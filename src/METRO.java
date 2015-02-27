@@ -35,7 +35,8 @@ public class METRO extends Frame implements MouseListener
 		__VERSION = "0.0.1";
 	public static final Font __STDFONT = new Font("Huxley Titling", Font.PLAIN, 20);
 	
-	public static GameScreen __currentGameScreen;
+	public static GameScreen __currentGameScreen,
+		__controlDrawer; // draws all the important controls and infos after rendering the scene
 	public static BufferedImage __bufferedImage,
 		__viewPortButton_Texture,
 		__mainMenu_Buttons;
@@ -115,15 +116,26 @@ public class METRO extends Frame implements MouseListener
 		
 		g2d.setFont(__STDFONT);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		
 		//Clear screen with white:
 		g2d.setColor(Color.white);
 		g2d.fillRect(0,  0, __SCREEN_SIZE.width, __SCREEN_SIZE.height);
 		
+		///
+		/// BEGIN DRAW GAME-SCREEN
+		///
+		
 		__currentGameScreen.update(g2d);
+		if(__controlDrawer != null) __controlDrawer.update(g2d);
+		
+		///
+		/// END   DRAW GAME-SCREEN
+		///
 		
 		// Draw cursor icon/image
 		g2d.drawImage(_cursor, MouseInfo.getPointerInfo().getLocation().x - 10, MouseInfo.getPointerInfo().getLocation().y - 10, null);
 		
+		//finalize drawing stuff
 	    Graphics2D g2dComponent = (Graphics2D) g;
 	    g2dComponent.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 	    		RenderingHints.VALUE_ANTIALIAS_ON);
@@ -142,11 +154,13 @@ public class METRO extends Frame implements MouseListener
 	public void mousePressed(MouseEvent e)
 	{
 		__currentGameScreen.mouseClicked(e);
+		if(__controlDrawer != null) __controlDrawer.mouseClicked(e);
 	}
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		__currentGameScreen.mouseReleased(e);
+		if(__controlDrawer != null) __controlDrawer.mouseClicked(e);
 	}
 	@Override
 	public void mouseClicked(MouseEvent e){}

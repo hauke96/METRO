@@ -48,8 +48,6 @@ public class GameScreen_TrainView implements GameScreen
 		drawBaseNet(g, Color.lightGray);
 		drawBaseDot(g);
 		
-		drawControls(g);
-		
 		printDebugStuff(g);
 		_oldMousePos = MouseInfo.getPointerInfo().getLocation();
 	}
@@ -112,41 +110,6 @@ public class GameScreen_TrainView implements GameScreen
 				MouseInfo.getPointerInfo().getLocation().y + offsetMarker.y - 8, 
 				3, 3);
 		g.setColor(Color.white);
-	}
-	/**
-	 * Draws the basic Controls onto the screen.
-	 * @param g The graphic handle to draw on
-	 */
-	private void drawControls(Graphics2D g)
-	{
-		g.drawImage(METRO.__viewPortButton_Texture, METRO.__SCREEN_SIZE.width / 2 - 40, 45, METRO.__SCREEN_SIZE.width / 2 + 40, 85, 
-			161, 60, 161+79, 60+40, null);
-		METRO.__viewPortButton_City.draw(g);
-		METRO.__viewPortButton_Train.draw(g);
-		drawPlayerInfos(g);
-	}
-	/**
-	 * Draws all significant player infos onto the upper left corner.
-	 * @param g The graphic handle to draw on
-	 */
-	private void drawPlayerInfos(Graphics g) // TODO evtl. in eigene klassen, damit man nicht 2x die gleiche methode hat?
-	{
-		// clear area
-		g.setColor(Color.white);
-		g.fillRect(0, 0, 150, 26);
-		
-		g.setColor(METRO.__metroBlue);
-		// Draw a   _|
-		g.drawLine(0, 26, 150, 26);
-		g.drawLine(150, 0, 150, 26);
-		
-		// draw amount of money like 935.258.555$
-		g.setFont(new Font("Huxley Titling", Font.PLAIN, 24));
-		g.setColor(METRO.__metroRed);
-		g.drawString("$", 5, 22);
-		g.setColor(METRO.__metroBlue);
-		g.drawString("=" + String.format("%,d", METRO.__money) + "$", 12, 22); // converts 12345 to 12.345
-		g.setFont(METRO.__STDFONT);
 	}
 
 	public void mouseClicked(MouseEvent e)

@@ -49,6 +49,7 @@ public class MainMenu implements GameScreen
 			METRO.__currentGameScreen = new GameScreen_TrainView();
 			GameScreen_TrainView._cityGameScreen = new GameScreen_CityView();
 			GameScreen_CityView._trainGameScreen = METRO.__currentGameScreen;
+			METRO.__controlDrawer = new ScreenInfoDrawer();
 		}
 		else if(_button_exitGame.isPressed(e.getX(), e.getY()))
 		{

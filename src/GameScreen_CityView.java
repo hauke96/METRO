@@ -51,7 +51,6 @@ public class GameScreen_CityView implements GameScreen
 		}
 		
 		drawCircles(g);	
-		drawControls(g);
 		
 		_oldMousePos = MouseInfo.getPointerInfo().getLocation();
 	}
@@ -84,48 +83,6 @@ public class GameScreen_CityView implements GameScreen
 			g.drawString(circleNumber + "", MouseInfo.getPointerInfo().getLocation().x - 3.5f, MouseInfo.getPointerInfo().getLocation().y + 4);
 			g.setColor(Color.white);
 		}
-	}
-	/**
-	 * Draws the basic Controls onto the screen.
-	 * @param g The graphic handle to draw on
-	 */
-	private void drawControls(Graphics2D g)
-	{
-		g.drawImage(METRO.__viewPortButton_Texture, METRO.__SCREEN_SIZE.width / 2 - 40, 45, METRO.__SCREEN_SIZE.width / 2 + 40, 85, 
-			161, 60, 161+79, 60+40, null);
-		METRO.__viewPortButton_City.draw(g);
-		METRO.__viewPortButton_Train.draw(g);
-		drawPlayerInfos(g);
-	}
-	/**
-	 * Draws all significant player infos onto the upper left corner.
-	 * @param g The graphic handle to draw on
-	 */
-	private void drawPlayerInfos(Graphics g)
-	{
-		// clear area
-		g.setColor(Color.white);
-		g.fillRect(0, 0, 100, 26);
-		
-		g.setColor(METRO.__metroBlue);
-		// Draw a   _|
-		g.drawLine(0, 26, 100, 26);
-		g.drawLine(100, 0, 100, 26);
-		
-		// draw amount of money like 935.258.555$
-		String money = ("" + METRO.__money).substring(("" + METRO.__money).length() - 3, ("" + METRO.__money).length());
-		for(int i = ("" + METRO.__money).length() - 4; i > 2; i -= 3)
-		{
-			money = ("" + METRO.__money).substring(i - 3, i) + money;
-		}
-		money = ("" + METRO.__money).substring(0, ("" + METRO.__money).length()%3) + money;
-		
-		g.setColor(METRO.__metroBlue);
-		g.setFont(new Font("Huxley Titling", Font.PLAIN, 24));
-		g.drawString("" + money, 5, 22);
-		g.setColor(METRO.__metroRed);
-		g.drawString("$", 7 + g.getFontMetrics().stringWidth("" + money), 22);
-		g.setFont(METRO.__STDFONT);
 	}
 
 	/* (non-Javadoc)
