@@ -1,3 +1,7 @@
+package Game;
+
+import Game.CityTravelerSpot;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
@@ -8,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.SwingUtilities;
+
 
 /**
  * 
