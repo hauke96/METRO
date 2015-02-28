@@ -41,7 +41,7 @@ public class CityTravelerSpot
 	 * Draws the circles of the Hotspot.
 	 * @param g The graphic handle to draw an.
 	 */
-	public void draw(Graphics g, int circleIndex, boolean circleSelected)
+	public void draw(Graphics g, int circleIndex, boolean circleSelected, boolean drawNumbers)
 	{
 		circleIndex = _strength - circleIndex;
 		if(circleIndex < 0) return;
@@ -66,8 +66,18 @@ public class CityTravelerSpot
 		}
 		//TODO do this also for vertikal and other horizontal side
 		//TODO do an animation like the dot in the baselines?
-		if(circleIndex > 1) g.drawString((_strength - circleIndex) + "", position.x + _circleRadiusStep * circleIndex - _circleRadiusStep / 2, position.y + 4);
-		else if (circleIndex == 1) g.drawString((_strength - 1) + "", position.x, position.y + 4);
+		if(circleIndex > 1 && drawNumbers)
+		{
+			g.drawString((_strength - circleIndex) + "", position.x + _circleRadiusStep * circleIndex - _circleRadiusStep / 2 - 4, position.y + 4);
+			g.drawString((_strength - circleIndex) + "", position.x - _circleRadiusStep * circleIndex + _circleRadiusStep / 2, position.y + 4);
+			
+			g.drawString((_strength - circleIndex) + "", position.x, position.y + _circleRadiusStep * circleIndex - _circleRadiusStep / 2 + 6);
+			g.drawString((_strength - circleIndex) + "", position.x, position.y - _circleRadiusStep * circleIndex + _circleRadiusStep - 14);
+		}
+		else if (circleIndex == 1 && drawNumbers) 
+		{
+			g.drawString((_strength - 1) + "", position.x, position.y + 4);
+		}
 
 		g.setColor(Color.white);
 	}

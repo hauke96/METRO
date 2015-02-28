@@ -57,27 +57,32 @@ public class GameScreen_CityView implements GameScreen
 	 */
 	private void drawCircles(Graphics2D g)
 	{
+		int showNumbersSpot = -1;
 		int circleNumber = -1; // the circle, the mouse is in. -1 means: Mouse out of any circle.
 
 		// get the selected circle number
 		for(int i = 0; i < 10; i++)
 		{
 			boolean isIndexSelected = false; // is this layer selected -> true -> draw whole layer in blue
-			for(CityTravelerSpot cSpot : _travelerSpots)
+			for(int k = 0; k < _travelerSpots.size(); k++)
 			{
-				isIndexSelected |= cSpot.isMouseInCircle(i); // if mouse is in ANY circle of this layer
+				isIndexSelected |= _travelerSpots.get(k).isMouseInCircle(i); // if mouse is in ANY circle of this layer
 				if(isIndexSelected)
 				{
 					circleNumber = i;
+				}
+				if(_travelerSpots.get(k).isMouseInCircle(i))// && showNumbersSpot == -1) // get spot wich should show the numbers
+				{
+					showNumbersSpot = k;
 				}
 			}
 		}
 		// draw all the circles
 		for(int i = 0; i < 10; i++)
 		{
-			for(CityTravelerSpot cSpot : _travelerSpots)
+			for(int k = 0; k < _travelerSpots.size(); k++)
 			{
-				cSpot.draw(g, i, i == circleNumber); // i==circleNumber means: if i is the selected circle level -> draw it different
+				_travelerSpots.get(k).draw(g, i, i == circleNumber, k == showNumbersSpot); // i==circleNumber means: if i is the selected circle level -> draw it different
 			}
 		}
 		
