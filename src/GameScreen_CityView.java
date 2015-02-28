@@ -1,12 +1,9 @@
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +22,7 @@ public class GameScreen_CityView implements GameScreen
 	public static GameScreen _trainGameScreen;
 	public static Point2D _offset = new Point2D.Float(0, 0);
 	
-	private List<CityTravelerSpot> _travelerSpots = new ArrayList<CityTravelerSpot>(); 
+	private List<CityTravelerSpot> _travelerSpots = new ArrayList<CityTravelerSpot>();
 	private Point _oldMousePos; // Mouse position from last frame
 	private boolean _dragMode = false;
 
@@ -61,7 +58,8 @@ public class GameScreen_CityView implements GameScreen
 	private void drawCircles(Graphics2D g)
 	{
 		int circleNumber = -1; // the circle, the mouse is in. -1 means: Mouse out of any circle.
-		
+
+		// get the selected circle number
 		for(int i = 0; i < 10; i++)
 		{
 			boolean isIndexSelected = false; // is this layer selected -> true -> draw whole layer in blue
@@ -72,15 +70,23 @@ public class GameScreen_CityView implements GameScreen
 				{
 					circleNumber = i;
 				}
-				cSpot.draw(g, i, isIndexSelected);
 			}
 		}
-		if(circleNumber != -1) 
+		// draw all the circles
+		for(int i = 0; i < 10; i++)
+		{
+			for(CityTravelerSpot cSpot : _travelerSpots)
+			{
+				cSpot.draw(g, i, i == circleNumber); // i==circleNumber means: if i is the selected circle level -> draw it different
+			}
+		}
+		
+		if(circleNumber != -1) // if there's a selected circle 
 		{
 			int gray = 55 * circleNumber;
 			if(gray > 255) gray = 255;
 			g.setColor(new Color(0, 0, 200));
-			g.drawString(circleNumber + "", MouseInfo.getPointerInfo().getLocation().x - 3.5f, MouseInfo.getPointerInfo().getLocation().y + 4);
+			g.drawString(circleNumber + "", MouseInfo.getPointerInfo().getLocation().x - 3.5f, MouseInfo.getPointerInfo().getLocation().y + 7);
 			g.setColor(Color.white);
 		}
 	}

@@ -57,12 +57,17 @@ public class CityTravelerSpot
 		
 		if(circleSelected)
 		{
-			g.setColor(new Color(100, 180, 255, 40));
+			g.setColor(new Color(100, 180, 255, 40)); //TODO just do one draw with blue-gray-color instead of this if... shit
 			g.fillOval(position.x - circleIndex *_circleRadiusStep, 
 					position.y - circleIndex * _circleRadiusStep,
 					_circleRadiusStep * 2 * circleIndex, 
 					_circleRadiusStep * 2 * circleIndex);
+			g.setColor(new Color(0, 0, 200));
 		}
+		//TODO do this also for vertikal and other horizontal side
+		//TODO do an animation like the dot in the baselines?
+		if(circleIndex > 1) g.drawString((_strength - circleIndex) + "", position.x + _circleRadiusStep * circleIndex - _circleRadiusStep / 2, position.y + 4);
+		else if (circleIndex == 1) g.drawString((_strength - 1) + "", position.x, position.y + 4);
 
 		g.setColor(Color.white);
 	}

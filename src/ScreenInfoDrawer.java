@@ -67,5 +67,4 @@ public class ScreenInfoDrawer implements GameScreen {
 		// TODO Auto-generated method stub
 
 	}
-
 }
