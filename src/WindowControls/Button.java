@@ -12,20 +12,27 @@ import java.awt.Rectangle;
  * @author Hauke
  *
  */
-public class Button
+public class Button implements ControlElement
 {
 	private Image _texture;
 	private Rectangle _position,
 		_positionOnImage;
+	private Window _windowHandle;
 
 	/**
 	 * 
 	 */
 	public Button(Rectangle position, Rectangle positionOnImage, Image texture)
 	{
+		this(position, positionOnImage, texture, null);
+	}
+	public Button(Rectangle position, Rectangle positionOnImage, Image texture, Window window)
+	{
 		_texture = texture;
 		_position = position;
 		_positionOnImage = positionOnImage;
+		_windowHandle = window;
+		if(_windowHandle != null) _windowHandle.addControlElement(this);
 	}
 
 	public boolean isPressed(int x, int y)
@@ -44,5 +51,9 @@ public class Button
 	public void setPosition(Point newPosition)
 	{
 		_position = new Rectangle(newPosition.x, newPosition.y, _position.width, _position.height);
+	}
+	@Override
+	public void update() 
+	{
 	}
 }

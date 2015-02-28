@@ -19,9 +19,11 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Locale;
-
 import javax.imageio.ImageIO;
+
+import WindowControls.Window;
 
 /**
  * @author Hauke
@@ -46,6 +48,7 @@ public class METRO extends Frame implements MouseListener
 	public static Color __metroRed,
 		__metroBlue;
 	public static int __money = 12345678;
+	public static ArrayList<Window> __windowList = new ArrayList<Window>();
 	 
 	private BufferedImage _cursor;
  
@@ -71,7 +74,7 @@ public class METRO extends Frame implements MouseListener
 	    addMouseListener(this);
 	    setLocationRelativeTo(null);
 	    setUndecorated(true);
-
+	    
 	    Locale.setDefault(new Locale("de", "DE"));
 	    
 	    // Create special colors
@@ -101,6 +104,12 @@ public class METRO extends Frame implements MouseListener
 		{
 			System.out.println(e.getMessage());
 		}
+	    
+	    Window win = new Window("abc123", new Point(200, 200), new Point(350, 300));
+	    __windowList.add(win);
+	    new WindowControls.Button(new Rectangle(100, 100, 201, 60), 
+				new Rectangle(0, 0, 201, 60), 
+				__viewPortButton_Texture, win);
 		
 	    // Create screen NOW (because of setVisible and repaint and NullPointerExceptions ;) )
 	    __currentGameScreen = new MainMenu();
@@ -128,6 +137,11 @@ public class METRO extends Frame implements MouseListener
 		
 		__currentGameScreen.update(g2d);
 		if(__controlDrawer != null) __controlDrawer.update(g2d);
+		//Draw every window with its controls
+		for(Window win : __windowList)
+		{
+			win.draw(g2d);
+		}
 		
 		///
 		/// END   DRAW GAME-SCREEN
