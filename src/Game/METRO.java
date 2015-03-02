@@ -164,21 +164,40 @@ public class METRO extends Frame implements MouseListener
 	    catch(Exception e){}
 	    repaint(); // max ~60fps  (1000/60=16.6666...)
 	}
-	public void update(Graphics g){
+	public void update(Graphics g)
+	{
         paint(g);
     }
 	
 	@Override
 	public void mousePressed(MouseEvent e)
 	{
-		__currentGameScreen.mouseClicked(e);
-		if(__controlDrawer != null) __controlDrawer.mouseClicked(e);
+		Window clickedWindow = null;
+		
+		for(Window win : __windowList)
+		{
+			win.mousePressed(e);
+			if(win.isMouseOnWindow()) // if mouse is just on the window area (not on a Button, etc.)
+			{
+				clickedWindow = win;
+				break;
+			}
+		}
+		if(clickedWindow == null)
+		{
+			__currentGameScreen.mouseClicked(e);
+			if(__controlDrawer != null) __controlDrawer.mouseClicked(e);
+		}
+		else
+		{
+			clickedWindow.closeIfNeeded(e);
+		}
 	}
 	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		__currentGameScreen.mouseReleased(e);
-		if(__controlDrawer != null) __controlDrawer.mouseClicked(e);
+		//if(__controlDrawer != null) __controlDrawer.mouseClicked(e);
 	}
 	@Override
 	public void mouseClicked(MouseEvent e){}
@@ -186,4 +205,9 @@ public class METRO extends Frame implements MouseListener
 	public void mouseEntered(MouseEvent e){}
 	@Override
 	public void mouseExited(MouseEvent e){}
+	
+	public static void __closeWindow(Window window)
+	{
+		__windowList.remove(window);
+	}
 }

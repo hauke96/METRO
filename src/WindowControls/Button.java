@@ -5,6 +5,7 @@ package WindowControls;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -18,6 +19,7 @@ public class Button implements ControlElement
 	private Rectangle _position,
 		_positionOnImage;
 	private Window _windowHandle;
+	private boolean hasBeenClicked = false; // true if control has been clicked since last check
 
 	/**
 	 * 
@@ -37,10 +39,16 @@ public class Button implements ControlElement
 
 	public boolean isPressed(int x, int y)
 	{
-		return x >= _position.x 
+		if(x >= _position.x 
 			&& x <= _position.x + _position.width
 			&& y >= _position.y
-			&& y <= _position.y + _position.height;
+			&& y <= _position.y + _position.height
+			|| hasBeenClicked)
+		{
+			hasBeenClicked = false;
+			return true;
+		}
+		return false;
 	}
 	
 	public void draw(Graphics g)
@@ -51,6 +59,20 @@ public class Button implements ControlElement
 	public void setPosition(Point newPosition)
 	{
 		_position = new Rectangle(newPosition.x, newPosition.y, _position.width, _position.height);
+	}
+	public boolean clickOnControlElement()
+	{
+		Point mPos = MouseInfo.getPointerInfo().getLocation();
+		
+		if(mPos.x >= _position.x 
+			&& mPos.x <= _position.x + _position.width
+			&& mPos.y >= _position.y
+			&& mPos.y <= _position.y + _position.height)
+		{
+			hasBeenClicked = true;
+			return true;
+		}
+		return false;
 	}
 	@Override
 	public void update() 
