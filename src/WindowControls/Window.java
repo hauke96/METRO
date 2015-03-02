@@ -11,6 +11,8 @@ import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import javax.swing.SwingUtilities;
+
 import Game.*;
 
 /**
@@ -21,9 +23,11 @@ import Game.*;
 public class Window 
 {
 	private Point _position,
-		_size;
+		_size,
+		_oldMousePos;
 	private String _title = "";
 	private ArrayList<ControlElement> _elementList = new ArrayList<ControlElement>();
+	private boolean _dragMode = false;
 	
 	public Window(String title, Point position, Point size)
 	{
@@ -34,6 +38,8 @@ public class Window
 	}
 	public void draw(Graphics g)
 	{
+		update();
+		
 		BufferedImage bufferedImage = new BufferedImage(_size.x, _size.y, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bufferedImage.createGraphics();
 		
@@ -63,6 +69,23 @@ public class Window
 	}
 	public void update()
 	{
+		if(_dragMode)
+		{
+			Point pos = null,
+				positionDiff = new Point(MouseInfo.getPointerInfo().getLocation().x - _oldMousePos.x,
+						MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y);
+			
+			/*for(ControlElement cElement : _elementList)
+			{
+				pos = cElement.getPosition();
+				cElement.setPosition(new Point(pos.x + positionDiff.x, pos.y + positionDiff.y));
+			}
+			*/
+			_position.x += positionDiff.x;
+			_position.y += positionDiff.y;
+			System.out.println("OK" + positionDiff);
+			_oldMousePos = MouseInfo.getPointerInfo().getLocation();
+		}
 		for(ControlElement cElement : _elementList)
 		{
 			cElement.update();
@@ -89,6 +112,23 @@ public class Window
 	}
 	public void mousePressed(MouseEvent e)
 	{
+		Point mousePosition = e.getPoint();
+		
+		if(mousePosition.x >= _position.x
+			&& mousePosition.x <= _position.x + _size.x - 20
+			&& mousePosition.y >= _position.y
+			&& mousePosition.y <= _position.y + 20
+			&& SwingUtilities.isLeftMouseButton(e))
+		{
+			System.out.println("DRAG START");
+			_dragMode = true;
+			_oldMousePos = mousePosition;
+		}
+	}
+	public void mouseReleased()
+	{
+		System.out.println("DRAG END");
+		_dragMode = false;
 	}
 	public boolean closeIfNeeded(MouseEvent e)
 	{

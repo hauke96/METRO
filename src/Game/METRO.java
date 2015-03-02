@@ -198,6 +198,10 @@ public class METRO extends Frame implements MouseListener
 	{
 		__currentGameScreen.mouseReleased(e);
 		//if(__controlDrawer != null) __controlDrawer.mouseClicked(e);
+		for(Window win : __windowList)
+		{
+			win.mouseReleased();
+		}
 	}
 	@Override
 	public void mouseClicked(MouseEvent e){}

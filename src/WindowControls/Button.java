@@ -60,6 +60,10 @@ public class Button implements ControlElement
 	{
 		_position = new Rectangle(newPosition.x, newPosition.y, _position.width, _position.height);
 	}
+	public Point getPosition()
+	{
+		return new Point(_position.x, _position.y);
+	}
 	public boolean clickOnControlElement()
 	{
 		Point mPos = MouseInfo.getPointerInfo().getLocation();
@@ -74,7 +78,6 @@ public class Button implements ControlElement
 		}
 		return false;
 	}
-	@Override
 	public void update() 
 	{
 	}
