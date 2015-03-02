@@ -96,7 +96,8 @@ public class GameScreen_CityView implements GameScreen
 			int gray = 55 * circleNumber;
 			if(gray > 255) gray = 255;
 			g.setColor(new Color(0, 0, 200));
-			g.drawString(circleNumber + "", MouseInfo.getPointerInfo().getLocation().x - 3.5f, MouseInfo.getPointerInfo().getLocation().y + 7);
+			g.drawString(circleNumber + "", MouseInfo.getPointerInfo().getLocation().x - g.getFontMetrics(METRO.__stdFont).stringWidth(circleNumber + "") / 2 - 1, 
+					MouseInfo.getPointerInfo().getLocation().y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
 			g.setColor(Color.white);
 		}
 	}

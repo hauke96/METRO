@@ -27,9 +27,6 @@ public class GameScreen_TrainView implements GameScreen
 	
 	static public GameScreen _cityGameScreen; // to go into the city game-screen without loosing reference
 	
-	/**
-	 * The constructor of this class. Loads the cursor and basic stuff.
-	 */
 	public GameScreen_TrainView()
 	{
 	}
@@ -112,7 +109,6 @@ public class GameScreen_TrainView implements GameScreen
 				3, 3);
 		g.setColor(Color.white);
 	}
-
 	public void mouseClicked(MouseEvent e)
 	{
 		if(SwingUtilities.isMiddleMouseButton(e))

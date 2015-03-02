@@ -2,7 +2,6 @@ package Game;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 
@@ -71,6 +70,7 @@ public class CityTravelerSpot
 		}
 
 		g.setColor(METRO.__metroBlue);
+		g.setColor(new Color(0, 0, 200));
 		if(circleIndex > 1 && drawNumbers)
 		{
 			g.drawString((_strength - circleIndex) + "", position.x + _circleRadiusStep * circleIndex - _circleRadiusStep / 2 - 4, position.y + 4);

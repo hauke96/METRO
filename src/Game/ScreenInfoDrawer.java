@@ -43,12 +43,13 @@ public class ScreenInfoDrawer implements GameScreen {
 		g.drawLine(150, 0, 150, 26);
 		
 		// draw amount of money like 935.258.555$
-		g.setFont(new Font("Huxley Titling", Font.PLAIN, 24));
+		g.setFont(METRO.__stdFont);
 		g.setColor(METRO.__metroRed);
 		g.drawString("$", 5, 22);
 		g.setColor(METRO.__metroBlue);
-		g.drawString("=" + String.format("%,d", METRO.__money) + "$", 12, 22); // converts 12345 to 12.345
-		g.setFont(METRO.__STDFONT);
+		String str = " = " + String.format("%,d", METRO.__money) + " $";
+		str = str.replace(".", ". ");
+		g.drawString(str, 12, 22); // converts 12345 to 12.345
 	}
 
 	/* (non-Javadoc)

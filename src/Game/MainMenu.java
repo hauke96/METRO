@@ -2,13 +2,8 @@ package Game;
 
 
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import WindowControls.Button;
 
@@ -43,8 +38,15 @@ public class MainMenu implements GameScreen
 	{
 		_button_startGame.draw(g);
 		_button_exitGame.draw(g);
+		
+		g.drawImage(METRO.__mainMenu_TitleImage, 
+				METRO.__SCREEN_SIZE.width / 2 - METRO.__mainMenu_TitleImage.getWidth() / 2,
+				METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getHeight() / 2 - 200,
+				null);
 	}
-
+	/**
+	 * Checks which button in the main menu has been clicked.
+	 */
 	public void mouseClicked(MouseEvent e)
 	{
 		if(_button_startGame.isPressed(e.getX(), e.getY()))
@@ -56,7 +58,8 @@ public class MainMenu implements GameScreen
 		}
 		else if(_button_exitGame.isPressed(e.getX(), e.getY()))
 		{
-			System.exit(0);
+			//System.exit(0);
+			METRO.__close();
 		}
 	}
 	public void mouseReleased(MouseEvent e){}

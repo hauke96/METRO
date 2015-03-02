@@ -1,13 +1,12 @@
 package WindowControls;
 
 import java.awt.Color;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
-import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -16,7 +15,7 @@ import javax.swing.SwingUtilities;
 import Game.*;
 
 /**
- * 
+ * Creates a simple but fancy window with some extra functions like Control-management (managing buttons, labels, etc.).
  * @author hauke
  *
  */
@@ -27,27 +26,52 @@ public class Window
 		_oldMousePos;
 	private String _title = "";
 	private ArrayList<ControlElement> _elementList = new ArrayList<ControlElement>();
-	private boolean _dragMode = false;
+	private boolean _dragMode = false; // to drag the window
+	private Color _color; // color of borders
 	
-	public Window(String title, Point position, Point size)
+	/**
+	 * Creates a new window.
+	 * @param title The title of the Window, is shown in the top area.
+	 * @param position The position on the Screen (absolute)
+	 * @param size The size in pixel (absolute)
+	 * @param color The color of the border
+	 */
+	public Window(String title, Point position, Point size, Color color)
 	{
 		_title = title;
 		_position = position;
 		_size = size;
 		_size.y += 20; // for title
+		_color = color;
 	}
+	/**
+	 * Creates a new window.
+	 * @param title The title of the Window, is shown in the top area.
+	 * @param position The position on the Screen (absolute)
+	 * @param size The size in pixel (absolute)
+	 */
+	public Window(String title, Point position, Point size)
+	{
+		this(title, position, size, METRO.__metroBlue);
+	}
+	/**
+	 * Draws the window and all controls on it.
+	 * @param g The graphic handle.
+	 */
 	public void draw(Graphics g)
 	{
 		update();
 		
 		BufferedImage bufferedImage = new BufferedImage(_size.x, _size.y, BufferedImage.TYPE_INT_ARGB);
+		
 		Graphics2D g2d = bufferedImage.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		//Clear background
 		g2d.setColor(Color.white);
 		g2d.fillRect(0, 0, _size.x - 1, _size.y - 1);
 		//Draw head bar of window
-		g2d.setColor(METRO.__metroBlue);
+		g2d.setColor(_color);
 		g2d.fillRect(0,  0, _size.x - 20, 20);
 		//Draw Border
 		g2d.drawRect(0, 0, _size.x - 1, _size.y - 1);
@@ -55,8 +79,9 @@ public class Window
 		g2d.drawRect(_size.x - 20, 0, _size.x - 1, 20); // close box
 		//Draw Window title
 		g2d.setColor(Color.white);
-		g2d.setFont(METRO.__STDFONT);
-		g2d.drawString(_title, (_size.x - 20) / 2 - g2d.getFontMetrics(METRO.__STDFONT).stringWidth(_title) / 2, g2d.getFontMetrics(METRO.__STDFONT).getHeight() + 1);
+		g2d.setFont(METRO.__stdFont);
+		g2d.drawString(_title, (_size.x - 20) / 2 - g2d.getFontMetrics(METRO.__stdFont).stringWidth(_title) / 2, 
+			g2d.getFontMetrics(METRO.__stdFont).getHeight() - 5);
 		//Close cross
 		g2d.drawImage(METRO.__iconSet, _size.x - 20, 0, _size.x, 20, 0, 0, 20, 20, null);
 		
@@ -67,23 +92,18 @@ public class Window
 		
 		g.drawImage(bufferedImage, _position.x, _position.y, null);
 	}
+	/**
+	 * Updates everything. Is very important for e.g. drag-feature and Controls
+	 */
 	public void update()
 	{
 		if(_dragMode)
 		{
-			Point pos = null,
-				positionDiff = new Point(MouseInfo.getPointerInfo().getLocation().x - _oldMousePos.x,
+			Point positionDiff = new Point(MouseInfo.getPointerInfo().getLocation().x - _oldMousePos.x,
 						MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y);
 			
-			/*for(ControlElement cElement : _elementList)
-			{
-				pos = cElement.getPosition();
-				cElement.setPosition(new Point(pos.x + positionDiff.x, pos.y + positionDiff.y));
-			}
-			*/
 			_position.x += positionDiff.x;
 			_position.y += positionDiff.y;
-			System.out.println("OK" + positionDiff);
 			_oldMousePos = MouseInfo.getPointerInfo().getLocation();
 		}
 		for(ControlElement cElement : _elementList)
@@ -91,9 +111,13 @@ public class Window
 			cElement.update();
 		}
 	}
+	/**
+	 * Adds a new control to the window control list. If the new Control is already in the list, it won't be added again, so there are no doubles in this list.
+	 * @param cElement The WindowControl element thta should be added.
+	 */
 	public void addControlElement(ControlElement cElement)
 	{
-		_elementList.add(cElement);
+		if(!_elementList.contains(cElement)) _elementList.add(cElement); // there wont be doubles ;)
 	}
 	/**
 	 * Returns true is mouse is in window, false if not and also false if in window but e.g. on a button.
@@ -110,6 +134,10 @@ public class Window
 			//&& !isOnWindow; // if mouse is on NO control element (only on the window area)
 				
 	}
+	/**
+	 * Makes things when mouse is pressed.
+	 * @param e MouseEvent
+	 */
 	public void mousePressed(MouseEvent e)
 	{
 		Point mousePosition = e.getPoint();
@@ -120,16 +148,22 @@ public class Window
 			&& mousePosition.y <= _position.y + 20
 			&& SwingUtilities.isLeftMouseButton(e))
 		{
-			System.out.println("DRAG START");
 			_dragMode = true;
 			_oldMousePos = mousePosition;
 		}
 	}
+	/**
+	 * Makes things when mouse is released (important for drag-mode of the window).
+	 */
 	public void mouseReleased()
 	{
-		System.out.println("DRAG END");
 		_dragMode = false;
 	}
+	/**
+	 * Closes the window if the mouse is on the cross. NO CLICK is needed in this function, be careful. This function calls the METRO.__close() function to close itself.
+	 * @param e MouseEvent
+	 * @return True if the window has been closed, false if not.
+	 */
 	public boolean closeIfNeeded(MouseEvent e)
 	{
 		if(e.getPoint().x >= _position.x + _size.x - 20

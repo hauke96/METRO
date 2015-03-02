@@ -23,5 +23,9 @@ public interface GameScreen
 	 * @param e MouseEvent with infos (pos etc.)
 	 */
 	public void mouseClicked(MouseEvent e);
+	/**
+	 * When mouse has been released.
+	 * @param e MouseEvent with infos (pos etc.)
+	 */
 	public void mouseReleased(MouseEvent e);
 }

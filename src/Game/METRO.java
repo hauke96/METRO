@@ -18,7 +18,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import javax.imageio.ImageIO;
@@ -37,13 +36,13 @@ public class METRO extends Frame implements MouseListener
 	//public static final Dimension __SCREEN_SIZE = new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width/2,Toolkit.getDefaultToolkit().getScreenSize().height/2);
 	public static final String __TITLE = "METRO",
 		__VERSION = "0.0.1";
-	public static final Font __STDFONT = new Font("Huxley Titling", Font.PLAIN, 20);
 	
+	public static Font __stdFont;// = new Font("Huxley Titling", Font.PLAIN, 20);
 	public static GameScreen __currentGameScreen,
 		__controlDrawer; // draws all the important controls and infos after rendering the scene
-	public static BufferedImage __bufferedImage,
-		__viewPortButton_Texture,
+	public static BufferedImage __viewPortButton_Texture,
 		__mainMenu_Buttons,
+		__mainMenu_TitleImage,
 		__iconSet;
 	public static WindowControls.Button __viewPortButton_City, 
 		__viewPortButton_Train;
@@ -51,8 +50,9 @@ public class METRO extends Frame implements MouseListener
 		__metroBlue;
 	public static int __money = 12345678;
 	public static ArrayList<Window> __windowList = new ArrayList<Window>();
-	 
-	private BufferedImage _cursor;
+	
+	private BufferedImage _cursor,
+		__bufferedImage;
  
 	 
 	/**
@@ -83,8 +83,11 @@ public class METRO extends Frame implements MouseListener
 	    __metroBlue = new Color(100, 180, 255);
 	    __metroRed = new Color(255, 100, 100);
 	    
+	    
 		try
 		{
+		    __stdFont = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/GatsbyFLF-Bold.ttf")).deriveFont(20f);
+		    
 			_cursor = ImageIO.read(new File("textures/Cursor.png"));
 			
 			// make Cursor invisible
@@ -101,14 +104,15 @@ public class METRO extends Frame implements MouseListener
 					new Rectangle(200, 0, 200, 60), 
 					__viewPortButton_Texture);
 			__mainMenu_Buttons = ImageIO.read(new File("textures/MainMenu_Buttons.png"));
+			__mainMenu_TitleImage = ImageIO.read(new File("textures/MainMenu_TitleImage.png"));
 			__iconSet = ImageIO.read(new File("textures/IconSet.png"));
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
 			System.out.println(e.getMessage());
 		}
 	    
-	    Window win = new Window("abc123", new Point(200, 200), new Point(350, 300));
+	    Window win = new Window("This is a test :)", new Point(200, 200), new Point(350, 300));
 	    __windowList.add(win);
 	    new WindowControls.Button(new Rectangle(100, 100, 201, 60), 
 				new Rectangle(0, 0, 201, 60), 
@@ -127,7 +131,7 @@ public class METRO extends Frame implements MouseListener
 		__bufferedImage = new BufferedImage(__SCREEN_SIZE.width, __SCREEN_SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = __bufferedImage.createGraphics();
 		
-		g2d.setFont(__STDFONT);
+		g2d.setFont(__stdFont);
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		//Clear screen with white:
@@ -210,8 +214,25 @@ public class METRO extends Frame implements MouseListener
 	@Override
 	public void mouseExited(MouseEvent e){}
 	
+	/**
+	 * Closes a specific window.
+	 * @param window The window that should be closed.
+	 */
 	public static void __closeWindow(Window window)
 	{
 		__windowList.remove(window);
+	}
+	/**
+	 * Creates a "really quit"-dialog window. This method does NOT QUIT the game.
+	 */
+	public static void __close()
+	{
+		Window quitWindow = new Window("Really quit?",new Point(__SCREEN_SIZE.width / 2 - 200, 
+			__SCREEN_SIZE.height / 2 - 50), new Point(400, 100), __metroRed);
+		new WindowControls.Button(new Rectangle(10, 75, 185, 20), "Yes", quitWindow);
+		new WindowControls.Button(new Rectangle(205, 75, 185, 20), "No", quitWindow);
+		new WindowControls.Label("Really quit METRO?", new Point(140, 55), quitWindow);
+		
+		__windowList.add(quitWindow);
 	}
 }
