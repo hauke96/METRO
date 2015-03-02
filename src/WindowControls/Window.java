@@ -1,9 +1,11 @@
 package WindowControls;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.font.FontRenderContext;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -36,13 +38,18 @@ public class Window
 		//Clear background
 		g2d.setColor(Color.white);
 		g2d.fillRect(0, 0, _size.x - 1, _size.y - 1);
-		//Draw Border
+		//Draw head bar of window
 		g2d.setColor(METRO.__metroBlue);
+		g2d.fillRect(0,  0, _size.x - 20, 20);
+		//Draw Border
 		g2d.drawRect(0, 0, _size.x - 1, _size.y - 1);
 		g2d.drawRect(0, 0, _size.x - 1, 20);
 		g2d.drawRect(_size.x - 20, 0, _size.x - 1, 20); // close box
-//		TODO create fancy close-cross for window
-//		TODO draw title of window
+		//Draw Window title
+		g2d.setColor(Color.white);
+		g2d.drawString(_title, (_size.x - 20) / 2 - g2d.getFontMetrics(METRO.__STDFONT).stringWidth(_title) / 2, 15);
+		//Close cross
+		g2d.drawImage(METRO.__iconSet, _size.x - 20, 0, _size.x, 20, 0, 0, 20, 20, null);
 		
 		for(ControlElement cElement : _elementList)
 		{

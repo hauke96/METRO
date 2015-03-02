@@ -32,6 +32,7 @@ import WindowControls.Window;
 public class METRO extends Frame implements MouseListener
 {
 	private static final long serialVersionUID = 1L;
+	
 	public static final Dimension __SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
 	//public static final Dimension __SCREEN_SIZE = new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width/2,Toolkit.getDefaultToolkit().getScreenSize().height/2);
 	public static final String __TITLE = "METRO",
@@ -42,7 +43,8 @@ public class METRO extends Frame implements MouseListener
 		__controlDrawer; // draws all the important controls and infos after rendering the scene
 	public static BufferedImage __bufferedImage,
 		__viewPortButton_Texture,
-		__mainMenu_Buttons;
+		__mainMenu_Buttons,
+		__iconSet;
 	public static WindowControls.Button __viewPortButton_City, 
 		__viewPortButton_Train;
 	public static Color __metroRed,
@@ -99,6 +101,7 @@ public class METRO extends Frame implements MouseListener
 					new Rectangle(200, 0, 200, 60), 
 					__viewPortButton_Texture);
 			__mainMenu_Buttons = ImageIO.read(new File("textures/MainMenu_Buttons.png"));
+			__iconSet = ImageIO.read(new File("textures/IconSet.png"));
 		}
 		catch (IOException e)
 		{

@@ -55,17 +55,15 @@ public class ScreenInfoDrawer implements GameScreen {
 	 * @see GameScreen#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+	public void mouseClicked(MouseEvent e) 
+	{
 	}
 
 	/* (non-Javadoc)
 	 * @see GameScreen#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-
+	public void mouseReleased(MouseEvent e) 
+	{
 	}
 }
