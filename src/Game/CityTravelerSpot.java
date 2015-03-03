@@ -1,7 +1,7 @@
 package Game;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
 
@@ -44,46 +44,78 @@ public class CityTravelerSpot
 	/**
 	 * Draws the circles of the Hotspot.
 	 * @param g The graphic handle to draw an.
+	 * @param circleIndex Index of the circle to draw
+	 * @param circleSelected If the circle is selected and therefore drawn in a different color.
+	 * @param drawNumbers if numbers should be drawn on circle
 	 */
-	public void draw(Graphics g, int circleIndex, boolean circleSelected, boolean drawNumbers)
+	public void draw(Graphics2D g, int circleIndex, boolean circleSelected, boolean drawNumbers)
+	{
+		draw(g, circleIndex, circleSelected, drawNumbers, false);
+	}
+	/**
+	 * Draws the circles of the Hotspot.
+	 * @param g The graphic handle to draw an.
+	 * @param circleIndex Index of the circle to draw
+	 * @param circleSelected If the circle is selected and therefore drawn in a different color.
+	 * @param drawNumbers if numbers should be drawn on circle
+	 * @param onlyEdges If only edges should be drawn
+	 */
+	public void draw(Graphics2D g, int circleIndex, boolean circleSelected, boolean drawNumbers, boolean onlyEdges)
 	{
 		circleIndex = _strength - circleIndex;
 		if(circleIndex < 0) return;
 		
+		// get the position with offset
 		Point position = new Point(_position.x + (int)GameScreen_CityView._offset.getX(), _position.y + (int)GameScreen_CityView._offset.getY());
 
-		int gray = 255 - 25 * (_strength - circleIndex + 1);
-		g.setColor(new Color(gray, gray, gray));
-		g.fillOval(position.x - circleIndex *_circleRadiusStep, 
-				position.y - circleIndex * _circleRadiusStep,
-				_circleRadiusStep * 2 * circleIndex, 
-				_circleRadiusStep * 2 * circleIndex);
-		
+
 		if(circleSelected)
 		{
-			g.setColor(new Color(100, 180, 255, 40)); //TODO just do one draw with blue-gray-color instead of this if... shit
-			g.fillOval(position.x - circleIndex *_circleRadiusStep, 
-					position.y - circleIndex * _circleRadiusStep,
-					_circleRadiusStep * 2 * circleIndex, 
-					_circleRadiusStep * 2 * circleIndex);
-			g.setColor(new Color(0, 0, 200));
-		}
+			g.setColor(new Color(230 - 5 * (_strength - circleIndex), 240 - (int)(4f * (float)(_strength - circleIndex)), 255));
+			g.fillOval(position.x - circleIndex *_circleRadiusStep + 1, 
+					position.y - circleIndex * _circleRadiusStep + 1,
+					_circleRadiusStep * 2 * circleIndex - 1, 
+					_circleRadiusStep * 2 * circleIndex - 1);
 
-		g.setColor(METRO.__metroBlue);
-		g.setColor(new Color(0, 0, 200));
-		if(circleIndex > 1 && drawNumbers)
-		{
-			g.drawString((_strength - circleIndex) + "", position.x + _circleRadiusStep * circleIndex - _circleRadiusStep / 2 - 4, position.y + 4);
-			g.drawString((_strength - circleIndex) + "", position.x - _circleRadiusStep * circleIndex + _circleRadiusStep / 2, position.y + 4);
-			
-			g.drawString((_strength - circleIndex) + "", position.x, position.y + _circleRadiusStep * circleIndex - _circleRadiusStep / 2 + 6);
-			g.drawString((_strength - circleIndex) + "", position.x, position.y - _circleRadiusStep * circleIndex + _circleRadiusStep - 14);
+			g.setColor(METRO.__metroBlue);
+			g.setColor(new Color(70, 126, 179));
+			if(drawNumbers && circleIndex > 1)
+			{
+				g.drawString((_strength - circleIndex) + "", position.x + _circleRadiusStep * circleIndex - _circleRadiusStep / 2 - 5, position.y + 4);
+				g.drawString((_strength - circleIndex) + "", position.x - _circleRadiusStep * circleIndex + _circleRadiusStep / 2 - 1, position.y + 4);
+				
+				g.drawString((_strength - circleIndex) + "", position.x - 3, position.y + _circleRadiusStep * circleIndex - _circleRadiusStep / 2 + 5);
+				g.drawString((_strength - circleIndex) + "", position.x - 3, position.y - _circleRadiusStep * circleIndex + _circleRadiusStep - 15);
+			}
+			else if (circleIndex == 1 && drawNumbers) 
+			{
+				g.drawString((_strength - 1) + "", position.x, position.y + 4);
+			}
 		}
-		else if (circleIndex == 1 && drawNumbers) 
+		else
 		{
-			g.drawString((_strength - 1) + "", position.x, position.y + 4);
+			int gray = 255 - 25 * (_strength - circleIndex + 1); // gray color based on layer
+			if(onlyEdges)
+			{
+				g.setColor(new Color(gray, gray, gray));
+				g.drawOval(position.x - circleIndex *_circleRadiusStep, 
+						position.y - circleIndex * _circleRadiusStep,
+						_circleRadiusStep * 2 * circleIndex, 
+						_circleRadiusStep * 2 * circleIndex);
+			}
+			else
+			{
+				gray = 255 - 5 * (_strength - circleIndex + 1); // gray color based on layer
+				g.setColor(new Color(gray, gray, gray));
+				g.fillOval(position.x - circleIndex *_circleRadiusStep + 1, 
+						position.y - circleIndex * _circleRadiusStep + 1,
+						_circleRadiusStep * 2 * circleIndex - 1, 
+						_circleRadiusStep * 2 * circleIndex - 1);
+			}
 		}
-
-		g.setColor(Color.white);
+	}
+	public int getStrength()
+	{
+		return _strength;
 	}
 }

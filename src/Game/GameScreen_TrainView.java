@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
@@ -129,4 +130,5 @@ public class GameScreen_TrainView implements GameScreen
 			_dragMode = false;
 		}
 	}
+	public void keyPressed(KeyEvent e){}
 }

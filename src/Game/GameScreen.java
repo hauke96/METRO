@@ -1,6 +1,7 @@
 package Game;
 
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
@@ -28,4 +29,9 @@ public interface GameScreen
 	 * @param e MouseEvent with infos (pos etc.)
 	 */
 	public void mouseReleased(MouseEvent e);
+	/**
+	 * When a key was pressed.
+	 * @param e KeyEvent with infos (which key?)
+	 */
+	public void keyPressed(KeyEvent e);
 }

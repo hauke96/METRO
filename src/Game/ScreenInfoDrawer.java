@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
@@ -31,7 +32,7 @@ public class ScreenInfoDrawer implements GameScreen {
 	 * Draws all significant player infos onto the upper left corner.
 	 * @param g The graphic handle to draw on
 	 */
-	private void drawPlayerInfos(Graphics g) // TODO evtl. in eigene klassen, damit man nicht 2x die gleiche methode hat?
+	private void drawPlayerInfos(Graphics g)
 	{
 		// clear area
 		g.setColor(Color.white);
@@ -64,7 +65,6 @@ public class ScreenInfoDrawer implements GameScreen {
 	 * @see GameScreen#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseReleased(MouseEvent e) 
-	{
-	}
+	public void mouseReleased(MouseEvent e){}
+	public void keyPressed(KeyEvent e){}
 }

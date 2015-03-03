@@ -106,6 +106,16 @@ public class Button implements ControlElement
 		return false;
 	}
 	/**
+	 * Returns if the button has been clicked since last frame.
+	 * @return True is button has been pressed.
+	 */
+	public boolean isPressed()
+	{
+		boolean temp = hasBeenClicked;
+		hasBeenClicked = false;
+		return temp;
+	}
+	/**
 	 * Draws the button with its text/texture.
 	 */
 	public void draw(Graphics g)
@@ -134,10 +144,10 @@ public class Button implements ControlElement
 	{
 		Point mPos = MouseInfo.getPointerInfo().getLocation();
 		
-		if(mPos.x >= _position.x 
-			&& mPos.x <= _position.x + _position.width
-			&& mPos.y >= _position.y
-			&& mPos.y <= _position.y + _position.height)
+		if(mPos.x >= _position.x + _windowHandle.getPosition().x
+			&& mPos.x <= _position.x + _position.width + _windowHandle.getPosition().x
+			&& mPos.y >= _position.y + _windowHandle.getPosition().y
+			&& mPos.y <= _position.y + _position.height + _windowHandle.getPosition().y)
 		{
 			hasBeenClicked = true;
 			return true;

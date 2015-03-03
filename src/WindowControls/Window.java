@@ -142,6 +142,11 @@ public class Window
 	{
 		Point mousePosition = e.getPoint();
 		
+		for(ControlElement cElement : _elementList)
+		{
+			cElement.clickOnControlElement();
+		}
+		
 		if(mousePosition.x >= _position.x
 			&& mousePosition.x <= _position.x + _size.x - 20
 			&& mousePosition.y >= _position.y
@@ -175,5 +180,9 @@ public class Window
 			return true;
 		}
 		return false;
+	}
+	public Point getPosition()
+	{
+		return _position;
 	}
 }

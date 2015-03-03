@@ -6,6 +6,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -62,43 +63,43 @@ public class GameScreen_CityView implements GameScreen
 	 */
 	private void drawCircles(Graphics2D g)
 	{
-		int showNumbersSpot = -1;
-		int circleNumber = -1; // the circle, the mouse is in. -1 means: Mouse out of any circle.
-
+		int selectedSpotNumber = -1;
+		int selectedLayerNumber = -1; // the circle, the mouse is in. -1 means: Mouse out of any circle.
+		
 		// get the selected circle number
-		for(int i = 0; i < 10; i++)
+		for(int i = 0; i < 10; i++) // go through all layers
 		{
-			boolean isIndexSelected = false; // is this layer selected -> true -> draw whole layer in blue
-			for(int k = 0; k < _travelerSpots.size(); k++)
+			boolean isLayerSelected = false;
+			for(int k = 0; !isLayerSelected && k < _travelerSpots.size(); k++) // go through all spots
 			{
-				isIndexSelected |= _travelerSpots.get(k).isMouseInCircle(i); // if mouse is in ANY circle of this layer
-				if(isIndexSelected)
+				isLayerSelected = _travelerSpots.get(k).isMouseInCircle(i); // if mouse is in ANY circle of this layer
+				if(isLayerSelected)
 				{
-					circleNumber = i;
-				}
-				if(_travelerSpots.get(k).isMouseInCircle(i))// && showNumbersSpot == -1) // get spot wich should show the numbers
-				{
-					showNumbersSpot = k;
+					selectedLayerNumber = i;
+					selectedSpotNumber = k;
 				}
 			}
 		}
 		// draw all the circles
 		for(int i = 0; i < 10; i++)
 		{
-			for(int k = 0; k < _travelerSpots.size(); k++)
+			for(int k = 0; k < _travelerSpots.size() && i < _travelerSpots.get(k).getStrength(); k++)
 			{
-				_travelerSpots.get(k).draw(g, i, i == circleNumber, k == showNumbersSpot); // i==circleNumber means: if i is the selected circle level -> draw it different
+				_travelerSpots.get(k).draw(g, i, i == selectedLayerNumber, k == selectedSpotNumber, true); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+			}
+			for(int k = 0; k < _travelerSpots.size() && i < _travelerSpots.get(k).getStrength(); k++)
+			{
+				_travelerSpots.get(k).draw(g, i, i == selectedLayerNumber, k == selectedSpotNumber); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 			}
 		}
 		
-		if(circleNumber != -1) // if there's a selected circle 
+		if(selectedLayerNumber != -1) // if there's a selected circle 
 		{
-			int gray = 55 * circleNumber;
+			int gray = 55 * selectedLayerNumber;
 			if(gray > 255) gray = 255;
 			g.setColor(new Color(0, 0, 200));
-			g.drawString(circleNumber + "", MouseInfo.getPointerInfo().getLocation().x - g.getFontMetrics(METRO.__stdFont).stringWidth(circleNumber + "") / 2 - 1, 
+			g.drawString(selectedLayerNumber + "", MouseInfo.getPointerInfo().getLocation().x - g.getFontMetrics(METRO.__stdFont).stringWidth(selectedLayerNumber + "") / 2 - 1, 
 					MouseInfo.getPointerInfo().getLocation().y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
-			g.setColor(Color.white);
 		}
 	}
 
@@ -131,5 +132,8 @@ public class GameScreen_CityView implements GameScreen
 			_dragMode = false;
 		}
 	}
-
+	@Override
+	public void keyPressed(KeyEvent e)
+	{
+	}
 }

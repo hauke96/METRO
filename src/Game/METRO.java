@@ -28,7 +28,7 @@ import WindowControls.Window;
  * @author Hauke
  * @version 0.0.1
  */
-public class METRO extends Frame implements MouseListener
+public class METRO extends Frame implements MouseListener, KeyListener
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -50,9 +50,11 @@ public class METRO extends Frame implements MouseListener
 		__metroBlue;
 	public static int __money = 12345678;
 	public static ArrayList<Window> __windowList = new ArrayList<Window>();
+	public static CloseWindow __closeWindow;
 	
 	private BufferedImage _cursor,
 		__bufferedImage;
+	private long _oldSystemTime = System.currentTimeMillis();
  
 	 
 	/**
@@ -74,6 +76,7 @@ public class METRO extends Frame implements MouseListener
 	        }
 	    });
 	    addMouseListener(this);
+	    addKeyListener(this);
 	    setLocationRelativeTo(null);
 	    setUndecorated(true);
 	    
@@ -123,11 +126,19 @@ public class METRO extends Frame implements MouseListener
 	    
 	    setVisible(true);
 	    setResizable(false);
+	    
+	    
 	}
 	
 	@Override
     public void paint(Graphics g) 
 	{
+		//update very important and basic things:
+		if(__closeWindow != null)
+		{
+			__closeWindow.update(g);
+		}
+		
 		__bufferedImage = new BufferedImage(__SCREEN_SIZE.width, __SCREEN_SIZE.height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = __bufferedImage.createGraphics();
 		
@@ -157,6 +168,11 @@ public class METRO extends Frame implements MouseListener
 		// Draw cursor icon/image
 		g2d.drawImage(_cursor, MouseInfo.getPointerInfo().getLocation().x - 10, MouseInfo.getPointerInfo().getLocation().y - 10, null);
 		
+		//Draw FPS on screen
+		g2d.setColor(__metroBlue);
+		g2d.drawString((int)(1000 / (float)(System.currentTimeMillis() - _oldSystemTime)) + " FPS", __SCREEN_SIZE.width - 50, 20);
+		_oldSystemTime = System.currentTimeMillis();
+		
 		//finalize drawing stuff
 	    Graphics2D g2dComponent = (Graphics2D) g;
 	    g2dComponent.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -164,8 +180,8 @@ public class METRO extends Frame implements MouseListener
 	    g2dComponent.drawImage(__bufferedImage,0, 0, __SCREEN_SIZE.width, __SCREEN_SIZE.height, null);
 	    g2dComponent.finalize();
 
-	    try{Thread.sleep(20);}
-	    catch(Exception e){}
+//	    try{Thread.sleep(20);}
+//	    catch(Exception e){}
 	    repaint(); // max ~60fps  (1000/60=16.6666...)
 	}
 	public void update(Graphics g)
@@ -178,18 +194,19 @@ public class METRO extends Frame implements MouseListener
 	{
 		Window clickedWindow = null;
 		
-		for(Window win : __windowList)
+//		for(Window win : __windowList)
+		for(int i = __windowList.size() - 1; i >= 0; i--)
 		{
-			win.mousePressed(e);
-			if(win.isMouseOnWindow()) // if mouse is just on the window area (not on a Button, etc.)
+			__windowList.get(i).mousePressed(e);
+			if(__windowList.get(i).isMouseOnWindow()) // if mouse is just on the window area (not on a Button, etc.)
 			{
-				clickedWindow = win;
+				clickedWindow = __windowList.get(i);
 				break;
 			}
 		}
-		if(clickedWindow == null)
+		if(clickedWindow == null) // if no window has been clicked
 		{
-			__currentGameScreen.mouseClicked(e);
+			__currentGameScreen.mouseClicked(e); // forward click to game screen
 			if(__controlDrawer != null) __controlDrawer.mouseClicked(e);
 		}
 		else
@@ -213,6 +230,17 @@ public class METRO extends Frame implements MouseListener
 	public void mouseEntered(MouseEvent e){}
 	@Override
 	public void mouseExited(MouseEvent e){}
+	@Override
+	public void keyPressed(KeyEvent e)
+	{
+		__currentGameScreen.keyPressed(e);
+	}
+	@Override
+	public void keyReleased(KeyEvent e)
+	{}
+	@Override
+	public void keyTyped(KeyEvent e)
+	{}
 	
 	/**
 	 * Closes a specific window.
@@ -227,12 +255,38 @@ public class METRO extends Frame implements MouseListener
 	 */
 	public static void __close()
 	{
-		Window quitWindow = new Window("Really quit?",new Point(__SCREEN_SIZE.width / 2 - 200, 
-			__SCREEN_SIZE.height / 2 - 50), new Point(400, 100), __metroRed);
-		new WindowControls.Button(new Rectangle(10, 75, 185, 20), "Yes", quitWindow);
-		new WindowControls.Button(new Rectangle(205, 75, 185, 20), "No", quitWindow);
-		new WindowControls.Label("Really quit METRO?", new Point(140, 55), quitWindow);
+		__closeWindow = new CloseWindow();
+	}
+	private static class CloseWindow 
+	{
+		private WindowControls.Button _yesButton, 
+			_noButton;
+		private Window _closeWindow;
 		
-		__windowList.add(quitWindow);
+		public CloseWindow()
+		{
+			_closeWindow = new Window("Really quit?",new Point(__SCREEN_SIZE.width / 2 - 200, 
+					__SCREEN_SIZE.height / 2 - 50), new Point(400, 100), __metroRed);
+			_yesButton = new WindowControls.Button(new Rectangle(10, 75, 185, 20), "Yes", _closeWindow);
+			_noButton = new WindowControls.Button(new Rectangle(205, 75, 185, 20), "No", _closeWindow);
+			new WindowControls.Label("Really quit METRO?", new Point(140, 55), _closeWindow);
+			
+			__windowList.add(_closeWindow);
+		}
+		public void update(Graphics g)
+		{
+			if(_yesButton.isPressed())
+			{
+				System.exit(0);
+			}
+			else if(_noButton.isPressed())
+			{
+				METRO.__closeWindow = null;
+//				_closeWindow = null;
+//				_yesButton = null;
+//				_noButton = null;
+				METRO.__windowList.remove(_closeWindow);
+			}
+		}
 	}
 }
