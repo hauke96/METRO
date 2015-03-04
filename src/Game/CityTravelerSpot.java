@@ -70,8 +70,8 @@ public class CityTravelerSpot
 
 		if(circleSelected)
 		{
-			g.setColor(new Color(230 - 5 * (int)(_strength - layerIndex), 
-					240 - (int)(3.5f * (_strength - layerIndex)), 
+			g.setColor(new Color(200 - (int)(2f * (_strength - layerIndex)), 
+					220 - (int)(1.5f * (_strength - layerIndex)), 
 					255));
 			g.fillOval(position.x - layerIndex *_circleRadiusStep + 1, 
 				position.y - layerIndex * _circleRadiusStep + 1,
