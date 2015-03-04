@@ -3,11 +3,8 @@ package Game;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-
-import javax.xml.crypto.dsig.keyinfo.KeyInfo;
 
 import WindowControls.Button;
 

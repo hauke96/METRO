@@ -6,9 +6,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,15 +32,23 @@ public class GameScreen_CityView implements GameScreen
 	
 	private List<CityTravelerSpot> _travelerSpots = new ArrayList<CityTravelerSpot>();
 	private Point _oldMousePos; // Mouse position from last frame
+	private Point2D _lastFrameOffset = new Point2D.Float(0, 0); // offset of last frame
 	private boolean _dragMode = false;
+	private int _lastSelectedSpot, 
+		_lastSelectedLayer; // selected things since last frame
+	private BufferedImage _lastSpotFrame; // the image, rendered since last change
 
 	/**
 	 * Constructor to load all the important stuff
 	 */
 	public GameScreen_CityView()
 	{
-		_travelerSpots.add(new CityTravelerSpot(new Point(500, 500), 6));
-		_travelerSpots.add(new CityTravelerSpot(new Point(700, 700), 4));
+		_travelerSpots.add(new CityTravelerSpot(new Point(500, 500), 7));
+		_travelerSpots.add(new CityTravelerSpot(new Point(700, 700), 5));
+		_travelerSpots.add(new CityTravelerSpot(new Point(550, 800), 6));
+		_travelerSpots.add(new CityTravelerSpot(new Point(200, 650), 8));
+		
+		_lastSpotFrame = new BufferedImage(METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height, BufferedImage.TYPE_INT_ARGB);
 	}
 
 	/* (non-Javadoc)
@@ -49,13 +59,14 @@ public class GameScreen_CityView implements GameScreen
 	{
 		if(_dragMode)
 		{
+			//TODO offset not working correctly :(
 			_offset = new Point2D.Float((float)_offset.getX() + (MouseInfo.getPointerInfo().getLocation().x - _oldMousePos.x) * 2f,
-				(float)_offset.getY() + (MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y) * 2f);
+					(float)_offset.getY() + (MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y) * 2f);
 		}
+		_oldMousePos = MouseInfo.getPointerInfo().getLocation();
 		
 		drawCircles(g);	
 		
-		_oldMousePos = MouseInfo.getPointerInfo().getLocation();
 	}
 	/**
 	 * Draws the traveler-circles.
@@ -80,18 +91,33 @@ public class GameScreen_CityView implements GameScreen
 				}
 			}
 		}
-		// draw all the circles
-		for(int i = 0; i < 10; i++)
+		
+		if(_lastSelectedSpot != selectedSpotNumber 
+			|| _lastSelectedLayer != selectedLayerNumber
+			|| !_lastFrameOffset.equals(_offset)) // only re-render if something changed
 		{
-			for(int k = 0; k < _travelerSpots.size() && i < _travelerSpots.get(k).getStrength(); k++)
+			Graphics2D g2d = _lastSpotFrame.createGraphics();
+			g2d.setColor(Color.white);
+			g2d.fillRect(0, 0, _lastSpotFrame.getWidth(), _lastSpotFrame.getHeight());
+			g2d.setFont(METRO.__stdFont);
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			// draw all the circles
+			for(int i = 0; i < 10; i++)
 			{
-				_travelerSpots.get(k).draw(g, i, i == selectedLayerNumber, k == selectedSpotNumber, true); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+				for(int k = 0; k < _travelerSpots.size(); k++)
+				{
+					_travelerSpots.get(k).draw(g2d, i, i == selectedLayerNumber, k == selectedSpotNumber, true); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+				}
+				for(int k = 0; k < _travelerSpots.size(); k++)
+				{
+					_travelerSpots.get(k).draw(g2d, i, i == selectedLayerNumber, k == selectedSpotNumber); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+				}
 			}
-			for(int k = 0; k < _travelerSpots.size() && i < _travelerSpots.get(k).getStrength(); k++)
-			{
-				_travelerSpots.get(k).draw(g, i, i == selectedLayerNumber, k == selectedSpotNumber); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
-			}
+			_lastSelectedLayer = selectedLayerNumber;
+			_lastSelectedSpot = selectedSpotNumber;
+			_lastFrameOffset = _offset;
 		}
+		g.drawImage(_lastSpotFrame, 0, 0, null);
 		
 		if(selectedLayerNumber != -1) // if there's a selected circle 
 		{
@@ -99,7 +125,7 @@ public class GameScreen_CityView implements GameScreen
 			if(gray > 255) gray = 255;
 			g.setColor(new Color(0, 0, 200));
 			g.drawString(selectedLayerNumber + "", MouseInfo.getPointerInfo().getLocation().x - g.getFontMetrics(METRO.__stdFont).stringWidth(selectedLayerNumber + "") / 2 - 1, 
-					MouseInfo.getPointerInfo().getLocation().y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
+				MouseInfo.getPointerInfo().getLocation().y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
 		}
 	}
 
@@ -135,5 +161,9 @@ public class GameScreen_CityView implements GameScreen
 	@Override
 	public void keyPressed(KeyEvent e)
 	{
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+		{
+			METRO.__close();
+		}
 	}
 }

@@ -69,7 +69,6 @@ public class METRO extends Frame implements MouseListener, KeyListener
 		
 	    setBackground(Color.white);
 	    setSize(__SCREEN_SIZE.width, __SCREEN_SIZE.height);
-	    setSize(__SCREEN_SIZE.width, __SCREEN_SIZE.height);
 	    addWindowListener(new WindowAdapter() {
 	        public void windowClosing(WindowEvent e) {
 	        	System.exit(0);
@@ -143,7 +142,7 @@ public class METRO extends Frame implements MouseListener, KeyListener
 		Graphics2D g2d = __bufferedImage.createGraphics();
 		
 		g2d.setFont(__stdFont);
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		//g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		
 		//Clear screen with white:
 		g2d.setColor(Color.white);

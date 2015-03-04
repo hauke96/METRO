@@ -43,12 +43,12 @@ public class GameScreen_TrainView implements GameScreen
 			_offset = new Point2D.Float((float)_offset.getX() + (MouseInfo.getPointerInfo().getLocation().x - _oldMousePos.x) * 2f,
 				(float)_offset.getY() + (MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y) * 2f);
 		}
+		_oldMousePos = MouseInfo.getPointerInfo().getLocation();
 
 		drawBaseNet(g, Color.lightGray);
 		drawBaseDot(g);
 		
 		printDebugStuff(g);
-		_oldMousePos = MouseInfo.getPointerInfo().getLocation();
 	}
 	/**
 	 * Prints all the debug stuff, that is -more or less- important.
@@ -130,5 +130,11 @@ public class GameScreen_TrainView implements GameScreen
 			_dragMode = false;
 		}
 	}
-	public void keyPressed(KeyEvent e){}
+	public void keyPressed(KeyEvent e)
+	{
+		if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+		{
+			METRO.__close();
+		}
+	}
 }

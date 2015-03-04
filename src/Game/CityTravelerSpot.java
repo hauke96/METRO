@@ -68,7 +68,6 @@ public class CityTravelerSpot
 		// get the position with offset
 		Point position = new Point(_position.x + (int)GameScreen_CityView._offset.getX(), _position.y + (int)GameScreen_CityView._offset.getY());
 
-
 		if(circleSelected)
 		{
 			g.setColor(new Color(230 - 5 * (_strength - circleIndex), 240 - (int)(4f * (float)(_strength - circleIndex)), 255));
