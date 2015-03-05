@@ -26,7 +26,7 @@ import WindowControls.Window;
 
 /**
  * @author Hauke
- * @version 0.0.1
+ * @version 0.0.2
  */
 public class METRO extends Frame implements MouseListener, KeyListener
 {
@@ -48,7 +48,8 @@ public class METRO extends Frame implements MouseListener, KeyListener
 		__viewPortButton_Train;
 	public static Color __metroRed,
 		__metroBlue;
-	public static int __money = 12345678;
+	public static int __money = 12345678,
+		__baseNetSpacing = 25; // amount of pixel between lines of the base net
 	public static ArrayList<Window> __windowList = new ArrayList<Window>();
 	public static CloseWindow __closeWindow;
 	

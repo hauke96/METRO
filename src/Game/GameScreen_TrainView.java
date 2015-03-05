@@ -7,8 +7,12 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.SwingUtilities;
+
+import TrainManagement.TrainStation;
 
 
 /**
@@ -23,10 +27,11 @@ public class GameScreen_TrainView implements GameScreen
 {
 	private boolean _dragMode = false;
 	private Point _oldMousePos; // Mouse position from last frame
-	private int _baseNetSpacing = 25; // amount of pixel between lines of the base net
 	private Point2D _offset = new Point2D.Float(0, 0); // offset for moving the map
+	private List<TrainStation> _trainStationList = new ArrayList<TrainStation>();
 	
 	static public GameScreen _cityGameScreen; // to go into the city game-screen without loosing reference
+	static public Point _selectedCross = new Point(-1, -1); // out of screen 
 	
 	public GameScreen_TrainView()
 	{
@@ -45,8 +50,13 @@ public class GameScreen_TrainView implements GameScreen
 		}
 		_oldMousePos = MouseInfo.getPointerInfo().getLocation();
 
-		drawBaseNet(g, Color.lightGray);
+		drawBaseNet(g, new Color(220, 220, 220));//Color.lightGray);
 		drawBaseDot(g);
+		
+		for(TrainStation ts : _trainStationList)
+		{
+			ts.draw(g, new Point((int)_offset.getX(), (int)_offset.getY()));
+		}
 		
 		printDebugStuff(g);
 	}
@@ -72,11 +82,11 @@ public class GameScreen_TrainView implements GameScreen
 	private void drawBaseNet(Graphics2D g, Color color, int offset)
 	{
 		g.setColor(color);
-		for(int y = ((int)_offset.getY() + offset) % _baseNetSpacing; y < METRO.__SCREEN_SIZE.height; y += _baseNetSpacing)
+		for(int y = ((int)_offset.getY() + offset) % METRO.__baseNetSpacing; y < METRO.__SCREEN_SIZE.height; y += METRO.__baseNetSpacing)
 		{
 			g.drawLine(offset, y, METRO.__SCREEN_SIZE.width, y);
 		}
-		for(int x = ((int)_offset.getX() + offset) % _baseNetSpacing; x < METRO.__SCREEN_SIZE.width; x += _baseNetSpacing)
+		for(int x = ((int)_offset.getX() + offset) % METRO.__baseNetSpacing; x < METRO.__SCREEN_SIZE.width; x += METRO.__baseNetSpacing)
 		{
 			g.drawLine(x, offset, x, METRO.__SCREEN_SIZE.height);
 		}
@@ -97,12 +107,15 @@ public class GameScreen_TrainView implements GameScreen
 	 */
 	private void drawBaseDot(Graphics2D g)
 	{
-		Point cursorPos = new Point(Math.abs((int)(MouseInfo.getPointerInfo().getLocation().x - 7 - _offset.getX()) % _baseNetSpacing), 
-				Math.abs((int)(MouseInfo.getPointerInfo().getLocation().y - 7 - _offset.getY()) % _baseNetSpacing));
+		Point cursorPos = new Point(Math.abs((int)(MouseInfo.getPointerInfo().getLocation().x - 7 - _offset.getX()) % METRO.__baseNetSpacing), 
+				Math.abs((int)(MouseInfo.getPointerInfo().getLocation().y - 7 - _offset.getY()) % METRO.__baseNetSpacing));
+
+		_selectedCross = new Point(((int)(MouseInfo.getPointerInfo().getLocation().x - 5 - _offset.getX()) - 10)/METRO.__baseNetSpacing + 1, 
+			((int)(MouseInfo.getPointerInfo().getLocation().y - 5 - _offset.getY()) - 10)/METRO.__baseNetSpacing + 1);
 		
-		Point offsetMarker = new Point(_baseNetSpacing - cursorPos.x, _baseNetSpacing - cursorPos.y);
-		if(cursorPos.x <= _baseNetSpacing / 2) offsetMarker.x = cursorPos.x;
-		if(cursorPos.y <= _baseNetSpacing / 2) offsetMarker.y = cursorPos.y;
+		Point offsetMarker = new Point(METRO.__baseNetSpacing - cursorPos.x, METRO.__baseNetSpacing - cursorPos.y);
+		if(cursorPos.x <= METRO.__baseNetSpacing / 2) offsetMarker.x = cursorPos.x;
+		if(cursorPos.y <= METRO.__baseNetSpacing / 2) offsetMarker.y = cursorPos.y;
 
 		g.setColor(Color.darkGray);
 		g.fillRect(MouseInfo.getPointerInfo().getLocation().x + offsetMarker.x - 8, 
@@ -121,6 +134,14 @@ public class GameScreen_TrainView implements GameScreen
 			METRO.__currentGameScreen = _cityGameScreen;
 			METRO.__viewPortButton_City.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2 - 200, -5));
 			METRO.__viewPortButton_Train.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2, -15));
+		}
+		else if(MouseInfo.getPointerInfo().getLocation().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 &&
+				MouseInfo.getPointerInfo().getLocation().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 &&
+				MouseInfo.getPointerInfo().getLocation().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 &&
+				MouseInfo.getPointerInfo().getLocation().y <= _selectedCross.y * METRO.__baseNetSpacing + 6)
+		{
+			_trainStationList.add(new TrainStation(_selectedCross, 0));
+			//TODO for testing: connect to last added station
 		}
 	}
 	public void mouseReleased(MouseEvent e)
