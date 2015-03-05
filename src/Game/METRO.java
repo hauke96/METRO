@@ -35,7 +35,7 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	public static final Dimension __SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
 	//public static final Dimension __SCREEN_SIZE = new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width/2,Toolkit.getDefaultToolkit().getScreenSize().height/2);
 	public static final String __TITLE = "METRO",
-		__VERSION = "0.0.1";
+		__VERSION = "0.0.2";
 	
 	public static Font __stdFont;// = new Font("Huxley Titling", Font.PLAIN, 20);
 	public static GameScreen __currentGameScreen,

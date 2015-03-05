@@ -1,6 +1,5 @@
 package Game;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
@@ -20,7 +19,7 @@ public class ScreenInfoDrawer implements GameScreen {
 	 * @see GameScreen#update(java.awt.Graphics2D)
 	 */
 	@Override
-	public void update(Graphics2D g) 
+	public void update(Graphics2D g)
 	{
 		g.drawImage(METRO.__viewPortButton_Texture, METRO.__SCREEN_SIZE.width / 2 - 40, 45, METRO.__SCREEN_SIZE.width / 2 + 40, 85, 
 				161, 60, 161+79, 60+40, null); // the "view" sign under the two buttons
@@ -43,7 +42,7 @@ public class ScreenInfoDrawer implements GameScreen {
 		g.drawLine(0, 26, 150, 26);
 		g.drawLine(150, 0, 150, 26);
 		
-		// draw amount of money like 935.258.555$
+		// draw amount of money like 935.258.550 $
 		g.setFont(METRO.__stdFont);
 		g.setColor(METRO.__metroRed);
 		g.drawString("$", 5, 22);

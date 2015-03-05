@@ -1,0 +1,23 @@
+You'll find all changes made in the versions here:
+
+VERSION 0.0.2: (since 05.03.2015)
+	- 
+
+VERSION 0.0.1:
+	- Controls Management
+		* Buttons
+		* Windows
+		* Label
+	- GameScreen-Management
+		* main menu
+			+ Buttons
+			+ Title image
+		* train-view
+			+ base net (the basic net you see)
+			+ base dot (the cool dot at the mouse position)
+			+ player information
+		* city-view
+			+ city circles 
+			+ fancy highlighting
+			+ numbering circles
+	- Centralized window management
