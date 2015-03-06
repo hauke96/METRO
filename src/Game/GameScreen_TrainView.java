@@ -25,10 +25,12 @@ import TrainManagement.TrainStation;
  */
 public class GameScreen_TrainView implements GameScreen
 {
-	private boolean _dragMode = false;
+	private boolean _dragMode = false,
+		_trainStationConnectMode = false; // when user clicked on a train station, he can connect this to another
 	private Point _oldMousePos; // Mouse position from last frame
 	private Point2D _offset = new Point2D.Float(0, 0); // offset for moving the map
 	private List<TrainStation> _trainStationList = new ArrayList<TrainStation>();
+	private TrainStation _selectedTrainStation = null;
 	
 	static public GameScreen _cityGameScreen; // to go into the city game-screen without loosing reference
 	static public Point _selectedCross = new Point(-1, -1); // out of screen 
@@ -36,7 +38,6 @@ public class GameScreen_TrainView implements GameScreen
 	public GameScreen_TrainView()
 	{
 	}
-
 	/* (non-Javadoc)
 	 * @see GameScreen#update(java.awt.Graphics2D)
 	 */
@@ -53,10 +54,7 @@ public class GameScreen_TrainView implements GameScreen
 		drawBaseNet(g, new Color(220, 220, 220));//Color.lightGray);
 		drawBaseDot(g);
 		
-		for(TrainStation ts : _trainStationList)
-		{
-			ts.draw(g, new Point((int)_offset.getX(), (int)_offset.getY()));
-		}
+		drawTrainStations(g);
 		
 		printDebugStuff(g);
 	}
@@ -123,25 +121,92 @@ public class GameScreen_TrainView implements GameScreen
 				3, 3);
 		g.setColor(Color.white);
 	}
+	/**
+	 * Draws all the train stations with conenctions and labels.
+	 * @param g Graphic handle to draw on.
+	 */
+	private void drawTrainStations(Graphics2D g)
+	{
+		Point offset = new Point((int)_offset.getX(), (int)_offset.getY());
+		//Draw line if _trainStationConnectMode is true
+		if(_trainStationConnectMode)
+		{
+			Point mPos = MouseInfo.getPointerInfo().getLocation();
+			g.setColor(Color.black);
+			g.drawLine(_selectedTrainStation.getPositionOnScreen(offset).x, _selectedTrainStation.getPositionOnScreen(offset).y, mPos.x, mPos.y);
+		}
+		//Draw connections:
+		for(TrainStation ts : _trainStationList)
+		{
+			ts.drawConnections(g, offset);
+		}
+		//Draw stations:
+		for(TrainStation ts : _trainStationList)
+		{
+			ts.draw(g, offset);
+		}
+	}
 	public void mouseClicked(MouseEvent e)
 	{
 		if(SwingUtilities.isMiddleMouseButton(e))
 		{
 			_dragMode = true;
 		}
-		if(METRO.__viewPortButton_City.isPressed(MouseInfo.getPointerInfo().getLocation().x, MouseInfo.getPointerInfo().getLocation().y))
+		else if(SwingUtilities.isRightMouseButton(e))
 		{
-			METRO.__currentGameScreen = _cityGameScreen;
-			METRO.__viewPortButton_City.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2 - 200, -5));
-			METRO.__viewPortButton_Train.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2, -15));
+			Point mPos = e.getPoint(),
+				offset = new Point((int)_offset.getX(), (int)_offset.getY());
+			
+			for(TrainStation ts : _trainStationList)
+			{
+				Point pos = ts.getPositionOnScreen(offset);
+				if(mPos.x >= pos.x - 4
+					&& mPos.x <= pos.x + 3
+					&& mPos.y >= pos.y - 7
+					&& mPos.y <= pos.y + 7)
+				{
+					_trainStationConnectMode = true;
+					_selectedTrainStation = ts;
+					break;
+				}	
+			}
 		}
-		else if(MouseInfo.getPointerInfo().getLocation().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 &&
-				MouseInfo.getPointerInfo().getLocation().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 &&
-				MouseInfo.getPointerInfo().getLocation().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 &&
-				MouseInfo.getPointerInfo().getLocation().y <= _selectedCross.y * METRO.__baseNetSpacing + 6)
+		else if(SwingUtilities.isLeftMouseButton(e))
 		{
-			_trainStationList.add(new TrainStation(_selectedCross, 0));
-			//TODO for testing: connect to last added station
+			if(_trainStationConnectMode)
+			{
+				Point mPos = e.getPoint(),
+					offset = new Point((int)_offset.getX(), (int)_offset.getY());
+				for(TrainStation ts : _trainStationList)
+				{
+					Point pos = ts.getPositionOnScreen(offset);
+					if(mPos.x >= pos.x - 4
+						&& mPos.x <= pos.x + 3
+						&& mPos.y >= pos.y - 7
+						&& mPos.y <= pos.y + 7)
+					{ 
+						_selectedTrainStation.addConnection(ts);
+						_trainStationConnectMode = false;
+						_selectedTrainStation = null;
+						break;
+					}	
+				}
+			}
+			else if(METRO.__viewPortButton_City.isPressed(e.getPoint().x, e.getPoint().y))
+			{
+				METRO.__currentGameScreen = _cityGameScreen;
+				METRO.__viewPortButton_City.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2 - 200, -5));
+				METRO.__viewPortButton_Train.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2, -15));
+			}
+			else if(e.getPoint().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 &&
+					e.getPoint().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 &&
+					e.getPoint().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 &&
+					e.getPoint().y <= _selectedCross.y * METRO.__baseNetSpacing + 6)
+			{
+				_trainStationList.add(new TrainStation(_selectedCross, 0));
+				// only for testing: add last station to connection
+//				_trainStationList.get(_trainStationList.size() - 1).addConnection(_trainStationList.get(_trainStationList.size() - 2));
+			}
 		}
 	}
 	public void mouseReleased(MouseEvent e)
