@@ -198,10 +198,10 @@ public class GameScreen_TrainView implements GameScreen
 				METRO.__viewPortButton_City.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2 - 200, -5));
 				METRO.__viewPortButton_Train.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2, -15));
 			}
-			else if(e.getPoint().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 &&
-					e.getPoint().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 &&
-					e.getPoint().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 &&
-					e.getPoint().y <= _selectedCross.y * METRO.__baseNetSpacing + 6)
+			else if(e.getPoint().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _offset.getX() &&
+					e.getPoint().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _offset.getX() &&
+					e.getPoint().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _offset.getY() &&
+					e.getPoint().y <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _offset.getY())
 			{
 				_trainStationList.add(new TrainStation(_selectedCross, 0));
 				// only for testing: add last station to connection
