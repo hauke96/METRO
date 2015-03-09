@@ -82,6 +82,7 @@ public class Window
 		g2d.setFont(METRO.__stdFont);
 		g2d.drawString(_title, (_size.x - 20) / 2 - g2d.getFontMetrics(METRO.__stdFont).stringWidth(_title) / 2, 
 			g2d.getFontMetrics(METRO.__stdFont).getHeight() - 5);
+		g2d.drawRect(1, 1, _size.x - 3, 18);
 		//Close cross
 		g2d.drawImage(METRO.__iconSet, _size.x - 20, 0, _size.x, 20, 0, 0, 20, 20, null);
 		

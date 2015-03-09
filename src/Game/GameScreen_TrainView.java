@@ -148,15 +148,15 @@ public class GameScreen_TrainView implements GameScreen
 	}
 	public void mouseClicked(MouseEvent e)
 	{
+		Point mPos = e.getPoint(),
+			offset = new Point((int)_offset.getX(), (int)_offset.getY());
+			
 		if(SwingUtilities.isMiddleMouseButton(e))
 		{
 			_dragMode = true;
 		}
 		else if(SwingUtilities.isRightMouseButton(e))
 		{
-			Point mPos = e.getPoint(),
-				offset = new Point((int)_offset.getX(), (int)_offset.getY());
-			
 			for(TrainStation ts : _trainStationList)
 			{
 				Point pos = ts.getPositionOnScreen(offset);
@@ -175,8 +175,6 @@ public class GameScreen_TrainView implements GameScreen
 		{
 			if(_trainStationConnectMode)
 			{
-				Point mPos = e.getPoint(),
-					offset = new Point((int)_offset.getX(), (int)_offset.getY());
 				for(TrainStation ts : _trainStationList)
 				{
 					Point pos = ts.getPositionOnScreen(offset);
@@ -203,9 +201,16 @@ public class GameScreen_TrainView implements GameScreen
 					e.getPoint().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _offset.getY() &&
 					e.getPoint().y <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _offset.getY())
 			{
-				_trainStationList.add(new TrainStation(_selectedCross, 0));
-				// only for testing: add last station to connection
-//				_trainStationList.get(_trainStationList.size() - 1).addConnection(_trainStationList.get(_trainStationList.size() - 2));
+				boolean positionOccupied = false;
+				Point _selectPointOnScreen = new Point(_selectedCross.x * METRO.__baseNetSpacing + (int)_offset.getX(),
+						_selectedCross.y * METRO.__baseNetSpacing + (int)_offset.getY());
+				
+				for(TrainStation ts : _trainStationList)
+				{
+					positionOccupied |= ts.getPositionOnScreen(offset).equals(_selectPointOnScreen); // true if this cross has already a station
+				}
+				
+				if(!positionOccupied) _trainStationList.add(new TrainStation(_selectedCross, 0)); // no doubles
 			}
 		}
 	}
