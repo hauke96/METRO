@@ -65,6 +65,8 @@ public class CityTravelerSpot
 		layerIndex = _strength - layerIndex;
 		if(layerIndex < -1) return;
 		
+		int gray = 255 - 25 * (_strength - layerIndex + 1); // gray color based on layer
+		
 		// get the position with offset
 		Point position = new Point(_position.x + (int)GameScreen_CityView._offset.getX(), _position.y + (int)GameScreen_CityView._offset.getY());
 
@@ -93,26 +95,22 @@ public class CityTravelerSpot
 				g.drawString((_strength - 1) + "", position.x, position.y + 4);
 			}
 		}
-		else
+		else if(!onlyEdges)
 		{
-			int gray = 255 - 25 * (_strength - layerIndex + 1); // gray color based on layer
-			if(onlyEdges)
-			{
-				g.setColor(new Color(gray, gray, gray));
-				g.drawOval(position.x - layerIndex *_circleRadiusStep,
-					position.y - layerIndex * _circleRadiusStep,
-					_circleRadiusStep * 2 * layerIndex,
-					_circleRadiusStep * 2 * layerIndex);
-			}
-			else
-			{
-				gray = 255 - 5 * (_strength - layerIndex + 1); // gray color based on layer
-				g.setColor(new Color(gray, gray, gray));
-				g.fillOval(position.x - layerIndex *_circleRadiusStep + 1,
-					position.y - layerIndex * _circleRadiusStep + 1,
-					_circleRadiusStep * 2 * layerIndex - 1,
-					_circleRadiusStep * 2 * layerIndex - 1);
-			}
+			gray = 255 - 5 * (_strength - layerIndex + 1); // gray color based on layer
+			g.setColor(new Color(gray, gray, gray));
+			g.fillOval(position.x - layerIndex *_circleRadiusStep + 1,
+				position.y - layerIndex * _circleRadiusStep + 1,
+				_circleRadiusStep * 2 * layerIndex - 1,
+				_circleRadiusStep * 2 * layerIndex - 1);
+		}
+		if(onlyEdges)
+		{
+			g.setColor(new Color(gray, gray, gray));
+			g.drawOval(position.x - layerIndex *_circleRadiusStep,
+				position.y - layerIndex * _circleRadiusStep,
+				_circleRadiusStep * 2 * layerIndex,
+				_circleRadiusStep * 2 * layerIndex);
 		}
 	}
 	public float getStrength()
