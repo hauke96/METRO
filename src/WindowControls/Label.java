@@ -6,6 +6,7 @@ package WindowControls;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
 
 import Game.METRO;
 
@@ -17,6 +18,7 @@ public class Label implements ControlElement
 {
 	private String _text = "";
 	private Point _position;
+	private int _areaWidth = 0;
 	private Window _windowHandle;
 
 	/**
@@ -30,6 +32,15 @@ public class Label implements ControlElement
 		_text = text;
 		_position = position;
 		_windowHandle = window;
+		_areaWidth = 0;
+		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+	}
+	public Label(String text, Point position, int areaWidth, Window window)
+	{
+		_text = text;
+		_position = position;
+		_windowHandle = window;
+		_areaWidth = areaWidth;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 	}
 	/**
@@ -39,7 +50,11 @@ public class Label implements ControlElement
 	 */
 	public Label(String text, Point position)
 	{
-		this(text, position, null);
+		this(text, position, 0, null);
+	}
+	public Label(String text, Point position, int areaWidth)
+	{
+		this(text, position, areaWidth, null);
 	}
 
 	/* (non-Javadoc)
@@ -57,8 +72,43 @@ public class Label implements ControlElement
 	public void draw(Graphics g)
 	{
 		Color c = g.getColor();
-		g.setColor(METRO.__metroBlue);
-		g.drawString(_text, _position.x, _position.y);
+		g.setFont(METRO.__stdFont);
+		g.setColor(Color.black);
+		
+		if(_areaWidth == 0)
+		{
+			g.drawString(_text, _position.x, _position.y);
+		}
+		else
+		{
+			int stringHeight = g.getFontMetrics(METRO.__stdFont).getHeight(),
+				vOffset = 0;
+			String[] segments = _text.split("\n"); // split by new line
+			
+			for(String segment : segments)
+			{
+				String[] subSegments = segment.split(" "); // each word
+				String line = "";
+				
+				// recunstruct string with length < area width
+				for(int i = 0; i < subSegments.length; i++)
+				{
+					if(g.getFontMetrics(METRO.__stdFont).stringWidth(line + " " + subSegments[i]) >= _areaWidth) // if next addition would be out of area
+					{
+						g.drawString(line, _position.x, _position.y + vOffset);
+						vOffset += stringHeight + 2; // y-pos for next line
+						line = subSegments[i] + " "; // choose first char for next line
+					}
+					else // if new addition is in area
+					{
+						line += subSegments[i] + " ";
+					}
+				}
+
+				g.drawString(line, _position.x, _position.y + vOffset);
+				vOffset += stringHeight + 2; // y-pos for next line
+			}
+		}
 		g.setColor(c);
 	}
 

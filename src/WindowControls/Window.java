@@ -40,9 +40,13 @@ public class Window
 	{
 		_title = title;
 		_position = position;
+		_position.y += 20;
+		_position.x += 1;
 		_size = size;
 		_size.y += 20; // for title
 		_color = color;
+		
+		METRO.__windowList.add(this);
 	}
 	/**
 	 * Creates a new window.
@@ -62,36 +66,45 @@ public class Window
 	{
 		update();
 		
-		BufferedImage bufferedImage = new BufferedImage(_size.x, _size.y, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage bufferedImage = new BufferedImage(_size.x + 2, _size.y + 22, BufferedImage.TYPE_INT_ARGB);
 		
 		Graphics2D g2d = bufferedImage.createGraphics();
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 		
 		//Clear background
 		g2d.setColor(Color.white);
-		g2d.fillRect(0, 0, _size.x - 1, _size.y - 1);
+		g2d.fillRect(0, 0, _size.x + 1, _size.y + 1);
 		//Draw head bar of window
 		g2d.setColor(_color);
 		g2d.fillRect(0,  0, _size.x - 20, 20);
+		g2d.setColor(Color.white);
+		g2d.drawRect(1, 1, _size.x - 3, 18);
 		//Draw Border
-		g2d.drawRect(0, 0, _size.x - 1, _size.y - 1);
-		g2d.drawRect(0, 0, _size.x - 1, 20);
-		g2d.drawRect(_size.x - 20, 0, _size.x - 1, 20); // close box
+		g2d.setColor(_color);
+		g2d.drawRect(0, 0, _size.x + 1, _size.y + 1);
+		g2d.drawRect(0, 0, _size.x + 1, 20);
+		g2d.drawRect(_size.x - 19, 0, _size.x + 1, 20); // close box
 		//Draw Window title
 		g2d.setColor(Color.white);
 		g2d.setFont(METRO.__stdFont);
 		g2d.drawString(_title, (_size.x - 20) / 2 - g2d.getFontMetrics(METRO.__stdFont).stringWidth(_title) / 2, 
 			g2d.getFontMetrics(METRO.__stdFont).getHeight() - 5);
-		g2d.drawRect(1, 1, _size.x - 3, 18);
 		//Close cross
-		g2d.drawImage(METRO.__iconSet, _size.x - 20, 0, _size.x, 20, 0, 0, 20, 20, null);
+		g2d.drawImage(METRO.__iconSet, _size.x - 19, 0, _size.x + 1, 20, 0, 0, 20, 20, null);
+
+		BufferedImage bufferedImage_controls = new BufferedImage(_size.x, _size.y, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d_controls = bufferedImage_controls.createGraphics();
+		g2d_controls.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d_controls.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 		
 		for(ControlElement cElement : _elementList)
 		{
-			cElement.draw(g2d);
+			cElement.draw(g2d_controls);
 		}
 		
-		g.drawImage(bufferedImage, _position.x, _position.y, null);
+		g2d.drawImage(bufferedImage_controls, 1, 21, null);
+		g.drawImage(bufferedImage, _position.x - 1, _position.y - 20, null);
 	}
 	/**
 	 * Updates everything. Is very important for e.g. drag-feature and Controls
@@ -130,8 +143,8 @@ public class Window
 		
 		return mPos.x >= _position.x
 			&& mPos.x <= _position.x + _size.x
-			&& mPos.y >= _position.y
-			&& mPos.y <= _position.y + _size.y;
+			&& mPos.y >= _position.y - 20
+			&& mPos.y <= _position.y + _size.y - 20;
 			//&& !isOnWindow; // if mouse is on NO control element (only on the window area)
 				
 	}
@@ -150,8 +163,8 @@ public class Window
 		
 		if(mousePosition.x >= _position.x
 			&& mousePosition.x <= _position.x + _size.x - 20
-			&& mousePosition.y >= _position.y
-			&& mousePosition.y <= _position.y + 20
+			&& mousePosition.y >= _position.y - 20
+			&& mousePosition.y <= _position.y
 			&& SwingUtilities.isLeftMouseButton(e))
 		{
 			_dragMode = true;
@@ -174,16 +187,28 @@ public class Window
 	{
 		if(e.getPoint().x >= _position.x + _size.x - 20
 			&& e.getPoint().x <= _position.x + _size.x
-			&& e.getPoint().y >= _position.y
-			&& e.getPoint().y <= _position.y + 20)
+			&& e.getPoint().y >= _position.y - 20
+			&& e.getPoint().y <= _position.y)
 		{
-			METRO.__closeWindow(this); // closes this window and removes it from the memory
+			close(); // closes this window and removes it from the memory
 			return true;
 		}
 		return false;
 	}
+	/**
+	 * Returns the position of the window.
+	 * @return Position.
+	 */
 	public Point getPosition()
 	{
 		return _position;
+	}
+	/**
+	 * Closes the window softly.
+	 */
+	public void close()
+	{
+		METRO.__closeWindow(this); // closes this window and removes it from the memory
+		_elementList.clear();
 	}
 }

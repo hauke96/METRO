@@ -20,7 +20,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
+
 import javax.imageio.ImageIO;
+import javax.swing.WindowConstants;
 
 import WindowControls.Window;
 
@@ -51,7 +53,7 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	public static int __money = 12345678,
 		__baseNetSpacing = 25; // amount of pixel between lines of the base net
 	public static ArrayList<Window> __windowList = new ArrayList<Window>();
-	public static CloseWindow __closeWindow;
+	public static ExitGameWindow __exitGameWindow;
 	
 	private BufferedImage _cursor,
 		__bufferedImage;
@@ -114,12 +116,6 @@ public class METRO extends Frame implements MouseListener, KeyListener
 		{
 			System.out.println(e.getMessage());
 		}
-	    
-	    Window win = new Window("This is a test :)", new Point(200, 200), new Point(350, 300));
-	    __windowList.add(win);
-	    new WindowControls.Button(new Rectangle(100, 100, 201, 60), 
-				new Rectangle(0, 0, 201, 60), 
-				__viewPortButton_Texture, win);
 		
 	    // Create screen NOW (because of setVisible and repaint and NullPointerExceptions ;) )
 	    __currentGameScreen = new MainMenu();
@@ -134,9 +130,9 @@ public class METRO extends Frame implements MouseListener, KeyListener
     public void paint(Graphics g) 
 	{
 		//update very important and basic things:
-		if(__closeWindow != null)
+		if(__exitGameWindow != null)
 		{
-			__closeWindow.update(g);
+			__exitGameWindow.update(g);
 		}
 		
 		__bufferedImage = new BufferedImage(__SCREEN_SIZE.width, __SCREEN_SIZE.height, BufferedImage.TYPE_INT_ARGB);
@@ -243,7 +239,7 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	{}
 	
 	/**
-	 * Closes a specific window.
+	 * Closes a specific window (please do window.close() instead).
 	 * @param window The window that should be closed.
 	 */
 	public static void __closeWindow(Window window)
@@ -255,23 +251,21 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	 */
 	public static void __close()
 	{
-		__closeWindow = new CloseWindow();
+		__exitGameWindow = new ExitGameWindow();
 	}
-	private static class CloseWindow 
+	private static class ExitGameWindow 
 	{
 		private WindowControls.Button _yesButton, 
 			_noButton;
 		private Window _closeWindow;
 		
-		public CloseWindow()
+		public ExitGameWindow()
 		{
 			_closeWindow = new Window("Really quit?",new Point(__SCREEN_SIZE.width / 2 - 200, 
 					__SCREEN_SIZE.height / 2 - 50), new Point(400, 100), __metroRed);
 			_yesButton = new WindowControls.Button(new Rectangle(10, 75, 185, 20), "Yes", _closeWindow);
 			_noButton = new WindowControls.Button(new Rectangle(205, 75, 185, 20), "No", _closeWindow);
 			new WindowControls.Label("Really quit METRO?", new Point(140, 55), _closeWindow);
-			
-			__windowList.add(_closeWindow);
 		}
 		public void update(Graphics g)
 		{
@@ -281,11 +275,8 @@ public class METRO extends Frame implements MouseListener, KeyListener
 			}
 			else if(_noButton.isPressed())
 			{
-				METRO.__closeWindow = null;
-//				_closeWindow = null;
-//				_yesButton = null;
-//				_noButton = null;
-				METRO.__windowList.remove(_closeWindow);
+				_closeWindow.close();
+				METRO.__exitGameWindow = null;
 			}
 		}
 	}
