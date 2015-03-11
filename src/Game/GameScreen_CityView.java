@@ -60,10 +60,10 @@ public class GameScreen_CityView implements GameScreen
 		if(_dragMode)
 		{
 			//TODO offset not working correctly :(
-			_offset = new Point2D.Float((float)_offset.getX() + (MouseInfo.getPointerInfo().getLocation().x - _oldMousePos.x) * 2f,
-					(float)_offset.getY() + (MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y) * 2f);
+			_offset = new Point2D.Float((float)_offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x) * 2f,
+					(float)_offset.getY() + (METRO.__mousePosition.y - _oldMousePos.y) * 2f);
 		}
-		_oldMousePos = MouseInfo.getPointerInfo().getLocation();
+		_oldMousePos = METRO.__mousePosition;
 		
 		drawCircles(g);	
 		
@@ -124,8 +124,8 @@ public class GameScreen_CityView implements GameScreen
 			int gray = 55 * selectedLayerNumber;
 			if(gray > 255) gray = 255;
 			g.setColor(new Color(0, 0, 200));
-			g.drawString(selectedLayerNumber + "", MouseInfo.getPointerInfo().getLocation().x - g.getFontMetrics(METRO.__stdFont).stringWidth(selectedLayerNumber + "") / 2 - 1, 
-				MouseInfo.getPointerInfo().getLocation().y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
+			g.drawString(selectedLayerNumber + "", METRO.__mousePosition.x - g.getFontMetrics(METRO.__stdFont).stringWidth(selectedLayerNumber + "") / 2 - 1, 
+				METRO.__mousePosition.y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
 		}
 	}
 
@@ -139,7 +139,7 @@ public class GameScreen_CityView implements GameScreen
 		{
 			_dragMode = true;
 		}
-		if(METRO.__viewPortButton_Train.isPressed(MouseInfo.getPointerInfo().getLocation().x, MouseInfo.getPointerInfo().getLocation().y))
+		if(METRO.__viewPortButton_Train.isPressed(METRO.__mousePosition.x, METRO.__mousePosition.y))
 		{
 			METRO.__currentGameScreen = _trainGameScreen;
 			METRO.__viewPortButton_City.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2 - 200, -15));

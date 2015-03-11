@@ -114,7 +114,7 @@ public class Window
 		if(_dragMode)
 		{
 			Point positionDiff = new Point(MouseInfo.getPointerInfo().getLocation().x - _oldMousePos.x,
-						MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y);
+					MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y);
 			
 			_position.x += positionDiff.x;
 			_position.y += positionDiff.y;
@@ -139,7 +139,7 @@ public class Window
 	 */
 	public boolean isMouseOnWindow()
 	{
-		Point mPos = MouseInfo.getPointerInfo().getLocation();
+		Point mPos = METRO.__mousePosition;
 		
 		return mPos.x >= _position.x
 			&& mPos.x <= _position.x + _size.x

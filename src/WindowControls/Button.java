@@ -25,6 +25,7 @@ public class Button implements ControlElement
 		_positionOnImage;
 	private Window _windowHandle;
 	private boolean hasBeenClicked = false; // true if control has been clicked since last check
+	private int _yOffset = 0; // offset, because of window title bar
 
 	/**
 	 * Creates a new Button.
@@ -50,6 +51,7 @@ public class Button implements ControlElement
 		_positionOnImage = positionOnImage;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+		else _yOffset = 20;
 	}
 	/**
 	 * Creates a new button.
@@ -76,6 +78,7 @@ public class Button implements ControlElement
 		_positionOnImage = new Rectangle(0, 0, _position.width, _position.height);
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+		else _yOffset = 20;
 	}
 	/**
 	 * Creates a new button.

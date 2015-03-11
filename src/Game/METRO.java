@@ -22,8 +22,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import javax.imageio.ImageIO;
-import javax.swing.WindowConstants;
 
+import TrainManagement.RailwayLine;
 import WindowControls.Window;
 
 /**
@@ -50,14 +50,16 @@ public class METRO extends Frame implements MouseListener, KeyListener
 		__viewPortButton_Train;
 	public static Color __metroRed,
 		__metroBlue;
-	public static int __money = 12345678,
+	public static int __money = 50000,
 		__baseNetSpacing = 25; // amount of pixel between lines of the base net
 	public static ArrayList<Window> __windowList = new ArrayList<Window>();
 	public static ExitGameWindow __exitGameWindow;
+	public static Point __mousePosition;
 	
 	private BufferedImage _cursor,
 		__bufferedImage;
 	private long _oldSystemTime = System.currentTimeMillis();
+	private Point _oldMousePosition = new Point(0,0);
  
 	 
 	/**
@@ -122,14 +124,21 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	    
 	    setVisible(true);
 	    setResizable(false);
-	    
-	    
 	}
 	
 	@Override
     public void paint(Graphics g) 
 	{
-		//update very important and basic things:
+		__mousePosition = MouseInfo.getPointerInfo().getLocation();
+		boolean mouseInWindow = false;
+		for(Window win : __windowList)
+		{
+			mouseInWindow |= win.isMouseOnWindow();
+		}
+		if(mouseInWindow) __mousePosition = _oldMousePosition;
+		else _oldMousePosition = __mousePosition;
+		
+		//update exitGameScreen, which should appear over all game screens
 		if(__exitGameWindow != null)
 		{
 			__exitGameWindow.update(g);
@@ -253,6 +262,9 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	{
 		__exitGameWindow = new ExitGameWindow();
 	}
+	
+	
+	
 	private static class ExitGameWindow 
 	{
 		private WindowControls.Button _yesButton, 

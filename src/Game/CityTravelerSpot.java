@@ -32,11 +32,11 @@ public class CityTravelerSpot
 		
 		Point position = new Point(_position.x + (int)GameScreen_CityView._offset.getX(), _position.y + (int)GameScreen_CityView._offset.getY());
 
-		boolean isInCurrentCircle = Math.pow(MouseInfo.getPointerInfo().getLocation().x - position.x, 2) 
-				+ Math.pow(MouseInfo.getPointerInfo().getLocation().y - position.y, 2) 
+		boolean isInCurrentCircle = Math.pow(METRO.__mousePosition.x - position.x, 2) 
+				+ Math.pow(METRO.__mousePosition.y - position.y, 2) 
 				< Math.pow(_circleRadiusStep * layerIndex, 2); // true: Mouse cursor is in circle
-		boolean isInNextCircle = Math.pow(MouseInfo.getPointerInfo().getLocation().x - position.x, 2) 
-				+ Math.pow(MouseInfo.getPointerInfo().getLocation().y - position.y, 2) 
+		boolean isInNextCircle = Math.pow(METRO.__mousePosition.x - position.x, 2) 
+				+ Math.pow(METRO.__mousePosition.y - position.y, 2) 
 				< Math.pow(_circleRadiusStep * (layerIndex - 1), 2); // true: Mouse cursor is in circle
 		
 		return isInCurrentCircle && !isInNextCircle;
