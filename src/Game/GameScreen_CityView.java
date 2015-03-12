@@ -59,7 +59,6 @@ public class GameScreen_CityView implements GameScreen
 	{
 		if(_dragMode)
 		{
-			//TODO offset not working correctly :(
 			_offset = new Point2D.Float((float)_offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x) * 2f,
 					(float)_offset.getY() + (METRO.__mousePosition.y - _oldMousePos.y) * 2f);
 		}

@@ -23,7 +23,6 @@ import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
-import TrainManagement.RailwayLine;
 import WindowControls.Window;
 
 /**
@@ -89,7 +88,6 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	    // Create special colors
 	    __metroBlue = new Color(100, 180, 255);
 	    __metroRed = new Color(255, 100, 100);
-	    
 	    
 		try
 		{
