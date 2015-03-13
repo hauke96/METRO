@@ -37,8 +37,8 @@ public class GameScreen_TrainView implements GameScreen
 		_buildTracks;
 	private int _editMode = 0; // 0 = nothing; 1 = place stations; 2 = place lines
 	private RailwayNode _currentRailwayNode; // click -> set railwaynode -> click -> connect/create
-	private ArrayList<RailwayNode> _railwayNodeList = new ArrayList<RailwayNode>();
 	
+	static public  ArrayList<RailwayNode> _railwayNodeList = new ArrayList<RailwayNode>();
 	static public GameScreen _cityGameScreen; // to go into the city game-screen without loosing reference
 	static public Point _selectedCross = new Point(-1, -1); // out of screen 
 	
@@ -352,15 +352,12 @@ public class GameScreen_TrainView implements GameScreen
 							}
 							else // no node -> create new node
 							{
-								
-								
-								
-
 								int diagonalOffset = 0,
 										B = _selectedCross.x - _currentRailwayNode.getPosition().x,
 										H = _selectedCross.y - _currentRailwayNode.getPosition().y,
 										preFactorH = 1, // counts the amount of fields covered
-										preFactorB = 1;
+										preFactorB = 1,
+										ID;
 								RailwayNode prevNode = _currentRailwayNode;
 								
 								if(Math.abs(H) > Math.abs(B))
@@ -369,14 +366,21 @@ public class GameScreen_TrainView implements GameScreen
 									if(H < 0) preFactorH = -1;
 									if(B < 0) preFactorB = -1;
 
-									//TODO: wenn sich linien kreuzen, gucken ob sort ein knoten existiert und dann keinen neuen anlegen, sondern alten benutzen.
-									
 									for(int i = 0; i < diagonalOffset; i++)
 									{
-										RailwayNode node = new RailwayNode(new Point(
-											prevNode.getPosition().x, 
-											prevNode.getPosition().y + preFactorH), 
-											prevNode);
+										ID = RailwayNode.calcID(prevNode.getPosition().x, prevNode.getPosition().y + preFactorH);
+										RailwayNode node = null;
+										if(!RailwayNode._IDList.contains(ID))
+										{
+											node = new RailwayNode(new Point(
+												prevNode.getPosition().x, 
+												prevNode.getPosition().y + preFactorH), 
+												prevNode);
+										}
+										else
+										{
+											node = RailwayNode.getNodeByID(ID);
+										}
 										
 										prevNode.add(node);
 										_railwayNodeList.add(node);
@@ -384,10 +388,20 @@ public class GameScreen_TrainView implements GameScreen
 									}
 									for(int i = 0; i < Math.abs(B); i++)
 									{
-										RailwayNode node = new RailwayNode(new Point(
-												prevNode.getPosition().x + preFactorB, 
-												prevNode.getPosition().y + preFactorH), 
-												prevNode);
+										ID = RailwayNode.calcID(prevNode.getPosition().x, prevNode.getPosition().y + preFactorH);
+										RailwayNode node = null;
+										if(!RailwayNode._IDList.contains(ID))
+										{
+											node = new RailwayNode(new Point(
+													prevNode.getPosition().x + preFactorB, 
+													prevNode.getPosition().y + preFactorH), 
+													prevNode);
+										}
+										else
+										{
+											node = RailwayNode.getNodeByID(ID);
+										}
+										
 											
 										prevNode.add(node);
 										_railwayNodeList.add(node);
@@ -395,10 +409,20 @@ public class GameScreen_TrainView implements GameScreen
 									}
 									for(int i = diagonalOffset + Math.abs(B); i < Math.abs(H); i++)
 									{
-										RailwayNode node = new RailwayNode(new Point(
-												prevNode.getPosition().x, 
-												prevNode.getPosition().y + preFactorH), // ((H - B) % 2) is for an extra offset, when whole offset is odd, but 2 * ... is even ;)
-												prevNode);
+										ID = RailwayNode.calcID(prevNode.getPosition().x, prevNode.getPosition().y + preFactorH);
+										RailwayNode node = null;
+										if(!RailwayNode._IDList.contains(ID))
+										{
+											node = new RailwayNode(new Point(
+													prevNode.getPosition().x, 
+													prevNode.getPosition().y + preFactorH), // ((H - B) % 2) is for an extra offset, when whole offset is odd, but 2 * ... is even ;)
+													prevNode);
+										}
+										else
+										{
+											node = RailwayNode.getNodeByID(ID);
+										}
+										
 											
 										prevNode.add(node);
 										_railwayNodeList.add(node);
