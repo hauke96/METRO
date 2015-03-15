@@ -36,7 +36,32 @@ public class RailwayNode
 	 */
 	public void add(RailwayNode p)
 	{
-		_neighborNodes.add(p);
+		boolean alreadyNeighbor = false;
+		for(RailwayNode node : _neighborNodes)
+		{
+			alreadyNeighbor |= node.getID() == p.getID(); // true when node is already a neighbor 
+		}
+		if(!alreadyNeighbor)
+		{
+			_neighborNodes.add(p); // when p is no neighbor then add it
+			p.addSimple(this); // when p is no neighbor then add it WITHOUT re-adding "this" (would cause endless loop + StackOverFlow)
+		}
+	}
+	/**
+	 * Adds a railway node to the list of neighbors without (!) adding himself to the node p.
+	 * @param p Node to add.
+	 */
+	public void addSimple(RailwayNode p)
+	{
+		boolean alreadyNeighbor = false;
+		for(RailwayNode node : _neighborNodes)
+		{
+			alreadyNeighbor |= node.getID() == p.getID(); // true when node is already a neighbor 
+		}
+		if(!alreadyNeighbor) // when p is no neighbor then add it
+		{
+			_neighborNodes.add(p);
+		}
 	}
 	/**
 	 * Returns position of Node. NOT in pixel but the cross coordinates.
@@ -97,6 +122,11 @@ public class RailwayNode
 	{
 		return (int)(((Math.pow(x + y, 2) + x + y ) / 2.0) + x);
 	}
+	/**
+	 * Returns a specific node with an specific ID.
+	 * @param ID The ID of the node to return.
+	 * @return The node.
+	 */
 	public static RailwayNode getNodeByID(int ID)
 	{
 		for(RailwayNode node : GameScreen_TrainView._railwayNodeList)

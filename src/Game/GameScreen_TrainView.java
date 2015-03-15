@@ -158,7 +158,7 @@ public class GameScreen_TrainView implements GameScreen
 							H = _selectedCross.y - _currentRailwayNode.getPosition().y,
 							preFactor = 1; // counts the amount of fields covered
 					
-					if(Math.abs(H) > Math.abs(B))
+					if(Math.abs(H) > Math.abs(B)) // vertical tracks
 					{
 						diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f);
 						if(H < 0) preFactor = -1;
@@ -178,7 +178,7 @@ public class GameScreen_TrainView implements GameScreen
 								offset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing, 
 								offset.y + (_currentRailwayNode.getPosition().y + preFactor * (2 * diagonalOffset + preFactor * ((H - B) % 2) + Math.abs(B))) * METRO.__baseNetSpacing);	
 					}
-					else if(Math.abs(B) > Math.abs(H))
+					else if(Math.abs(B) > Math.abs(H)) // horizontal tracks
 					{
 						diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
 						if(B < 0) preFactor = -1;
@@ -195,10 +195,10 @@ public class GameScreen_TrainView implements GameScreen
 						
 						g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing, 
 								offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing,
-								offset.y + (_currentRailwayNode.getPosition().x + preFactor * (2 * diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing,
+								offset.y + (_currentRailwayNode.getPosition().x + preFactor * (2 * diagonalOffset + preFactor * ((B - H) % 2) + Math.abs(H))) * METRO.__baseNetSpacing,
 								offset.x + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing);
 					}
-					else if(Math.abs(B) == Math.abs(H))
+					else if(Math.abs(B) == Math.abs(H)) // diagonal tracks
 					{
 						g.drawLine(offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
 								offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
@@ -291,7 +291,7 @@ public class GameScreen_TrainView implements GameScreen
 			// map stuff after Toolbar check, so there won't be a placing under a button
 			switch(_editMode)
 			{
-				case 1:
+				case 1: // station place mode
 					if(e.getPoint().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _offset.getX() &&
 						e.getPoint().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _offset.getX() &&
 						e.getPoint().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _offset.getY() &&
@@ -309,174 +309,105 @@ public class GameScreen_TrainView implements GameScreen
 						if(!positionOccupied) _trainStationList.add(new TrainStation(_selectedCross, 0)); // no doubles
 					}
 					break;
-				case 2:
-					if(e.getPoint().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _offset.getX() &&
-						e.getPoint().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _offset.getX() &&
-						e.getPoint().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _offset.getY() &&
-						e.getPoint().y <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _offset.getY())
-					{
-						if(_currentRailwayNode == null)
-						{
-							for(RailwayNode node : _railwayNodeList)
-							{
-								if(node.getPosition().equals(_selectedCross))
-								{
-									_currentRailwayNode = node;
-									break;
-								}
-							}
-							
-							if(_currentRailwayNode == null)
-							{
-								RailwayNode node = new RailwayNode(_selectedCross, null);
-								_currentRailwayNode = node;
-								_railwayNodeList.add(node);
-							}
-						}
-						else
-						{
-							RailwayNode clickedNode = null; // to connect nodes
-							
-							for(RailwayNode node : _railwayNodeList)
-							{
-								if(node.getPosition().equals(_selectedCross))
-								{
-									clickedNode = node;
-									break;
-								}
-							}
-							
-							if(clickedNode != null) // click on existing node
-							{
-								_currentRailwayNode.add(clickedNode);
-							}
-							else // no node -> create new node
-							{
-								int diagonalOffset = 0,
-										B = _selectedCross.x - _currentRailwayNode.getPosition().x,
-										H = _selectedCross.y - _currentRailwayNode.getPosition().y,
-										preFactorH = 1, // counts the amount of fields covered
-										preFactorB = 1,
-										ID;
-								RailwayNode prevNode = _currentRailwayNode;
-								
-								if(Math.abs(H) > Math.abs(B))
-								{
-									diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f);
-									if(H < 0) preFactorH = -1;
-									if(B < 0) preFactorB = -1;
-
-									for(int i = 0; i < diagonalOffset; i++)
-									{
-										ID = RailwayNode.calcID(prevNode.getPosition().x, prevNode.getPosition().y + preFactorH);
-										RailwayNode node = null;
-										if(!RailwayNode._IDList.contains(ID))
-										{
-											node = new RailwayNode(new Point(
-												prevNode.getPosition().x, 
-												prevNode.getPosition().y + preFactorH), 
-												prevNode);
-										}
-										else
-										{
-											node = RailwayNode.getNodeByID(ID);
-										}
-										
-										prevNode.add(node);
-										_railwayNodeList.add(node);
-										prevNode = node;
-									}
-									for(int i = 0; i < Math.abs(B); i++)
-									{
-										ID = RailwayNode.calcID(prevNode.getPosition().x, prevNode.getPosition().y + preFactorH);
-										RailwayNode node = null;
-										if(!RailwayNode._IDList.contains(ID))
-										{
-											node = new RailwayNode(new Point(
-													prevNode.getPosition().x + preFactorB, 
-													prevNode.getPosition().y + preFactorH), 
-													prevNode);
-										}
-										else
-										{
-											node = RailwayNode.getNodeByID(ID);
-										}
-										
-											
-										prevNode.add(node);
-										_railwayNodeList.add(node);
-										prevNode = node;
-									}
-									for(int i = diagonalOffset + Math.abs(B); i < Math.abs(H); i++)
-									{
-										ID = RailwayNode.calcID(prevNode.getPosition().x, prevNode.getPosition().y + preFactorH);
-										RailwayNode node = null;
-										if(!RailwayNode._IDList.contains(ID))
-										{
-											node = new RailwayNode(new Point(
-													prevNode.getPosition().x, 
-													prevNode.getPosition().y + preFactorH), // ((H - B) % 2) is for an extra offset, when whole offset is odd, but 2 * ... is even ;)
-													prevNode);
-										}
-										else
-										{
-											node = RailwayNode.getNodeByID(ID);
-										}
-										
-											
-										prevNode.add(node);
-										_railwayNodeList.add(node);
-										prevNode = node;
-									}	
-								}
-//								else if(Math.abs(B) > Math.abs(H))
-//								{
-//									diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
-//									if(B < 0) preFactor = -1;
-//									
-//									g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * diagonalOffset) * METRO.__baseNetSpacing, 
-//										offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-//										offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
-//										offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing);
-//
-//									g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * diagonalOffset) * METRO.__baseNetSpacing, 
-//											offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-//											offset.y + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing,
-//											offset.x + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing); 
-//									
-//									g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing, 
-//											offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing,
-//											offset.y + (_currentRailwayNode.getPosition().x + preFactor * (2 * diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing,
-//											offset.x + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing);
-//								}
-//								else if(Math.abs(B) == Math.abs(H))
-//								{
-//									g.drawLine(offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
-//											offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-//											offset.x + _selectedCross.x * METRO.__baseNetSpacing, 
-//											offset.y + _selectedCross.y * METRO.__baseNetSpacing);
-//								}
-								
-								
-								
-								
-								
-								
-								
-								
-								
-								
-//								RailwayNode node = new RailwayNode(_selectedCross, _currentRailwayNode);
-//								_currentRailwayNode.add(node);
-//								_railwayNodeList.add(node);
-								_currentRailwayNode = null;
-							}
-							
-						}
-					}
+				case 2: // track place mode
+					placeTracks(e);
 					break;
 			}
 		}
+	}
+	/**
+	 * Created nodes after second mouse click, removes doubles and manages calculation of automatic routiung.
+	 * @param e
+	 */
+	private void placeTracks(MouseEvent e)
+	{
+		if(e.getPoint().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _offset.getX() &&
+				e.getPoint().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _offset.getX() &&
+				e.getPoint().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _offset.getY() &&
+				e.getPoint().y <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _offset.getY())
+			{
+				if(_currentRailwayNode == null) // first click
+				{
+					_currentRailwayNode = RailwayNode.getNodeByID(RailwayNode.calcID(_selectedCross.x, _selectedCross.y)); // get Node at this position
+					
+					if(_currentRailwayNode == null) // if there's no node, create new one and set it as current node
+					{
+						RailwayNode node = new RailwayNode(_selectedCross, null);
+						_currentRailwayNode = node;
+						_railwayNodeList.add(node);
+					}
+				}
+				else // second click
+				{
+					int diagonalOffset = 0,
+							B = _selectedCross.x - _currentRailwayNode.getPosition().x, // horizontal distance
+							H = _selectedCross.y - _currentRailwayNode.getPosition().y, // vertical distance
+							preFactorH = 1,
+							preFactorB = 1;
+					RailwayNode prevNode = _currentRailwayNode;
+					
+					if(Math.abs(H) > Math.abs(B)) // vertical tracks
+					{
+						diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f); // calculate length of one vertical part
+						if(H < 0) preFactorH = -1;
+						if(B < 0) preFactorB = -1;
+						
+						prevNode = createTrack(0, preFactorH, 0, diagonalOffset, prevNode); // vertical line
+						prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(B), prevNode); // diagonal lines
+						createTrack(0, preFactorH, diagonalOffset + Math.abs(B), Math.abs(H), prevNode); // vertical lines
+					}
+					else if(Math.abs(B) > Math.abs(H))
+					{
+						diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
+						if(H < 0) preFactorH = -1;
+						if(B < 0) preFactorB = -1;
+						
+						prevNode = createTrack(preFactorB, 0, 0, diagonalOffset, prevNode); // vertical lines
+						prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
+						createTrack(preFactorB, 0, diagonalOffset + Math.abs(H), Math.abs(B), prevNode); // vertical lines
+					}
+					else if(Math.abs(B) == Math.abs(H))
+					{
+						if(H < 0) preFactorH = -1;
+						if(B < 0) preFactorB = -1;
+						
+						createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
+					}
+					_currentRailwayNode = null;
+				}
+			}
+	}
+	/**
+	 * Creates one Track for the parameter.
+	 * @param offsetB Offset for horizontal position.
+	 * @param offsetH Offset for vertical position.
+	 * @param start Start of counter.
+	 * @param end End of counter.
+	 * @param prevNode The previous node that should be connected to new ones.
+	 */
+	private RailwayNode createTrack(int offsetB, int offsetH, int start, int end, RailwayNode prevNode)
+	{
+		for(int i = start; i < end; i++)
+		{
+			int ID = RailwayNode.calcID(prevNode.getPosition().x + offsetB, prevNode.getPosition().y + offsetH);
+			RailwayNode node = null;
+			if(!RailwayNode._IDList.contains(ID)) // if there's a NO node at this position
+			{
+				node = new RailwayNode(new Point(
+					prevNode.getPosition().x + offsetB, 
+					prevNode.getPosition().y + offsetH), 
+					prevNode);
+			}
+			else // if there's a node, set it as node instead of new one
+			{
+				node = RailwayNode.getNodeByID(ID);
+			}
+			
+			prevNode.add(node); // connect to previous node
+			if(!_railwayNodeList.contains(node))_railwayNodeList.add(node); // ad node to list
+			prevNode = node; // set previous node to current one to go on
+		}
+		return prevNode;
 	}
 	public void mouseReleased(MouseEvent e)
 	{
