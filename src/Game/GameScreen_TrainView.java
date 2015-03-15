@@ -2,7 +2,6 @@ package Game;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -19,7 +18,7 @@ import WindowControls.Button;
 
 
 /**
- * 
+ * GameScreen with the default view. It Shows the trains, tracks, stations and basic player information.
  */
 
 /**
@@ -44,7 +43,7 @@ public class GameScreen_TrainView implements GameScreen
 	
 	public GameScreen_TrainView()
 	{
-		_buildStation = new Button(new Rectangle(0, 100, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
+		_buildStation = new Button(new Rectangle(-10, 100, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
 		_buildTracks = new Button(new Rectangle(-10, 139, 50, 40), new Rectangle(0, 68, 50, 40), METRO.__iconSet);
 	}
 	/* (non-Javadoc)
@@ -55,16 +54,17 @@ public class GameScreen_TrainView implements GameScreen
 	{
 		if(_dragMode)
 		{
-			_offset = new Point2D.Float((float)_offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x) * 2f,
-				(float)_offset.getY() + (METRO.__mousePosition.y - _oldMousePos.y) * 2f);
+			_offset = new Point2D.Float((float)_offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x),
+				(float)_offset.getY() + (METRO.__mousePosition.y - _oldMousePos.y));
 		}
 		_oldMousePos = METRO.__mousePosition;
 
 		drawBaseNet(g, new Color(220, 220, 220));//Color.lightGray);
 		drawBaseDot(g);
 		
-		drawTrainStations(g);
+		drawEditMode(g);
 		drawRailwayLines(g);
+		drawTrainStations(g);
 		
 		drawToolbar(g);
 		
@@ -134,19 +134,22 @@ public class GameScreen_TrainView implements GameScreen
 		g.setColor(Color.white);
 	}
 	/**
-	 * Draws all the train stations with conenctions and labels.
-	 * @param g Graphic handle to draw on.
+	 * Draws all the stuff from edit mode things (previews, etc.)
+	 * @param g Graphics handle to draw on.
 	 */
-	private void drawTrainStations(Graphics2D g)
+	private void drawEditMode(Graphics2D g)
 	{
 		Point offset = new Point((int)_offset.getX(), (int)_offset.getY());
-
+		
 		switch(_editMode)
 		{
 			case 1:
-				Point mPos = METRO.__mousePosition;
+				Point position = new Point(METRO.__mousePosition.x - 4, 
+						METRO.__mousePosition.y - 8); // Position with offset etc.
+				g.setColor(Color.white);
+				g.fillRect(position.x, position.y, 8, 15);
 				g.setColor(Color.black);
-				g.drawLine(_selectedTrainStation.getPositionOnScreen(offset).x, _selectedTrainStation.getPositionOnScreen(offset).y, mPos.x, mPos.y);
+				g.drawRect(position.x, position.y, 8, 15);
 				break;
 			case 2:
 				if(_currentRailwayNode != null) // if not null, calc and draw preview
@@ -190,13 +193,13 @@ public class GameScreen_TrainView implements GameScreen
 
 						g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * diagonalOffset) * METRO.__baseNetSpacing, 
 								offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-								offset.y + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing,
-								offset.x + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing); 
+								offset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing,
+								offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing); 
 						
 						g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing, 
 								offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing,
-								offset.y + (_currentRailwayNode.getPosition().x + preFactor * (2 * diagonalOffset + preFactor * ((B - H) % 2) + Math.abs(H))) * METRO.__baseNetSpacing,
-								offset.x + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing);
+								offset.x + (_currentRailwayNode.getPosition().x + preFactor * (2 * diagonalOffset + preFactor * ((B - H) % 2) + Math.abs(H))) * METRO.__baseNetSpacing,
+								offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing);
 					}
 					else if(Math.abs(B) == Math.abs(H)) // diagonal tracks
 					{
@@ -208,6 +211,14 @@ public class GameScreen_TrainView implements GameScreen
 				}
 				break;
 		}
+	}
+	/**
+	 * Draws all the train stations with conenctions and labels.
+	 * @param g Graphic handle to draw on.
+	 */
+	private void drawTrainStations(Graphics2D g)
+	{
+		Point offset = new Point((int)_offset.getX(), (int)_offset.getY());
 		
 		//Draw connections:
 		for(TrainStation ts : _trainStationList)
@@ -241,79 +252,6 @@ public class GameScreen_TrainView implements GameScreen
 	{
 		_buildStation.draw(g);
 		_buildTracks.draw(g);
-	}
-	public void mouseClicked(MouseEvent e)
-	{
-		Point mPos = e.getPoint(),
-			offset = new Point((int)_offset.getX(), (int)_offset.getY());
-			
-		if(SwingUtilities.isMiddleMouseButton(e))
-		{
-			_dragMode = true;
-		}
-//		else if(SwingUtilities.isRightMouseButton(e)) // TODO: change toolbarbutton to buildTracks
-//		{
-//			for(TrainStation ts : _trainStationList)
-//			{
-//				Point pos = ts.getPositionOnScreen(offset);
-//				if(mPos.x >= pos.x - 4
-//					&& mPos.x <= pos.x + 3
-//					&& mPos.y >= pos.y - 7
-//					&& mPos.y <= pos.y + 7)
-//				{
-//					_editMode = 2;
-//					_selectedTrainStation = ts;
-//					break;
-//				}	
-//			}
-//		}
-		else if(SwingUtilities.isLeftMouseButton(e)) // TODO: calculate new way of connection and create a RailwayLine
-		{
-			if(METRO.__viewPortButton_City.isPressed(e.getPoint().x, e.getPoint().y)) // change to city view
-			{
-				METRO.__currentGameScreen = _cityGameScreen;
-				METRO.__viewPortButton_City.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2 - 200, -5));
-				METRO.__viewPortButton_Train.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2, -15));
-			}
-			// Toolbar-Buttons:
-			else if(_buildStation.isPressed(e.getPoint().x, e.getPoint().y))
-			{
-				_buildTracks.setPosition(new Point(-10, _buildTracks.getPosition().y));
-				_buildStation.setPosition(new Point(0, _buildStation.getPosition().y));
-				_editMode = 1; // place stations
-			}
-			else if(_buildTracks.isPressed(e.getPoint().x, e.getPoint().y))
-			{
-				_buildTracks.setPosition(new Point(0, _buildTracks.getPosition().y));
-				_buildStation.setPosition(new Point(-10, _buildStation.getPosition().y));
-				_editMode = 2; // place lines
-			}
-			// map stuff after Toolbar check, so there won't be a placing under a button
-			switch(_editMode)
-			{
-				case 1: // station place mode
-					if(e.getPoint().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _offset.getX() &&
-						e.getPoint().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _offset.getX() &&
-						e.getPoint().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _offset.getY() &&
-						e.getPoint().y <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _offset.getY())
-					{
-						boolean positionOccupied = false;
-						Point _selectPointOnScreen = new Point(_selectedCross.x * METRO.__baseNetSpacing + (int)_offset.getX(),
-								_selectedCross.y * METRO.__baseNetSpacing + (int)_offset.getY());
-						
-						for(TrainStation ts : _trainStationList)
-						{
-							positionOccupied |= ts.getPositionOnScreen(offset).equals(_selectPointOnScreen); // true if this cross has already a station
-						}
-						
-						if(!positionOccupied) _trainStationList.add(new TrainStation(_selectedCross, 0)); // no doubles
-					}
-					break;
-				case 2: // track place mode
-					placeTracks(e);
-					break;
-			}
-		}
 	}
 	/**
 	 * Created nodes after second mouse click, removes doubles and manages calculation of automatic routiung.
@@ -397,6 +335,7 @@ public class GameScreen_TrainView implements GameScreen
 					prevNode.getPosition().x + offsetB, 
 					prevNode.getPosition().y + offsetH), 
 					prevNode);
+				METRO.__money -= RailwayNode._PRICE;
 			}
 			else // if there's a node, set it as node instead of new one
 			{
@@ -404,10 +343,95 @@ public class GameScreen_TrainView implements GameScreen
 			}
 			
 			prevNode.add(node); // connect to previous node
-			if(!_railwayNodeList.contains(node))_railwayNodeList.add(node); // ad node to list
+			if(!_railwayNodeList.contains(node)) _railwayNodeList.add(node); // ad node to list
 			prevNode = node; // set previous node to current one to go on
 		}
 		return prevNode;
+	}
+	public void mouseClicked(MouseEvent e)
+	{
+		Point offset = new Point((int)_offset.getX(), (int)_offset.getY());
+			
+		if(SwingUtilities.isMiddleMouseButton(e))
+		{
+			_dragMode = true;
+		}
+		else if(SwingUtilities.isLeftMouseButton(e))
+		{
+			if(METRO.__viewPortButton_City.isPressed(e.getPoint().x, e.getPoint().y)) // change to city view
+			{
+				METRO.__currentGameScreen = _cityGameScreen;
+				METRO.__viewPortButton_City.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2 - 200, -5));
+				METRO.__viewPortButton_Train.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2, -15));
+			}
+			// Toolbar-Buttons:
+			else if(_buildStation.isPressed(e.getPoint().x, e.getPoint().y))
+			{
+				_buildTracks.setPosition(new Point(-10, _buildTracks.getPosition().y));
+				_buildStation.setPosition(new Point(0, _buildStation.getPosition().y));
+				_editMode = 1; // place stations
+			}
+			else if(_buildTracks.isPressed(e.getPoint().x, e.getPoint().y))
+			{
+				_buildTracks.setPosition(new Point(0, _buildTracks.getPosition().y));
+				_buildStation.setPosition(new Point(-10, _buildStation.getPosition().y));
+				_editMode = 2; // place lines
+			}
+			else
+			{
+				// map stuff after Toolbar check, so there won't be a placing under a button
+				switch(_editMode)
+				{
+					case 1: // station place mode
+						if(e.getPoint().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _offset.getX() &&
+							e.getPoint().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _offset.getX() &&
+							e.getPoint().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _offset.getY() &&
+							e.getPoint().y <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _offset.getY())
+						{
+							boolean positionOccupied = false;
+							Point selectPointOnScreen = new Point(_selectedCross.x * METRO.__baseNetSpacing + (int)_offset.getX(),
+									_selectedCross.y * METRO.__baseNetSpacing + (int)_offset.getY());
+							
+							for(TrainStation ts : _trainStationList)
+							{
+								positionOccupied |= ts.getPositionOnScreen(offset).equals(selectPointOnScreen); // true if this cross has already a station
+							}
+							
+							if(!positionOccupied) // no doubles
+							{
+								_trainStationList.add(new TrainStation(_selectedCross, 0));
+								METRO.__money -= TrainStation._PRICE;
+							}
+						}
+						break;
+					case 2: // track place mode
+						placeTracks(e);
+						break;
+				}
+			}
+		}
+		else if(SwingUtilities.isRightMouseButton(e))
+		{
+			switch(_editMode)
+			{
+				case 1:
+					_editMode = 0;
+					_buildStation.setPosition(new Point(_buildStation.getPosition().x - 10, _buildStation.getPosition().y));
+					break;
+				case 2:
+					if(_currentRailwayNode != null)
+					{
+						_railwayNodeList.remove(_railwayNodeList.size() - 1);
+						_currentRailwayNode = null;
+					}
+					else
+					{
+						_editMode = 0;
+						_buildTracks.setPosition(new Point(_buildTracks.getPosition().x - 10, _buildTracks.getPosition().y));
+					}
+					break;
+			}
+		}
 	}
 	public void mouseReleased(MouseEvent e)
 	{

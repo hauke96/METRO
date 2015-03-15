@@ -2,7 +2,6 @@ package Game;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
 import java.awt.Point;
 
 import Game.GameScreen_CityView;

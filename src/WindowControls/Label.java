@@ -6,7 +6,6 @@ package WindowControls;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.util.ArrayList;
 
 import Game.METRO;
 

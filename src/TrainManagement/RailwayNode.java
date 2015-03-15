@@ -14,11 +14,11 @@ public class RailwayNode
 	private Point _position; // not in pixel, cross number/pos
 	private int _ID;
 	
-	public static ArrayList<Integer> _IDList;
+	public static ArrayList<Integer> _IDList = new ArrayList<Integer>();
+	public static final int _PRICE = 200;
 
 	public RailwayNode(Point position, RailwayNode neighbor)
 	{
-		if(_IDList == null) _IDList = new ArrayList<Integer>();
 		_position = position;
 		_ID = (int)(((Math.pow(position.x + position.y, 2) + position.x + position.y) / 2.0) + position.x);
 		// ID Table:

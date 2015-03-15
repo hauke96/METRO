@@ -4,7 +4,6 @@ import Game.CityTravelerSpot;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
@@ -18,7 +17,7 @@ import javax.swing.SwingUtilities;
 
 
 /**
- * 
+ * GameScreen with the city view. It Shows the population density and basic player information.
  */
 
 /**
@@ -59,8 +58,8 @@ public class GameScreen_CityView implements GameScreen
 	{
 		if(_dragMode)
 		{
-			_offset = new Point2D.Float((float)_offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x) * 2f,
-					(float)_offset.getY() + (METRO.__mousePosition.y - _oldMousePos.y) * 2f);
+			_offset = new Point2D.Float((float)_offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x),
+				(float)_offset.getY() + (METRO.__mousePosition.y - _oldMousePos.y));
 		}
 		_oldMousePos = METRO.__mousePosition;
 		

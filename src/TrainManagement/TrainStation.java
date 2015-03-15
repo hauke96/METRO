@@ -6,7 +6,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import Game.GameScreen_TrainView;
 import Game.METRO;
 
 public class TrainStation
@@ -14,6 +13,8 @@ public class TrainStation
 	private int _waitingPassengers;
 	private List<TrainStation> _connectedStations = new ArrayList<TrainStation>();
 	private Point _position; // Position
+	
+	public static final int _PRICE = 1000;
 	
 	public TrainStation(Point position)
 	{
