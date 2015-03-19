@@ -33,7 +33,7 @@ public class METRO extends Frame implements MouseListener, KeyListener
 {
 	private static final long serialVersionUID = 1L;
 	
-	public static final Dimension __SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+	public static Dimension __SCREEN_SIZE;// = Toolkit.getDefaultToolkit().getScreenSize();
 	//public static final Dimension __SCREEN_SIZE = new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width/2,Toolkit.getDefaultToolkit().getScreenSize().height/2);
 	public static final String __TITLE = "METRO",
 		__VERSION = "0.0.2";
@@ -72,7 +72,7 @@ public class METRO extends Frame implements MouseListener, KeyListener
 		super(__TITLE + "  " + __VERSION);
 		
 	    setBackground(Color.white);
-	    setSize(__SCREEN_SIZE.width, __SCREEN_SIZE.height);
+//	    setSize(__SCREEN_SIZE.width, __SCREEN_SIZE.height);
 	    addWindowListener(new WindowAdapter() {
 	        public void windowClosing(WindowEvent e) {
 	        	System.exit(0);
@@ -83,6 +83,12 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	    setLocationRelativeTo(null);
 	    setUndecorated(true);
 	    
+	    GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	    GraphicsDevice[] devices = g.getScreenDevices();
+	    __SCREEN_SIZE = new Dimension(devices[0].getDisplayMode().getWidth(), devices[0].getDisplayMode().getHeight()); 
+	    
+		setBounds(0, 0, __SCREEN_SIZE.width, __SCREEN_SIZE.height);
+		
 	    Locale.setDefault(new Locale("de", "DE"));
 	    
 	    // Create special colors
