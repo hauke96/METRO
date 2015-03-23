@@ -3,6 +3,7 @@ package Game;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 
 import Game.GameScreen_CityView;
 import Game.METRO;
@@ -76,8 +77,8 @@ public class CityTravelerSpot
 					255));
 			g.fillOval(position.x - layerIndex *_circleRadiusStep + 1, 
 				position.y - layerIndex * _circleRadiusStep + 1,
-				_circleRadiusStep * 2 * layerIndex - 1, 
-				_circleRadiusStep * 2 * layerIndex - 1);
+				_circleRadiusStep * 2 * layerIndex - 2, 
+				_circleRadiusStep * 2 * layerIndex - 2);
 
 			g.setColor(METRO.__metroBlue);
 			g.setColor(new Color(70, 126, 179));
@@ -100,16 +101,18 @@ public class CityTravelerSpot
 			g.setColor(new Color(gray, gray, gray));
 			g.fillOval(position.x - layerIndex *_circleRadiusStep + 1,
 				position.y - layerIndex * _circleRadiusStep + 1,
-				_circleRadiusStep * 2 * layerIndex - 1,
-				_circleRadiusStep * 2 * layerIndex - 1);
+				_circleRadiusStep * 2 * layerIndex - 2,
+				_circleRadiusStep * 2 * layerIndex - 2);
 		}
 		if(onlyEdges)
 		{
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g.setColor(new Color(gray, gray, gray));
 			g.drawOval(position.x - layerIndex *_circleRadiusStep,
 				position.y - layerIndex * _circleRadiusStep,
 				_circleRadiusStep * 2 * layerIndex,
 				_circleRadiusStep * 2 * layerIndex);
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		}
 	}
 	public float getStrength()

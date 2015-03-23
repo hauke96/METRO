@@ -98,16 +98,18 @@ public class GameScreen_CityView implements GameScreen
 			g2d.setColor(Color.white);
 			g2d.fillRect(0, 0, _lastSpotFrame.getWidth(), _lastSpotFrame.getHeight());
 			g2d.setFont(METRO.__stdFont);
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			//g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			// draw all the circles
 			for(int i = 0; i < 10; i++)
 			{
 				for(int k = 0; k < _travelerSpots.size(); k++)
 				{
+					if(_travelerSpots.get(k).getStrength() <= i) continue;
 					_travelerSpots.get(k).draw(g2d, i, i == selectedLayerNumber, k == selectedSpotNumber, true); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 				}
 				for(int k = 0; k < _travelerSpots.size(); k++)
 				{
+					if(_travelerSpots.get(k).getStrength() <= i) continue;
 					_travelerSpots.get(k).draw(g2d, i, i == selectedLayerNumber, k == selectedSpotNumber); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 				}
 			}

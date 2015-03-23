@@ -33,7 +33,9 @@ public class GameScreen_TrainView implements GameScreen
 	private List<TrainStation> _trainStationList = new ArrayList<TrainStation>();
 	private TrainStation _selectedTrainStation = null;
 	private Button _buildStation,
-		_buildTracks;
+		_buildTracks,
+		_showTrainList,
+		_createNewTrain;
 	private int _editMode = 0; // 0 = nothing; 1 = place stations; 2 = place lines
 	private RailwayNode _currentRailwayNode; // click -> set railwaynode -> click -> connect/create
 	
@@ -45,6 +47,8 @@ public class GameScreen_TrainView implements GameScreen
 	{
 		_buildStation = new Button(new Rectangle(-10, 100, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
 		_buildTracks = new Button(new Rectangle(-10, 139, 50, 40), new Rectangle(0, 68, 50, 40), METRO.__iconSet);
+		_showTrainList = new Button(new Rectangle(-10, 200, 50, 40), new Rectangle(0, 108, 50, 40), METRO.__iconSet);
+		_createNewTrain = new Button(new Rectangle(-10, 239, 50, 40), new Rectangle(0, 148, 50, 40), METRO.__iconSet);
 	}
 	/* (non-Javadoc)
 	 * @see GameScreen#update(java.awt.Graphics2D)
@@ -152,7 +156,7 @@ public class GameScreen_TrainView implements GameScreen
 				g.drawRect(position.x, position.y, 8, 15);
 				break;
 			case 2:
-				if(_currentRailwayNode != null) // if not null, calc and draw preview
+				if(_currentRailwayNode != null) // if not null, calc and draw preview of new tracks
 				{
 					g.setColor(Color.black);
 					
@@ -252,6 +256,8 @@ public class GameScreen_TrainView implements GameScreen
 	{
 		_buildStation.draw(g);
 		_buildTracks.draw(g);
+		_showTrainList.draw(g);
+		_createNewTrain.draw(g);
 	}
 	/**
 	 * Created nodes after second mouse click, removes doubles and manages calculation of automatic routiung.
@@ -352,7 +358,7 @@ public class GameScreen_TrainView implements GameScreen
 	{
 		Point offset = new Point((int)_offset.getX(), (int)_offset.getY());
 			
-		if(SwingUtilities.isMiddleMouseButton(e))
+		if(SwingUtilities.isMiddleMouseButton(e)) // for drag-mode
 		{
 			_dragMode = true;
 		}
@@ -367,15 +373,23 @@ public class GameScreen_TrainView implements GameScreen
 			// Toolbar-Buttons:
 			else if(_buildStation.isPressed(e.getPoint().x, e.getPoint().y))
 			{
-				_buildTracks.setPosition(new Point(-10, _buildTracks.getPosition().y));
-				_buildStation.setPosition(new Point(0, _buildStation.getPosition().y));
+				resetToolbarButtonPosition(_buildStation);
 				_editMode = 1; // place stations
 			}
 			else if(_buildTracks.isPressed(e.getPoint().x, e.getPoint().y))
 			{
-				_buildTracks.setPosition(new Point(0, _buildTracks.getPosition().y));
-				_buildStation.setPosition(new Point(-10, _buildStation.getPosition().y));
+				resetToolbarButtonPosition(_buildTracks);
 				_editMode = 2; // place lines
+			}
+			else if(_showTrainList.isPressed(e.getPoint().x, e.getPoint().y))
+			{
+				resetToolbarButtonPosition(_showTrainList);
+				//TODO: create list view with all trains
+			}
+			else if(_createNewTrain.isPressed(e.getPoint().x, e.getPoint().y))
+			{
+				resetToolbarButtonPosition(_createNewTrain);
+				//TODO: show config window to create new train
 			}
 			else
 			{
@@ -412,11 +426,11 @@ public class GameScreen_TrainView implements GameScreen
 		}
 		else if(SwingUtilities.isRightMouseButton(e))
 		{
+			resetToolbarButtonPosition(null);
 			switch(_editMode)
 			{
 				case 1:
 					_editMode = 0;
-					_buildStation.setPosition(new Point(_buildStation.getPosition().x - 10, _buildStation.getPosition().y));
 					break;
 				case 2:
 					if(_currentRailwayNode != null)
@@ -427,10 +441,52 @@ public class GameScreen_TrainView implements GameScreen
 					else
 					{
 						_editMode = 0;
-						_buildTracks.setPosition(new Point(_buildTracks.getPosition().x - 10, _buildTracks.getPosition().y));
 					}
 					break;
 			}
+		}
+	}
+	/**
+	 * Resets the position of all toolbar buttons to -10 (like "off").
+	 * @param exceptThisButton This button should not be reset.
+	 */
+	private void resetToolbarButtonPosition(Button exceptThisButton)
+	{
+		// Build Tracks
+		if(exceptThisButton == _buildTracks)
+		{
+			_buildTracks.setPosition(new Point(0, _buildTracks.getPosition().y));
+		}
+		else
+		{
+			_buildTracks.setPosition(new Point(-10, _buildTracks.getPosition().y));
+		}
+		// Create new station
+		if(exceptThisButton == _buildStation)
+		{
+			_buildStation.setPosition(new Point(0, _buildStation.getPosition().y));
+		}
+		else
+		{
+			_buildStation.setPosition(new Point(-10, _buildStation.getPosition().y));
+		}
+		//show list of trains
+		if(exceptThisButton == _showTrainList)
+		{
+			_showTrainList.setPosition(new Point(0, _showTrainList.getPosition().y));
+		}
+		else
+		{
+			_showTrainList.setPosition(new Point(-10, _showTrainList.getPosition().y));
+		}
+		//create new train
+		if(exceptThisButton == _createNewTrain)
+		{
+			_createNewTrain.setPosition(new Point(0, _createNewTrain.getPosition().y));
+		}
+		else
+		{
+			_createNewTrain.setPosition(new Point(-10, _createNewTrain.getPosition().y));
 		}
 	}
 	public void mouseReleased(MouseEvent e)
