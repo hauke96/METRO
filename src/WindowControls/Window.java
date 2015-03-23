@@ -139,7 +139,7 @@ public class Window
 	 */
 	public boolean isMouseOnWindow()
 	{
-		Point mPos = METRO.__mousePosition;
+		Point mPos = MouseInfo.getPointerInfo().getLocation(); // use real position, because __mousePosition is old when mouse is on window (to ignore the mouse on the game screen)
 		
 		return mPos.x >= _position.x
 			&& mPos.x <= _position.x + _size.x
@@ -154,13 +154,14 @@ public class Window
 	 */
 	public void mousePressed(MouseEvent e)
 	{
-		Point mousePosition = e.getPoint();
+		Point mousePosition = e.getPoint(); // use e.getPoint(), because __mousePosition is old when mouse is on window (to ignore the mouse on the game screen)
 		
 		for(ControlElement cElement : _elementList)
 		{
 			cElement.clickOnControlElement();
 		}
-		
+
+		// Check for drag-mode:
 		if(mousePosition.x >= _position.x
 			&& mousePosition.x <= _position.x + _size.x - 20
 			&& mousePosition.y >= _position.y - 20

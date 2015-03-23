@@ -203,11 +203,10 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	{
 		Window clickedWindow = null;
 		
-//		for(Window win : __windowList)
-		for(int i = __windowList.size() - 1; i >= 0; i--)
+		for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
 		{
 			__windowList.get(i).mousePressed(e);
-			if(__windowList.get(i).isMouseOnWindow()) // if mouse is just on the window area (not on a Button, etc.)
+			if(__windowList.get(i).isMouseOnWindow()) // if mouse is just on the window area
 			{
 				clickedWindow = __windowList.get(i);
 				break;
@@ -227,7 +226,7 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	public void mouseReleased(MouseEvent e)
 	{
 		__currentGameScreen.mouseReleased(e);
-		//if(__controlDrawer != null) __controlDrawer.mouseClicked(e);
+		
 		for(Window win : __windowList)
 		{
 			win.mouseReleased();
