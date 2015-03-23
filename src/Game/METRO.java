@@ -23,13 +23,17 @@ import java.util.Locale;
 
 import javax.imageio.ImageIO;
 
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+
 import WindowControls.Window;
 
 /**
  * @author Hauke
  * @version 0.0.2
  */
-public class METRO extends Frame implements MouseListener, KeyListener
+public class METRO extends Frame implements MouseListener, KeyListener, ApplicationListener
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -59,6 +63,7 @@ public class METRO extends Frame implements MouseListener, KeyListener
 		__bufferedImage;
 	private long _oldSystemTime = System.currentTimeMillis();
 	private Point _oldMousePosition = new Point(0,0);
+	private LwjglApplication _application; 
  
 	 
 	/**
@@ -68,8 +73,22 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	{
 		new METRO();
 	}
-	private METRO(){
-		super(__TITLE + "  " + __VERSION);
+	private METRO()
+	{
+	    GraphicsEnvironment gEnviroment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	    GraphicsDevice[] devices = gEnviroment.getScreenDevices();
+		__SCREEN_SIZE = new Dimension(devices[0].getDisplayMode().getWidth(), devices[0].getDisplayMode().getHeight()); 
+		
+		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.title = "METRO";
+		config.width = __SCREEN_SIZE.width;
+		config.height = __SCREEN_SIZE.height;
+		config.useGL30 = true;
+		config.resizable = false;
+		
+		_application = new LwjglApplication(this, config);
+		
+//		super(__TITLE + "  " + __VERSION);
 		
 	    setBackground(Color.white);
 //	    setSize(__SCREEN_SIZE.width, __SCREEN_SIZE.height);
@@ -83,9 +102,9 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	    setLocationRelativeTo(null);
 	    setUndecorated(true);
 	    
-	    GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	    GraphicsDevice[] devices = g.getScreenDevices();
-	    __SCREEN_SIZE = new Dimension(devices[0].getDisplayMode().getWidth(), devices[0].getDisplayMode().getHeight()); 
+//	    GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
+//	    GraphicsDevice[] devices = g.getScreenDevices();
+//	    __SCREEN_SIZE = new Dimension(devices[0].getDisplayMode().getWidth(), devices[0].getDisplayMode().getHeight()); 
 	    
 		setBounds(0, 0, __SCREEN_SIZE.width, __SCREEN_SIZE.height);
 		
@@ -250,6 +269,26 @@ public class METRO extends Frame implements MouseListener, KeyListener
 	@Override
 	public void keyTyped(KeyEvent e)
 	{}
+
+	@Override
+	public void create()
+	{
+	}
+	@Override
+	public void render()
+	{
+		
+	}
+	@Override
+	public void pause()
+	{
+		
+	}
+	@Override
+	public void resume()
+	{
+		
+	}
 	
 	/**
 	 * Closes a specific window (please do window.close() instead).
