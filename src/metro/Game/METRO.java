@@ -16,7 +16,6 @@ package metro.Game;
  */
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Frame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -24,17 +23,14 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import metro.WindowControls.Window;
-import metro.graphics.Draw;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL30;
@@ -51,7 +47,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
  * @author Hauke
  * @version 0.0.2
  */
-public class METRO extends Frame implements MouseListener, KeyListener, ApplicationListener
+public class METRO extends Frame implements ApplicationListener, InputProcessor
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -224,14 +220,30 @@ public class METRO extends Frame implements MouseListener, KeyListener, Applicat
 //    }
 	
 	@Override
-	public void mousePressed(MouseEvent e)
+	public boolean keyDown(int keycode) 
 	{
+		System.out.println("KeyEvent::keyDown::" + keycode);
+		__currentGameScreen.keyPressed(keycode);
+		return false;
+	}
+	@Override
+	public boolean keyUp(int keycode) {
+		return false;
+	}
+	@Override
+	public boolean keyTyped(char character) {
+		return false;
+	}
+	@Override
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
+	{
+		System.out.println(screenX + " - " + screenY);
 		Window clickedWindow = null;
 		
 		for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
 		{
-			__windowList.get(i).mousePressed(e);
-			if(__windowList.get(i).isMouseOnWindow()) // if mouse is just on the window area
+			__windowList.get(i).mousePressed(screenX, screenY, button);
+			if(__windowList.get(i).isMouseOnWindow(screenX, screenY)) // if mouse is just on the window area
 			{
 				clickedWindow = __windowList.get(i);
 				break;
@@ -239,41 +251,38 @@ public class METRO extends Frame implements MouseListener, KeyListener, Applicat
 		}
 		if(clickedWindow == null) // if no window has been clicked
 		{
-			__currentGameScreen.mouseClicked(e); // forward click to game screen
-			if(__controlDrawer != null) __controlDrawer.mouseClicked(e);
+			__currentGameScreen.mouseClicked(screenX, screenY, button); // forward click to game screen
+			if(__controlDrawer != null) __controlDrawer.mouseClicked(screenX, screenY, button);
 		}
 		else
 		{
-			clickedWindow.closeIfNeeded(e);
+			clickedWindow.closeIfNeeded(screenX, screenY, button);
 		}
+		return false;
 	}
 	@Override
-	public void mouseReleased(MouseEvent e)
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) 
 	{
-		__currentGameScreen.mouseReleased(e);
+		__currentGameScreen.mouseReleased(button);
 		
 		for(Window win : __windowList)
 		{
 			win.mouseReleased();
 		}
+		return false;
 	}
 	@Override
-	public void mouseClicked(MouseEvent e){}
-	@Override
-	public void mouseEntered(MouseEvent e){}
-	@Override
-	public void mouseExited(MouseEvent e){}
-	@Override
-	public void keyPressed(KeyEvent e)
-	{
-		__currentGameScreen.keyPressed(e);
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
+		return false;
 	}
 	@Override
-	public void keyReleased(KeyEvent e)
-	{}
+	public boolean mouseMoved(int screenX, int screenY) {
+		return false;
+	}
 	@Override
-	public void keyTyped(KeyEvent e)
-	{}
+	public boolean scrolled(int amount) {
+		return false;
+	}
 
 	@Override
 	public void create()
@@ -283,6 +292,9 @@ public class METRO extends Frame implements MouseListener, KeyListener, Applicat
 		__camera = new OrthographicCamera();
 		__camera.setToOrtho(true, __SCREEN_SIZE.width / 2, __SCREEN_SIZE.height / 2);
 		__camera.update();
+		
+		// Set up the input event handling
+		Gdx.input.setInputProcessor(this);
 
 		// Hide Cursor
 		Gdx.input.setCursorCatched(true);
@@ -339,7 +351,7 @@ public class METRO extends Frame implements MouseListener, KeyListener, Applicat
 		boolean mouseInWindow = false;
 		for(Window win : __windowList)
 		{
-			mouseInWindow |= win.isMouseOnWindow();
+			mouseInWindow |= win.isMouseOnWindow(__mousePosition.x, __mousePosition.y);
 		}
 		if(mouseInWindow) __mousePosition = _oldMousePosition;
 		else _oldMousePosition = __mousePosition;
@@ -442,6 +454,7 @@ public class METRO extends Frame implements MouseListener, KeyListener, Applicat
 		{
 			if(_yesButton.isPressed())
 			{
+				System.out.println("OK");
 				System.exit(0);
 			}
 			else if(_noButton.isPressed())

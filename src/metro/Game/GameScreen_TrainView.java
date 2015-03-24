@@ -17,6 +17,8 @@ import metro.TrainManagement.TrainStation;
 import metro.WindowControls.Button;
 
 
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
@@ -270,12 +272,12 @@ public class GameScreen_TrainView implements GameScreen
 	 * Created nodes after second mouse click, removes doubles and manages calculation of automatic routiung.
 	 * @param e
 	 */
-	private void placeTracks(MouseEvent e)
+	private void placeTracks(int screenX, int screenY, int mouseButton)
 	{
-		if(e.getPoint().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _offset.getX() &&
-				e.getPoint().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _offset.getX() &&
-				e.getPoint().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _offset.getY() &&
-				e.getPoint().y <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _offset.getY())
+		if(screenX >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _offset.getX() &&
+				screenX <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _offset.getX() &&
+				screenY >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _offset.getY() &&
+				screenY <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _offset.getY())
 			{
 				if(_currentRailwayNode == null) // first click
 				{
@@ -361,39 +363,39 @@ public class GameScreen_TrainView implements GameScreen
 		}
 		return prevNode;
 	}
-	public void mouseClicked(MouseEvent e)
+	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		Point offset = new Point((int)_offset.getX(), (int)_offset.getY());
 			
-		if(SwingUtilities.isMiddleMouseButton(e)) // for drag-mode
+		if(mouseButton == Buttons.MIDDLE) // for drag-mode
 		{
 			_dragMode = true;
 		}
-		else if(SwingUtilities.isLeftMouseButton(e))
+		else if(mouseButton == Buttons.LEFT)
 		{
-			if(METRO.__viewPortButton_City.isPressed(e.getPoint().x, e.getPoint().y)) // change to city view
+			if(METRO.__viewPortButton_City.isPressed(screenX, screenY)) // change to city view
 			{
 				METRO.__currentGameScreen = _cityGameScreen;
 				METRO.__viewPortButton_City.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2 - 200, -5));
 				METRO.__viewPortButton_Train.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2, -15));
 			}
 			// Toolbar-Buttons:
-			else if(_buildStation.isPressed(e.getPoint().x, e.getPoint().y))
+			else if(_buildStation.isPressed(screenX, screenY))
 			{
 				resetToolbarButtonPosition(_buildStation);
 				_editMode = 1; // place stations
 			}
-			else if(_buildTracks.isPressed(e.getPoint().x, e.getPoint().y))
+			else if(_buildTracks.isPressed(screenX, screenY))
 			{
 				resetToolbarButtonPosition(_buildTracks);
 				_editMode = 2; // place lines
 			}
-			else if(_showTrainList.isPressed(e.getPoint().x, e.getPoint().y))
+			else if(_showTrainList.isPressed(screenX, screenY))
 			{
 				resetToolbarButtonPosition(_showTrainList);
 				//TODO: create list view with all trains
 			}
-			else if(_createNewTrain.isPressed(e.getPoint().x, e.getPoint().y))
+			else if(_createNewTrain.isPressed(screenX, screenY))
 			{
 				resetToolbarButtonPosition(_createNewTrain);
 				//TODO: show config window to create new train
@@ -404,10 +406,10 @@ public class GameScreen_TrainView implements GameScreen
 				switch(_editMode)
 				{
 					case 1: // station place mode
-						if(e.getPoint().x >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _offset.getX() &&
-							e.getPoint().x <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _offset.getX() &&
-							e.getPoint().y >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _offset.getY() &&
-							e.getPoint().y <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _offset.getY())
+						if(screenX >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _offset.getX() &&
+							screenX <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _offset.getX() &&
+							screenY >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _offset.getY() &&
+							screenY <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _offset.getY())
 						{
 							boolean positionOccupied = false;
 							Point selectPointOnScreen = new Point(_selectedCross.x * METRO.__baseNetSpacing + (int)_offset.getX(),
@@ -426,12 +428,12 @@ public class GameScreen_TrainView implements GameScreen
 						}
 						break;
 					case 2: // track place mode
-						placeTracks(e);
+						placeTracks(screenX, screenY, mouseButton);
 						break;
 				}
 			}
 		}
-		else if(SwingUtilities.isRightMouseButton(e))
+		else if(mouseButton == Buttons.MIDDLE)
 		{
 			resetToolbarButtonPosition(null);
 			switch(_editMode)
@@ -496,16 +498,16 @@ public class GameScreen_TrainView implements GameScreen
 			_createNewTrain.setPosition(new Point(-10, _createNewTrain.getPosition().y));
 		}
 	}
-	public void mouseReleased(MouseEvent e)
+	public void mouseReleased(int mouseButton)
 	{
-		if(SwingUtilities.isMiddleMouseButton(e))
+		if(mouseButton == Buttons.MIDDLE)
 		{
 			_dragMode = false;
 		}
 	}
-	public void keyPressed(KeyEvent e)
+	public void keyPressed(int keyCode)
 	{
-		if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+		if(keyCode == Keys.ESCAPE)
 		{
 			METRO.__close();
 		}

@@ -16,6 +16,9 @@ import javax.swing.SwingUtilities;
 
 import metro.Game.CityTravelerSpot;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
@@ -135,9 +138,9 @@ public class GameScreen_CityView implements GameScreen
 	 * @see GameScreen#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseClicked(MouseEvent e)
+	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(SwingUtilities.isMiddleMouseButton(e))
+		if(mouseButton == Buttons.MIDDLE)
 		{
 			_dragMode = true;
 		}
@@ -153,17 +156,17 @@ public class GameScreen_CityView implements GameScreen
 	 * @see GameScreen#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseReleased(MouseEvent e)
+	public void mouseReleased(int mouseButton)
 	{
-		if(SwingUtilities.isMiddleMouseButton(e))
+		if(mouseButton == Buttons.MIDDLE)
 		{
 			_dragMode = false;
 		}
 	}
 	@Override
-	public void keyPressed(KeyEvent e)
+	public void keyPressed(int keyCode)
 	{
-		if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+		if(keyCode == Keys.ESCAPE)
 		{
 			METRO.__close();
 		}

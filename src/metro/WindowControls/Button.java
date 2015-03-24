@@ -148,15 +148,22 @@ public class Button implements ControlElement
 	public boolean clickOnControlElement()
 	{
 		Point mPos = MouseInfo.getPointerInfo().getLocation();
-		
-		if(mPos.x >= _position.x + _windowHandle.getPosition().x
-			&& mPos.x <= _position.x + _position.width + _windowHandle.getPosition().x
-			&& mPos.y >= _position.y + _windowHandle.getPosition().y
-			&& mPos.y <= _position.y + _position.height + _windowHandle.getPosition().y)
+
+		if(mPos.x >= _position.x
+			&& mPos.x <= _position.x + _position.width
+			&& mPos.y >= _position.y
+			&& mPos.y <= _position.y + _position.height)
 		{
+			System.out.println("Pressed" + _text);
 			hasBeenClicked = true;
 			return true;
 		}
 		return false;
+	}
+	@Override
+	public void moveElement(Point offset)
+	{
+		_position.x += offset.x;
+		_position.y += offset.y;
 	}
 }

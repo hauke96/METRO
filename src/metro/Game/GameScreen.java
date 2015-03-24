@@ -19,20 +19,22 @@ public interface GameScreen
 	 * Will be executed as fast as possible ;)
 	 */
 	public void update(SpriteBatch g);
-	
+
 	/**
 	 * When mouse has clicked
-	 * @param e MouseEvent with infos (pos etc.)
+	 * @param screenX The x-position on the screen
+	 * @param screenY The y-position on the screen
+	 * @param mouseButton The number of the button like Buttons.LEFT
 	 */
-	public void mouseClicked(MouseEvent e);
+	public void mouseClicked(int screenX, int screenY, int mouseButton);
 	/**
 	 * When mouse has been released.
-	 * @param e MouseEvent with infos (pos etc.)
+	 * @param mouseButton The number of the button like Buttons.LEFT
 	 */
-	public void mouseReleased(MouseEvent e);
+	public void mouseReleased(int mouseButton);
 	/**
 	 * When a key was pressed.
-	 * @param e KeyEvent with infos (which key?)
+	 * @param keyCode Key number from Gdx.Input
 	 */
-	public void keyPressed(KeyEvent e);
+	public void keyPressed(int keyCode);
 }

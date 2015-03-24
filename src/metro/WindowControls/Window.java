@@ -13,6 +13,7 @@ import metro.Game.METRO;
 import metro.graphics.Draw;
 import metro.graphics.Fill;
 
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -120,6 +121,11 @@ public class Window
 		{
 			Point positionDiff = new Point(MouseInfo.getPointerInfo().getLocation().x - _oldMousePos.x,
 					MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y);
+
+			for(ControlElement cElement : _elementList)
+			{
+				cElement.moveElement(positionDiff);
+			}
 			
 			_position.x += positionDiff.x;
 			_position.y += positionDiff.y;
@@ -135,23 +141,22 @@ public class Window
 		if(!_elementList.contains(cElement))
 		{
 			Point pos = cElement.getPosition();
-			System.out.println(cElement.getClass().getName() + " - " + pos);
 			cElement.setPosition(new Point(pos.x + _position.x, pos.y + _position.y));
 			_elementList.add(cElement); // there wont be doubles ;)
 		}
 	}
 	/**
 	 * Returns true is mouse is in window, false if not and also false if in window but e.g. on a button.
+	 * @param screenX x-coordinate of mouse
+	 * @param screenY y-coordinate of mouse
 	 * @return boolean True/false if mouse is in window.
 	 */
-	public boolean isMouseOnWindow()
+	public boolean isMouseOnWindow(int screenX, int screenY)
 	{
-		Point mPos = MouseInfo.getPointerInfo().getLocation(); // use real position, because __mousePosition is old when mouse is on window (to ignore the mouse on the game screen)
-		
-		return mPos.x >= _position.x
-			&& mPos.x <= _position.x + _size.x
-			&& mPos.y >= _position.y - 20
-			&& mPos.y <= _position.y + _size.y - 20;
+		return screenX >= _position.x
+			&& screenX <= _position.x + _size.x
+			&& screenY >= _position.y
+			&& screenY <= _position.y + _size.y;
 			//&& !isOnWindow; // if mouse is on NO control element (only on the window area)
 				
 	}
@@ -159,24 +164,23 @@ public class Window
 	 * Makes things when mouse is pressed.
 	 * @param e MouseEvent
 	 */
-	public void mousePressed(MouseEvent e)
+	public void mousePressed(int screenX, int screenY, int mouseButton)
 	{
-		Point mousePosition = e.getPoint(); // use e.getPoint(), because __mousePosition is old when mouse is on window (to ignore the mouse on the game screen)
-		
 		for(ControlElement cElement : _elementList)
 		{
 			cElement.clickOnControlElement();
 		}
-
+		
 		// Check for drag-mode:
-		if(mousePosition.x >= _position.x
-			&& mousePosition.x <= _position.x + _size.x - 20
-			&& mousePosition.y >= _position.y - 20
-			&& mousePosition.y <= _position.y
-			&& SwingUtilities.isLeftMouseButton(e))
+		if(screenX >= _position.x
+			&& screenX <= _position.x + _size.x - 20
+			&& screenY >= _position.y
+			&& screenY <= _position.y + 20
+			&& mouseButton == Buttons.LEFT
+			)
 		{
 			_dragMode = true;
-			_oldMousePos = mousePosition;
+			_oldMousePos = new Point(screenX, screenY);
 		}
 	}
 	/**
@@ -191,12 +195,12 @@ public class Window
 	 * @param e MouseEvent
 	 * @return True if the window has been closed, false if not.
 	 */
-	public boolean closeIfNeeded(MouseEvent e)
+	public boolean closeIfNeeded(int screenX, int screenY, int mouseButton)
 	{
-		if(e.getPoint().x >= _position.x + _size.x - 20
-			&& e.getPoint().x <= _position.x + _size.x
-			&& e.getPoint().y >= _position.y - 20
-			&& e.getPoint().y <= _position.y)
+		if(screenX >= _position.x + _size.x - 20
+			&& screenX <= _position.x + _size.x
+			&& screenY >= _position.y
+			&& screenY <= _position.y + 20)
 		{
 			close(); // closes this window and removes it from the memory
 			return true;

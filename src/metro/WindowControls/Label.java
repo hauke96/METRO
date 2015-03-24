@@ -138,5 +138,11 @@ public class Label implements ControlElement
 	{
 		return _position;
 	}
+	@Override
+	public void moveElement(Point offset)
+	{
+		_position.x += offset.x;
+		_position.y += offset.y;
+	}
 
 }

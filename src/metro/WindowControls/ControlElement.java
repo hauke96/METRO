@@ -26,4 +26,9 @@ public interface ControlElement
 	 * @return Position as Point.
 	 */
 	public Point getPosition();
+	/**
+	 * Moves the element.
+	 * @param offset The amount of pixel to move. This is NOT the new position, only an offset!
+	 */
+	public void moveElement(Point offset);
 }

@@ -11,6 +11,7 @@ import metro.WindowControls.Window;
 import metro.graphics.Draw;
 
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
@@ -72,9 +73,9 @@ public class MainMenu implements GameScreen
 	/**
 	 * Checks which button in the main menu has been clicked.
 	 */
-	public void mouseClicked(MouseEvent e)
+	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(_button_startGame.isPressed(e.getX(), e.getY()))
+		if(_button_startGame.isPressed(screenX, screenY))
 		{
 			_welcomeWindow.close();
 			_welcomeWindow = null;
@@ -83,15 +84,15 @@ public class MainMenu implements GameScreen
 			GameScreen_CityView._trainGameScreen = METRO.__currentGameScreen;
 			METRO.__controlDrawer = new ScreenInfoDrawer();
 		}
-		else if(_button_exitGame.isPressed(e.getX(), e.getY()))
+		else if(_button_exitGame.isPressed(screenX, screenY))
 		{
 			METRO.__close();
 		}
 	}
-	public void mouseReleased(MouseEvent e){}
-	public void keyPressed(KeyEvent e)
+	public void mouseReleased(int mouseButton){}
+	public void keyPressed(int keyCode)
 	{
-		if(e.getKeyCode() == KeyEvent.VK_ESCAPE)
+		if(keyCode == Keys.ESCAPE)
 		{
 			METRO.__close();
 		}

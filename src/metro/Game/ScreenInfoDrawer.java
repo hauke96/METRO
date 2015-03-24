@@ -57,7 +57,7 @@ public class ScreenInfoDrawer implements GameScreen {
 	 * @see GameScreen#mouseClicked(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseClicked(MouseEvent e) 
+	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 	}
 
@@ -65,6 +65,6 @@ public class ScreenInfoDrawer implements GameScreen {
 	 * @see GameScreen#mouseReleased(java.awt.event.MouseEvent)
 	 */
 	@Override
-	public void mouseReleased(MouseEvent e){}
-	public void keyPressed(KeyEvent e){}
+	public void mouseReleased(int mouseButton){}
+	public void keyPressed(int keyCode){}
 }
