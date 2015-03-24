@@ -1,9 +1,10 @@
 package Game;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * Draws stuff like money, view-buttons, etc. onto the screen.
@@ -19,37 +20,37 @@ public class ScreenInfoDrawer implements GameScreen {
 	 * @see GameScreen#update(java.awt.Graphics2D)
 	 */
 	@Override
-	public void update(Graphics2D g)
+	public void update(SpriteBatch sp)
 	{
-		g.drawImage(METRO.__viewPortButton_Texture, METRO.__SCREEN_SIZE.width / 2 - 40, 45, METRO.__SCREEN_SIZE.width / 2 + 40, 85, 
-				161, 60, 161+79, 60+40, null); // the "view" sign under the two buttons
-		METRO.__viewPortButton_City.draw(g);
-		METRO.__viewPortButton_Train.draw(g);
-		drawPlayerInfos(g);
+		sp.draw(METRO.__viewPortButton_Texture, METRO.__SCREEN_SIZE.width / 2 - 40, 45, METRO.__SCREEN_SIZE.width / 2 + 40, 85); // the "view" sign under the two buttons
+		METRO.__viewPortButton_City.draw(sp);
+		METRO.__viewPortButton_Train.draw(sp);
+		drawPlayerInfos(sp);
 	}
 	/**
 	 * Draws all significant player infos onto the upper left corner.
 	 * @param g The graphic handle to draw on
 	 */
-	private void drawPlayerInfos(Graphics g)
+	private void drawPlayerInfos(SpriteBatch g)
 	{
+		//TOOD: recreate drawing stuff for the player infos
 		// clear area
-		g.setColor(Color.white);
-		g.fillRect(0, 0, 150, 26);
-		
-		g.setColor(METRO.__metroBlue);
-		// Draw a   _|
-		g.drawLine(0, 26, 150, 26);
-		g.drawLine(150, 0, 150, 26);
-		
-		// draw amount of money like 935.258.550 $
-		g.setFont(METRO.__stdFont);
-		g.setColor(METRO.__metroRed);
-		g.drawString("$", 5, 22);
-		g.setColor(METRO.__metroBlue);
-		String str = " = " + String.format("%,d", METRO.__money) + " $";
-		str = str.replace(".", ". ");
-		g.drawString(str, 12, 22); // converts 12345 to 12.345
+//		g.setColor(Color.white);
+//		g.fillRect(0, 0, 150, 26);
+//		
+//		g.setColor(METRO.__metroBlue);
+//		// Draw a   _|
+//		g.drawLine(0, 26, 150, 26);
+//		g.drawLine(150, 0, 150, 26);
+//		
+//		// draw amount of money like 935.258.550 $
+//		g.setFont(METRO.__stdFont);
+//		g.setColor(METRO.__metroRed);
+//		g.drawString("$", 5, 22);
+//		g.setColor(METRO.__metroBlue);
+//		String str = " = " + String.format("%,d", METRO.__money) + " $";
+//		str = str.replace(".", ". ");
+//		g.drawString(str, 12, 22); // converts 12345 to 12.345
 	}
 
 	/* (non-Javadoc)

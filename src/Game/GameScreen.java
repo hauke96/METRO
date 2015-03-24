@@ -1,8 +1,9 @@
 package Game;
 
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * Every Menu or Game Sreen has to implement this interface for start() and update().
@@ -17,7 +18,7 @@ public interface GameScreen
 	/**
 	 * Will be executed as fast as possible ;)
 	 */
-	public void update(Graphics2D g);
+	public void update(SpriteBatch g);
 	
 	/**
 	 * When mouse has clicked

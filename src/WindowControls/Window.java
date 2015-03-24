@@ -1,18 +1,16 @@
 package WindowControls;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
-import Game.*;
+import Game.METRO;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * Creates a simple but fancy window with some extra functions like Control-management (managing buttons, labels, etc.).
@@ -62,49 +60,49 @@ public class Window
 	 * Draws the window and all controls on it.
 	 * @param g The graphic handle.
 	 */
-	public void draw(Graphics g)
+	public void draw(SpriteBatch g)
 	{
 		update();
-		
-		BufferedImage bufferedImage = new BufferedImage(_size.x + 2, _size.y + 22, BufferedImage.TYPE_INT_ARGB);
-		
-		Graphics2D g2d = bufferedImage.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-		
-		//Clear background
-		g2d.setColor(Color.white);
-		g2d.fillRect(0, 0, _size.x + 1, _size.y + 1);
-		//Draw head bar of window
-		g2d.setColor(_color);
-		g2d.fillRect(0,  0, _size.x - 20, 20);
-		g2d.setColor(Color.white);
-		g2d.drawRect(1, 1, _size.x - 3, 18);
-		//Draw Border
-		g2d.setColor(_color);
-		g2d.drawRect(0, 0, _size.x + 1, _size.y + 1);
-		g2d.drawRect(0, 0, _size.x + 1, 20);
-		g2d.drawRect(_size.x - 19, 0, _size.x + 1, 20); // close box
-		//Draw Window title
-		g2d.setColor(Color.white);
-		g2d.setFont(METRO.__stdFont);
-		g2d.drawString(_title, (_size.x - 20) / 2 - g2d.getFontMetrics(METRO.__stdFont).stringWidth(_title) / 2, 
-			g2d.getFontMetrics(METRO.__stdFont).getHeight() - 5);
-		//Close cross
-		g2d.drawImage(METRO.__iconSet, _size.x - 19, 0, _size.x + 1, 20, 0, 0, 20, 20, null);
-
-		BufferedImage bufferedImage_controls = new BufferedImage(_size.x, _size.y, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D g2d_controls = bufferedImage_controls.createGraphics();
-		g2d_controls.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d_controls.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-		
-		for(ControlElement cElement : _elementList)
-		{
-			cElement.draw(g2d_controls);
-		}
-		
-		g2d.drawImage(bufferedImage_controls, 1, 21, null);
-		g.drawImage(bufferedImage, _position.x - 1, _position.y - 20, null);
+		//TODO: Recreate the draw routine for the window
+//		BufferedImage bufferedImage = new BufferedImage(_size.x + 2, _size.y + 22, BufferedImage.TYPE_INT_ARGB);
+//		
+//		Graphics2D g2d = bufferedImage.createGraphics();
+//		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//		g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+//		
+//		//Clear background
+//		g2d.setColor(Color.white);
+//		g2d.fillRect(0, 0, _size.x + 1, _size.y + 1);
+//		//Draw head bar of window
+//		g2d.setColor(_color);
+//		g2d.fillRect(0,  0, _size.x - 20, 20);
+//		g2d.setColor(Color.white);
+//		g2d.drawRect(1, 1, _size.x - 3, 18);
+//		//Draw Border
+//		g2d.setColor(_color);
+//		g2d.drawRect(0, 0, _size.x + 1, _size.y + 1);
+//		g2d.drawRect(0, 0, _size.x + 1, 20);
+//		g2d.drawRect(_size.x - 19, 0, _size.x + 1, 20); // close box
+//		//Draw Window title
+//		g2d.setColor(Color.white);
+//		g2d.setFont(METRO.__stdFont);
+//		g2d.drawString(_title, (_size.x - 20) / 2 - g2d.getFontMetrics(METRO.__stdFont).stringWidth(_title) / 2, 
+//			g2d.getFontMetrics(METRO.__stdFont).getHeight() - 5);
+//		//Close cross
+//		g2d.drawImage(METRO.__iconSet, _size.x - 19, 0, _size.x + 1, 20, 0, 0, 20, 20, null);
+//
+//		BufferedImage bufferedImage_controls = new BufferedImage(_size.x, _size.y, BufferedImage.TYPE_INT_ARGB);
+//		Graphics2D g2d_controls = bufferedImage_controls.createGraphics();
+//		g2d_controls.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//		g2d_controls.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+//		
+//		for(ControlElement cElement : _elementList)
+//		{
+//			cElement.draw(g2d_controls);
+//		}
+//		
+//		g2d.drawImage(bufferedImage_controls, 1, 21, null);
+//		g.drawImage(bufferedImage, _position.x - 1, _position.y - 20, null);
 	}
 	/**
 	 * Updates everything. Is very important for e.g. drag-feature and Controls

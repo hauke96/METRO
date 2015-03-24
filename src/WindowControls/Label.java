@@ -3,11 +3,9 @@
  */
 package WindowControls;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Point;
 
-import Game.METRO;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * @author hauke
@@ -68,47 +66,48 @@ public class Label implements ControlElement
 	 * Draws the label onto the screen. The Color of the Graphics-handle will be restores after drawing.
 	 */
 	@Override
-	public void draw(Graphics g)
+	public void draw(SpriteBatch sp)
 	{
-		Color c = g.getColor();
-		g.setFont(METRO.__stdFont);
-		g.setColor(Color.black);
-		
-		if(_areaWidth == 0)
-		{
-			g.drawString(_text, _position.x, _position.y);
-		}
-		else
-		{
-			int stringHeight = g.getFontMetrics(METRO.__stdFont).getHeight(),
-				vOffset = 0;
-			String[] segments = _text.split("\n"); // split by new line
-			
-			for(String segment : segments)
-			{
-				String[] subSegments = segment.split(" "); // each word
-				String line = "";
-				
-				// recunstruct string with length < area width
-				for(int i = 0; i < subSegments.length; i++)
-				{
-					if(g.getFontMetrics(METRO.__stdFont).stringWidth(line + " " + subSegments[i]) >= _areaWidth) // if next addition would be out of area
-					{
-						g.drawString(line, _position.x, _position.y + vOffset);
-						vOffset += stringHeight + 2; // y-pos for next line
-						line = subSegments[i] + " "; // choose first char for next line
-					}
-					else // if new addition is in area
-					{
-						line += subSegments[i] + " ";
-					}
-				}
-
-				g.drawString(line, _position.x, _position.y + vOffset);
-				vOffset += stringHeight + 2; // y-pos for next line
-			}
-		}
-		g.setColor(c);
+		//TODO: Recreate label drawing
+//		Color c = g.getColor();
+//		g.setFont(METRO.__stdFont);
+//		g.setColor(Color.black);
+//		
+//		if(_areaWidth == 0)
+//		{
+//			g.drawString(_text, _position.x, _position.y);
+//		}
+//		else
+//		{
+//			int stringHeight = g.getFontMetrics(METRO.__stdFont).getHeight(),
+//				vOffset = 0;
+//			String[] segments = _text.split("\n"); // split by new line
+//			
+//			for(String segment : segments)
+//			{
+//				String[] subSegments = segment.split(" "); // each word
+//				String line = "";
+//				
+//				// recunstruct string with length < area width
+//				for(int i = 0; i < subSegments.length; i++)
+//				{
+//					if(g.getFontMetrics(METRO.__stdFont).stringWidth(line + " " + subSegments[i]) >= _areaWidth) // if next addition would be out of area
+//					{
+//						g.drawString(line, _position.x, _position.y + vOffset);
+//						vOffset += stringHeight + 2; // y-pos for next line
+//						line = subSegments[i] + " "; // choose first char for next line
+//					}
+//					else // if new addition is in area
+//					{
+//						line += subSegments[i] + " ";
+//					}
+//				}
+//
+//				g.drawString(line, _position.x, _position.y + vOffset);
+//				vOffset += stringHeight + 2; // y-pos for next line
+//			}
+//		}
+//		g.setColor(c);
 	}
 
 	/* (non-Javadoc)

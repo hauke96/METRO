@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import Game.GameScreen_TrainView;
 import Game.METRO;
 
@@ -84,7 +86,7 @@ public class RailwayNode
 	 * @param g
 	 * @param offset
 	 */
-	public void draw(Graphics2D g, Point offset)
+	public void draw(SpriteBatch sp, Point offset)
 	{
 		Point position, positionNext;
 		
@@ -99,8 +101,9 @@ public class RailwayNode
 						offset.y + _position.y * METRO.__baseNetSpacing); // Position with offset etc.
 				positionNext = new Point(offset.x + p.x * METRO.__baseNetSpacing, 
 						offset.y + p.y * METRO.__baseNetSpacing); // Position with offset etc. for second point
-				g.setColor(Color.black);
-				g.drawLine(position.x, position.y, positionNext.x, positionNext.y);
+				//TODO: Recreate drawing stuff for railwaynode
+//				g.setColor(Color.black);
+//				g.drawLine(position.x, position.y, positionNext.x, positionNext.y);
 			}
 		}
 	}

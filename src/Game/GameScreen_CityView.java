@@ -15,6 +15,8 @@ import java.util.List;
 
 import javax.swing.SwingUtilities;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 
 /**
  * GameScreen with the city view. It Shows the population density and basic player information.
@@ -54,7 +56,7 @@ public class GameScreen_CityView implements GameScreen
 	 * @see GameScreen#update(java.awt.Graphics2D)
 	 */
 	@Override
-	public void update(Graphics2D g)
+	public void update(SpriteBatch sp)
 	{
 		if(_dragMode)
 		{
@@ -63,16 +65,16 @@ public class GameScreen_CityView implements GameScreen
 		}
 		_oldMousePos = METRO.__mousePosition;
 		
-		drawCircles(g);	
+		drawCircles(sp);	
 		
 	}
 	/**
 	 * Draws the traveler-circles.
 	 * @param g The graphic handle to draw on
 	 */
-	private void drawCircles(Graphics2D g)
+	private void drawCircles(SpriteBatch sp)
 	{
-		int selectedSpotNumber = -1;
+		int selectedSpotNumber = -1; 
 		int selectedLayerNumber = -1; // the circle, the mouse is in. -1 means: Mouse out of any circle.
 		
 		// get the selected circle number
@@ -89,44 +91,43 @@ public class GameScreen_CityView implements GameScreen
 				}
 			}
 		}
-		
-		if(_lastSelectedSpot != selectedSpotNumber 
-			|| _lastSelectedLayer != selectedLayerNumber
-			|| !_lastFrameOffset.equals(_offset)) // only re-render if something changed
-		{
-			Graphics2D g2d = _lastSpotFrame.createGraphics();
-			g2d.setColor(Color.white);
-			g2d.fillRect(0, 0, _lastSpotFrame.getWidth(), _lastSpotFrame.getHeight());
-			g2d.setFont(METRO.__stdFont);
-			//g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			// draw all the circles
-			for(int i = 0; i < 10; i++)
-			{
-				for(int k = 0; k < _travelerSpots.size(); k++)
-				{
-					if(_travelerSpots.get(k).getStrength() <= i) continue;
-					_travelerSpots.get(k).draw(g2d, i, i == selectedLayerNumber, k == selectedSpotNumber, true); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
-				}
-				for(int k = 0; k < _travelerSpots.size(); k++)
-				{
-					if(_travelerSpots.get(k).getStrength() <= i) continue;
-					_travelerSpots.get(k).draw(g2d, i, i == selectedLayerNumber, k == selectedSpotNumber); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
-				}
-			}
-			_lastSelectedLayer = selectedLayerNumber;
-			_lastSelectedSpot = selectedSpotNumber;
-			_lastFrameOffset = _offset;
-		}
-		g.drawImage(_lastSpotFrame, 0, 0, null);
-		
-		if(selectedLayerNumber != -1) // if there's a selected circle 
-		{
-			int gray = 55 * selectedLayerNumber;
-			if(gray > 255) gray = 255;
-			g.setColor(new Color(0, 0, 200));
-			g.drawString(selectedLayerNumber + "", METRO.__mousePosition.x - g.getFontMetrics(METRO.__stdFont).stringWidth(selectedLayerNumber + "") / 2 - 1, 
-				METRO.__mousePosition.y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
-		}
+		//TODO: Recreate drawing stuff for circles
+//		if(_lastSelectedSpot != selectedSpotNumber 
+//			|| _lastSelectedLayer != selectedLayerNumber
+//			|| !_lastFrameOffset.equals(_offset)) // only re-render if something changed
+//		{
+//			Graphics2D g2d = _lastSpotFrame.createGraphics();
+//			g2d.setColor(Color.white);
+//			g2d.fillRect(0, 0, _lastSpotFrame.getWidth(), _lastSpotFrame.getHeight());
+//			g2d.setFont(METRO.__stdFont);
+//			// draw all the circles
+//			for(int i = 0; i < 10; i++)
+//			{
+//				for(int k = 0; k < _travelerSpots.size(); k++)
+//				{
+//					if(_travelerSpots.get(k).getStrength() <= i) continue;
+//					_travelerSpots.get(k).draw(g2d, i, i == selectedLayerNumber, k == selectedSpotNumber, true); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+//				}
+//				for(int k = 0; k < _travelerSpots.size(); k++)
+//				{
+//					if(_travelerSpots.get(k).getStrength() <= i) continue;
+//					_travelerSpots.get(k).draw(g2d, i, i == selectedLayerNumber, k == selectedSpotNumber); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+//				}
+//			}
+//			_lastSelectedLayer = selectedLayerNumber;
+//			_lastSelectedSpot = selectedSpotNumber;
+//			_lastFrameOffset = _offset;
+//		}
+//		g.drawImage(_lastSpotFrame, 0, 0, null);
+//		
+//		if(selectedLayerNumber != -1) // if there's a selected circle 
+//		{
+//			int gray = 55 * selectedLayerNumber;
+//			if(gray > 255) gray = 255;
+//			g.setColor(new Color(0, 0, 200));
+//			g.drawString(selectedLayerNumber + "", METRO.__mousePosition.x - g.getFontMetrics(METRO.__stdFont).stringWidth(selectedLayerNumber + "") / 2 - 1, 
+//				METRO.__mousePosition.y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
+//		}
 	}
 
 	/* (non-Javadoc)

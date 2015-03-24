@@ -16,6 +16,8 @@ import TrainManagement.RailwayNode;
 import TrainManagement.TrainStation;
 import WindowControls.Button;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 
 /**
  * GameScreen with the default view. It Shows the trains, tracks, stations and basic player information.
@@ -54,7 +56,7 @@ public class GameScreen_TrainView implements GameScreen
 	 * @see GameScreen#update(java.awt.Graphics2D)
 	 */
 	@Override
-	public void update(Graphics2D g)
+	public void update(SpriteBatch sp)
 	{
 		if(_dragMode)
 		{
@@ -63,29 +65,30 @@ public class GameScreen_TrainView implements GameScreen
 		}
 		_oldMousePos = METRO.__mousePosition;
 
-		drawBaseNet(g, new Color(220, 220, 220));//Color.lightGray);
-		drawBaseDot(g);
+		drawBaseNet(sp, new Color(220, 220, 220));//Color.lightGray);
+		drawBaseDot(sp);
 		
-		drawEditMode(g);
-		drawRailwayLines(g);
-		drawTrainStations(g);
+		drawEditMode(sp);
+		drawRailwayLines(sp);
+		drawTrainStations(sp);
 		
-		drawToolbar(g);
+		drawToolbar(sp);
 		
-		printDebugStuff(g);
+		printDebugStuff(sp);
 	}
 	/**
 	 * Prints all the debug stuff, that is -more or less- important.
 	 * @param g Graphics handle to draw on
 	 */
-	private void printDebugStuff(Graphics2D g)
+	private void printDebugStuff(SpriteBatch sp)
 	{
-		g.setColor(Color.blue);
-		g.drawString("MapPosition:", METRO.__SCREEN_SIZE.width - 300, 65);
-		g.drawString("MousePosition:", METRO.__SCREEN_SIZE.width - 300, 85);
-		g.setColor(Color.black);
-		g.drawString(_offset + "", METRO.__SCREEN_SIZE.width - 200, 65);
-		g.drawString(METRO.__mousePosition + "", METRO.__SCREEN_SIZE.width - 200, 85);
+		//TODO: Recreate drawing stuff for debug information
+//		g.setColor(Color.blue);
+//		g.drawString("MapPosition:", METRO.__SCREEN_SIZE.width - 300, 65);
+//		g.drawString("MousePosition:", METRO.__SCREEN_SIZE.width - 300, 85);
+//		g.setColor(Color.black);
+//		g.drawString(_offset + "", METRO.__SCREEN_SIZE.width - 200, 65);
+//		g.drawString(METRO.__mousePosition + "", METRO.__SCREEN_SIZE.width - 200, 85);
 	}
 	/**
 	 * Draws the basic gray net for kind of orientation.
@@ -93,33 +96,34 @@ public class GameScreen_TrainView implements GameScreen
 	 * @param color The color of the net
 	 * @param offset An user made offset
 	 */
-	private void drawBaseNet(Graphics2D g, Color color, int offset)
+	private void drawBaseNet(SpriteBatch sp, Color color, int offset)
 	{
-		g.setColor(color);
-		for(int y = ((int)_offset.getY() + offset) % METRO.__baseNetSpacing; y < METRO.__SCREEN_SIZE.height; y += METRO.__baseNetSpacing)
-		{
-			g.drawLine(offset, y, METRO.__SCREEN_SIZE.width, y);
-		}
-		for(int x = ((int)_offset.getX() + offset) % METRO.__baseNetSpacing; x < METRO.__SCREEN_SIZE.width; x += METRO.__baseNetSpacing)
-		{
-			g.drawLine(x, offset, x, METRO.__SCREEN_SIZE.height);
-		}
-		g.setColor(Color.white);
+		//TODO: recretae drawing for base net
+//		sp.setColor(color);
+//		for(int y = ((int)_offset.getY() + offset) % METRO.__baseNetSpacing; y < METRO.__SCREEN_SIZE.height; y += METRO.__baseNetSpacing)
+//		{
+//			sp.drawLine(offset, y, METRO.__SCREEN_SIZE.width, y);
+//		}
+//		for(int x = ((int)_offset.getX() + offset) % METRO.__baseNetSpacing; x < METRO.__SCREEN_SIZE.width; x += METRO.__baseNetSpacing)
+//		{
+//			sp.drawLine(x, offset, x, METRO.__SCREEN_SIZE.height);
+//		}
+//		sp.setColor(Color.white);
 	}
 	/**
 	 * Draws the basic gray net for kind of orientation.
 	 * @param g The graphic handle to draw on
 	 * @param color The color of the net
 	 */
-	private void drawBaseNet(Graphics2D g, Color color)
+	private void drawBaseNet(SpriteBatch sp, Color color)
 	{
-		drawBaseNet(g, color, 0);
+		drawBaseNet(sp, color, 0);
 	}
 	/**
 	 * Calculates the position and draws this fancy jumping dot near the cursor.
 	 * @param g The graphic handle to draw on
 	 */
-	private void drawBaseDot(Graphics2D g)
+	private void drawBaseDot(SpriteBatch sp)
 	{
 		Point cursorPos = new Point(Math.abs((int)(METRO.__mousePosition.x - 7 - _offset.getX()) % METRO.__baseNetSpacing), 
 				Math.abs((int)(METRO.__mousePosition.y - 7 - _offset.getY()) % METRO.__baseNetSpacing));
@@ -131,133 +135,135 @@ public class GameScreen_TrainView implements GameScreen
 		if(cursorPos.x <= METRO.__baseNetSpacing / 2) offsetMarker.x = cursorPos.x;
 		if(cursorPos.y <= METRO.__baseNetSpacing / 2) offsetMarker.y = cursorPos.y;
 
-		g.setColor(Color.darkGray);
-		g.fillRect(METRO.__mousePosition.x + offsetMarker.x - 8, 
-				METRO.__mousePosition.y + offsetMarker.y - 8, 
-				3, 3);
-		g.setColor(Color.white);
+		//TODO: Recreate drawing stuff for base dot
+//		g.setColor(Color.darkGray);
+//		g.fillRect(METRO.__mousePosition.x + offsetMarker.x - 8, 
+//				METRO.__mousePosition.y + offsetMarker.y - 8, 
+//				3, 3);
+//		g.setColor(Color.white);
 	}
 	/**
 	 * Draws all the stuff from edit mode things (previews, etc.)
 	 * @param g Graphics handle to draw on.
 	 */
-	private void drawEditMode(Graphics2D g)
+	private void drawEditMode(SpriteBatch sp)
 	{
-		Point offset = new Point((int)_offset.getX(), (int)_offset.getY());
-		
-		switch(_editMode)
-		{
-			case 1:
-				Point position = new Point(METRO.__mousePosition.x - 4, 
-						METRO.__mousePosition.y - 8); // Position with offset etc.
-				g.setColor(Color.white);
-				g.fillRect(position.x, position.y, 8, 15);
-				g.setColor(Color.black);
-				g.drawRect(position.x, position.y, 8, 15);
-				break;
-			case 2:
-				if(_currentRailwayNode != null) // if not null, calc and draw preview of new tracks
-				{
-					g.setColor(Color.black);
-					
-					int diagonalOffset = 0,
-							B = _selectedCross.x - _currentRailwayNode.getPosition().x,
-							H = _selectedCross.y - _currentRailwayNode.getPosition().y,
-							preFactor = 1; // counts the amount of fields covered
-					
-					if(Math.abs(H) > Math.abs(B)) // vertical tracks
-					{
-						diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f);
-						if(H < 0) preFactor = -1;
-						
-						g.drawLine(offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
-							offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-							offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
-							offset.y + (_currentRailwayNode.getPosition().y + preFactor * diagonalOffset) * METRO.__baseNetSpacing);
-						
-						g.drawLine(offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
-								offset.y + (_currentRailwayNode.getPosition().y + preFactor * diagonalOffset) * METRO.__baseNetSpacing,
-								offset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing, 
-								offset.y + (_currentRailwayNode.getPosition().y + preFactor * (diagonalOffset + Math.abs(B))) * METRO.__baseNetSpacing);
-						
-						g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing, 
-								offset.y + (_currentRailwayNode.getPosition().y + preFactor * (diagonalOffset + Math.abs(B))) * METRO.__baseNetSpacing,
-								offset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing, 
-								offset.y + (_currentRailwayNode.getPosition().y + preFactor * (2 * diagonalOffset + preFactor * ((H - B) % 2) + Math.abs(B))) * METRO.__baseNetSpacing);	
-					}
-					else if(Math.abs(B) > Math.abs(H)) // horizontal tracks
-					{
-						diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
-						if(B < 0) preFactor = -1;
-						
-						g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * diagonalOffset) * METRO.__baseNetSpacing, 
-							offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-							offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
-							offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing);
-
-						g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * diagonalOffset) * METRO.__baseNetSpacing, 
-								offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-								offset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing,
-								offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing); 
-						
-						g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing, 
-								offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing,
-								offset.x + (_currentRailwayNode.getPosition().x + preFactor * (2 * diagonalOffset + preFactor * ((B - H) % 2) + Math.abs(H))) * METRO.__baseNetSpacing,
-								offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing);
-					}
-					else if(Math.abs(B) == Math.abs(H)) // diagonal tracks
-					{
-						g.drawLine(offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
-								offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-								offset.x + _selectedCross.x * METRO.__baseNetSpacing, 
-								offset.y + _selectedCross.y * METRO.__baseNetSpacing);
-					}
-				}
-				break;
-		}
+		//TODO: Recreate drawing stuff for edit modes
+//		Point offset = new Point((int)_offset.getX(), (int)_offset.getY());
+//		
+//		switch(_editMode)
+//		{
+//			case 1:
+//				Point position = new Point(METRO.__mousePosition.x - 4, 
+//						METRO.__mousePosition.y - 8); // Position with offset etc.
+//				g.setColor(Color.white);
+//				g.fillRect(position.x, position.y, 8, 15);
+//				g.setColor(Color.black);
+//				g.drawRect(position.x, position.y, 8, 15);
+//				break;
+//			case 2:
+//				if(_currentRailwayNode != null) // if not null, calc and draw preview of new tracks
+//				{
+//					g.setColor(Color.black);
+//					
+//					int diagonalOffset = 0,
+//							B = _selectedCross.x - _currentRailwayNode.getPosition().x,
+//							H = _selectedCross.y - _currentRailwayNode.getPosition().y,
+//							preFactor = 1; // counts the amount of fields covered
+//					
+//					if(Math.abs(H) > Math.abs(B)) // vertical tracks
+//					{
+//						diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f);
+//						if(H < 0) preFactor = -1;
+//						
+//						g.drawLine(offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
+//							offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
+//							offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
+//							offset.y + (_currentRailwayNode.getPosition().y + preFactor * diagonalOffset) * METRO.__baseNetSpacing);
+//						
+//						g.drawLine(offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
+//								offset.y + (_currentRailwayNode.getPosition().y + preFactor * diagonalOffset) * METRO.__baseNetSpacing,
+//								offset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing, 
+//								offset.y + (_currentRailwayNode.getPosition().y + preFactor * (diagonalOffset + Math.abs(B))) * METRO.__baseNetSpacing);
+//						
+//						g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing, 
+//								offset.y + (_currentRailwayNode.getPosition().y + preFactor * (diagonalOffset + Math.abs(B))) * METRO.__baseNetSpacing,
+//								offset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing, 
+//								offset.y + (_currentRailwayNode.getPosition().y + preFactor * (2 * diagonalOffset + preFactor * ((H - B) % 2) + Math.abs(B))) * METRO.__baseNetSpacing);	
+//					}
+//					else if(Math.abs(B) > Math.abs(H)) // horizontal tracks
+//					{
+//						diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
+//						if(B < 0) preFactor = -1;
+//						
+//						g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * diagonalOffset) * METRO.__baseNetSpacing, 
+//							offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
+//							offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
+//							offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing);
+//
+//						g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * diagonalOffset) * METRO.__baseNetSpacing, 
+//								offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
+//								offset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing,
+//								offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing); 
+//						
+//						g.drawLine(offset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing, 
+//								offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing,
+//								offset.x + (_currentRailwayNode.getPosition().x + preFactor * (2 * diagonalOffset + preFactor * ((B - H) % 2) + Math.abs(H))) * METRO.__baseNetSpacing,
+//								offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing);
+//					}
+//					else if(Math.abs(B) == Math.abs(H)) // diagonal tracks
+//					{
+//						g.drawLine(offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing, 
+//								offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
+//								offset.x + _selectedCross.x * METRO.__baseNetSpacing, 
+//								offset.y + _selectedCross.y * METRO.__baseNetSpacing);
+//					}
+//				}
+//				break;
+//		}
 	}
 	/**
 	 * Draws all the train stations with conenctions and labels.
 	 * @param g Graphic handle to draw on.
 	 */
-	private void drawTrainStations(Graphics2D g)
+	private void drawTrainStations(SpriteBatch sp)
 	{
 		Point offset = new Point((int)_offset.getX(), (int)_offset.getY());
 		
 		//Draw connections:
 		for(TrainStation ts : _trainStationList)
 		{
-			ts.drawConnections(g, offset);
+			ts.drawConnections(sp, offset);
 		}
 		//Draw stations:
 		for(TrainStation ts : _trainStationList)
 		{
-			ts.draw(g, offset);
+			ts.draw(sp, offset);
 		}
 	}
 	/**
 	 * Draws all the railway lines
 	 * @param g Graphics handle.
 	 */
-	private void drawRailwayLines(Graphics2D g)
+	private void drawRailwayLines(SpriteBatch sp)
 	{
 		Point offset = new Point((int)_offset.getX(), (int)_offset.getY());
 		
 		for(RailwayNode node : _railwayNodeList)
 		{
-			node.draw(g, offset);
+			node.draw(sp, offset);
 		}
 	}
 	/**
 	 * Draws the toolbar with its elements.
 	 * @param g Graphics handle.
 	 */
-	private void drawToolbar(Graphics2D g)
+	private void drawToolbar(SpriteBatch sp)
 	{
-		_buildStation.draw(g);
-		_buildTracks.draw(g);
-		_showTrainList.draw(g);
-		_createNewTrain.draw(g);
+		_buildStation.draw(sp);
+		_buildTracks.draw(sp);
+		_showTrainList.draw(sp);
+		_createNewTrain.draw(sp);
 	}
 	/**
 	 * Created nodes after second mouse click, removes doubles and manages calculation of automatic routiung.

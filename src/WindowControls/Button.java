@@ -3,16 +3,18 @@
  */
 package WindowControls;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 
 import Game.METRO;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 /**
  * @author Hauke
@@ -20,11 +22,13 @@ import Game.METRO;
  */
 public class Button implements ControlElement
 {
-	private Image _texture;
+	private TextureRegion _texture;
 	private Rectangle _position,
 		_positionOnImage;
 	private Window _windowHandle;
 	private boolean hasBeenClicked = false; // true if control has been clicked since last check
+	
+	private ShapeRenderer shapeRenderer = new ShapeRenderer();
 
 	/**
 	 * Creates a new Button.
@@ -32,7 +36,7 @@ public class Button implements ControlElement
 	 * @param positionOnImage The position of the button texture on an image (absolute).
 	 * @param texture The button texture.
 	 */
-	public Button(Rectangle position, Rectangle positionOnImage, Image texture)
+	public Button(Rectangle position, Rectangle positionOnImage, TextureRegion texture)
 	{
 		this(position, positionOnImage, texture, null);
 	}
@@ -43,7 +47,7 @@ public class Button implements ControlElement
 	 * @param texture The button texture.
 	 * @param window The window it should be on.
 	 */
-	public Button(Rectangle position, Rectangle positionOnImage, Image texture, Window window)
+	public Button(Rectangle position, Rectangle positionOnImage, TextureRegion texture, Window window)
 	{
 		_texture = texture;
 		_position = position;
@@ -59,19 +63,21 @@ public class Button implements ControlElement
 	 */
 	public Button(Rectangle position, String text, Window window)
 	{
-		BufferedImage bufferedImage = new BufferedImage(position.width, position.height, BufferedImage.TYPE_INT_ARGB);
+		//TODO: Recreate creation stuff for buttons
+//		BufferedImage bufferedImage = new BufferedImage(position.width, position.height, BufferedImage.TYPE_INT_ARGB);
+//		
+//		Graphics2D g2d = bufferedImage.createGraphics();
+//		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+//		g2d.setColor(METRO.__metroBlue);
+//		g2d.setFont(METRO.__stdFont);
+//
+//		g2d.drawString(text, position.width / 2 - g2d.getFontMetrics(METRO.__stdFont).stringWidth(text) / 2, 
+//			g2d.getFontMetrics(METRO.__stdFont).getHeight() - 5);
+//		
+//		g2d.drawRect(0, 0, position.width - 1, position.height - 1);
+//
+//		_texture = bufferedImage;
 		
-		Graphics2D g2d = bufferedImage.createGraphics();
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2d.setColor(METRO.__metroBlue);
-		g2d.setFont(METRO.__stdFont);
-
-		g2d.drawString(text, position.width / 2 - g2d.getFontMetrics(METRO.__stdFont).stringWidth(text) / 2, 
-			g2d.getFontMetrics(METRO.__stdFont).getHeight() - 5);
-		
-		g2d.drawRect(0, 0, position.width - 1, position.height - 1);
-
-		_texture = bufferedImage;
 		_position = position;
 		_positionOnImage = new Rectangle(0, 0, _position.width, _position.height);
 		_windowHandle = window;
@@ -118,10 +124,31 @@ public class Button implements ControlElement
 	/**
 	 * Draws the button with its text/texture.
 	 */
-	public void draw(Graphics g)
+	public void draw(SpriteBatch sp)
 	{
-		g.drawImage(_texture, _position.x, _position.y, _position.x + _position.width, _position.y + _position.height, 
-				_positionOnImage.x, _positionOnImage.y, _positionOnImage.x + _positionOnImage.width, _positionOnImage.y + _positionOnImage.height, null);
+//		sp.draw(_texture.getTexture(), 
+//				_position.x, 
+//				_position.y, 
+//				_position.width, 
+//				_position.height, 
+//				_positionOnImage.x, 
+//				_positionOnImage.y, 
+//				_positionOnImage.width, 
+//				_positionOnImage.height, 
+//				false, true); 
+		//TASK!: finish button drawing
+		METRO.__spriteBatch.end();
+		Gdx.gl.glEnable(GL30.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
+		
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.setColor(0, 0, 0, 1);
+		shapeRenderer.rect(0, 0, 100, 100);
+		shapeRenderer.circle(50, 50, 20);
+		shapeRenderer.end();
+		
+		Gdx.gl.glDisable(GL30.GL_BLEND);
+		METRO.__spriteBatch.begin();
 	}
 	/**
 	 * Sets the position of the button.

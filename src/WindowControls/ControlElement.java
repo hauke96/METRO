@@ -1,7 +1,8 @@
 package WindowControls;
 
-import java.awt.Graphics;
 import java.awt.Point;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public interface ControlElement 
 {
@@ -13,7 +14,7 @@ public interface ControlElement
 	 * Draws the control.
 	 * @param g Graphics handle.
 	 */
-	public void draw(Graphics g);
+	public void draw(SpriteBatch g);
 	/**
 	 * When mouse clicked on control.
 	 * @return
