@@ -22,19 +22,21 @@ import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import metro.WindowControls.Window;
+import metro.graphics.Draw;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -42,6 +44,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * @author Hauke
@@ -74,12 +77,12 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static Point __mousePosition;
 	public static OrthographicCamera __camera;
 	public static SpriteBatch __spriteBatch;
+	public static LwjglApplication __application; 
 	
-	private TextureRegion _cursor;
+//	private TextureRegion _cursor;
 //		__bufferedImage;
 	private long _oldSystemTime = System.currentTimeMillis();
 	private Point _oldMousePosition = new Point(0,0);
-	private LwjglApplication _application; 
  
 	/**
 	 * @param args
@@ -95,14 +98,18 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		__SCREEN_SIZE = new Dimension(devices[0].getDisplayMode().getWidth(), devices[0].getDisplayMode().getHeight()); 
 		
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "METRO";
+		config.title = __TITLE + "  " + __VERSION;
 		config.width = __SCREEN_SIZE.width;
 		config.height = __SCREEN_SIZE.height;
 		config.useGL30 = true;
 		config.resizable = false;
 		config.fullscreen = true;
+//		config.foregroundFPS = -1; // max frames
+		config.samples = 0;
+		config.vSyncEnabled = false;
+		config.useHDPI = false;
 		
-		_application = new LwjglApplication(this, config);
+		__application = new LwjglApplication(this, config);
 		
 //		super(__TITLE + "  " + __VERSION);
 		
@@ -113,7 +120,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 //	        	System.exit(0);
 //	        }
 //	    });
-	    //TODO: Create Key and Mouse listener to get input stuff
 //	    addMouseListener(this);
 //	    addKeyListener(this);
 //	    setLocationRelativeTo(null);
@@ -149,76 +155,117 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 //	    setVisible(true);
 //	    setResizable(false);
 	}
-	
-//	@Override
-//    public void paint(Graphics g) 
-//	{
-//		__mousePosition = MouseInfo.getPointerInfo().getLocation();
-//		boolean mouseInWindow = false;
-//		for(Window win : __windowList)
-//		{
-//			mouseInWindow |= win.isMouseOnWindow();
-//		}
-//		if(mouseInWindow) __mousePosition = _oldMousePosition;
-//		else _oldMousePosition = __mousePosition;
-//		
-//		//update exitGameScreen, which should appear over all game screens
-//		if(__exitGameWindow != null)
-//		{
-//			__exitGameWindow.update(g);
-//		}
-//		
-//		__bufferedImage = new BufferedImage(__SCREEN_SIZE.width, __SCREEN_SIZE.height, BufferedImage.TYPE_INT_ARGB);
-//		Graphics2D g2d = __bufferedImage.createGraphics();
-//		
-//		g2d.setFont(__stdFont);
-//
-//		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//		
-//		//Clear screen with white:
-//		g2d.setColor(Color.white);
-//		g2d.fillRect(0,  0, __SCREEN_SIZE.width, __SCREEN_SIZE.height);
-//		
-//		///
-//		/// BEGIN DRAW GAME-SCREEN
-//		///
-//		
-//		__currentGameScreen.update(g2d);
-//		if(__controlDrawer != null) __controlDrawer.update(g2d);
-//		//Draw every window with its controls
-//		for(Window win : __windowList)
-//		{
-//			win.draw(g2d);
-//		}
-//		
-//		///
-//		/// END   DRAW GAME-SCREEN
-//		///
-//		
-//		// Draw cursor icon/image
-//		g2d.drawImage(_cursor, MouseInfo.getPointerInfo().getLocation().x - 10, MouseInfo.getPointerInfo().getLocation().y - 10, null);
-//		
-//		//Draw FPS on screen
-//		g2d.setColor(__metroBlue);
-//		g2d.drawString((int)(1000 / (float)(System.currentTimeMillis() - _oldSystemTime)) + " FPS", __SCREEN_SIZE.width - 50, 20);
-//		_oldSystemTime = System.currentTimeMillis();
-//		
-//		//finalize drawing stuff
-//	    Graphics2D g2dComponent = (Graphics2D) g;
-//	    g2dComponent.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-//	    		RenderingHints.VALUE_ANTIALIAS_ON);
-//	    g2dComponent.drawImage(__bufferedImage,0, 0, __SCREEN_SIZE.width, __SCREEN_SIZE.height, null);
-//	    g2dComponent.finalize();
-//
-////	    try{Thread.sleep(20);}
-////	    catch(Exception e){}
-//	    repaint(); // max ~60fps  (1000/60=16.6666...)
-//	}
-//	public void update(Graphics g)
-//	{
-//        paint(g);
-//    }
-	
+	@Override
+	public void create()
+	{
+		__spriteBatch = new SpriteBatch();
+		
+		__camera = new OrthographicCamera();
+		__camera.setToOrtho(true, __SCREEN_SIZE.width / 2, __SCREEN_SIZE.height / 2);
+		__camera.update();
+		
+		// Set up the input event handling
+		Gdx.input.setInputProcessor(this);
+		
+		try
+		{
+			Pixmap pixmap = new Pixmap(Gdx.files.internal("textures/Cursor.png")); // has to be a width of 2^x (2, 4, 8, 16, 32, ...)
+			Gdx.input.setCursorImage(pixmap, 16, 13); // sets cursor to correct position
+			pixmap.dispose();
+		}
+		catch(GdxRuntimeException ex)
+		{
+			System.out.println(ex.getMessage());
+		}
+		
+		//Load important stuff
+		__viewPortButton_Texture = new TextureRegion(new Texture(Gdx.files.internal("textures/ViewPortButtons.png")));
+		__viewPortButton_Texture.flip(false, true);
+
+		__viewPortButton_City = new metro.WindowControls.Button(new Rectangle(__SCREEN_SIZE.width / 2 - 200, -15, 201, 60), 
+				new Rectangle(0, 0, 201, 60), 
+				__viewPortButton_Texture);
+		__viewPortButton_Train = new metro.WindowControls.Button(new Rectangle(__SCREEN_SIZE.width / 2, -5, 200, 60), 
+				new Rectangle(200, 0, 200, 60), 
+				__viewPortButton_Texture);
+		
+		__mainMenu_Buttons = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
+		__mainMenu_Buttons.flip(false, true);
+		
+		__mainMenu_TitleImage = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_TitleImage.png")));
+		__mainMenu_TitleImage.flip(false, true);
+		
+		__iconSet = new TextureRegion(new Texture(Gdx.files.internal("textures/IconSet.png")));
+		__iconSet.flip(false, true);
+		
+		//Load fonts
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/GatsbyFLF-Bold.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.magFilter = TextureFilter.Nearest;
+		parameter.size = 21;
+		parameter.flip = true;
+		__stdFont = generator.generateFont(parameter); // font size 20 pixels
+		generator.dispose();
+		
+		//Create MainMenu Screen
+	    __currentGameScreen = new MainMenu();
+	    
+	    // Create special colors
+	    __metroBlue = new Color(100, 180, 255);
+	    __metroRed = new Color(255, 100, 100);
+	}
+	@Override
+	public void resize (int width, int height) 
+	{
+		__camera.setToOrtho(true, width, height);
+		__spriteBatch.setProjectionMatrix(__camera.combined);
+	}
+	@Override
+	public void render()
+	{
+		__mousePosition = MouseInfo.getPointerInfo().getLocation();
+		boolean mouseInWindow = false;
+		for(Window win : __windowList)
+		{
+			mouseInWindow |= win.isMouseOnWindow(__mousePosition.x, __mousePosition.y);
+		}
+		if(mouseInWindow) __mousePosition = _oldMousePosition;
+		else _oldMousePosition = __mousePosition;
+		
+		//update exitGameScreen, which should appear over all game screens
+		if(__exitGameWindow != null)
+		{
+			__exitGameWindow.update();
+		}
+		
+		//Clear screen
+		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+		
+		__spriteBatch.begin();
+		
+		__currentGameScreen.update(__spriteBatch);
+		if(__controlDrawer != null) __controlDrawer.update(__spriteBatch);
+		//Draw every window with its controls
+		for(Window win : __windowList)
+		{
+			win.draw(__spriteBatch);
+		}
+		
+		///
+		/// END   DRAW GAME-SCREEN
+		///
+		
+		Draw.setColor(__metroBlue);
+		Draw.String("FPS: " + Gdx.graphics.getFramesPerSecond(), __SCREEN_SIZE.width - (Draw.getStringSize("FPS: " + Gdx.graphics.getFramesPerSecond()).width + 20), 20);
+		_oldSystemTime = System.currentTimeMillis();
+		
+		__spriteBatch.end();
+	}
+	@Override
+	public void pause(){}
+	@Override
+	public void resume(){}
 	@Override
 	public boolean keyDown(int keycode) 
 	{
@@ -283,140 +330,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public boolean scrolled(int amount) {
 		return false;
 	}
-
-	@Override
-	public void create()
-	{
-		__spriteBatch = new SpriteBatch();
-		
-		__camera = new OrthographicCamera();
-		__camera.setToOrtho(true, __SCREEN_SIZE.width / 2, __SCREEN_SIZE.height / 2);
-		__camera.update();
-		
-		// Set up the input event handling
-		Gdx.input.setInputProcessor(this);
-
-		// Hide Cursor
-		Gdx.input.setCursorCatched(true);
-		
-		//Load important stuff
-		__viewPortButton_Texture = new TextureRegion(new Texture(Gdx.files.internal("textures/ViewPortButtons.png")));
-		__viewPortButton_Texture.flip(false, true);
-
-		__viewPortButton_City = new metro.WindowControls.Button(new Rectangle(__SCREEN_SIZE.width / 2 - 200, -15, 201, 60), 
-				new Rectangle(0, 0, 201, 60), 
-				__viewPortButton_Texture);
-		__viewPortButton_Train = new metro.WindowControls.Button(new Rectangle(__SCREEN_SIZE.width / 2, -5, 200, 60), 
-				new Rectangle(200, 0, 200, 60), 
-				__viewPortButton_Texture);
-		
-		__mainMenu_Buttons = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
-		__mainMenu_Buttons.flip(false, true);
-		
-		__mainMenu_TitleImage = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_TitleImage.png")));
-		__mainMenu_TitleImage.flip(false, true);
-		
-		__iconSet = new TextureRegion(new Texture(Gdx.files.internal("textures/IconSet.png")));
-		__iconSet.flip(false, true);
-		
-		_cursor = new TextureRegion(new Texture(Gdx.files.internal("textures/Cursor.png")));
-		_cursor.flip(false, true);
-		
-		//Load fonts
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/GatsbyFLF-Bold.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.magFilter = TextureFilter.Nearest;
-		parameter.size = 22;
-		parameter.flip = true;
-		__stdFont = generator.generateFont(parameter); // font size 20 pixels
-		generator.dispose();
-		
-		//Create MainMenu Screen
-	    __currentGameScreen = new MainMenu();
-	    
-	    // Create special colors
-	    __metroBlue = new Color(100, 180, 255);
-	    __metroRed = new Color(255, 100, 100);
-	}
-	@Override
-	public void resize (int width, int height) 
-	{
-		__camera.setToOrtho(true, width, height);
-		__spriteBatch.setProjectionMatrix(__camera.combined);
-	}
-	@Override
-	public void render()
-	{
-		__mousePosition = MouseInfo.getPointerInfo().getLocation();
-		boolean mouseInWindow = false;
-		for(Window win : __windowList)
-		{
-			mouseInWindow |= win.isMouseOnWindow(__mousePosition.x, __mousePosition.y);
-		}
-		if(mouseInWindow) __mousePosition = _oldMousePosition;
-		else _oldMousePosition = __mousePosition;
-		
-		//update exitGameScreen, which should appear over all game screens
-		if(__exitGameWindow != null)
-		{
-			__exitGameWindow.update();
-		}
-		
-		//Clear screen
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
-		
-		__spriteBatch.begin();
-		
-		
-		
-		__currentGameScreen.update(__spriteBatch);
-		if(__controlDrawer != null) __controlDrawer.update(__spriteBatch);
-		//Draw every window with its controls
-		for(Window win : __windowList)
-		{
-			win.draw(__spriteBatch);
-		}
-		
-		///
-		/// END   DRAW GAME-SCREEN
-		///
-		
-		// Draw cursor icon/image
-		__spriteBatch.draw(_cursor, MouseInfo.getPointerInfo().getLocation().x - 10, MouseInfo.getPointerInfo().getLocation().y - 10);
-		
-		//TODO: Draw FPS on screen
-//		g2d.setColor(__metroBlue);
-//		g2d.drawString((int)(1000 / (float)(System.currentTimeMillis() - _oldSystemTime)) + " FPS", __SCREEN_SIZE.width - 50, 20);
-		_oldSystemTime = System.currentTimeMillis();
-		
-		//finalize drawing stuff
-//	    Graphics2D g2dComponent = (Graphics2D) g;
-//	    g2dComponent.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-//	    		RenderingHints.VALUE_ANTIALIAS_ON);
-//	    g2dComponent.drawImage(__bufferedImage,0, 0, __SCREEN_SIZE.width, __SCREEN_SIZE.height, null);
-//	    g2dComponent.finalize();
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		__spriteBatch.end();
-	}
-	@Override
-	public void pause()
-	{
-		
-	}
-	@Override
-	public void resume()
-	{
-		
-	}
 	
 	/**
 	 * Closes a specific window (please do window.close() instead).
@@ -446,16 +359,15 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		{
 			_closeWindow = new Window("Really quit?",new Point(__SCREEN_SIZE.width / 2 - 200, 
 					__SCREEN_SIZE.height / 2 - 50), new Point(400, 100), __metroRed);
-			_yesButton = new metro.WindowControls.Button(new Rectangle(10, 75, 185, 20), "Yes", _closeWindow);
-			_noButton = new metro.WindowControls.Button(new Rectangle(205, 75, 185, 20), "No", _closeWindow);
-			new metro.WindowControls.Label("Really quit METRO?", new Point(140, 55), _closeWindow);
+			_yesButton = new metro.WindowControls.Button(new Rectangle(10, 55, 185, 20), "Yes", _closeWindow);
+			_noButton = new metro.WindowControls.Button(new Rectangle(205, 55, 185, 20), "No", _closeWindow);
+			new metro.WindowControls.Label("Really quit METRO?", new Point(140, 25), _closeWindow);
 		}
 		public void update()
 		{
 			if(_yesButton.isPressed())
 			{
-				System.out.println("OK");
-				System.exit(0);
+				METRO.__application.exit();
 			}
 			else if(_noButton.isPressed())
 			{

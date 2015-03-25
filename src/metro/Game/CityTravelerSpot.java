@@ -1,12 +1,13 @@
 package metro.Game;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
 
-import metro.Game.GameScreen_CityView;
-import metro.Game.METRO;
+import metro.graphics.Draw;
+import metro.graphics.Fill;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 
@@ -49,9 +50,9 @@ public class CityTravelerSpot
 	 * @param circleSelected If the circle is selected and therefore drawn in a different color.
 	 * @param drawNumbers if numbers should be drawn on circle
 	 */
-	public void draw(Graphics2D g, int layerIndex, boolean circleSelected, boolean drawNumbers)
+	public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean drawNumbers)
 	{
-		draw(g, layerIndex, circleSelected, drawNumbers, false);
+		draw(sp, layerIndex, circleSelected, drawNumbers, false);
 	}
 	/**
 	 * Draws the circles of the Hotspot.
@@ -61,7 +62,7 @@ public class CityTravelerSpot
 	 * @param drawNumbers if numbers should be drawn on circle
 	 * @param onlyEdges If only edges should be drawn
 	 */
-	public void draw(Graphics2D g, int layerIndex, boolean circleSelected, boolean drawNumbers, boolean onlyEdges)
+	public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean drawNumbers, boolean onlyEdges)
 	{
 		layerIndex = _strength - layerIndex;
 		if(layerIndex < -1) return;
@@ -73,47 +74,42 @@ public class CityTravelerSpot
 
 		if(circleSelected)
 		{
-			g.setColor(new Color(200 - (int)(2f * (_strength - layerIndex)), 
+			Fill.setColor(new Color(200 - (int)(2f * (_strength - layerIndex)), 
 					220 - (int)(1.5f * (_strength - layerIndex)), 
 					255));
-			g.fillOval(position.x - layerIndex *_circleRadiusStep + 1, 
+			Fill.Circle(position.x - layerIndex *_circleRadiusStep + 1, 
 				position.y - layerIndex * _circleRadiusStep + 1,
-				_circleRadiusStep * 2 * layerIndex - 2, 
 				_circleRadiusStep * 2 * layerIndex - 2);
 
-			g.setColor(METRO.__metroBlue);
-			g.setColor(new Color(70, 126, 179));
-			if(drawNumbers && layerIndex > 2)
+//			Draw.setColor(METRO.__metroBlue);
+			Draw.setColor(new Color(70, 126, 179));
+			if(drawNumbers && layerIndex > 1)
 			{
-				g.drawString(_strength - layerIndex + "", position.x + _circleRadiusStep * layerIndex - _circleRadiusStep / 2 - 5, position.y + 4);
-				g.drawString(_strength - layerIndex + "", position.x - _circleRadiusStep * layerIndex + _circleRadiusStep / 2 - 1, position.y + 4);
+				Draw.String(_strength - layerIndex + "", position.x + _circleRadiusStep * layerIndex - _circleRadiusStep / 2 - 5, position.y - 6); // right
+				Draw.String(_strength - layerIndex + "", position.x - _circleRadiusStep * layerIndex + _circleRadiusStep / 2 - 1, position.y - 6); // left
 				
-				g.drawString(_strength - layerIndex + "", position.x - 3, position.y + _circleRadiusStep * layerIndex - _circleRadiusStep / 2 + 5);
-				g.drawString(_strength - layerIndex + "", position.x - 3, position.y - _circleRadiusStep * layerIndex + _circleRadiusStep - 15);
+				Draw.String(_strength - layerIndex + "", position.x - 3, position.y + _circleRadiusStep * layerIndex - _circleRadiusStep / 2 - 5); // bottom
+				Draw.String(_strength - layerIndex + "", position.x - 3, position.y - _circleRadiusStep * layerIndex + _circleRadiusStep - 28); // top
 			}
-			else if (layerIndex <= 2 && drawNumbers) 
+			else if (layerIndex <= 1 && drawNumbers) // draw only one number on last circle
 			{
-				g.drawString((_strength - 1) + "", position.x, position.y + 4);
+				Draw.String((_strength - 1) + "", position.x - 3, position.y - 5);
 			}
 		}
 		else if(!onlyEdges)
 		{
 			gray = 255 - 5 * (_strength - layerIndex + 1); // gray color based on layer
-			g.setColor(new Color(gray, gray, gray));
-			g.fillOval(position.x - layerIndex *_circleRadiusStep + 1,
+			Fill.setColor(new Color(gray, gray, gray));
+			Fill.Circle(position.x - layerIndex *_circleRadiusStep + 1,
 				position.y - layerIndex * _circleRadiusStep + 1,
-				_circleRadiusStep * 2 * layerIndex - 2,
 				_circleRadiusStep * 2 * layerIndex - 2);
 		}
 		if(onlyEdges)
 		{
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g.setColor(new Color(gray, gray, gray));
-			g.drawOval(position.x - layerIndex *_circleRadiusStep,
+			Draw.setColor(new Color(gray, gray, gray));
+			Draw.Circle(position.x - layerIndex *_circleRadiusStep,
 				position.y - layerIndex * _circleRadiusStep,
-				_circleRadiusStep * 2 * layerIndex,
 				_circleRadiusStep * 2 * layerIndex);
-			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		}
 	}
 	public float getStrength()

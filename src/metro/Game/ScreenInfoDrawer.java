@@ -1,8 +1,9 @@
 package metro.Game;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.awt.Rectangle;
+
+import metro.graphics.Draw;
+import metro.graphics.Fill;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -22,7 +23,9 @@ public class ScreenInfoDrawer implements GameScreen {
 	@Override
 	public void update(SpriteBatch sp)
 	{
-		sp.draw(METRO.__viewPortButton_Texture, METRO.__SCREEN_SIZE.width / 2 - 40, 45, METRO.__SCREEN_SIZE.width / 2 + 40, 85); // the "view" sign under the two buttons
+		Draw.Image(METRO.__viewPortButton_Texture, 
+			new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 40, 45, 79, 40), 
+			new Rectangle(161, 60, 79, 40));
 		METRO.__viewPortButton_City.draw();
 		METRO.__viewPortButton_Train.draw();
 		drawPlayerInfos(sp);
@@ -31,26 +34,24 @@ public class ScreenInfoDrawer implements GameScreen {
 	 * Draws all significant player infos onto the upper left corner.
 	 * @param g The graphic handle to draw on
 	 */
-	private void drawPlayerInfos(SpriteBatch g)
+	private void drawPlayerInfos(SpriteBatch sp)
 	{
-		//TOOD: recreate drawing stuff for the player infos
 		// clear area
-//		g.setColor(Color.white);
-//		g.fillRect(0, 0, 150, 26);
-//		
-//		g.setColor(METRO.__metroBlue);
-//		// Draw a   _|
-//		g.drawLine(0, 26, 150, 26);
-//		g.drawLine(150, 0, 150, 26);
-//		
-//		// draw amount of money like 935.258.550 $
-//		g.setFont(METRO.__stdFont);
-//		g.setColor(METRO.__metroRed);
-//		g.drawString("$", 5, 22);
-//		g.setColor(METRO.__metroBlue);
-//		String str = " = " + String.format("%,d", METRO.__money) + " $";
-//		str = str.replace(".", ". ");
-//		g.drawString(str, 12, 22); // converts 12345 to 12.345
+		Fill.setColor(Color.white);
+		Fill.Rect(0, 0, 150, 26);
+		// Draw a  _|
+		Draw.setColor(METRO.__metroBlue);
+		Draw.Line(0, 26, 150, 26);
+		Draw.Line(150, 0, 150, 26);
+		
+		// draw amount of money like 935.258.550 $
+		Draw.setColor(METRO.__metroRed);
+		Draw.String("$", 5, 7);
+		
+		String str = " = " + String.format("%,d", METRO.__money);
+		str = str.replace(".", ". ");
+		Draw.setColor(METRO.__metroBlue);
+		Draw.String(str, 13, 7);
 	}
 
 	/* (non-Javadoc)

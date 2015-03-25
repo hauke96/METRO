@@ -62,7 +62,7 @@ public class Draw
 	public static void Circle(int x, int y, int diameter)
 	{
 		init();
-		shapeRenderer.circle(x + diameter/2, y + diameter/2, diameter/2);
+		shapeRenderer.circle(x + diameter/2, y + diameter/2, diameter/2, 64);
 		reset();
 	}
 	/**
@@ -89,7 +89,7 @@ public class Draw
 	public static void Line(int x1, int y1, int x2, int y2)
 	{
 		init();
-		shapeRenderer.line(x1, y2, x1, y2);
+		shapeRenderer.line(x1, y1, x2, y2);
 		reset();
 	}
 	/**

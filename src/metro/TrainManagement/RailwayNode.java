@@ -1,12 +1,12 @@
 package metro.TrainManagement;
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.ArrayList;
 
 import metro.Game.GameScreen_TrainView;
 import metro.Game.METRO;
+import metro.graphics.Draw;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -102,9 +102,9 @@ public class RailwayNode
 						offset.y + _position.y * METRO.__baseNetSpacing); // Position with offset etc.
 				positionNext = new Point(offset.x + p.x * METRO.__baseNetSpacing, 
 						offset.y + p.y * METRO.__baseNetSpacing); // Position with offset etc. for second point
-				//TODO: Recreate drawing stuff for railwaynode
-//				g.setColor(Color.black);
-//				g.drawLine(position.x, position.y, positionNext.x, positionNext.y);
+
+				Draw.setColor(Color.black);
+				Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
 			}
 		}
 	}

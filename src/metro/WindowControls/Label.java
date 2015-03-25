@@ -70,7 +70,6 @@ public class Label implements ControlElement
 	@Override
 	public void draw()
 	{
-		//TODO: Recreate label drawing
 		Draw.setColor(Color.black);
 		
 		if(_areaWidth == 0)
@@ -91,8 +90,7 @@ public class Label implements ControlElement
 				// recunstruct string with length < area width
 				for(int i = 0; i < subSegments.length; i++)
 				{
-					if(Draw.getStringSize(line + " " + subSegments[i]).width >= _areaWidth)
-//					if(g.getFontMetrics(METRO.__stdFont).stringWidth(line + " " + subSegments[i]) >= _areaWidth) // if next addition would be out of area
+					if(Draw.getStringSize(line + " " + subSegments[i]).width >= _areaWidth) // if next addition would be out of area
 					{
 						Draw.String(line, _position.x, _position.y + vOffset);
 						vOffset += stringHeight + 8; // y-pos for next line
@@ -104,12 +102,10 @@ public class Label implements ControlElement
 					}
 				}
 
-//				g.drawString(line, _position.x, _position.y + vOffset);
 				Draw.String(line, _position.x, _position.y + vOffset);
 				vOffset += stringHeight + 8; // y-pos for next line
 			}
 		}
-//		g.setColor(c);
 	}
 
 	/* (non-Javadoc)

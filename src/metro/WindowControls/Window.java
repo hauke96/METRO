@@ -96,7 +96,7 @@ public class Window
 		//Draw Window title
 		Draw.setColor(Color.white);
 		Draw.String(_title, _position.x + (_size.x - 20) / 2 - Draw.getStringSize(_title).width / 2, 
-			_position.y + Draw.getStringSize(_title).height - 8);
+			_position.y + Draw.getStringSize(_title).height - 9);
 		
 		//Close cross
 		Draw.Image(METRO.__iconSet, 
@@ -141,7 +141,7 @@ public class Window
 		if(!_elementList.contains(cElement))
 		{
 			Point pos = cElement.getPosition();
-			cElement.setPosition(new Point(pos.x + _position.x, pos.y + _position.y));
+			cElement.setPosition(new Point(pos.x + _position.x, pos.y + _position.y + 20));
 			_elementList.add(cElement); // there wont be doubles ;)
 		}
 	}

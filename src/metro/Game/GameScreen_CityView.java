@@ -2,21 +2,14 @@ package metro.Game;
 
 
 import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.SwingUtilities;
+import metro.graphics.Draw;
 
-import metro.Game.CityTravelerSpot;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -37,11 +30,11 @@ public class GameScreen_CityView implements GameScreen
 	
 	private List<CityTravelerSpot> _travelerSpots = new ArrayList<CityTravelerSpot>();
 	private Point _oldMousePos; // Mouse position from last frame
-	private Point2D _lastFrameOffset = new Point2D.Float(0, 0); // offset of last frame
+//	private Point2D _lastFrameOffset = new Point2D.Float(0, 0); // offset of last frame
 	private boolean _dragMode = false;
-	private int _lastSelectedSpot, 
-		_lastSelectedLayer; // selected things since last frame
-	private BufferedImage _lastSpotFrame; // the image, rendered since last change
+//	private int _lastSelectedSpot, 
+//		_lastSelectedLayer; // selected things since last frame
+//	private BufferedImage _lastSpotFrame; // the image, rendered since last change
 
 	/**
 	 * Constructor to load all the important stuff
@@ -50,10 +43,10 @@ public class GameScreen_CityView implements GameScreen
 	{
 		_travelerSpots.add(new CityTravelerSpot(new Point(500, 500), 7));
 		_travelerSpots.add(new CityTravelerSpot(new Point(700, 700), 5));
-		_travelerSpots.add(new CityTravelerSpot(new Point(550, 800), 6));
+		_travelerSpots.add(new CityTravelerSpot(new Point(550, 850), 6));
 		_travelerSpots.add(new CityTravelerSpot(new Point(200, 650), 8));
 		
-		_lastSpotFrame = new BufferedImage(METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height, BufferedImage.TYPE_INT_ARGB);
+//		_lastSpotFrame = new BufferedImage(METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height, BufferedImage.TYPE_INT_ARGB);
 	}
 
 	/* (non-Javadoc)
@@ -95,43 +88,31 @@ public class GameScreen_CityView implements GameScreen
 				}
 			}
 		}
-		//TODO: Recreate drawing stuff for circles
-//		if(_lastSelectedSpot != selectedSpotNumber 
-//			|| _lastSelectedLayer != selectedLayerNumber
-//			|| !_lastFrameOffset.equals(_offset)) // only re-render if something changed
-//		{
-//			Graphics2D g2d = _lastSpotFrame.createGraphics();
-//			g2d.setColor(Color.white);
-//			g2d.fillRect(0, 0, _lastSpotFrame.getWidth(), _lastSpotFrame.getHeight());
-//			g2d.setFont(METRO.__stdFont);
-//			// draw all the circles
-//			for(int i = 0; i < 10; i++)
-//			{
-//				for(int k = 0; k < _travelerSpots.size(); k++)
-//				{
-//					if(_travelerSpots.get(k).getStrength() <= i) continue;
-//					_travelerSpots.get(k).draw(g2d, i, i == selectedLayerNumber, k == selectedSpotNumber, true); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
-//				}
-//				for(int k = 0; k < _travelerSpots.size(); k++)
-//				{
-//					if(_travelerSpots.get(k).getStrength() <= i) continue;
-//					_travelerSpots.get(k).draw(g2d, i, i == selectedLayerNumber, k == selectedSpotNumber); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
-//				}
-//			}
-//			_lastSelectedLayer = selectedLayerNumber;
-//			_lastSelectedSpot = selectedSpotNumber;
-//			_lastFrameOffset = _offset;
-//		}
-//		g.drawImage(_lastSpotFrame, 0, 0, null);
-//		
-//		if(selectedLayerNumber != -1) // if there's a selected circle 
-//		{
-//			int gray = 55 * selectedLayerNumber;
-//			if(gray > 255) gray = 255;
-//			g.setColor(new Color(0, 0, 200));
-//			g.drawString(selectedLayerNumber + "", METRO.__mousePosition.x - g.getFontMetrics(METRO.__stdFont).stringWidth(selectedLayerNumber + "") / 2 - 1, 
-//				METRO.__mousePosition.y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
-//		}
+		// draw all the circles
+		for(int i = 0; i < 10; i++)
+		{
+			for(int k = 0; k < _travelerSpots.size(); k++)
+			{
+				if(_travelerSpots.get(k).getStrength() <= i) continue;
+				_travelerSpots.get(k).draw(sp, i, i == selectedLayerNumber, k == selectedSpotNumber, true); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+			}
+			for(int k = 0; k < _travelerSpots.size(); k++)
+			{
+				if(_travelerSpots.get(k).getStrength() <= i) continue;
+				_travelerSpots.get(k).draw(sp, i, i == selectedLayerNumber, k == selectedSpotNumber); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+			}
+		}
+		
+		if(selectedLayerNumber != -1) // if there's a selected circle 
+		{
+			int gray = 55 * selectedLayerNumber;
+			if(gray > 255) gray = 255;
+			Draw.setColor(new Color(0, 0, 200));
+//			Draw.String(selectedLayerNumber + "", METRO.__mousePosition.x - g.getFontMetrics(METRO.__stdFont).stringWidth(selectedLayerNumber + "") / 2 - 1, 
+//					METRO.__mousePosition.y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
+			Draw.String(selectedLayerNumber + "", METRO.__mousePosition.x - Draw.getStringSize(selectedLayerNumber + "").width / 2, 
+					METRO.__mousePosition.y + Draw.getStringSize(selectedLayerNumber + "").height / 4 - 10);
+		}
 	}
 
 	/* (non-Javadoc)

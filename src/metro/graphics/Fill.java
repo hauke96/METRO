@@ -57,7 +57,7 @@ public class Fill
 	public static void Circle(int x, int y, int diameter)
 	{
 		init();
-		shapeRenderer.circle(x + diameter/2, y + diameter/2, diameter/2);
+		shapeRenderer.circle(x + diameter/2, y + diameter/2, diameter/2, 64);
 		reset();
 	}
 	/**
