@@ -384,11 +384,13 @@ public class GameScreen_TrainView implements GameScreen
 			else if(_showTrainList.isPressed(screenX, screenY))
 			{
 				resetToolbarButtonPosition(_showTrainList);
+				_editMode = 0;
 				//TODO: create list view with all trains
 			}
 			else if(_createNewTrain.isPressed(screenX, screenY))
 			{
 				resetToolbarButtonPosition(_createNewTrain);
+				_editMode = 0;
 				//TODO: show config window to create new train
 			}
 			else

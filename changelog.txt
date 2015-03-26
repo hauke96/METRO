@@ -1,7 +1,23 @@
 You'll find all changes made in the versions here:
 
-VERSION 0.0.2: (since 05.03.2015)
-	- 
+VERSION 0.1.0: (26.03.2015)
+	- Using LibGDX instead of java.awt
+	- Renamed packages
+	- New Toolbar-buttons
+		* create new train
+		* show train-list
+
+VERSION 0.0.2:
+	- Some bug-fixes
+	- Train Management
+		* build train stations
+		* built tracks
+		* automatic and optimized way of tracks
+	- Windows
+		* drag windows
+		* some design changes
+		* changes in the way controls were placed
+		* "Really close?"-window after ESC pressed
 
 VERSION 0.0.1:
 	- Controls Management

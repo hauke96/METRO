@@ -48,7 +48,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * @author Hauke
- * @version 0.0.2
+ * @version 0.0.3
  */
 public class METRO extends Frame implements ApplicationListener, InputProcessor
 {
@@ -57,7 +57,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static Dimension __SCREEN_SIZE;// = Toolkit.getDefaultToolkit().getScreenSize();
 	//public static final Dimension __SCREEN_SIZE = new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width/2,Toolkit.getDefaultToolkit().getScreenSize().height/2);
 	public static final String __TITLE = "METRO",
-		__VERSION = "0.0.2";
+		__VERSION = "0.0.3";
 	
 	public static BitmapFont __stdFont;// = new Font("Huxley Titling", Font.PLAIN, 20);
 	public static GameScreen __currentGameScreen,
@@ -105,7 +105,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		config.resizable = false;
 		config.fullscreen = true;
 //		config.foregroundFPS = -1; // max frames
-		config.samples = 0;
+		config.samples = 8;
 		config.vSyncEnabled = false;
 		config.useHDPI = false;
 		
