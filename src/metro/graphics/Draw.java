@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -66,7 +67,7 @@ public class Draw
 		reset();
 	}
 	/**
-	 * Draws a rectangle.
+	 * Draws a rectangle onto the METRO.__spriteBatch.
 	 * @param x x-coordinate (left upper corner)
 	 * @param y y-coordinate (left upper corner)
 	 * @param width Width of rectangle.
@@ -74,13 +75,27 @@ public class Draw
 	 */
 	public static void Rect(int x, int y, int width, int height)
 	{
-		init();
-		shapeRenderer.rect(x, y, width, height);
-		shapeRenderer.rect(x, y + height, 0, 1);
-		reset();
+		Rect(x, y, width, height, METRO.__spriteBatch);
 	}
 	/**
-	 * Draws a line from one coordinate pair to another.
+	 * Draws a rectangle on a specific sprite batch.
+	 * @param x x-coordinate (left upper corner)
+	 * @param y y-coordinate (left upper corner)
+	 * @param width Width of rectangle.
+	 * @param height Height of rectangle.
+	 * @param spriteBatch The sprite batch to draw on.
+	 */
+	public static void Rect(int x, int y, int width, int height, SpriteBatch spriteBatch)
+	{
+		spriteBatch.setColor(r, g, b, a);
+		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y, 1, height, 20, 0, 1, 1, false, false); // left
+		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y + height, width, 1, 20, 0, 1, 1, false, false); // bottom
+		spriteBatch.draw(METRO.__iconSet.getTexture(), x + width, y, 1, height, 20, 0, 1, 1, false, false); // right
+		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y, width, 1, 20, 0, 1, 1, false, false); // top
+		spriteBatch.setColor(1, 1, 1, 1);
+	}
+	/**
+	 * Draws a line from one coordinate pair to another. This uses the METRO.__spriteBatch as default.
 	 * @param x1 First x-coordinate.
 	 * @param y1 First y-coordinate.
 	 * @param x2 Second x-coordinate.
@@ -88,9 +103,32 @@ public class Draw
 	 */
 	public static void Line(int x1, int y1, int x2, int y2)
 	{
-		init();
-		shapeRenderer.line(x1, y1, x2, y2);
-		reset();
+		Line(x1, y1, x2, y2, METRO.__spriteBatch);
+	}
+	/**
+	 * Draws a line from one coordinate pair to another onto the given sprite batch.
+	 * @param x1 First x-coordinate.
+	 * @param y1 First y-coordinate.
+	 * @param x2 Second x-coordinate.
+	 * @param y2 Second y-coordinate.
+	 * @param spriteBatch The spriteBatch to draw on.
+	 */
+	public static void Line(int x1, int y1, int x2, int y2, SpriteBatch spriteBatch)
+	{
+		spriteBatch.end();
+		spriteBatch.begin();
+		if(x1 != x2 && y1 != y2) // -> diagonal line -> shapeRenderer for antialising
+		{
+			init();
+			shapeRenderer.line(x1, y1, x2, y2);
+			reset();
+		}
+		else // -> straight line -> texture for non-antialised drawing
+		{
+			spriteBatch.setColor(r, g, b, a);
+			spriteBatch.draw(METRO.__iconSet.getTexture(), x1, y1, x2 - x1 + 1, y2 - y1 + 1, 20, 0, 1, 1, false, false);
+			spriteBatch.setColor(1, 1, 1, 1);
+		}
 	}
 	/**
 	 * Draws a string with the __stdFont (default font).

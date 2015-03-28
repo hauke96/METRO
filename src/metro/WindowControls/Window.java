@@ -100,8 +100,8 @@ public class Window
 		
 		//Close cross
 		Draw.Image(METRO.__iconSet, 
-				new Rectangle(_position.x + _size.x - 20, _position.y, 20, 20), 
-				new Rectangle(0, 0, 20, 20));
+				new Rectangle(_position.x + _size.x - 18, _position.y + 1, 19, 19), 
+				new Rectangle(0, 0, 19, 19));
 //		
 		for(ControlElement cElement : _elementList)
 		{

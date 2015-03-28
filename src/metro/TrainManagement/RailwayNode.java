@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import javax.crypto.spec.PSource;
+
 import metro.Game.GameScreen_TrainView;
 import metro.Game.METRO;
 import metro.graphics.Draw;
@@ -102,6 +104,10 @@ public class RailwayNode
 						offset.y + _position.y * METRO.__baseNetSpacing); // Position with offset etc.
 				positionNext = new Point(offset.x + p.x * METRO.__baseNetSpacing, 
 						offset.y + p.y * METRO.__baseNetSpacing); // Position with offset etc. for second point
+				
+				//if the track is a straight one (horizontal or vertical but not diagonal), make it longer (because of drawing inaccuracy)
+				if(position.y == positionNext.y) positionNext.x--;
+				if(position.x == positionNext.x) positionNext.y--;
 
 				Draw.setColor(Color.black);
 				Draw.Line(position.x, position.y, positionNext.x, positionNext.y);

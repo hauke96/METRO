@@ -55,11 +55,10 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	private static final long serialVersionUID = 1L;
 	
 	public static Dimension __SCREEN_SIZE;// = Toolkit.getDefaultToolkit().getScreenSize();
-	//public static final Dimension __SCREEN_SIZE = new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width/2,Toolkit.getDefaultToolkit().getScreenSize().height/2);
 	public static final String __TITLE = "METRO",
 		__VERSION = "0.0.3";
 	
-	public static BitmapFont __stdFont;// = new Font("Huxley Titling", Font.PLAIN, 20);
+	public static BitmapFont __stdFont;
 	public static GameScreen __currentGameScreen,
 		__controlDrawer; // draws all the important controls and infos after rendering the scene
 	public static TextureRegion __viewPortButton_Texture,
@@ -79,9 +78,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static SpriteBatch __spriteBatch;
 	public static LwjglApplication __application; 
 	
-//	private TextureRegion _cursor;
-//		__bufferedImage;
-	private long _oldSystemTime = System.currentTimeMillis();
 	private Point _oldMousePosition = new Point(0,0);
  
 	/**
@@ -110,50 +106,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		config.useHDPI = false;
 		
 		__application = new LwjglApplication(this, config);
-		
-//		super(__TITLE + "  " + __VERSION);
-		
-//	    setBackground(Color.white);
-//	    setSize(__SCREEN_SIZE.width, __SCREEN_SIZE.height);
-//	    addWindowListener(new WindowAdapter() {
-//	        public void windowClosing(WindowEvent e) {
-//	        	System.exit(0);
-//	        }
-//	    });
-//	    addMouseListener(this);
-//	    addKeyListener(this);
-//	    setLocationRelativeTo(null);
-//	    setUndecorated(true);
-	    
-//	    GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
-//	    GraphicsDevice[] devices = g.getScreenDevices();
-//	    __SCREEN_SIZE = new Dimension(devices[0].getDisplayMode().getWidth(), devices[0].getDisplayMode().getHeight()); 
-	    
-//		setBounds(0, 0, __SCREEN_SIZE.width, __SCREEN_SIZE.height);
-		
-//	    Locale.setDefault(new Locale("de", "DE"));
-	    
-	    
-//		try
-//		{
-//		    __stdFont = Font.createFont(Font.TRUETYPE_FONT, new File("fonts/GatsbyFLF-Bold.ttf")).deriveFont(20f);
-//			
-//			// make Cursor invisible
-//			BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-//			Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(
-//			    cursorImg, new Point(0, 0), "blank cursor");
-//			METRO.getWindows()[0].setCursor(blankCursor);
-//			
-//		}
-//		catch (Exception e)
-//		{
-//			System.out.println(e.getMessage());
-//		}
-		
-	    // Create screen NOW (because of setVisible and repaint and NullPointerExceptions ;) )
-	    
-//	    setVisible(true);
-//	    setResizable(false);
 	}
 	@Override
 	public void create()
@@ -258,7 +210,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		
 		Draw.setColor(__metroBlue);
 		Draw.String("FPS: " + Gdx.graphics.getFramesPerSecond(), __SCREEN_SIZE.width - (Draw.getStringSize("FPS: " + Gdx.graphics.getFramesPerSecond()).width + 20), 20);
-		_oldSystemTime = System.currentTimeMillis();
 		
 		__spriteBatch.end();
 	}
