@@ -2,8 +2,6 @@ package metro.WindowControls;
 
 import java.awt.Point;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 public interface ControlElement 
 {
 	/**

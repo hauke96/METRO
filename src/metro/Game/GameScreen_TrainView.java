@@ -32,7 +32,7 @@ public class GameScreen_TrainView implements GameScreen
 	private Point _oldMousePos; // Mouse position from last frame
 	private Point2D _offset = new Point2D.Float(0, 0); // offset for moving the map
 	private List<TrainStation> _trainStationList = new ArrayList<TrainStation>();
-	private TrainStation _selectedTrainStation = null;
+//	private TrainStation _selectedTrainStation = null;
 	private Button _buildStation,
 		_buildTracks,
 		_showTrainList,

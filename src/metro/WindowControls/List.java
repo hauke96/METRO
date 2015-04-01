@@ -4,12 +4,7 @@ import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
-
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
-
-import org.lwjgl.input.Mouse;
 
 import metro.Game.METRO;
 import metro.graphics.Draw;
@@ -114,13 +109,10 @@ public class List implements ControlElement
 		
 		//Draw all the border lines. The two top and bottom lines are just looking cool ;)
 		Draw.setColor(METRO.__metroBlue);
-		Draw.Line(_position.x, _position.y, _position.x, _position.y + _position.height); // left
-		Draw.Line(_position.x, _position.y + _position.height, _position.x + _position.width, _position.y + _position.height); // bottom
+		Draw.Rect(_position);
 		Draw.Line(_position.x, _position.y + _position.height - 2, _position.x + _position.width - 3, _position.y + _position.height - 2); // bottom 2
-		Draw.Line(_position.x + _position.width, _position.y, _position.x + _position.width, _position.y + _position.height); // right
 		Draw.Line(_position.x + _position.width - 3, _position.y, _position.x + _position.width - 3, _position.y + _position.height); // right for scroll bar
-		Draw.Line(_position.x, _position.y + 2, _position.x + _position.width - 3, _position.y + 2); // top
-		Draw.Line(_position.x, _position.y, _position.x + _position.width, _position.y); // top 2
+		Draw.Line(_position.x, _position.y + 2, _position.x + _position.width - 3, _position.y + 2); // top 2
 		
 		//Draw scroll bar
 		int height = (int)(_position.height * (_position.height / (_maxOffset * _scrollHeight))), // gets the height of the scrollbar. E.g.: The area is 2*_pos.height, then is _max/_scrollHeight = 0.5

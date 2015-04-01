@@ -4,10 +4,7 @@ import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-
-import javax.swing.SwingUtilities;
 
 import metro.Game.METRO;
 import metro.graphics.Draw;

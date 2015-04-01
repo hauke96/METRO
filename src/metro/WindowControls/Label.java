@@ -6,7 +6,6 @@ package metro.WindowControls;
 import java.awt.Color;
 import java.awt.Point;
 
-import metro.Game.METRO;
 import metro.graphics.Draw;
 
 /**
