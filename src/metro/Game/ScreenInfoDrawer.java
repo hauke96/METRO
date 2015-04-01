@@ -68,4 +68,8 @@ public class ScreenInfoDrawer implements GameScreen {
 	@Override
 	public void mouseReleased(int mouseButton){}
 	public void keyPressed(int keyCode){}
+	@Override
+	public void mouseScrolled(int amount) 
+	{
+	}
 }

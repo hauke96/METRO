@@ -235,7 +235,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) 
 	{
-		System.out.println(screenX + " - " + screenY);
 		Window clickedWindow = null;
 		
 		for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
@@ -278,7 +277,18 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		return false;
 	}
 	@Override
-	public boolean scrolled(int amount) {
+	public boolean scrolled(int amount) 
+	{
+		__currentGameScreen.mouseScrolled(amount);
+		Point mPos = MouseInfo.getPointerInfo().getLocation();
+		for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
+		{
+			if(__windowList.get(i).isMouseOnWindow(mPos.x, mPos.y)) // if mouse is just on the window area
+			{
+				__windowList.get(i).mouseScrolled(amount);
+				break;
+			}
+		}
 		return false;
 	}
 	

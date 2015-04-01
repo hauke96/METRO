@@ -109,5 +109,7 @@ public class Label implements ControlElement
 		_position.x += offset.x;
 		_position.y += offset.y;
 	}
+	@Override
+	public void mouseScrolled(int amount) {}
 
 }

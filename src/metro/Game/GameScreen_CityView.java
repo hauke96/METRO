@@ -152,4 +152,8 @@ public class GameScreen_CityView implements GameScreen
 			METRO.__close();
 		}
 	}
+	@Override
+	public void mouseScrolled(int amount) 
+	{
+	}
 }

@@ -31,4 +31,9 @@ public interface ControlElement
 	 * @param offset The amount of pixel to move. This is NOT the new position, only an offset!
 	 */
 	public void moveElement(Point offset);
+	/**
+	 * Fires when users scrolls.
+	 * @param amount Positive or negative amount of steps since last frame.
+	 */
+	public void mouseScrolled(int amount);
 }

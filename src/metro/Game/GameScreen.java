@@ -1,8 +1,5 @@
 package metro.Game;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -37,4 +34,9 @@ public interface GameScreen
 	 * @param keyCode Key number from Gdx.Input
 	 */
 	public void keyPressed(int keyCode);
+	/**
+	 * Fires when user scrolls.
+	 * @param amount Positive or negative amount of steps since last frame. 
+	 */
+	public void mouseScrolled(int amount);
 }

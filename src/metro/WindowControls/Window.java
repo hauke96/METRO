@@ -191,6 +191,17 @@ public class Window
 		_dragMode = false;
 	}
 	/**
+	 * Fires when users scrolls.
+	 * @param amount Positive or negative amount of steps since last frame.
+	 */
+	public void mouseScrolled(int amount) 
+	{
+		for(ControlElement cElement : _elementList)
+		{
+			cElement.mouseScrolled(amount);
+		}
+	}
+	/**
 	 * Closes the window if the mouse is on the cross. NO CLICK is needed in this function, be careful. This function calls the METRO.__close() function to close itself.
 	 * @param e MouseEvent
 	 * @return True if the window has been closed, false if not.

@@ -505,4 +505,8 @@ public class GameScreen_TrainView implements GameScreen
 			METRO.__close();
 		}
 	}
+	@Override
+	public void mouseScrolled(int amount) 
+	{
+	}
 }

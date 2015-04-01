@@ -7,6 +7,8 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.util.ArrayList;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.MaximizeAction;
+
 import org.lwjgl.input.Mouse;
 
 import metro.Game.METRO;
@@ -22,6 +24,8 @@ public class List implements ControlElement
 	private Rectangle _position;
 	private Window _windowHandle;
 	private int _offset = 0;
+	private float _maxOffset = 0,
+		_scrollHeight = 20; // height of one scroll
 
 	public List(Rectangle position, Window win)
 	{
@@ -31,6 +35,19 @@ public class List implements ControlElement
 	{
 		if(entries != null) _entries = entries;
 		_position = position;
+		
+		int yOffset = 30;
+		for(String e : _entries)
+		{
+			int amountRows = Draw.getStringLines(e, 
+					_position.width - 6);
+
+			yOffset += 60 + // 2 * 30px space above and below string
+				Draw.getStringSize(e).height * amountRows + // rows * height of string 
+				(amountRows - 1) * 8; // space between lines
+		}
+		if(yOffset > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight - 3;
+		
 		_windowHandle = win;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)	
 	}
@@ -60,7 +77,7 @@ public class List implements ControlElement
 			// Calculate rect for the border = rect of entry
 			Rectangle entryRect = new Rectangle(_position.x + 3, 
 				_position.y - 25 + _offset + yOffset, 
-				_position.width - 6, 
+				_position.width - 9, 
 				60 + // 2 * 30px space above and below string
 					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
 					(amountRows - 1) * 8 // space between lines
@@ -73,10 +90,13 @@ public class List implements ControlElement
 			}
 			
 			//Draw border around entry
-			Draw.Rect(_position.x + 3, _position.y - 25 + _offset + yOffset, _position.width - 6, 60 + // 2 * 30px space above and below string
-				Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
-				(amountRows - 1) * 8 // space between lines
-				 - 3); // gap between rects
+			Draw.Rect(_position.x + 3, 
+				_position.y - 25 + _offset + yOffset, 
+				_position.width - 9, 
+				60 + // 2 * 30px space above and below string
+					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
+					(amountRows - 1) * 8 // space between lines
+					 - 3); // gap between rects
 			
 			// Draw the string
 			Draw.setColor(Color.black);
@@ -96,10 +116,21 @@ public class List implements ControlElement
 		Draw.setColor(METRO.__metroBlue);
 		Draw.Line(_position.x, _position.y, _position.x, _position.y + _position.height); // left
 		Draw.Line(_position.x, _position.y + _position.height, _position.x + _position.width, _position.y + _position.height); // bottom
-		Draw.Line(_position.x, _position.y + _position.height - 2, _position.x + _position.width, _position.y + _position.height - 2); // bottom 2
+		Draw.Line(_position.x, _position.y + _position.height - 2, _position.x + _position.width - 3, _position.y + _position.height - 2); // bottom 2
 		Draw.Line(_position.x + _position.width, _position.y, _position.x + _position.width, _position.y + _position.height); // right
-		Draw.Line(_position.x, _position.y + 2, _position.x + _position.width, _position.y + 2); // top
+		Draw.Line(_position.x + _position.width - 3, _position.y, _position.x + _position.width - 3, _position.y + _position.height); // right for scroll bar
+		Draw.Line(_position.x, _position.y + 2, _position.x + _position.width - 3, _position.y + 2); // top
 		Draw.Line(_position.x, _position.y, _position.x + _position.width, _position.y); // top 2
+		
+		//Draw scroll bar
+		int height = (int)(_position.height * (_position.height / (_maxOffset * _scrollHeight))), // gets the height of the scrollbar. E.g.: The area is 2*_pos.height, then is _max/_scrollHeight = 0.5
+			yPos = (int)((_position.height - height) * -(_offset / _maxOffset));
+		
+		Fill.setColor(METRO.__metroBlue);
+		Fill.Rect(_position.x + _position.width - 3, 
+			_position.y + yPos, 
+			_position.x + _position.width - 2, 
+			height); // right for scroll bar
 		
 		ScissorStack.popScissors();
 	}
@@ -131,5 +162,15 @@ public class List implements ControlElement
 	public void addElement(String element)
 	{
 		_entries.add(element);
+	}
+	@Override
+	public void mouseScrolled(int amount) 
+	{
+		if(_position.contains(MouseInfo.getPointerInfo().getLocation()))
+		{
+			_offset += -1 * amount * _scrollHeight;
+			if(_offset > 0) _offset = 0;
+			if(_offset < -_maxOffset) _offset = (int)-_maxOffset;
+		}
 	}
 }
