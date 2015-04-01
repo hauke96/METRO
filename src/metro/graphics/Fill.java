@@ -2,10 +2,12 @@ package metro.graphics;
 
 import com.badlogic.gdx.Gdx;
 import java.awt.Color;
+import java.awt.Rectangle;
 
 import metro.Game.METRO;
 
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
@@ -72,6 +74,37 @@ public class Fill
 		init();
 		shapeRenderer.rect(x, y, width, height);
 		reset();
+	}
+	/**
+	 * Draws a rectangle onto a given spriteBatch.
+	 * @param x x-coordinate (left upper corner)
+	 * @param y y-coordinate (left upper corner)
+	 * @param width Width of rectangle.
+	 * @param height Height of rectangle.
+	 * @param spriteBatch The spriteBatch to use here.
+	 */
+	public static void Rect(int x, int y, int width, int height, SpriteBatch spriteBatch)
+	{
+		init();
+		shapeRenderer.rect(x, y, width, height);
+		reset();
+	}
+	/**
+	 * Fills a rectangle with the given awt.Rectangle onto the METRO.__spriteBatch.
+	 * @param rect The rectangle to draw.
+	 */
+	public static void Rect(Rectangle rect) 
+	{
+		Rect(rect.x, rect.y, rect.width, rect.height);
+	}
+	/**
+	 * Fills a rectangle with the given awt.Rectangle onto a given spriteBatch.
+	 * @param rect The rectangle to draw.
+	 * @param spriteBatch The spriteBatch to use here.
+	 */
+	public static void Rect(Rectangle rect, SpriteBatch spriteBatch) 
+	{
+		Rect(rect.x, rect.y, rect.width, rect.height, spriteBatch);
 	}
 }
 

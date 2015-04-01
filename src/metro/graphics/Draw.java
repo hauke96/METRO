@@ -95,6 +95,23 @@ public class Draw
 		spriteBatch.setColor(1, 1, 1, 1);
 	}
 	/**
+	 * Draws a rectangle with the given awt.Rectangle onto the METRO.__spriteBatch.
+	 * @param rect The rectangle to draw.
+	 */
+	public static void Rect(Rectangle rect) 
+	{
+		Rect(rect.x, rect.y, rect.width, rect.height);
+	}
+	/**
+	 * Draws a rectangle with the given awt.Rectangle onto a given spriteBatch.
+	 * @param rect The rectangle to draw.
+	 * @param spriteBatch The spriteBatch to use here.
+	 */
+	public static void Rect(Rectangle rect, SpriteBatch spriteBatch) 
+	{
+		Rect(rect.x, rect.y, rect.width, rect.height, spriteBatch);
+	}
+	/**
 	 * Draws a line from one coordinate pair to another. This uses the METRO.__spriteBatch as default.
 	 * @param x1 First x-coordinate.
 	 * @param y1 First y-coordinate.
@@ -153,6 +170,49 @@ public class Draw
 		font.draw(METRO.__spriteBatch, text, x, y);
 	}
 	/**
+	 * Draws a multi-line text with automatic line breaks.
+	 * @param text The text to draw.
+	 * @param x The x-coord.
+	 * @param y The y-coord.
+	 * @param width The maximum width of the area where the text should be.
+	 * @return Amount of lines/rows.
+	 */
+	public static int String(String text, int x, int y, int width)
+	{
+		int stringHeight = Draw.getStringSize(text).height,
+			vOffset = 0,
+			rowCount = 0;
+		String[] segments = text.split("\n"); // split by new line
+		
+		for(String segment : segments)
+		{
+			String[] subSegments = segment.split(" "); // each word
+			String line = "";
+			
+			// recunstruct string with length < area width
+			for(int i = 0; i < subSegments.length; i++)
+			{
+				if(Draw.getStringSize(line + " " + subSegments[i]).width >= width) // if next addition would be out of area
+				{
+					Draw.String(line, x, y + vOffset);
+					vOffset += stringHeight + 8; // y-pos for next line
+					line = subSegments[i] + " "; // choose first char for next line
+					rowCount++;
+				}
+				else // if new addition is in area
+				{
+					line += subSegments[i] + " ";
+				}
+			}
+
+			Draw.String(line, x, y + vOffset);
+			vOffset += stringHeight + 8; // y-pos for next line
+			rowCount++;
+		}
+		
+		return rowCount;
+	}
+	/**
 	 * Calculates the size of a string when it's drawn onto the screen. This method usess the __stdFont (defualt font).
 	 * @param text The text whose size you want.
 	 * @return The size as a Dimension (width, height).
@@ -171,6 +231,34 @@ public class Draw
 	{
 		TextBounds bounds = font.getBounds(text);
 		return new Dimension((int)bounds.width, (int)bounds.height);
+	}
+	public static int getStringLines(String text, int width)
+	{
+		int rowCount = 0;
+			String[] segments = text.split("\n"); // split by new line
+			
+		for(String segment : segments)
+		{
+			String[] subSegments = segment.split(" "); // each word
+			String line = "";
+			
+			// recunstruct string with length < area width
+			for(int i = 0; i < subSegments.length; i++)
+			{
+				if(Draw.getStringSize(line + " " + subSegments[i]).width >= width) // if next addition would be out of area
+				{
+					rowCount++;
+					line = subSegments[i] + " "; // choose first char for next line
+				}
+				else // if new addition is in area
+				{
+					line += subSegments[i] + " ";
+				}
+			}
+			rowCount++;
+		}
+		
+		return rowCount;
 	}
 	/**
 	 * Draws an image with its original size to the spriteBatch.

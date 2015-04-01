@@ -29,11 +29,6 @@ public class Label implements ControlElement
 	public Label(String text, Point position, Window window)
 	{
 		this(text, position, 0, window);
-//		_text = text;
-//		_position = position;
-//		_windowHandle = window;
-//		_areaWidth = 0;
-//		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 	}
 	/**
 	 * Creates a new label.
@@ -78,33 +73,7 @@ public class Label implements ControlElement
 		}
 		else
 		{
-			int stringHeight = Draw.getStringSize(_text).height,
-				vOffset = 0;
-			String[] segments = _text.split("\n"); // split by new line
-			
-			for(String segment : segments)
-			{
-				String[] subSegments = segment.split(" "); // each word
-				String line = "";
-				
-				// recunstruct string with length < area width
-				for(int i = 0; i < subSegments.length; i++)
-				{
-					if(Draw.getStringSize(line + " " + subSegments[i]).width >= _areaWidth) // if next addition would be out of area
-					{
-						Draw.String(line, _position.x, _position.y + vOffset);
-						vOffset += stringHeight + 8; // y-pos for next line
-						line = subSegments[i] + " "; // choose first char for next line
-					}
-					else // if new addition is in area
-					{
-						line += subSegments[i] + " ";
-					}
-				}
-
-				Draw.String(line, _position.x, _position.y + vOffset);
-				vOffset += stringHeight + 8; // y-pos for next line
-			}
+			Draw.String(_text, _position.x, _position.y, _areaWidth);
 		}
 	}
 

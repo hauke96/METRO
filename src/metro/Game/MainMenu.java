@@ -3,13 +3,11 @@ package metro.Game;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import metro.WindowControls.Button;
 import metro.WindowControls.Window;
 import metro.graphics.Draw;
-
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -39,10 +37,10 @@ public class MainMenu implements GameScreen
 
 		// Create welcome-window:
 	    _welcomeWindow = new Window("Welcome to METRO", 
-    		new Point(200, 
-    			METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 200), // same y-pos as title image
-    		new Point(350, 350));
-	    new metro.WindowControls.Button(new Rectangle((350 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2, 
+    		new Point(50, 
+    			METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 400), // same y-pos as title image
+    		new Point(500, 800));
+	    new metro.WindowControls.Button(new Rectangle((500 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2, 
 	    		(260 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2, 
 	    		(int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f), 
 	    		(int)(METRO.__mainMenu_TitleImage.getRegionHeight() * 0.4f)),
@@ -53,7 +51,12 @@ public class MainMenu implements GameScreen
 				METRO.__mainMenu_TitleImage, _welcomeWindow);
 	    new metro.WindowControls.Label("METRO stands for \"Master of established transport railway operators\" and is a simple Subway/Rapid-Transit and economic simulator."
     		+ "\n\nTRAIN-VIEW - In this mode you'll be able to build tracks and stations."
-    		+ "\n\nCITY-VIEW - In this mode you'll see where the most passengers are.", new Point(20, 100), 330, _welcomeWindow);
+    		+ "\n\nCITY-VIEW - In this mode you'll see where the most passengers are.", new Point(20, 100), 450, _welcomeWindow);
+	    ArrayList<String> list = new ArrayList<String>();
+	    list.add("Hallo world!");
+	    list.add("Wie gehts euch?");
+	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
+	    new metro.WindowControls.List(new Rectangle(50, 300, 400, 450), list, _welcomeWindow);
 	}
 
 	/* (non-Javadoc)
