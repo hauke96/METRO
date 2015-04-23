@@ -9,9 +9,11 @@ import java.awt.Point;
 import metro.graphics.Draw;
 
 /**
+ * Create a label to hold text with optional automatic line breaks.
  * @author hauke
  *
  */
+
 public class Label implements ControlElement
 {
 	private String _text = "";
@@ -29,6 +31,7 @@ public class Label implements ControlElement
 	{
 		this(text, position, 0, window);
 	}
+	
 	/**
 	 * Creates a new label.
 	 * @param text The text that should be displayed.
@@ -44,6 +47,7 @@ public class Label implements ControlElement
 		_areaWidth = areaWidth;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 	}
+	
 	/**
 	 * Creates a new label.
 	 * @param text The text that should be displayed.
@@ -53,6 +57,13 @@ public class Label implements ControlElement
 	{
 		this(text, position, 0, null);
 	}
+	
+	/**
+	 * Creates a new label.
+	 * @param text The text that should be displayed.
+	 * @param position The position on the screen/window (absolute)
+	 * @param areaWidth The maximum width of the label. This will enable automatic line breaks.
+	 */
 	public Label(String text, Point position, int areaWidth)
 	{
 		this(text, position, areaWidth, null);
@@ -110,5 +121,4 @@ public class Label implements ControlElement
 	}
 	@Override
 	public void mouseScrolled(int amount) {}
-
 }

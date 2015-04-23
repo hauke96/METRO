@@ -77,10 +77,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static LwjglApplication __application; 
 	
 	private Point _oldMousePosition = new Point(0,0);
- 
-	/**
-	 * @param args
-	 */
+
 	public static void main(String[] args) 
 	{
 		new METRO();
@@ -298,6 +295,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		__windowList.remove(window);
 	}
+	
 	/**
 	 * Creates a "really quit"-dialog window. This method does NOT QUIT the game.
 	 */
@@ -305,8 +303,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		__exitGameWindow = new ExitGameWindow();
 	}
-	
-	
 	
 	private static class ExitGameWindow 
 	{

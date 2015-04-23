@@ -13,9 +13,11 @@ import metro.graphics.Draw;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
- * @author Hauke
+ * A button with text ot an image attached to a window. It also manages the click-event.
+ * @author hauke
  *
  */
+
 public class Button implements ControlElement
 {
 	private TextureRegion _texture;
@@ -35,6 +37,7 @@ public class Button implements ControlElement
 	{
 		this(position, positionOnImage, texture, null);
 	}
+	
 	/**
 	 * Creates a new Button.
 	 * @param position The position on the screen/window (absolute).
@@ -50,6 +53,7 @@ public class Button implements ControlElement
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 	}
+	
 	/**
 	 * Creates a new button.
 	 * @param position The position on the screen/window (absolute).
@@ -64,6 +68,7 @@ public class Button implements ControlElement
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 	}
+	
 	/**
 	 * Creates a new button.
 	 * @param position The position on screen (absolute).
@@ -73,6 +78,7 @@ public class Button implements ControlElement
 	{
 		this(position, text, null);
 	}
+	
 	/**
 	 * Checks if the mouse is in the button area or has been clicked a while ago.
 	 * @param x x-coordinate of mouse.
@@ -92,6 +98,7 @@ public class Button implements ControlElement
 		}
 		return false;
 	}
+	
 	/**
 	 * Returns if the button has been clicked since last frame.
 	 * @return True is button has been pressed.
@@ -102,6 +109,7 @@ public class Button implements ControlElement
 		hasBeenClicked = false;
 		return temp;
 	}
+	
 	/**
 	 * Draws the button with its text/texture.
 	 */
@@ -120,6 +128,7 @@ public class Button implements ControlElement
 			Draw.Image(_texture, _position, _positionOnImage);
 		}
 	}
+	
 	/**
 	 * Sets the position of the button.
 	 * @param newPosition The new position. It's NOT an offset!
@@ -128,6 +137,7 @@ public class Button implements ControlElement
 	{
 		_position = new Rectangle(newPosition.x, newPosition.y, _position.width, _position.height);
 	}
+	
 	/**
 	 * Returns the position of the button as point.
 	 */
@@ -135,6 +145,7 @@ public class Button implements ControlElement
 	{
 		return new Point(_position.x, _position.y);
 	}
+	
 	/**
 	 * Check if mouse is on the button and sets its clicked-flag to true (isPressed() would return true now).
 	 */

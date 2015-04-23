@@ -1,6 +1,5 @@
 package metro.Game;
 
-
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -12,15 +11,12 @@ import metro.graphics.Draw;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-
 /**
+ * The main menu is the first menu you'll see after starting the game. It provides some basic options like start, exit and settings.
+ * @author Hauke
  * 
  */
 
-/**
- * @author Hauke
- *
- */
 public class MainMenu implements GameScreen
 {
 	private Button _button_startGame, 
@@ -40,7 +36,8 @@ public class MainMenu implements GameScreen
     		new Point(50, 
     			METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 400), // same y-pos as title image
     		new Point(500, 800));
-	    new metro.WindowControls.Button(new Rectangle((500 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2, 
+	    new metro.WindowControls.Button(
+	    	new Rectangle((500 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2, 
 	    		(260 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2, 
 	    		(int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f), 
 	    		(int)(METRO.__mainMenu_TitleImage.getRegionHeight() * 0.4f)),
@@ -79,8 +76,8 @@ public class MainMenu implements GameScreen
 		_button_exitGame.draw();
 		
 		Draw.Image(METRO.__mainMenu_TitleImage, 
-				METRO.__SCREEN_SIZE.width / 2 - METRO.__mainMenu_TitleImage.getRegionWidth() / 2,
-				METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 200);
+			METRO.__SCREEN_SIZE.width / 2 - METRO.__mainMenu_TitleImage.getRegionWidth() / 2,
+			METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 200);
 	}
 	/**
 	 * Checks which button in the main menu has been clicked.

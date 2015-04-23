@@ -17,22 +17,19 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-
 /**
  * GameScreen with the default view. It Shows the trains, tracks, stations and basic player information.
- */
-
-/**
  * @author Hauke
  *
  */
+
 public class GameScreen_TrainView implements GameScreen
 {
 	private boolean _dragMode = false;
 	private Point _oldMousePos; // Mouse position from last frame
 	private Point2D _offset = new Point2D.Float(0, 0); // offset for moving the map
 	private List<TrainStation> _trainStationList = new ArrayList<TrainStation>();
-//	private TrainStation _selectedTrainStation = null;
+//	private TrainStation _selectedTrainStation = null; // important for later stuff when the user can select a train station
 	private Button _buildStation,
 		_buildTracks,
 		_showTrainList,

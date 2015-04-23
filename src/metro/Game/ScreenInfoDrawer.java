@@ -9,9 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * Draws stuff like money, view-buttons, etc. onto the screen.
- */
-
-/**
  * @author hauke
  *
  */
@@ -30,6 +27,7 @@ public class ScreenInfoDrawer implements GameScreen {
 		METRO.__viewPortButton_Train.draw();
 		drawPlayerInfos(sp);
 	}
+	
 	/**
 	 * Draws all significant player infos onto the upper left corner.
 	 * @param g The graphic handle to draw on
@@ -69,7 +67,5 @@ public class ScreenInfoDrawer implements GameScreen {
 	public void mouseReleased(int mouseButton){}
 	public void keyPressed(int keyCode){}
 	@Override
-	public void mouseScrolled(int amount) 
-	{
-	}
+	public void mouseScrolled(int amount){}
 }

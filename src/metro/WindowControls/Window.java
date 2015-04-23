@@ -16,7 +16,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /**
  * Creates a simple but fancy window with some extra functions like Control-management (managing buttons, labels, etc.).
  * @author hauke
- *
+ * 
  */
 public class Window 
 {
@@ -47,6 +47,7 @@ public class Window
 		
 		METRO.__windowList.add(this);
 	}
+	
 	/**
 	 * Creates a new window.
 	 * @param title The title of the Window, is shown in the top area.
@@ -57,6 +58,7 @@ public class Window
 	{
 		this(title, position, size, METRO.__metroBlue);
 	}
+	
 	/**
 	 * Draws the window and all controls on it.
 	 * @param g The graphic handle.
@@ -97,14 +99,15 @@ public class Window
 		
 		//Close cross
 		Draw.Image(METRO.__iconSet, 
-				new Rectangle(_position.x + _size.x - 18, _position.y + 1, 19, 19), 
-				new Rectangle(0, 0, 19, 19));
-//		
+			new Rectangle(_position.x + _size.x - 18, _position.y + 1, 19, 19), 
+			new Rectangle(0, 0, 19, 19));
+
 		for(ControlElement cElement : _elementList)
 		{
 			cElement.draw();
 		}
 	}
+	
 	/**
 	 * Updates everything. Is very important for e.g. drag-feature and Controls
 	 */
@@ -117,7 +120,7 @@ public class Window
 		if(_dragMode)
 		{
 			Point positionDiff = new Point(MouseInfo.getPointerInfo().getLocation().x - _oldMousePos.x,
-					MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y);
+				MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y);
 
 			for(ControlElement cElement : _elementList)
 			{
@@ -129,6 +132,7 @@ public class Window
 			_oldMousePos = MouseInfo.getPointerInfo().getLocation();
 		}
 	}
+	
 	/**
 	 * Adds a new control to the window control list. If the new Control is already in the list, it won't be added again, so there are no doubles in this list.
 	 * @param cElement The WindowControl element thta should be added.
@@ -142,6 +146,7 @@ public class Window
 			_elementList.add(cElement); // there wont be doubles ;)
 		}
 	}
+	
 	/**
 	 * Returns true is mouse is in window, false if not and also false if in window but e.g. on a button.
 	 * @param screenX x-coordinate of mouse
@@ -153,10 +158,9 @@ public class Window
 		return screenX >= _position.x
 			&& screenX <= _position.x + _size.x
 			&& screenY >= _position.y
-			&& screenY <= _position.y + _size.y;
-			//&& !isOnWindow; // if mouse is on NO control element (only on the window area)
-				
+			&& screenY <= _position.y + _size.y;		
 	}
+	
 	/**
 	 * Makes things when mouse is pressed.
 	 * @param e MouseEvent
@@ -173,13 +177,13 @@ public class Window
 			&& screenX <= _position.x + _size.x - 20
 			&& screenY >= _position.y
 			&& screenY <= _position.y + 20
-			&& mouseButton == Buttons.LEFT
-			)
+			&& mouseButton == Buttons.LEFT)
 		{
 			_dragMode = true;
 			_oldMousePos = new Point(screenX, screenY);
 		}
 	}
+	
 	/**
 	 * Makes things when mouse is released (important for drag-mode of the window).
 	 */
@@ -187,6 +191,7 @@ public class Window
 	{
 		_dragMode = false;
 	}
+	
 	/**
 	 * Fires when users scrolls.
 	 * @param amount Positive or negative amount of steps since last frame.
@@ -198,6 +203,7 @@ public class Window
 			cElement.mouseScrolled(amount);
 		}
 	}
+	
 	/**
 	 * Closes the window if the mouse is on the cross. NO CLICK is needed in this function, be careful. This function calls the METRO.__close() function to close itself.
 	 * @param e MouseEvent
@@ -215,6 +221,7 @@ public class Window
 		}
 		return false;
 	}
+	
 	/**
 	 * Returns the position of the window.
 	 * @return Position.
@@ -223,6 +230,7 @@ public class Window
 	{
 		return _position;
 	}
+	
 	/**
 	 * Closes the window softly.
 	 */

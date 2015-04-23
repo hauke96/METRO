@@ -8,7 +8,11 @@ import metro.graphics.Fill;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-
+/**
+ * A traveler spot is a center where many people/traveler are. This will effect its environment so there are areas around it with a higher amount of traveler.
+ * @author hauke
+ *
+ */
 
 public class CityTravelerSpot
 {
@@ -16,11 +20,17 @@ public class CityTravelerSpot
 	private Point _position;
 	private int _strength;
 	
+	/**
+	 * Creates a new traveler spot on a specific position an with a certain strength.
+	 * @param position Position of the center of the spot in pixel.
+	 * @param strength The strength (usually from 0 to 10).
+	 */
 	public CityTravelerSpot(Point position, int strength)
 	{
 		_position = position;
 		_strength = strength;
 	}
+	
 	/**
 	 * Checks if mouse is in ONLY this circle or greater circles (but not in smaller/next ones).
 	 * @param layerIndex The circle index.
@@ -42,6 +52,7 @@ public class CityTravelerSpot
 		
 		return isInCurrentCircle && !isInNextCircle;
 	}
+	
 	/**
 	 * Draws the circles of the Hotspot.
 	 * @param g The graphic handle to draw an.
@@ -53,6 +64,7 @@ public class CityTravelerSpot
 	{
 		draw(sp, layerIndex, circleSelected, drawNumbers, false);
 	}
+	
 	/**
 	 * Draws the circles of the Hotspot.
 	 * @param g The graphic handle to draw an.
@@ -74,13 +86,12 @@ public class CityTravelerSpot
 		if(circleSelected)
 		{
 			Fill.setColor(new Color(200 - (int)(2f * (_strength - layerIndex)), 
-					220 - (int)(1.5f * (_strength - layerIndex)), 
-					255));
+				220 - (int)(1.5f * (_strength - layerIndex)), 
+				255));
 			Fill.Circle(position.x - layerIndex *_circleRadiusStep + 1, 
 				position.y - layerIndex * _circleRadiusStep + 1,
 				_circleRadiusStep * 2 * layerIndex - 2);
-
-//			Draw.setColor(METRO.__metroBlue);
+			
 			Draw.setColor(new Color(70, 126, 179));
 			if(drawNumbers && layerIndex > 1)
 			{
@@ -111,6 +122,11 @@ public class CityTravelerSpot
 				_circleRadiusStep * 2 * layerIndex);
 		}
 	}
+	
+	/**
+	 * Gets the strength of the TravelerSpot
+	 * @return Strength
+	 */
 	public float getStrength()
 	{
 		return _strength;

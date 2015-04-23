@@ -13,6 +13,12 @@ import metro.graphics.Fill;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 
+/**
+ * Creates a list control element that can have some entries in it. An entry is highlighted when the mouse is over it.
+ * @author hauke
+ *
+ */
+
 public class List implements ControlElement 
 {
 	private ArrayList<String> _entries = new ArrayList<String>();
@@ -22,10 +28,21 @@ public class List implements ControlElement
 	private float _maxOffset = 0,
 		_scrollHeight = 20; // height of one scroll
 
+	/**
+	 * Creates a new list control element on a window.
+	 * @param position The position on the window.
+	 * @param win The window with which this list of connected.
+	 */
 	public List(Rectangle position, Window win)
 	{
 		this(position, null, win);
 	}
+	/**
+	 * Creates a new list control element on a window with some entries in it.
+	 * @param position The position on the window.
+	 * @param entries The entries that are in the list after creating it.
+	 * @param win The window with which this list of connected.
+	 */
 	public List(Rectangle position, ArrayList<String> entries, Window win)
 	{
 		if(entries != null) _entries = entries;
@@ -35,7 +52,7 @@ public class List implements ControlElement
 		for(String e : _entries)
 		{
 			int amountRows = Draw.getStringLines(e, 
-					_position.width - 6);
+				_position.width - 6);
 
 			yOffset += 60 + // 2 * 30px space above and below string
 				Draw.getStringSize(e).height * amountRows + // rows * height of string 
@@ -46,6 +63,16 @@ public class List implements ControlElement
 		_windowHandle = win;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)	
 	}
+	
+	/**
+	 * Adds an element to the list control.
+	 * @param element The element to add.
+	 */
+	public void addElement(String element)
+	{
+		_entries.add(element);
+	}
+	
 	@Override
 	public void draw() 
 	{
@@ -146,14 +173,6 @@ public class List implements ControlElement
 	{
 		_position.x += offset.x;
 		_position.y += offset.y;
-	}
-	/**
-	 * Adds an element to the list control.
-	 * @param element The element to add.
-	 */
-	public void addElement(String element)
-	{
-		_entries.add(element);
 	}
 	@Override
 	public void mouseScrolled(int amount) 

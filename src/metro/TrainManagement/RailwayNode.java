@@ -10,6 +10,11 @@ import metro.graphics.Draw;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * A railway node is a point that's used by tracks. There's no track-class but every railway node has neighbors and by drawing a railway node, lines are drawed to these neighbors.
+ * @author hauke
+ *
+ */
 
 public class RailwayNode
 {
@@ -33,6 +38,7 @@ public class RailwayNode
 		_IDList.add(_ID);
 		if(neighbor != null) _neighborNodes.add(neighbor);
 	}
+	
 	/**
 	 * Add a Point to the List of neighbors
 	 * @param p The Point to add
@@ -50,6 +56,7 @@ public class RailwayNode
 			p.addSimple(this); // when p is no neighbor then add it WITHOUT re-adding "this" (would cause endless loop + StackOverFlow)
 		}
 	}
+	
 	/**
 	 * Adds a railway node to the list of neighbors without (!) adding himself to the node p.
 	 * @param p Node to add.
@@ -66,6 +73,7 @@ public class RailwayNode
 			_neighborNodes.add(p);
 		}
 	}
+	
 	/**
 	 * Returns position of Node. NOT in pixel but the cross coordinates.
 	 * @return Position.
@@ -74,6 +82,7 @@ public class RailwayNode
 	{
 		return _position;
 	}
+	
 	/**
 	 * Returns all the neighbors of this node as ArrayList<RailwayNode>.
 	 * @return Neighbors as ArrayList<RailwayNode>.
@@ -82,8 +91,9 @@ public class RailwayNode
 	{
 		return _neighborNodes;
 	}
+	
 	/**
-	 * 
+	 * Draws a railway node.
 	 * @param g
 	 * @param offset
 	 */
@@ -112,6 +122,7 @@ public class RailwayNode
 			}
 		}
 	}
+	
 	/**
 	 * Returns the ID of the node.
 	 * @return ID
@@ -120,6 +131,7 @@ public class RailwayNode
 	{
 		return _ID;
 	}
+	
 	/**
 	 * Calculates the ID of a specific position.
 	 * @param x x-coordinate
@@ -130,6 +142,7 @@ public class RailwayNode
 	{
 		return (int)(((Math.pow(x + y, 2) + x + y ) / 2.0) + x);
 	}
+	
 	/**
 	 * Returns a specific node with an specific ID.
 	 * @param ID The ID of the node to return.
