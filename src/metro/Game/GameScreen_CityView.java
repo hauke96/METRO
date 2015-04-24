@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import metro.graphics.Draw;
+import metro.Graphics.Draw;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * 
  */
 
-public class GameScreen_CityView implements GameScreen
+public class GameScreen_CityView extends GameScreen
 {
 	public static GameScreen _trainGameScreen;
 	public static Point2D _offset = new Point2D.Float(0, 0);
@@ -44,7 +44,7 @@ public class GameScreen_CityView implements GameScreen
 	 * @see GameScreen#update(java.awt.Graphics2D)
 	 */
 	@Override
-	public void update(SpriteBatch sp)
+	public void updateGameScreen(SpriteBatch sp)
 	{
 		if (_dragMode)
 		{
@@ -142,12 +142,12 @@ public class GameScreen_CityView implements GameScreen
 	}
 
 	@Override
-	public void keyPressed(int keyCode)
+	public void keyDown(int keyCode)
 	{
-		if (keyCode == Keys.ESCAPE)
-		{
-			METRO.__close();
-		}
+//		if (keyCode == Keys.ESCAPE)
+//		{
+//			METRO.__close();
+//		}
 	}
 
 	@Override

@@ -7,8 +7,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import metro.Game.METRO;
-import metro.graphics.Draw;
-import metro.graphics.Fill;
+import metro.Graphics.Draw;
+import metro.Graphics.Fill;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,7 +25,8 @@ public class Window
 		_oldMousePos;
 	private String _title = "";
 	private ArrayList<ControlElement> _elementList = new ArrayList<ControlElement>();
-	private boolean _dragMode = false; // to drag the window
+	private boolean _dragMode = false, // to drag the window
+		_closed = false; // even if window has been deleted from the window list, that does not mean, that this object doesn't exist anymore, to this indicates that this window has been deleted
 	private Color _color; // color of borders
 	
 	/**
@@ -236,7 +237,17 @@ public class Window
 	 */
 	public void close()
 	{
-		METRO.__closeWindow(this); // closes this window and removes it from the memory
+		METRO.__closeWindow(this); // closes this window and removes it from the list
 		_elementList.clear();
+		_closed = true;
+	}
+	
+	/**
+	 * Returns true if window has been successfully removed from the window list.
+	 * @return True - Already removed, False - Still exists
+	 */
+	public boolean isClosed()
+	{
+		return _closed;
 	}
 }

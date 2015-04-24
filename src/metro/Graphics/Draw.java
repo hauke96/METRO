@@ -1,4 +1,4 @@
-package metro.graphics;
+package metro.Graphics;
 
 import java.awt.Color;
 import java.awt.Dimension;

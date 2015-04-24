@@ -2,8 +2,8 @@ package metro.Game;
 import java.awt.Color;
 import java.awt.Rectangle;
 
-import metro.graphics.Draw;
-import metro.graphics.Fill;
+import metro.Graphics.Draw;
+import metro.Graphics.Fill;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -12,13 +12,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author hauke
  *
  */
-public class ScreenInfoDrawer implements GameScreen {
+public class ScreenInfoDrawer extends GameScreen {
 
 	/* (non-Javadoc)
 	 * @see GameScreen#update(java.awt.Graphics2D)
 	 */
 	@Override
-	public void update(SpriteBatch sp)
+	public void updateGameScreen(SpriteBatch sp)
 	{
 		Draw.Image(METRO.__viewPortButton_Texture, 
 			new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 40, 45, 79, 40), 
@@ -65,7 +65,7 @@ public class ScreenInfoDrawer implements GameScreen {
 	 */
 	@Override
 	public void mouseReleased(int mouseButton){}
-	public void keyPressed(int keyCode){}
+	public void keyDown(int keyCode){}
 	@Override
 	public void mouseScrolled(int amount){}
 }

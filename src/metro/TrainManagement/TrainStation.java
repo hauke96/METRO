@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import metro.Game.METRO;
-import metro.graphics.Draw;
-import metro.graphics.Fill;
+import metro.Graphics.Draw;
+import metro.Graphics.Fill;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

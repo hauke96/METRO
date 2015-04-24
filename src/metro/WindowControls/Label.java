@@ -6,7 +6,7 @@ package metro.WindowControls;
 import java.awt.Color;
 import java.awt.Point;
 
-import metro.graphics.Draw;
+import metro.Graphics.Draw;
 
 /**
  * Create a label to hold text with optional automatic line breaks.

@@ -7,11 +7,11 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import metro.Graphics.Draw;
+import metro.Graphics.Fill;
 import metro.TrainManagement.RailwayNode;
 import metro.TrainManagement.TrainStation;
 import metro.WindowControls.Button;
-import metro.graphics.Draw;
-import metro.graphics.Fill;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.Input.Keys;
@@ -23,7 +23,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  *
  */
 
-public class GameScreen_TrainView implements GameScreen
+public class GameScreen_TrainView extends GameScreen
 {
 	private boolean _dragMode = false;
 	private Point _oldMousePos; // Mouse position from last frame
@@ -52,7 +52,7 @@ public class GameScreen_TrainView implements GameScreen
 	 * @see GameScreen#update(java.awt.Graphics2D)
 	 */
 	@Override
-	public void update(SpriteBatch sp)
+	public void updateGameScreen(SpriteBatch sp)
 	{
 		if(_dragMode)
 		{
@@ -495,12 +495,12 @@ public class GameScreen_TrainView implements GameScreen
 			_dragMode = false;
 		}
 	}
-	public void keyPressed(int keyCode)
+	public void keyDown(int keyCode)
 	{
-		if(keyCode == Keys.ESCAPE)
-		{
-			METRO.__close();
-		}
+//		if(keyCode == Keys.ESCAPE)
+//		{
+//			METRO.__close();
+//		}
 	}
 	@Override
 	public void mouseScrolled(int amount) 

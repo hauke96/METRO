@@ -3,8 +3,8 @@ package metro.Game;
 import java.awt.Color;
 import java.awt.Point;
 
-import metro.graphics.Draw;
-import metro.graphics.Fill;
+import metro.Graphics.Draw;
+import metro.Graphics.Fill;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

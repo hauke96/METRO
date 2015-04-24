@@ -7,8 +7,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import metro.Game.METRO;
-import metro.graphics.Draw;
-import metro.graphics.Fill;
+import metro.Graphics.Draw;
+import metro.Graphics.Fill;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;

@@ -8,7 +8,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import metro.Game.METRO;
-import metro.graphics.Draw;
+import metro.Graphics.Draw;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
