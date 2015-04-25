@@ -71,6 +71,17 @@ public class List implements ControlElement
 	public void addElement(String element)
 	{
 		_entries.add(element);
+		int yOffset = 30;
+		for(String e : _entries)
+		{
+			int amountRows = Draw.getStringLines(e, 
+				_position.width - 6);
+
+			yOffset += 60 + // 2 * 30px space above and below string
+				Draw.getStringSize(e).height * amountRows + // rows * height of string 
+				(amountRows - 1) * 8; // space between lines
+		}
+		if(yOffset - _scrollHeight - 3 > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight - 3;
 	}
 	
 	@Override

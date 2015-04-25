@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import metro.Graphics.Draw;
 import metro.WindowControls.Button;
 import metro.WindowControls.Window;
+import metro.WindowControls.Checkbox;
+import metro.WindowControls.List;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,6 +25,8 @@ public class MainMenu extends GameScreen
 		_button_settings, 
 		_button_exitGame;
 	private Window _welcomeWindow;
+	private Checkbox box;
+	private List _list;
 	
 	public MainMenu()
 	{
@@ -54,20 +58,22 @@ public class MainMenu extends GameScreen
     		+ "\n\nTRAIN-VIEW - In this mode you'll be able to build tracks and stations."
     		+ "\n\nCITY-VIEW - In this mode you'll see where the most passengers are.", new Point(20, 100), 450, _welcomeWindow);
 	    
+	    box = new Checkbox(new Point(50, 260), "Hallo test", 0, true, true, _welcomeWindow);
+	    
 	    ArrayList<String> list = new ArrayList<String>();
 	    list.add("Hallo world!");
-	    list.add("Wie gehts euch?");
-	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
-	    list.add("Hallo world!");
-	    list.add("Wie gehts euch?");
-	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
-	    list.add("Hallo world!");
-	    list.add("Wie gehts euch?");
-	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
-	    list.add("Hallo world!");
-	    list.add("Wie gehts euch?");
-	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
-	    new metro.WindowControls.List(new Rectangle(50, 300, 400, 450), list, _welcomeWindow);
+//	    list.add("Wie gehts euch?");
+//	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
+//	    list.add("Hallo world!");
+//	    list.add("Wie gehts euch?");
+//	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
+//	    list.add("Hallo world!");
+//	    list.add("Wie gehts euch?");
+//	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
+//	    list.add("Hallo world!");
+//	    list.add("Wie gehts euch?");
+//	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
+	    _list = new List(new Rectangle(50, 300, 400, 450), list, _welcomeWindow);
 	}
 
 	/* (non-Javadoc)
@@ -108,7 +114,13 @@ public class MainMenu extends GameScreen
 			METRO.__application.exit();
 		}
 	}
-	public void mouseReleased(int mouseButton){}
+	public void mouseReleased(int mouseButton)
+	{
+		if(box.isPressed())
+		{
+			_list.addElement("Checkbox: " + box.isChecked());
+		}
+	}
 	public void keyDown(int keyCode){}
 	@Override
 	public void mouseScrolled(int amount){}

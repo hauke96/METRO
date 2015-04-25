@@ -24,7 +24,7 @@ public class Button implements ControlElement
 	private Rectangle _position,
 		_positionOnImage;
 	private Window _windowHandle;
-	private boolean hasBeenClicked = false; // true if control has been clicked since last check
+	private boolean _hasBeenClicked = false; // true if control has been clicked since last check
 	private String _text = "";
 
 	/**
@@ -91,9 +91,9 @@ public class Button implements ControlElement
 			&& x <= _position.x + _position.width
 			&& y >= _position.y
 			&& y <= _position.y + _position.height
-			|| hasBeenClicked)
+			|| _hasBeenClicked)
 		{
-			hasBeenClicked = false;
+			_hasBeenClicked = false;
 			return true;
 		}
 		return false;
@@ -105,8 +105,8 @@ public class Button implements ControlElement
 	 */
 	public boolean isPressed()
 	{
-		boolean temp = hasBeenClicked;
-		hasBeenClicked = false;
+		boolean temp = _hasBeenClicked;
+		_hasBeenClicked = false;
 		return temp;
 	}
 	
@@ -158,8 +158,7 @@ public class Button implements ControlElement
 			&& mPos.y >= _position.y
 			&& mPos.y <= _position.y + _position.height)
 		{
-			System.out.println("Pressed" + _text);
-			hasBeenClicked = true;
+			_hasBeenClicked = true;
 			return true;
 		}
 		return false;

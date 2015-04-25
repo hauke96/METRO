@@ -20,6 +20,7 @@ public class Label implements ControlElement
 	private Point _position;
 	private int _areaWidth = 0;
 	private Window _windowHandle;
+	private Color _color;
 
 	/**
 	 * Creates a new label.
@@ -46,6 +47,7 @@ public class Label implements ControlElement
 		_windowHandle = window;
 		_areaWidth = areaWidth;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+		_color = Color.black;
 	}
 	
 	/**
@@ -68,6 +70,15 @@ public class Label implements ControlElement
 	{
 		this(text, position, areaWidth, null);
 	}
+	
+	/**
+	 * Sets the color of the text to newColor.
+	 * @param newColor The new color.
+	 */
+	public void setColor(Color newColor)
+	{
+		_color = newColor;
+	}
 
 	/**
 	 * Draws the label onto the screen. The Color of the Graphics-handle will be restores after drawing.
@@ -75,7 +86,7 @@ public class Label implements ControlElement
 	@Override
 	public void draw()
 	{
-		Draw.setColor(Color.black);
+		Draw.setColor(_color);
 		
 		if(_areaWidth == 0)
 		{
