@@ -87,13 +87,15 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	    GraphicsDevice[] devices = gEnviroment.getScreenDevices();
 		__SCREEN_SIZE = new Dimension(devices[0].getDisplayMode().getWidth(), devices[0].getDisplayMode().getHeight()); 
 		
+		Settings.read();
+		
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = __TITLE + "  " + __VERSION;
 		config.width = __SCREEN_SIZE.width;
 		config.height = __SCREEN_SIZE.height;
 		config.useGL30 = true;
 		config.resizable = false;
-		config.fullscreen = true;
+		config.fullscreen = Settings.__fullscreen;
 //		config.foregroundFPS = -1; // max frames
 		config.samples = 8;
 		config.vSyncEnabled = false;

@@ -117,6 +117,8 @@ public abstract class GameScreen
 			new Label("To make things easier, you don't need to click on \"save\" everythin will be saved in realtime by just changing settings.", new Point(20, 20), 460, _window);
 			
 			_okButton = new Button(new Rectangle(200, 420, 100, 20), "OK", _window);
+			
+			Settings.save();
 		}
 		
 		/**

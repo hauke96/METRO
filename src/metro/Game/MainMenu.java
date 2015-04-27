@@ -10,7 +10,6 @@ import metro.WindowControls.Window;
 import metro.WindowControls.Checkbox;
 import metro.WindowControls.List;
 
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
