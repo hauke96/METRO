@@ -6,6 +6,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import org.w3c.dom.css.Rect;
+
 import metro.Game.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
@@ -24,9 +26,12 @@ public class List implements ControlElement
 	private ArrayList<String> _entries = new ArrayList<String>();
 	private Rectangle _position;
 	private Window _windowHandle;
-	private int _offset = 0;
+	private int _offset = 0,
+		_defaultYSpace = 30,
+		_compactYSpace = 8;
 	private float _maxOffset = 0,
 		_scrollHeight = 20; // height of one scroll
+	private boolean _compact = false; // less space between text and top/bottom edge
 
 	/**
 	 * Creates a new list control element on a window.
@@ -35,8 +40,20 @@ public class List implements ControlElement
 	 */
 	public List(Rectangle position, Window win)
 	{
-		this(position, null, win);
+		this(position, null, win, false);
 	}
+	
+	/**
+	 * Creates a new list control element on a window.
+	 * @param position The position on the window.
+	 * @param win The window with which this list of connected.
+	 * @param compact Set to true if list should be a compact list (entries are not that high)
+	 */
+	public List(Rectangle position, Window win, boolean compact)
+	{
+		this(position, null, win, compact);
+	}
+	
 	/**
 	 * Creates a new list control element on a window with some entries in it.
 	 * @param position The position on the window.
@@ -45,23 +62,40 @@ public class List implements ControlElement
 	 */
 	public List(Rectangle position, ArrayList<String> entries, Window win)
 	{
+		this(position, entries, win, false);
+	}
+	
+	/**
+	 * Creates a new list control element on a window with some entries in it.
+	 * @param position The position on the window.
+	 * @param entries The entries that are in the list after creating it.
+	 * @param win The window with which this list of connected.
+	 * @param compact Set to true if list should be a compact list (entries are not that high)
+	 */
+	public List(Rectangle position, ArrayList<String> entries, Window win, boolean compact)
+	{
 		if(entries != null) _entries = entries;
 		_position = position;
+
+		int ySpace = _defaultYSpace;
+		if(_compact) ySpace = _compactYSpace;
+		int yOffset = ySpace;
 		
-		int yOffset = 30;
 		for(String e : _entries)
 		{
 			int amountRows = Draw.getStringLines(e, 
 				_position.width - 6);
 
-			yOffset += 60 + // 2 * 30px space above and below string
+			yOffset += 2 * ySpace + // 2 * 30px space above and below string
 				Draw.getStringSize(e).height * amountRows + // rows * height of string 
 				(amountRows - 1) * 8; // space between lines
 		}
 		if(yOffset > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight - 3;
 		
 		_windowHandle = win;
-		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)	
+		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+		
+		_compact = compact;
 	}
 	
 	/**
@@ -71,18 +105,23 @@ public class List implements ControlElement
 	public void addElement(String element)
 	{
 		_entries.add(element);
-		int yOffset = 30;
+		int ySpace = _defaultYSpace;
+		if(_compact) ySpace = _compactYSpace;
+		int yOffset = ySpace;
 		for(String e : _entries)
 		{
 			int amountRows = Draw.getStringLines(e, 
 				_position.width - 6);
 
-			yOffset += 60 + // 2 * 30px space above and below string
+			yOffset += 2 * ySpace + // space above and below string
 				Draw.getStringSize(e).height * amountRows + // rows * height of string 
 				(amountRows - 1) * 8; // space between lines
 		}
-		if(yOffset - _scrollHeight - 3 > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight - 3;
+		int magicFactor = (0 - (23 / 20)) * (ySpace - 10) + 17; // fine-tuning for the maximum offset for scrolling (with this factor, the space between last element and bottom of list are matching automagically)
+		if(yOffset - _scrollHeight - 3 > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight + magicFactor;
 	}
+	
+	//TODO: Make entry clickable: Save clicked entry and implement getSelectedElement() method.
 	
 	@Override
 	public void draw() 
@@ -100,7 +139,9 @@ public class List implements ControlElement
 		Fill.setColor(Color.white);
 		Fill.Rect(_position.x, _position.y, _position.width, _position.height);
 		
-		int yOffset = 30;
+		int ySpace = _defaultYSpace;
+		if(_compact) ySpace = _compactYSpace;
+		int yOffset = ySpace;
 		Point mPos = MouseInfo.getPointerInfo().getLocation();
 		for(int i = 0; i < _entries.size(); i++)
 		{
@@ -109,9 +150,9 @@ public class List implements ControlElement
 			
 			// Calculate rect for the border = rect of entry
 			Rectangle entryRect = new Rectangle(_position.x + 3, 
-				_position.y - 25 + _offset + yOffset, 
+				_position.y + _offset + (yOffset - ySpace) + 5, 
 				_position.width - 9, 
-				60 + // 2 * 30px space above and below string
+				2 * ySpace + // space above and below string
 					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
 					(amountRows - 1) * 8 // space between lines
 					 - 3);
@@ -124,19 +165,19 @@ public class List implements ControlElement
 			
 			//Draw border around entry
 			Draw.Rect(_position.x + 3, 
-				_position.y - 25 + _offset + yOffset, 
+				_position.y + _offset + (yOffset - ySpace) + 5,
 				_position.width - 9, 
-				60 + // 2 * 30px space above and below string
+				2 * ySpace + // space above and below string
 					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
 					(amountRows - 1) * 8 // space between lines
 					 - 3); // gap between rects
 			
 			// Draw the string
 			Draw.setColor(Color.black);
-			Draw.String(_entries.get(i), _position.x + 20, _position.y + _offset + yOffset + 5, _position.width - 40);
+			Draw.String(_entries.get(i), _position.x + 20, _position.y + _offset + yOffset + 4
+					, _position.width - 40);
 			
-
-			yOffset += 60 + // 2 * 30px space above and below string
+			yOffset += 2 * ySpace + // 2 * 30px space above and below string
 				Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
 				(amountRows - 1) * 8; // space between lines
 		}

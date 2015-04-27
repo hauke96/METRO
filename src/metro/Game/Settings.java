@@ -11,6 +11,7 @@ public class Settings
 	public static int __screenwidth, 
 		__screenheight,
 		__amountsamples;
+	
 	private static String __praeambel = "* comments begin with *\n* Settings: [name]=[value]\n"; 
 	
 	public static void read()

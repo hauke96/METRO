@@ -72,7 +72,7 @@ public class MainMenu extends GameScreen
 //	    list.add("Hallo world!");
 //	    list.add("Wie gehts euch?");
 //	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
-	    _list = new List(new Rectangle(50, 300, 400, 450), list, _welcomeWindow);
+	    _list = new List(new Rectangle(50, 300, 400, 450), list, _welcomeWindow, true);
 	}
 
 	/* (non-Javadoc)
