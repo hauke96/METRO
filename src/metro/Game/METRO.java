@@ -91,15 +91,15 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = __TITLE + "  " + __VERSION;
-		config.width = __SCREEN_SIZE.width;
-		config.height = __SCREEN_SIZE.height;
-		config.useGL30 = true;
+		config.width = Settings.__screenwidth;//__SCREEN_SIZE.width;
+		config.height = Settings.__screenheight;//__SCREEN_SIZE.height;
+		config.useGL30 = Settings.__useopengl30;
 		config.resizable = false;
 		config.fullscreen = Settings.__fullscreen;
 //		config.foregroundFPS = -1; // max frames
-		config.samples = 8;
-		config.vSyncEnabled = false;
-		config.useHDPI = false;
+		config.samples = Settings.__amountsamples;
+		config.vSyncEnabled = Settings.__usevsync;
+		config.useHDPI = Settings.__usehdpi;
 		
 		__application = new LwjglApplication(this, config);
 	}

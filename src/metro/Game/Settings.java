@@ -4,8 +4,13 @@ import java.io.*;
 
 public class Settings
 {
-	public static boolean __fullscreen;
-	public static int __screenWidth, __screenHeight;
+	public static boolean __fullscreen,
+		__useopengl30,
+		__usevsync,
+		__usehdpi;
+	public static int __screenwidth, 
+		__screenheight,
+		__amountsamples;
 	private static String __praeambel = "* comments begin with *\n* Settings: [name]=[value]\n"; 
 	
 	public static void read()
@@ -25,15 +30,19 @@ public class Settings
 				
 				switch(settingsName)
 				{
-					case "fullscreen":
+					case "fullscreen.on":
 						__fullscreen = Boolean.parseBoolean(settingsValue);
 						break;
-					case "screen_width":
-						__screenWidth = Integer.parseInt(settingsValue);
+					case "screen.width":
+						__screenwidth = Integer.parseInt(settingsValue);
 						break;
-					case "screen_height":
-						__screenHeight = Integer.parseInt(settingsValue);
+					case "screen.height":
+						__screenheight = Integer.parseInt(settingsValue);
 						break;
+					case "use.opengl30":
+						__useopengl30 = Boolean.parseBoolean(settingsValue);
+						break;
+					//TODO weiter machen
 					case "":
 					default:
 						break;
@@ -70,9 +79,13 @@ public class Settings
 		{
 			FileWriter writer = new FileWriter("./settings.cfg", true);
 			writer.write(__praeambel);
-			writer.write("fullscreen=" + __fullscreen + "\n");
-			writer.write("screen_width=" + __screenWidth + "\n");
-			writer.write("screen_height=" + __screenHeight + "\n");
+			writer.write("fullscreen.on=" + __fullscreen + "\n");
+			writer.write("screen.width=" + __screenwidth + "\n");
+			writer.write("screen.height=" + __screenheight + "\n");
+			writer.write("use.opengl30=" + __useopengl30 + "\n");
+			writer.write("use.vsync=" + __usevsync + "\n");
+			writer.write("use.hdpi=" + __usehdpi + "\n");
+			writer.write("amount.samples=" + __amountsamples + "\n");
 			writer.close();
 		}
 		catch (IOException e)
