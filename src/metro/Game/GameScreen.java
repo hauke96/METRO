@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import metro.Graphics.Draw;
+import metro.WindowControls.Input;
 import metro.WindowControls.Window;
 import metro.WindowControls.Button;
 import metro.WindowControls.Label;
@@ -21,6 +22,7 @@ public abstract class GameScreen
 {
 	public SettingsWindow _settingsWindow; // makes it possible to create a settings-window from every(!) game screen.
 	public InGameMenuWindow _inGameMenuWindow; // makes it possible to create a ingame-menu-window from every(!) game screen.
+	public static Input _selectedInput = null;
 	
 	/**
 	 * Will be executed as fast as possible ;)
@@ -61,9 +63,12 @@ public abstract class GameScreen
 	 */
 	public void keyPressed(int keyCode)
 	{
-		if(keyCode == Keys.ESCAPE && _inGameMenuWindow == null) // Escape pressed and NO ingame window yet
+		if(_selectedInput == null)
 		{
-			createMenuWindow();
+			if(keyCode == Keys.ESCAPE && _inGameMenuWindow == null) // Escape pressed and NO ingame window yet
+			{
+				createMenuWindow();
+			}
 		}
 		keyDown(keyCode);
 	}

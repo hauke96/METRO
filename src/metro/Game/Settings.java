@@ -43,14 +43,21 @@ public class Settings
 					case "use.opengl30":
 						__useopengl30 = Boolean.parseBoolean(settingsValue);
 						break;
-					//TODO weiter machen
+					case "use.vsync":
+						__usevsync = Boolean.parseBoolean(settingsValue);
+						break;
+					case "use.hdpi":
+						__usehdpi = Boolean.parseBoolean(settingsValue);
+						break;
+					case "amount.samples":
+						__amountsamples = Integer.parseInt(settingsValue);
+						break;
 					case "":
 					default:
 						break;
 				}
 				str = getNextEntry(reader);
 			}
-			
 		}
 		catch (FileNotFoundException e)
 		{

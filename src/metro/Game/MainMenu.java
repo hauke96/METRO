@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import metro.Graphics.Draw;
 import metro.WindowControls.Button;
+import metro.WindowControls.InputField;
 import metro.WindowControls.Window;
 import metro.WindowControls.Checkbox;
 import metro.WindowControls.List;
@@ -26,6 +27,7 @@ public class MainMenu extends GameScreen
 	private Window _welcomeWindow;
 	private Checkbox box;
 	private List _list;
+	private InputField _input;
 	
 	public MainMenu()
 	{
@@ -40,7 +42,7 @@ public class MainMenu extends GameScreen
 		// Create welcome-window:
 	    _welcomeWindow = new Window("Welcome to METRO", 
 	    		new Point(50, 
-	    			METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 400), // same y-pos as title image
+	    			METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 500), // same y-pos as title image
 	    		new Point(500, 800));
 		    new metro.WindowControls.Button(
 		    	new Rectangle((500 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2, 
@@ -73,6 +75,8 @@ public class MainMenu extends GameScreen
 //	    list.add("Wie gehts euch?");
 //	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
 	    _list = new List(new Rectangle(50, 300, 400, 450), list, _welcomeWindow, true);
+	    
+	    _input = new InputField(new Rectangle(20,  760, 400, 20), _welcomeWindow, "Hello World!");
 	}
 
 	/* (non-Javadoc)

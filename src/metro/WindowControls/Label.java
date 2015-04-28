@@ -6,6 +6,8 @@ package metro.WindowControls;
 import java.awt.Color;
 import java.awt.Point;
 
+import com.badlogic.gdx.Input.Keys;
+
 import metro.Graphics.Draw;
 
 /**
@@ -132,4 +134,7 @@ public class Label implements ControlElement
 	}
 	@Override
 	public void mouseScrolled(int amount) {}
+
+	@Override
+	public void keyPressed(int key){}
 }

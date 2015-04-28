@@ -10,6 +10,7 @@ import java.awt.Rectangle;
 import metro.Game.METRO;
 import metro.Graphics.Draw;
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
@@ -171,4 +172,7 @@ public class Button implements ControlElement
 	}
 	@Override
 	public void mouseScrolled(int amount) {}
+
+	@Override
+	public void keyPressed(int key){}
 }

@@ -2,6 +2,8 @@ package metro.WindowControls;
 
 import java.awt.Point;
 
+import com.badlogic.gdx.Input.Keys;
+
 /**
  * The interface with all the important methods every control element should have.
  * @author hauke
@@ -45,4 +47,10 @@ public interface ControlElement
 	 * @param amount Positive or negative amount of steps since last frame.
 	 */
 	public void mouseScrolled(int amount);
+	
+	/**
+	 * Fires, when a key has been pressed.
+	 * @param keyCode The code of the key as int.
+	 */
+	public void keyPressed(int keyCode);
 }

@@ -5,6 +5,8 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import com.badlogic.gdx.Input.Keys;
+
 import metro.Game.METRO;
 import metro.Graphics.Draw;
 
@@ -162,4 +164,7 @@ public class Checkbox implements ControlElement
 
 	@Override
 	public void mouseScrolled(int amount){}
+
+	@Override
+	public void keyPressed(int key){}
 }
