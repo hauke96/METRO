@@ -14,7 +14,7 @@ import metro.Graphics.Fill;
 
 public class InputField extends Input
 {
-	private int _curserPos = 5,
+	private int _curserPos = 0,
 		_xOffset = 0;
 	
 	/**
@@ -50,6 +50,7 @@ public class InputField extends Input
 
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 	}
+	
 	@Override
 	public void draw()
 	{
@@ -74,29 +75,33 @@ public class InputField extends Input
 		Draw.Rect(_position);
 		
 		// Draw cursor on right position
-		String str = _text.substring(0, _curserPos + 1);
+		String str = _text.substring(0, _curserPos);
 		int width = Draw.getStringSize(str).width;
 		Draw.setColor(Color.gray);
-		Draw.Line(_position.x + width, _position.y + 2, _position.x + width, _position.y + _position.height - 4);
+		Draw.Line(_position.x + width + 3, _position.y + 2, _position.x + width + 3, _position.y + _position.height - 4);
 
 		ScissorStack.popScissors();
 	}
+	
 	@Override
 	public boolean clickOnControlElement()
 	{
 		//TODO: Check if clicked and set _selectedInput to this.
 		return false;
 	}
+	
 	@Override
 	public void setPosition(Point pos)
 	{
 		_position = new Rectangle(pos.x, pos.y, _position.width, _position.height);
 	}
+	
 	@Override
 	public Point getPosition()
 	{
 		return _position.getLocation();
 	}
+	
 	@Override
 	public void moveElement(Point offset)
 	{
@@ -104,9 +109,7 @@ public class InputField extends Input
 		_position.y += offset.y;
 	}
 	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
+	public void mouseScrolled(int amount){}
 
 	@Override
 	public void keyPressed(int key)
@@ -114,12 +117,18 @@ public class InputField extends Input
 		if(key == Keys.RIGHT)
 		{
 			_curserPos++;
+			_curserPos %= (_text.length() + 1);
 		}
 		else if(key == Keys.LEFT)
 		{
 			_curserPos--;
+			if(_curserPos < 0) _curserPos = _text.length();
+		}
+		else if(key >= Keys.A && key <= Keys.Z)
+		{
+			_text = new StringBuilder(_text).insert(_curserPos, (char)(36 + key)).toString();
+			_curserPos++;
 		}
 		//TODO: ENTER -> set _selectedInput to null
-		_curserPos %= _text.length();
 	}
 }

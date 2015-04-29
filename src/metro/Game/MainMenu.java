@@ -124,7 +124,10 @@ public class MainMenu extends GameScreen
 			_list.addElement("Checkbox: " + box.isChecked());
 		}
 	}
-	public void keyDown(int keyCode){}
+	public void keyDown(int keyCode)
+	{
+		if(_welcomeWindow != null) _welcomeWindow.keyPressed(keyCode);
+	}
 	@Override
 	public void mouseScrolled(int amount){}
 }

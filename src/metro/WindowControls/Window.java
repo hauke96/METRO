@@ -250,4 +250,16 @@ public class Window
 	{
 		return _closed;
 	}
+	
+	/**
+	 * Gets called when a key is pressed. Controls should 
+	 * @param keyCode Key code of the pressed key.
+	 */
+	public void keyPressed(int keyCode)
+	{
+		for(ControlElement cElement : _elementList)
+		{
+			cElement.keyPressed(keyCode);
+		}
+	}
 }
