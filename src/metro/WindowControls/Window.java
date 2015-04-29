@@ -262,4 +262,12 @@ public class Window
 			cElement.keyPressed(keyCode);
 		}
 	}
+
+	public void keyUp(int keyCode)
+	{
+		for(ControlElement cElement : _elementList)
+		{
+			cElement.keyUp(keyCode);
+		}
+	}
 }

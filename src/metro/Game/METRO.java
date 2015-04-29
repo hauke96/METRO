@@ -217,6 +217,10 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyUp(int keycode) 
 	{
+		for (Window win : __windowList)
+		{
+			win.keyUp(keycode);
+		}
 		return false;
 	}
 	@Override

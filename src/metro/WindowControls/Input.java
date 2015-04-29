@@ -7,6 +7,7 @@ public abstract class Input implements ControlElement
 	protected String _text;
 	protected Rectangle _position;
 	protected Window _windowHandle;
+	protected boolean _shift;
 	
 	/**
 	 * Returns the current text of the control.

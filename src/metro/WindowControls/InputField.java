@@ -126,9 +126,38 @@ public class InputField extends Input
 		}
 		else if(key >= Keys.A && key <= Keys.Z)
 		{
-			_text = new StringBuilder(_text).insert(_curserPos, (char)(36 + key)).toString();
-			_curserPos++;
+			if(_shift)
+			{
+				charTyped((char)(36 + key));
+			}
+			else
+			{
+				charTyped((char)(68 + key));
+			}
+		}
+		else if(key == Keys.SHIFT_LEFT || key == Keys.SHIFT_RIGHT)
+		{
+			_shift = true;
+		}
+		else if(key == Keys.SPACE)
+		{
+			charTyped((char)32);
 		}
 		//TODO: ENTER -> set _selectedInput to null
+	}
+	
+	private void charTyped(char c)
+	{
+		_text = new StringBuilder(_text).insert(_curserPos, c).toString();
+		_curserPos++;
+	}
+
+	@Override
+	public void keyUp(int key)
+	{
+		if(key == Keys.SHIFT_LEFT || key == Keys.SHIFT_RIGHT)
+		{
+			_shift = false;
+		}
 	}
 }

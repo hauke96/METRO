@@ -53,4 +53,10 @@ public interface ControlElement
 	 * @param keyCode The code of the key as int.
 	 */
 	public void keyPressed(int keyCode);
+
+	/**
+	 * Fires when a key has been released.
+	 * @param keyCode The code of the key from Input.Keys
+	 */
+	public void keyUp(int keyCode);
 }
