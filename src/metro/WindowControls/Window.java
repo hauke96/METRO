@@ -6,12 +6,14 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import metro.Game.GameScreen;
 import metro.Game.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 /**
  * Creates a simple but fancy window with some extra functions like Control-management (managing buttons, labels, etc.).
@@ -168,10 +170,17 @@ public class Window
 	 */
 	public void mousePressed(int screenX, int screenY, int mouseButton)
 	{
+		boolean inputPressed = false; // true if an input field has been clicked
 		for(ControlElement cElement : _elementList)
 		{
-			cElement.clickOnControlElement();
+			boolean b = cElement.clickOnControlElement();
+			if(b && cElement instanceof Input) // if clicked element is an input field, set this as selected field
+			{
+				inputPressed = true;
+				METRO.__currentGameScreen.setSelectedInput((Input)cElement);
+			}
 		}
+		if(!inputPressed) METRO.__currentGameScreen.setSelectedInput(null); // reset the selected input field
 		
 		// Check for drag-mode:
 		if(screenX >= _position.x

@@ -138,7 +138,6 @@ public class Checkbox implements ControlElement
 		{
 			_hasBeenClicked = true;
 			_checked = (false == _checked) && _enable;
-//			_enable = false == _enable; // TODO: remove for release and real use, this is just for testing
 			return true;
 		}
 		return false;
@@ -169,9 +168,5 @@ public class Checkbox implements ControlElement
 	public void keyPressed(int key){}
 
 	@Override
-	public void keyUp(int keyCode)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyUp(int keyCode){}
 }

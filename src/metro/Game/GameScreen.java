@@ -22,7 +22,7 @@ public abstract class GameScreen
 {
 	public SettingsWindow _settingsWindow; // makes it possible to create a settings-window from every(!) game screen.
 	public InGameMenuWindow _inGameMenuWindow; // makes it possible to create a ingame-menu-window from every(!) game screen.
-	public static Input _selectedInput = null;
+	private static Input _selectedInput = null;
 	
 	/**
 	 * Will be executed as fast as possible ;)
@@ -65,11 +65,11 @@ public abstract class GameScreen
 	{
 		if(_selectedInput == null)
 		{
-			if(keyCode == Keys.ESCAPE && _inGameMenuWindow == null) // Escape pressed and NO ingame window yet
+			if(keyCode == Keys.ESCAPE && _inGameMenuWindow == null) // Show in game window if no input control and no other window is focused/open.
 			{
 				createMenuWindow();
 			}
-		}
+		} // Window-class will do not-null-stuff, and Input-class will check if the input is selected -> nothing to do here
 		keyDown(keyCode);
 	}
 	
@@ -99,6 +99,26 @@ public abstract class GameScreen
 	public void createSettingsWindow()
 	{
 		if(_settingsWindow == null) _settingsWindow = new SettingsWindow();
+	}
+	
+	/**
+	 * Sets the selected field to a new one. Reset selected field with null as parameter. The Input-component will be informed about the change.
+	 * @param field The selected input component.
+	 */
+	public void setSelectedInput(Input field)
+	{
+		if(field != null) field.select();
+		else if(_selectedInput != null) _selectedInput.disselect();
+		_selectedInput = field;
+	}
+	
+	/**
+	 * Gets the current/selected input field. Can be null -> no input selected.
+	 * @return Selected input field.
+	 */
+	public Input getSelectedInput()
+	{
+		return _selectedInput;
 	}
 
 	/**

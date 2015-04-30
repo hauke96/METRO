@@ -7,7 +7,8 @@ public abstract class Input implements ControlElement
 	protected String _text;
 	protected Rectangle _position;
 	protected Window _windowHandle;
-	protected boolean _shift;
+	protected boolean _shift,
+		_selected;
 	
 	/**
 	 * Returns the current text of the control.
@@ -22,8 +23,21 @@ public abstract class Input implements ControlElement
 	 * Sets the whole text and deletes the old one.
 	 * @param text The new text of the input.
 	 */
-	public void setText(String text)
+	public abstract void setText(String text);
+	
+	/**
+	 * Sets this input as selected which enables inputs.
+	 */
+	public void select()
 	{
-		_text = text;
+		_selected = true;
+	}
+	
+	/**
+	 * Sets this input as non-selected which disables inputs.
+	 */
+	public void disselect()
+	{
+		_selected = false;
 	}
 }

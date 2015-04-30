@@ -1,6 +1,7 @@
 package metro.WindowControls;
 
 import java.awt.Color;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -15,7 +16,7 @@ import metro.Graphics.Fill;
 public class InputField extends Input
 {
 	private int _curserPos = 0,
-		_xOffset = 0;
+		_xOffset = 0; // in pixel
 	
 	/**
 	 * Creates a new InputField with one line to input text. The start-text is "" and the window is null
@@ -86,8 +87,8 @@ public class InputField extends Input
 	@Override
 	public boolean clickOnControlElement()
 	{
-		//TODO: Check if clicked and set _selectedInput to this.
-		return false;
+		Point mPos = MouseInfo.getPointerInfo().getLocation();
+		return _position.contains(mPos);
 	}
 	
 	@Override
@@ -114,40 +115,76 @@ public class InputField extends Input
 	@Override
 	public void keyPressed(int key)
 	{
-		if(key == Keys.RIGHT)
+		// if this input box is NOT selected, just do nothing
+		if(!_selected) return;
+		
+		switch(key)
 		{
-			_curserPos++;
-			_curserPos %= (_text.length() + 1);
+			case Keys.RIGHT:
+				_curserPos++;
+				_curserPos %= (_text.length() + 1);
+				break;
+			case Keys.LEFT:
+				_curserPos--;
+				if(_curserPos < 0) _curserPos = _text.length();
+				break;
+			case Keys.SHIFT_LEFT:
+			case Keys.SHIFT_RIGHT:
+				_shift = true;
+				break;
+			case Keys.SPACE:
+				charTyped(' ');
+				break;
+			case Keys.PERIOD:
+				charTyped('.');
+				break;
+			case Keys.COMMA:
+				charTyped(',');
+				break;
+			case Keys.SEMICOLON:
+				charTyped(';');
+				break;
+			case Keys.COLON:
+				charTyped(':');
+				break;
+			case Keys.MINUS:
+				charTyped('-');
+				break;
+			case Keys.BACKSPACE:
+				if(_curserPos > 0)
+				{
+					_text = _text.substring(0, _curserPos - 1) + _text.substring(_curserPos, _text.length());
+					_curserPos--;
+				}
+				break;
+			case Keys.ENTER:
+			case Keys.ESCAPE:
+				METRO.__currentGameScreen.setSelectedInput(null);
+				break;
 		}
-		else if(key == Keys.LEFT)
+		//for ranges:
+		if(key >= Keys.A && key <= Keys.Z)
 		{
+			charTyped(_shift ? (char)(36 + key) : (char)(68 + key));
+		}
+		else if(key >= Keys.NUM_0 && key <= Keys.NUM_9)
+		{
+			charTyped((char)(key + 41));
+		}
+		// if length of string in pixel is greater than the width of the field, delete last added character
+		if(Draw.getStringSize(_text).width > _position.width)
+		{
+			_text = _text.substring(0, _curserPos - 1) + _text.substring(_curserPos, _text.length());
 			_curserPos--;
-			if(_curserPos < 0) _curserPos = _text.length();
 		}
-		else if(key >= Keys.A && key <= Keys.Z)
-		{
-			if(_shift)
-			{
-				charTyped((char)(36 + key));
-			}
-			else
-			{
-				charTyped((char)(68 + key));
-			}
-		}
-		else if(key == Keys.SHIFT_LEFT || key == Keys.SHIFT_RIGHT)
-		{
-			_shift = true;
-		}
-		else if(key == Keys.SPACE)
-		{
-			charTyped((char)32);
-		}
-		//TODO: ENTER -> set _selectedInput to null
 	}
 	
+	/**
+	 * Adds a character at _cursor position to the current text.
+	 * @param c The character to add.
+	 */
 	private void charTyped(char c)
-	{
+	{ 
 		_text = new StringBuilder(_text).insert(_curserPos, c).toString();
 		_curserPos++;
 	}
@@ -159,5 +196,12 @@ public class InputField extends Input
 		{
 			_shift = false;
 		}
+	}
+
+	@Override
+	public void setText(String text)
+	{
+		_text = text;
+		_curserPos = _text.length();
 	}
 }

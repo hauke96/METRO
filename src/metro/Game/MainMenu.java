@@ -42,7 +42,7 @@ public class MainMenu extends GameScreen
 		// Create welcome-window:
 	    _welcomeWindow = new Window("Welcome to METRO", 
 	    		new Point(50, 
-	    			METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 500), // same y-pos as title image
+	    			METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 400), // same y-pos as title image
 	    		new Point(500, 800));
 		    new metro.WindowControls.Button(
 		    	new Rectangle((500 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2, 

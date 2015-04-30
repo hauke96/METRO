@@ -6,13 +6,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import org.w3c.dom.css.Rect;
-
 import metro.Game.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 
@@ -122,8 +119,6 @@ public class List implements ControlElement
 		if(yOffset - _scrollHeight - 3 > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight + magicFactor;
 	}
 	
-	//TODO: Make entry clickable: Save clicked entry and implement getSelectedElement() method.
-	
 	@Override
 	public void draw() 
 	{
@@ -209,6 +204,7 @@ public class List implements ControlElement
 	@Override
 	public boolean clickOnControlElement() 
 	{
+		//TODO: check what entry has been clicked and create an int with a value. Also create a getText(int) method to get the text of this entry.
 		return false;
 	}
 	@Override
@@ -242,9 +238,5 @@ public class List implements ControlElement
 	public void keyPressed(int key){}
 
 	@Override
-	public void keyUp(int keyCode)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyUp(int keyCode){}
 }

@@ -177,9 +177,5 @@ public class Button implements ControlElement
 	public void keyPressed(int key){}
 
 	@Override
-	public void keyUp(int keyCode)
-	{
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyUp(int keyCode){}
 }
