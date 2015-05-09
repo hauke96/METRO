@@ -1,8 +1,10 @@
-package metro.Game;
+package metro.GameScreen;
 
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import metro.METRO;
+import metro.Settings;
 import metro.Graphics.Draw;
 import metro.WindowControls.Input;
 import metro.WindowControls.Window;
@@ -139,7 +141,7 @@ public abstract class GameScreen
 			_window = new Window("METRO settings",new Point(METRO.__SCREEN_SIZE.width / 2 - 250, 
 				METRO.__SCREEN_SIZE.height / 2 - 225), new Point(500, 450), METRO.__metroBlue);
 			
-			new Label("To make things easier, you don't need to click on \"save\". Everythin will be saved in realtime by just changing settings.", new Point(20, 20), 460, _window);
+			new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.", new Point(20, 20), 460, _window);
 			
 			_okButton = new Button(new Rectangle(200, 420, 100, 20), "OK", _window);
 			

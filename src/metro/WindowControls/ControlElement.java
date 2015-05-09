@@ -2,8 +2,6 @@ package metro.WindowControls;
 
 import java.awt.Point;
 
-import com.badlogic.gdx.Input.Keys;
-
 /**
  * The interface with all the important methods every control element should have.
  * @author hauke

@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 
-import metro.Game.GameScreen_TrainView;
-import metro.Game.METRO;
+import metro.METRO;
+import metro.GameScreen.TrainView;
 import metro.Graphics.Draw;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -150,7 +150,7 @@ public class RailwayNode
 	 */
 	public static RailwayNode getNodeByID(int ID)
 	{
-		for(RailwayNode node : GameScreen_TrainView._railwayNodeList)
+		for(RailwayNode node : TrainView._railwayNodeList)
 		{
 			if(node.getID() == ID)
 			{

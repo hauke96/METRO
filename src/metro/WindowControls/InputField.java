@@ -9,7 +9,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 
-import metro.Game.METRO;
+import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 

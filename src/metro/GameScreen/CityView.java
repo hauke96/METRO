@@ -1,4 +1,4 @@
-package metro.Game;
+package metro.GameScreen;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -6,19 +6,20 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import metro.METRO;
 import metro.Graphics.Draw;
 
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * GameScreen with the city view. It Shows the population density and basic player information.
+ * This class is used by the TrainView-class as "background image".
  * @author Hauke
  * 
  */
 
-public class GameScreen_CityView extends GameScreen
+public class CityView extends GameScreen
 {
 	public static GameScreen _trainGameScreen;
 	public static Point2D _offset = new Point2D.Float(0, 0);
@@ -30,7 +31,7 @@ public class GameScreen_CityView extends GameScreen
 	/**
 	 * Constructor to load all the important stuff
 	 */
-	public GameScreen_CityView()
+	public CityView()
 	{
 		_travelerSpots.add(new CityTravelerSpot(new Point(500, 500), 7));
 		_travelerSpots.add(new CityTravelerSpot(new Point(700, 700), 5));
@@ -97,8 +98,6 @@ public class GameScreen_CityView extends GameScreen
 
 		if (selectedLayerNumber != -1) // if there's a selected circle
 		{
-			int gray = 55 * selectedLayerNumber;
-			if (gray > 255) gray = 255;
 			Draw.setColor(new Color(0, 0, 200));
 			// Draw.String(selectedLayerNumber + "", METRO.__mousePosition.x - g.getFontMetrics(METRO.__stdFont).stringWidth(selectedLayerNumber + "") / 2 - 1,
 			// METRO.__mousePosition.y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
@@ -118,12 +117,6 @@ public class GameScreen_CityView extends GameScreen
 		if (mouseButton == Buttons.MIDDLE)
 		{
 			_dragMode = true;
-		}
-		if (METRO.__viewPortButton_Train.isPressed(METRO.__mousePosition.x, METRO.__mousePosition.y))
-		{
-			METRO.__currentGameScreen = _trainGameScreen;
-			METRO.__viewPortButton_City.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2 - 200, -15));
-			METRO.__viewPortButton_Train.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2, -5));
 		}
 	}
 

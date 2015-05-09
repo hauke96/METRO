@@ -3,18 +3,14 @@ package metro.WindowControls;
 import java.awt.Color;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.Rectangle;
 
-import com.badlogic.gdx.Input.Keys;
-
-import metro.Game.METRO;
+import metro.METRO;
 import metro.Graphics.Draw;
 
 public class Checkbox implements ControlElement
 {
 	private boolean _checked,
-		_enable, // other name: isCheckable (true - box can be used; false - box can't be used)
-		_hasBeenClicked = false;
+		_enable; // other name: isCheckable (true - box can be used; false - box can't be used)
 	private String _text;
 	private Label _label;
 	private Point _position;
@@ -136,7 +132,6 @@ public class Checkbox implements ControlElement
 			&& mPos.y >= _position.y
 			&& mPos.y <= _position.y + 15)
 		{
-			_hasBeenClicked = true;
 			_checked = (false == _checked) && _enable;
 			return true;
 		}

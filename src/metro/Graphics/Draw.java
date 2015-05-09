@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Rectangle;
 
-import metro.Game.METRO;
+import metro.METRO;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;

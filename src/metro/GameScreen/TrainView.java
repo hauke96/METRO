@@ -1,4 +1,4 @@
-package metro.Game;
+package metro.GameScreen;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -7,6 +7,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.RailwayNode;
@@ -14,7 +15,6 @@ import metro.TrainManagement.TrainStation;
 import metro.WindowControls.Button;
 
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -23,7 +23,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  *
  */
 
-public class GameScreen_TrainView extends GameScreen
+public class TrainView extends GameScreen
 {
 	private boolean _dragMode = false;
 	private Point _oldMousePos; // Mouse position from last frame
@@ -34,14 +34,16 @@ public class GameScreen_TrainView extends GameScreen
 		_buildTracks,
 		_showTrainList,
 		_createNewTrain;
-	private int _editMode = 0; // 0 = nothing; 1 = place stations; 2 = place lines
+	private int _editMode = 0; // 0 = nothing; 1 = place stations; 2 = place lines TODO: outsource to extra classes?
 	private RailwayNode _currentRailwayNode; // click -> set railwaynode -> click -> connect/create
+	
+	private CityView _cityView = new CityView();
 	
 	static public  ArrayList<RailwayNode> _railwayNodeList = new ArrayList<RailwayNode>();
 	static public GameScreen _cityGameScreen; // to go into the city game-screen without loosing reference
 	static public Point _selectedCross = new Point(-1, -1); // out of screen 
 	
-	public GameScreen_TrainView()
+	public TrainView()
 	{
 		_buildStation = new Button(new Rectangle(-10, 100, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
 		_buildTracks = new Button(new Rectangle(-10, 139, 50, 40), new Rectangle(0, 68, 50, 40), METRO.__iconSet);
@@ -54,6 +56,7 @@ public class GameScreen_TrainView extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
+		_cityView.update(sp);
 		if(_dragMode)
 		{
 			_offset = new Point2D.Float((float)_offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x),
@@ -353,6 +356,7 @@ public class GameScreen_TrainView extends GameScreen
 	}
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
+		_cityView.mouseClicked(screenX, screenY, mouseButton);
 		Point offset = new Point((int)_offset.getX(), (int)_offset.getY());
 			
 		if(mouseButton == Buttons.MIDDLE) // for drag-mode
@@ -361,14 +365,8 @@ public class GameScreen_TrainView extends GameScreen
 		}
 		else if(mouseButton == Buttons.LEFT)
 		{
-			if(METRO.__viewPortButton_City.isPressed(screenX, screenY)) // change to city view
-			{
-				METRO.__currentGameScreen = _cityGameScreen;
-				METRO.__viewPortButton_City.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2 - 200, -5));
-				METRO.__viewPortButton_Train.setPosition(new Point(METRO.__SCREEN_SIZE.width / 2, -15));
-			}
 			// Toolbar-Buttons:
-			else if(_buildStation.isPressed(screenX, screenY))
+			if(_buildStation.isPressed(screenX, screenY))
 			{
 				resetToolbarButtonPosition(_buildStation);
 				_editMode = 1; // place stations
@@ -490,6 +488,7 @@ public class GameScreen_TrainView extends GameScreen
 	}
 	public void mouseReleased(int mouseButton)
 	{
+		_cityView.mouseReleased(mouseButton);
 		if(mouseButton == Buttons.MIDDLE)
 		{
 			_dragMode = false;

@@ -1,8 +1,9 @@
-package metro.Game;
+package metro.GameScreen;
 
 import java.awt.Color;
 import java.awt.Point;
 
+import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 
@@ -41,7 +42,7 @@ public class CityTravelerSpot
 		layerIndex = (int)_strength - layerIndex;
 		if(layerIndex < 0) return false;
 		
-		Point position = new Point(_position.x + (int)GameScreen_CityView._offset.getX(), _position.y + (int)GameScreen_CityView._offset.getY());
+		Point position = new Point(_position.x + (int)CityView._offset.getX(), _position.y + (int)CityView._offset.getY());
 
 		boolean isInCurrentCircle = Math.pow(METRO.__mousePosition.x - position.x, 2) 
 				+ Math.pow(METRO.__mousePosition.y - position.y, 2) 
@@ -78,10 +79,8 @@ public class CityTravelerSpot
 		layerIndex = _strength - layerIndex;
 		if(layerIndex < -1) return;
 		
-		int gray = 255 - 25 * (_strength - layerIndex + 1); // gray color based on layer
-		
 		// get the position with offset
-		Point position = new Point(_position.x + (int)GameScreen_CityView._offset.getX(), _position.y + (int)GameScreen_CityView._offset.getY());
+		Point position = new Point(_position.x + (int)CityView._offset.getX(), _position.y + (int)CityView._offset.getY());
 
 		if(circleSelected)
 		{
@@ -108,7 +107,7 @@ public class CityTravelerSpot
 		}
 		else if(!onlyEdges)
 		{
-			gray = 255 - 5 * (_strength - layerIndex + 1); // gray color based on layer
+			int gray = 255 - 5 * (_strength - layerIndex + 1); // gray color based on layer
 			Fill.setColor(new Color(gray, gray, gray));
 			Fill.Circle(position.x - layerIndex *_circleRadiusStep + 1,
 				position.y - layerIndex * _circleRadiusStep + 1,
@@ -116,6 +115,7 @@ public class CityTravelerSpot
 		}
 		if(onlyEdges)
 		{
+			int gray = 255 - 25 * (_strength - layerIndex + 1); // gray color based on layer
 			Draw.setColor(new Color(gray, gray, gray));
 			Draw.Circle(position.x - layerIndex *_circleRadiusStep,
 				position.y - layerIndex * _circleRadiusStep,

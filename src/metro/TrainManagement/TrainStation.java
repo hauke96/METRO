@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-import metro.Game.METRO;
+import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 

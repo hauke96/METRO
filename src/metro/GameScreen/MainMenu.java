@@ -1,9 +1,11 @@
-package metro.Game;
+package metro.GameScreen;
 
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import metro.METRO;
+import metro.ScreenInfoDrawer;
 import metro.Graphics.Draw;
 import metro.WindowControls.Button;
 import metro.WindowControls.InputField;
@@ -27,7 +29,6 @@ public class MainMenu extends GameScreen
 	private Window _welcomeWindow;
 	private Checkbox box;
 	private List _list;
-	private InputField _input;
 	
 	public MainMenu()
 	{
@@ -63,20 +64,11 @@ public class MainMenu extends GameScreen
 	    
 	    ArrayList<String> list = new ArrayList<String>();
 	    list.add("Hallo world!");
-//	    list.add("Wie gehts euch?");
-//	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
-//	    list.add("Hallo world!");
-//	    list.add("Wie gehts euch?");
-//	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
-//	    list.add("Hallo world!");
-//	    list.add("Wie gehts euch?");
-//	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
-//	    list.add("Hallo world!");
-//	    list.add("Wie gehts euch?");
-//	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
+	    list.add("How are you?\n\n\nTwo lines later...");
+	    list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
 	    _list = new List(new Rectangle(50, 300, 400, 450), list, _welcomeWindow, true);
 	    
-	    _input = new InputField(new Rectangle(20,  760, 400, 20), _welcomeWindow, "Hello World!");
+	    new InputField(new Rectangle(20,  760, 400, 20), _welcomeWindow, "Hello World!");
 	}
 
 	/* (non-Javadoc)
@@ -103,9 +95,9 @@ public class MainMenu extends GameScreen
 		{
 			_welcomeWindow.close();
 			_welcomeWindow = null;
-			METRO.__currentGameScreen = new GameScreen_TrainView();
-			GameScreen_TrainView._cityGameScreen = new GameScreen_CityView();
-			GameScreen_CityView._trainGameScreen = METRO.__currentGameScreen;
+			METRO.__currentGameScreen = new TrainView();
+			TrainView._cityGameScreen = new CityView();
+			CityView._trainGameScreen = METRO.__currentGameScreen;
 			METRO.__controlDrawer = new ScreenInfoDrawer();
 		}
 		else if(_button_settings.isPressed(screenX, screenY))

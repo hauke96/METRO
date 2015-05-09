@@ -1,30 +1,23 @@
-package metro.Game;
-import java.awt.Color;
-import java.awt.Rectangle;
+package metro;
 
+import java.awt.Color;
+
+import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * Draws stuff like money, view-buttons, etc. onto the screen.
+ * Draws stuff like money, etc. onto the screen.
  * @author hauke
  *
  */
-public class ScreenInfoDrawer extends GameScreen {
-
-	/* (non-Javadoc)
-	 * @see GameScreen#update(java.awt.Graphics2D)
-	 */
+public class ScreenInfoDrawer extends GameScreen
+{
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		Draw.Image(METRO.__viewPortButton_Texture, 
-			new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 40, 45, 79, 40), 
-			new Rectangle(161, 60, 79, 40));
-		METRO.__viewPortButton_City.draw();
-		METRO.__viewPortButton_Train.draw();
 		drawPlayerInfos(sp);
 	}
 	
@@ -52,19 +45,11 @@ public class ScreenInfoDrawer extends GameScreen {
 		Draw.String(str, 13, 7);
 	}
 
-	/* (non-Javadoc)
-	 * @see GameScreen#mouseClicked(java.awt.event.MouseEvent)
-	 */
 	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
-	{
-	}
-
-	/* (non-Javadoc)
-	 * @see GameScreen#mouseReleased(java.awt.event.MouseEvent)
-	 */
+	public void mouseClicked(int screenX, int screenY, int mouseButton){}
 	@Override
 	public void mouseReleased(int mouseButton){}
+	@Override
 	public void keyDown(int keyCode){}
 	@Override
 	public void mouseScrolled(int amount){}

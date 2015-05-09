@@ -6,8 +6,6 @@ package metro.WindowControls;
 import java.awt.Color;
 import java.awt.Point;
 
-import com.badlogic.gdx.Input.Keys;
-
 import metro.Graphics.Draw;
 
 /**

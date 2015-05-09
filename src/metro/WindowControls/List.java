@@ -6,7 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import metro.Game.METRO;
+import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 

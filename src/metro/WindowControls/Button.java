@@ -7,10 +7,9 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import metro.Game.METRO;
+import metro.METRO;
 import metro.Graphics.Draw;
 
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**

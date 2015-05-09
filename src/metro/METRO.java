@@ -1,4 +1,4 @@
-package metro.Game;
+package metro;
 /**
  * METRO - Master of established transport railway operators
  * 
@@ -21,9 +21,10 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import metro.GameScreen.GameScreen;
+import metro.GameScreen.MainMenu;
 import metro.Graphics.Draw;
 import metro.WindowControls.Window;
 
@@ -46,7 +47,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * @author Hauke
- * @version 0.0.3
+ * @version 0.1.0
  */
 public class METRO extends Frame implements ApplicationListener, InputProcessor
 {
@@ -59,8 +60,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static BitmapFont __stdFont;
 	public static GameScreen __currentGameScreen,
 		__controlDrawer; // draws all the important controls and infos after rendering the scene
-	public static TextureRegion __viewPortButton_Texture,
-		__mainMenu_Buttons,
+	public static TextureRegion __mainMenu_Buttons,
 		__mainMenu_TitleImage,
 		__iconSet;
 	public static metro.WindowControls.Button __viewPortButton_City, 
@@ -125,17 +125,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		{
 			System.out.println(ex.getMessage());
 		}
-		
-		//Load important stuff
-		__viewPortButton_Texture = new TextureRegion(new Texture(Gdx.files.internal("textures/ViewPortButtons.png")));
-		__viewPortButton_Texture.flip(false, true);
-
-		__viewPortButton_City = new metro.WindowControls.Button(new Rectangle(__SCREEN_SIZE.width / 2 - 200, -15, 201, 60), 
-				new Rectangle(0, 0, 201, 60), 
-				__viewPortButton_Texture);
-		__viewPortButton_Train = new metro.WindowControls.Button(new Rectangle(__SCREEN_SIZE.width / 2, -5, 200, 60), 
-				new Rectangle(200, 0, 200, 60), 
-				__viewPortButton_Texture);
 		
 		__mainMenu_Buttons = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
 		__mainMenu_Buttons.flip(false, true);

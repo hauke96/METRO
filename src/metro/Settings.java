@@ -1,4 +1,4 @@
-package metro.Game;
+package metro;
 
 import java.io.*;
 

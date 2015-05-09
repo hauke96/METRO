@@ -6,14 +6,12 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import metro.Game.GameScreen;
-import metro.Game.METRO;
+import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 
 /**
  * Creates a simple but fancy window with some extra functions like Control-management (managing buttons, labels, etc.).
