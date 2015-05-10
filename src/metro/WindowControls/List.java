@@ -26,10 +26,12 @@ public class List implements ControlElement
 	private Window _windowHandle;
 	private int _offset = 0,
 		_defaultYSpace = 30,
-		_compactYSpace = 8;
+		_compactYSpace = 8,
+		_selectedEntry = -1; // the entry, that was clicked
 	private float _maxOffset = 0,
 		_scrollHeight = 20; // height of one scroll
-	private boolean _compact = false; // less space between text and top/bottom edge
+	private boolean _compact = false, // less space between text and top/bottom edge
+		_enabled = true;
 
 	/**
 	 * Creates a new list control element on a window.
@@ -119,6 +121,60 @@ public class List implements ControlElement
 		if(yOffset - _scrollHeight - 3 > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight + magicFactor;
 	}
 	
+	/**
+	 * Dis- or enabled this control.
+	 * @param enableState The new state. True - enabled; false - disabled.
+	 */
+	public void setState(boolean enableState)
+	{
+		_enabled = enableState;
+	}
+	
+	/**
+	 * Gets the text of a given entry.
+	 * @param entryIndex The number of the entry.
+	 */
+	public String getText(int entryIndex)
+	{
+		if(entryIndex >= _entries.size() ||  entryIndex < 0) return "";
+		return _entries.get(entryIndex);
+	}
+	
+	/**
+	 * Sets the selected Entry to a specific.
+	 * @param entryIndex The entry number.
+	 */
+	public void setSelectedEntry(int entryIndex)
+	{
+		_selectedEntry = entryIndex;
+	}
+	
+	/**
+	 * Return the index of the selected entry.
+	 * @return Index of selected entry. Returns -1 if nothing is selected.
+	 */
+	public int getSelected()
+	{
+		return _selectedEntry;
+	}
+	
+	/**
+	 * Returns the index of the first entry with the given text.
+	 * @param entryText The text to search.
+	 * @return The index. Returns -1 if the entry doesn't exist.
+	 */
+	public int getIndex(String entryText)
+	{
+		for(int i = 0; i < _entries.size(); i++)
+		{
+			if(_entries.get(i).equals(entryText))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	@Override
 	public void draw() 
 	{
@@ -138,7 +194,7 @@ public class List implements ControlElement
 		int ySpace = _defaultYSpace;
 		if(_compact) ySpace = _compactYSpace;
 		int yOffset = ySpace;
-		Point mPos = MouseInfo.getPointerInfo().getLocation();
+		Point mPos = METRO.__originalMousePosition;
 		for(int i = 0; i < _entries.size(); i++)
 		{
 			int amountRows = Draw.getStringLines(_entries.get(i), _position.width - 6);
@@ -153,13 +209,17 @@ public class List implements ControlElement
 					(amountRows - 1) * 8 // space between lines
 					 - 3);
 			
-			if(entryRect.contains(mPos)) // when mouse is in an entry, make background light-light-gray
+			if(_enabled && entryRect.contains(mPos)) // when mouse is in an entry, make background light-light-gray
 			{
 				Fill.setColor(new Color(240, 240, 240));
 				Fill.Rect(entryRect);
 			}
 			
 			//Draw border around entry
+			if(_enabled && _selectedEntry == i)
+			{
+				Draw.setColor(Color.gray);
+			}
 			Draw.Rect(_position.x + 3, 
 				_position.y + _offset + (yOffset - ySpace) + 5,
 				_position.width - 9, 
@@ -169,7 +229,7 @@ public class List implements ControlElement
 					 - 3); // gap between rects
 			
 			// Draw the string
-			Draw.setColor(Color.black);
+			Draw.setColor((_enabled ? Color.black : Color.gray)); // gray when disabled
 			Draw.String(_entries.get(i), _position.x + 20, _position.y + _offset + yOffset + 4
 					, _position.width - 40);
 			
@@ -204,7 +264,40 @@ public class List implements ControlElement
 	@Override
 	public boolean clickOnControlElement() 
 	{
-		//TODO: check what entry has been clicked and create an int with a value. Also create a getText(int) method to get the text of this entry.
+		Point mPos = METRO.__originalMousePosition;
+		if(!_position.contains(mPos)) return false;
+		
+		int ySpace = _defaultYSpace;
+		if(_compact) ySpace = _compactYSpace;
+		int yOffset = ySpace;
+		
+		for(int i = 0; i < _entries.size(); i++)
+		{
+			int amountRows = Draw.getStringLines(_entries.get(i), _position.width - 6);
+			Draw.setColor(Color.lightGray);
+			
+			// Calculate rect for the border = rect of entry
+			Rectangle entryRect = new Rectangle(_position.x + 3, 
+				_position.y + _offset + (yOffset - ySpace) + 5, 
+				_position.width - 9, 
+				2 * ySpace + // space above and below string
+					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
+					(amountRows - 1) * 8 // space between lines
+					 - 3);
+			
+			if(_enabled && entryRect.contains(mPos)) // when mouse is in an entry, make background light-light-gray
+			{
+				_selectedEntry = i;
+				return true;
+			}
+			
+			yOffset += 2 * ySpace + // 2 * 30px space above and below string
+					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
+					(amountRows - 1) * 8; // space between lines
+		}
+		
+		_selectedEntry = -1;
+		
 		return false;
 	}
 	@Override
@@ -226,7 +319,7 @@ public class List implements ControlElement
 	@Override
 	public void mouseScrolled(int amount) 
 	{
-		if(_position.contains(MouseInfo.getPointerInfo().getLocation()))
+		if(_enabled && _position.contains(METRO.__originalMousePosition))
 		{
 			_offset += -1 * amount * _scrollHeight;
 			if(_offset > 0) _offset = 0;

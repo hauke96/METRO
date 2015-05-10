@@ -3,7 +3,6 @@
  */
 package metro.WindowControls;
 
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -87,10 +86,7 @@ public class Button implements ControlElement
 	 */
 	public boolean isPressed(int x, int y)
 	{
-		if(x >= _position.x 
-			&& x <= _position.x + _position.width
-			&& y >= _position.y
-			&& y <= _position.y + _position.height
+		if(_position.contains(x, y)
 			|| _hasBeenClicked)
 		{
 			_hasBeenClicked = false;
@@ -151,12 +147,9 @@ public class Button implements ControlElement
 	 */
 	public boolean clickOnControlElement()
 	{
-		Point mPos = MouseInfo.getPointerInfo().getLocation();
+		Point mPos = METRO.__originalMousePosition;
 
-		if(mPos.x >= _position.x
-			&& mPos.x <= _position.x + _position.width
-			&& mPos.y >= _position.y
-			&& mPos.y <= _position.y + _position.height)
+		if(_position.contains(mPos))
 		{
 			_hasBeenClicked = true;
 			return true;

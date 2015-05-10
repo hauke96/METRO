@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 
 import metro.METRO;
+import metro.Settings;
 
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -73,7 +74,7 @@ public class Fill
 	public static void Circle(int x, int y, int diameter)
 	{
 		init();
-		shapeRenderer.circle(x + diameter / 2, y + diameter / 2, diameter / 2, 64);
+		shapeRenderer.circle(x + diameter / 2, y + diameter / 2, diameter / 2, Settings.amountOfSegments());
 		reset();
 	}
 

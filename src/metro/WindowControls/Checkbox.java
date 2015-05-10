@@ -10,7 +10,8 @@ import metro.Graphics.Draw;
 public class Checkbox implements ControlElement
 {
 	private boolean _checked,
-		_enable; // other name: isCheckable (true - box can be used; false - box can't be used)
+		_enable, // other name: isCheckable (true - box can be used; false - box can't be used)
+		_oldState; // used by hasChanged() method to detemine if the state has changed since last call
 	private String _text;
 	private Label _label;
 	private Point _position;
@@ -93,9 +94,20 @@ public class Checkbox implements ControlElement
 		return _checked;
 	}
 	
+	/**
+	 * Returns true, when the state (true/false) has changes since last call of this method.
+	 * @return True if state has changed.
+	 */
+	public boolean hasChanged()
+	{
+		boolean hasChanged = _oldState != _checked;
+		if(hasChanged) _oldState = _checked;
+		return hasChanged;
+	}
+	
 	public boolean isPressed()
 	{
-		Point mPos = MouseInfo.getPointerInfo().getLocation();
+		Point mPos = METRO.__originalMousePosition;
 
 		return mPos.x >= _position.x
 			&& mPos.x <= _position.x + 15
@@ -125,7 +137,7 @@ public class Checkbox implements ControlElement
 	@Override
 	public boolean clickOnControlElement()
 	{
-		Point mPos = MouseInfo.getPointerInfo().getLocation();
+		Point mPos = METRO.__originalMousePosition;
 
 		if(mPos.x >= _position.x
 			&& mPos.x <= _position.x + 15

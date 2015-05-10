@@ -87,7 +87,7 @@ public class InputField extends Input
 	@Override
 	public boolean clickOnControlElement()
 	{
-		Point mPos = MouseInfo.getPointerInfo().getLocation();
+		Point mPos = METRO.__originalMousePosition;
 		return _position.contains(mPos);
 	}
 	

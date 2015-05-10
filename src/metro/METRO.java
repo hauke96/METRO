@@ -47,7 +47,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * @author Hauke
- * @version 0.1.0
+ * @version 0.1.1
  */
 public class METRO extends Frame implements ApplicationListener, InputProcessor
 {
@@ -55,7 +55,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	
 	public static Dimension __SCREEN_SIZE;// = Toolkit.getDefaultToolkit().getScreenSize();
 	public static final String __TITLE = "METRO",
-		__VERSION = "0.1.0";
+		__VERSION = "0.1.1";
 	
 	public static BitmapFont __stdFont;
 	public static GameScreen __currentGameScreen,
@@ -70,12 +70,14 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static int __money = 50000,
 		__baseNetSpacing = 25; // amount of pixel between lines of the base net
 	public static ArrayList<Window> __windowList = new ArrayList<Window>();
-	public static Point __mousePosition;
+	public static Point __mousePosition,
+		__originalMousePosition;
 	public static OrthographicCamera __camera;
 	public static SpriteBatch __spriteBatch;
 	public static LwjglApplication __application; 
 	
 	private Point _oldMousePosition = new Point(0,0);
+	private LwjglApplicationConfiguration _config;
 
 	public static void main(String[] args) 
 	{
@@ -83,25 +85,23 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	}
 	private METRO()
 	{
-	    GraphicsEnvironment gEnviroment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-	    GraphicsDevice[] devices = gEnviroment.getScreenDevices();
-		__SCREEN_SIZE = new Dimension(devices[0].getDisplayMode().getWidth(), devices[0].getDisplayMode().getHeight()); 
-		
 		Settings.read();
 		
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = __TITLE + "  " + __VERSION;
-		config.width = Settings.__screenwidth;//__SCREEN_SIZE.width;
-		config.height = Settings.__screenheight;//__SCREEN_SIZE.height;
-		config.useGL30 = Settings.__useopengl30;
-		config.resizable = false;
-		config.fullscreen = Settings.__fullscreen;
-//		config.foregroundFPS = -1; // max frames
-		config.samples = Settings.__amountsamples;
-		config.vSyncEnabled = Settings.__usevsync;
-		config.useHDPI = Settings.__usehdpi;
+		__SCREEN_SIZE = new Dimension(Settings.screenWidth(), Settings.screenHeight());
 		
-		__application = new LwjglApplication(this, config);
+		_config = new LwjglApplicationConfiguration();
+		_config.title = __TITLE + "  " + __VERSION;
+		_config.width = Settings.screenWidth();//__SCREEN_SIZE.width;
+		_config.height = Settings.screenHeight();//__SCREEN_SIZE.height;
+		_config.useGL30 = Settings.useOpenGL30();
+		_config.resizable = false;
+		_config.fullscreen = Settings.fullscreen();
+//		config.foregroundFPS = -1; // max frames
+		_config.samples = Settings.amountOfSamples();
+		_config.vSyncEnabled = Settings.useVSync();
+		_config.useHDPI = Settings.useHDPI();
+		
+		__application = new LwjglApplication(this, _config);
 	}
 	@Override
 	public void create()
@@ -115,6 +115,8 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		// Set up the input event handling
 		Gdx.input.setInputProcessor(this);
 		
+		//load new cursor image
+		// TODO: s. issue #9: No cursor in Windows.
 		try
 		{
 			Pixmap pixmap = new Pixmap(Gdx.files.internal("textures/Cursor.png")); // has to be a width of 2^x (2, 4, 8, 16, 32, ...)
@@ -138,7 +140,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		//Load fonts
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/GatsbyFLF-Bold.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.magFilter = TextureFilter.Nearest;
+		parameter.magFilter = TextureFilter.Linear;
 		parameter.size = 21;
 		parameter.flip = true;
 		__stdFont = generator.generateFont(parameter); // font size 20 pixels
@@ -161,6 +163,16 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public void render()
 	{
 		__mousePosition = MouseInfo.getPointerInfo().getLocation();
+		
+		if(!Settings.fullscreen())
+		{
+			__mousePosition.translate(-_config.x, -_config.y-25);
+		}
+//		__originalMousePosition = MouseInfo.getPointerInfo().getLocation();
+//		__originalMousePosition.translate(-_config.x, -_config.y);
+//		if(!Settings.__fullscreen)__originalMousePosition.translate(0, -25);
+		__originalMousePosition = (Point)__mousePosition.clone();
+
 		boolean mouseInWindow = false;
 		for(Window win : __windowList)
 		{
@@ -199,7 +211,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyDown(int keycode) 
 	{
-//		System.out.println("KeyEvent::keyDown::" + keycode);
 		__currentGameScreen.keyPressed(keycode);
 		return false;
 	}
@@ -267,7 +278,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public boolean scrolled(int amount) 
 	{
 		__currentGameScreen.mouseScrolled(amount);
-		Point mPos = MouseInfo.getPointerInfo().getLocation();
+		Point mPos = METRO.__originalMousePosition;
 		for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
 		{
 			if(__windowList.get(i).isMouseOnWindow(mPos.x, mPos.y)) // if mouse is just on the window area

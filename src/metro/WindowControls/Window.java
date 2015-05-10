@@ -120,8 +120,8 @@ public class Window
 		}
 		if(_dragMode)
 		{
-			Point positionDiff = new Point(MouseInfo.getPointerInfo().getLocation().x - _oldMousePos.x,
-				MouseInfo.getPointerInfo().getLocation().y - _oldMousePos.y);
+			Point positionDiff = new Point(METRO.__originalMousePosition.x - _oldMousePos.x,
+					METRO.__originalMousePosition.y - _oldMousePos.y);
 
 			for(ControlElement cElement : _elementList)
 			{
@@ -130,7 +130,7 @@ public class Window
 			
 			_position.x += positionDiff.x;
 			_position.y += positionDiff.y;
-			_oldMousePos = MouseInfo.getPointerInfo().getLocation();
+			_oldMousePos = METRO.__originalMousePosition;
 		}
 	}
 	
@@ -172,6 +172,7 @@ public class Window
 		for(ControlElement cElement : _elementList)
 		{
 			boolean b = cElement.clickOnControlElement();
+			
 			if(b && cElement instanceof Input) // if clicked element is an input field, set this as selected field
 			{
 				inputPressed = true;

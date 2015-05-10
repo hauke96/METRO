@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 
 import metro.METRO;
+import metro.Settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL30;
@@ -77,7 +78,7 @@ public class Draw
 	public static void Circle(int x, int y, int diameter)
 	{
 		init();
-		shapeRenderer.circle(x + diameter / 2, y + diameter / 2, diameter / 2, 64);
+		shapeRenderer.circle(x + diameter / 2, y + diameter / 2, diameter / 2, Settings.amountOfSegments());
 		reset();
 	}
 
