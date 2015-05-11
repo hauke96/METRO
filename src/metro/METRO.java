@@ -19,6 +19,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.io.File;
 import java.util.ArrayList;
 
 import metro.GameScreen.GameScreen;
@@ -83,24 +84,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	}
 	private METRO()
 	{
-		Settings.read();
-		
-		__SCREEN_SIZE = new Dimension(Integer.parseInt(Settings.get("screen.width").toString()), 
-			Integer.parseInt(Settings.get("screen.height").toString()));
-		
-		_config = new LwjglApplicationConfiguration();
-		_config.title = __TITLE + "  " + __VERSION;
-		_config.width = Integer.parseInt(Settings.get("screen.width").toString());
-		_config.height = Integer.parseInt(Settings.get("screen.height").toString());
-		_config.useGL30 = Boolean.parseBoolean(Settings.get("use.opengl30").toString());
-		_config.resizable = false;
-		_config.fullscreen = Boolean.parseBoolean(Settings.get("fullscreen.on").toString());
-//		config.foregroundFPS = -1; // max frames
-		_config.samples = Integer.parseInt(Settings.get("amount.samples").toString());
-		_config.vSyncEnabled = Boolean.parseBoolean(Settings.get("use.vsync").toString());
-		_config.useHDPI = Boolean.parseBoolean(Settings.get("use.hdpi").toString());
-		
-		__application = new LwjglApplication(this, _config);
+		setSettings();
 	}
 	@Override
 	public void create()
@@ -167,9 +151,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		{
 			__mousePosition.translate(-_config.x, -_config.y-25);
 		}
-//		__originalMousePosition = MouseInfo.getPointerInfo().getLocation();
-//		__originalMousePosition.translate(-_config.x, -_config.y);
-//		if(!Settings.__fullscreen)__originalMousePosition.translate(0, -25);
 		__originalMousePosition = (Point)__mousePosition.clone();
 
 		boolean mouseInWindow = false;
@@ -296,5 +277,57 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static void __closeWindow(Window window)
 	{
 		__windowList.remove(window);
+	}
+	
+	private void setSettings()
+	{
+		Settings.read();
+		
+		try
+		{
+			__SCREEN_SIZE = new Dimension(Integer.parseInt(Settings.get("screen.width").toString()), 
+				Integer.parseInt(Settings.get("screen.height").toString()));
+		
+			_config = new LwjglApplicationConfiguration();
+			_config.title = __TITLE + "  " + __VERSION;
+			_config.width = Integer.parseInt(Settings.get("screen.width").toString());
+			_config.height = Integer.parseInt(Settings.get("screen.height").toString());
+			_config.useGL30 = Boolean.parseBoolean(Settings.get("use.opengl30").toString());
+			_config.resizable = false;
+			_config.fullscreen = Boolean.parseBoolean(Settings.get("fullscreen.on").toString());
+//				config.foregroundFPS = -1; // max frames
+			_config.samples = Integer.parseInt(Settings.get("amount.samples").toString());
+			_config.vSyncEnabled = Boolean.parseBoolean(Settings.get("use.vsync").toString());
+			_config.useHDPI = Boolean.parseBoolean(Settings.get("use.hdpi").toString());
+			
+			__application = new LwjglApplication(this, _config);
+		}
+		catch(Exception ex) // if something gone wrong (e.g. "screen.width=19a20"
+		{
+			File file = new File("./settings.cfg");
+			if(file.exists()) // try to use default values by deleting config file
+			{
+				// Create date time for backup name
+				java.util.Date date = new java.util.Date();
+				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd.MM.yyyy.h:mm:ss");
+				sdf.setTimeZone(java.util.TimeZone.getTimeZone("CET"));
+				String formattedDate = sdf.format(date);
+				
+				// try to rename settings.cfg
+				if(!file.renameTo(new File("./settings.backup." + formattedDate + ".cfg")))
+				{
+					System.out.println("No backup of settings.cfg has been created.");
+				}
+				
+				// no 
+				setSettings();
+			}
+			else
+			{
+				System.err.println("Could NOT create any senseful configuration. Tried to use default values by deleting the ./settings.cfg - not working.\nHere some technical information :" + ex.getMessage() + "\n");
+				for(StackTraceElement str : ex.getStackTrace()){
+				System.err.println(str.toString());}
+			}
+		}
 	}
 }

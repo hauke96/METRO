@@ -11,13 +11,38 @@ public class Settings
 		_newSettings;
 	private static boolean _newSettingsHaveChanged = false; // true when something changed and has to be saved
 	
-	private static String __praeambel = "* comments begin with *\n* Settings: [name]=[value]\n"; 
+	private static String __praeambel = "* comments begin with *\n* Settings: [name]=[value]\n";
+	
+	/**
+	 * Creates a plain default config file for this system.
+	 */
+	public static void create()
+	{
+		if(_newSettings == null)_newSettings = new HashMap<String, Object>();
+		
+		set("fullscreen.on", true);
+		GraphicsEnvironment gEnviroment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice[] devices = gEnviroment.getScreenDevices();
+		set("screen.width", devices[0].getDisplayMode().getWidth());
+		set("screen.height", devices[0].getDisplayMode().getHeight());
+		set("use.opengl30", true);
+		set("use.hdpi", false);
+		set("use.vsync", true);
+		set("amount.samples", 8);
+		set("amount.segments", 64);
+		
+		save();
+	}
 	
 	/**
 	 * Reads everything from the settings.cfg
 	 */
 	public static void read()
 	{
+		File file = new File("./settings.cfg");
+		if(!file.exists()) 
+			create(); // create default values is no settings file exist
+		
 		_settings = new HashMap<String, Object>();
 		_newSettings = new HashMap<String, Object>();
 		
@@ -84,8 +109,8 @@ public class Settings
 			GraphicsEnvironment gEnviroment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			GraphicsDevice[] devices = gEnviroment.getScreenDevices();
 
-			_newSettings.put("screen.width", devices[0].getDisplayMode().getWidth());
-			_newSettings.put("screen.height", devices[0].getDisplayMode().getHeight());
+			set("screen.width", devices[0].getDisplayMode().getWidth());
+			set("screen.height", devices[0].getDisplayMode().getHeight());
 		}
 		
 		try
@@ -97,9 +122,9 @@ public class Settings
 			for(int i = 0; i < keys.length; i++)
 			{
 				writer.write(keys[i] + "=" + values[i] + "\n");
-				System.out.println(keys[i] + "=" + values[i]);
+//				System.out.println(keys[i] + "=" + values[i]);
 			}
-			System.out.println("\n");
+//			System.out.println("\n");
 			writer.close();
 		}
 		catch (IOException e)
