@@ -161,10 +161,10 @@ public abstract class GameScreen
 				"OK", 
 				_window);
 			
-			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Settings.new_fullscreen(), true, _window);
-			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Settings.new_useOpenGL30(), true, _window);
-			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Settings.new_useVSync(), true, _window);
-			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Settings.new_useHDPI(), true, _window);
+			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Settings.getNew("fullscreen.on").equals("true"), true, _window);
+			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Settings.getNew("use.opengl30").equals("true"), true, _window);
+			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Settings.getNew("use.vsync").equals("true"), true, _window);
+			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Settings.getNew("use.hdpi").equals("true"), true, _window);
 
 			new Label("Screen Resolution:", new Point(20, 180), _window);
 			_resolutionList = new List(new Rectangle(20, 200, 190, 150), _window, true);
@@ -173,11 +173,11 @@ public abstract class GameScreen
 			_resolutionList.addElement("1600x900");
 			_resolutionList.addElement("1440x900");
 			_resolutionList.addElement("1366x768");
-			_resolutionList.addElement("1360x768x");
+			_resolutionList.addElement("1360x768");
 			_resolutionList.addElement("1280x768");
 			_resolutionList.addElement("1280x720");
-			if(!Settings.new_fullscreen()) _resolutionList.setState(false);
-			int index = _resolutionList.getIndex(Settings.new_screenWidth() + "x" + Settings.new_screenHeight()); // get the entry with the current resolution
+			if(!Settings.getNew("fullscreen.on").equals("true")) _resolutionList.setState(false);
+			int index = _resolutionList.getIndex(Integer.parseInt(Settings.getNew("screen.width").toString()) + "x" + Integer.parseInt(Settings.getNew("screen.width").toString())); // get the entry with the current resolution
 			_resolutionList.setSelectedEntry(index);
 
 			new Label("Amount Samples:", new Point(240, 180), _window);
@@ -187,7 +187,7 @@ public abstract class GameScreen
 			_sampleList.addElement("4");
 			_sampleList.addElement("8");
 			_sampleList.addElement("16");
-			index = _sampleList.getIndex(Settings.amountOfSamples() + ""); // get the entry with the current resolution
+			index = _sampleList.getIndex(Settings.getNew("amount.samples") + ""); // get the entry with the current resolution
 			_sampleList.setSelectedEntry(index);
 			
 			new Label("Amount Segments:", new Point(360, 180), _window);
@@ -197,7 +197,7 @@ public abstract class GameScreen
 			_segmentList.addElement("64");
 			_segmentList.addElement("128");
 			_segmentList.addElement("256");
-			index = _segmentList.getIndex(Settings.amountOfSegments() + ""); // get the entry with the current resolution
+			index = _segmentList.getIndex(Settings.getNew("amount.segments") + ""); // get the entry with the current resolution
 			_segmentList.setSelectedEntry(index);
 			
 			Settings.save();
@@ -219,32 +219,32 @@ public abstract class GameScreen
 				|| _useVSync.hasChanged()
 				|| _useHDPI.hasChanged())
 			{
-				Settings.setFullscreen(_fullscreenOn.isChecked());
-				Settings.setOpenGL30Usage(_useOpenGL30.isChecked());
-				Settings.setVSyncUsage(_useVSync.isChecked());
-				Settings.setHDPIUsage(_useHDPI.isChecked());
+				Settings.set("fullscreen.on" ,_fullscreenOn.isChecked());
+				Settings.set("use.opengl30", _useOpenGL30.isChecked());
+				Settings.set("use.vsync", _useVSync.isChecked());
+				Settings.set("use.hdpi", _useHDPI.isChecked());
 
-				_resolutionList.setState(!Settings.new_fullscreen());
+				_resolutionList.setState(!(Settings.getNew("fullscreen.on").equals("true")));
 			}
-			else if(!_resolutionList.getText(_resolutionList.getSelected()).equals(Settings.new_screenWidth() + "x" + Settings.new_screenHeight())) // if selection has changed
+			else if(!_resolutionList.getText(_resolutionList.getSelected()).equals(Settings.getNew("screen.width") + "x" + Settings.getNew("screen.height"))) // if selection has changed
 			{
 				String entry = _resolutionList.getText(_resolutionList.getSelected());
 				String splitted[] = entry.split("x");
 				if(splitted.length == 2)
 				{
-					Settings.setScreenWidth(Integer.parseInt(splitted[0]));
-					Settings.setScreenHeight(Integer.parseInt(splitted[1]));
+					Settings.set("screen.width", Integer.parseInt(splitted[0]));
+					Settings.set("screen.height", Integer.parseInt(splitted[1]));
 				}
 			}
-			else if(!_sampleList.getText(_sampleList.getSelected()).equals(Settings.new_amountOfSamples() + "")) // if selection has changed
+			else if(!_sampleList.getText(_sampleList.getSelected()).equals(Settings.getNew("amount.samples") + "")) // if selection has changed
 			{
 				String entry = _sampleList.getText(_sampleList.getSelected());
-				if(!entry.equals("")) Settings.setAmountSamples(Integer.parseInt(entry));
+				if(!entry.equals("")) Settings.set("amount.samples", Integer.parseInt(entry));
 			}
-			else if(!_segmentList.getText(_segmentList.getSelected()).equals(Settings.new_amountOfSegments() + "")) // if selection has changed
+			else if(!_segmentList.getText(_segmentList.getSelected()).equals(Settings.getNew("smount.segments") + "")) // if selection has changed
 			{
 				String entry = _segmentList.getText(_segmentList.getSelected());
-				if(!entry.equals("")) Settings.setAmountSegments(Integer.parseInt(entry));
+				if(!entry.equals("")) Settings.set("amount.segments", Integer.parseInt(entry));
 			}
 		}
 		

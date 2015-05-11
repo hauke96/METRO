@@ -74,7 +74,7 @@ public class Fill
 	public static void Circle(int x, int y, int diameter)
 	{
 		init();
-		shapeRenderer.circle(x + diameter / 2, y + diameter / 2, diameter / 2, Settings.amountOfSegments());
+		shapeRenderer.circle(x + diameter / 2, y + diameter / 2, diameter / 2, Integer.parseInt(Settings.get("amount.samples").toString()));
 		reset();
 	}
 

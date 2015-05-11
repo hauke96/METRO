@@ -87,19 +87,20 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		Settings.read();
 		
-		__SCREEN_SIZE = new Dimension(Settings.screenWidth(), Settings.screenHeight());
+		__SCREEN_SIZE = new Dimension(Integer.parseInt(Settings.get("screen.width").toString()), 
+			Integer.parseInt(Settings.get("screen.height").toString()));
 		
 		_config = new LwjglApplicationConfiguration();
 		_config.title = __TITLE + "  " + __VERSION;
-		_config.width = Settings.screenWidth();//__SCREEN_SIZE.width;
-		_config.height = Settings.screenHeight();//__SCREEN_SIZE.height;
-		_config.useGL30 = Settings.useOpenGL30();
+		_config.width = Integer.parseInt(Settings.get("screen.width").toString());
+		_config.height = Integer.parseInt(Settings.get("screen.height").toString());
+		_config.useGL30 = Settings.get("use.opengl30").equals("true");
 		_config.resizable = false;
-		_config.fullscreen = Settings.fullscreen();
+		_config.fullscreen = Settings.get("fullscreen.on").equals("true");//also possible: Boolean.parseBoolean(Settings.get("fullscreen.on").toString());
 //		config.foregroundFPS = -1; // max frames
-		_config.samples = Settings.amountOfSamples();
-		_config.vSyncEnabled = Settings.useVSync();
-		_config.useHDPI = Settings.useHDPI();
+		_config.samples = Integer.parseInt(Settings.get("amount.samples").toString());
+		_config.vSyncEnabled = Settings.get("use.vsync").equals("true");
+		_config.useHDPI = Settings.get("use.hdpi").equals("true");
 		
 		__application = new LwjglApplication(this, _config);
 	}
@@ -164,7 +165,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		__mousePosition = MouseInfo.getPointerInfo().getLocation();
 		
-		if(!Settings.fullscreen())
+		if(!Settings.get("fullscreen.on").equals("true"))
 		{
 			__mousePosition.translate(-_config.x, -_config.y-25);
 		}

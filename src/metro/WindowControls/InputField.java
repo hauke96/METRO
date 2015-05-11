@@ -1,7 +1,6 @@
 package metro.WindowControls;
 
 import java.awt.Color;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 
