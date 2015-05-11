@@ -161,10 +161,10 @@ public abstract class GameScreen
 				"OK", 
 				_window);
 			
-			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Settings.getNew("fullscreen.on").equals("true"), true, _window);
-			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Settings.getNew("use.opengl30").equals("true"), true, _window);
-			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Settings.getNew("use.vsync").equals("true"), true, _window);
-			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Settings.getNew("use.hdpi").equals("true"), true, _window);
+			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString()), true, _window);
+			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Boolean.parseBoolean(Settings.getNew("use.opengl30").toString()), true, _window);
+			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Boolean.parseBoolean(Settings.getNew("use.vsync").toString()), true, _window);
+			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Boolean.parseBoolean(Settings.getNew("use.hdpi").toString()), true, _window);
 
 			new Label("Screen Resolution:", new Point(20, 180), _window);
 			_resolutionList = new List(new Rectangle(20, 200, 190, 150), _window, true);
@@ -176,7 +176,7 @@ public abstract class GameScreen
 			_resolutionList.addElement("1360x768");
 			_resolutionList.addElement("1280x768");
 			_resolutionList.addElement("1280x720");
-			if(!Settings.getNew("fullscreen.on").equals("true")) _resolutionList.setState(false);
+			if(Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())) _resolutionList.setState(false);
 			int index = _resolutionList.getIndex(Integer.parseInt(Settings.getNew("screen.width").toString()) + "x" + Integer.parseInt(Settings.getNew("screen.width").toString())); // get the entry with the current resolution
 			_resolutionList.setSelectedEntry(index);
 
@@ -208,9 +208,8 @@ public abstract class GameScreen
 		 */
 		public void update()
 		{
-			if(_window.isClosed()) close();
-			
-			if(_okButton.isPressed())
+			if(_okButton.isPressed()
+				|| _window.isClosed())
 			{
 				close();
 			}
@@ -224,10 +223,12 @@ public abstract class GameScreen
 				Settings.set("use.vsync", _useVSync.isChecked());
 				Settings.set("use.hdpi", _useHDPI.isChecked());
 
-				_resolutionList.setState(!(Settings.getNew("fullscreen.on").equals("true")));
+				_resolutionList.setState(!(Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())));
 			}
-			else if(!_resolutionList.getText(_resolutionList.getSelected()).equals(Settings.getNew("screen.width") + "x" + Settings.getNew("screen.height"))) // if selection has changed
+			else if(!_resolutionList.getText(_resolutionList.getSelected()).equals(Settings.getNew("screen.width") + "x" + Settings.getNew("screen.height")) // if selection has changed
+				&& !Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())) // ... and fullscreen-mode is off
 			{
+				System.out.println(Settings.getNew("screen.width") + "x" + Settings.getNew("screen.height") + " -- " + _resolutionList.getText(_resolutionList.getSelected()));
 				String entry = _resolutionList.getText(_resolutionList.getSelected());
 				String splitted[] = entry.split("x");
 				if(splitted.length == 2)
@@ -236,16 +237,18 @@ public abstract class GameScreen
 					Settings.set("screen.height", Integer.parseInt(splitted[1]));
 				}
 			}
-			else if(!_sampleList.getText(_sampleList.getSelected()).equals(Settings.getNew("amount.samples") + "")) // if selection has changed
+			else if(!_sampleList.getText(_sampleList.getSelected()).equals(Settings.getNew("amount.samples").toString())) // if selection has changed
 			{
 				String entry = _sampleList.getText(_sampleList.getSelected());
 				if(!entry.equals("")) Settings.set("amount.samples", Integer.parseInt(entry));
 			}
-			else if(!_segmentList.getText(_segmentList.getSelected()).equals(Settings.getNew("smount.segments") + "")) // if selection has changed
+			else if(!_segmentList.getText(_segmentList.getSelected()).equals(Settings.getNew("amount.segments").toString())) // if selection has changed
 			{
 				String entry = _segmentList.getText(_segmentList.getSelected());
 				if(!entry.equals("")) Settings.set("amount.segments", Integer.parseInt(entry));
 			}
+			
+			Settings.save(); // there will be no unnecessary writing, cause of boolean-variable
 		}
 		
 		/**

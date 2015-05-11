@@ -9,6 +9,7 @@ public class Settings
 {
 	private static java.util.Map<String, Object> _settings,
 		_newSettings;
+	private static boolean _newSettingsHaveChanged = false; // true when something changed and has to be saved
 	
 	private static String __praeambel = "* comments begin with *\n* Settings: [name]=[value]\n"; 
 	
@@ -69,13 +70,16 @@ public class Settings
 	
 	/**
 	 * Saves everything to the settings file.
+	 * A flag is set, when something changed, so there won't be unnecessary writing.
 	 */
 	public static void save()
 	{
+		if(!_newSettingsHaveChanged) return; // when nothing changed
+		
 		File oldFile = new File("./settings.cfg");
 		if(oldFile.exists()) oldFile.delete();
 		
-		if(_newSettings.get("fullscreen.on").equals(true)) // if fullscreen is true, the resolution has to be the full-screen resolution
+		if(Boolean.parseBoolean(_newSettings.get("fullscreen.on").toString())) // if fullscreen is true, the resolution has to be the full-screen resolution
 		{
 			GraphicsEnvironment gEnviroment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			GraphicsDevice[] devices = gEnviroment.getScreenDevices();
@@ -89,11 +93,13 @@ public class Settings
 			FileWriter writer = new FileWriter("./settings.cfg", true);
 			writer.write(__praeambel);
 			Object[] keys = _newSettings.keySet().toArray();
-			Object[] valueCollection = _settings.values().toArray();
+			Object[] values = _newSettings.values().toArray();
 			for(int i = 0; i < keys.length; i++)
 			{
-				writer.write(keys[i] + "=" + valueCollection[i] + "\n");
+				writer.write(keys[i] + "=" + values[i] + "\n");
+				System.out.println(keys[i] + "=" + values[i]);
 			}
+			System.out.println("\n");
 			writer.close();
 		}
 		catch (IOException e)
@@ -103,18 +109,24 @@ public class Settings
 		}
 	}
 	
+	/**
+	 * Returns the value of the key.
+	 * @param settingsKey The key which value you want to have.
+	 * @return The value of the key. "" when key does not exist
+	 */
 	public static Object get(String settingsKey)
 	{
-		return _settings.get(settingsKey);
+		return _settings.containsKey(settingsKey) ? _settings.get(settingsKey) : "";
 	}
 	
 	public static Object getNew(String settingsKey)
 	{
-		return _newSettings.get(settingsKey);
+		return _newSettings.containsKey(settingsKey) ? _newSettings.get(settingsKey) : "";
 	}
 
 	public static void set(String key, Object value)
 	{
 		_newSettings.put(key, value);
+		_newSettingsHaveChanged = true;
 	}
 }

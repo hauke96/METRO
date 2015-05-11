@@ -80,6 +80,7 @@ public class Checkbox implements ControlElement
 		_textWidth = textWidth;
 		_label = new Label(_text, new Point(_position.x + 25, _position.y), _textWidth, window);
 		_checked = checked;
+		_oldState = _checked;
 		_enable = enabled;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)

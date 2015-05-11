@@ -78,7 +78,7 @@ public class Draw
 	public static void Circle(int x, int y, int diameter)
 	{
 		init();
-		shapeRenderer.circle(x + diameter / 2, y + diameter / 2, diameter / 2, Integer.parseInt(Settings.get("amount.samples").toString()));
+		shapeRenderer.circle(x + diameter / 2, y + diameter / 2, diameter / 2, Integer.parseInt(Settings.get("amount.segments").toString()));
 		reset();
 	}
 

@@ -17,8 +17,6 @@ package metro;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.util.ArrayList;
@@ -47,7 +45,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * @author Hauke
- * @version 0.1.1
+ * @version 0.1.0
  */
 public class METRO extends Frame implements ApplicationListener, InputProcessor
 {
@@ -55,7 +53,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	
 	public static Dimension __SCREEN_SIZE;// = Toolkit.getDefaultToolkit().getScreenSize();
 	public static final String __TITLE = "METRO",
-		__VERSION = "0.1.1";
+		__VERSION = "0.1.0";
 	
 	public static BitmapFont __stdFont;
 	public static GameScreen __currentGameScreen,
@@ -94,13 +92,13 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		_config.title = __TITLE + "  " + __VERSION;
 		_config.width = Integer.parseInt(Settings.get("screen.width").toString());
 		_config.height = Integer.parseInt(Settings.get("screen.height").toString());
-		_config.useGL30 = Settings.get("use.opengl30").equals("true");
+		_config.useGL30 = Boolean.parseBoolean(Settings.get("use.opengl30").toString());
 		_config.resizable = false;
-		_config.fullscreen = Settings.get("fullscreen.on").equals("true");//also possible: Boolean.parseBoolean(Settings.get("fullscreen.on").toString());
+		_config.fullscreen = Boolean.parseBoolean(Settings.get("fullscreen.on").toString());
 //		config.foregroundFPS = -1; // max frames
 		_config.samples = Integer.parseInt(Settings.get("amount.samples").toString());
-		_config.vSyncEnabled = Settings.get("use.vsync").equals("true");
-		_config.useHDPI = Settings.get("use.hdpi").equals("true");
+		_config.vSyncEnabled = Boolean.parseBoolean(Settings.get("use.vsync").toString());
+		_config.useHDPI = Boolean.parseBoolean(Settings.get("use.hdpi").toString());
 		
 		__application = new LwjglApplication(this, _config);
 	}
@@ -165,7 +163,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		__mousePosition = MouseInfo.getPointerInfo().getLocation();
 		
-		if(!Settings.get("fullscreen.on").equals("true"))
+		if(!Boolean.parseBoolean(Settings.get("fullscreen.on").toString()))
 		{
 			__mousePosition.translate(-_config.x, -_config.y-25);
 		}
