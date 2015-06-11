@@ -1,7 +1,6 @@
 package metro.WindowControls;
 
 import java.awt.Color;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -15,11 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 
 /**
  * Creates a list control element that can have some entries in it. An entry is highlighted when the mouse is over it.
+ * 
  * @author hauke
  *
  */
 
-public class List implements ControlElement 
+public class List implements ControlElement
 {
 	private ArrayList<String> _entries = new ArrayList<String>();
 	private Rectangle _position;
@@ -35,6 +35,7 @@ public class List implements ControlElement
 
 	/**
 	 * Creates a new list control element on a window.
+	 * 
 	 * @param position The position on the window.
 	 * @param win The window with which this list of connected.
 	 */
@@ -42,9 +43,10 @@ public class List implements ControlElement
 	{
 		this(position, null, win, false);
 	}
-	
+
 	/**
 	 * Creates a new list control element on a window.
+	 * 
 	 * @param position The position on the window.
 	 * @param win The window with which this list of connected.
 	 * @param compact Set to true if list should be a compact list (entries are not that high)
@@ -53,9 +55,10 @@ public class List implements ControlElement
 	{
 		this(position, null, win, compact);
 	}
-	
+
 	/**
 	 * Creates a new list control element on a window with some entries in it.
+	 * 
 	 * @param position The position on the window.
 	 * @param entries The entries that are in the list after creating it.
 	 * @param win The window with which this list of connected.
@@ -64,9 +67,10 @@ public class List implements ControlElement
 	{
 		this(position, entries, win, false);
 	}
-	
+
 	/**
 	 * Creates a new list control element on a window with some entries in it.
+	 * 
 	 * @param position The position on the window.
 	 * @param entries The entries that are in the list after creating it.
 	 * @param win The window with which this list of connected.
@@ -80,26 +84,27 @@ public class List implements ControlElement
 		int ySpace = _defaultYSpace;
 		if(_compact) ySpace = _compactYSpace;
 		int yOffset = ySpace;
-		
+
 		for(String e : _entries)
 		{
-			int amountRows = Draw.getStringLines(e, 
+			int amountRows = Draw.getStringLines(e,
 				_position.width - 6);
 
 			yOffset += 2 * ySpace + // 2 * 30px space above and below string
-				Draw.getStringSize(e).height * amountRows + // rows * height of string 
+				Draw.getStringSize(e).height * amountRows + // rows * height of string
 				(amountRows - 1) * 8; // space between lines
 		}
 		if(yOffset > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight - 3;
-		
+
 		_windowHandle = win;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		
+
 		_compact = compact;
 	}
-	
+
 	/**
 	 * Adds an element to the list control.
+	 * 
 	 * @param element The element to add.
 	 */
 	public void addElement(String element)
@@ -110,56 +115,61 @@ public class List implements ControlElement
 		int yOffset = ySpace;
 		for(String e : _entries)
 		{
-			int amountRows = Draw.getStringLines(e, 
+			int amountRows = Draw.getStringLines(e,
 				_position.width - 6);
 
 			yOffset += 2 * ySpace + // space above and below string
-				Draw.getStringSize(e).height * amountRows + // rows * height of string 
+				Draw.getStringSize(e).height * amountRows + // rows * height of string
 				(amountRows - 1) * 8; // space between lines
 		}
 		int magicFactor = (0 - (23 / 20)) * (ySpace - 10) + 17; // fine-tuning for the maximum offset for scrolling (with this factor, the space between last element and bottom of list are matching automagically)
 		if(yOffset - _scrollHeight - 3 > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight + magicFactor;
 	}
-	
+
 	/**
 	 * Dis- or enabled this control.
+	 * 
 	 * @param enableState The new state. True - enabled; false - disabled.
 	 */
 	public void setState(boolean enableState)
 	{
 		_enabled = enableState;
 	}
-	
+
 	/**
 	 * Gets the text of a given entry.
+	 * 
 	 * @param entryIndex The number of the entry.
 	 */
 	public String getText(int entryIndex)
 	{
-		if(entryIndex >= _entries.size() ||  entryIndex < 0) return "";
+		if(entryIndex >= _entries.size() || entryIndex < 0) return "";
 		return _entries.get(entryIndex);
 	}
-	
+
 	/**
 	 * Sets the selected Entry to a specific.
+	 * 
 	 * @param entryIndex The entry number.
 	 */
 	public void setSelectedEntry(int entryIndex)
 	{
 		_selectedEntry = entryIndex;
 	}
-	
+
 	/**
 	 * Return the index of the selected entry.
+	 * 
 	 * @return Index of selected entry. Returns -1 if nothing is selected.
 	 */
 	public int getSelected()
 	{
 		return _selectedEntry;
 	}
-	
+
 	/**
 	 * Returns the index of the first entry with the given text.
+	 * 
 	 * @param entryText The text to search.
 	 * @return The index. Returns -1 if the entry doesn't exist.
 	 */
@@ -174,23 +184,23 @@ public class List implements ControlElement
 		}
 		return -1;
 	}
-	
+
 	@Override
-	public void draw() 
+	public void draw()
 	{
 		METRO.__spriteBatch.end();
 		METRO.__spriteBatch.begin();
-		
-		//Create scissor to draw only in the area of the list box.
+
+		// Create scissor to draw only in the area of the list box.
 		com.badlogic.gdx.math.Rectangle scissors = new com.badlogic.gdx.math.Rectangle();
 		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_position.x, _position.y, _position.width + 1, _position.height + 1);
 		ScissorStack.calculateScissors((Camera)METRO.__camera, METRO.__spriteBatch.getTransformMatrix(), clipBounds, scissors);
 		ScissorStack.pushScissors(scissors);
-		
-		//Clear Background
+
+		// Clear Background
 		Fill.setColor(Color.white);
 		Fill.Rect(_position.x, _position.y, _position.width, _position.height);
-		
+
 		int ySpace = _defaultYSpace;
 		if(_compact) ySpace = _compactYSpace;
 		int yOffset = ySpace;
@@ -199,125 +209,130 @@ public class List implements ControlElement
 		{
 			int amountRows = Draw.getStringLines(_entries.get(i), _position.width - 6);
 			Draw.setColor(Color.lightGray);
-			
+
 			// Calculate rect for the border = rect of entry
-			Rectangle entryRect = new Rectangle(_position.x + 3, 
-				_position.y + _offset + (yOffset - ySpace) + 5, 
-				_position.width - 9, 
+			Rectangle entryRect = new Rectangle(_position.x + 3,
+				_position.y + _offset + (yOffset - ySpace) + 5,
+				_position.width - 9,
 				2 * ySpace + // space above and below string
-					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
+					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
 					(amountRows - 1) * 8 // space between lines
-					 - 3);
-			
+					- 3);
+
 			if(_enabled && entryRect.contains(mPos)) // when mouse is in an entry, make background light-light-gray
 			{
 				Fill.setColor(new Color(240, 240, 240));
 				Fill.Rect(entryRect);
 			}
-			
-			//Draw border around entry
+
+			// Draw border around entry
 			if(_enabled && _selectedEntry == i)
 			{
 				Draw.setColor(Color.gray);
 			}
-			Draw.Rect(_position.x + 3, 
+			Draw.Rect(_position.x + 3,
 				_position.y + _offset + (yOffset - ySpace) + 5,
-				_position.width - 9, 
+				_position.width - 9,
 				2 * ySpace + // space above and below string
-					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
+					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
 					(amountRows - 1) * 8 // space between lines
-					 - 3); // gap between rects
-			
+					- 3); // gap between rects
+
 			// Draw the string
 			Draw.setColor((_enabled ? Color.black : Color.gray)); // gray when disabled
 			Draw.String(_entries.get(i), _position.x + 20, _position.y + _offset + yOffset + 4
-					, _position.width - 40);
-			
+				, _position.width - 40);
+
 			yOffset += 2 * ySpace + // 2 * 30px space above and below string
-				Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
+				Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
 				(amountRows - 1) * 8; // space between lines
 		}
-		
-		//Fill the little gabs ob the two top and bottom lines
+
+		// Fill the little gabs ob the two top and bottom lines
 		Fill.Rect(_position.x, _position.y, _position.width, 3);
 		Fill.Rect(_position.x, _position.y + _position.height - 2, _position.width, 3);
-		
-		//Draw all the border lines. The two top and bottom lines are just looking cool ;)
+
+		// Draw all the border lines. The two top and bottom lines are just looking cool ;)
 		Draw.setColor(METRO.__metroBlue);
 		Draw.Rect(_position);
 		Draw.Line(_position.x, _position.y + _position.height - 2, _position.x + _position.width - 3, _position.y + _position.height - 2); // bottom 2
 		Draw.Line(_position.x + _position.width - 3, _position.y, _position.x + _position.width - 3, _position.y + _position.height); // right for scroll bar
 		Draw.Line(_position.x, _position.y + 2, _position.x + _position.width - 3, _position.y + 2); // top 2
-		
-		//Draw scroll bar
+
+		// Draw scroll bar
 		int height = (int)(_position.height * (_position.height / (_maxOffset * _scrollHeight))), // gets the height of the scrollbar. E.g.: The area is 2*_pos.height, then is _max/_scrollHeight = 0.5
-			yPos = (int)((_position.height - height) * -(_offset / _maxOffset));
-		
+		yPos = (int)((_position.height - height) * -(_offset / _maxOffset));
+
 		Fill.setColor(METRO.__metroBlue);
-		Fill.Rect(_position.x + _position.width - 3, 
-			_position.y + yPos, 
-			_position.x + _position.width - 2, 
+		Fill.Rect(_position.x + _position.width - 3,
+			_position.y + yPos,
+			_position.x + _position.width - 2,
 			height); // right for scroll bar
-		
+
 		ScissorStack.popScissors();
 	}
+
 	@Override
-	public boolean clickOnControlElement() 
+	public boolean clickOnControlElement()
 	{
 		Point mPos = METRO.__originalMousePosition;
 		if(!_position.contains(mPos)) return false;
-		
+
 		int ySpace = _defaultYSpace;
 		if(_compact) ySpace = _compactYSpace;
 		int yOffset = ySpace;
-		
+
 		for(int i = 0; i < _entries.size(); i++)
 		{
 			int amountRows = Draw.getStringLines(_entries.get(i), _position.width - 6);
 			Draw.setColor(Color.lightGray);
-			
+
 			// Calculate rect for the border = rect of entry
-			Rectangle entryRect = new Rectangle(_position.x + 3, 
-				_position.y + _offset + (yOffset - ySpace) + 5, 
-				_position.width - 9, 
+			Rectangle entryRect = new Rectangle(_position.x + 3,
+				_position.y + _offset + (yOffset - ySpace) + 5,
+				_position.width - 9,
 				2 * ySpace + // space above and below string
-					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
+					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
 					(amountRows - 1) * 8 // space between lines
-					 - 3);
-			
+					- 3);
+
 			if(_enabled && entryRect.contains(mPos)) // when mouse is in an entry, make background light-light-gray
 			{
 				_selectedEntry = i;
 				return true;
 			}
-			
+
 			yOffset += 2 * ySpace + // 2 * 30px space above and below string
-					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string 
-					(amountRows - 1) * 8; // space between lines
+				Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
+				(amountRows - 1) * 8; // space between lines
 		}
-		
+
 		_selectedEntry = -1;
-		
+
 		return false;
 	}
+
 	@Override
-	public void setPosition(Point pos) 
+	public void setPosition(Point pos)
 	{
 		_position = new Rectangle(pos.x, pos.y, _position.width, _position.height);
 	}
+
 	@Override
-	public Point getPosition() 
+	public Point getPosition()
 	{
 		return new Point(_position.x, _position.y);
 	}
+
 	@Override
-	public void moveElement(Point offset) 
+	public void moveElement(Point offset)
 	{
 		_position.x += offset.x;
 		_position.y += offset.y;
 	}
+
 	@Override
-	public void mouseScrolled(int amount) 
+	public void mouseScrolled(int amount)
 	{
 		if(_enabled && _position.contains(METRO.__originalMousePosition))
 		{
@@ -328,8 +343,12 @@ public class List implements ControlElement
 	}
 
 	@Override
-	public void keyPressed(int key){}
+	public void keyPressed(int key)
+	{
+	}
 
 	@Override
-	public void keyUp(int keyCode){}
+	public void keyUp(int keyCode)
+	{
+	}
 }

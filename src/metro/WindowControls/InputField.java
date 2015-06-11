@@ -16,18 +16,20 @@ public class InputField extends Input
 {
 	private int _curserPos = 0,
 		_xOffset = 0; // in pixel
-	
+
 	/**
 	 * Creates a new InputField with one line to input text. The start-text is "" and the window is null
+	 * 
 	 * @param position The position.
 	 */
 	public InputField(Rectangle position)
 	{
 		this(position, null, "");
 	}
-	
+
 	/**
 	 * Creates a new InputField with one line to input text. The start-text is ""
+	 * 
 	 * @param position The position on the window
 	 * @param win The window handle.
 	 */
@@ -35,9 +37,10 @@ public class InputField extends Input
 	{
 		this(position, win, "");
 	}
-	
+
 	/**
 	 * Creates a new InputField with one line to input text.
+	 * 
 	 * @param position The position on the window
 	 * @param win The window handle.
 	 * @param text The text, that's in the input box at the beginning.
@@ -50,30 +53,30 @@ public class InputField extends Input
 
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 	}
-	
+
 	@Override
 	public void draw()
 	{
 		METRO.__spriteBatch.end();
 		METRO.__spriteBatch.begin();
-		
-		//Create scissor to draw only in the area of the list box.
+
+		// Create scissor to draw only in the area of the list box.
 		com.badlogic.gdx.math.Rectangle scissors = new com.badlogic.gdx.math.Rectangle();
 		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_position.x, _position.y, _position.width + 1, _position.height + 1);
 		ScissorStack.calculateScissors((Camera)METRO.__camera, METRO.__spriteBatch.getTransformMatrix(), clipBounds, scissors);
 		ScissorStack.pushScissors(scissors);
-		
+
 		// Fill background
 		Fill.setColor(Color.white);
 		Fill.Rect(_position);
-		
-		//draw text
+
+		// draw text
 		Draw.String(_text, _position.x - _xOffset + 3, _position.y + 3);
-		
+
 		// Draw border
 		Draw.setColor(METRO.__metroBlue);
 		Draw.Rect(_position);
-		
+
 		// Draw cursor on right position
 		String str = _text.substring(0, _curserPos);
 		int width = Draw.getStringSize(str).width;
@@ -82,41 +85,44 @@ public class InputField extends Input
 
 		ScissorStack.popScissors();
 	}
-	
+
 	@Override
 	public boolean clickOnControlElement()
 	{
 		Point mPos = METRO.__originalMousePosition;
 		return _position.contains(mPos);
 	}
-	
+
 	@Override
 	public void setPosition(Point pos)
 	{
 		_position = new Rectangle(pos.x, pos.y, _position.width, _position.height);
 	}
-	
+
 	@Override
 	public Point getPosition()
 	{
 		return _position.getLocation();
 	}
-	
+
 	@Override
 	public void moveElement(Point offset)
 	{
 		_position.x += offset.x;
 		_position.y += offset.y;
 	}
+
 	@Override
-	public void mouseScrolled(int amount){}
+	public void mouseScrolled(int amount)
+	{
+	}
 
 	@Override
 	public void keyPressed(int key)
 	{
 		// if this input box is NOT selected, just do nothing
 		if(!_selected) return;
-		
+
 		switch(key)
 		{
 			case Keys.RIGHT:
@@ -161,7 +167,7 @@ public class InputField extends Input
 				METRO.__currentGameScreen.setSelectedInput(null);
 				break;
 		}
-		//for ranges:
+		// for ranges:
 		if(key >= Keys.A && key <= Keys.Z)
 		{
 			charTyped(_shift ? (char)(36 + key) : (char)(68 + key));
@@ -177,13 +183,14 @@ public class InputField extends Input
 			_curserPos--;
 		}
 	}
-	
+
 	/**
 	 * Adds a character at _cursor position to the current text.
+	 * 
 	 * @param c The character to add.
 	 */
 	private void charTyped(char c)
-	{ 
+	{
 		_text = new StringBuilder(_text).insert(_curserPos, c).toString();
 		_curserPos++;
 	}

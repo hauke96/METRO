@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 /**
  * GameScreen with the city view. It Shows the population density and basic player information.
  * This class is used by the TrainView-class as "background image".
+ * 
  * @author Hauke
  * 
  */
@@ -47,10 +48,10 @@ public class CityView extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		if (_dragMode)
+		if(_dragMode)
 		{
-			_offset = new Point2D.Float((float) _offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x), (float) _offset.getY()
-					+ (METRO.__mousePosition.y - _oldMousePos.y));
+			_offset = new Point2D.Float((float)_offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x), (float)_offset.getY()
+				+ (METRO.__mousePosition.y - _oldMousePos.y));
 		}
 		_oldMousePos = METRO.__mousePosition;
 
@@ -68,13 +69,13 @@ public class CityView extends GameScreen
 		int selectedLayerNumber = -1; // the circle, the mouse is in. -1 means: Mouse out of any circle.
 
 		// get the selected circle number
-		for (int i = 0; i < 10; i++) // go through all layers
+		for(int i = 0; i < 10; i++) // go through all layers
 		{
 			boolean isLayerSelected = false;
-			for (int k = 0; !isLayerSelected && k < _travelerSpots.size(); k++) // go through all spots
+			for(int k = 0; !isLayerSelected && k < _travelerSpots.size(); k++) // go through all spots
 			{
 				isLayerSelected = _travelerSpots.get(k).isMouseInCircle(i); // if mouse is in ANY circle of this layer
-				if (isLayerSelected)
+				if(isLayerSelected)
 				{
 					selectedLayerNumber = i;
 					selectedSpotNumber = k;
@@ -82,27 +83,27 @@ public class CityView extends GameScreen
 			}
 		}
 		// draw all the circles
-		for (int i = 0; i < 10; i++)
+		for(int i = 0; i < 10; i++)
 		{
-			for (int k = 0; k < _travelerSpots.size(); k++)
+			for(int k = 0; k < _travelerSpots.size(); k++)
 			{
-				if (_travelerSpots.get(k).getStrength() <= i) continue;
+				if(_travelerSpots.get(k).getStrength() <= i) continue;
 				_travelerSpots.get(k).draw(sp, i, i == selectedLayerNumber, k == selectedSpotNumber, true); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 			}
-			for (int k = 0; k < _travelerSpots.size(); k++)
+			for(int k = 0; k < _travelerSpots.size(); k++)
 			{
-				if (_travelerSpots.get(k).getStrength() <= i) continue;
+				if(_travelerSpots.get(k).getStrength() <= i) continue;
 				_travelerSpots.get(k).draw(sp, i, i == selectedLayerNumber, k == selectedSpotNumber); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 			}
 		}
 
-		if (selectedLayerNumber != -1) // if there's a selected circle
+		if(selectedLayerNumber != -1) // if there's a selected circle
 		{
 			Draw.setColor(new Color(0, 0, 200));
 			// Draw.String(selectedLayerNumber + "", METRO.__mousePosition.x - g.getFontMetrics(METRO.__stdFont).stringWidth(selectedLayerNumber + "") / 2 - 1,
 			// METRO.__mousePosition.y + g.getFontMetrics(METRO.__stdFont).getHeight() / 4 + 1);
 			Draw.String(selectedLayerNumber + "", METRO.__mousePosition.x - Draw.getStringSize(selectedLayerNumber + "").width / 2, METRO.__mousePosition.y
-					+ Draw.getStringSize(selectedLayerNumber + "").height / 4 - 10);
+				+ Draw.getStringSize(selectedLayerNumber + "").height / 4 - 10);
 		}
 	}
 
@@ -114,7 +115,7 @@ public class CityView extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if (mouseButton == Buttons.MIDDLE)
+		if(mouseButton == Buttons.MIDDLE)
 		{
 			_dragMode = true;
 		}
@@ -128,7 +129,7 @@ public class CityView extends GameScreen
 	@Override
 	public void mouseReleased(int mouseButton)
 	{
-		if (mouseButton == Buttons.MIDDLE)
+		if(mouseButton == Buttons.MIDDLE)
 		{
 			_dragMode = false;
 		}
@@ -137,10 +138,10 @@ public class CityView extends GameScreen
 	@Override
 	public void keyDown(int keyCode)
 	{
-//		if (keyCode == Keys.ESCAPE)
-//		{
-//			METRO.__close();
-//		}
+		// if (keyCode == Keys.ESCAPE)
+		// {
+		// METRO.__close();
+		// }
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package metro.WindowControls;
 
 import java.awt.Color;
-import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -15,10 +14,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * Creates a simple but fancy window with some extra functions like Control-management (managing buttons, labels, etc.).
+ * 
  * @author hauke
  * 
  */
-public class Window 
+public class Window
 {
 	private Point _position,
 		_size,
@@ -28,9 +28,10 @@ public class Window
 	private boolean _dragMode = false, // to drag the window
 		_closed = false; // even if window has been deleted from the window list, that does not mean, that this object doesn't exist anymore, to this indicates that this window has been deleted
 	private Color _color; // color of borders
-	
+
 	/**
 	 * Creates a new window.
+	 * 
 	 * @param title The title of the Window, is shown in the top area.
 	 * @param position The position on the Screen (absolute)
 	 * @param size The size in pixel (absolute)
@@ -45,12 +46,13 @@ public class Window
 		_size = size;
 		_size.y += 20; // for title
 		_color = color;
-		
+
 		METRO.__windowList.add(this);
 	}
-	
+
 	/**
 	 * Creates a new window.
+	 * 
 	 * @param title The title of the Window, is shown in the top area.
 	 * @param position The position on the Screen (absolute)
 	 * @param size The size in pixel (absolute)
@@ -59,48 +61,49 @@ public class Window
 	{
 		this(title, position, size, METRO.__metroBlue);
 	}
-	
+
 	/**
 	 * Draws the window and all controls on it.
+	 * 
 	 * @param g The graphic handle.
 	 */
 	public void draw(SpriteBatch g)
 	{
 		update();
-		
-		//Clear background
+
+		// Clear background
 		Fill.setColor(Color.white);
-		Fill.Rect(_position.x, 
-			_position.y, 
-			_size.x + 1, 
+		Fill.Rect(_position.x,
+			_position.y,
+			_size.x + 1,
 			_size.y + 1);
-		
-		//Draw head bar of window
+
+		// Draw head bar of window
 		Fill.setColor(_color);
-		Fill.Rect(_position.x, 
-			_position.y, 
-			_size.x - 20, 
+		Fill.Rect(_position.x,
+			_position.y,
+			_size.x - 20,
 			20);
 		Draw.setColor(Color.white);
-		Draw.Rect(_position.x + 1, 
-			_position.y + 1, 
-			_size.x - 21, 
+		Draw.Rect(_position.x + 1,
+			_position.y + 1,
+			_size.x - 21,
 			18);
-		
-		//Draw Border
+
+		// Draw Border
 		Draw.setColor(_color);
 		Draw.Rect(_position.x, _position.y, _size.x + 1, _size.y + 1);
 		Draw.Rect(_position.x, _position.y, _size.x + 1, 20);
 		Draw.Rect(_position.x + _size.x - 19, _position.y, 20, 20); // close box
-		
-		//Draw Window title
+
+		// Draw Window title
 		Draw.setColor(Color.white);
-		Draw.String(_title, _position.x + (_size.x - 20) / 2 - Draw.getStringSize(_title).width / 2, 
+		Draw.String(_title, _position.x + (_size.x - 20) / 2 - Draw.getStringSize(_title).width / 2,
 			_position.y + Draw.getStringSize(_title).height - 9);
-		
-		//Close cross
-		Draw.Image(METRO.__iconSet, 
-			new Rectangle(_position.x + _size.x - 18, _position.y + 1, 19, 19), 
+
+		// Close cross
+		Draw.Image(METRO.__iconSet,
+			new Rectangle(_position.x + _size.x - 18, _position.y + 1, 19, 19),
 			new Rectangle(0, 0, 19, 19));
 
 		for(ControlElement cElement : _elementList)
@@ -108,7 +111,7 @@ public class Window
 			cElement.draw();
 		}
 	}
-	
+
 	/**
 	 * Updates everything. Is very important for e.g. drag-feature and Controls
 	 */
@@ -121,21 +124,22 @@ public class Window
 		if(_dragMode)
 		{
 			Point positionDiff = new Point(METRO.__originalMousePosition.x - _oldMousePos.x,
-					METRO.__originalMousePosition.y - _oldMousePos.y);
+				METRO.__originalMousePosition.y - _oldMousePos.y);
 
 			for(ControlElement cElement : _elementList)
 			{
 				cElement.moveElement(positionDiff);
 			}
-			
+
 			_position.x += positionDiff.x;
 			_position.y += positionDiff.y;
 			_oldMousePos = METRO.__originalMousePosition;
 		}
 	}
-	
+
 	/**
 	 * Adds a new control to the window control list. If the new Control is already in the list, it won't be added again, so there are no doubles in this list.
+	 * 
 	 * @param cElement The WindowControl element thta should be added.
 	 */
 	public void addControlElement(ControlElement cElement)
@@ -147,9 +151,10 @@ public class Window
 			_elementList.add(cElement); // there wont be doubles ;)
 		}
 	}
-	
+
 	/**
 	 * Returns true is mouse is in window, false if not and also false if in window but e.g. on a button.
+	 * 
 	 * @param screenX x-coordinate of mouse
 	 * @param screenY y-coordinate of mouse
 	 * @return boolean True/false if mouse is in window.
@@ -159,11 +164,12 @@ public class Window
 		return screenX >= _position.x
 			&& screenX <= _position.x + _size.x
 			&& screenY >= _position.y
-			&& screenY <= _position.y + _size.y;		
+			&& screenY <= _position.y + _size.y;
 	}
-	
+
 	/**
 	 * Makes things when mouse is pressed.
+	 * 
 	 * @param e MouseEvent
 	 */
 	public void mousePressed(int screenX, int screenY, int mouseButton)
@@ -172,7 +178,7 @@ public class Window
 		for(ControlElement cElement : _elementList)
 		{
 			boolean b = cElement.clickOnControlElement();
-			
+
 			if(b && cElement instanceof Input) // if clicked element is an input field, set this as selected field
 			{
 				inputPressed = true;
@@ -180,7 +186,7 @@ public class Window
 			}
 		}
 		if(!inputPressed) METRO.__currentGameScreen.setSelectedInput(null); // reset the selected input field
-		
+
 		// Check for drag-mode:
 		if(screenX >= _position.x
 			&& screenX <= _position.x + _size.x - 20
@@ -192,7 +198,7 @@ public class Window
 			_oldMousePos = new Point(screenX, screenY);
 		}
 	}
-	
+
 	/**
 	 * Makes things when mouse is released (important for drag-mode of the window).
 	 */
@@ -200,21 +206,23 @@ public class Window
 	{
 		_dragMode = false;
 	}
-	
+
 	/**
 	 * Fires when users scrolls.
+	 * 
 	 * @param amount Positive or negative amount of steps since last frame.
 	 */
-	public void mouseScrolled(int amount) 
+	public void mouseScrolled(int amount)
 	{
 		for(ControlElement cElement : _elementList)
 		{
 			cElement.mouseScrolled(amount);
 		}
 	}
-	
+
 	/**
 	 * Closes the window if the mouse is on the cross. NO CLICK is needed in this function, be careful. This function calls the METRO.__close() function to close itself.
+	 * 
 	 * @param e MouseEvent
 	 * @return True if the window has been closed, false if not.
 	 */
@@ -230,16 +238,17 @@ public class Window
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Returns the position of the window.
+	 * 
 	 * @return Position.
 	 */
 	public Point getPosition()
 	{
 		return _position;
 	}
-	
+
 	/**
 	 * Closes the window softly.
 	 */
@@ -249,18 +258,20 @@ public class Window
 		_elementList.clear();
 		_closed = true;
 	}
-	
+
 	/**
 	 * Returns true if window has been successfully removed from the window list.
+	 * 
 	 * @return True - Already removed, False - Still exists
 	 */
 	public boolean isClosed()
 	{
 		return _closed;
 	}
-	
+
 	/**
-	 * Gets called when a key is pressed. Controls should 
+	 * Gets called when a key is pressed. Controls should
+	 * 
 	 * @param keyCode Key code of the pressed key.
 	 */
 	public void keyPressed(int keyCode)

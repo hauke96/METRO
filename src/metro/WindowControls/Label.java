@@ -10,6 +10,7 @@ import metro.Graphics.Draw;
 
 /**
  * Create a label to hold text with optional automatic line breaks.
+ * 
  * @author hauke
  *
  */
@@ -24,6 +25,7 @@ public class Label implements ControlElement
 
 	/**
 	 * Creates a new label.
+	 * 
 	 * @param text The text that should be displayed.
 	 * @param position The position on the screen/window (absolute)
 	 * @param window The window it's on.
@@ -32,9 +34,10 @@ public class Label implements ControlElement
 	{
 		this(text, position, 0, window);
 	}
-	
+
 	/**
 	 * Creates a new label.
+	 * 
 	 * @param text The text that should be displayed.
 	 * @param position The position on the screen/window (absolute)
 	 * @param areaWidth Maximum width of label for automatic line breaks.
@@ -49,9 +52,10 @@ public class Label implements ControlElement
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_color = Color.black;
 	}
-	
+
 	/**
 	 * Creates a new label.
+	 * 
 	 * @param text The text that should be displayed.
 	 * @param position The position on the screen/window (absolute)
 	 */
@@ -59,9 +63,10 @@ public class Label implements ControlElement
 	{
 		this(text, position, 0, null);
 	}
-	
+
 	/**
 	 * Creates a new label.
+	 * 
 	 * @param text The text that should be displayed.
 	 * @param position The position on the screen/window (absolute)
 	 * @param areaWidth The maximum width of the label. This will enable automatic line breaks.
@@ -70,9 +75,10 @@ public class Label implements ControlElement
 	{
 		this(text, position, areaWidth, null);
 	}
-	
+
 	/**
 	 * Sets the color of the text to newColor.
+	 * 
 	 * @param newColor The new color.
 	 */
 	public void setColor(Color newColor)
@@ -87,7 +93,7 @@ public class Label implements ControlElement
 	public void draw()
 	{
 		Draw.setColor(_color);
-		
+
 		if(_areaWidth == 0)
 		{
 			Draw.String(_text, _position.x, _position.y);
@@ -98,7 +104,9 @@ public class Label implements ControlElement
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see WindowControls.ControlElement#clickOnControlElement()
 	 */
 	@Override
@@ -107,7 +115,9 @@ public class Label implements ControlElement
 		return false;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see WindowControls.ControlElement#setPosition(java.awt.Point)
 	 */
 	@Override
@@ -116,7 +126,9 @@ public class Label implements ControlElement
 		_position = pos;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see WindowControls.ControlElement#getPosition()
 	 */
 	@Override
@@ -124,18 +136,26 @@ public class Label implements ControlElement
 	{
 		return _position;
 	}
+
 	@Override
 	public void moveElement(Point offset)
 	{
 		_position.x += offset.x;
 		_position.y += offset.y;
 	}
-	@Override
-	public void mouseScrolled(int amount) {}
 
 	@Override
-	public void keyPressed(int key){}
+	public void mouseScrolled(int amount)
+	{
+	}
 
 	@Override
-	public void keyUp(int keyCode){}
+	public void keyPressed(int key)
+	{
+	}
+
+	@Override
+	public void keyUp(int keyCode)
+	{
+	}
 }

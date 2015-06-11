@@ -161,13 +161,14 @@ public class Draw
 	{
 		spriteBatch.end();
 		spriteBatch.begin();
-		if (x1 != x2 && y1 != y2) // -> diagonal line -> shapeRenderer for antialising
+		if(x1 != x2 && y1 != y2) // -> diagonal line -> shapeRenderer for antialising
 		{
 			init();
 			shapeRenderer.line(x1, y1, x2, y2);
 			reset();
 		}
-		else // -> straight line -> texture for non-antialised drawing
+		else
+		// -> straight line -> texture for non-antialised drawing
 		{
 			spriteBatch.setColor(r, g, b, a);
 			spriteBatch.draw(METRO.__iconSet.getTexture(), x1, y1, x2 - x1 + 1, y2 - y1 + 1, 20, 0, 1, 1, false, false);
@@ -215,15 +216,15 @@ public class Draw
 		int stringHeight = Draw.getStringSize(text).height, vOffset = 0, rowCount = 0;
 		String[] segments = text.split("\n"); // split by new line
 
-		for (String segment : segments)
+		for(String segment : segments)
 		{
 			String[] subSegments = segment.split(" "); // each word
 			String line = "";
 
 			// recunstruct string with length < area width
-			for (int i = 0; i < subSegments.length; i++)
+			for(int i = 0; i < subSegments.length; i++)
 			{
-				if (Draw.getStringSize(line + " " + subSegments[i]).width >= width) // if next addition would be out of area
+				if(Draw.getStringSize(line + " " + subSegments[i]).width >= width) // if next addition would be out of area
 				{
 					Draw.String(line, x, y + vOffset);
 					vOffset += stringHeight + 8; // y-pos for next line
@@ -265,7 +266,7 @@ public class Draw
 	public static Dimension getStringSize(String text, BitmapFont font)
 	{
 		TextBounds bounds = font.getBounds(text);
-		return new Dimension((int) bounds.width, (int) bounds.height);
+		return new Dimension((int)bounds.width, (int)bounds.height);
 	}
 
 	/**
@@ -280,15 +281,15 @@ public class Draw
 		int rowCount = 0;
 		String[] segments = text.split("\n"); // split by new line
 
-		for (String segment : segments)
+		for(String segment : segments)
 		{
 			String[] subSegments = segment.split(" "); // each word
 			String line = "";
 
 			// recunstruct string with length < area width
-			for (int i = 0; i < subSegments.length; i++)
+			for(int i = 0; i < subSegments.length; i++)
 			{
-				if (Draw.getStringSize(line + " " + subSegments[i]).width >= width) // if next addition would be out of area
+				if(Draw.getStringSize(line + " " + subSegments[i]).width >= width) // if next addition would be out of area
 				{
 					rowCount++;
 					line = subSegments[i] + " "; // choose first char for next line
@@ -341,6 +342,6 @@ public class Draw
 	public static void Image(TextureRegion image, Rectangle position, Rectangle areaOnImage)
 	{
 		METRO.__spriteBatch.draw(image.getTexture(), position.x, position.y, position.width, position.height, areaOnImage.x, areaOnImage.y, areaOnImage.width,
-				areaOnImage.height, false, true);
+			areaOnImage.height, false, true);
 	}
 }

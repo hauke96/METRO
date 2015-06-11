@@ -1,7 +1,6 @@
 package metro.WindowControls;
 
 import java.awt.Color;
-import java.awt.MouseInfo;
 import java.awt.Point;
 
 import metro.METRO;
@@ -17,9 +16,10 @@ public class Checkbox implements ControlElement
 	private Point _position;
 	private Window _windowHandle;
 	private int _textWidth = 0;
-	
+
 	/**
 	 * Creates a new checkbox with a certain text.
+	 * 
 	 * @param position The position of the checkbox.
 	 * @param text The text of the checkbox
 	 */
@@ -27,9 +27,10 @@ public class Checkbox implements ControlElement
 	{
 		this(position, text, false, true, null);
 	}
-	
+
 	/**
 	 * Creates a new checbox with a certain text and a start-state.
+	 * 
 	 * @param position The position of the checkbox.
 	 * @param text The text of the checkbox
 	 * @param checked The start state of the checkbox.
@@ -38,9 +39,10 @@ public class Checkbox implements ControlElement
 	{
 		this(position, text, checked, true, null);
 	}
-	
+
 	/**
 	 * Creates a new checbox with a certain text, a start-state and an enable flag.
+	 * 
 	 * @param position The position of the checkbox.
 	 * @param text The text of the checkbox
 	 * @param checked The start state of the checkbox.
@@ -50,9 +52,10 @@ public class Checkbox implements ControlElement
 	{
 		this(position, text, checked, enabled, null);
 	}
-	
+
 	/**
 	 * Creates a new checbox with a certain text, a start-state and an enable flag.
+	 * 
 	 * @param position The position of the checkbox.
 	 * @param text The text of the checkbox
 	 * @param checked The start state of the checkbox.
@@ -63,9 +66,10 @@ public class Checkbox implements ControlElement
 	{
 		this(position, text, 0, checked, enabled, window);
 	}
-	
+
 	/**
 	 * Creates a new checbox with a certain text, a start-state and an enable flag.
+	 * 
 	 * @param position The position of the checkbox.
 	 * @param text The text of the checkbox
 	 * @param textWidth The maximum width of the text. This enables automatic linebreaks
@@ -85,18 +89,20 @@ public class Checkbox implements ControlElement
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 	}
-	
+
 	/**
 	 * Returns the current state of the checkbox.
+	 * 
 	 * @return True if checked, false if not.
 	 */
 	public boolean isChecked()
 	{
 		return _checked;
 	}
-	
+
 	/**
 	 * Returns true, when the state (true/false) has changes since last call of this method.
+	 * 
 	 * @return True if state has changed.
 	 */
 	public boolean hasChanged()
@@ -105,7 +111,7 @@ public class Checkbox implements ControlElement
 		if(hasChanged) _oldState = _checked;
 		return hasChanged;
 	}
-	
+
 	public boolean isPressed()
 	{
 		Point mPos = METRO.__originalMousePosition;
@@ -115,18 +121,18 @@ public class Checkbox implements ControlElement
 			&& mPos.y >= _position.y
 			&& mPos.y <= _position.y + 15;
 	}
-	
+
 	@Override
 	public void draw()
 	{
-		//set the color depending on _enabled
-		Draw.setColor(_enable 
-			? METRO.__metroBlue 
+		// set the color depending on _enabled
+		Draw.setColor(_enable
+			? METRO.__metroBlue
 			: new Color(METRO.__metroBlue.getRed(), METRO.__metroBlue.getGreen(), METRO.__metroBlue.getBlue(), 125));
 		_label.setColor(_enable
 			? Color.black
 			: Color.lightGray);
-		
+
 		Draw.Rect(_position.x, _position.y, 15, 15);
 		if(_checked) // draw cross if checked
 		{
@@ -170,11 +176,17 @@ public class Checkbox implements ControlElement
 	}
 
 	@Override
-	public void mouseScrolled(int amount){}
+	public void mouseScrolled(int amount)
+	{
+	}
 
 	@Override
-	public void keyPressed(int key){}
+	public void keyPressed(int key)
+	{
+	}
 
 	@Override
-	public void keyUp(int keyCode){}
+	public void keyUp(int keyCode)
+	{
+	}
 }
