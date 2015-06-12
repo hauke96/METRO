@@ -1,4 +1,4 @@
-package metro.GameScreen;
+package metro.GameScreen.CityView;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -27,6 +27,7 @@ public class CityTravelerSpot
 	 * 
 	 * @param position Position of the center of the spot in pixel.
 	 * @param strength The strength (usually from 0 to 10).
+	 * @param circlesOnly When true, only the outer circles will be visible. The inside is white.
 	 */
 	public CityTravelerSpot(Point position, int strength)
 	{
@@ -65,10 +66,10 @@ public class CityTravelerSpot
 	 * @param circleSelected If the circle is selected and therefore drawn in a different color.
 	 * @param drawNumbers if numbers should be drawn on circle
 	 */
-	public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean drawNumbers)
-	{
-		draw(sp, layerIndex, circleSelected, drawNumbers, false);
-	}
+//	public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean drawNumbers)
+//	{
+//		draw(sp, layerIndex, circleSelected, drawNumbers, false);
+//	}
 
 	/**
 	 * Draws the circles of the Hotspot.
@@ -76,55 +77,40 @@ public class CityTravelerSpot
 	 * @param g The graphic handle to draw an.
 	 * @param layerIndex Index of the circle to draw
 	 * @param circleSelected If the circle is selected and therefore drawn in a different color.
-	 * @param drawNumbers if numbers should be drawn on circle
 	 * @param onlyEdges If only edges should be drawn
 	 */
-	public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean drawNumbers, boolean onlyEdges)
+	public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean onlyEdges)
 	{
 		layerIndex = _strength - layerIndex;
 		if(layerIndex < -1) return;
 
 		// get the position with offset
-		Point position = new Point(_position.x + (int)CityView._offset.getX(), _position.y + (int)CityView._offset.getY());
+		Point position = new Point(_position.x + (int)CityView._offset.getX() + 1, _position.y + (int)CityView._offset.getY() + 1);
 
 		if(circleSelected)
 		{
-			Fill.setColor(new Color(200 - (int)(2f * (_strength - layerIndex)),
-				220 - (int)(1.5f * (_strength - layerIndex)),
-				255));
-			Fill.Circle(position.x - layerIndex * _circleRadiusStep + 1,
-				position.y - layerIndex * _circleRadiusStep + 1,
-				_circleRadiusStep * 2 * layerIndex - 2);
-
-			Draw.setColor(new Color(70, 126, 179));
-			if(drawNumbers && layerIndex > 1)
-			{
-				Draw.String(_strength - layerIndex + "", position.x + _circleRadiusStep * layerIndex - _circleRadiusStep / 2 - 5, position.y - 6); // right
-				Draw.String(_strength - layerIndex + "", position.x - _circleRadiusStep * layerIndex + _circleRadiusStep / 2 - 1, position.y - 6); // left
-
-				Draw.String(_strength - layerIndex + "", position.x - 3, position.y + _circleRadiusStep * layerIndex - _circleRadiusStep / 2 - 5); // bottom
-				Draw.String(_strength - layerIndex + "", position.x - 3, position.y - _circleRadiusStep * layerIndex + _circleRadiusStep - 28); // top
-			}
-			else if(layerIndex <= 1 && drawNumbers) // draw only one number on last circle
-			{
-				Draw.String((_strength - 1) + "", position.x - 3, position.y - 5);
-			}
-		}
-		else if(!onlyEdges)
-		{
-			int gray = 255 - 5 * (_strength - layerIndex + 1); // gray color based on layer
+			int gray = (int)(255 - 2 * (_strength - layerIndex + 1) - 8); // gray color based on layer
 			Fill.setColor(new Color(gray, gray, gray));
 			Fill.Circle(position.x - layerIndex * _circleRadiusStep + 1,
 				position.y - layerIndex * _circleRadiusStep + 1,
-				_circleRadiusStep * 2 * layerIndex - 2);
+				_circleRadiusStep * 2 * layerIndex - 3);
+		}
+		else
+		{
+			int gray = 255 - 5 * (_strength - layerIndex + 1); // gray color based on layer
+			gray = 255;
+			Fill.setColor(new Color(gray, gray, gray));
+			Fill.Circle(position.x - layerIndex * _circleRadiusStep + 1,
+				position.y - layerIndex * _circleRadiusStep + 1,
+				_circleRadiusStep * 2 * layerIndex - 3);
 		}
 		if(onlyEdges)
 		{
-			int gray = 255 - 25 * (_strength - layerIndex + 1); // gray color based on layer
+			int gray = 255 - 9 * (_strength - layerIndex + 1) - 30; // gray color based on layer
 			Draw.setColor(new Color(gray, gray, gray));
 			Draw.Circle(position.x - layerIndex * _circleRadiusStep,
 				position.y - layerIndex * _circleRadiusStep,
-				_circleRadiusStep * 2 * layerIndex);
+				_circleRadiusStep * 2 * layerIndex - 1);
 		}
 	}
 

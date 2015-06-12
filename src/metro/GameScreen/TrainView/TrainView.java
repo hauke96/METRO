@@ -1,4 +1,4 @@
-package metro.GameScreen;
+package metro.GameScreen.TrainView;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import metro.METRO;
+import metro.GameScreen.GameScreen;
+import metro.GameScreen.CityView.CityView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.RailwayNode;
@@ -41,7 +43,6 @@ public class TrainView extends GameScreen
 	private CityView _cityView = new CityView();
 
 	static public ArrayList<RailwayNode> _railwayNodeList = new ArrayList<RailwayNode>();
-	static public GameScreen _cityGameScreen; // to go into the city game-screen without loosing reference
 	static public Point _selectedCross = new Point(-1, -1); // out of screen
 
 	public TrainView()
@@ -64,7 +65,9 @@ public class TrainView extends GameScreen
 		_oldMousePos = METRO.__mousePosition;
 
 		drawBaseNet(sp, new Color(220, 220, 220));// Color.lightGray);
-		drawBaseDot(sp);
+		Point cursorDotPosition = drawBaseDot(sp);
+		
+		_cityView.drawNumbers(sp, cursorDotPosition);
 
 		drawEditMode(sp);
 		drawRailwayLines(sp);
@@ -127,7 +130,7 @@ public class TrainView extends GameScreen
 	 * 
 	 * @param g The graphic handle to draw on
 	 */
-	private void drawBaseDot(SpriteBatch sp)
+	private Point drawBaseDot(SpriteBatch sp)
 	{
 		Point cursorPos = new Point(Math.abs((int)(METRO.__mousePosition.x - 7 - _mapOffset.getX()) % METRO.__baseNetSpacing),
 			Math.abs((int)(METRO.__mousePosition.y - 7 - _mapOffset.getY()) % METRO.__baseNetSpacing));
@@ -143,6 +146,8 @@ public class TrainView extends GameScreen
 		Fill.Rect(METRO.__mousePosition.x + offsetMarker.x - 8,
 			METRO.__mousePosition.y + offsetMarker.y - 8,
 			3, 3);
+		return new Point(METRO.__mousePosition.x + offsetMarker.x - 7,
+			METRO.__mousePosition.y + offsetMarker.y - 7);
 	}
 
 	/**

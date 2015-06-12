@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import metro.METRO;
-import metro.GameScreen.TrainView;
+import metro.GameScreen.TrainView.TrainView;
 import metro.Graphics.Draw;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
