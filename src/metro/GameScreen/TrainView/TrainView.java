@@ -28,22 +28,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class TrainView extends GameScreen
 {
-	private boolean _dragMode = false;
+	private boolean _dragMode;
 	private Point _oldMousePos; // Mouse position from last frame
-	private Point2D _mapOffset = new Point2D.Float(0, 0); // offset for moving the map
-	private List<TrainStation> _trainStationList = new ArrayList<TrainStation>();
 	// private TrainStation _selectedTrainStation = null; // important for later stuff when the user can select a train station
 	private Button _buildStation,
 		_buildTracks,
 		_showTrainList,
 		_createNewTrain;
-	private int _editMode = 0; // 0 = nothing; 1 = place stations; 2 = place lines TODO: outsource to extra classes?
-	private RailwayNode _currentRailwayNode; // click -> set railwaynode -> click -> connect/create
+	private CityView _cityView;
+	private TrainViewTool _trainViewTool;
+	private Point2D _mapOffset; // offset for moving the map
 
-	private CityView _cityView = new CityView();
-
-	static public ArrayList<RailwayNode> _railwayNodeList = new ArrayList<RailwayNode>();
-	static public Point _selectedCross = new Point(-1, -1); // out of screen
+	static public List<TrainStation> _trainStationList = new ArrayList<TrainStation>();;
+	static public ArrayList<RailwayNode> _railwayNodeList = new ArrayList<RailwayNode>();;
+	static public Point _selectedCross = new Point(-1, -1); // out of screen;
 
 	public TrainView()
 	{
@@ -51,6 +49,12 @@ public class TrainView extends GameScreen
 		_buildTracks = new Button(new Rectangle(-10, 139, 50, 40), new Rectangle(0, 68, 50, 40), METRO.__iconSet);
 		_showTrainList = new Button(new Rectangle(-10, 200, 50, 40), new Rectangle(0, 108, 50, 40), METRO.__iconSet);
 		_createNewTrain = new Button(new Rectangle(-10, 239, 50, 40), new Rectangle(0, 148, 50, 40), METRO.__iconSet);
+
+		_mapOffset = new Point2D.Float(0, 0);
+		_cityView = new CityView();
+
+		_dragMode = false;
+		_trainViewTool = null;
 	}
 
 	@Override
@@ -64,12 +68,13 @@ public class TrainView extends GameScreen
 		}
 		_oldMousePos = METRO.__mousePosition;
 
-		drawBaseNet(sp, new Color(220, 220, 220));// Color.lightGray);
+		drawBaseNet(sp, new Color(220, 220, 220), 0);
 		Point cursorDotPosition = drawBaseDot(sp);
-		
+
 		_cityView.drawNumbers(sp, cursorDotPosition);
 
-		drawEditMode(sp);
+		if(_trainViewTool != null) _trainViewTool.draw(sp, _mapOffset);
+
 		drawRailwayLines(sp);
 		drawTrainStations(sp);
 
@@ -88,9 +93,11 @@ public class TrainView extends GameScreen
 		Draw.setColor(Color.blue);
 		Draw.String("MapPosition:", METRO.__SCREEN_SIZE.width - 300, 65);
 		Draw.String("MousePosition:", METRO.__SCREEN_SIZE.width - 300, 85);
+		Draw.String("SelectedCross:", METRO.__SCREEN_SIZE.width - 300, 105);
 		Draw.setColor(Color.black);
 		Draw.String(_mapOffset + "", METRO.__SCREEN_SIZE.width - 200, 65);
 		Draw.String(METRO.__mousePosition + "", METRO.__SCREEN_SIZE.width - 200, 85);
+		Draw.String(_selectedCross + "", METRO.__SCREEN_SIZE.width - 200, 105);
 
 	}
 
@@ -115,17 +122,6 @@ public class TrainView extends GameScreen
 	}
 
 	/**
-	 * Draws the basic gray net for kind of orientation.
-	 * 
-	 * @param g The graphic handle to draw on
-	 * @param color The color of the net
-	 */
-	private void drawBaseNet(SpriteBatch sp, Color color)
-	{
-		drawBaseNet(sp, color, 0);
-	}
-
-	/**
 	 * Calculates the position and draws this fancy jumping dot near the cursor.
 	 * 
 	 * @param g The graphic handle to draw on
@@ -135,8 +131,8 @@ public class TrainView extends GameScreen
 		Point cursorPos = new Point(Math.abs((int)(METRO.__mousePosition.x - 7 - _mapOffset.getX()) % METRO.__baseNetSpacing),
 			Math.abs((int)(METRO.__mousePosition.y - 7 - _mapOffset.getY()) % METRO.__baseNetSpacing));
 
-		_selectedCross = new Point(((int)(METRO.__mousePosition.x - 5 - _mapOffset.getX()) - 10) / METRO.__baseNetSpacing + 1,
-			((int)(METRO.__mousePosition.y - 5 - _mapOffset.getY()) - 10) / METRO.__baseNetSpacing + 1);
+		_selectedCross = new Point((int)Math.round(((int)(METRO.__mousePosition.x - 15 - _mapOffset.getX()) - 10) / (float)METRO.__baseNetSpacing) + 1,// ((int)(METRO.__mousePosition.x - 5 - _mapOffset.getX()) - 10) / METRO.__baseNetSpacing + 1,
+			(int)Math.round(((int)(METRO.__mousePosition.y - 15 - _mapOffset.getY()) - 10) / (float)METRO.__baseNetSpacing) + 1);
 
 		Point offsetMarker = new Point(METRO.__baseNetSpacing - cursorPos.x, METRO.__baseNetSpacing - cursorPos.y);
 		if(cursorPos.x <= METRO.__baseNetSpacing / 2) offsetMarker.x = cursorPos.x;
@@ -148,84 +144,6 @@ public class TrainView extends GameScreen
 			3, 3);
 		return new Point(METRO.__mousePosition.x + offsetMarker.x - 7,
 			METRO.__mousePosition.y + offsetMarker.y - 7);
-	}
-
-	/**
-	 * Draws all the stuff from edit mode things (previews, etc.)
-	 * 
-	 * @param g Graphics handle to draw on.
-	 */
-	private void drawEditMode(SpriteBatch sp)
-	{
-		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
-
-		switch(_editMode)
-		{
-			case 1:
-				Point position = new Point(METRO.__mousePosition.x - 4,
-					METRO.__mousePosition.y - 8); // Position with offset etc.
-				Fill.setColor(Color.white);
-				Fill.Rect(position.x, position.y, 8, 15);
-				Draw.setColor(Color.black);
-				Draw.Rect(position.x, position.y, 8, 15);
-				break;
-			case 2:
-				if(_currentRailwayNode != null) // if not null, calc and draw preview of new tracks
-				{
-					Draw.setColor(Color.black);
-
-					int diagonalOffset = 0, B = _selectedCross.x - _currentRailwayNode.getPosition().x, H = _selectedCross.y - _currentRailwayNode.getPosition().y, preFactor = 1; // counts the amount of fields covered
-
-					if(Math.abs(H) > Math.abs(B)) // vertical tracks
-					{
-						diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f);
-						if(H < 0) preFactor = -1;
-
-						Draw.Line(offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing,
-							offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-							offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing,
-							offset.y + (_currentRailwayNode.getPosition().y + preFactor * diagonalOffset) * METRO.__baseNetSpacing);
-
-						Draw.Line(offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing,
-							offset.y + (_currentRailwayNode.getPosition().y + preFactor * diagonalOffset) * METRO.__baseNetSpacing,
-							offset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing,
-							offset.y + (_currentRailwayNode.getPosition().y + preFactor * (diagonalOffset + Math.abs(B))) * METRO.__baseNetSpacing);
-
-						Draw.Line(offset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing,
-							offset.y + (_currentRailwayNode.getPosition().y + preFactor * (diagonalOffset + Math.abs(B))) * METRO.__baseNetSpacing,
-							offset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing,
-							offset.y + (_currentRailwayNode.getPosition().y + preFactor * (2 * diagonalOffset + preFactor * ((H - B) % 2) + Math.abs(B))) * METRO.__baseNetSpacing);
-					}
-					else if(Math.abs(B) > Math.abs(H)) // horizontal tracks
-					{
-						diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
-						if(B < 0) preFactor = -1;
-
-						Draw.Line(offset.x + (_currentRailwayNode.getPosition().x + preFactor * diagonalOffset) * METRO.__baseNetSpacing,
-							offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-							offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing,
-							offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing);
-
-						Draw.Line(offset.x + (_currentRailwayNode.getPosition().x + preFactor * diagonalOffset) * METRO.__baseNetSpacing,
-							offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-							offset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing,
-							offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing);
-
-						Draw.Line(offset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing,
-							offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing,
-							offset.x + (_currentRailwayNode.getPosition().x + preFactor * (2 * diagonalOffset + preFactor * ((B - H) % 2) + Math.abs(H))) * METRO.__baseNetSpacing,
-							offset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing);
-					}
-					else if(Math.abs(B) == Math.abs(H)) // diagonal tracks
-					{
-						Draw.Line(offset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing,
-							offset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-							offset.x + _selectedCross.x * METRO.__baseNetSpacing,
-							offset.y + _selectedCross.y * METRO.__baseNetSpacing);
-					}
-				}
-				break;
-		}
 	}
 
 	/**
@@ -277,107 +195,6 @@ public class TrainView extends GameScreen
 		_createNewTrain.draw();
 	}
 
-	/**
-	 * Created nodes after second mouse click, removes doubles and manages calculation of automatic routiung.
-	 * 
-	 * @param screenX The x-position on screen of the click
-	 * @param screenY The y-position on screen of the click
-	 * @param mouseButton The mouse button that has been pressed.
-	 */
-	private void placeTracks(int screenX, int screenY, int mouseButton)
-	{
-		if(screenX >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _mapOffset.getX() &&
-			screenX <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _mapOffset.getX() &&
-			screenY >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _mapOffset.getY() &&
-			screenY <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _mapOffset.getY())
-		{
-			if(_currentRailwayNode == null) // first click
-			{
-				_currentRailwayNode = RailwayNode.getNodeByID(RailwayNode.calcID(_selectedCross.x, _selectedCross.y)); // get Node at this position
-
-				if(_currentRailwayNode == null) // if there's no node, create new one and set it as current node
-				{
-					RailwayNode node = new RailwayNode(_selectedCross, null);
-					_currentRailwayNode = node;
-					_railwayNodeList.add(node);
-				}
-			}
-			else
-			// second click
-			{
-				int diagonalOffset = 0, B = _selectedCross.x - _currentRailwayNode.getPosition().x, // horizontal distance
-				H = _selectedCross.y - _currentRailwayNode.getPosition().y, // vertical distance
-				preFactorH = 1, preFactorB = 1;
-				RailwayNode prevNode = _currentRailwayNode;
-
-				if(Math.abs(H) > Math.abs(B)) // vertical tracks
-				{
-					diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f); // calculate length of one vertical part
-					if(H < 0) preFactorH = -1;
-					if(B < 0) preFactorB = -1;
-
-					prevNode = createTrack(0, preFactorH, 0, diagonalOffset, prevNode); // vertical line
-					prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(B), prevNode); // diagonal lines
-					createTrack(0, preFactorH, diagonalOffset + Math.abs(B), Math.abs(H), prevNode); // vertical lines
-				}
-				else if(Math.abs(B) > Math.abs(H))
-				{
-					diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
-					if(H < 0) preFactorH = -1;
-					if(B < 0) preFactorB = -1;
-
-					prevNode = createTrack(preFactorB, 0, 0, diagonalOffset, prevNode); // vertical lines
-					prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
-					createTrack(preFactorB, 0, diagonalOffset + Math.abs(H), Math.abs(B), prevNode); // vertical lines
-				}
-				else if(Math.abs(B) == Math.abs(H))
-				{
-					if(H < 0) preFactorH = -1;
-					if(B < 0) preFactorB = -1;
-
-					createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
-				}
-				_currentRailwayNode = null;
-			}
-		}
-	}
-
-	/**
-	 * Creates one Track for the parameter.
-	 * 
-	 * @param offsetB Offset for horizontal position.
-	 * @param offsetH Offset for vertical position.
-	 * @param start Start of counter.
-	 * @param end End of counter.
-	 * @param prevNode The previous node that should be connected to new ones.
-	 */
-	private RailwayNode createTrack(int offsetB, int offsetH, int start, int end, RailwayNode prevNode)
-	{
-		for(int i = start; i < end; i++)
-		{
-			int ID = RailwayNode.calcID(prevNode.getPosition().x + offsetB, prevNode.getPosition().y + offsetH);
-			RailwayNode node = null;
-			if(!RailwayNode._IDList.contains(ID)) // if there's a NO node at this position
-			{
-				node = new RailwayNode(new Point(
-					prevNode.getPosition().x + offsetB,
-					prevNode.getPosition().y + offsetH),
-					prevNode);
-				METRO.__money -= RailwayNode._PRICE;
-			}
-			else
-			// if there's a node, set it as node instead of new one
-			{
-				node = RailwayNode.getNodeByID(ID);
-			}
-
-			prevNode.add(node); // connect to previous node
-			if(!_railwayNodeList.contains(node)) _railwayNodeList.add(node); // ad node to list
-			prevNode = node; // set previous node to current one to go on
-		}
-		return prevNode;
-	}
-
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
@@ -389,18 +206,16 @@ public class TrainView extends GameScreen
 		}
 		else if(mouseButton == Buttons.LEFT)
 		{
-
 			if(!toolbarButtonPressed(screenX, screenY))// If no toolbar button was pressed, the user has clicked onto the map
 			{
 				// map stuff after Toolbar check, so there won't be a placing under a button
-				Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
-				manageEditModeLeftClick(screenX, screenY, offset);
+				if(_trainViewTool != null) _trainViewTool.leftClick(screenX, screenY, _mapOffset);
 			}
 		}
-		else if(mouseButton == Buttons.MIDDLE)
+		else if(mouseButton == Buttons.RIGHT)
 		{
 			resetToolbarButtonPosition(null);
-			manageEditModeRightClick();
+			if(_trainViewTool != null) _trainViewTool.rightClick(screenX, screenY, _mapOffset);
 		}
 	}
 
@@ -417,93 +232,30 @@ public class TrainView extends GameScreen
 		if(_buildStation.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_buildStation);
-			_editMode = 1; // place stations
+			_trainViewTool = new StationPlacingTool(this);
 			buttonPresses = true;
 		}
 		else if(_buildTracks.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_buildTracks);
-			_editMode = 2; // place lines
+			_trainViewTool = new TrackPlacingTool(this);
 			buttonPresses = true;
 		}
 		else if(_showTrainList.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_showTrainList);
-			_editMode = 0;
+			_trainViewTool = null;
 			// TODO: create list view with all trains
 			buttonPresses = true;
 		}
 		else if(_createNewTrain.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_createNewTrain);
-			_editMode = 0;
+			_trainViewTool = null;
 			// TODO: show config window to create new train
 			buttonPresses = true;
 		}
 		return buttonPresses;
-	}
-
-	/**
-	 * Manages the actions after mouse is pressed (LEFT) in certain edit mode.
-	 * 
-	 * @param screenX The x-position on screen of the click
-	 * @param screenY The y-position on screen of the click
-	 * @param offset The map offset as Point (not Point2D)
-	 */
-	private void manageEditModeLeftClick(int screenX, int screenY, Point offset)
-	{
-		switch(_editMode)
-		{
-			case 1: // station place mode
-				if(screenX >= _selectedCross.x * METRO.__baseNetSpacing - 6 + _mapOffset.getX() &&
-					screenX <= _selectedCross.x * METRO.__baseNetSpacing + 6 + _mapOffset.getX() &&
-					screenY >= _selectedCross.y * METRO.__baseNetSpacing - 6 + _mapOffset.getY() &&
-					screenY <= _selectedCross.y * METRO.__baseNetSpacing + 6 + _mapOffset.getY())
-				{
-					boolean positionOccupied = false;
-					Point selectPointOnScreen = new Point(_selectedCross.x * METRO.__baseNetSpacing + (int)_mapOffset.getX(),
-						_selectedCross.y * METRO.__baseNetSpacing + (int)_mapOffset.getY());
-
-					for(TrainStation ts : _trainStationList)
-					{
-						positionOccupied |= ts.getPositionOnScreen(offset).equals(selectPointOnScreen); // true if this cross has already a station
-					}
-
-					if(!positionOccupied) // no doubles
-					{
-						_trainStationList.add(new TrainStation(_selectedCross, 0));
-						METRO.__money -= TrainStation._PRICE;
-					}
-				}
-				break;
-			case 2: // track place mode
-				placeTracks(screenX, screenY, Buttons.LEFT);
-				break;
-		}
-	}
-
-	/**
-	 * Resets every necessary part after a RIGHT click in certain edit mode.
-	 */
-	private void manageEditModeRightClick()
-	{
-		switch(_editMode)
-		{
-			case 1: // station place mode
-				_editMode = 0;
-				break;
-			case 2: // track place mode
-				if(_currentRailwayNode != null)
-				{
-					_railwayNodeList.remove(_railwayNodeList.size() - 1);
-					_currentRailwayNode = null;
-				}
-				else
-				{
-					_editMode = 0;
-				}
-				break;
-		}
 	}
 
 	/**
@@ -549,6 +301,16 @@ public class TrainView extends GameScreen
 		{
 			_createNewTrain.setPosition(new Point(-10, _createNewTrain.getPosition().y));
 		}
+	}
+
+	/**
+	 * Sets a new TrainViewTool.
+	 * 
+	 * @param tool The new tool.
+	 */
+	public void settrainViewTool(TrainViewTool tool)
+	{
+		_trainViewTool = tool;
 	}
 
 	@Override

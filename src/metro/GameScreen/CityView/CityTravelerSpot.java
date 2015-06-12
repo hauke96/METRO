@@ -66,10 +66,10 @@ public class CityTravelerSpot
 	 * @param circleSelected If the circle is selected and therefore drawn in a different color.
 	 * @param drawNumbers if numbers should be drawn on circle
 	 */
-//	public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean drawNumbers)
-//	{
-//		draw(sp, layerIndex, circleSelected, drawNumbers, false);
-//	}
+	// public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean drawNumbers)
+	// {
+	// draw(sp, layerIndex, circleSelected, drawNumbers, false);
+	// }
 
 	/**
 	 * Draws the circles of the Hotspot.

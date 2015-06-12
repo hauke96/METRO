@@ -149,6 +149,19 @@ public class Draw
 	}
 
 	/**
+	 * Draws a line from one coordinate pair to another. This uses the METRO.__spriteBatch as default.
+	 * 
+	 * @param x1 First x-coordinate.
+	 * @param y1 First y-coordinate.
+	 * @param x2 Second x-coordinate.
+	 * @param y2 Second y-coordinate.
+	 */
+	public static void Line(double x1, double y1, double x2, double y2)
+	{
+		Line((int)x1, (int)y1, (int)x2, (int)y2, METRO.__spriteBatch);
+	}
+
+	/**
 	 * Draws a line from one coordinate pair to another onto the given sprite batch.
 	 * 
 	 * @param x1 First x-coordinate.

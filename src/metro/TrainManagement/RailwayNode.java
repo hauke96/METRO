@@ -24,7 +24,7 @@ public class RailwayNode
 	private int _ID;
 
 	public static ArrayList<Integer> _IDList = new ArrayList<Integer>();
-	public static final int _PRICE = 200;
+	public static final int PRICE = 200;
 
 	public RailwayNode(Point position, RailwayNode neighbor)
 	{

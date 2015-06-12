@@ -101,8 +101,6 @@ public class MainMenu extends GameScreen
 			_welcomeWindow.close();
 			_welcomeWindow = null;
 			METRO.__currentGameScreen = new TrainView();
-//			TrainView._cityGameScreen = new CityView();
-//			CityView._trainGameScreen = METRO.__currentGameScreen;
 			METRO.__controlDrawer = new ScreenInfoDrawer();
 		}
 		else if(_button_settings.isPressed(screenX, screenY))
