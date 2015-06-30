@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainMenu;
 import metro.Graphics.Draw;
+import metro.WindowControls.Button;
 import metro.WindowControls.Window;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -63,7 +64,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static TextureRegion __mainMenu_Buttons,
 		__mainMenu_TitleImage,
 		__iconSet;
-	public static metro.WindowControls.Button __viewPortButton_City,
+	public static Button __viewPortButton_City,
 		__viewPortButton_Train;
 	public static Color __metroRed,
 		__metroBlue;

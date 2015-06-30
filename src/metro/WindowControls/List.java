@@ -87,8 +87,7 @@ public class List implements ControlElement
 
 		for(String e : _entries)
 		{
-			int amountRows = Draw.getStringLines(e,
-				_position.width - 6);
+			int amountRows = Draw.getStringLines(e, _position.width - 6);
 
 			yOffset += 2 * ySpace + // 2 * 30px space above and below string
 				Draw.getStringSize(e).height * amountRows + // rows * height of string

@@ -38,10 +38,9 @@ public class TrainView extends GameScreen
 		_showTrainList,
 		_createNewTrain;
 	private CityView _cityView;
-	private TrainInteractionTool _trainViewTool;
+	private TrainInteractionTool _activeTool;
 	private Point2D _mapOffset; // offset for moving the map
-//	private TrainLineView _trainLineView;
-	private List<GameScreen> _subGameScreens;
+	private TrainLineView _trainListView;
 
 	static public List<TrainStation> _trainStationList;
 	static public ArrayList<RailwayNode> _railwayNodeList;
@@ -52,31 +51,26 @@ public class TrainView extends GameScreen
 		_selectedCross = new Point(-1, -1);
 		_railwayNodeList = new ArrayList<RailwayNode>();
 		_trainStationList = new ArrayList<TrainStation>();
-		
+
 		_buildStation = new Button(new Rectangle(-10, 100, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
 		_buildTracks = new Button(new Rectangle(-10, 139, 50, 40), new Rectangle(0, 68, 50, 40), METRO.__iconSet);
 		_showTrainList = new Button(new Rectangle(-10, 200, 50, 40), new Rectangle(0, 108, 50, 40), METRO.__iconSet);
 		_createNewTrain = new Button(new Rectangle(-10, 239, 50, 40), new Rectangle(0, 148, 50, 40), METRO.__iconSet);
 
 		_mapOffset = new Point2D.Float(0, 0);
-		_cityView = new CityView();
-		CityView another = new CityView();
-		_cityView.equals(another);
-		this.equals(another);
 
 		_dragMode = false;
-		_trainViewTool = null;
-		
-		_subGameScreens = new ArrayList<GameScreen>();
-		_subGameScreens.add(new TrainLineView());
+		_activeTool = null;
+
+		_cityView = new CityView(); // create extra instance for general purpose actions
+		_trainListView = new TrainLineView();
 	}
 
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		if(_cityView != null) _cityView.update(sp);
-		if(_cityView != null) _cityView.update(sp);
-		
+		if(_cityView != null) _cityView.updateGameScreen(sp);
+
 		if(_dragMode)
 		{
 			_mapOffset = new Point2D.Float((float)_mapOffset.getX() + (METRO.__mousePosition.x - _oldMousePos.x),
@@ -89,14 +83,16 @@ public class TrainView extends GameScreen
 
 		_cityView.drawNumbers(sp, cursorDotPosition);
 
-		if(_trainViewTool != null) _trainViewTool.draw(sp, _mapOffset);
+		if(_activeTool != null) _activeTool.draw(sp, _mapOffset);
 
 		drawRailwayLines(sp);
 		drawTrainStations(sp);
 
 		drawToolbar(sp);
-
+		
 		printDebugStuff(sp);
+		
+		if(_trainListView!= null) _trainListView.updateGameScreen(sp);
 	}
 
 	/**
@@ -114,7 +110,6 @@ public class TrainView extends GameScreen
 		Draw.String(_mapOffset + "", METRO.__SCREEN_SIZE.width - 200, 65);
 		Draw.String(METRO.__mousePosition + "", METRO.__SCREEN_SIZE.width - 200, 85);
 		Draw.String(_selectedCross + "", METRO.__SCREEN_SIZE.width - 200, 105);
-
 	}
 
 	/**
@@ -214,8 +209,9 @@ public class TrainView extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		_cityView.mouseClicked(screenX, screenY, mouseButton);
-
+		if(_cityView != null) _cityView.mouseClicked(screenX, screenY, mouseButton);
+		if(_trainListView!= null) _trainListView.mouseClicked(screenX, screenY, mouseButton);
+		
 		if(mouseButton == Buttons.MIDDLE) // for drag-mode
 		{
 			_dragMode = true;
@@ -225,13 +221,13 @@ public class TrainView extends GameScreen
 			if(!toolbarButtonPressed(screenX, screenY))// If no toolbar button was pressed, the user has clicked onto the map
 			{
 				// map stuff after Toolbar check, so there won't be a placing under a button
-				if(_trainViewTool != null) _trainViewTool.leftClick(screenX, screenY, _mapOffset);
+				if(_activeTool != null) _activeTool.leftClick(screenX, screenY, _mapOffset);
 			}
 		}
 		else if(mouseButton == Buttons.RIGHT)
 		{
 			resetToolbarButtonPosition(null);
-			if(_trainViewTool != null) _trainViewTool.rightClick(screenX, screenY, _mapOffset);
+			if(_activeTool != null) _activeTool.rightClick(screenX, screenY, _mapOffset);
 		}
 	}
 
@@ -248,25 +244,26 @@ public class TrainView extends GameScreen
 		if(_buildStation.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_buildStation);
-			_trainViewTool = new StationPlacingTool(this);
+			_activeTool = new StationPlacingTool(this);
 			buttonPresses = true;
 		}
 		else if(_buildTracks.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_buildTracks);
-			_trainViewTool = new TrackPlacingTool(this);
+			_activeTool = new TrackPlacingTool(this);
 			buttonPresses = true;
 		}
 		else if(_showTrainList.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_showTrainList);
-			_trainViewTool = null;
+			_activeTool = null;
+			_trainListView = new TrainLineView();
 			buttonPresses = true;
 		}
 		else if(_createNewTrain.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_createNewTrain);
-			_trainViewTool = null;
+			_activeTool = null;
 			// TODO: show config window to create new train
 			buttonPresses = true;
 		}
@@ -325,13 +322,14 @@ public class TrainView extends GameScreen
 	 */
 	public void settrainViewTool(TrainInteractionTool tool)
 	{
-		_trainViewTool = tool;
+		_activeTool = tool;
 	}
 
 	@Override
 	public void mouseReleased(int mouseButton)
 	{
-		_cityView.mouseReleased(mouseButton);
+		if(_cityView != null) _cityView.mouseReleased(mouseButton);
+		if(_trainListView!= null) _trainListView.mouseReleased(mouseButton);
 
 		if(mouseButton == Buttons.MIDDLE)
 		{
@@ -351,5 +349,6 @@ public class TrainView extends GameScreen
 	@Override
 	public void mouseScrolled(int amount)
 	{
+		if(_trainListView != null) _trainListView.mouseScrolled(amount);
 	}
 }
