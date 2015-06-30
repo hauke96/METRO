@@ -9,7 +9,9 @@ import java.util.List;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
+import metro.GameScreen.TrainInteractionTool;
 import metro.GameScreen.CityView.CityView;
+import metro.GameScreen.TrainLineView.TrainLineView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.RailwayNode;
@@ -36,15 +38,21 @@ public class TrainView extends GameScreen
 		_showTrainList,
 		_createNewTrain;
 	private CityView _cityView;
-	private TrainViewTool _trainViewTool;
+	private TrainInteractionTool _trainViewTool;
 	private Point2D _mapOffset; // offset for moving the map
+//	private TrainLineView _trainLineView;
+	private List<GameScreen> _subGameScreens;
 
-	static public List<TrainStation> _trainStationList = new ArrayList<TrainStation>();;
-	static public ArrayList<RailwayNode> _railwayNodeList = new ArrayList<RailwayNode>();;
-	static public Point _selectedCross = new Point(-1, -1); // out of screen;
+	static public List<TrainStation> _trainStationList;
+	static public ArrayList<RailwayNode> _railwayNodeList;
+	static public Point _selectedCross; // out of screen;
 
 	public TrainView()
 	{
+		_selectedCross = new Point(-1, -1);
+		_railwayNodeList = new ArrayList<RailwayNode>();
+		_trainStationList = new ArrayList<TrainStation>();
+		
 		_buildStation = new Button(new Rectangle(-10, 100, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
 		_buildTracks = new Button(new Rectangle(-10, 139, 50, 40), new Rectangle(0, 68, 50, 40), METRO.__iconSet);
 		_showTrainList = new Button(new Rectangle(-10, 200, 50, 40), new Rectangle(0, 108, 50, 40), METRO.__iconSet);
@@ -52,15 +60,23 @@ public class TrainView extends GameScreen
 
 		_mapOffset = new Point2D.Float(0, 0);
 		_cityView = new CityView();
+		CityView another = new CityView();
+		_cityView.equals(another);
+		this.equals(another);
 
 		_dragMode = false;
 		_trainViewTool = null;
+		
+		_subGameScreens = new ArrayList<GameScreen>();
+		_subGameScreens.add(new TrainLineView());
 	}
 
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		_cityView.update(sp);
+		if(_cityView != null) _cityView.update(sp);
+		if(_cityView != null) _cityView.update(sp);
+		
 		if(_dragMode)
 		{
 			_mapOffset = new Point2D.Float((float)_mapOffset.getX() + (METRO.__mousePosition.x - _oldMousePos.x),
@@ -245,7 +261,6 @@ public class TrainView extends GameScreen
 		{
 			resetToolbarButtonPosition(_showTrainList);
 			_trainViewTool = null;
-			// TODO: create list view with all trains
 			buttonPresses = true;
 		}
 		else if(_createNewTrain.isPressed(screenX, screenY))
@@ -308,7 +323,7 @@ public class TrainView extends GameScreen
 	 * 
 	 * @param tool The new tool.
 	 */
-	public void settrainViewTool(TrainViewTool tool)
+	public void settrainViewTool(TrainInteractionTool tool)
 	{
 		_trainViewTool = tool;
 	}

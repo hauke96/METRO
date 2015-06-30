@@ -8,6 +8,7 @@ import java.util.List;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
+import metro.GameScreen.TrainLineView.TrainLineView;
 import metro.Graphics.Draw;
 
 import com.badlogic.gdx.Input.Buttons;

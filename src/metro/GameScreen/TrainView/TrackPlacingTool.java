@@ -5,13 +5,14 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 
 import metro.METRO;
+import metro.GameScreen.TrainInteractionTool;
 import metro.Graphics.Draw;
 import metro.TrainManagement.RailwayNode;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class TrackPlacingTool implements TrainViewTool
+public class TrackPlacingTool implements TrainInteractionTool
 {
 	private RailwayNode _currentRailwayNode; // click -> set railwaynode -> click -> connect/create
 	private TrainView _trainView;

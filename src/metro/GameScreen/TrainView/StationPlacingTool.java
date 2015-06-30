@@ -5,13 +5,14 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 
 import metro.METRO;
+import metro.GameScreen.TrainInteractionTool;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.TrainStation;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class StationPlacingTool implements TrainViewTool
+public class StationPlacingTool implements TrainInteractionTool
 {
 	TrainView _trainView;
 

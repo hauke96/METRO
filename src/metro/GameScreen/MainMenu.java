@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import metro.METRO;
-import metro.ScreenInfoDrawer;
+import metro.GameScreen.TrainLineView.TrainLineView;
 import metro.GameScreen.TrainView.TrainView;
 import metro.Graphics.Draw;
 import metro.WindowControls.Button;

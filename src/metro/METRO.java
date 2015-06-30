@@ -5,7 +5,11 @@ package metro;
  * 
  * Code convention:
  * 
- * final: _WITH_BIG_NAME normal instance variables: _variable_someName METRO instance variables: __variable METRO finals: __FINAL local stuff: chooseAnyName
+ * final: _WITH_BIG_NAME
+ * normal instance variables: _variable_someName
+ * METRO instance variables: __variable
+ * METRO finals: __FINAL
+ * local stuff: chooseAnyName
  * 
  * final and local with small beginning char and capitol for every following word ( e.g.: int myVariableIsCool = 42; ).
  * 
@@ -170,6 +174,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 		__currentGameScreen.update(__spriteBatch);
 		if(__controlDrawer != null) __controlDrawer.update(__spriteBatch);
+		
 		// Draw every window with its controls
 		for(Window win : __windowList)
 		{

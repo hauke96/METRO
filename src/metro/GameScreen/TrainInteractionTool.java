@@ -1,10 +1,10 @@
-package metro.GameScreen.TrainView;
+package metro.GameScreen;
 
 import java.awt.geom.Point2D;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public interface TrainViewTool
+public interface TrainInteractionTool
 {
 	/**
 	 * Draws content of this tool.

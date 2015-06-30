@@ -134,6 +134,12 @@ public abstract class GameScreen
 	{
 		return _selectedInput;
 	}
+	
+	@Override
+	public boolean equals(Object obj)
+	{
+		return obj.getClass().equals(this.getClass());
+	}
 
 	/**
 	 * This is the settings window, that provides some options to configure.
