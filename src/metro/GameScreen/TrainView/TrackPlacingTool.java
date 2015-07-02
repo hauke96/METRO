@@ -93,9 +93,7 @@ public class TrackPlacingTool implements TrainInteractionTool
 	{
 		if(_currentRailwayNode != null)
 		{
-//			TrainView._railwayNodeList.remove(TrainView._railwayNodeList.size() - 1);
 			RailwayNodeOverseer.removeNodesWithoutNeighbors();
-			System.out.println(RailwayNodeOverseer.getSize());
 			_currentRailwayNode = null;
 		}
 		else
@@ -129,7 +127,8 @@ public class TrackPlacingTool implements TrainInteractionTool
 					_currentRailwayNode = node;
 				}
 			}
-			else // second click
+			else
+			// second click
 			{
 				int diagonalOffset = 0, B = TrainView._selectedCross.x - _currentRailwayNode.getPosition().x, // horizontal distance
 				H = TrainView._selectedCross.y - _currentRailwayNode.getPosition().y, // vertical distance
@@ -183,7 +182,7 @@ public class TrackPlacingTool implements TrainInteractionTool
 		{
 			Point nodePosition = new Point(prevNode.getPosition().x + offsetB, prevNode.getPosition().y + offsetH);
 			RailwayNode node = null;
-			
+
 			if(!RailwayNodeOverseer.isNodeAt(nodePosition)) // if there's NO node at this position
 			{
 				node = new RailwayNode(new Point(
@@ -192,7 +191,8 @@ public class TrackPlacingTool implements TrainInteractionTool
 					prevNode);
 				METRO.__money -= RailwayNode.PRICE;
 			}
-			else // if there's a node at this position, set it as node instead of new one
+			else
+			// if there's a node at this position, set it as node instead of new one
 			{
 				node = RailwayNodeOverseer.getNodeByPosition(nodePosition);
 			}

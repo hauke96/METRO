@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class RailwayNode
 {
-	private ArrayList<RailwayNode> _neighborNodes = new ArrayList<RailwayNode>();
+	private ArrayList<RailwayNode> _neighborNodes = new ArrayList<RailwayNode>(); // a list of all nodes this node is connected to
 	private Point _position; // not in pixel, cross number/pos
 
 	public static final int PRICE = 200;
@@ -78,10 +78,10 @@ public class RailwayNode
 	}
 
 	/**
-	 * Draws a railway node.
+	 * Draws a railway node and its neighbors. An algorithm takes care of NOT drawing nodes twice.
 	 * 
-	 * @param g
-	 * @param offset
+	 * @param sp The sprite batch.
+	 * @param offset An map offset in pixel.
 	 */
 	public void draw(SpriteBatch sp, Point offset)
 	{

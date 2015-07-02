@@ -7,10 +7,16 @@ import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * This class manages the RailwayNodes, offers some functions in adding, removing and clearing the map of nodes.
+ * 
+ * @author hauke
+ *
+ */
 public class RailwayNodeOverseer
 {
 	public static Map<Point, RailwayNode> _nodeMap = new HashMap<Point, RailwayNode>(); // yeah, i know, it sound like "road map" ...
-	
+
 	/**
 	 * Gets the RailwayNode at a specific position.
 	 * 
@@ -32,9 +38,10 @@ public class RailwayNodeOverseer
 	{
 		return _nodeMap.containsKey(position);
 	}
-	
+
 	/**
 	 * Checks if an node already exists
+	 * 
 	 * @param node The node that possibly exists.
 	 * @return True when node exists.
 	 */
@@ -42,16 +49,20 @@ public class RailwayNodeOverseer
 	{
 		return _nodeMap.containsValue(node);
 	}
-	
+
 	/**
 	 * Adds a node to the list of nodes (better: to the map).
+	 * 
 	 * @param node The RailwayNode that should be added
 	 */
 	public static void add(RailwayNode node)
 	{
 		_nodeMap.put(node.getPosition(), node);
 	}
-	
+
+	/**
+	 * Removes all nodes with no neighbors. These nodes are normally not visible and have no function.
+	 */
 	public static void removeNodesWithoutNeighbors()
 	{
 		ArrayList<RailwayNode> list = new ArrayList<RailwayNode>();
@@ -60,23 +71,24 @@ public class RailwayNodeOverseer
 		{
 			if(node.getNeighbors().size() == 0) list.add(node);
 		}
-		
+
 		for(RailwayNode node : list)
 		{
 			_nodeMap.remove(node.getPosition());
 		}
 	}
-	
+
+	/**
+	 * Draws all nodes onto the sprite batch.
+	 * 
+	 * @param offset The map offset in pixel.
+	 * @param sp The sprite batch.
+	 */
 	public static void drawAllNodes(Point offset, SpriteBatch sp)
 	{
 		for(RailwayNode node : _nodeMap.values())
 		{
 			node.draw(sp, offset);
 		}
-	}
-
-	public static int getSize()
-	{
-		return _nodeMap.values().size();
 	}
 }
