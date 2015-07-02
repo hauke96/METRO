@@ -64,6 +64,7 @@ public class TrainView extends GameScreen
 
 		_cityView = new CityView(); // create extra instance for general purpose actions
 		_trainListView = new TrainLineView();
+		_trainListView.setVisibility(false);
 	}
 
 	@Override
@@ -241,6 +242,8 @@ public class TrainView extends GameScreen
 	private boolean toolbarButtonPressed(int screenX, int screenY)
 	{
 		boolean buttonPresses = false;
+		_trainListView.setVisibility(false); // default is false. If _showTrainList is pressed this will be set to "true".
+		
 		if(_buildStation.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_buildStation);
@@ -257,7 +260,7 @@ public class TrainView extends GameScreen
 		{
 			resetToolbarButtonPosition(_showTrainList);
 			_activeTool = null;
-			_trainListView = new TrainLineView();
+			_trainListView.setVisibility(true);
 			buttonPresses = true;
 		}
 		else if(_createNewTrain.isPressed(screenX, screenY))
