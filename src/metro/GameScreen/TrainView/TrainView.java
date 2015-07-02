@@ -43,7 +43,7 @@ public class TrainView extends GameScreen
 	private TrainLineView _trainListView;
 
 	static public List<TrainStation> _trainStationList;
-	static public ArrayList<RailwayNode> _railwayNodeList;
+	static public ArrayList<RailwayNode> _railwayNodeList; // TODO put into RailwayNode
 	static public Point _selectedCross; // out of screen;
 
 	public TrainView()

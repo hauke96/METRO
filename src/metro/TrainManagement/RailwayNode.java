@@ -3,9 +3,10 @@ package metro.TrainManagement;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import metro.METRO;
-import metro.GameScreen.TrainView.TrainView;
 import metro.Graphics.Draw;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,61 +22,40 @@ public class RailwayNode
 {
 	private ArrayList<RailwayNode> _neighborNodes = new ArrayList<RailwayNode>();
 	private Point _position; // not in pixel, cross number/pos
-	private int _ID;
 
-	public static ArrayList<Integer> _IDList = new ArrayList<Integer>();
+	public static Map<Point, RailwayNode> _nodeMap = new HashMap<Point, RailwayNode>(); // yeah, i know, it sound like "road map" ...
 	public static final int PRICE = 200;
 
 	public RailwayNode(Point position, RailwayNode neighbor)
 	{
 		_position = position;
-		_ID = (int)(((Math.pow(position.x + position.y, 2) + position.x + position.y) / 2.0) + position.x);
-		//@formatter:off
-		// ID Table:
-		// 0   2   5   9  14  20 ...
-		// 1   4   8  13  19  26 ...
-		// 3   7  12  18  25  33 ...
-		// 6  11  17  24  32  41 ...
-		// ...
-		//@formatter:on
-		_IDList.add(_ID);
 		if(neighbor != null) _neighborNodes.add(neighbor);
 	}
 
 	/**
-	 * Add a Point to the List of neighbors
+	 * Add a Point to the List of neighbors.
 	 * 
-	 * @param p The Point to add
+	 * @param node The Point to add
 	 */
-	public void add(RailwayNode p)
+	public void add(RailwayNode node)
 	{
-		boolean alreadyNeighbor = false;
-		for(RailwayNode node : _neighborNodes)
+		if(!_neighborNodes.contains(node)) // when node is no neighbor then add it
 		{
-			alreadyNeighbor |= node.getID() == p.getID(); // true when node is already a neighbor
-		}
-		if(!alreadyNeighbor)
-		{
-			_neighborNodes.add(p); // when p is no neighbor then add it
-			p.addSimple(this); // when p is no neighbor then add it WITHOUT re-adding "this" (would cause endless loop + StackOverFlow)
+			_neighborNodes.add(node); // add it to the neighbors
+			node.addSimple(this); // add it WITHOUT re-adding "this" (would cause endless loop + StackOverFlow)
 		}
 	}
 
 	/**
 	 * Adds a railway node to the list of neighbors without (!) adding himself to the node p.
 	 * 
-	 * @param p Node to add.
+	 * @param node Node to add.
 	 */
-	public void addSimple(RailwayNode p)
+	public void addSimple(RailwayNode node)
 	{
-		boolean alreadyNeighbor = false;
-		for(RailwayNode node : _neighborNodes)
+		if(!_neighborNodes.contains(node)) // when node is no neighbor then add it
 		{
-			alreadyNeighbor |= node.getID() == p.getID(); // true when node is already a neighbor
-		}
-		if(!alreadyNeighbor) // when p is no neighbor then add it
-		{
-			_neighborNodes.add(p);
+			_neighborNodes.add(node);
 		}
 	}
 
@@ -132,42 +112,30 @@ public class RailwayNode
 	}
 
 	/**
-	 * Returns the ID of the node.
+	 * Gets the RailwayNode at a specific position.
 	 * 
-	 * @return ID
+	 * @param position The position.
+	 * @return The node that should be found. "null" when no node exists.
 	 */
-	public int getID()
+	public static RailwayNode getNodeByPosition(Point position)
 	{
-		return _ID;
+		return _nodeMap.get(position);
 	}
 
 	/**
-	 * Calculates the ID of a specific position.
+	 * Checks if a node at a specific position exists.
 	 * 
-	 * @param x x-coordinate
-	 * @param y y-coordinate
-	 * @return Calculated ID.
+	 * @param position The position to check on.
+	 * @return True when a node exists, false if not.
 	 */
-	public static int calcID(int x, int y)
+	public static boolean isNodeAt(Point position)
 	{
-		return (int)(((Math.pow(x + y, 2) + x + y) / 2.0) + x);
+		return _nodeMap.containsKey(position);
 	}
 
-	/**
-	 * Returns a specific node with an specific ID.
-	 * 
-	 * @param ID The ID of the node to return.
-	 * @return The node.
-	 */
-	public static RailwayNode getNodeByID(int ID)
+	@Override
+	public boolean equals(Object obj)
 	{
-		for(RailwayNode node : TrainView._railwayNodeList)
-		{
-			if(node.getID() == ID)
-			{
-				return node;
-			}
-		}
-		return null;
+		return (obj instanceof RailwayNode) && (_position == ((RailwayNode)obj).getPosition());
 	}
 }

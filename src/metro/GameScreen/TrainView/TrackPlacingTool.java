@@ -118,7 +118,8 @@ public class TrackPlacingTool implements TrainInteractionTool
 		{
 			if(_currentRailwayNode == null) // first click
 			{
-				_currentRailwayNode = RailwayNode.getNodeByID(RailwayNode.calcID(TrainView._selectedCross.x, TrainView._selectedCross.y)); // get Node at this position
+//				_currentRailwayNode = RailwayNode.getNodeByID(RailwayNode.calcID(TrainView._selectedCross.x, TrainView._selectedCross.y)); // get Node at this position
+				_currentRailwayNode = RailwayNode.getNodeByPosition(TrainView._selectedCross);
 
 				if(_currentRailwayNode == null) // if there's no node, create new one and set it as current node
 				{
@@ -168,7 +169,7 @@ public class TrackPlacingTool implements TrainInteractionTool
 	}
 
 	/**
-	 * Creates one Track for the parameter.
+	 * Creates one Track (~ one line) for the parameter.
 	 * 
 	 * @param offsetB Offset for horizontal position.
 	 * @param offsetH Offset for vertical position.
@@ -180,9 +181,9 @@ public class TrackPlacingTool implements TrainInteractionTool
 	{
 		for(int i = start; i < end; i++)
 		{
-			int ID = RailwayNode.calcID(prevNode.getPosition().x + offsetB, prevNode.getPosition().y + offsetH);
+			Point nodePosition = new Point(prevNode.getPosition().x + offsetB, prevNode.getPosition().y + offsetH);
 			RailwayNode node = null;
-			if(!RailwayNode._IDList.contains(ID)) // if there's a NO node at this position
+			if(!RailwayNode.isNodeAt(nodePosition)) // if there's NO node at this position
 			{
 				node = new RailwayNode(new Point(
 					prevNode.getPosition().x + offsetB,
@@ -190,10 +191,9 @@ public class TrackPlacingTool implements TrainInteractionTool
 					prevNode);
 				METRO.__money -= RailwayNode.PRICE;
 			}
-			else
-			// if there's a node, set it as node instead of new one
+			else // if there's a node at this position, set it as node instead of new one
 			{
-				node = RailwayNode.getNodeByID(ID);
+				node = RailwayNode.getNodeByPosition(nodePosition);
 			}
 
 			prevNode.add(node); // connect to previous node
