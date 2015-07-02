@@ -8,6 +8,7 @@ import metro.METRO;
 import metro.GameScreen.TrainInteractionTool;
 import metro.Graphics.Draw;
 import metro.TrainManagement.RailwayNode;
+import metro.TrainManagement.RailwayNodeOverseer;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -92,7 +93,9 @@ public class TrackPlacingTool implements TrainInteractionTool
 	{
 		if(_currentRailwayNode != null)
 		{
-			TrainView._railwayNodeList.remove(TrainView._railwayNodeList.size() - 1);
+//			TrainView._railwayNodeList.remove(TrainView._railwayNodeList.size() - 1);
+			RailwayNodeOverseer.removeNodesWithoutNeighbors();
+			System.out.println(RailwayNodeOverseer.getSize());
 			_currentRailwayNode = null;
 		}
 		else
@@ -118,18 +121,15 @@ public class TrackPlacingTool implements TrainInteractionTool
 		{
 			if(_currentRailwayNode == null) // first click
 			{
-//				_currentRailwayNode = RailwayNode.getNodeByID(RailwayNode.calcID(TrainView._selectedCross.x, TrainView._selectedCross.y)); // get Node at this position
-				_currentRailwayNode = RailwayNode.getNodeByPosition(TrainView._selectedCross);
+				_currentRailwayNode = RailwayNodeOverseer.getNodeByPosition(TrainView._selectedCross); // implicit check if node exists: null = node doesn't exist
 
 				if(_currentRailwayNode == null) // if there's no node, create new one and set it as current node
 				{
 					RailwayNode node = new RailwayNode(TrainView._selectedCross, null);
 					_currentRailwayNode = node;
-					TrainView._railwayNodeList.add(node);
 				}
 			}
-			else
-			// second click
+			else // second click
 			{
 				int diagonalOffset = 0, B = TrainView._selectedCross.x - _currentRailwayNode.getPosition().x, // horizontal distance
 				H = TrainView._selectedCross.y - _currentRailwayNode.getPosition().y, // vertical distance
@@ -183,7 +183,8 @@ public class TrackPlacingTool implements TrainInteractionTool
 		{
 			Point nodePosition = new Point(prevNode.getPosition().x + offsetB, prevNode.getPosition().y + offsetH);
 			RailwayNode node = null;
-			if(!RailwayNode.isNodeAt(nodePosition)) // if there's NO node at this position
+			
+			if(!RailwayNodeOverseer.isNodeAt(nodePosition)) // if there's NO node at this position
 			{
 				node = new RailwayNode(new Point(
 					prevNode.getPosition().x + offsetB,
@@ -193,11 +194,10 @@ public class TrackPlacingTool implements TrainInteractionTool
 			}
 			else // if there's a node at this position, set it as node instead of new one
 			{
-				node = RailwayNode.getNodeByPosition(nodePosition);
+				node = RailwayNodeOverseer.getNodeByPosition(nodePosition);
 			}
 
-			prevNode.add(node); // connect to previous node
-			if(!TrainView._railwayNodeList.contains(node)) TrainView._railwayNodeList.add(node); // ad node to list
+			prevNode.addNeighbor(node); // connect to previous node
 			prevNode = node; // set previous node to current one to go on
 		}
 		return prevNode;

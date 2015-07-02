@@ -3,8 +3,6 @@ package metro.TrainManagement;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import metro.METRO;
 import metro.Graphics.Draw;
@@ -23,21 +21,21 @@ public class RailwayNode
 	private ArrayList<RailwayNode> _neighborNodes = new ArrayList<RailwayNode>();
 	private Point _position; // not in pixel, cross number/pos
 
-	public static Map<Point, RailwayNode> _nodeMap = new HashMap<Point, RailwayNode>(); // yeah, i know, it sound like "road map" ...
 	public static final int PRICE = 200;
 
 	public RailwayNode(Point position, RailwayNode neighbor)
 	{
 		_position = position;
 		if(neighbor != null) _neighborNodes.add(neighbor);
+		RailwayNodeOverseer.add(this);
 	}
 
 	/**
-	 * Add a Point to the List of neighbors.
+	 * Adds a node to the List of neighbors.
 	 * 
-	 * @param node The Point to add
+	 * @param node The node to add
 	 */
-	public void add(RailwayNode node)
+	public void addNeighbor(RailwayNode node)
 	{
 		if(!_neighborNodes.contains(node)) // when node is no neighbor then add it
 		{
@@ -47,7 +45,7 @@ public class RailwayNode
 	}
 
 	/**
-	 * Adds a railway node to the list of neighbors without (!) adding himself to the node p.
+	 * Adds a railway node to the list of neighbors without (!) adding himself to the node.
 	 * 
 	 * @param node Node to add.
 	 */
@@ -109,28 +107,6 @@ public class RailwayNode
 				Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
 			}
 		}
-	}
-
-	/**
-	 * Gets the RailwayNode at a specific position.
-	 * 
-	 * @param position The position.
-	 * @return The node that should be found. "null" when no node exists.
-	 */
-	public static RailwayNode getNodeByPosition(Point position)
-	{
-		return _nodeMap.get(position);
-	}
-
-	/**
-	 * Checks if a node at a specific position exists.
-	 * 
-	 * @param position The position to check on.
-	 * @return True when a node exists, false if not.
-	 */
-	public static boolean isNodeAt(Point position)
-	{
-		return _nodeMap.containsKey(position);
 	}
 
 	@Override

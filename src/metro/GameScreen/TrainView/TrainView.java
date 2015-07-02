@@ -14,7 +14,7 @@ import metro.GameScreen.CityView.CityView;
 import metro.GameScreen.TrainLineView.TrainLineView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.TrainManagement.RailwayNode;
+import metro.TrainManagement.RailwayNodeOverseer;
 import metro.TrainManagement.TrainStation;
 import metro.WindowControls.Button;
 
@@ -42,14 +42,14 @@ public class TrainView extends GameScreen
 	private Point2D _mapOffset; // offset for moving the map
 	private TrainLineView _trainListView;
 
-	static public List<TrainStation> _trainStationList;
-	static public ArrayList<RailwayNode> _railwayNodeList; // TODO put into RailwayNode
-	static public Point _selectedCross; // out of screen;
+	public static List<TrainStation> _trainStationList;
+//	static public ArrayList<RailwayNode> _railwayNodeList; // TODO put into RailwayNode
+	public static Point _selectedCross; // out of screen;
 
 	public TrainView()
 	{
 		_selectedCross = new Point(-1, -1);
-		_railwayNodeList = new ArrayList<RailwayNode>();
+//		_railwayNodeList = new ArrayList<RailwayNode>();
 		_trainStationList = new ArrayList<TrainStation>();
 
 		_buildStation = new Button(new Rectangle(-10, 100, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
@@ -186,11 +186,8 @@ public class TrainView extends GameScreen
 	private void drawRailwayLines(SpriteBatch sp)
 	{
 		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
-
-		for(RailwayNode node : _railwayNodeList)
-		{
-			node.draw(sp, offset);
-		}
+		
+		RailwayNodeOverseer.drawAllNodes(offset, sp);
 	}
 
 	/**
