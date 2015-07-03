@@ -3,7 +3,6 @@ package metro.GameScreen;
 import java.awt.Color;
 
 import metro.METRO;
-import metro.GameScreen.TrainLineView.TrainLineView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 

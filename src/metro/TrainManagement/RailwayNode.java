@@ -5,7 +5,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import metro.METRO;
-import metro.GameScreen.TrainView.TrainView;
 import metro.Graphics.Draw;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,63 +18,42 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class RailwayNode
 {
-	private ArrayList<RailwayNode> _neighborNodes = new ArrayList<RailwayNode>();
+	private ArrayList<RailwayNode> _neighborNodes = new ArrayList<RailwayNode>(); // a list of all nodes this node is connected to
 	private Point _position; // not in pixel, cross number/pos
-	private int _ID;
 
-	public static ArrayList<Integer> _IDList = new ArrayList<Integer>();
 	public static final int PRICE = 200;
 
 	public RailwayNode(Point position, RailwayNode neighbor)
 	{
 		_position = position;
-		_ID = (int)(((Math.pow(position.x + position.y, 2) + position.x + position.y) / 2.0) + position.x);
-		//@formatter:off
-		// ID Table:
-		// 0   2   5   9  14  20 ...
-		// 1   4   8  13  19  26 ...
-		// 3   7  12  18  25  33 ...
-		// 6  11  17  24  32  41 ...
-		// ...
-		//@formatter:on
-		_IDList.add(_ID);
 		if(neighbor != null) _neighborNodes.add(neighbor);
+		RailwayNodeOverseer.add(this);
 	}
 
 	/**
-	 * Add a Point to the List of neighbors
+	 * Adds a node to the List of neighbors.
 	 * 
-	 * @param p The Point to add
+	 * @param node The node to add
 	 */
-	public void add(RailwayNode p)
+	public void addNeighbor(RailwayNode node)
 	{
-		boolean alreadyNeighbor = false;
-		for(RailwayNode node : _neighborNodes)
+		if(!_neighborNodes.contains(node)) // when node is no neighbor then add it
 		{
-			alreadyNeighbor |= node.getID() == p.getID(); // true when node is already a neighbor
-		}
-		if(!alreadyNeighbor)
-		{
-			_neighborNodes.add(p); // when p is no neighbor then add it
-			p.addSimple(this); // when p is no neighbor then add it WITHOUT re-adding "this" (would cause endless loop + StackOverFlow)
+			_neighborNodes.add(node); // add it to the neighbors
+			node.addSimple(this); // add it WITHOUT re-adding "this" (would cause endless loop + StackOverFlow)
 		}
 	}
 
 	/**
-	 * Adds a railway node to the list of neighbors without (!) adding himself to the node p.
+	 * Adds a railway node to the list of neighbors without (!) adding himself to the node.
 	 * 
-	 * @param p Node to add.
+	 * @param node Node to add.
 	 */
-	public void addSimple(RailwayNode p)
+	public void addSimple(RailwayNode node)
 	{
-		boolean alreadyNeighbor = false;
-		for(RailwayNode node : _neighborNodes)
+		if(!_neighborNodes.contains(node)) // when node is no neighbor then add it
 		{
-			alreadyNeighbor |= node.getID() == p.getID(); // true when node is already a neighbor
-		}
-		if(!alreadyNeighbor) // when p is no neighbor then add it
-		{
-			_neighborNodes.add(p);
+			_neighborNodes.add(node);
 		}
 	}
 
@@ -100,10 +78,10 @@ public class RailwayNode
 	}
 
 	/**
-	 * Draws a railway node.
+	 * Draws a railway node and its neighbors. An algorithm takes care of NOT drawing nodes twice.
 	 * 
-	 * @param g
-	 * @param offset
+	 * @param sp The sprite batch.
+	 * @param offset An map offset in pixel.
 	 */
 	public void draw(SpriteBatch sp, Point offset)
 	{
@@ -131,43 +109,9 @@ public class RailwayNode
 		}
 	}
 
-	/**
-	 * Returns the ID of the node.
-	 * 
-	 * @return ID
-	 */
-	public int getID()
+	@Override
+	public boolean equals(Object obj)
 	{
-		return _ID;
-	}
-
-	/**
-	 * Calculates the ID of a specific position.
-	 * 
-	 * @param x x-coordinate
-	 * @param y y-coordinate
-	 * @return Calculated ID.
-	 */
-	public static int calcID(int x, int y)
-	{
-		return (int)(((Math.pow(x + y, 2) + x + y) / 2.0) + x);
-	}
-
-	/**
-	 * Returns a specific node with an specific ID.
-	 * 
-	 * @param ID The ID of the node to return.
-	 * @return The node.
-	 */
-	public static RailwayNode getNodeByID(int ID)
-	{
-		for(RailwayNode node : TrainView._railwayNodeList)
-		{
-			if(node.getID() == ID)
-			{
-				return node;
-			}
-		}
-		return null;
+		return (obj instanceof RailwayNode) && (_position == ((RailwayNode)obj).getPosition());
 	}
 }
