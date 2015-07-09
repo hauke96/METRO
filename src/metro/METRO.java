@@ -22,6 +22,7 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainMenu;
@@ -58,12 +59,15 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static final String __TITLE = "METRO",
 		__VERSION = "0.1.0";
 
+	private static OSType _detected_OS = OSType.UNKNOWN;
+
 	public static BitmapFont __stdFont;
 	public static GameScreen __currentGameScreen,
 		__controlDrawer; // draws all the important controls and infos after rendering the scene
 	public static TextureRegion __mainMenu_Buttons,
 		__mainMenu_TitleImage,
-		__iconSet;
+		__iconSet,
+		__mouseCursorImage;
 	public static Button __viewPortButton_City,
 		__viewPortButton_Train;
 	public static Color __metroRed,
@@ -93,6 +97,21 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public void create()
 	{
+		String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
+		if(os.contains("win"))
+		{
+			_detected_OS = OSType.WIN;
+		}
+		else if(os.contains("nux"))
+		{
+			_detected_OS = OSType.LINUX;
+		}
+		else if(os.contains("mac") || os.contains("darwin"))
+		{
+			_detected_OS = OSType.MAC;
+		}
+
+		// __CURRENT_OS
 		__spriteBatch = new SpriteBatch();
 
 		__camera = new OrthographicCamera();
@@ -103,12 +122,18 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		Gdx.input.setInputProcessor(this);
 
 		// load new cursor image
-		// TODO: s. issue #9: No cursor in Windows.
 		try
 		{
-			Pixmap pixmap = new Pixmap(Gdx.files.internal("textures/Cursor.png")); // has to be a width of 2^x (2, 4, 8, 16, 32, ...)
-			Gdx.input.setCursorImage(pixmap, 16, 13); // sets cursor to correct position
-			pixmap.dispose();
+			if(_detected_OS == OSType.LINUX || _detected_OS == OSType.MAC)
+			{
+				Pixmap pixmap = new Pixmap(Gdx.files.internal("textures/Cursor.png")); // has to be a width of 2^x (2, 4, 8, 16, 32, ...)
+				Gdx.input.setCursorImage(pixmap, 16, 13); // sets cursor to correct position
+				pixmap.dispose();
+			}
+			else if(_detected_OS == OSType.WIN) // setCursorImage doesn't work on Windows :(
+			{
+				__mouseCursorImage = new TextureRegion(new Texture(Gdx.files.internal("textures/Cursor.png")));
+			}
 		}
 		catch(GdxRuntimeException ex)
 		{
@@ -175,7 +200,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 		__currentGameScreen.update(__spriteBatch);
 		if(__controlDrawer != null) __controlDrawer.update(__spriteBatch);
-		
+
 		// Draw every window with its controls
 		for(Window win : __windowList)
 		{
@@ -188,6 +213,11 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 		Draw.setColor(__metroBlue);
 		Draw.String("FPS: " + Gdx.graphics.getFramesPerSecond(), __SCREEN_SIZE.width - (Draw.getStringSize("FPS: " + Gdx.graphics.getFramesPerSecond()).width + 20), 20);
+
+		if(_detected_OS == OSType.WIN) // setCursorImage doesn't work on Windows :(
+		{
+			if(__mouseCursorImage != null) Draw.Image(__mouseCursorImage, __originalMousePosition.x - 16, __originalMousePosition.y - 16);
+		}
 
 		__spriteBatch.end();
 	}
@@ -355,5 +385,13 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 				}
 			}
 		}
+	}
+
+	private enum OSType
+	{
+		WIN,
+		LINUX,
+		MAC,
+		UNKNOWN;
 	}
 }
