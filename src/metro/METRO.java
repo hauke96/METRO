@@ -124,13 +124,10 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		// load new cursor image
 		try
 		{
-			if(_detected_OS == OSType.LINUX || _detected_OS == OSType.MAC)
-			{
-				Pixmap pixmap = new Pixmap(Gdx.files.internal("textures/Cursor.png")); // has to be a width of 2^x (2, 4, 8, 16, 32, ...)
-				Gdx.input.setCursorImage(pixmap, 16, 13); // sets cursor to correct position
-				pixmap.dispose();
-			}
-			else if(_detected_OS == OSType.WIN) // setCursorImage doesn't work on Windows :(
+			Pixmap pixmap = new Pixmap(Gdx.files.internal("textures/Cursor.png")); // has to be a width of 2^x (2, 4, 8, 16, 32, ...)
+			Gdx.input.setCursorImage(pixmap, 16, 13); // sets cursor to correct position
+			pixmap.dispose();
+			if(_detected_OS == OSType.WIN) // setCursorImage doesn't work on Windows :(
 			{
 				__mouseCursorImage = new TextureRegion(new Texture(Gdx.files.internal("textures/Cursor.png")));
 			}
