@@ -42,7 +42,7 @@ public class MainMenu extends GameScreen
 			new Rectangle(0, 100, 200, 50), METRO.__mainMenu_Buttons);
 
 		// Create welcome-window:
-		_welcomeWindow = new Window("Welcome to METRO",
+		_welcomeWindow = new Window("Welcome to METRO - ver.:" + METRO.__VERSION,
 			new Point(50, METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 300), // same y-pos as title image
 			new Point(500, 600));
 		new metro.WindowControls.Button(
@@ -60,15 +60,15 @@ public class MainMenu extends GameScreen
 			+ "\n\nTRAIN-VIEW - In this mode you'll be able to build tracks and stations."
 			+ "\n\nCITY-VIEW - In this mode you'll see where the most passengers are.", new Point(20, 100), 450, _welcomeWindow);
 
-		box = new Checkbox(new Point(50, 260), "Hallo test", 0, true, true, _welcomeWindow);
+		box = new Checkbox(new Point(40, 260), "Hallo test", 0, true, true, _welcomeWindow);
 
 		ArrayList<String> list = new ArrayList<String>();
 		list.add("Hallo world!");
 		list.add("How are you?\n\n\nTwo lines later...");
 		list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
-		_list = new List(new Rectangle(50, 300, 400, 250), list, _welcomeWindow, true);
+		_list = new List(new Rectangle(40, 300, 400, 250), list, _welcomeWindow, true);
 
-		new InputField(new Rectangle(20, 560, 400, 20), _welcomeWindow, "Hello World!");
+		new InputField(new Rectangle(40, 560, 400, 20), _welcomeWindow, "Hello World!");
 	}
 
 	/*

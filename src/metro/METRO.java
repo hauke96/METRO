@@ -49,7 +49,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * @author Hauke
- * @version 0.1.0
+ * @version 0.1.1
  */
 public class METRO extends Frame implements ApplicationListener, InputProcessor
 {
@@ -57,7 +57,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 	public static Dimension __SCREEN_SIZE;// = Toolkit.getDefaultToolkit().getScreenSize();
 	public static final String __TITLE = "METRO",
-		__VERSION = "0.1.0";
+		__VERSION = "0.1.1";
 
 	private static OSType _detected_OS = OSType.UNKNOWN;
 
