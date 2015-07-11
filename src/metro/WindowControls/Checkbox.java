@@ -189,4 +189,16 @@ public class Checkbox implements ControlElement
 	public void keyUp(int keyCode)
 	{
 	}
+
+	@Override
+	public void setText(String text)
+	{
+		_text = text;
+	}
+
+	@Override
+	public void setState(boolean enable)
+	{
+		_enable = enable;
+	}
 }

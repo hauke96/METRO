@@ -3,6 +3,7 @@
  */
 package metro.WindowControls;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -24,7 +25,8 @@ public class Button implements ControlElement
 	private Rectangle _position,
 		_positionOnImage;
 	private Window _windowHandle;
-	private boolean _hasBeenClicked = false; // true if control has been clicked since last check
+	private boolean _hasBeenClicked = false, // true if control has been clicked since last check
+		_enable;
 	private String _text = "";
 
 	/**
@@ -70,6 +72,7 @@ public class Button implements ControlElement
 		_positionOnImage = new Rectangle(0, 0, _position.width, _position.height);
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+		_enable = true;
 	}
 
 	/**
@@ -120,10 +123,13 @@ public class Button implements ControlElement
 	{
 		if(!_text.equals(""))
 		{
-			Draw.setColor(METRO.__metroRed);
+			if(_enable) Draw.setColor(METRO.__metroRed);
+			else Draw.setColor(Color.gray);
 			Draw.String(_text, _position.x + (_position.width - Draw.getStringSize(_text).width) / 2,
 				_position.y + (_position.height - Draw.getStringSize(_text).height) / 2);
-			Draw.setColor(METRO.__metroBlue);
+			
+			if(_enable)Draw.setColor(METRO.__metroBlue); 
+			else Draw.setColor(Color.lightGray);
 			Draw.Rect(_position.x, _position.y, _position.width, _position.height);
 		}
 		else
@@ -155,6 +161,7 @@ public class Button implements ControlElement
 	 */
 	public boolean clickOnControlElement()
 	{
+		if(!_enable) return false;
 		Point mPos = METRO.__originalMousePosition;
 
 		if(_position.contains(mPos))
@@ -185,5 +192,17 @@ public class Button implements ControlElement
 	@Override
 	public void keyUp(int keyCode)
 	{
+	}
+
+	@Override
+	public void setText(String text)
+	{
+		_text = text;
+	}
+
+	@Override
+	public void setState(boolean enable)
+	{
+		_enable = enable;
 	}
 }

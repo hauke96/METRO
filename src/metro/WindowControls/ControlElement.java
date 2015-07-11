@@ -33,6 +33,20 @@ public interface ControlElement
 	public void setPosition(Point pos);
 
 	/**
+	 * Updates the text of the control.
+	 * 
+	 * @param text The new text.
+	 */
+	public void setText(String text);
+
+	/**
+	 * Sets the enable state of the control. If it's disabled, the user can't interact with this control.
+	 * 
+	 * @param enable The new state of the control.
+	 */
+	public void setState(boolean enable);
+
+	/**
 	 * Returns the current position of this control.
 	 * 
 	 * @return Position as Point.

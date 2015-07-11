@@ -63,7 +63,7 @@ public class TrainView extends GameScreen
 		_activeTool = null;
 
 		_cityView = new CityView(); // create extra instance for general purpose actions
-		_trainLineView = new TrainLineView();
+		_trainLineView = new TrainLineView(_mapOffset);
 		_trainLineView.setVisibility(false);
 	}
 

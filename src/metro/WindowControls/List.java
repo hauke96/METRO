@@ -125,11 +125,7 @@ public class List implements ControlElement
 		if(yOffset - _scrollHeight - 3 > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight + magicFactor;
 	}
 
-	/**
-	 * Dis- or enabled this control.
-	 * 
-	 * @param enableState The new state. True - enabled; false - disabled.
-	 */
+	@Override
 	public void setState(boolean enableState)
 	{
 		_enabled = enableState;
@@ -348,6 +344,11 @@ public class List implements ControlElement
 
 	@Override
 	public void keyUp(int keyCode)
+	{
+	}
+
+	@Override
+	public void setText(String text)
 	{
 	}
 }

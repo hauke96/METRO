@@ -16,6 +16,7 @@ public class InputField extends Input
 {
 	private int _curserPos = 0,
 		_xOffset = 0; // in pixel
+	private boolean _enable;
 
 	/**
 	 * Creates a new InputField with one line to input text. The start-text is "" and the window is null
@@ -50,8 +51,8 @@ public class InputField extends Input
 		_position = position;
 		_windowHandle = win;
 		_text = text;
-
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+		_enable = true;
 	}
 
 	@Override
@@ -74,13 +75,16 @@ public class InputField extends Input
 		Draw.String(_text, _position.x - _xOffset + 3, _position.y + 3);
 
 		// Draw border
-		Draw.setColor(METRO.__metroBlue);
+		if(_enable) Draw.setColor(METRO.__metroBlue);
+		else Draw.setColor(Color.lightGray);
 		Draw.Rect(_position);
 
 		// Draw cursor on right position
 		String str = _text.substring(0, _curserPos);
 		int width = Draw.getStringSize(str).width;
-		Draw.setColor(Color.gray);
+
+		if(_enable) Draw.setColor(Color.gray);
+		else Draw.setColor(Color.lightGray);
 		Draw.Line(_position.x + width + 3, _position.y + 2, _position.x + width + 3, _position.y + _position.height - 4);
 
 		ScissorStack.popScissors();
@@ -89,6 +93,7 @@ public class InputField extends Input
 	@Override
 	public boolean clickOnControlElement()
 	{
+		if(!_enable) return false;
 		Point mPos = METRO.__originalMousePosition;
 		return _position.contains(mPos);
 	}
@@ -121,7 +126,7 @@ public class InputField extends Input
 	public void keyPressed(int key)
 	{
 		// if this input box is NOT selected, just do nothing
-		if(!_selected) return;
+		if(!_selected || !_enable) return;
 
 		switch(key)
 		{
@@ -198,6 +203,8 @@ public class InputField extends Input
 	@Override
 	public void keyUp(int key)
 	{
+		if(!_enable) return;
+
 		if(key == Keys.SHIFT_LEFT || key == Keys.SHIFT_RIGHT)
 		{
 			_shift = false;
@@ -209,5 +216,11 @@ public class InputField extends Input
 	{
 		_text = text;
 		_curserPos = _text.length();
+	}
+
+	@Override
+	public void setState(boolean enable)
+	{
+		_enable = enable;
 	}
 }

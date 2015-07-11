@@ -158,4 +158,17 @@ public class Label implements ControlElement
 	public void keyUp(int keyCode)
 	{
 	}
+
+	@Override
+	public void setText(String text)
+	{
+		_text = text;
+	}
+
+	@Override
+	public void setState(boolean enable)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }
