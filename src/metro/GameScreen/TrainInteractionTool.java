@@ -4,6 +4,12 @@ import java.awt.geom.Point2D;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * Every class that can edit trains, lines, stations, ... should implement this interface to be able to be used.
+ * 
+ * @author hauke
+ *
+ */
 public interface TrainInteractionTool
 {
 	/**

@@ -1,12 +1,14 @@
 package metro.GameScreen.TrainLineView;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
+import metro.WindowControls.Button;
 import metro.WindowControls.List;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,7 +23,12 @@ public class TrainLineView extends GameScreen
 {
 	private int _windowWidth;
 	private List _lineList;
-	private boolean _visible;
+	private Button _createLineButton,
+		_editLineButton,
+		_removeLineButton;
+	private boolean _visible,
+		_selectorEnabled;
+	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 
 	/**
 	 * Creates a new TrainLineView.
@@ -29,9 +36,14 @@ public class TrainLineView extends GameScreen
 	public TrainLineView()
 	{
 		_visible = true;
+		_selectorEnabled = false;
 		_windowWidth = 400;
-		_lineList = new List(new Rectangle(METRO.__SCREEN_SIZE.width - _windowWidth + 20, 130, _windowWidth - 40, 300),
+		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
+		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 40, 300),
 			null, null, true);
+		_createLineButton = new Button(new Rectangle(_areaOffset.x + 20, 450, (_windowWidth - 40) / 3 - 10, 20), "Create line");
+		_editLineButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), 450, (_windowWidth - 40) / 3 - 10, 20), "Edit line");
+		_removeLineButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, 450, (_windowWidth - 40) / 3 - 10, 20), "Remove line");
 	}
 
 	@Override
@@ -41,6 +53,7 @@ public class TrainLineView extends GameScreen
 		drawBackground();
 		drawTitleBox();
 		drawListBox();
+		drawButtons();
 	}
 
 	/**
@@ -93,6 +106,13 @@ public class TrainLineView extends GameScreen
 		_lineList.draw();
 	}
 
+	private void drawButtons()
+	{
+		_createLineButton.draw();
+		_editLineButton.draw();
+		_removeLineButton.draw();
+	}
+
 	/**
 	 * Sets the visibility of the TrainLineView. The visibility will also effect the usability (e.g. mouse click).
 	 * 
@@ -108,6 +128,10 @@ public class TrainLineView extends GameScreen
 	{
 		if(!_visible) return;
 		_lineList.clickOnControlElement();
+		if(_createLineButton.isPressed(screenX, screenY))
+		{
+			_selectorEnabled = true;
+		}
 	}
 
 	@Override

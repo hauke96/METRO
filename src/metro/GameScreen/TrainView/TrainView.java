@@ -40,7 +40,7 @@ public class TrainView extends GameScreen
 	private CityView _cityView;
 	private TrainInteractionTool _activeTool;
 	private Point2D _mapOffset; // offset for moving the map
-	private TrainLineView _trainListView;
+	private TrainLineView _trainLineView;
 
 	public static List<TrainStation> _trainStationList;
 //	static public ArrayList<RailwayNode> _railwayNodeList; // TODO put into RailwayNode
@@ -63,8 +63,8 @@ public class TrainView extends GameScreen
 		_activeTool = null;
 
 		_cityView = new CityView(); // create extra instance for general purpose actions
-		_trainListView = new TrainLineView();
-		_trainListView.setVisibility(false);
+		_trainLineView = new TrainLineView();
+		_trainLineView.setVisibility(false);
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class TrainView extends GameScreen
 		
 		printDebugStuff(sp);
 		
-		if(_trainListView!= null) _trainListView.updateGameScreen(sp);
+		if(_trainLineView!= null) _trainLineView.updateGameScreen(sp);
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class TrainView extends GameScreen
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		if(_cityView != null) _cityView.mouseClicked(screenX, screenY, mouseButton);
-		if(_trainListView!= null) _trainListView.mouseClicked(screenX, screenY, mouseButton);
+		if(_trainLineView!= null) _trainLineView.mouseClicked(screenX, screenY, mouseButton);
 		
 		if(mouseButton == Buttons.MIDDLE) // for drag-mode
 		{
@@ -239,7 +239,7 @@ public class TrainView extends GameScreen
 	private boolean toolbarButtonPressed(int screenX, int screenY)
 	{
 		boolean buttonPresses = false;
-		_trainListView.setVisibility(false); // default is false. If _showTrainList is pressed this will be set to "true".
+		_trainLineView.setVisibility(false); // default is false. If _showTrainList is pressed this will be set to "true".
 		
 		if(_buildStation.isPressed(screenX, screenY))
 		{
@@ -257,7 +257,7 @@ public class TrainView extends GameScreen
 		{
 			resetToolbarButtonPosition(_showTrainList);
 			_activeTool = null;
-			_trainListView.setVisibility(true);
+			_trainLineView.setVisibility(true);
 			buttonPresses = true;
 		}
 		else if(_createNewTrain.isPressed(screenX, screenY))
@@ -329,7 +329,7 @@ public class TrainView extends GameScreen
 	public void mouseReleased(int mouseButton)
 	{
 		if(_cityView != null) _cityView.mouseReleased(mouseButton);
-		if(_trainListView!= null) _trainListView.mouseReleased(mouseButton);
+		if(_trainLineView!= null) _trainLineView.mouseReleased(mouseButton);
 
 		if(mouseButton == Buttons.MIDDLE)
 		{
@@ -349,6 +349,6 @@ public class TrainView extends GameScreen
 	@Override
 	public void mouseScrolled(int amount)
 	{
-		if(_trainListView != null) _trainListView.mouseScrolled(amount);
+		if(_trainLineView != null) _trainLineView.mouseScrolled(amount);
 	}
 }
