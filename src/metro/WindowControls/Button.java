@@ -56,6 +56,7 @@ public class Button implements ControlElement
 		_positionOnImage = positionOnImage;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+		_enable = true;
 	}
 
 	/**
@@ -95,8 +96,7 @@ public class Button implements ControlElement
 	 */
 	public boolean isPressed(int x, int y)
 	{
-		if(_position.contains(x, y)
-			|| _hasBeenClicked)
+		if(_enable && (_position.contains(x, y) || _hasBeenClicked))
 		{
 			_hasBeenClicked = false;
 			return true;
@@ -113,7 +113,7 @@ public class Button implements ControlElement
 	{
 		boolean temp = _hasBeenClicked;
 		_hasBeenClicked = false;
-		return temp;
+		return _enable ? temp : false;
 	}
 
 	/**

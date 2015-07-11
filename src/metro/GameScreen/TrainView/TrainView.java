@@ -43,13 +43,11 @@ public class TrainView extends GameScreen
 	private TrainLineView _trainLineView;
 
 	public static List<TrainStation> _trainStationList;
-//	static public ArrayList<RailwayNode> _railwayNodeList; // TODO put into RailwayNode
 	public static Point _selectedCross; // out of screen;
 
 	public TrainView()
 	{
 		_selectedCross = new Point(-1, -1);
-//		_railwayNodeList = new ArrayList<RailwayNode>();
 		_trainStationList = new ArrayList<TrainStation>();
 
 		_buildStation = new Button(new Rectangle(-10, 100, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
@@ -239,18 +237,19 @@ public class TrainView extends GameScreen
 	private boolean toolbarButtonPressed(int screenX, int screenY)
 	{
 		boolean buttonPresses = false;
-		_trainLineView.setVisibility(false); // default is false. If _showTrainList is pressed this will be set to "true".
 		
 		if(_buildStation.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_buildStation);
 			_activeTool = new StationPlacingTool(this);
+			_trainLineView.setVisibility(false);
 			buttonPresses = true;
 		}
 		else if(_buildTracks.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_buildTracks);
 			_activeTool = new TrackPlacingTool(this);
+			_trainLineView.setVisibility(false);
 			buttonPresses = true;
 		}
 		else if(_showTrainList.isPressed(screenX, screenY))
@@ -264,6 +263,7 @@ public class TrainView extends GameScreen
 		{
 			resetToolbarButtonPosition(_createNewTrain);
 			_activeTool = null;
+			_trainLineView.setVisibility(false);
 			// TODO: show config window to create new train
 			buttonPresses = true;
 		}
