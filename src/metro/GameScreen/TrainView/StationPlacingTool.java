@@ -8,7 +8,7 @@ import metro.METRO;
 import metro.GameScreen.TrainInteractionTool;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.TrainManagement.TrainStation;
+import metro.TrainManagement.Trains.TrainStation;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

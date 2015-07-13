@@ -63,6 +63,14 @@ public class TrainLineView extends GameScreen
 		drawTitleBox();
 		drawListBox();
 		drawButtons();
+		
+		//Draw Color bar
+//		for(int i = 0; i < 255; i++)
+//		{
+//			Color color = Color.getHSBColor((float) i / (float) 255, 1.0f, 1.0f);
+//			Draw.setColor(color);
+//			Draw.Line(i, 0, i, 20);
+//		}
 	}
 
 	/**

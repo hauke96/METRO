@@ -7,8 +7,8 @@ import java.awt.geom.Point2D;
 import metro.METRO;
 import metro.GameScreen.TrainInteractionTool;
 import metro.Graphics.Draw;
-import metro.TrainManagement.RailwayNode;
-import metro.TrainManagement.RailwayNodeOverseer;
+import metro.TrainManagement.Nodes.RailwayNode;
+import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

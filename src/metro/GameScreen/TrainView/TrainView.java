@@ -14,8 +14,8 @@ import metro.GameScreen.CityView.CityView;
 import metro.GameScreen.TrainLineView.TrainLineView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.TrainManagement.RailwayNodeOverseer;
-import metro.TrainManagement.TrainStation;
+import metro.TrainManagement.Nodes.RailwayNodeOverseer;
+import metro.TrainManagement.Trains.TrainStation;
 import metro.WindowControls.Button;
 
 import com.badlogic.gdx.Input.Buttons;

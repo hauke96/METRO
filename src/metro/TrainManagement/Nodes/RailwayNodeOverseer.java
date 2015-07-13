@@ -1,4 +1,4 @@
-package metro.TrainManagement;
+package metro.TrainManagement.Nodes;
 
 import java.awt.Point;
 import java.util.ArrayList;

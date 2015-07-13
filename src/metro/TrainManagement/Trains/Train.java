@@ -1,4 +1,4 @@
-package metro.TrainManagement;
+package metro.TrainManagement.Trains;
 
 /**
  * WILL handle all the train stuff like animations, etc.
