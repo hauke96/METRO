@@ -21,7 +21,7 @@ public class RailwayConnection
 	
 	private void sortList()
 	{
-		//TODO: implement sort algorithm
+		//TODO: implement sort algorithm to sort by color
 //		for(int i = 0; i < _colorList.size() - 1; i++)
 //		{
 //			boolean somethingChanged = false;

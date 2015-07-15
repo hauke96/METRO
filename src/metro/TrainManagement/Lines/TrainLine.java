@@ -3,34 +3,48 @@ package metro.TrainManagement.Lines;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import metro.TrainManagement.Nodes.RailwayNode;
-
 public class TrainLine
 {
-	private ArrayList<RailwayConnection> _listOfLines;
+	private ArrayList<RailwayConnection> _listOfConnections;
 	private Color _lineColor;
-	
-	public TrainLine()
+	private String _name;
+
+	public TrainLine(String name, Color lineColor)
 	{
-		this(null, null);
+		this(null, name, lineColor);
 	}
-	public TrainLine(Color lineColor)
+
+	public TrainLine(ArrayList<RailwayConnection> nodes, String name, Color lineColor)
 	{
-		this(null, lineColor);
-	}
-	public TrainLine(ArrayList<RailwayConnection> nodes, Color lineColor)
-	{
-		_listOfLines = nodes;
+		if(nodes != null) _listOfConnections = nodes;
+		else _listOfConnections = new ArrayList<RailwayConnection>();
+		_name = name;
 		_lineColor = lineColor;
 	}
-	
-	public ArrayList<Color> getColors(RailwayConnection connection)
+
+	public Color getColor()
 	{
-		return connection.getColors();
+		return _lineColor;
 	}
-	
+
 	public boolean contains(RailwayConnection connection)
 	{
+		return _listOfConnections.contains(connection);
+	}
+
+	public String getName()
+	{
+		return _name;
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof TrainLine)
+		{
+			TrainLine line = (TrainLine)o;
+			return line._name.equals(_name) && line._lineColor.equals(_lineColor); // equal when color and name are equal
+		}
 		return false;
 	}
 }

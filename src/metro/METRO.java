@@ -209,7 +209,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		// /
 
 		Draw.setColor(__metroBlue);
-		Draw.String("FPS: " + Gdx.graphics.getFramesPerSecond(), __SCREEN_SIZE.width - (Draw.getStringSize("FPS: " + Gdx.graphics.getFramesPerSecond()).width + 20), 20);
+		Draw.String("FPS: " + Gdx.graphics.getFramesPerSecond(), __SCREEN_SIZE.width - (Draw.getStringSize("FPS: " + Gdx.graphics.getFramesPerSecond()).width + 30), 25);
 
 		if(_detected_OS == OSType.WIN) // setCursorImage doesn't work on Windows :(
 		{

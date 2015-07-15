@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import metro.METRO;
 import metro.Graphics.Draw;
+import metro.TrainManagement.Lines.RailwayConnection;
+import metro.TrainManagement.Lines.TrainLineOverseer;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -103,7 +105,16 @@ public class RailwayNode
 				if(position.y == positionNext.y) positionNext.x--;
 				if(position.x == positionNext.x) positionNext.y--;
 
-				Draw.setColor(Color.black);
+				ArrayList<Color> colors = TrainLineOverseer.getColor(new RailwayConnection(this, node));
+				if(colors.size() == 0)
+				{
+					Draw.setColor(Color.black);
+				}
+				else
+				{
+					Draw.setColor(colors.get(0));
+					Draw.Line(position.x, position.y - 1, positionNext.x, positionNext.y - 1);
+				}
 				Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
 			}
 		}

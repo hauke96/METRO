@@ -4,13 +4,18 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+import java.util.Random;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
+import metro.TrainManagement.Lines.TrainLine;
+import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.WindowControls.Button;
+import metro.WindowControls.InputField;
 import metro.WindowControls.List;
+import metro.WindowControls.Label;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,14 +30,17 @@ public class TrainLineView extends GameScreen
 {
 	private int _windowWidth;
 	private List _lineList;
-	private Button _createLineButton,
-		_editLineButton,
-		_removeLineButton;
-	private boolean _visible,
-		_lineSelectToolEnabled;
+	private Button _createLineButton, // to create a new train line
+		_editLineButton, // to change railway nodes of train line
+		_removeLineButton, // to remove a train line
+		_lineNameFieldButton; // to edit train line name
+	private boolean _visible, // true: TrainLineView will be displayed
+		_lineSelectToolEnabled; // if enabled, the user can select nodes
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private Point2D _mapOffset;
 	private TrainLineSelectTool _lineSelectTool;
+	private InputField _trainLineNameField;
+	private Label _trainLineNameFieldLabel;
 
 	/**
 	 * Creates a new TrainLineView.
@@ -53,6 +61,12 @@ public class TrainLineView extends GameScreen
 		_createLineButton = new Button(new Rectangle(_areaOffset.x + 20, 450, (_windowWidth - 40) / 3 - 10, 20), "Create line");
 		_editLineButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), 450, (_windowWidth - 40) / 3 - 10, 20), "Edit line");
 		_removeLineButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, 450, (_windowWidth - 40) / 3 - 10, 20), "Remove line");
+
+		_lineNameFieldButton = new Button(new Rectangle(_areaOffset.x + _windowWidth - 70, 490, 50, 20), "OK");
+		_lineNameFieldButton.setState(false);
+		_trainLineNameField = new InputField(new Rectangle(_areaOffset.x + 95, 490, _windowWidth - 175, 20));
+		_trainLineNameField.setState(false);
+		_trainLineNameFieldLabel = new Label("Line Name", new Point(_areaOffset.x + 20, 493));
 	}
 
 	@Override
@@ -63,14 +77,15 @@ public class TrainLineView extends GameScreen
 		drawTitleBox();
 		drawListBox();
 		drawButtons();
-		
-		//Draw Color bar
-//		for(int i = 0; i < 255; i++)
-//		{
-//			Color color = Color.getHSBColor((float) i / (float) 255, 1.0f, 1.0f);
-//			Draw.setColor(color);
-//			Draw.Line(i, 0, i, 20);
-//		}
+		drawInputFields();
+
+		// Draw Color bar
+		for(int i = 0; i < 255; i++)
+		{
+			Color color = Color.getHSBColor((float)i / (float)255, 1.0f, 1.0f);
+			Draw.setColor(color);
+			Draw.Line(i + 300, 0, i + 300, 20);
+		}
 	}
 
 	/**
@@ -123,11 +138,24 @@ public class TrainLineView extends GameScreen
 		_lineList.draw();
 	}
 
+	/**
+	 * Draws all buttons.
+	 */
 	private void drawButtons()
 	{
 		_createLineButton.draw();
 		_editLineButton.draw();
 		_removeLineButton.draw();
+	}
+
+	/**
+	 * Draws all input fields
+	 */
+	private void drawInputFields()
+	{
+		_trainLineNameFieldLabel.draw();
+		_trainLineNameField.draw();
+		_lineNameFieldButton.draw();
 	}
 
 	/**
@@ -145,19 +173,47 @@ public class TrainLineView extends GameScreen
 	{
 		if(!_visible || _lineList.clickOnControlElement()) return;
 
-		if(_createLineButton.isPressed(screenX, screenY)) // create new train line
+		// "create new train"/"finish" line has been pressed
+		if(_createLineButton.isPressed(screenX, screenY)) createLineButton_action();
+		//TODO: If clause for edit button
+		//TODO: If clause for remove button
+		//TODO: If clause for ok button
+
+		// when no control was clicked and mouse out of T.L.View, forward it to the SelectTool
+		if(screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
 		{
-			if(!_lineSelectToolEnabled) _createLineButton.setText("Finish");
-			else _createLineButton.setText("Create Line");
+			if(mouseButton == Input.Buttons.LEFT) _lineSelectTool.leftClick(screenX, screenY, _mapOffset); // add node to list
+			if(mouseButton == Input.Buttons.RIGHT) _lineSelectTool.rightClick(screenX, screenY, _mapOffset); // remove node from list
 			
-			_lineSelectToolEnabled = !_lineSelectToolEnabled;
-			// switch controls on/off depending on the enable state of the selector tool
-			_editLineButton.setState(!_lineSelectToolEnabled);
-			_removeLineButton.setState(!_lineSelectToolEnabled);
+			//the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
+			TrainLine line = _lineSelectTool.getTrainLine();
+			TrainLineOverseer.addLine(line);
+		}
+	}
+
+	/**
+	 * Will be executed after a click on the "Create Line" / "Finish" button
+	 */
+	private void createLineButton_action()
+	{
+		if(!_lineSelectToolEnabled)
+		{
+			_createLineButton.setText("Finish");
+			_lineSelectTool = new TrainLineSelectTool(_mapOffset); // create clean select tool
+		}
+		else
+		{
+			_createLineButton.setText("Create Line");
+			TrainLine line = _lineSelectTool.getTrainLine();
+			TrainLineOverseer.addLine(line);
+			_lineList.addElement(line.getName());
 		}
 
-		if(mouseButton == Input.Buttons.LEFT && _lineSelectToolEnabled) _lineSelectTool.leftClick(screenX, screenY, _mapOffset); // add node to list
-		if(mouseButton == Input.Buttons.RIGHT && _lineSelectToolEnabled) _lineSelectTool.rightClick(screenX, screenY, _mapOffset); // remove node from list
+		_lineSelectToolEnabled = !_lineSelectToolEnabled;
+		// switch controls on/off depending on the enable state of the selector tool
+		_editLineButton.setState(!_lineSelectToolEnabled);
+		_removeLineButton.setState(!_lineSelectToolEnabled);
+		_trainLineNameField.setState(_lineSelectToolEnabled);
 	}
 
 	@Override
