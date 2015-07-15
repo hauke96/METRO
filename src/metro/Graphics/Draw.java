@@ -31,8 +31,6 @@ public class Draw
 
 	/**
 	 * Initializes the screen for drawing on it. It also stops the spriteBatch for a transparent background.
-	 * 
-	 * @param shape Defines the shape type of the object that should be drawn.
 	 */
 	private static void init()
 	{
@@ -335,10 +333,7 @@ public class Draw
 	 * Draws an image to the sprite batch.
 	 * 
 	 * @param image The TextureRegion (i call it "image" ;) ) that should be draw.
-	 * @param x The x-coordinate (upper left corner)
-	 * @param y The y-coordinate (upper left corner)
-	 * @param width The width of the area for the image (to scale it)
-	 * @param height The height of the area for the image (to scale it)
+	 * @param position The position as Rectangle of the image with x, y, width and height.
 	 */
 	public static void Image(TextureRegion image, Rectangle position)
 	{

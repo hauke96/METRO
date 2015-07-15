@@ -51,7 +51,7 @@ public class TrainStation
 	/**
 	 * Draws all the connections to connected stations.
 	 * 
-	 * @param g The Graphic handle to draw on.
+	 * @param sp The SpriteBatch to draw on
 	 * @param offset The current offset of the game screen.
 	 */
 	public void drawConnections(SpriteBatch sp, Point offset)
@@ -69,7 +69,7 @@ public class TrainStation
 	/**
 	 * Draws the station with passenger amount.
 	 * 
-	 * @param g Graphic handle to draw on.
+	 * @param sp The SpriteBatch to draw on
 	 * @param offset The offset of the current game screen.
 	 */
 	public void draw(SpriteBatch sp, Point offset)

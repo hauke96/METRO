@@ -32,9 +32,6 @@ public class CityView extends GameScreen
 
 	/**
 	 * Constructor to load all the important stuff.
-	 * 
-	 * @param drawOnly If true, the mouse won't cause any actions. It'll only draw the CityView.
-	 * @param circlesOnly If true, the normal black circles around each Travelerspot are drawn.
 	 */
 	public CityView()
 	{
@@ -60,7 +57,7 @@ public class CityView extends GameScreen
 	/**
 	 * Draws the traveler-circles.
 	 * 
-	 * @param g The graphic handle to draw on
+	 * @param sp The SpriteBatch to draw on
 	 */
 	private void draw(SpriteBatch sp)
 	{

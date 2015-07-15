@@ -27,8 +27,6 @@ public class Fill
 
 	/**
 	 * Initializes the screen for drawing on it. It also stops the spriteBatch for a transparent background.
-	 * 
-	 * @param shape Defines the shape type of the object that should be drawn.
 	 */
 	private static void init()
 	{

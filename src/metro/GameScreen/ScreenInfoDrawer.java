@@ -23,9 +23,9 @@ public class ScreenInfoDrawer extends GameScreen
 	}
 
 	/**
-	 * Draws all significant player infos onto the upper left corner.
+	 * Draws all significant player info onto the upper left corner.
 	 * 
-	 * @param g The graphic handle to draw on
+	 * @param sp The SpriteBatch to draw on.
 	 */
 	private void drawPlayerInfos(SpriteBatch sp)
 	{

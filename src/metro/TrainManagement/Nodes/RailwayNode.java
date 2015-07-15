@@ -12,7 +12,8 @@ import metro.TrainManagement.Lines.TrainLineOverseer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * A railway node is a point that's used by tracks. There's no track-class but every railway node has neighbors and by drawing a railway node, lines are drawed to these neighbors.
+ * A railway node is a point that's used by train lines.
+ * Every node has neighbors (both know each other) and by drawing a railway node, lines are drawed to these neighbors.
  * 
  * @author hauke
  *
@@ -112,8 +113,8 @@ public class RailwayNode
 				}
 				else
 				{
-					Draw.setColor(colors.get(0));
-					Draw.Line(position.x, position.y - 1, positionNext.x, positionNext.y - 1);
+					Draw.setColor(colors.get(0)); // TODO: Draw all colors, not only the first
+					Draw.Line(position.x, position.y - 1, positionNext.x, positionNext.y - 1); // TODO: make more accurate draw algo. This won't work vor vertical lines :(
 				}
 				Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
 			}

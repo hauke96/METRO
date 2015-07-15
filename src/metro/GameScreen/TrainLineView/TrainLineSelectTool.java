@@ -15,6 +15,13 @@ import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * The TrainLineSelectTool allows the user to create train lines by clicking on all the nodes this line should contain.
+ * It can also generate a new train line from all selected nodes.
+ * 
+ * @author hauke
+ *
+ */
 public class TrainLineSelectTool implements TrainInteractionTool
 {
 	private Point2D _mapOffset;
@@ -67,7 +74,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	public TrainLine getTrainLine()
 	{
 		ArrayList<RailwayConnection> connections = createRailwayConnections();
-		return new TrainLine(connections, "S 31", Color.blue); // TODO: Change to manual color
+		return new TrainLine(connections, "New Line", Color.blue); // TODO: Change to manual color
 	}
 
 	/**
@@ -169,14 +176,15 @@ public class TrainLineSelectTool implements TrainInteractionTool
 					// && !_listOfNodes.get(k).equals(start)
 					&& _listOfNodes.get(k).getNeighbors().contains(endNode)) amountNeighbors++; // count nodes that are neighbors only within THIS train line
 			}
-			System.out.println("   " + endNode.getPosition() + " - " +  amountNeighbors);
+			System.out.println("   " + endNode.getPosition() + " - " + amountNeighbors);
 		}
-		
+
 		return endNode;
 	}
 
 	@Override
 	public void rightClick(int screenX, int screenY, Point2D offset)
 	{
+		// TODO: Remove clicked node from train line
 	}
 }

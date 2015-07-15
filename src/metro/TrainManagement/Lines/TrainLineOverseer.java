@@ -3,6 +3,12 @@ package metro.TrainManagement.Lines;
 import java.awt.Color;
 import java.util.ArrayList;
 
+/**
+ * The TrainLineOverseer knows all train lines and with this overseer you can add, remove and change a train line.
+ * 
+ * @author hauke
+ *
+ */
 public class TrainLineOverseer
 {
 	private static ArrayList<TrainLine> _listOfTrainLines = new ArrayList<TrainLine>();

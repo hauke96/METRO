@@ -97,7 +97,7 @@ public class TrainView extends GameScreen
 	/**
 	 * Prints all the debug stuff, that is -more or less- important.
 	 * 
-	 * @param g Graphics handle to draw on
+	 * @param sp The SpriteBatch to draw on
 	 */
 	private void printDebugStuff(SpriteBatch sp)
 	{
@@ -114,7 +114,7 @@ public class TrainView extends GameScreen
 	/**
 	 * Draws the basic gray net for kind of orientation.
 	 * 
-	 * @param g The graphic handle to draw on
+	 * @param sp The SpriteBatch to draw on
 	 * @param color The color of the net
 	 * @param offset An user made offset
 	 */
@@ -134,7 +134,7 @@ public class TrainView extends GameScreen
 	/**
 	 * Calculates the position and draws this fancy jumping dot near the cursor.
 	 * 
-	 * @param g The graphic handle to draw on
+	 * @param sp The SpriteBatch to draw on
 	 */
 	private Point drawBaseDot(SpriteBatch sp)
 	{
@@ -159,7 +159,7 @@ public class TrainView extends GameScreen
 	/**
 	 * Draws all the train stations with conenctions and labels.
 	 * 
-	 * @param g Graphic handle to draw on.
+	 * @param sp The SpriteBatch to draw on
 	 */
 	private void drawTrainStations(SpriteBatch sp)
 	{
@@ -180,7 +180,7 @@ public class TrainView extends GameScreen
 	/**
 	 * Draws all the railway lines
 	 * 
-	 * @param g Graphics handle.
+	 * @param sp The SpriteBatch to draw on
 	 */
 	private void drawRailwayLines(SpriteBatch sp)
 	{
@@ -192,7 +192,7 @@ public class TrainView extends GameScreen
 	/**
 	 * Draws the toolbar with its elements.
 	 * 
-	 * @param g Graphics handle.
+	 * @param sp The SpriteBatch to draw on
 	 */
 	private void drawToolbar(SpriteBatch sp)
 	{

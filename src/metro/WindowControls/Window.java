@@ -170,7 +170,9 @@ public class Window
 	/**
 	 * Makes things when mouse is pressed.
 	 * 
-	 * @param e MouseEvent
+	 * @param screenX The x-coordinate of the click
+	 * @param screenY The y-coordinate of the click
+	 * @param mouseButton The mouse button (using gdx.Input.Buttons)
 	 */
 	public void mousePressed(int screenX, int screenY, int mouseButton)
 	{
@@ -223,7 +225,6 @@ public class Window
 	/**
 	 * Closes the window if the mouse is on the cross. NO CLICK is needed in this function, be careful. This function calls the METRO.__close() function to close itself.
 	 * 
-	 * @param e MouseEvent
 	 * @return True if the window has been closed, false if not.
 	 */
 	public boolean closeIfNeeded(int screenX, int screenY, int mouseButton)

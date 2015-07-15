@@ -27,7 +27,6 @@ public class CityTravelerSpot
 	 * 
 	 * @param position Position of the center of the spot in pixel.
 	 * @param strength The strength (usually from 0 to 10).
-	 * @param circlesOnly When true, only the outer circles will be visible. The inside is white.
 	 */
 	public CityTravelerSpot(Point position, int strength)
 	{
@@ -72,9 +71,9 @@ public class CityTravelerSpot
 	// }
 
 	/**
-	 * Draws the circles of the Hotspot.
+	 * Draws the circles of the hot-spot.
 	 * 
-	 * @param g The graphic handle to draw an.
+	 * @param sp The SpriteBatch to draw on.
 	 * @param layerIndex Index of the circle to draw
 	 * @param circleSelected If the circle is selected and therefore drawn in a different color.
 	 * @param onlyEdges If only edges should be drawn

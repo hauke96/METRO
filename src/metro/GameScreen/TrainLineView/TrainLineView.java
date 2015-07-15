@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-import java.util.Random;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
@@ -14,8 +13,8 @@ import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.WindowControls.Button;
 import metro.WindowControls.InputField;
-import metro.WindowControls.List;
 import metro.WindowControls.Label;
+import metro.WindowControls.List;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -45,7 +44,7 @@ public class TrainLineView extends GameScreen
 	/**
 	 * Creates a new TrainLineView.
 	 * 
-	 * @param _mapOffset The offset of the map (for correct mouse clicks)
+	 * @param mapOffset The offset of the map (for correct mouse clicks)
 	 */
 	public TrainLineView(Point2D mapOffset)
 	{
@@ -175,17 +174,17 @@ public class TrainLineView extends GameScreen
 
 		// "create new train"/"finish" line has been pressed
 		if(_createLineButton.isPressed(screenX, screenY)) createLineButton_action();
-		//TODO: If clause for edit button
-		//TODO: If clause for remove button
-		//TODO: If clause for ok button
+		// TODO: If clause for edit button
+		// TODO: If clause for remove button
+		// TODO: If clause for ok button
 
 		// when no control was clicked and mouse out of T.L.View, forward it to the SelectTool
 		if(screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
 		{
 			if(mouseButton == Input.Buttons.LEFT) _lineSelectTool.leftClick(screenX, screenY, _mapOffset); // add node to list
 			if(mouseButton == Input.Buttons.RIGHT) _lineSelectTool.rightClick(screenX, screenY, _mapOffset); // remove node from list
-			
-			//the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
+
+			// the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
 			TrainLine line = _lineSelectTool.getTrainLine();
 			TrainLineOverseer.addLine(line);
 		}

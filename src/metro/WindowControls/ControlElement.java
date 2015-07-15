@@ -13,15 +13,13 @@ public interface ControlElement
 {
 	/**
 	 * Draws the control.
-	 * 
-	 * @param g Graphics handle.
 	 */
 	public void draw();
 
 	/**
 	 * When mouse clicked on control.
 	 * 
-	 * @return
+	 * @return True when user clicked on control.
 	 */
 	public boolean clickOnControlElement();
 
