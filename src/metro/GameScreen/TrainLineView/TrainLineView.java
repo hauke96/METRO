@@ -81,7 +81,7 @@ public class TrainLineView extends GameScreen
 		// Draw Color bar
 		for(int i = 0; i < 255; i++)
 		{
-			Color color = Color.getHSBColor((float)i / (float)255, 1.0f, 1.0f);
+			Color color = Color.getHSBColor((float)i / (float)255, 0.61f, 1.0f);
 			Draw.setColor(color);
 			Draw.Line(i + 300, 0, i + 300, 20);
 		}
@@ -186,7 +186,7 @@ public class TrainLineView extends GameScreen
 
 			// the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
 			TrainLine line = _lineSelectTool.getTrainLine();
-			TrainLineOverseer.addLine(line);
+			if(line != null) TrainLineOverseer.addLine(line); // only change something when line is valid
 		}
 	}
 
@@ -204,8 +204,11 @@ public class TrainLineView extends GameScreen
 		{
 			_createLineButton.setText("Create Line");
 			TrainLine line = _lineSelectTool.getTrainLine();
-			TrainLineOverseer.addLine(line);
-			_lineList.addElement(line.getName());
+			if(line != null) // only change something when line is valid
+			{
+				TrainLineOverseer.addLine(line);
+				_lineList.addElement(line.getName());
+			}
 		}
 
 		_lineSelectToolEnabled = !_lineSelectToolEnabled;

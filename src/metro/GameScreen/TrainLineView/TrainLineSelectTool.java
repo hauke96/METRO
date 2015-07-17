@@ -74,6 +74,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	public TrainLine getTrainLine()
 	{
 		ArrayList<RailwayConnection> connections = createRailwayConnections();
+		if(connections == null) return null;
 		return new TrainLine(connections, "New Line", Color.blue); // TODO: Change to manual color
 	}
 
@@ -84,6 +85,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	 */
 	private ArrayList<RailwayConnection> createRailwayConnections()
 	{
+		System.out.println("count: " + countEndNodes());
 		if(countEndNodes() != 2) return null;
 		RailwayNode start = findStartNode();
 
@@ -149,7 +151,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 			{
 				if(node.getNeighbors().contains(_listOfNodes.get(k))) amountNeighbors++;
 			}
-			if(amountNeighbors == 1) amountEndNodes++;
+			if(amountNeighbors <= 1) amountEndNodes++;
 		}
 		System.out.println("countEndNodes: " + amountEndNodes);
 		return amountEndNodes;
