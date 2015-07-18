@@ -89,6 +89,8 @@ public class RailwayNode
 	public void draw(SpriteBatch sp, Point offset)
 	{
 		Point position, positionNext;
+		position = new Point(offset.x + _position.x * METRO.__baseNetSpacing,
+			offset.y + _position.y * METRO.__baseNetSpacing); // Position with offset etc.
 
 		for(RailwayNode node : _neighborNodes)
 		{
@@ -97,8 +99,6 @@ public class RailwayNode
 			if(p.y < _position.y ||
 				(p.y == _position.y && p.x < _position.x))
 			{
-				position = new Point(offset.x + _position.x * METRO.__baseNetSpacing,
-					offset.y + _position.y * METRO.__baseNetSpacing); // Position with offset etc.
 				positionNext = new Point(offset.x + p.x * METRO.__baseNetSpacing,
 					offset.y + p.y * METRO.__baseNetSpacing); // Position with offset etc. for second point
 
@@ -119,11 +119,18 @@ public class RailwayNode
 				Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
 			}
 		}
+		ArrayList<Color> colorList = TrainLineOverseer.getNodeColor(this);
+		for(int i = 0; i < colorList.size(); i++)
+		{
+			Draw.setColor(colorList.get(i));
+			Draw.setColor(METRO.__metroBlue);
+			Draw.Circle(position.x - 4 - i, position.y - 4 - i, 9 + 2 * i);
+		}
 	}
 
 	@Override
 	public boolean equals(Object obj)
 	{
-		return (obj instanceof RailwayNode) && (_position == ((RailwayNode)obj).getPosition());
+		return (obj instanceof RailwayNode) && (_position.equals(((RailwayNode)obj).getPosition()));
 	}
 }

@@ -15,7 +15,7 @@ import metro.TrainManagement.Nodes.RailwayNode;
 public class RailwayConnection
 {
 	private ArrayList<Color> _colorList;
-	private RailwayNode[] _coordinates;
+	private RailwayNode[] _nodes;
 
 	/**
 	 * Creates a new connection of two railway nodes. The order (with regard to the equals-method) of the nodes is irrelevant!
@@ -26,9 +26,9 @@ public class RailwayConnection
 	public RailwayConnection(RailwayNode node1, RailwayNode node2)
 	{
 		_colorList = new ArrayList<Color>();
-		_coordinates = new RailwayNode[2];
-		_coordinates[0] = node1;
-		_coordinates[1] = node2;
+		_nodes = new RailwayNode[2];
+		_nodes[0] = node1;
+		_nodes[1] = node2;
 	}
 
 	/**
@@ -80,10 +80,10 @@ public class RailwayConnection
 			RailwayConnection connection = (RailwayConnection)obj;
 
 			// Check if both coordinated are equal
-			result = connection._coordinates[0].equals(_coordinates[0])
-				&& connection._coordinates[1].equals(_coordinates[1])
-				|| connection._coordinates[0].equals(_coordinates[1])
-				&& connection._coordinates[1].equals(_coordinates[0]);
+			result = connection._nodes[0].equals(_nodes[0])
+				&& connection._nodes[1].equals(_nodes[1])
+				|| connection._nodes[0].equals(_nodes[1])
+				&& connection._nodes[1].equals(_nodes[0]);
 		}
 
 		return result;
@@ -98,5 +98,22 @@ public class RailwayConnection
 	private int getColorIndex(Color color)
 	{
 		return (int)(Color.RGBtoHSB(color.getRed(), color.getGreen(), color.getBlue(), null)[0] * 255);
+	}
+
+	/**
+	 * Checks if this connection contains the given node.
+	 * 
+	 * @param node The node that might be in here.
+	 * @return True if one of the two containing nodes is the given one.
+	 */
+	public boolean contains(RailwayNode node)
+	{
+		return _nodes[0].equals(node) || _nodes[1].equals(node);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return _nodes[0].getPosition() + " - " + _nodes[1].getPosition();
 	}
 }

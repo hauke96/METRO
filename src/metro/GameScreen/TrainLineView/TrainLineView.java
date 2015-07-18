@@ -186,7 +186,8 @@ public class TrainLineView extends GameScreen
 
 			// the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
 			TrainLine line = _lineSelectTool.getTrainLine();
-			if(line != null) TrainLineOverseer.addLine(line); // only change something when line is valid
+//			if(line != null) 
+				TrainLineOverseer.addLine(line); // only change something when line is valid
 		}
 	}
 

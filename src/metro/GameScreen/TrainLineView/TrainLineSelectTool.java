@@ -74,7 +74,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	public TrainLine getTrainLine()
 	{
 		ArrayList<RailwayConnection> connections = createRailwayConnections();
-		if(connections == null) return null;
+		// if(connections == null) return null;
 		return new TrainLine(connections, "New Line", Color.blue); // TODO: Change to manual color
 	}
 
@@ -85,29 +85,38 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	 */
 	private ArrayList<RailwayConnection> createRailwayConnections()
 	{
-		System.out.println("count: " + countEndNodes());
-		if(countEndNodes() != 2) return null;
 		RailwayNode start = findStartNode();
 
 		ArrayList<RailwayNode> listOfNodes = new ArrayList<RailwayNode>(_listOfNodes); // copies the _listOfNodes
 		ArrayList<RailwayConnection> listOfConnections = new ArrayList<RailwayConnection>();
 
 		RailwayNode node = start; // begin at the start node
-		System.out.println("Start pos: " + start.getPosition());
 		for(int i = 0; i < _listOfNodes.size(); i++)
 		{
 			RailwayNode neighbor = getNeighbor(node, listOfNodes); // gets the only neighbor of this node
-			if(neighbor == null)// || listOfNodes.size() <= 1)
+			if(neighbor == null) // no neighbors found
 			{
-				System.out.println("i: " + i + " of " + (_listOfNodes.size() - 1));
-				break; // the end node is alone -> no neighbors -> algorithm finished
+				// search for new longer segments
+				for(int k = 0; k < listOfNodes.size(); k++)
+				{
+					node = listOfNodes.get(k);
+					neighbor = getNeighbor(node, listOfNodes); // gets the only neighbor of this node)
+					if(neighbor != null) break; // greater segment found
+				}
+				if(neighbor == null) break; // the end node is alone -> no neighbors -> algorithm finished
 			}
 			RailwayConnection connection = new RailwayConnection(node, neighbor); // creates the connection
 			listOfConnections.add(connection); // adds the connection to the list
 			listOfNodes.remove(node); // removes the used node from the list of nodes
 			node = neighbor; // get next node by using the neighbor AS the next node
 		}
-		System.out.println("amountOfConnections: " + listOfConnections.size() + "\n");
+
+		// go throught all single nodes that have no neighbors
+		for(RailwayNode standAloneNode : listOfNodes)
+		{
+			RailwayConnection connection = new RailwayConnection(standAloneNode, standAloneNode); // creates the connection
+			listOfConnections.add(connection); // adds the connection to the list
+		}
 
 		return listOfConnections;
 	}
@@ -121,6 +130,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	 */
 	private RailwayNode getNeighbor(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
 	{
+		if(node == null) return null;
 		RailwayNode neighborNode = null;
 
 		for(RailwayNode neighbor : node.getNeighbors())
@@ -153,7 +163,6 @@ public class TrainLineSelectTool implements TrainInteractionTool
 			}
 			if(amountNeighbors <= 1) amountEndNodes++;
 		}
-		System.out.println("countEndNodes: " + amountEndNodes);
 		return amountEndNodes;
 	}
 
@@ -175,10 +184,8 @@ public class TrainLineSelectTool implements TrainInteractionTool
 			for(int k = 0; k < _listOfNodes.size(); k++)
 			{
 				if(!_listOfNodes.get(k).equals(endNode) // not the end node self
-					// && !_listOfNodes.get(k).equals(start)
 					&& _listOfNodes.get(k).getNeighbors().contains(endNode)) amountNeighbors++; // count nodes that are neighbors only within THIS train line
 			}
-			System.out.println("   " + endNode.getPosition() + " - " + amountNeighbors);
 		}
 
 		return endNode;

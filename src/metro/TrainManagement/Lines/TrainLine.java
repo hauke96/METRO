@@ -3,6 +3,8 @@ package metro.TrainManagement.Lines;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import metro.TrainManagement.Nodes.RailwayNode;
+
 /**
  * A Train line is a collection of several railway connections that touches each other (building one big line).
  * Trains can only move on one of this train lines.
@@ -62,6 +64,22 @@ public class TrainLine
 	public boolean contains(RailwayConnection connection)
 	{
 		return _listOfConnections.contains(connection);
+	}
+
+	/**
+	 * Checks if this train line contains the given node.
+	 * 
+	 * @param node The node that might be in here.
+	 * @return True when the node is included in this line.
+	 */
+	public boolean contains(RailwayNode node)
+	{
+		boolean contains = false;
+		for(RailwayConnection connection : _listOfConnections)
+		{
+			contains |= connection.contains(node);
+		}
+		return contains;
 	}
 
 	/**
