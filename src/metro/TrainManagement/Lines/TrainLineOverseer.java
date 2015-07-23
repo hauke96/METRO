@@ -1,9 +1,6 @@
 package metro.TrainManagement.Lines;
 
-import java.awt.Color;
 import java.util.ArrayList;
-
-import metro.TrainManagement.Nodes.RailwayNode;
 
 /**
  * The TrainLineOverseer knows all train lines and with this overseer you can add, remove and change a train line.
@@ -25,21 +22,5 @@ public class TrainLineOverseer
 		_listOfTrainLines.remove(line); // remove old line, because maybe line.equals(old-line) == true
 		// TODO: advanced remove mechanics (what if the user changed name AND color? -> currently the lines are different)
 		_listOfTrainLines.add(line); // adds the new line to the list
-	}
-
-	/**
-	 * Gets all colors of the given node.
-	 * 
-	 * @param node The node which colors you want to know.
-	 * @return A list of all color of this node.
-	 */
-	public static ArrayList<Color> getNodeColor(RailwayNode node)
-	{
-		ArrayList<Color> colorList = new ArrayList<Color>();
-		for(TrainLine line : _listOfTrainLines)
-		{
-			if(line.contains(node)) colorList.add(line.getColor());
-		}
-		return colorList;
 	}
 }

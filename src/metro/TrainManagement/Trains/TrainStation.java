@@ -2,8 +2,6 @@ package metro.TrainManagement.Trains;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
 
 import metro.METRO;
 import metro.Graphics.Draw;
@@ -21,7 +19,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class TrainStation
 {
 	private int _waitingPassengers;
-	private List<TrainStation> _connectedStations = new ArrayList<TrainStation>();
 	private Point _position; // Position
 
 	public static final int _PRICE = 1000;
@@ -49,24 +46,6 @@ public class TrainStation
 	}
 
 	/**
-	 * Draws all the connections to connected stations.
-	 * 
-	 * @param sp The SpriteBatch to draw on
-	 * @param offset The current offset of the game screen.
-	 */
-	public void drawConnections(SpriteBatch sp, Point offset)
-	{
-		Point position = new Point(offset.x + _position.x * METRO.__baseNetSpacing - 4,
-			offset.y + _position.y * METRO.__baseNetSpacing - 7); // Position with offset etc.
-
-		Draw.setColor(Color.black);
-		for(TrainStation ts : _connectedStations)
-		{
-			Draw.Line(position.x + 4, position.y + 7, ts.getPositionOnScreen(offset).x, ts.getPositionOnScreen(offset).y);
-		}
-	}
-
-	/**
 	 * Draws the station with passenger amount.
 	 * 
 	 * @param sp The SpriteBatch to draw on
@@ -84,20 +63,6 @@ public class TrainStation
 		Draw.String("" + _waitingPassengers,
 			offset.x + _position.x * METRO.__baseNetSpacing - Draw.getStringSize("" + _waitingPassengers).width / 2 - 1,
 			offset.y + _position.y * METRO.__baseNetSpacing - 25);
-	}
-
-	/**
-	 * Adds a connection to this train station.
-	 * 
-	 * @param station The train station to add to the connection list.
-	 */
-	public void addConnection(TrainStation station)
-	{
-		if(!_connectedStations.contains(station))
-		{
-			_connectedStations.add(station); // A -> B
-			station.addConnection(this); // B -> A
-		}
 	}
 
 	/**

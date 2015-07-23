@@ -46,24 +46,14 @@ public class TrainLine
 	}
 
 	/**
-	 * Gets the color of the train line.
+	 * Checks if a node is included in this train line.
 	 * 
-	 * @return The color.
+	 * @param node The node that's possibly in here.
+	 * @return True if the node is already included.
 	 */
-	public Color getColor()
+	public boolean contains(RailwayNode node)
 	{
-		return _lineColor;
-	}
-
-	/**
-	 * Checks if a connections is included in this train line.
-	 * 
-	 * @param connection The connection that's possibly in here.
-	 * @return True if the connection is already included.
-	 */
-	public boolean contains(RailwayNode connection)
-	{
-		return _listOfNodes.contains(connection);
+		return _listOfNodes.contains(node);
 	}
 
 	/**

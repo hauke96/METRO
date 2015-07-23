@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 import metro.METRO;
 import metro.Graphics.Draw;
-import metro.TrainManagement.Lines.TrainLineOverseer;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -120,8 +119,8 @@ public class RailwayNode
 				Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
 			}
 		}
-		ArrayList<Color> colorList = TrainLineOverseer.getNodeColor(this);
-		for(int i = 0; i < colorList.size(); i++)
+		ArrayList<Color> colorList = _mapOfColors.get(this);
+		for(int i = 0; colorList != null && i < colorList.size(); i++)
 		{
 			Draw.setColor(colorList.get(i));
 			Draw.setColor(METRO.__metroBlue);

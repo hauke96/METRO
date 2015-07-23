@@ -165,11 +165,6 @@ public class TrainView extends GameScreen
 	{
 		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
 
-		// Draw connections:
-		for(TrainStation ts : _trainStationList)
-		{
-			ts.drawConnections(sp, offset);
-		}
 		// Draw stations:
 		for(TrainStation ts : _trainStationList)
 		{
