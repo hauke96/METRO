@@ -15,7 +15,7 @@ import metro.TrainManagement.Nodes.RailwayNode;
  */
 public class TrainLine
 {
-	private ArrayList<RailwayConnection> _listOfConnections;
+	private ArrayList<RailwayNode> _listOfNodes;
 	private Color _lineColor;
 	private String _name;
 
@@ -37,10 +37,10 @@ public class TrainLine
 	 * @param name The name.
 	 * @param lineColor The color.
 	 */
-	public TrainLine(ArrayList<RailwayConnection> connections, String name, Color lineColor)
+	public TrainLine(ArrayList<RailwayNode> connections, String name, Color lineColor)
 	{
-		if(connections != null) _listOfConnections = connections;
-		else _listOfConnections = new ArrayList<RailwayConnection>();
+		if(connections != null) _listOfNodes = connections;
+		else _listOfNodes = new ArrayList<RailwayNode>();
 		_name = name;
 		_lineColor = lineColor;
 	}
@@ -61,25 +61,9 @@ public class TrainLine
 	 * @param connection The connection that's possibly in here.
 	 * @return True if the connection is already included.
 	 */
-	public boolean contains(RailwayConnection connection)
+	public boolean contains(RailwayNode connection)
 	{
-		return _listOfConnections.contains(connection);
-	}
-
-	/**
-	 * Checks if this train line contains the given node.
-	 * 
-	 * @param node The node that might be in here.
-	 * @return True when the node is included in this line.
-	 */
-	public boolean contains(RailwayNode node)
-	{
-		boolean contains = false;
-		for(RailwayConnection connection : _listOfConnections)
-		{
-			contains |= connection.contains(node);
-		}
-		return contains;
+		return _listOfNodes.contains(connection);
 	}
 
 	/**

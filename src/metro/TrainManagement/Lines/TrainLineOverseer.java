@@ -28,22 +28,6 @@ public class TrainLineOverseer
 	}
 
 	/**
-	 * Returns a list of all colors that are just by the lines containing the given RailwayConnection.
-	 * 
-	 * @param connection The Connection which color you want to have.
-	 * @return A list of colors.
-	 */
-	public static ArrayList<Color> getColor(RailwayConnection connection)
-	{
-		ArrayList<Color> colorList = new ArrayList<Color>();
-		for(TrainLine line : _listOfTrainLines)
-		{
-			if(line.contains(connection)) colorList.add(line.getColor());
-		}
-		return colorList;
-	}
-
-	/**
 	 * Gets all colors of the given node.
 	 * 
 	 * @param node The node which colors you want to know.

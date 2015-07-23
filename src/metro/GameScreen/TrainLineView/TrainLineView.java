@@ -52,7 +52,7 @@ public class TrainLineView extends GameScreen
 		_lineSelectToolEnabled = false;
 		_windowWidth = 400;
 		_mapOffset = mapOffset;
-		_lineSelectTool = new TrainLineSelectTool(_mapOffset);
+		_lineSelectTool = new TrainLineSelectTool();
 
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 40, 300),
@@ -186,8 +186,7 @@ public class TrainLineView extends GameScreen
 
 			// the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
 			TrainLine line = _lineSelectTool.getTrainLine();
-//			if(line != null) 
-				TrainLineOverseer.addLine(line); // only change something when line is valid
+			TrainLineOverseer.addLine(line); // only change something when line is valid
 		}
 	}
 
@@ -199,7 +198,7 @@ public class TrainLineView extends GameScreen
 		if(!_lineSelectToolEnabled)
 		{
 			_createLineButton.setText("Finish");
-			_lineSelectTool = new TrainLineSelectTool(_mapOffset); // create clean select tool
+			_lineSelectTool = new TrainLineSelectTool(); // create clean select tool
 		}
 		else
 		{

@@ -3,10 +3,10 @@ package metro.TrainManagement.Nodes;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import metro.METRO;
 import metro.Graphics.Draw;
-import metro.TrainManagement.Lines.RailwayConnection;
 import metro.TrainManagement.Lines.TrainLineOverseer;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,7 +21,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class RailwayNode
 {
-	private ArrayList<RailwayNode> _neighborNodes = new ArrayList<RailwayNode>(); // a list of all nodes this node is connected to
+	private ArrayList<RailwayNode> _listOfNeighbors = new ArrayList<RailwayNode>(); // a list of all nodes this node is connected to
+	private HashMap<RailwayNode, ArrayList<Color>> _mapOfColors = new HashMap<RailwayNode, ArrayList<Color>>();
 	private Point _position; // not in pixel, cross number/pos
 
 	public static final int PRICE = 200;
@@ -29,7 +30,7 @@ public class RailwayNode
 	public RailwayNode(Point position, RailwayNode neighbor)
 	{
 		_position = position;
-		if(neighbor != null) _neighborNodes.add(neighbor);
+		if(neighbor != null) _listOfNeighbors.add(neighbor);
 		RailwayNodeOverseer.add(this);
 	}
 
@@ -40,9 +41,9 @@ public class RailwayNode
 	 */
 	public void addNeighbor(RailwayNode node)
 	{
-		if(!_neighborNodes.contains(node)) // when node is no neighbor then add it
+		if(!_listOfNeighbors.contains(node)) // when node is no neighbor then add it
 		{
-			_neighborNodes.add(node); // add it to the neighbors
+			_listOfNeighbors.add(node); // add it to the neighbors
 			node.addSimple(this); // add it WITHOUT re-adding "this" (would cause endless loop + StackOverFlow)
 		}
 	}
@@ -54,9 +55,9 @@ public class RailwayNode
 	 */
 	public void addSimple(RailwayNode node)
 	{
-		if(!_neighborNodes.contains(node)) // when node is no neighbor then add it
+		if(!_listOfNeighbors.contains(node)) // when node is no neighbor then add it
 		{
-			_neighborNodes.add(node);
+			_listOfNeighbors.add(node);
 		}
 	}
 
@@ -77,7 +78,7 @@ public class RailwayNode
 	 */
 	public ArrayList<RailwayNode> getNeighbors()
 	{
-		return _neighborNodes;
+		return _listOfNeighbors;
 	}
 
 	/**
@@ -92,7 +93,7 @@ public class RailwayNode
 		position = new Point(offset.x + _position.x * METRO.__baseNetSpacing,
 			offset.y + _position.y * METRO.__baseNetSpacing); // Position with offset etc.
 
-		for(RailwayNode node : _neighborNodes)
+		for(RailwayNode node : _listOfNeighbors)
 		{
 			Point p = node.getPosition();
 
@@ -106,8 +107,8 @@ public class RailwayNode
 				if(position.y == positionNext.y) positionNext.x--;
 				if(position.x == positionNext.x) positionNext.y--;
 
-				ArrayList<Color> colors = TrainLineOverseer.getColor(new RailwayConnection(this, node));
-				if(colors.size() == 0)
+				ArrayList<Color> colors = _mapOfColors.get(node);
+				if(colors == null || colors.size() == 0)
 				{
 					Draw.setColor(Color.black);
 				}
@@ -132,5 +133,17 @@ public class RailwayNode
 	public boolean equals(Object obj)
 	{
 		return (obj instanceof RailwayNode) && (_position.equals(((RailwayNode)obj).getPosition()));
+	}
+
+	/**
+	 * Adds a color to the connection "this node" <--[color]--> "parameter node".
+	 * 
+	 * @param node The other node with same color.
+	 * @param color The color of both nodes.
+	 */
+	public void addColorTo(RailwayNode node, Color color)
+	{
+		if(!_mapOfColors.containsKey(node)) _mapOfColors.put(node, new ArrayList<Color>());
+		_mapOfColors.get(node).add(color);
 	}
 }
