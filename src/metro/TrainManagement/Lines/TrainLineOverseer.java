@@ -23,4 +23,15 @@ public class TrainLineOverseer
 		// TODO: advanced remove mechanics (what if the user changed name AND color? -> currently the lines are different)
 		_listOfTrainLines.add(line); // adds the new line to the list
 	}
+
+	/**
+	 * Removes a line from the list.
+	 * 
+	 * @param line The line to remove.
+	 */
+	public static void removeLine(TrainLine line)
+	{
+		line.clear();
+		_listOfTrainLines.remove(line);
+	}
 }

@@ -24,6 +24,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class TrainLineSelectTool implements TrainInteractionTool
 {
 	private ArrayList<RailwayNode> _listOfNodes;
+	private boolean _isClosed;
 
 	/**
 	 * Creates a new tool to select the train line.
@@ -31,6 +32,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	public TrainLineSelectTool()
 	{
 		_listOfNodes = new ArrayList<RailwayNode>();
+		_isClosed = false;
 	}
 
 	@Override
@@ -67,7 +69,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 				clickedNode.addColorTo(neighborNode, Color.blue);
 			}
 		}
-		
+
 		if(!_listOfNodes.contains(clickedNode)) _listOfNodes.add(clickedNode);
 	}
 
@@ -84,6 +86,12 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	@Override
 	public void rightClick(int screenX, int screenY, Point2D offset)
 	{
-		// TODO: Remove clicked node from train line
+		_isClosed = true;
+	}
+
+	@Override
+	public boolean isClosed()
+	{
+		return _isClosed;
 	}
 }

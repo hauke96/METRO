@@ -14,11 +14,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class StationPlacingTool implements TrainInteractionTool
 {
-	TrainView _trainView;
+	private boolean _isClosed;
 
-	public StationPlacingTool(TrainView view)
+	public StationPlacingTool()
 	{
-		_trainView = view;
+		_isClosed = false;
 	}
 
 	@Override
@@ -61,7 +61,13 @@ public class StationPlacingTool implements TrainInteractionTool
 	@Override
 	public void rightClick(int screenX, int screenY, Point2D offset)
 	{
-		_trainView.settrainViewTool(null);
+		_isClosed = true;
+	}
+
+	@Override
+	public boolean isClosed()
+	{
+		return _isClosed;
 	}
 
 }

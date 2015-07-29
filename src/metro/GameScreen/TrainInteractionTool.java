@@ -37,4 +37,11 @@ public interface TrainInteractionTool
 	 * @param offset An offset for the click (e.g. for the map-offset)
 	 */
 	public void rightClick(int screenX, int screenY, Point2D offset);
+	
+	/**
+	 * When a tool or control is closed it means that it's not used any longer. It wont get any click-events or other calls.
+	 * 
+	 * @return True when closed and not needed anymore.
+	 */
+	public boolean isClosed();
 }

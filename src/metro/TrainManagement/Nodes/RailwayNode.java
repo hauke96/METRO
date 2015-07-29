@@ -145,4 +145,17 @@ public class RailwayNode
 		if(!_mapOfColors.containsKey(node)) _mapOfColors.put(node, new ArrayList<Color>());
 		_mapOfColors.get(node).add(color);
 	}
+
+	/**
+	 * Removes a specific color from this node.
+	 * 
+	 * @param color The color to remove.
+	 */
+	public void removeColor(Color color)
+	{
+		for(ArrayList<Color> list : _mapOfColors.values())
+		{
+			list.remove(color);
+		}
+	}
 }

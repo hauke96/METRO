@@ -88,10 +88,10 @@ public class TrainView extends GameScreen
 		drawTrainStations(sp);
 
 		drawToolbar(sp);
-		
+
 		printDebugStuff(sp);
-		
-		if(_trainLineView!= null) _trainLineView.updateGameScreen(sp);
+
+		if(_trainLineView != null) _trainLineView.updateGameScreen(sp);
 	}
 
 	/**
@@ -138,22 +138,32 @@ public class TrainView extends GameScreen
 	 */
 	private Point drawBaseDot(SpriteBatch sp)
 	{
-		Point cursorPos = new Point(Math.abs((int)(METRO.__mousePosition.x - 7 - _mapOffset.getX()) % METRO.__baseNetSpacing),
-			Math.abs((int)(METRO.__mousePosition.y - 7 - _mapOffset.getY()) % METRO.__baseNetSpacing));
-
-		_selectedCross = new Point((int)Math.round(((int)(METRO.__mousePosition.x - 15 - _mapOffset.getX()) - 10) / (float)METRO.__baseNetSpacing) + 1,// ((int)(METRO.__mousePosition.x - 5 - _mapOffset.getX()) - 10) / METRO.__baseNetSpacing + 1,
+		_selectedCross = new Point(
+			(int)Math.round(((int)(METRO.__mousePosition.x - 18 - _mapOffset.getX()) - 10) / (float)METRO.__baseNetSpacing) + 1,// ((int)(METRO.__mousePosition.x - 5 - _mapOffset.getX()) - 10) / METRO.__baseNetSpacing + 1,
 			(int)Math.round(((int)(METRO.__mousePosition.y - 15 - _mapOffset.getY()) - 10) / (float)METRO.__baseNetSpacing) + 1);
 
-		Point offsetMarker = new Point(METRO.__baseNetSpacing - cursorPos.x, METRO.__baseNetSpacing - cursorPos.y);
-		if(cursorPos.x <= METRO.__baseNetSpacing / 2) offsetMarker.x = cursorPos.x;
-		if(cursorPos.y <= METRO.__baseNetSpacing / 2) offsetMarker.y = cursorPos.y;
+		Point cursorPos = new Point(Math.abs((int)(METRO.__mousePosition.x - 7 - _mapOffset.getX()) % METRO.__baseNetSpacing),
+			Math.abs((int)(METRO.__mousePosition.y - 7 - _mapOffset.getY()) % METRO.__baseNetSpacing));
+		
+		System.out.println("OK");
+		System.out.println("  _sC: " + _selectedCross);
+		System.out.println("  cP : " + cursorPos);
+
+//		Point offsetMarker = new Point(METRO.__baseNetSpacing - cursorPos.x, METRO.__baseNetSpacing - cursorPos.y);
+		Point offsetMarker = new Point(METRO.__baseNetSpacing * _selectedCross.x,
+			METRO.__baseNetSpacing * _selectedCross.y);
+//		if(cursorPos.x <= METRO.__baseNetSpacing / 2) offsetMarker.x = cursorPos.x;
+//		if(cursorPos.y <= METRO.__baseNetSpacing / 2) offsetMarker.y = cursorPos.y;
 
 		Fill.setColor(Color.darkGray);
-		Fill.Rect(METRO.__mousePosition.x + offsetMarker.x - 8,
-			METRO.__mousePosition.y + offsetMarker.y - 8,
+//		Fill.Rect(METRO.__mousePosition.x + offsetMarker.x - 8,
+//			METRO.__mousePosition.y + offsetMarker.y - 8,
+//			3, 3);
+		Fill.Rect(offsetMarker.x - 1,
+			offsetMarker.y - 1,
 			3, 3);
-		return new Point(METRO.__mousePosition.x + offsetMarker.x - 7,
-			METRO.__mousePosition.y + offsetMarker.y - 7);
+		return new Point(offsetMarker.x - 1,
+			offsetMarker.y - 1);
 	}
 
 	/**
@@ -180,7 +190,7 @@ public class TrainView extends GameScreen
 	private void drawRailwayLines(SpriteBatch sp)
 	{
 		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
-		
+
 		RailwayNodeOverseer.drawAllNodes(offset, sp);
 	}
 
@@ -201,8 +211,8 @@ public class TrainView extends GameScreen
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		if(_cityView != null) _cityView.mouseClicked(screenX, screenY, mouseButton);
-		if(_trainLineView!= null) _trainLineView.mouseClicked(screenX, screenY, mouseButton);
-		
+		if(_trainLineView != null) _trainLineView.mouseClicked(screenX, screenY, mouseButton);
+
 		if(mouseButton == Buttons.MIDDLE) // for drag-mode
 		{
 			_dragMode = true;
@@ -215,10 +225,14 @@ public class TrainView extends GameScreen
 				if(_activeTool != null) _activeTool.leftClick(screenX, screenY, _mapOffset);
 			}
 		}
-		else if(mouseButton == Buttons.RIGHT)
+		else if(mouseButton == Buttons.RIGHT && _activeTool != null)
 		{
-			resetToolbarButtonPosition(null);
-			if(_activeTool != null) _activeTool.rightClick(screenX, screenY, _mapOffset);
+			_activeTool.rightClick(screenX, screenY, _mapOffset);
+			if(_activeTool.isClosed())
+			{
+				resetToolbarButtonPosition(null);
+				setTrainViewTool(null);
+			}
 		}
 	}
 
@@ -232,25 +246,25 @@ public class TrainView extends GameScreen
 	private boolean toolbarButtonPressed(int screenX, int screenY)
 	{
 		boolean buttonPresses = false;
-		
+
 		if(_buildStation.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_buildStation);
-			_activeTool = new StationPlacingTool(this);
+			_activeTool = new StationPlacingTool();
 			_trainLineView.setVisibility(false);
 			buttonPresses = true;
 		}
 		else if(_buildTracks.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_buildTracks);
-			_activeTool = new TrackPlacingTool(this);
+			_activeTool = new TrackPlacingTool();
 			_trainLineView.setVisibility(false);
 			buttonPresses = true;
 		}
 		else if(_showTrainList.isPressed(screenX, screenY))
 		{
 			resetToolbarButtonPosition(_showTrainList);
-			_activeTool = null;
+			_activeTool = _trainLineView;
 			_trainLineView.setVisibility(true);
 			buttonPresses = true;
 		}
@@ -315,7 +329,7 @@ public class TrainView extends GameScreen
 	 * 
 	 * @param tool The new tool.
 	 */
-	public void settrainViewTool(TrainInteractionTool tool)
+	public void setTrainViewTool(TrainInteractionTool tool)
 	{
 		_activeTool = tool;
 	}
@@ -324,7 +338,7 @@ public class TrainView extends GameScreen
 	public void mouseReleased(int mouseButton)
 	{
 		if(_cityView != null) _cityView.mouseReleased(mouseButton);
-		if(_trainLineView!= null) _trainLineView.mouseReleased(mouseButton);
+		if(_trainLineView != null) _trainLineView.mouseReleased(mouseButton);
 
 		if(mouseButton == Buttons.MIDDLE)
 		{

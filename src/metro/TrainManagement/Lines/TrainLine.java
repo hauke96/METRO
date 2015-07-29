@@ -2,6 +2,7 @@ package metro.TrainManagement.Lines;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import metro.TrainManagement.Nodes.RailwayNode;
 
@@ -74,6 +75,17 @@ public class TrainLine
 	public void setName(String newName)
 	{
 		_name = newName;
+	}
+
+	/**
+	 * Clears this train line, which means that the color of all nodes will be removed.
+	 */
+	public void clear()
+	{
+		for(RailwayNode node : _listOfNodes)
+		{
+			node.removeColor(_lineColor);
+		}
 	}
 
 	@Override

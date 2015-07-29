@@ -7,6 +7,7 @@ import java.awt.geom.Point2D;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
+import metro.GameScreen.TrainInteractionTool;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.Lines.TrainLine;
@@ -16,7 +17,6 @@ import metro.WindowControls.InputField;
 import metro.WindowControls.Label;
 import metro.WindowControls.List;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
@@ -25,7 +25,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author hauke
  *
  */
-public class TrainLineView extends GameScreen
+public class TrainLineView extends GameScreen implements TrainInteractionTool
 {
 	private int _windowWidth;
 	private List _lineList;
@@ -34,7 +34,8 @@ public class TrainLineView extends GameScreen
 		_removeLineButton, // to remove a train line
 		_lineNameFieldButton; // to edit train line name
 	private boolean _visible, // true: TrainLineView will be displayed
-		_lineSelectToolEnabled; // if enabled, the user can select nodes
+		_lineSelectToolEnabled, // if enabled, the user can select nodes
+		_isClosed;
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private Point2D _mapOffset;
 	private TrainLineSelectTool _lineSelectTool;
@@ -50,6 +51,7 @@ public class TrainLineView extends GameScreen
 	{
 		_visible = true;
 		_lineSelectToolEnabled = false;
+		_isClosed = false;
 		_windowWidth = 400;
 		_mapOffset = mapOffset;
 		_lineSelectTool = new TrainLineSelectTool();
@@ -181,9 +183,6 @@ public class TrainLineView extends GameScreen
 		// when no control was clicked and mouse out of T.L.View, forward it to the SelectTool
 		if(screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
 		{
-			if(mouseButton == Input.Buttons.LEFT) _lineSelectTool.leftClick(screenX, screenY, _mapOffset); // add node to list
-			if(mouseButton == Input.Buttons.RIGHT) _lineSelectTool.rightClick(screenX, screenY, _mapOffset); // remove node from list
-
 			// the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
 			TrainLine line = _lineSelectTool.getTrainLine();
 			TrainLineOverseer.addLine(line); // only change something when line is valid
@@ -197,12 +196,10 @@ public class TrainLineView extends GameScreen
 	{
 		if(!_lineSelectToolEnabled)
 		{
-			_createLineButton.setText("Finish");
 			_lineSelectTool = new TrainLineSelectTool(); // create clean select tool
 		}
 		else
 		{
-			_createLineButton.setText("Create Line");
 			TrainLine line = _lineSelectTool.getTrainLine();
 			if(line != null) // only change something when line is valid
 			{
@@ -212,6 +209,13 @@ public class TrainLineView extends GameScreen
 		}
 
 		_lineSelectToolEnabled = !_lineSelectToolEnabled;
+		resetControls();
+	}
+
+	private void resetControls()
+	{
+		if(_lineSelectToolEnabled) _createLineButton.setText("Finish");
+		else _createLineButton.setText("Create Line");
 		// switch controls on/off depending on the enable state of the selector tool
 		_editLineButton.setState(!_lineSelectToolEnabled);
 		_removeLineButton.setState(!_lineSelectToolEnabled);
@@ -233,5 +237,45 @@ public class TrainLineView extends GameScreen
 	{
 		if(!_visible) return;
 		_lineList.mouseScrolled(amount);
+	}
+
+	@Override
+	public void draw(SpriteBatch sp, Point2D offset)
+	{
+	}
+
+	@Override
+	public void leftClick(int screenX, int screenY, Point2D offset)
+	{
+		if(_lineSelectTool != null) _lineSelectTool.leftClick(screenX, screenY, _mapOffset); // add node to list
+	}
+
+	@Override
+	public void rightClick(int screenX, int screenY, Point2D offset)
+	{
+		if(!_visible) return;
+		if(_lineSelectToolEnabled)
+		{
+			_lineSelectTool.rightClick(screenX, screenY, offset); // if enables, than do something with it
+			_lineSelectToolEnabled = !_lineSelectTool.isClosed(); // after right click
+			if(!_lineSelectToolEnabled) // tool closed itself
+			{
+				TrainLine line = _lineSelectTool.getTrainLine();
+				TrainLineOverseer.removeLine(line);
+				_lineSelectTool = null;
+				resetControls();
+			}
+		}
+		else
+		{
+			_isClosed = true; // of not, close the TrainLineView
+			_visible = false;
+		}
+	}
+
+	@Override
+	public boolean isClosed()
+	{
+		return _isClosed;
 	}
 }

@@ -16,11 +16,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class TrackPlacingTool implements TrainInteractionTool
 {
 	private RailwayNode _currentRailwayNode; // click -> set railwaynode -> click -> connect/create
-	private TrainView _trainView;
+	private boolean _isClosed;
 
-	public TrackPlacingTool(TrainView trainView)
+	public TrackPlacingTool()
 	{
-		_trainView = trainView;
+		_isClosed = false;
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class TrackPlacingTool implements TrainInteractionTool
 		}
 		else
 		{
-			_trainView.settrainViewTool(null);
+			_isClosed = true;
 		}
 	}
 
@@ -201,5 +201,11 @@ public class TrackPlacingTool implements TrainInteractionTool
 			prevNode = node; // set previous node to current one to go on
 		}
 		return prevNode;
+	}
+
+	@Override
+	public boolean isClosed()
+	{
+		return _isClosed;
 	}
 }
