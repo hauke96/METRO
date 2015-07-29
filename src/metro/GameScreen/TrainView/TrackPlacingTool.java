@@ -112,58 +112,52 @@ public class TrackPlacingTool implements TrainInteractionTool
 	 */
 	private void placeTracks(int screenX, int screenY, int mouseButton, Point2D offset)
 	{
-		if(screenX >= TrainView._selectedCross.x * METRO.__baseNetSpacing - 6 + offset.getX() &&
-			screenX <= TrainView._selectedCross.x * METRO.__baseNetSpacing + 6 + offset.getX() &&
-			screenY >= TrainView._selectedCross.y * METRO.__baseNetSpacing - 6 + offset.getY() &&
-			screenY <= TrainView._selectedCross.y * METRO.__baseNetSpacing + 6 + offset.getY())
+		if(_currentRailwayNode == null) // first click
 		{
-			if(_currentRailwayNode == null) // first click
+			_currentRailwayNode = RailwayNodeOverseer.getNodeByPosition(TrainView._selectedCross); // implicit check if node exists: null = node doesn't exist
+
+			if(_currentRailwayNode == null) // if there's no node, create new one and set it as current node
 			{
-				_currentRailwayNode = RailwayNodeOverseer.getNodeByPosition(TrainView._selectedCross); // implicit check if node exists: null = node doesn't exist
-
-				if(_currentRailwayNode == null) // if there's no node, create new one and set it as current node
-				{
-					RailwayNode node = new RailwayNode(TrainView._selectedCross, null);
-					_currentRailwayNode = node;
-				}
+				RailwayNode node = new RailwayNode(TrainView._selectedCross, null);
+				_currentRailwayNode = node;
 			}
-			else
-			// second click
+		}
+		else
+		// second click
+		{
+			int diagonalOffset = 0, B = TrainView._selectedCross.x - _currentRailwayNode.getPosition().x, // horizontal distance
+			H = TrainView._selectedCross.y - _currentRailwayNode.getPosition().y, // vertical distance
+			preFactorH = 1, preFactorB = 1;
+			RailwayNode prevNode = _currentRailwayNode;
+
+			if(Math.abs(H) > Math.abs(B)) // vertical tracks
 			{
-				int diagonalOffset = 0, B = TrainView._selectedCross.x - _currentRailwayNode.getPosition().x, // horizontal distance
-				H = TrainView._selectedCross.y - _currentRailwayNode.getPosition().y, // vertical distance
-				preFactorH = 1, preFactorB = 1;
-				RailwayNode prevNode = _currentRailwayNode;
+				diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f); // calculate length of one vertical part
+				if(H < 0) preFactorH = -1;
+				if(B < 0) preFactorB = -1;
 
-				if(Math.abs(H) > Math.abs(B)) // vertical tracks
-				{
-					diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f); // calculate length of one vertical part
-					if(H < 0) preFactorH = -1;
-					if(B < 0) preFactorB = -1;
-
-					prevNode = createTrack(0, preFactorH, 0, diagonalOffset, prevNode); // vertical line
-					prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(B), prevNode); // diagonal lines
-					createTrack(0, preFactorH, diagonalOffset + Math.abs(B), Math.abs(H), prevNode); // vertical lines
-				}
-				else if(Math.abs(B) > Math.abs(H))
-				{
-					diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
-					if(H < 0) preFactorH = -1;
-					if(B < 0) preFactorB = -1;
-
-					prevNode = createTrack(preFactorB, 0, 0, diagonalOffset, prevNode); // vertical lines
-					prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
-					createTrack(preFactorB, 0, diagonalOffset + Math.abs(H), Math.abs(B), prevNode); // vertical lines
-				}
-				else if(Math.abs(B) == Math.abs(H))
-				{
-					if(H < 0) preFactorH = -1;
-					if(B < 0) preFactorB = -1;
-
-					createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
-				}
-				_currentRailwayNode = null;
+				prevNode = createTrack(0, preFactorH, 0, diagonalOffset, prevNode); // vertical line
+				prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(B), prevNode); // diagonal lines
+				createTrack(0, preFactorH, diagonalOffset + Math.abs(B), Math.abs(H), prevNode); // vertical lines
 			}
+			else if(Math.abs(B) > Math.abs(H))
+			{
+				diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
+				if(H < 0) preFactorH = -1;
+				if(B < 0) preFactorB = -1;
+
+				prevNode = createTrack(preFactorB, 0, 0, diagonalOffset, prevNode); // vertical lines
+				prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
+				createTrack(preFactorB, 0, diagonalOffset + Math.abs(H), Math.abs(B), prevNode); // vertical lines
+			}
+			else if(Math.abs(B) == Math.abs(H))
+			{
+				if(H < 0) preFactorH = -1;
+				if(B < 0) preFactorB = -1;
+
+				createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
+			}
+			_currentRailwayNode = null;
 		}
 	}
 

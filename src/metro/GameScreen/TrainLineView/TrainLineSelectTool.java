@@ -43,13 +43,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	@Override
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
-		if(screenX >= TrainView._selectedCross.x * METRO.__baseNetSpacing - 6 + offset.getX() &&
-			screenX <= TrainView._selectedCross.x * METRO.__baseNetSpacing + 6 + offset.getX() &&
-			screenY >= TrainView._selectedCross.y * METRO.__baseNetSpacing - 6 + offset.getY() &&
-			screenY <= TrainView._selectedCross.y * METRO.__baseNetSpacing + 6 + offset.getY())
-		{
-			addNodeToList(TrainView._selectedCross);
-		}
+		addNodeToList(TrainView._selectedCross);
 	}
 
 	/**

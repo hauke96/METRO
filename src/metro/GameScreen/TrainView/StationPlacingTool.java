@@ -35,26 +35,20 @@ public class StationPlacingTool implements TrainInteractionTool
 	@Override
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
-		if(screenX >= TrainView._selectedCross.x * METRO.__baseNetSpacing - 6 + offset.getX() &&
-			screenX <= TrainView._selectedCross.x * METRO.__baseNetSpacing + 6 + offset.getX() &&
-			screenY >= TrainView._selectedCross.y * METRO.__baseNetSpacing - 6 + offset.getY() &&
-			screenY <= TrainView._selectedCross.y * METRO.__baseNetSpacing + 6 + offset.getY())
+		boolean positionOccupied = false;
+		Point selectPointOnScreen = new Point(TrainView._selectedCross.x * METRO.__baseNetSpacing + (int)offset.getX(),
+			TrainView._selectedCross.y * METRO.__baseNetSpacing + (int)offset.getY());
+
+		Point offsetPoint = new Point((int)offset.getX(), (int)offset.getY());
+		for(TrainStation ts : TrainView._trainStationList)
 		{
-			boolean positionOccupied = false;
-			Point selectPointOnScreen = new Point(TrainView._selectedCross.x * METRO.__baseNetSpacing + (int)offset.getX(),
-				TrainView._selectedCross.y * METRO.__baseNetSpacing + (int)offset.getY());
+			positionOccupied |= ts.getPositionOnScreen(offsetPoint).equals(selectPointOnScreen); // true if this cross has already a station
+		}
 
-			Point offsetPoint = new Point((int)offset.getX(), (int)offset.getY());
-			for(TrainStation ts : TrainView._trainStationList)
-			{
-				positionOccupied |= ts.getPositionOnScreen(offsetPoint).equals(selectPointOnScreen); // true if this cross has already a station
-			}
-
-			if(!positionOccupied) // no doubles
-			{
-				TrainView._trainStationList.add(new TrainStation(TrainView._selectedCross, 0));
-				METRO.__money -= TrainStation._PRICE;
-			}
+		if(!positionOccupied) // no doubles
+		{
+			TrainView._trainStationList.add(new TrainStation(TrainView._selectedCross, 0));
+			METRO.__money -= TrainStation._PRICE;
 		}
 	}
 

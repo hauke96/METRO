@@ -132,7 +132,7 @@ public class TrainView extends GameScreen
 	}
 
 	/**
-	 * Calculates the position and draws this fancy jumping dot near the cursor.
+	 * Calculates the position and draws the dot near the cursor.
 	 * 
 	 * @param sp The SpriteBatch to draw on
 	 */
@@ -141,24 +141,11 @@ public class TrainView extends GameScreen
 		_selectedCross = new Point(
 			(int)Math.round(((int)(METRO.__mousePosition.x - 18 - _mapOffset.getX()) - 10) / (float)METRO.__baseNetSpacing) + 1,// ((int)(METRO.__mousePosition.x - 5 - _mapOffset.getX()) - 10) / METRO.__baseNetSpacing + 1,
 			(int)Math.round(((int)(METRO.__mousePosition.y - 15 - _mapOffset.getY()) - 10) / (float)METRO.__baseNetSpacing) + 1);
-
-		Point cursorPos = new Point(Math.abs((int)(METRO.__mousePosition.x - 7 - _mapOffset.getX()) % METRO.__baseNetSpacing),
-			Math.abs((int)(METRO.__mousePosition.y - 7 - _mapOffset.getY()) % METRO.__baseNetSpacing));
 		
-		System.out.println("OK");
-		System.out.println("  _sC: " + _selectedCross);
-		System.out.println("  cP : " + cursorPos);
-
-//		Point offsetMarker = new Point(METRO.__baseNetSpacing - cursorPos.x, METRO.__baseNetSpacing - cursorPos.y);
 		Point offsetMarker = new Point(METRO.__baseNetSpacing * _selectedCross.x,
 			METRO.__baseNetSpacing * _selectedCross.y);
-//		if(cursorPos.x <= METRO.__baseNetSpacing / 2) offsetMarker.x = cursorPos.x;
-//		if(cursorPos.y <= METRO.__baseNetSpacing / 2) offsetMarker.y = cursorPos.y;
-
+		
 		Fill.setColor(Color.darkGray);
-//		Fill.Rect(METRO.__mousePosition.x + offsetMarker.x - 8,
-//			METRO.__mousePosition.y + offsetMarker.y - 8,
-//			3, 3);
 		Fill.Rect(offsetMarker.x - 1,
 			offsetMarker.y - 1,
 			3, 3);
