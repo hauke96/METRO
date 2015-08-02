@@ -68,7 +68,8 @@ public class InputField extends Input
 		ScissorStack.pushScissors(scissors);
 
 		// Fill background
-		Fill.setColor(Color.white);
+		if(_enabled) Fill.setColor(Color.white);
+		else Fill.setColor(Color.lightGray);
 		Fill.Rect(_position);
 
 		// draw text

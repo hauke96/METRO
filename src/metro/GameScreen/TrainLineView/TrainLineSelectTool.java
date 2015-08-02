@@ -26,6 +26,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	private ArrayList<RailwayNode> _listOfNodes;
 	private boolean _isClosed;
 	private Color _color;
+	private String _lineName;
 
 	/**
 	 * Creates a new tool to select the train line.
@@ -35,6 +36,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 		_listOfNodes = new ArrayList<RailwayNode>();
 		_isClosed = false;
 		_color = METRO.__metroBlue;
+		_lineName = "";
 	}
 
 	@Override
@@ -72,12 +74,13 @@ public class TrainLineSelectTool implements TrainInteractionTool
 
 	/**
 	 * Generates the TrainLine object for further using.
+	 * This method WON'T return null under any circumstances.
 	 * 
-	 * @return The train line as TrainLine object.
+	 * @return Won't be null! The train line as TrainLine object.
 	 */
 	public TrainLine getTrainLine()
 	{
-		return new TrainLine(_listOfNodes, "New Line", _color); // TODO: Change to manual color
+		return new TrainLine(_listOfNodes, _lineName, _color); // TODO: Change to manual color
 	}
 
 	@Override
@@ -114,5 +117,15 @@ public class TrainLineSelectTool implements TrainInteractionTool
 
 		_color = newColor;
 		return "";
+	}
+
+	/**
+	 * Sets a new name for this train line.
+	 * 
+	 * @param newName The new name.
+	 */
+	public void setName(String newName)
+	{
+		_lineName = newName;
 	}
 }

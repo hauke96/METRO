@@ -2,7 +2,6 @@ package metro.TrainManagement.Lines;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import metro.TrainManagement.Nodes.RailwayNode;
 
@@ -97,5 +96,24 @@ public class TrainLine
 			return line._name.equals(_name) && line._lineColor.equals(_lineColor); // equal when color and name are equal
 		}
 		return false;
+	}
+
+	/**
+	 * Check if this train line is a valid line. A line is valid when:
+	 * 1.) There're more than 2 nodes in this line.
+	 * 2.) There're exactly 2 end/start nodes in this line. These nodes only have one neighbor.
+	 * 
+	 * @return True when valid.
+	 */
+	public boolean isValid()
+	{
+		int amountEndNodes = 0;
+
+		for(RailwayNode node : _listOfNodes)
+		{
+			if(node.isEndOfLine(_lineColor)) amountEndNodes++;
+		}
+
+		return _listOfNodes.size() >= 2 && amountEndNodes == 2;
 	}
 }

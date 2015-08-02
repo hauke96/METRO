@@ -336,10 +336,7 @@ public class TrainView extends GameScreen
 	@Override
 	public void keyDown(int keyCode)
 	{
-		// if(keyCode == Keys.ESCAPE)
-		// {
-		// METRO.__close();
-		// }
+		_trainLineView.keyDown(keyCode);
 	}
 
 	@Override

@@ -33,15 +33,15 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	private Button _createLineButton, // to create a new train line
 		_editLineButton, // to change railway nodes of train line
 		_removeLineButton, // to remove a train line
-		_lineNameFieldButton; // to edit train line name
+		_saveButton; // to save settings/changes
 	private boolean _visible, // true: TrainLineView will be displayed
 		_lineSelectToolEnabled, // if enabled, the user can select nodes
 		_isClosed;
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private Point2D _mapOffset;
 	private TrainLineSelectTool _lineSelectTool;
-	private InputField _trainLineNameField;
-	private Label _trainLineNameFieldLabel,
+	private InputField _lineNameField;
+	private Label _lineNameFieldLabel,
 		_messageLabel;
 	private ColorBar _colorBar;
 
@@ -66,14 +66,14 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		_editLineButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), 450, (_windowWidth - 40) / 3 - 10, 20), "Edit line");
 		_removeLineButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, 450, (_windowWidth - 40) / 3 - 10, 20), "Remove line");
 
-		_trainLineNameField = new InputField(new Rectangle(_areaOffset.x + 95, 490, _windowWidth - 175, 20));
-		_trainLineNameField.setState(false);
-		_trainLineNameFieldLabel = new Label("Line Name", new Point(_areaOffset.x + 20, 493));
-		_trainLineNameFieldLabel.setState(false);
+		_lineNameField = new InputField(new Rectangle(_areaOffset.x + 95, 490, _windowWidth - 175, 20));
+		_lineNameField.setState(false);
+		_lineNameFieldLabel = new Label("Line Name", new Point(_areaOffset.x + 20, 493));
+		_lineNameFieldLabel.setState(false);
 		_colorBar = new ColorBar(new Rectangle(_areaOffset.x + 20, 520, _windowWidth - 70, 20), null, 0.9f, 0.8f);
 		_colorBar.setState(false);
-		_lineNameFieldButton = new Button(new Rectangle(_areaOffset.x + (_windowWidth / 2) - 75, 550, 150, 20), "Save");
-		_lineNameFieldButton.setState(false);
+		_saveButton = new Button(new Rectangle(_areaOffset.x + (_windowWidth / 2) - 75, METRO.__SCREEN_SIZE.height - _areaOffset.y - 60, 150, 20), "Save");
+		_saveButton.setState(false);
 
 		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 30));
 		_messageLabel.setColor(METRO.__metroRed);
@@ -158,11 +158,14 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	 */
 	private void drawInputFields()
 	{
-		_trainLineNameFieldLabel.draw();
-		_trainLineNameField.draw();
-		_lineNameFieldButton.draw();
+		_lineNameFieldLabel.draw();
+		_lineNameField.draw();
+		_saveButton.draw();
 	}
 
+	/**
+	 * Draws the color bar including border and preview field next to it.
+	 */
 	private void drawColorBar()
 	{
 		_colorBar.draw();
@@ -191,25 +194,19 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	{
 		if(!_visible || _lineList.clickOnControlElement()) return;
 
+		// set lineNameField as inactive when mouse NOT clicked on it
+		if(_lineNameField.clickOnControlElement()) _lineNameField.select();
+		else _lineNameField.disselect();
+
+		boolean controlClicked = false;
+
+		controlClicked |= checkButtonClicks(screenX, screenY, mouseButton);
+		controlClicked |= checkColorBarClick(screenX, screenY, mouseButton);
+		controlClicked |= checkMessageLabelClick(screenX, screenY, mouseButton);
 		// "create new train"/"finish" line has been pressed
-		if(_createLineButton.isPressed(screenX, screenY))
-		{
-			createLineButton_action();
-		}
-		// TODO: If clause for edit butt on
-		// TODO: If clause for remove button
-		// TODO: If clause for ok button
-		else if(_colorBar.clickOnControlElement())
-		{
-			String msg = _lineSelectTool.setColor(_colorBar.getClickedColor());
-			if(!msg.equals("")) _messageLabel.setText(msg);
-		}
-		else if(_messageLabel.clickOnControlElement())
-		{
-			_messageLabel.setText("");
-		}
-		// when no control was clicked and mouse out of T.L.View, forward it to the SelectTool
-		else if(screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
+
+		// when no control was clicked and mouse out of TrainLineView, forward it to the SelectTool
+		if(!controlClicked && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
 		{
 			// the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
 			TrainLine line = _lineSelectTool.getTrainLine();
@@ -218,27 +215,118 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	}
 
 	/**
-	 * Will be executed after a click on the "Create Line" / "Finish" button
+	 * Checks if a button has clicked and executes necessary methods.
+	 * 
+	 * @param screenX The x-position on the screen
+	 * @param screenY The y-position on the screen
+	 * @param mouseButton The number of the button like Buttons.LEFT
+	 * @return True when one of the buttons has been clicked.
+	 */
+	private boolean checkButtonClicks(int screenX, int screenY, int mouseButton)
+	{
+		boolean buttonClicked = false;
+
+		if(_createLineButton.isPressed(screenX, screenY))
+		{
+			createLineButton_action();
+			buttonClicked = true;
+		}
+		else if(_editLineButton.isPressed(screenX, screenY))
+		{
+			// TODO: Implementation of changing anything on a train line
+			buttonClicked = true;
+		}
+		else if(_removeLineButton.isPressed(screenX, screenY))
+		{
+			// TODO: Implementation of removing a train line
+			buttonClicked = true;
+		}
+		else if(_saveButton.isPressed(screenX, screenY))
+		{
+			saveButton_action();
+			buttonClicked = true;
+		}
+
+		return buttonClicked;
+	}
+
+	/**
+	 * Check if the color bar has been clicked and sets message and the color of the select tool.
+	 * 
+	 * @param screenX The x-position on the screen
+	 * @param screenY The y-position on the screen
+	 * @param mouseButton The number of the button like Buttons.LEFT
+	 * @return True when the color bar has been clicked.
+	 */
+	private boolean checkColorBarClick(int screenX, int screenY, int mouseButton)
+	{
+		boolean barClicked = false;
+		if(_colorBar.clickOnControlElement())
+		{
+			String msg = _lineSelectTool.setColor(_colorBar.getClickedColor());
+			if(!msg.equals("")) _messageLabel.setText(msg);
+			barClicked = true;
+		}
+		return barClicked;
+	}
+
+	/**
+	 * Checks if the message label has been clicked and removes its content if needed.
+	 * 
+	 * @param screenX The x-position on the screen
+	 * @param screenY The y-position on the screen
+	 * @param mouseButton The number of the button like Buttons.LEFT
+	 * @return True when label has been clicked.
+	 */
+	private boolean checkMessageLabelClick(int screenX, int screenY, int mouseButton)
+	{
+		boolean labelClicked = false;
+		if(_messageLabel.clickOnControlElement())
+		{
+			_messageLabel.setText("");
+			labelClicked = true;
+		}
+		return labelClicked;
+	}
+
+	/**
+	 * Will be executed after a click on the "Create Line" button. This will unlock/lock all necessary controls.
 	 */
 	private void createLineButton_action()
 	{
-		if(!_lineSelectToolEnabled)
-		{
-			_lineSelectTool = new TrainLineSelectTool(); // create clean select tool
-			if(_colorBar.getClickedColor() != null) _lineSelectTool.setColor(_colorBar.getClickedColor());
-		}
-		else
-		{
-			TrainLine line = _lineSelectTool.getTrainLine();
-			if(line != null) // only change something when line is valid
-			{
-				TrainLineOverseer.addLine(line);
-				_lineList.addElement(line.getName());
-			}
-		}
+		if(_lineSelectToolEnabled) return;
 
-		_lineSelectToolEnabled = !_lineSelectToolEnabled;
+		_lineSelectTool = new TrainLineSelectTool(); // create clean select tool
+		if(_colorBar.getClickedColor() != null) _lineSelectTool.setColor(_colorBar.getClickedColor());
+		_lineSelectToolEnabled = true;
 		resetControls();
+
+	}
+
+	/**
+	 * Creates a new train line and saves it correctly. If something went wrong, an error message will be shown.
+	 */
+	private void saveButton_action()
+	{
+		if(!_lineSelectToolEnabled) return;
+
+		TrainLine line = _lineSelectTool.getTrainLine();
+		if(_lineSelectTool.getTrainLine().isValid()) // only change something when line and name are valid
+		{
+			TrainLineOverseer.addLine(line);
+			_lineList.addElement(_lineNameField.getText());
+			_lineSelectToolEnabled = false;
+			resetControls();
+		}
+		// if something went wrong:
+		else if(_lineNameField.getText().equals(""))
+		{
+			_messageLabel.setText("Please enter a name!");
+		}
+		else if(!line.isValid())
+		{
+			_messageLabel.setText("Train Line not valid!");
+		}
 	}
 
 	/**
@@ -246,17 +334,18 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	 */
 	private void resetControls()
 	{
-		if(_lineSelectToolEnabled) _createLineButton.setText("Finish");
-		else _createLineButton.setText("Create Line");
-
 		// switch controls OFF when select tool is enabled
 		_editLineButton.setState(!_lineSelectToolEnabled);
 		_removeLineButton.setState(!_lineSelectToolEnabled);
+		_createLineButton.setState(!_lineSelectToolEnabled);
 
 		// switch controls ON when select tool is enabled
-		_trainLineNameField.setState(_lineSelectToolEnabled);
-		_trainLineNameFieldLabel.setState(_lineSelectToolEnabled);
+		_lineNameField.setState(_lineSelectToolEnabled);
+		_lineNameFieldLabel.setState(_lineSelectToolEnabled);
 		_colorBar.setState(_lineSelectToolEnabled);
+		_saveButton.setState(_lineSelectToolEnabled);
+
+		_messageLabel.setText("");
 	}
 
 	@Override
@@ -267,6 +356,8 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	@Override
 	public void keyDown(int keyCode)
 	{
+		_lineNameField.keyPressed(keyCode);
+		_lineSelectTool.setName(_lineNameField.getText());
 	}
 
 	@Override

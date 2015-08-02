@@ -178,4 +178,21 @@ public class RailwayNode
 			}
 		}
 	}
+
+	/**
+	 * Checks if this node is the end/start node of the train line specified by the given color.
+	 * 
+	 * @param colorOfLine The color of the train line this node may be an end/start node.
+	 * @return True when it's an end/start node.
+	 */
+	public boolean isEndOfLine(Color colorOfLine)
+	{
+		int i = 0;
+		for(ArrayList<Color> list : _mapOfColors.values())
+		{
+			if(list.contains(colorOfLine)) i++;
+		}
+
+		return i == 1;
+	}
 }
