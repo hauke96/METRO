@@ -5,7 +5,9 @@ package metro.WindowControls;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 
+import metro.METRO;
 import metro.Graphics.Draw;
 
 /**
@@ -22,6 +24,7 @@ public class Label implements ControlElement
 	private int _areaWidth = 0;
 	private Window _windowHandle;
 	private Color _color;
+	private boolean _enabled;
 
 	/**
 	 * Creates a new label.
@@ -51,6 +54,7 @@ public class Label implements ControlElement
 		_areaWidth = areaWidth;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_color = Color.black;
+		_enabled = true;
 	}
 
 	/**
@@ -92,7 +96,8 @@ public class Label implements ControlElement
 	@Override
 	public void draw()
 	{
-		Draw.setColor(_color);
+		if(_enabled) Draw.setColor(_color);
+		else Draw.setColor(Color.gray);
 
 		if(_areaWidth == 0)
 		{
@@ -112,7 +117,12 @@ public class Label implements ControlElement
 	@Override
 	public boolean clickOnControlElement()
 	{
-		return false;
+		if(!_enabled) return false;
+		Point mPos = METRO.__originalMousePosition;
+		
+		Rectangle pos = new Rectangle(_position.x, _position.y, Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
+
+		return pos.contains(mPos);
 	}
 
 	/*
@@ -168,7 +178,6 @@ public class Label implements ControlElement
 	@Override
 	public void setState(boolean enable)
 	{
-		// TODO Auto-generated method stub
-		
+		_enabled = enable;
 	}
 }

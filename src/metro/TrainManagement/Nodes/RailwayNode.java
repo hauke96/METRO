@@ -158,4 +158,24 @@ public class RailwayNode
 			list.remove(color);
 		}
 	}
+
+	/**
+	 * Replaces all colors to a new color.
+	 * This method may throw an IllegalArgumentException when the newColor is already in use!
+	 * 
+	 * @param oldColor The color to replace.
+	 * @param newColor The new color.
+	 */
+	public void changeColor(Color oldColor, Color newColor) throws IllegalArgumentException
+	{
+		for(ArrayList<Color> list : _mapOfColors.values())
+		{
+			if(list.contains(newColor)) throw new IllegalArgumentException("No duplicates allowed!"); // to avoid duplicates
+			if(list.contains(oldColor))
+			{
+				list.remove(oldColor);
+				list.add(newColor);
+			}
+		}
+	}
 }

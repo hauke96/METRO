@@ -25,6 +25,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 {
 	private ArrayList<RailwayNode> _listOfNodes;
 	private boolean _isClosed;
+	private Color _color;
 
 	/**
 	 * Creates a new tool to select the train line.
@@ -33,6 +34,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	{
 		_listOfNodes = new ArrayList<RailwayNode>();
 		_isClosed = false;
+		_color = METRO.__metroBlue;
 	}
 
 	@Override
@@ -54,13 +56,14 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	private void addNodeToList(Point node)
 	{
 		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(node);
+		if(clickedNode == null) return;
 		ArrayList<RailwayNode> neighbors = clickedNode.getNeighbors();
 		for(RailwayNode neighborNode : neighbors)
 		{
 			if(_listOfNodes.contains(neighborNode))
 			{
-				neighborNode.addColorTo(clickedNode, Color.blue);
-				clickedNode.addColorTo(neighborNode, Color.blue);
+				neighborNode.addColorTo(clickedNode, _color);
+				clickedNode.addColorTo(neighborNode, _color);
 			}
 		}
 
@@ -74,7 +77,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	 */
 	public TrainLine getTrainLine()
 	{
-		return new TrainLine(_listOfNodes, "New Line", Color.blue); // TODO: Change to manual color
+		return new TrainLine(_listOfNodes, "New Line", _color); // TODO: Change to manual color
 	}
 
 	@Override
@@ -87,5 +90,29 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	public boolean isClosed()
 	{
 		return _isClosed;
+	}
+
+	/**
+	 * Sets the color for this in-progress-line.
+	 * 
+	 * @param newColor The new color.
+	 * @return A message if something went wrong.
+	 */
+	public String setColor(Color newColor)
+	{
+		for(RailwayNode node : _listOfNodes)
+		{
+			try
+			{
+				node.changeColor(_color, newColor);
+			}
+			catch(IllegalArgumentException ex)
+			{
+				return ex.getMessage();
+			}
+		}
+
+		_color = newColor;
+		return "";
 	}
 }

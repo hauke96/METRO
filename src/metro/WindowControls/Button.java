@@ -26,7 +26,7 @@ public class Button implements ControlElement
 		_positionOnImage;
 	private Window _windowHandle;
 	private boolean _hasBeenClicked = false, // true if control has been clicked since last check
-		_enable;
+		_enabled;
 	private String _text = "";
 
 	/**
@@ -56,7 +56,7 @@ public class Button implements ControlElement
 		_positionOnImage = positionOnImage;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		_enable = true;
+		_enabled = true;
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class Button implements ControlElement
 		_positionOnImage = new Rectangle(0, 0, _position.width, _position.height);
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		_enable = true;
+		_enabled = true;
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class Button implements ControlElement
 	 */
 	public boolean isPressed(int x, int y)
 	{
-		if(_enable && (_position.contains(x, y) || _hasBeenClicked))
+		if(_enabled && (_position.contains(x, y) || _hasBeenClicked))
 		{
 			_hasBeenClicked = false;
 			return true;
@@ -113,7 +113,7 @@ public class Button implements ControlElement
 	{
 		boolean temp = _hasBeenClicked;
 		_hasBeenClicked = false;
-		return _enable ? temp : false;
+		return _enabled ? temp : false;
 	}
 
 	/**
@@ -123,12 +123,12 @@ public class Button implements ControlElement
 	{
 		if(!_text.equals(""))
 		{
-			if(_enable) Draw.setColor(METRO.__metroRed);
+			if(_enabled) Draw.setColor(METRO.__metroRed);
 			else Draw.setColor(Color.gray);
 			Draw.String(_text, _position.x + (_position.width - Draw.getStringSize(_text).width) / 2,
 				_position.y + (_position.height - Draw.getStringSize(_text).height) / 2);
 			
-			if(_enable)Draw.setColor(METRO.__metroBlue); 
+			if(_enabled)Draw.setColor(METRO.__metroBlue); 
 			else Draw.setColor(Color.lightGray);
 			Draw.Rect(_position.x, _position.y, _position.width, _position.height);
 		}
@@ -161,7 +161,7 @@ public class Button implements ControlElement
 	 */
 	public boolean clickOnControlElement()
 	{
-		if(!_enable) return false;
+		if(!_enabled) return false;
 		Point mPos = METRO.__originalMousePosition;
 
 		if(_position.contains(mPos))
@@ -203,6 +203,6 @@ public class Button implements ControlElement
 	@Override
 	public void setState(boolean enable)
 	{
-		_enable = enable;
+		_enabled = enable;
 	}
 }

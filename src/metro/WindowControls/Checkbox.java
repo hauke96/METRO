@@ -9,7 +9,7 @@ import metro.Graphics.Draw;
 public class Checkbox implements ControlElement
 {
 	private boolean _checked,
-		_enable, // other name: isCheckable (true - box can be used; false - box can't be used)
+		_enabled, // other name: isCheckable (true - box can be used; false - box can't be used)
 		_oldState; // used by hasChanged() method to detemine if the state has changed since last call
 	private String _text;
 	private Label _label;
@@ -85,7 +85,7 @@ public class Checkbox implements ControlElement
 		_label = new Label(_text, new Point(_position.x + 25, _position.y), _textWidth, window);
 		_checked = checked;
 		_oldState = _checked;
-		_enable = enabled;
+		_enabled = enabled;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 	}
@@ -126,10 +126,10 @@ public class Checkbox implements ControlElement
 	public void draw()
 	{
 		// set the color depending on _enabled
-		Draw.setColor(_enable
+		Draw.setColor(_enabled
 			? METRO.__metroBlue
 			: new Color(METRO.__metroBlue.getRed(), METRO.__metroBlue.getGreen(), METRO.__metroBlue.getBlue(), 125));
-		_label.setColor(_enable
+		_label.setColor(_enabled
 			? Color.black
 			: Color.lightGray);
 
@@ -151,7 +151,7 @@ public class Checkbox implements ControlElement
 			&& mPos.y >= _position.y
 			&& mPos.y <= _position.y + 15)
 		{
-			_checked = (false == _checked) && _enable;
+			_checked = (false == _checked) && _enabled;
 			return true;
 		}
 		return false;
@@ -199,6 +199,6 @@ public class Checkbox implements ControlElement
 	@Override
 	public void setState(boolean enable)
 	{
-		_enable = enable;
+		_enabled = enable;
 	}
 }
