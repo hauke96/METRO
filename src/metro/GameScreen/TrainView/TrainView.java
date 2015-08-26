@@ -55,7 +55,7 @@ public class TrainView extends GameScreen
 		_showTrainList = new Button(new Rectangle(-10, 200, 50, 40), new Rectangle(0, 108, 50, 40), METRO.__iconSet);
 		_createNewTrain = new Button(new Rectangle(-10, 239, 50, 40), new Rectangle(0, 148, 50, 40), METRO.__iconSet);
 
-		_mapOffset = new Point2D.Float(0, 0);
+		_mapOffset = new Point2D.Float(0,0);//METRO.__baseNetSpacing * 3, METRO.__baseNetSpacing * 2 + 12);
 
 		_dragMode = false;
 		_activeTool = null;
@@ -139,11 +139,11 @@ public class TrainView extends GameScreen
 	private Point drawBaseDot(SpriteBatch sp)
 	{
 		_selectedCross = new Point(
-			(int)Math.round(((int)(METRO.__mousePosition.x - 18 - _mapOffset.getX()) - 10) / (float)METRO.__baseNetSpacing) + 1,// ((int)(METRO.__mousePosition.x - 5 - _mapOffset.getX()) - 10) / METRO.__baseNetSpacing + 1,
-			(int)Math.round(((int)(METRO.__mousePosition.y - 15 - _mapOffset.getY()) - 10) / (float)METRO.__baseNetSpacing) + 1);
+			(int)Math.round((int)(METRO.__mousePosition.x - _mapOffset.getX()) / (float)METRO.__baseNetSpacing),
+			(int)Math.round((int)(METRO.__mousePosition.y - _mapOffset.getY()) / (float)METRO.__baseNetSpacing));
 		
-		Point offsetMarker = new Point(METRO.__baseNetSpacing * _selectedCross.x,
-			METRO.__baseNetSpacing * _selectedCross.y);
+		Point offsetMarker = new Point((int)(_mapOffset.getX()) + METRO.__baseNetSpacing * _selectedCross.x,
+			(int)(_mapOffset.getY()) + METRO.__baseNetSpacing * _selectedCross.y);
 		
 		Fill.setColor(Color.darkGray);
 		Fill.Rect(offsetMarker.x - 1,
