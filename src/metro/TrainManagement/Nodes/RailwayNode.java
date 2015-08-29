@@ -110,13 +110,17 @@ public class RailwayNode
 				if(colors == null || colors.size() == 0)
 				{
 					Draw.setColor(Color.black);
+				Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
 				}
 				else
 				{
-					Draw.setColor(colors.get(0)); // TODO: Draw all colors, not only the first
-					Draw.Line(position.x, position.y - 1, positionNext.x, positionNext.y - 1); // TODO: make more accurate draw algo. This won't work vor vertical lines :(
+					for(int i = 0; i < colors.size(); i++)
+					{
+						Draw.setColor(colors.get(i)); // TODO: Draw all colors, not only the first
+						Draw.Line(position.x, position.y - 2 * i, positionNext.x, positionNext.y - 2 * i); // TODO: make more accurate draw algo. This won't work vor vertical lines :(
+						Draw.Line(position.x, position.y - 1 - 2 * i, positionNext.x, positionNext.y - 1 - 2 * i);
+					}
 				}
-				Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
 			}
 		}
 		ArrayList<Color> colorList = _mapOfColors.get(this);
@@ -170,7 +174,7 @@ public class RailwayNode
 	{
 		for(ArrayList<Color> list : _mapOfColors.values())
 		{
-			if(list.contains(newColor)) throw new IllegalArgumentException("No duplicates allowed!"); // to avoid duplicates
+			if(list.contains(newColor)) throw new IllegalArgumentException("No duplicate colors are allowed!"); // to avoid duplicates
 			if(list.contains(oldColor))
 			{
 				list.remove(oldColor);

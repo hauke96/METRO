@@ -99,7 +99,7 @@ public class TrainLine
 	}
 
 	/**
-	 * Check if this train line is a valid line. A line is valid when:
+	 * Check if this train line is a valid line. A line is valid when both of the following conditions apply:
 	 * 1.) There're more than 2 nodes in this line.
 	 * 2.) There're exactly 2 end/start nodes in this line. These nodes only have one neighbor.
 	 * 

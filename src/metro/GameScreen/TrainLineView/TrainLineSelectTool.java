@@ -47,18 +47,9 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	@Override
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
-		addNodeToList(TrainView._selectedCross);
-	}
-
-	/**
-	 * Add a node to the list of nodes for this train line if it doesn't exist.
-	 * 
-	 * @param node The node to add.
-	 */
-	private void addNodeToList(Point node)
-	{
-		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(node);
-		if(clickedNode == null) return;
+		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(TrainView._selectedCross);
+		if(clickedNode == null || _listOfNodes.contains(clickedNode)) return;
+		
 		ArrayList<RailwayNode> neighbors = clickedNode.getNeighbors();
 		for(RailwayNode neighborNode : neighbors)
 		{
@@ -69,7 +60,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 			}
 		}
 
-		if(!_listOfNodes.contains(clickedNode)) _listOfNodes.add(clickedNode);
+		_listOfNodes.add(clickedNode);
 	}
 
 	/**

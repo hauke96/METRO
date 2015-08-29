@@ -74,6 +74,12 @@ public class ColorBar implements ControlElement
 		_drawBorder = visible;
 	}
 
+	public void clear()
+	{
+		_clickedColor = null;
+		_clickedXPosition = -1;
+	}
+
 	@Override
 	public void draw()
 	{

@@ -187,31 +187,8 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	public void setVisibility(boolean visible)
 	{
 		_visible = visible;
-	}
-
-	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
-	{
-		if(!_visible || _lineList.clickOnControlElement()) return;
-
-		// set lineNameField as inactive when mouse NOT clicked on it
-		if(_lineNameField.clickOnControlElement()) _lineNameField.select();
-		else _lineNameField.disselect();
-
-		boolean controlClicked = false;
-
-		controlClicked |= checkButtonClicks(screenX, screenY, mouseButton);
-		controlClicked |= checkColorBarClick(screenX, screenY, mouseButton);
-		controlClicked |= checkMessageLabelClick(screenX, screenY, mouseButton);
-		// "create new train"/"finish" line has been pressed
-
-		// when no control was clicked and mouse out of TrainLineView, forward it to the SelectTool
-		if(!controlClicked && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
-		{
-			// the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
-			TrainLine line = _lineSelectTool.getTrainLine();
-			TrainLineOverseer.addLine(line); // only change something when line is valid
-		}
+		_lineSelectToolEnabled = false;
+		if(!_visible) resetControls();
 	}
 
 	/**
@@ -300,7 +277,6 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		if(_colorBar.getClickedColor() != null) _lineSelectTool.setColor(_colorBar.getClickedColor());
 		_lineSelectToolEnabled = true;
 		resetControls();
-
 	}
 
 	/**
@@ -325,7 +301,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		}
 		else if(!line.isValid())
 		{
-			_messageLabel.setText("Train Line not valid!");
+			_messageLabel.setText("Train Line is not valid!");
 		}
 	}
 
@@ -345,7 +321,35 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		_colorBar.setState(_lineSelectToolEnabled);
 		_saveButton.setState(_lineSelectToolEnabled);
 
+		_colorBar.clear();
+
 		_messageLabel.setText("");
+		_lineNameField.setText("");
+	}
+
+	@Override
+	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	{
+		if(!_visible || _lineList.clickOnControlElement()) return;
+
+		// set lineNameField as inactive when mouse NOT clicked on it
+		if(_lineNameField.clickOnControlElement()) _lineNameField.select();
+		else _lineNameField.disselect();
+
+		boolean controlClicked = false;
+
+		controlClicked |= checkButtonClicks(screenX, screenY, mouseButton);
+		controlClicked |= checkColorBarClick(screenX, screenY, mouseButton);
+		controlClicked |= checkMessageLabelClick(screenX, screenY, mouseButton);
+		// "create new train"/"finish" line has been pressed
+
+		// when no control was clicked and mouse out of TrainLineView, forward it to the SelectTool
+		if(!controlClicked && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
+		{
+			// the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
+			TrainLine line = _lineSelectTool.getTrainLine();
+			TrainLineOverseer.addLine(line); // this will only change something when line is valid
+		}
 	}
 
 	@Override
@@ -376,7 +380,10 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		if(!_visible) return;
-		if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth) _lineSelectTool.leftClick(screenX, screenY, _mapOffset); // add node to list
+		if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
+		{
+			_lineSelectTool.leftClick(screenX, screenY, _mapOffset); // add node to list
+		}
 	}
 
 	@Override
