@@ -74,6 +74,9 @@ public class ColorBar implements ControlElement
 		_drawBorder = visible;
 	}
 
+	/**
+	 * Clears the color bar and sets it color to null (default value).
+	 */
 	public void clear()
 	{
 		_clickedColor = null;
@@ -157,6 +160,13 @@ public class ColorBar implements ControlElement
 	@Override
 	public void mouseScrolled(int amount)
 	{
+		if(_position.contains(METRO.__mousePosition))
+		{
+			_clickedXPosition += 5 * amount;
+			_clickedXPosition += _position.width;
+			_clickedXPosition %= _position.width;
+			_clickedColor = Color.getHSBColor((float)_clickedXPosition / (float)_position.width, _saturation, _brightness);
+		}
 	}
 
 	@Override

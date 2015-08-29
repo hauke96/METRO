@@ -93,7 +93,7 @@ public class TrainLine
 		if(o instanceof TrainLine)
 		{
 			TrainLine line = (TrainLine)o;
-			return line._name.equals(_name) && line._lineColor.equals(_lineColor); // equal when color and name are equal
+			return _listOfNodes.equals(line._listOfNodes);// old: line._name.equals(_name) && line._lineColor.equals(_lineColor); // equal when color and name are equal
 		}
 		return false;
 	}

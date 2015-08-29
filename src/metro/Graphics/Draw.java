@@ -106,8 +106,8 @@ public class Draw
 	{
 		spriteBatch.setColor(r, g, b, a);
 		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y, 1, height, 20, 0, 1, 1, false, false); // left
-		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y + height, width, 1, 20, 0, 1, 1, false, false); // bottom
-		spriteBatch.draw(METRO.__iconSet.getTexture(), x + width, y, 1, height, 20, 0, 1, 1, false, false); // right
+		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y + height, width + 1, 1, 20, 0, 1, 1, false, false); // bottom
+		spriteBatch.draw(METRO.__iconSet.getTexture(), x + width, y, 1, height + 1, 20, 0, 1, 1, false, false); // right
 		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y, width, 1, 20, 0, 1, 1, false, false); // top
 		spriteBatch.setColor(1, 1, 1, 1);
 	}

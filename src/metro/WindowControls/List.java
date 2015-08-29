@@ -24,12 +24,12 @@ public class List implements ControlElement
 	private ArrayList<String> _entries = new ArrayList<String>();
 	private Rectangle _position;
 	private Window _windowHandle;
-	private int _offset = 0,
-		_defaultYSpace = 30,
-		_compactYSpace = 8,
-		_selectedEntry = -1; // the entry, that was clicked
-	private float _maxOffset = 0,
-		_scrollHeight = 20; // height of one scroll
+	private int _offset,
+		_defaultYSpace,
+		_compactYSpace,
+		_selectedEntry; // the entry, that was clicked
+	private float _maxOffset,
+		_scrollHeight; // height of one scroll
 	private boolean _compact = false, // less space between text and top/bottom edge
 		_enabled = true;
 
@@ -79,7 +79,14 @@ public class List implements ControlElement
 	public List(Rectangle position, ArrayList<String> entries, Window win, boolean compact)
 	{
 		if(entries != null) _entries = entries;
+
 		_position = position;
+		_offset = 0;
+		_defaultYSpace = 30;
+		_compactYSpace = 8;
+		_selectedEntry = -1;
+		_maxOffset = 0;
+		_scrollHeight = 20;
 
 		int ySpace = _defaultYSpace;
 		if(_compact) ySpace = _compactYSpace;
@@ -178,6 +185,28 @@ public class List implements ControlElement
 			}
 		}
 		return -1;
+	}
+
+	/**
+	 * Removes the entry at this position.
+	 * 
+	 * @param entryIndex The position of the entry.
+	 */
+	public void remove(int entryIndex)
+	{
+		_entries.remove(entryIndex);
+		_selectedEntry = -1;
+	}
+
+	/**
+	 * Checks if the given text is in the list.
+	 * 
+	 * @param text The entry to search.
+	 * @return True when the text is in the list, false if not.
+	 */
+	public boolean contains(String text)
+	{
+		return _entries.contains(text);
 	}
 
 	@Override

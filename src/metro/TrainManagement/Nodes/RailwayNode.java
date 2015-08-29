@@ -132,12 +132,6 @@ public class RailwayNode
 		}
 	}
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		return (obj instanceof RailwayNode) && (_position.equals(((RailwayNode)obj).getPosition()));
-	}
-
 	/**
 	 * Adds a color to the connection "this node" <--[color]--> "parameter node".
 	 * 
@@ -198,5 +192,11 @@ public class RailwayNode
 		}
 
 		return i == 1;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		return (obj instanceof RailwayNode) && (_position.equals(((RailwayNode)obj).getPosition()));
 	}
 }

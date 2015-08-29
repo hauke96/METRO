@@ -13,6 +13,12 @@ import metro.WindowControls.Button;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * This is the bar on the side with the "build station", "build tracks", "show line view" and "create train" buttons.
+ * 
+ * @author hauke
+ *
+ */
 public class Toolbar extends Observable implements TrainInteractionTool
 {
 	private Button _buildStation,
@@ -20,6 +26,11 @@ public class Toolbar extends Observable implements TrainInteractionTool
 		_showTrainList,
 		_createNewTrain;
 
+	/**
+	 * Creates a new toolbar.
+	 * 
+	 * @param position The position of the upper left corner.
+	 */
 	public Toolbar(Point position)
 	{
 		_buildStation = new Button(new Rectangle(-10 + position.x, position.y, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
@@ -50,7 +61,7 @@ public class Toolbar extends Observable implements TrainInteractionTool
 	 */
 	private Object toolbarButtonPressed(int screenX, int screenY)
 	{
-		 // as default value to give the click-position back to the observer
+		// as default value to give the click-position back to the observer
 		Object tool = new Point(screenX, screenY);
 
 		if(_buildStation.isPressed(screenX, screenY))

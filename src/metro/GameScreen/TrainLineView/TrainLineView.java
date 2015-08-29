@@ -211,11 +211,13 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		else if(_editLineButton.isPressed(screenX, screenY))
 		{
 			// TODO: Implementation of changing anything on a train line
+			editLineButton_action();
 			buttonClicked = true;
 		}
 		else if(_removeLineButton.isPressed(screenX, screenY))
 		{
 			// TODO: Implementation of removing a train line
+			removeLineButton_action();
 			buttonClicked = true;
 		}
 		else if(_saveButton.isPressed(screenX, screenY))
@@ -287,14 +289,12 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		if(!_lineSelectToolEnabled) return;
 
 		TrainLine line = _lineSelectTool.getTrainLine();
-		if(_lineSelectTool.getTrainLine().isValid()) // only change something when line and name are valid
-		{
-			TrainLineOverseer.addLine(line);
-			_lineList.addElement(_lineNameField.getText());
-			_lineSelectToolEnabled = false;
-			resetControls();
-		}
+
 		// if something went wrong:
+		if(_lineList.contains(_lineNameField.getText()))
+		{
+			_messageLabel.setText("The line \"" + _lineNameField.getText() + "\" already exists.");
+		}
 		else if(_lineNameField.getText().equals(""))
 		{
 			_messageLabel.setText("Please enter a name!");
@@ -303,6 +303,30 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		{
 			_messageLabel.setText("Train Line is not valid!");
 		}
+		else if(line.isValid()) // only change something when line and name are valid
+		{
+			TrainLineOverseer.addLine(line);
+			_lineList.addElement(_lineNameField.getText());
+			_lineSelectToolEnabled = false;
+			resetControls();
+		}
+	}
+
+	/**
+	 * Removes the whole selected line.
+	 */
+	private void removeLineButton_action()
+	{
+		TrainLineOverseer.removeLine(_lineList.getText(_lineList.getSelected()));
+		_lineList.remove(_lineList.getSelected());
+	}
+
+	/**
+	 * TODO: Fills controls with information about line so that the player can edit it.
+	 */
+	private void editLineButton_action()
+	{
+		// TODO: Fill controls with information about line so that the player can edit it.
 	}
 
 	/**
@@ -369,6 +393,9 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	{
 		if(!_visible) return;
 		_lineList.mouseScrolled(amount);
+		_colorBar.mouseScrolled(amount);
+		String msg = _lineSelectTool.setColor(_colorBar.getClickedColor());
+		if(!msg.equals("")) _messageLabel.setText(msg);
 	}
 
 	@Override

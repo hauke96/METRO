@@ -2,7 +2,6 @@ package metro.GameScreen.TrainView;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,13 +13,11 @@ import metro.GameScreen.GameScreen;
 import metro.GameScreen.Toolbar;
 import metro.GameScreen.TrainInteractionTool;
 import metro.GameScreen.CityView.CityView;
-import metro.GameScreen.TrainLineView.TrainLineSelectTool;
 import metro.GameScreen.TrainLineView.TrainLineView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.TrainManagement.Trains.TrainStation;
-import metro.WindowControls.Button;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

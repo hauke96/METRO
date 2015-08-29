@@ -1,7 +1,6 @@
 package metro.GameScreen.TrainLineView;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
@@ -39,30 +38,6 @@ public class TrainLineSelectTool implements TrainInteractionTool
 		_lineName = "";
 	}
 
-	@Override
-	public void draw(SpriteBatch sp, Point2D offset)
-	{
-	}
-
-	@Override
-	public void leftClick(int screenX, int screenY, Point2D offset)
-	{
-		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(TrainView._selectedCross);
-		if(clickedNode == null || _listOfNodes.contains(clickedNode)) return;
-		
-		ArrayList<RailwayNode> neighbors = clickedNode.getNeighbors();
-		for(RailwayNode neighborNode : neighbors)
-		{
-			if(_listOfNodes.contains(neighborNode))
-			{
-				neighborNode.addColorTo(clickedNode, _color);
-				clickedNode.addColorTo(neighborNode, _color);
-			}
-		}
-
-		_listOfNodes.add(clickedNode);
-	}
-
 	/**
 	 * Generates the TrainLine object for further using.
 	 * This method WON'T return null under any circumstances.
@@ -72,18 +47,6 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	public TrainLine getTrainLine()
 	{
 		return new TrainLine(_listOfNodes, _lineName, _color); // TODO: Change to manual color
-	}
-
-	@Override
-	public void rightClick(int screenX, int screenY, Point2D offset)
-	{
-		_isClosed = true;
-	}
-
-	@Override
-	public boolean isClosed()
-	{
-		return _isClosed;
 	}
 
 	/**
@@ -118,5 +81,41 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	public void setName(String newName)
 	{
 		_lineName = newName;
+	}
+
+	@Override
+	public void draw(SpriteBatch sp, Point2D offset)
+	{
+	}
+
+	@Override
+	public void leftClick(int screenX, int screenY, Point2D offset)
+	{
+		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(TrainView._selectedCross);
+		if(clickedNode == null || _listOfNodes.contains(clickedNode)) return;
+
+		ArrayList<RailwayNode> neighbors = clickedNode.getNeighbors();
+		for(RailwayNode neighborNode : neighbors)
+		{
+			if(_listOfNodes.contains(neighborNode))
+			{
+				neighborNode.addColorTo(clickedNode, _color);
+				clickedNode.addColorTo(neighborNode, _color);
+			}
+		}
+
+		_listOfNodes.add(clickedNode);
+	}
+
+	@Override
+	public void rightClick(int screenX, int screenY, Point2D offset)
+	{
+		_isClosed = true;
+	}
+
+	@Override
+	public boolean isClosed()
+	{
+		return _isClosed;
 	}
 }
