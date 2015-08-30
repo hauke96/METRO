@@ -87,17 +87,6 @@ public class TrainLine
 		}
 	}
 
-	@Override
-	public boolean equals(Object o)
-	{
-		if(o instanceof TrainLine)
-		{
-			TrainLine line = (TrainLine)o;
-			return _listOfNodes.equals(line._listOfNodes);// old: line._name.equals(_name) && line._lineColor.equals(_lineColor); // equal when color and name are equal
-		}
-		return false;
-	}
-
 	/**
 	 * Check if this train line is a valid line. A line is valid when both of the following conditions apply:
 	 * 1.) There're more than 2 nodes in this line.
@@ -115,5 +104,36 @@ public class TrainLine
 		}
 
 		return _listOfNodes.size() >= 2 && amountEndNodes == 2;
+	}
+
+	/**
+	 * Returns the color of this line.
+	 * 
+	 * @return The color.
+	 */
+	public Color getColor()
+	{
+		return _lineColor;
+	}
+
+	/**
+	 * Returns the whole list with all nodes of this line.
+	 * 
+	 * @return The list with all nodes.
+	 */
+	public ArrayList<RailwayNode> getNodes()
+	{
+		return _listOfNodes;
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o instanceof TrainLine)
+		{
+			TrainLine line = (TrainLine)o;
+			return _listOfNodes.equals(line._listOfNodes);// old: line._name.equals(_name) && line._lineColor.equals(_lineColor); // equal when color and name are equal
+		}
+		return false;
 	}
 }

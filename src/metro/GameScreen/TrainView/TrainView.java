@@ -200,11 +200,6 @@ public class TrainView extends GameScreen implements Observer
 		else if(mouseButton == Buttons.LEFT)
 		{
 			_toolbar.leftClick(screenX, screenY, _mapOffset);
-			// if(!toolbarButtonPressed(screenX, screenY))// If no toolbar button was pressed, the user has clicked onto the map
-			// {
-			// // map stuff after Toolbar check, so there won't be a placing under a button
-			// if(_activeTool != null) _activeTool.leftClick(screenX, screenY, _mapOffset);
-			// }
 		}
 		else if(mouseButton == Buttons.RIGHT && _activeTool != null)
 		{

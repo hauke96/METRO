@@ -134,7 +134,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		}
 		catch(GdxRuntimeException ex)
 		{
-			System.out.println(ex.getMessage());
+			System.out.println(ex.getMessage()); //TODO: Put into popup-message-box
 		}
 
 		__mainMenu_Buttons = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
@@ -365,7 +365,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 				// try to rename settings.cfg
 				if(!file.renameTo(new File("./settings.backup." + formattedDate + ".cfg")))
 				{
-					System.out.println("No backup of settings.cfg has been created.");
+					System.out.println("No backup of settings.cfg has been created."); //TODO: Put into popup-message-box
 				}
 
 				// no

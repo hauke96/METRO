@@ -83,6 +83,45 @@ public class ColorBar implements ControlElement
 		_clickedXPosition = -1;
 	}
 
+	/**
+	 * Selects a new color.
+	 * 
+	 * @param color The Color that should be selected.
+	 */
+	public void setValue(Color color)
+	{
+		int hue = getHue(color.getRed(), color.getGreen(), color.getBlue());
+		_clickedColor = Color.getHSBColor(hue / 360f, _saturation, _brightness);
+	}
+
+	public int getHue(int red, int green, int blue)
+	{
+
+		float min = Math.min(Math.min(red, green), blue);
+		float max = Math.max(Math.max(red, green), blue);
+
+		float hue = 0f;
+		if(max == red)
+		{
+			hue = (green - blue) / (max - min);
+
+		}
+		else if(max == green)
+		{
+			hue = 2f + (blue - red) / (max - min);
+
+		}
+		else
+		{
+			hue = 4f + (red - green) / (max - min);
+		}
+
+		hue = hue * 60;
+		if(hue < 0) hue = hue + 360;
+
+		return Math.round(hue);
+	}
+
 	@Override
 	public void draw()
 	{

@@ -46,7 +46,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	 */
 	public TrainLine getTrainLine()
 	{
-		return new TrainLine(_listOfNodes, _lineName, _color); // TODO: Change to manual color
+		return new TrainLine(_listOfNodes, _lineName, _color);
 	}
 
 	/**
@@ -81,6 +81,28 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	public void setName(String newName)
 	{
 		_lineName = newName;
+	}
+
+	/**
+	 * Sets the current line to a new one.
+	 * 
+	 * @param line The new line.
+	 */
+	public void setLine(TrainLine line)
+	{
+		_listOfNodes = new ArrayList<RailwayNode>(line.getNodes());
+		_color = line.getColor();
+		_lineName = line.getName();
+	}
+
+	/**
+	 * Enables or disables this tool. When enabled it works otherwise it won't do anything.
+	 * 
+	 * @param enabled True to enable, false to disable.
+	 */
+	public void setState(boolean enabled)
+	{
+		_isClosed = enabled;
 	}
 
 	@Override

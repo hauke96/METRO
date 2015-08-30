@@ -1,5 +1,6 @@
 package metro.TrainManagement.Lines;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 /**
@@ -49,5 +50,40 @@ public class TrainLineOverseer
 				return;
 			}
 		}
+	}
+
+	/**
+	 * Returns the color of a given train line.
+	 * 
+	 * @param lineName The name of the line.
+	 * @return The color of the given line. null if line does not exist.
+	 */
+	public static Color getColor(String lineName)
+	{
+		for(TrainLine line : _listOfTrainLines)
+		{
+			if(line.getName().equals(lineName))
+			{
+				return line.getColor();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Searches for a special line.
+	 * @param lineName The name of the line.
+	 * @return The line. null if line does not exist.
+	 */
+	public static TrainLine getLine(String lineName)
+	{
+		for(TrainLine line : _listOfTrainLines)
+		{
+			if(line.getName().equals(lineName))
+			{
+				return line;
+			}
+		}
+		return null;
 	}
 }

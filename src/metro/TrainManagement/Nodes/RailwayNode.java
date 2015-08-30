@@ -110,16 +110,11 @@ public class RailwayNode
 				if(colors == null || colors.size() == 0)
 				{
 					Draw.setColor(Color.black);
-				Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
+					Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
 				}
 				else
 				{
-					for(int i = 0; i < colors.size(); i++)
-					{
-						Draw.setColor(colors.get(i)); // TODO: Draw all colors, not only the first
-						Draw.Line(position.x, position.y - 2 * i, positionNext.x, positionNext.y - 2 * i); // TODO: make more accurate draw algo. This won't work vor vertical lines :(
-						Draw.Line(position.x, position.y - 1 - 2 * i, positionNext.x, positionNext.y - 1 - 2 * i);
-					}
+					drawColoredLines(position, positionNext, node.getPosition(), colors);
 				}
 			}
 		}
@@ -129,6 +124,57 @@ public class RailwayNode
 			Draw.setColor(colorList.get(i));
 			Draw.setColor(METRO.__metroBlue);
 			Draw.Circle(position.x - 4 - i, position.y - 4 - i, 9 + 2 * i);
+		}
+	}
+
+	/**
+	 * Draws all train lines in their own color.
+	 * 
+	 * @param position The position with offset.
+	 * @param positionNext The position of the next node (also with offset).
+	 * @param nodePosition The node position (in fields, not pixel).
+	 * @param listOfColors List of all colors of this track.
+	 */
+	private void drawColoredLines(Point position, Point positionNext, Point nodePosition, ArrayList<Color> listOfColors)
+	{
+		Point diff = new Point(_position.y - nodePosition.y, _position.x - nodePosition.x);
+		boolean diagonal = false;
+		if(diff.x != 0 && diff.y != 0)
+		{
+			if(diff.x == 1 && diff.y == 1) diff.x = -1;
+			else if(diff.x == 1 && diff.y == -1) diff.y = 1;
+			diagonal = true;
+		}
+		for(int i = 0; i < listOfColors.size(); i++)
+		{
+			// TODO: make more accurate draw algo. This won't work vor vertical lines :(
+			Draw.setColor(listOfColors.get(i));
+			Draw.Line(position.x - (i * 4) * diff.x,
+				position.y - (i * 4) * diff.y,
+				positionNext.x - (i * 4) * diff.x,
+				positionNext.y - (i * 4) * diff.y);
+			Draw.Line(position.x - (1 + i * 4) * diff.x,
+				position.y - (1 + 4 * i) * diff.y,
+				positionNext.x - (1 + i * 4) * diff.x,
+				positionNext.y - (1 + i * 4) * diff.y);
+			if(!diagonal)
+			{
+				Draw.Line(position.x - (2 + i * 4) * diff.x,
+					position.y - (2 + 4 * i) * diff.y,
+					positionNext.x - (2 + i * 4) * diff.x,
+					positionNext.y - (2 + i * 4) * diff.y);
+			}
+			else
+			{
+				Draw.Line(position.x - (1 + i * 4) * diff.x,
+					position.y - (4 * i) * diff.y,
+					positionNext.x - (1 + i * 4) * diff.x,
+					positionNext.y - (i * 4) * diff.y);
+				Draw.Line(position.x - (-1 + i * 4) * diff.x,
+					position.y - (i * 4) * diff.y,
+					positionNext.x - (-1 + i * 4) * diff.x,
+					positionNext.y - (i * 4) * diff.y);
+			}
 		}
 	}
 

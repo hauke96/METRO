@@ -36,7 +36,8 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		_saveButton; // to save settings/changes
 	private boolean _visible, // true: TrainLineView will be displayed
 		_lineSelectToolEnabled, // if enabled, the user can select nodes
-		_isClosed;
+		_isClosed,
+		_editMode; // true when user edits a line
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private Point2D _mapOffset;
 	private TrainLineSelectTool _lineSelectTool;
@@ -187,7 +188,11 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	public void setVisibility(boolean visible)
 	{
 		_visible = visible;
-		_lineSelectToolEnabled = false;
+		if(_lineSelectToolEnabled)
+		{
+			TrainLineOverseer.removeLine(_lineSelectTool.getTrainLine());
+			_lineSelectToolEnabled = false;
+		}
 		if(!_visible) resetControls();
 	}
 
@@ -210,13 +215,11 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		}
 		else if(_editLineButton.isPressed(screenX, screenY))
 		{
-			// TODO: Implementation of changing anything on a train line
 			editLineButton_action();
 			buttonClicked = true;
 		}
 		else if(_removeLineButton.isPressed(screenX, screenY))
 		{
-			// TODO: Implementation of removing a train line
 			removeLineButton_action();
 			buttonClicked = true;
 		}
@@ -291,7 +294,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		TrainLine line = _lineSelectTool.getTrainLine();
 
 		// if something went wrong:
-		if(_lineList.contains(_lineNameField.getText()))
+		if(_lineList.contains(_lineNameField.getText()) && !_editMode) // when edit mode, then don't change the list
 		{
 			_messageLabel.setText("The line \"" + _lineNameField.getText() + "\" already exists.");
 		}
@@ -306,7 +309,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		else if(line.isValid()) // only change something when line and name are valid
 		{
 			TrainLineOverseer.addLine(line);
-			_lineList.addElement(_lineNameField.getText());
+			if(!_editMode) _lineList.addElement(_lineNameField.getText());
 			_lineSelectToolEnabled = false;
 			resetControls();
 		}
@@ -322,11 +325,31 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	}
 
 	/**
-	 * TODO: Fills controls with information about line so that the player can edit it.
+	 * Fills controls with information about line so that the player can edit it.
 	 */
 	private void editLineButton_action()
 	{
-		// TODO: Fill controls with information about line so that the player can edit it.
+		Color color = TrainLineOverseer.getColor(_lineList.getText(_lineList.getSelected()));
+		TrainLine line = TrainLineOverseer.getLine(_lineList.getText(_lineList.getSelected()));
+
+		if(color == null || line == null)
+		{
+			_messageLabel.setText("An erorr occured while reading data :(");
+		}
+
+		_editMode = true;
+
+		_lineNameField.setState(true);
+		_lineNameField.setText(_lineList.getText(_lineList.getSelected()));
+		_colorBar.setState(true);
+		_colorBar.setValue(color);
+		_createLineButton.setState(false);
+		_removeLineButton.setState(false);
+		_saveButton.setState(true);
+
+		_lineSelectToolEnabled = true;
+		_lineSelectTool.setLine(line);
+		_lineSelectTool.setState(true);
 	}
 
 	/**
@@ -336,6 +359,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	{
 		// switch controls OFF when select tool is enabled
 		_editLineButton.setState(!_lineSelectToolEnabled);
+		_editMode = !_lineSelectToolEnabled;
 		_removeLineButton.setState(!_lineSelectToolEnabled);
 		_createLineButton.setState(!_lineSelectToolEnabled);
 
@@ -349,6 +373,9 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 
 		_messageLabel.setText("");
 		_lineNameField.setText("");
+
+		_lineSelectTool.setState(false);
+
 	}
 
 	@Override
