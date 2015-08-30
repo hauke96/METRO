@@ -1,5 +1,17 @@
 You'll find all changes made in the versions here:
 
+VERSION 0.1.2: (30.08.2015)
+(mainly features from #8; for implementation-ideas see #13)
+	- Train line dialog with a list of all lines, buttons and settings
+	- Player can create, edit and remove lines with the corresponding buttons
+	- Remove a node of a line with a second click
+	- Lines are drawn within their colors
+	- Project has now a documentation (#16)
+	  (http://hauke-stieler.de/public/METRO/doc/)
+	- UML-like diagrams where added
+	  (http://hauke-stieler.de/public/METRO/diagrams/)
+
+
 VERSION 0.1.1: (10.07.2015)
 	- Implemented settings-window (#6)
 	- Merged City- and Train-view

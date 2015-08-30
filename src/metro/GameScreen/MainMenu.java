@@ -44,7 +44,7 @@ public class MainMenu extends GameScreen
 		// Create welcome-window:
 		_welcomeWindow = new Window("Welcome to METRO - ver.:" + METRO.__VERSION,
 			new Point(50, METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 300), // same y-pos as title image
-			new Point(500, 600));
+			new Point(500, 360));
 		new metro.WindowControls.Button(
 			new Rectangle((500 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2,
 				(260 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2,
@@ -57,27 +57,25 @@ public class MainMenu extends GameScreen
 			METRO.__mainMenu_TitleImage, _welcomeWindow);
 
 		new metro.WindowControls.Label("METRO stands for \"Master of established transport railway operators\" and is a simple Subway/Rapid-Transit and economic simulator."
-			+ "\n\nTRAIN-VIEW - In this mode you'll be able to build tracks and stations."
-			+ "\n\nCITY-VIEW - In this mode you'll see where the most passengers are.", new Point(20, 100), 450, _welcomeWindow);
+			+ "\n\nFor all changes take a look into the 'changelog.txt'"
+			+ "\nNew main-features of ver." + METRO.__VERSION + ":"
+			+ "\n\n   * Dialog for creating a train line"
+			+ "\n   * Create, edit and remove lines"
+			+ "\n   * Lines are drawn within their color"
+			+ "\n\nAnd now: Have fun and earn money ;)",
+			new Point(20, 100), 450, _welcomeWindow);
 
-		box = new Checkbox(new Point(40, 260), "Hallo test", 0, true, true, _welcomeWindow);
-
-		ArrayList<String> list = new ArrayList<String>();
-		list.add("Hallo world!");
-		list.add("How are you?\n\n\nTwo lines later...");
-		list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
-		_list = new List(new Rectangle(40, 300, 400, 250), list, _welcomeWindow, true);
-
-		new InputField(new Rectangle(40, 560, 400, 20), _welcomeWindow, "Hello World!");
+		// box = new Checkbox(new Point(40, 260), "Hallo test", 0, true, true, _welcomeWindow);
+		//
+		// ArrayList<String> list = new ArrayList<String>();
+		// list.add("Hallo world!");
+		// list.add("How are you?\n\n\nTwo lines later...");
+		// list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
+		// _list = new List(new Rectangle(40, 300, 400, 250), list, _welcomeWindow, true);
+		//
+		// new InputField(new Rectangle(40, 560, 400, 20), _welcomeWindow, "Hello World!");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see GameMode#update()
-	 * 
-	 * @param buffer The graphics handle to the buffer to draw on.
-	 */
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
@@ -90,9 +88,7 @@ public class MainMenu extends GameScreen
 			METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 200);
 	}
 
-	/**
-	 * Checks which button in the main menu has been clicked.
-	 */
+	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		if(_button_startGame.isPressed(screenX, screenY))
@@ -112,6 +108,7 @@ public class MainMenu extends GameScreen
 		}
 	}
 
+	@Override
 	public void mouseReleased(int mouseButton)
 	{
 		if(box.isPressed())
@@ -120,6 +117,7 @@ public class MainMenu extends GameScreen
 		}
 	}
 
+	@Override
 	public void keyDown(int keyCode)
 	{
 		if(_welcomeWindow != null) _welcomeWindow.keyPressed(keyCode);
