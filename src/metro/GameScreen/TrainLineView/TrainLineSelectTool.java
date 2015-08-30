@@ -114,19 +114,26 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(TrainView._selectedCross);
-		if(clickedNode == null || _listOfNodes.contains(clickedNode)) return;
-
 		ArrayList<RailwayNode> neighbors = clickedNode.getNeighbors();
+
 		for(RailwayNode neighborNode : neighbors)
 		{
 			if(_listOfNodes.contains(neighborNode))
 			{
-				neighborNode.addColorTo(clickedNode, _color);
-				clickedNode.addColorTo(neighborNode, _color);
+				if(_listOfNodes.contains(clickedNode)) // if list contains node, remove it
+				{
+					neighborNode.removeColorTo(clickedNode, _color);
+					clickedNode.removeColorTo(neighborNode, _color);
+				}
+				else
+				{
+					neighborNode.addColorTo(clickedNode, _color);
+					clickedNode.addColorTo(neighborNode, _color);
+				}
 			}
 		}
-
-		_listOfNodes.add(clickedNode);
+		if(_listOfNodes.contains(clickedNode)) _listOfNodes.remove(clickedNode);
+		else _listOfNodes.add(clickedNode);
 	}
 
 	@Override

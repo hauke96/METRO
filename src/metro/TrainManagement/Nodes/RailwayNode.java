@@ -189,6 +189,19 @@ public class RailwayNode
 		if(!_mapOfColors.containsKey(node)) _mapOfColors.put(node, new ArrayList<Color>());
 		_mapOfColors.get(node).add(color);
 	}
+	
+	/**
+	 * Removes the connection "this node" <--[color]--> "parameter node".
+	 * @param node The neighbor node with the same color.
+	 * @param color The color of these nodes.
+	 */
+	public void removeColorTo(RailwayNode node, Color color)
+	{
+		if(_mapOfColors.containsKey(node))
+		{
+			_mapOfColors.get(node).remove(color);
+		}
+	}
 
 	/**
 	 * Removes a specific color from this node.
