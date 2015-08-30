@@ -322,6 +322,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	{
 		TrainLineOverseer.removeLine(_lineList.getText(_lineList.getSelected()));
 		_lineList.remove(_lineList.getSelected());
+
 	}
 
 	/**
@@ -329,12 +330,14 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	 */
 	private void editLineButton_action()
 	{
+		if(_lineList.getSelected() == -1) return;
 		Color color = TrainLineOverseer.getColor(_lineList.getText(_lineList.getSelected()));
 		TrainLine line = TrainLineOverseer.getLine(_lineList.getText(_lineList.getSelected()));
 
 		if(color == null || line == null)
 		{
 			_messageLabel.setText("An erorr occured while reading data :(");
+			return;
 		}
 
 		_editMode = true;
@@ -344,6 +347,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		_colorBar.setState(true);
 		_colorBar.setValue(color);
 		_createLineButton.setState(false);
+		_editLineButton.setState(false);
 		_removeLineButton.setState(false);
 		_saveButton.setState(true);
 
