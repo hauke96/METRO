@@ -19,7 +19,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
  *
  */
 
-public class Button implements ControlElement
+public class Button extends ActionObservable implements ControlElement
 {
 	private TextureRegion _texture;
 	private Rectangle _position,
@@ -57,6 +57,7 @@ public class Button implements ControlElement
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
+		METRO.registerControl(this);
 	}
 
 	/**
@@ -170,6 +171,15 @@ public class Button implements ControlElement
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void mouseLeftClicked(int screenX, int screenY, int button)
+	{
+		if(clickOnControlElement())
+		{
+			notifyClickOnControl(this);
+		}
 	}
 
 	@Override

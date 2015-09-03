@@ -225,11 +225,13 @@ public abstract class GameScreen
 		 */
 		public void update()
 		{
+			//TODO: ActionObserver implementation
 			if(_okButton.isPressed()
 				|| _window.isClosed())
 			{
 				close();
 			}
+			//TODO: ActionObserver for checkboxes implementation
 			else if(_fullscreenOn.hasChanged()
 				|| _useOpenGL30.hasChanged()
 				|| _useVSync.hasChanged()
@@ -242,6 +244,7 @@ public abstract class GameScreen
 
 				_resolutionList.setState(!(Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())));
 			}
+			//TODO: ActionObserver for lists implementation
 			else if(!_resolutionList.getText(_resolutionList.getSelected()).equals(Settings.getNew("screen.width") + "x" + Settings.getNew("screen.height")) // if selection has changed
 				&& !Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())) // ... and fullscreen-mode is off
 			{
@@ -254,11 +257,13 @@ public abstract class GameScreen
 					Settings.set("screen.height", Integer.parseInt(splitted[1]));
 				}
 			}
+			//TODO: ActionObserver for lists implementation
 			else if(!_sampleList.getText(_sampleList.getSelected()).equals(Settings.getNew("amount.samples").toString())) // if selection has changed
 			{
 				String entry = _sampleList.getText(_sampleList.getSelected());
 				if(!entry.equals("")) Settings.set("amount.samples", Integer.parseInt(entry));
 			}
+			//TODO: ActionObserver for lists implementation
 			else if(!_segmentList.getText(_segmentList.getSelected()).equals(Settings.getNew("amount.segments").toString())) // if selection has changed
 			{
 				String entry = _segmentList.getText(_segmentList.getSelected());
@@ -312,10 +317,12 @@ public abstract class GameScreen
 		{
 			if(_window.isClosed()) close();
 
+			//TODO: ActionObserver implementation
 			if(_yesButton.isPressed())
 			{
 				METRO.__application.exit();
 			}
+			//TODO: ActionObserver implementation
 			else if(_settingsButton.isPressed())
 			{
 				if(_settingsWindow == null)
@@ -329,6 +336,7 @@ public abstract class GameScreen
 					METRO.__windowList.add(_settingsWindow._window);
 				}
 			}
+			//TODO: ActionObserver implementation
 			else if(_noButton.isPressed())
 			{
 				close();

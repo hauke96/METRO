@@ -50,6 +50,14 @@ public interface ControlElement
 	 * @return Position as Point.
 	 */
 	public Point getPosition();
+	
+	/**
+	 * Is called when mouse clicked with its left button.
+	 * @param screenX The x coordinate of the click.
+	 * @param screenY The y coordinate of the click.
+	 * @param button The button related to Buttons.xy.
+	 */
+	public void mouseLeftClicked(int screenX, int screenY, int button);
 
 	/**
 	 * Moves the element.

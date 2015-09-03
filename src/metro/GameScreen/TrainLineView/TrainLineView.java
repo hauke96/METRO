@@ -206,6 +206,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	 */
 	private boolean checkButtonClicks(int screenX, int screenY, int mouseButton)
 	{
+		//TODO: ActionObserver implementation
 		boolean buttonClicked = false;
 
 		if(_createLineButton.isPressed(screenX, screenY))

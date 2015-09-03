@@ -199,7 +199,7 @@ public class TrainView extends GameScreen implements Observer
 		}
 		else if(mouseButton == Buttons.LEFT)
 		{
-			_toolbar.leftClick(screenX, screenY, _mapOffset);
+			update(_toolbar, METRO.__mousePosition); // emulate the observer to update the tools correctly
 		}
 		else if(mouseButton == Buttons.RIGHT && _activeTool != null)
 		{

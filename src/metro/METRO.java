@@ -28,6 +28,8 @@ import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainMenu;
 import metro.Graphics.Draw;
 import metro.WindowControls.Button;
+import metro.WindowControls.ControlActionManager;
+import metro.WindowControls.ControlElement;
 import metro.WindowControls.Window;
 
 import com.badlogic.gdx.ApplicationListener;
@@ -49,7 +51,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * @author Hauke
- * @version 0.1.2
+ * @version 0.1.3_indev
  */
 public class METRO extends Frame implements ApplicationListener, InputProcessor
 {
@@ -57,13 +59,13 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 	public static Dimension __SCREEN_SIZE;// = Toolkit.getDefaultToolkit().getScreenSize();
 	public static final String __TITLE = "METRO",
-		__VERSION = "0.1.2";
+		__VERSION = "0.1.3_indev";
 
 	private static OSType _detected_OS = OSType.UNKNOWN;
+	private static ControlActionManager _controlActionManager;
 
 	public static BitmapFont __stdFont;
-	public static GameScreen __currentGameScreen,
-		__controlDrawer; // draws all the important controls and infos after rendering the scene
+	public static GameScreen __currentGameScreen, __controlDrawer; // draws all the important controls and infos after rendering the scene
 	public static TextureRegion __mainMenu_Buttons,
 		__mainMenu_TitleImage,
 		__iconSet,
@@ -97,6 +99,9 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public void create()
 	{
+		_controlActionManager = new ControlActionManager();
+
+		// __CURRENT_OS
 		String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
 		if(os.contains("win"))
 		{
@@ -111,7 +116,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 			_detected_OS = OSType.MAC;
 		}
 
-		// __CURRENT_OS
 		__spriteBatch = new SpriteBatch();
 
 		__camera = new OrthographicCamera();
@@ -134,7 +138,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		}
 		catch(GdxRuntimeException ex)
 		{
-			System.out.println(ex.getMessage()); //TODO: Put into popup-message-box
+			System.out.println(ex.getMessage()); // TODO: Put into popup-message-box
 		}
 
 		__mainMenu_Buttons = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
@@ -173,6 +177,25 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public void render()
 	{
+		calculateMousePosition();
+
+		__spriteBatch.begin();
+
+		renderInit();
+		renderGameScreen();
+		renderWindows();
+		renderFPSDisplay();
+		renderCursor();
+
+		__spriteBatch.end();
+	}
+
+	/**
+	 * Calculates the mouse position concerning fullscreen, window borders, windows, etc.
+	 * When the mouse is in a window, the position does not change (to prevent wrong clicks on other controls/tools).
+	 */
+	private void calculateMousePosition()
+	{
 		__mousePosition = MouseInfo.getPointerInfo().getLocation();
 
 		if(!Boolean.parseBoolean(Settings.get("fullscreen.on").toString()))
@@ -188,35 +211,56 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		}
 		if(mouseInWindow) __mousePosition = _oldMousePosition;
 		else _oldMousePosition = __mousePosition;
+	}
 
+	/**
+	 * Initializes the rendering anc cleares the screen.
+	 */
+	private void renderInit()
+	{
 		// Clear screen
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+	}
 
-		__spriteBatch.begin();
-
+	/**
+	 * Updates the game screen and draws the control drawer.
+	 */
+	private void renderGameScreen()
+	{
 		__currentGameScreen.update(__spriteBatch);
 		if(__controlDrawer != null) __controlDrawer.update(__spriteBatch);
+	}
 
-		// Draw every window with its controls
+	/**
+	 * Draws all windows that are in the __windowList.
+	 */
+	private void renderWindows()
+	{
 		for(Window win : __windowList)
 		{
 			win.draw(__spriteBatch);
 		}
+	}
 
-		// /
-		// / END DRAW GAME-SCREEN
-		// /
-
+	/**
+	 * Draws the FPS-display with the frames per second given by Gdx.
+	 */
+	private void renderFPSDisplay()
+	{
 		Draw.setColor(__metroBlue);
 		Draw.String("FPS: " + Gdx.graphics.getFramesPerSecond(), __SCREEN_SIZE.width - (Draw.getStringSize("FPS: " + Gdx.graphics.getFramesPerSecond()).width + 30), 25);
+	}
 
+	/**
+	 * Draws the cursor based on the operating system (if windows: cursor is drawn manually).
+	 */
+	private void renderCursor()
+	{
 		if(_detected_OS == OSType.WIN) // setCursorImage doesn't work on Windows :(
 		{
 			if(__mouseCursorImage != null) Draw.Image(__mouseCursorImage, __originalMousePosition.x - 16, __originalMousePosition.y - 16);
 		}
-
-		__spriteBatch.end();
 	}
 
 	@Override
@@ -230,19 +274,21 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	}
 
 	@Override
-	public boolean keyDown(int keycode)
+	public boolean keyDown(int keyCode)
 	{
-		__currentGameScreen.keyPressed(keycode);
+		__currentGameScreen.keyPressed(keyCode);
+		_controlActionManager.keyPressed(keyCode);
 		return false;
 	}
 
 	@Override
-	public boolean keyUp(int keycode)
+	public boolean keyUp(int keyCode)
 	{
 		for(Window win : __windowList)
 		{
-			win.keyUp(keycode);
+			win.keyUp(keyCode);
 		}
+		_controlActionManager.keyUp(keyCode);
 		return false;
 	}
 
@@ -275,6 +321,9 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		{
 			clickedWindow.closeIfNeeded(screenX, screenY, button);
 		}
+
+		_controlActionManager.mouseClicked(screenX, screenY, button);
+
 		return false;
 	}
 
@@ -328,6 +377,19 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		__windowList.remove(window);
 	}
 
+	/**
+	 * Registers a control in the control manager. If the control already is registered, it'll be deleted.
+	 * 
+	 * @param control The control to add/remove.
+	 */
+	public static void registerControl(ControlElement control)
+	{
+		_controlActionManager.registerElement(control);
+	}
+
+	/**
+	 * Reads the settings from the settings.cfg and sets them to the variables of METRO.
+	 */
 	private void setSettings()
 	{
 		Settings.read();
@@ -365,7 +427,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 				// try to rename settings.cfg
 				if(!file.renameTo(new File("./settings.backup." + formattedDate + ".cfg")))
 				{
-					System.out.println("No backup of settings.cfg has been created."); //TODO: Put into popup-message-box
+					System.out.println("No backup of settings.cfg has been created."); // TODO: Put into popup-message-box
 				}
 
 				// no

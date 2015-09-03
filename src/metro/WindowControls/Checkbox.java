@@ -168,6 +168,13 @@ public class Checkbox implements ControlElement
 	{
 		return _position;
 	}
+	
+	@Override
+	public void mouseLeftClicked(int screenX, int screenY, int button)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void moveElement(Point offset)

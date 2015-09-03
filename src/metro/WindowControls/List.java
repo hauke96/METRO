@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Observable;
 
 import metro.METRO;
 import metro.Graphics.Draw;
@@ -347,6 +348,13 @@ public class List implements ControlElement
 	public Point getPosition()
 	{
 		return new Point(_position.x, _position.y);
+	}
+	
+	@Override
+	public void mouseLeftClicked(int screenX, int screenY, int button)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override

@@ -2,15 +2,13 @@ package metro.GameScreen;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 
 import metro.METRO;
 import metro.GameScreen.TrainView.TrainView;
 import metro.Graphics.Draw;
+import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
-import metro.WindowControls.Checkbox;
-import metro.WindowControls.InputField;
-import metro.WindowControls.List;
+import metro.WindowControls.Label;
 import metro.WindowControls.Window;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -28,8 +26,6 @@ public class MainMenu extends GameScreen
 		_button_settings,
 		_button_exitGame;
 	private Window _welcomeWindow;
-	private Checkbox box;
-	private List _list;
 
 	public MainMenu()
 	{
@@ -40,12 +36,13 @@ public class MainMenu extends GameScreen
 			new Rectangle(0, 50, 200, 50), METRO.__mainMenu_Buttons);
 		_button_exitGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 95, 200, 50),
 			new Rectangle(0, 100, 200, 50), METRO.__mainMenu_Buttons);
+		addActionObservations();
 
 		// Create welcome-window:
 		_welcomeWindow = new Window("Welcome to METRO - ver.:" + METRO.__VERSION,
 			new Point(50, METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 300), // same y-pos as title image
 			new Point(500, 360));
-		new metro.WindowControls.Button(
+		new Button(
 			new Rectangle((500 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2,
 				(260 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2,
 				(int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f),
@@ -56,7 +53,7 @@ public class MainMenu extends GameScreen
 				METRO.__mainMenu_TitleImage.getRegionHeight()),
 			METRO.__mainMenu_TitleImage, _welcomeWindow);
 
-		new metro.WindowControls.Label("METRO stands for \"Master of established transport railway operators\" and is a simple Subway/Rapid-Transit and economic simulator."
+		new Label("METRO stands for \"Master of established transport railway operators\" and is a simple Subway/Rapid-Transit and economic simulator."
 			+ "\n\nFor all changes take a look into the 'changelog.txt'"
 			+ "\nNew main-features of ver." + METRO.__VERSION + ":"
 			+ "\n\n   * Dialog for creating a train line"
@@ -64,16 +61,39 @@ public class MainMenu extends GameScreen
 			+ "\n   * Lines are drawn within their color"
 			+ "\n\nAnd now: Have fun and earn money ;)",
 			new Point(20, 100), 450, _welcomeWindow);
+	}
 
-		// box = new Checkbox(new Point(40, 260), "Hallo test", 0, true, true, _welcomeWindow);
-		//
-		// ArrayList<String> list = new ArrayList<String>();
-		// list.add("Hallo world!");
-		// list.add("How are you?\n\n\nTwo lines later...");
-		// list.add("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.");
-		// _list = new List(new Rectangle(40, 300, 400, 250), list, _welcomeWindow, true);
-		//
-		// new InputField(new Rectangle(40, 560, 400, 20), _welcomeWindow, "Hello World!");
+	/**
+	 * Creates anonymous inner classes for all buttons (using ActionObserver system) to do their specific action.
+	 */
+	private void addActionObservations()
+	{
+		_button_exitGame.register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				METRO.__application.exit();
+			}
+		});
+		_button_settings.register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				createSettingsWindow();
+			}
+		});
+		_button_startGame.register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				_welcomeWindow.close();
+				METRO.__currentGameScreen = new TrainView();
+				METRO.__controlDrawer = new ScreenInfoDrawer();
+			}
+		});
 	}
 
 	@Override
@@ -91,30 +111,11 @@ public class MainMenu extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(_button_startGame.isPressed(screenX, screenY))
-		{
-			_welcomeWindow.close();
-			_welcomeWindow = null;
-			METRO.__currentGameScreen = new TrainView();
-			METRO.__controlDrawer = new ScreenInfoDrawer();
-		}
-		else if(_button_settings.isPressed(screenX, screenY))
-		{
-			createSettingsWindow();
-		}
-		else if(_button_exitGame.isPressed(screenX, screenY))
-		{
-			METRO.__application.exit();
-		}
 	}
 
 	@Override
 	public void mouseReleased(int mouseButton)
 	{
-		if(box.isPressed())
-		{
-			_list.addElement("Checkbox: " + box.isChecked());
-		}
 	}
 
 	@Override

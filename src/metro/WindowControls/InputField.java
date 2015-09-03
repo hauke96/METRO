@@ -110,6 +110,13 @@ public class InputField extends Input
 	{
 		return _position.getLocation();
 	}
+	
+	@Override
+	public void mouseLeftClicked(int screenX, int screenY, int button)
+	{
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void moveElement(Point offset)
