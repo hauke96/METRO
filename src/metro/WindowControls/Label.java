@@ -148,10 +148,9 @@ public class Label implements ControlElement
 	}
 	
 	@Override
-	public void mouseLeftClicked(int screenX, int screenY, int button)
+	public boolean mouseLeftClicked(int screenX, int screenY, int button)
 	{
-		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 	@Override

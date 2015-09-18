@@ -57,7 +57,7 @@ public interface ControlElement
 	 * @param screenY The y coordinate of the click.
 	 * @param button The button related to Buttons.xy.
 	 */
-	public void mouseLeftClicked(int screenX, int screenY, int button);
+	public boolean mouseLeftClicked(int screenX, int screenY, int button);
 
 	/**
 	 * Moves the element.

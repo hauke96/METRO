@@ -10,6 +10,7 @@ import metro.WindowControls.Checkbox;
 import metro.WindowControls.Input;
 import metro.WindowControls.List;
 import metro.WindowControls.Window;
+import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.Label;
 
@@ -134,7 +135,7 @@ public abstract class GameScreen
 	{
 		return _selectedInput;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -168,6 +169,7 @@ public abstract class GameScreen
 				new Point(METRO.__SCREEN_SIZE.width / 2 - 250, METRO.__SCREEN_SIZE.height / 2 - 225),
 				new Point(500, 450),
 				METRO.__metroBlue);
+			addWindowListener();
 
 			new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.",
 				new Point(20, 20),
@@ -177,11 +179,13 @@ public abstract class GameScreen
 			_okButton = new Button(new Rectangle(200, 420, 100, 20),
 				"OK",
 				_window);
+			addButtonObserver();
 
 			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString()), true, _window);
 			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Boolean.parseBoolean(Settings.getNew("use.opengl30").toString()), true, _window);
 			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Boolean.parseBoolean(Settings.getNew("use.vsync").toString()), true, _window);
 			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Boolean.parseBoolean(Settings.getNew("use.hdpi").toString()), true, _window);
+			addCheckboxObserver();
 
 			new Label("Screen Resolution:", new Point(20, 180), _window);
 			_resolutionList = new List(new Rectangle(20, 200, 190, 150), _window, true);
@@ -216,8 +220,111 @@ public abstract class GameScreen
 			_segmentList.addElement("256");
 			index = _segmentList.getIndex(Settings.getNew("amount.segments") + ""); // get the entry with the current resolution
 			_segmentList.setSelectedEntry(index);
+			addListObserver();
 
 			Settings.save();
+		}
+
+		private void addWindowListener()
+		{
+			_window.register(new ActionObserver()
+			{
+				@Override
+				public void closed()
+				{
+					close();
+				}
+			});
+		}
+
+		private void addButtonObserver()
+		{
+			_okButton.register(new ActionObserver()
+			{
+				@Override
+				public void clickedOnControl(Object arg)
+				{
+					close();
+				}
+			});
+		}
+
+		/**
+		 * Creates the observer with sub-classes for all the check-boxes of this class.
+		 */
+		private void addCheckboxObserver()
+		{
+			_fullscreenOn.register(new ActionObserver()
+			{
+				@Override
+				public void checkStateChanged(boolean newState)
+				{
+					Settings.set("fullscreen.on", _fullscreenOn.isChecked());
+					_resolutionList.setState(!(Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())));
+				}
+			});
+			_useOpenGL30.register(new ActionObserver()
+			{
+				@Override
+				public void checkStateChanged(boolean newState)
+				{
+					Settings.set("use.opengl30", _useOpenGL30.isChecked());
+				}
+			});
+			_useOpenGL30.register(new ActionObserver()
+			{
+				@Override
+				public void checkStateChanged(boolean newState)
+				{
+					Settings.set("use.vsync", _useVSync.isChecked());
+				}
+			});
+			_useOpenGL30.register(new ActionObserver()
+			{
+				@Override
+				public void checkStateChanged(boolean newState)
+				{
+					Settings.set("use.hdpi", _useHDPI.isChecked());
+				}
+			});
+		}
+
+		private void addListObserver()
+		{
+			_resolutionList.register(new ActionObserver()
+			{
+				@Override
+				public void selectionChanged(String entry)
+				{
+					if(!Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())) // ... and fullscreen-mode is off
+					{
+						System.out
+							.println(Settings.getNew("screen.width") + "x" + Settings.getNew("screen.height") + " -- " + _resolutionList.getText(_resolutionList.getSelected()));
+						String splitted[] = entry.split("x");
+						if(splitted.length == 2)
+						{
+							Settings.set("screen.width", Integer.parseInt(splitted[0]));
+							Settings.set("screen.height", Integer.parseInt(splitted[1]));
+						}
+					}
+				}
+			});
+			_sampleList.register(new ActionObserver()
+			{
+				@Override
+				public void selectionChanged(String entry)
+				{
+					if(!entry.equals("")) Settings.set("amount.samples", Integer.parseInt(entry));
+				}
+			});
+			_segmentList.register(new ActionObserver()
+			{
+				@Override
+				public void selectionChanged(String entry)
+				{
+					if(!entry.equals("")) Settings.set("amount.segments", Integer.parseInt(entry));
+				}
+			});
 		}
 
 		/**
@@ -225,51 +332,6 @@ public abstract class GameScreen
 		 */
 		public void update()
 		{
-			//TODO: ActionObserver implementation
-			if(_okButton.isPressed()
-				|| _window.isClosed())
-			{
-				close();
-			}
-			//TODO: ActionObserver for checkboxes implementation
-			else if(_fullscreenOn.hasChanged()
-				|| _useOpenGL30.hasChanged()
-				|| _useVSync.hasChanged()
-				|| _useHDPI.hasChanged())
-			{
-				Settings.set("fullscreen.on", _fullscreenOn.isChecked());
-				Settings.set("use.opengl30", _useOpenGL30.isChecked());
-				Settings.set("use.vsync", _useVSync.isChecked());
-				Settings.set("use.hdpi", _useHDPI.isChecked());
-
-				_resolutionList.setState(!(Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())));
-			}
-			//TODO: ActionObserver for lists implementation
-			else if(!_resolutionList.getText(_resolutionList.getSelected()).equals(Settings.getNew("screen.width") + "x" + Settings.getNew("screen.height")) // if selection has changed
-				&& !Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())) // ... and fullscreen-mode is off
-			{
-				System.out.println(Settings.getNew("screen.width") + "x" + Settings.getNew("screen.height") + " -- " + _resolutionList.getText(_resolutionList.getSelected()));
-				String entry = _resolutionList.getText(_resolutionList.getSelected());
-				String splitted[] = entry.split("x");
-				if(splitted.length == 2)
-				{
-					Settings.set("screen.width", Integer.parseInt(splitted[0]));
-					Settings.set("screen.height", Integer.parseInt(splitted[1]));
-				}
-			}
-			//TODO: ActionObserver for lists implementation
-			else if(!_sampleList.getText(_sampleList.getSelected()).equals(Settings.getNew("amount.samples").toString())) // if selection has changed
-			{
-				String entry = _sampleList.getText(_sampleList.getSelected());
-				if(!entry.equals("")) Settings.set("amount.samples", Integer.parseInt(entry));
-			}
-			//TODO: ActionObserver for lists implementation
-			else if(!_segmentList.getText(_segmentList.getSelected()).equals(Settings.getNew("amount.segments").toString())) // if selection has changed
-			{
-				String entry = _segmentList.getText(_segmentList.getSelected());
-				if(!entry.equals("")) Settings.set("amount.segments", Integer.parseInt(entry));
-			}
-
 			Settings.save(); // there will be no unnecessary writing, cause of boolean-variable
 		}
 
@@ -317,12 +379,12 @@ public abstract class GameScreen
 		{
 			if(_window.isClosed()) close();
 
-			//TODO: ActionObserver implementation
+			// TODO: ActionObserver implementation
 			if(_yesButton.isPressed())
 			{
 				METRO.__application.exit();
 			}
-			//TODO: ActionObserver implementation
+			// TODO: ActionObserver implementation
 			else if(_settingsButton.isPressed())
 			{
 				if(_settingsWindow == null)
@@ -336,7 +398,7 @@ public abstract class GameScreen
 					METRO.__windowList.add(_settingsWindow._window);
 				}
 			}
-			//TODO: ActionObserver implementation
+			// TODO: ActionObserver implementation
 			else if(_noButton.isPressed())
 			{
 				close();

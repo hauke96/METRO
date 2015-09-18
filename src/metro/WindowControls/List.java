@@ -4,14 +4,13 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Observable;
+
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 
 import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-
-import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 
 /**
  * Creates a list control element that can have some entries in it. An entry is highlighted when the mouse is over it.
@@ -20,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
  *
  */
 
-public class List implements ControlElement
+public class List extends ActionObservable implements ControlElement
 {
 	private ArrayList<String> _entries = new ArrayList<String>();
 	private Rectangle _position;
@@ -351,10 +350,14 @@ public class List implements ControlElement
 	}
 	
 	@Override
-	public void mouseLeftClicked(int screenX, int screenY, int button)
+	public boolean mouseLeftClicked(int screenX, int screenY, int button)
 	{
-		// TODO Auto-generated method stub
-		
+		if(clickOnControlElement())
+		{
+			notifyClosed();
+			return true;
+		}
+		return false;
 	}
 
 	@Override

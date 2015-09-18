@@ -50,4 +50,12 @@ public abstract class ActionObserver
 	{
 		
 	}
+	
+	/**
+	 * Is called when a control (e.g. a window) is closed.
+	 */
+	public void closed()
+	{
+		
+	}
 }

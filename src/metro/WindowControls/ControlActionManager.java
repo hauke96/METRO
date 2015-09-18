@@ -61,18 +61,20 @@ public class ControlActionManager
 	 * @param screenY The y coordinate of the mouse.
 	 * @param button The mouse button (Buttons.xy).
 	 */
-	public void mouseClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
+		boolean controlClicked = false;
 		if(button == Buttons.LEFT)
 		{
 			_currentlyIterating = true;
 			for(ControlElement control : _listOfControlElements)
 			{
-				control.mouseLeftClicked(screenX, screenY, button);
+				controlClicked |= control.mouseLeftClicked(screenX, screenY, button);
 			}
 			_currentlyIterating = false;
 			updateList();
 		}
+		return controlClicked;
 	}
 
 	public void keyPressed(int keyCode)

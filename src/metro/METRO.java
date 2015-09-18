@@ -312,17 +312,18 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 				break;
 			}
 		}
-		if(clickedWindow == null) // if no window has been clicked
+		if(!_controlActionManager.mouseClicked(screenX, screenY, button))
 		{
-			__currentGameScreen.mouseClicked(screenX, screenY, button); // forward click to game screen
-			if(__controlDrawer != null) __controlDrawer.mouseClicked(screenX, screenY, button);
+			if(clickedWindow == null) // if no window has been clicked
+			{
+				__currentGameScreen.mouseClicked(screenX, screenY, button); // forward click to game screen
+				if(__controlDrawer != null) __controlDrawer.mouseClicked(screenX, screenY, button);
+			}
+			else
+			{
+				clickedWindow.closeIfNeeded(screenX, screenY, button);
+			}
 		}
-		else
-		{
-			clickedWindow.closeIfNeeded(screenX, screenY, button);
-		}
-
-		_controlActionManager.mouseClicked(screenX, screenY, button);
 
 		return false;
 	}

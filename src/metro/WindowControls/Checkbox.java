@@ -6,7 +6,7 @@ import java.awt.Point;
 import metro.METRO;
 import metro.Graphics.Draw;
 
-public class Checkbox implements ControlElement
+public class Checkbox extends ActionObservable implements ControlElement
 {
 	private boolean _checked,
 		_enabled, // other name: isCheckable (true - box can be used; false - box can't be used)
@@ -88,6 +88,7 @@ public class Checkbox implements ControlElement
 		_enabled = enabled;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+		METRO.registerControl(this);
 	}
 
 	/**
@@ -170,10 +171,14 @@ public class Checkbox implements ControlElement
 	}
 	
 	@Override
-	public void mouseLeftClicked(int screenX, int screenY, int button)
+	public boolean mouseLeftClicked(int screenX, int screenY, int button)
 	{
-		// TODO Auto-generated method stub
-		
+		if(clickOnControlElement())
+		{
+			notifyStateChanged(_checked);
+			return true;
+		}
+		return false;
 	}
 
 	@Override

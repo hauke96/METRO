@@ -7,10 +7,10 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+
 import metro.METRO;
 import metro.Graphics.Draw;
-
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * A button with text ot an image attached to a window. It also manages the click-event.
@@ -75,6 +75,7 @@ public class Button extends ActionObservable implements ControlElement
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
+		METRO.registerControl(this);
 	}
 
 	/**
@@ -174,12 +175,14 @@ public class Button extends ActionObservable implements ControlElement
 	}
 	
 	@Override
-	public void mouseLeftClicked(int screenX, int screenY, int button)
+	public boolean mouseLeftClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{
 			notifyClickOnControl(this);
+			return true;
 		}
+		return false;
 	}
 
 	@Override

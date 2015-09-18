@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author hauke
  * 
  */
-public class Window
+public class Window extends ActionObservable implements ControlElement
 {
 	private Point _position,
 		_size,
@@ -48,6 +48,7 @@ public class Window
 		_color = color;
 
 		METRO.__windowList.add(this);
+		METRO.registerControl(this);
 	}
 
 	/**
@@ -177,16 +178,16 @@ public class Window
 	public void mousePressed(int screenX, int screenY, int mouseButton)
 	{
 		boolean inputPressed = false; // true if an input field has been clicked
-		for(ControlElement cElement : _elementList)
-		{
-			boolean b = cElement.clickOnControlElement();
-
-			if(b && cElement instanceof Input) // if clicked element is an input field, set this as selected field
-			{
-				inputPressed = true;
-				METRO.__currentGameScreen.setSelectedInput((Input)cElement);
-			}
-		}
+		// for(ControlElement cElement : _elementList)
+		// {
+		// boolean b = cElement.clickOnControlElement();
+		//
+		// if(b && cElement instanceof Input) // if clicked element is an input field, set this as selected field
+		// {
+		// inputPressed = true;
+		// METRO.__currentGameScreen.setSelectedInput((Input)cElement);
+		// }
+		// }
 		if(!inputPressed) METRO.__currentGameScreen.setSelectedInput(null); // reset the selected input field
 
 		// Check for drag-mode:
@@ -289,5 +290,50 @@ public class Window
 		{
 			cElement.keyUp(keyCode);
 		}
+	}
+
+	@Override
+	public void draw()
+	{
+	}
+
+	@Override
+	public boolean clickOnControlElement()
+	{
+		return false;
+	}
+
+	@Override
+	public void setPosition(Point pos)
+	{
+	}
+
+	@Override
+	public void setText(String text)
+	{
+	}
+
+	@Override
+	public void setState(boolean enable)
+	{
+	}
+
+	@Override
+	public boolean mouseLeftClicked(int screenX, int screenY, int button)
+	{
+		if(screenX >= _position.x + _size.x - 20
+			&& screenX <= _position.x + _size.x
+			&& screenY >= _position.y
+			&& screenY <= _position.y + 20)
+		{
+			notifyClosed();
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void moveElement(Point offset)
+	{
 	}
 }
