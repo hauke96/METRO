@@ -298,22 +298,33 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		return false;
 	}
 
-	@Override
+	/**
+	 * Is executed when the user clicks with the mouse.
+	 * 
+	 * The click-hirarchy:
+	 *   1.) Check if a control has been clicked.
+	 *       If yes: return
+	 *       If no : do check 2
+	 *   2.) Check if a window has been clicked.
+	 *       If yes: Close the window if needed and then return
+	 *       If no : do check 3
+	 *   3.) Forward click to the game screen.
+	 */
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
 		Window clickedWindow = null;
 
-		for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
-		{
-			__windowList.get(i).mousePressed(screenX, screenY, button);
-			if(__windowList.get(i).isMouseOnWindow(screenX, screenY)) // if mouse is just on the window area
-			{
-				clickedWindow = __windowList.get(i);
-				break;
-			}
-		}
 		if(!_controlActionManager.mouseClicked(screenX, screenY, button))
 		{
+			for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
+			{
+				__windowList.get(i).mousePressed(screenX, screenY, button);
+				if(__windowList.get(i).isMouseOnWindow(screenX, screenY)) // if mouse is just on the window area
+				{
+					clickedWindow = __windowList.get(i);
+					break;
+				}
+			}
 			if(clickedWindow == null) // if no window has been clicked
 			{
 				__currentGameScreen.mouseClicked(screenX, screenY, button); // forward click to game screen

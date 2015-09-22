@@ -12,6 +12,7 @@ import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Lines.TrainLineOverseer;
+import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.ColorBar;
 import metro.WindowControls.InputField;
@@ -37,7 +38,8 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	private boolean _visible, // true: TrainLineView will be displayed
 		_lineSelectToolEnabled, // if enabled, the user can select nodes
 		_isClosed,
-		_editMode; // true when user edits a line
+		_editMode, // true when user edits a line
+		_buttonClicked;
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private Point2D _mapOffset;
 	private TrainLineSelectTool _lineSelectTool;
@@ -56,6 +58,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		_visible = true;
 		_lineSelectToolEnabled = false;
 		_isClosed = false;
+		_buttonClicked = false;
 		_windowWidth = 400;
 		_mapOffset = mapOffset;
 		_lineSelectTool = new TrainLineSelectTool();
@@ -78,6 +81,44 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 
 		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 30));
 		_messageLabel.setColor(METRO.__metroRed);
+		
+		addButtonObserver();
+	}
+
+	private void addButtonObserver()
+	{
+		_createLineButton.register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				createLineButton_action();
+			}
+		});
+		_editLineButton.register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				editLineButton_action();
+			}
+		});
+		_removeLineButton.register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				removeLineButton_action();
+			}
+		});
+		_saveButton.register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				saveButton_action();
+			}
+		});
 	}
 
 	@Override
@@ -197,40 +238,13 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	}
 
 	/**
-	 * Checks if a button has clicked and executes necessary methods.
+	 * Checks if a button has been clicked since last call.
 	 * 
-	 * @param screenX The x-position on the screen
-	 * @param screenY The y-position on the screen
-	 * @param mouseButton The number of the button like Buttons.LEFT
-	 * @return True when one of the buttons has been clicked.
+	 * @return True when one of the buttons has been clicked since last call.
 	 */
-	private boolean checkButtonClicks(int screenX, int screenY, int mouseButton)
+	private boolean hasButtonClicked()
 	{
-		//TODO: ActionObserver implementation
-		boolean buttonClicked = false;
-
-		if(_createLineButton.isPressed(screenX, screenY))
-		{
-			createLineButton_action();
-			buttonClicked = true;
-		}
-		else if(_editLineButton.isPressed(screenX, screenY))
-		{
-			editLineButton_action();
-			buttonClicked = true;
-		}
-		else if(_removeLineButton.isPressed(screenX, screenY))
-		{
-			removeLineButton_action();
-			buttonClicked = true;
-		}
-		else if(_saveButton.isPressed(screenX, screenY))
-		{
-			saveButton_action();
-			buttonClicked = true;
-		}
-
-		return buttonClicked;
+		return _buttonClicked;
 	}
 
 	/**
@@ -282,6 +296,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		_lineSelectTool = new TrainLineSelectTool(); // create clean select tool
 		if(_colorBar.getClickedColor() != null) _lineSelectTool.setColor(_colorBar.getClickedColor());
 		_lineSelectToolEnabled = true;
+		_buttonClicked = true;
 		resetControls();
 	}
 
@@ -314,6 +329,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 			_lineSelectToolEnabled = false;
 			resetControls();
 		}
+		_buttonClicked = true;
 	}
 
 	/**
@@ -323,7 +339,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	{
 		TrainLineOverseer.removeLine(_lineList.getText(_lineList.getSelected()));
 		_lineList.remove(_lineList.getSelected());
-
+		_buttonClicked = true;
 	}
 
 	/**
@@ -355,6 +371,8 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		_lineSelectToolEnabled = true;
 		_lineSelectTool.setLine(line);
 		_lineSelectTool.setState(true);
+
+		_buttonClicked = true;
 	}
 
 	/**
@@ -394,7 +412,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 
 		boolean controlClicked = false;
 
-		controlClicked |= checkButtonClicks(screenX, screenY, mouseButton);
+		controlClicked |= hasButtonClicked();
 		controlClicked |= checkColorBarClick(screenX, screenY, mouseButton);
 		controlClicked |= checkMessageLabelClick(screenX, screenY, mouseButton);
 		// "create new train"/"finish" line has been pressed
@@ -457,8 +475,8 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 			{
 				TrainLine line = _lineSelectTool.getTrainLine();
 				TrainLineOverseer.removeLine(line);
-				_lineSelectTool = null;
 				resetControls();
+				_lineSelectTool = null;
 			}
 		}
 		else

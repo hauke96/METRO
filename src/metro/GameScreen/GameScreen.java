@@ -365,11 +365,62 @@ public abstract class GameScreen
 		{
 			_window = new Window("Really quit?", new Point(METRO.__SCREEN_SIZE.width / 2 - 200,
 				METRO.__SCREEN_SIZE.height / 2 - 50), new Point(400, 100), METRO.__metroRed);
+			addWindowObserver();
 			_yesButton = new metro.WindowControls.Button(new Rectangle(10, 70, 120, 20), "Yes", _window);
 			_settingsButton = new metro.WindowControls.Button(new Rectangle(140, 70, 120, 20), "Settings", _window);
 			_noButton = new metro.WindowControls.Button(new Rectangle(270, 70, 120, 20), "No", _window);
+			addButtonObserver();
 			new metro.WindowControls.Label("Really quit METRO? Or go into settings?",
 				new Point(200 - (Draw.getStringSize("Really quit METRO? Or go into settings?").width) / 2, 25), _window);
+		}
+
+		private void addWindowObserver()
+		{
+			_window.register(new ActionObserver()
+			{
+				@Override
+				public void closed()
+				{
+					close();
+				}
+			});
+		}
+
+		private void addButtonObserver()
+		{
+			_yesButton.register(new ActionObserver()
+			{
+				@Override
+				public void clickedOnControl(Object arg)
+				{
+					METRO.__application.exit();
+				}
+			});
+			_settingsButton.register(new ActionObserver()
+			{
+				@Override
+				public void clickedOnControl(Object arg)
+				{
+					if(_settingsWindow == null)
+					{
+						_settingsWindow = new SettingsWindow();
+						close();
+					}
+					else
+					{
+						METRO.__windowList.remove(_settingsWindow._window);
+						METRO.__windowList.add(_settingsWindow._window);
+					}
+				}
+			});
+			_noButton.register(new ActionObserver()
+			{
+				@Override
+				public void clickedOnControl(Object arg)
+				{
+					close();
+				}
+			});
 		}
 
 		/**
@@ -377,32 +428,6 @@ public abstract class GameScreen
 		 */
 		public void update()
 		{
-			if(_window.isClosed()) close();
-
-			// TODO: ActionObserver implementation
-			if(_yesButton.isPressed())
-			{
-				METRO.__application.exit();
-			}
-			// TODO: ActionObserver implementation
-			else if(_settingsButton.isPressed())
-			{
-				if(_settingsWindow == null)
-				{
-					_settingsWindow = new SettingsWindow();
-					close();
-				}
-				else
-				{
-					METRO.__windowList.remove(_settingsWindow._window);
-					METRO.__windowList.add(_settingsWindow._window);
-				}
-			}
-			// TODO: ActionObserver implementation
-			else if(_noButton.isPressed())
-			{
-				close();
-			}
 		}
 
 		/**

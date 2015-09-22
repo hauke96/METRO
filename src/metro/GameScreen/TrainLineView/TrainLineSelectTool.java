@@ -114,6 +114,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(TrainView._selectedCross);
+		if(clickedNode == null) return;
 		ArrayList<RailwayNode> neighbors = clickedNode.getNeighbors();
 
 		for(RailwayNode neighborNode : neighbors)
