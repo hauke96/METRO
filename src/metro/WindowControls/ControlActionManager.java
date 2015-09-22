@@ -7,7 +7,7 @@ import com.badlogic.gdx.Input.Buttons;
 
 /**
  * The ControlActionManager knows every ControlElement and handles the user input events.
- * Every ControlElement that has been created and uses the ActionObserver system is registered in this manager.
+ * Every ControlElement, that has been created and uses the ActionObserver system, is registered in this manager.
  * 
  * @author hauke
  *

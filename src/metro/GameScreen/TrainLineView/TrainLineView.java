@@ -39,7 +39,9 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		_lineSelectToolEnabled, // if enabled, the user can select nodes
 		_isClosed,
 		_editMode, // true when user edits a line
-		_buttonClicked;
+		_buttonClicked,
+		_colorBarClicked,
+		_messageLabelClicked;
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private Point2D _mapOffset;
 	private TrainLineSelectTool _lineSelectTool;
@@ -81,10 +83,15 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 
 		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 30));
 		_messageLabel.setColor(METRO.__metroRed);
-		
+
 		addButtonObserver();
+		addColorBarObserver();
+		addMessageLabelObserver();
 	}
 
+	/**
+	 * Creates all needed observers for the buttons.
+	 */
 	private void addButtonObserver()
 	{
 		_createLineButton.register(new ActionObserver()
@@ -117,6 +124,37 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 			public void clickedOnControl(Object arg)
 			{
 				saveButton_action();
+			}
+		});
+	}
+
+	/**
+	 * Creates the observer for the color bar.
+	 * The observer will manage the click and update operations.
+	 */
+	private void addColorBarObserver()
+	{
+		_colorBar.register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				String msg = _lineSelectTool.setColor(_colorBar.getClickedColor());
+				if(!msg.equals("")) _messageLabel.setText(msg);
+				_colorBarClicked = true;
+			}
+		});
+	}
+
+	private void addMessageLabelObserver()
+	{
+		_messageLabel.register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				_messageLabel.setText("");
+				_messageLabelClicked = true;
 			}
 		});
 	}
@@ -248,42 +286,23 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	}
 
 	/**
-	 * Check if the color bar has been clicked and sets message and the color of the select tool.
+	 * Checks if the color bar has been clicked since last call.
 	 * 
-	 * @param screenX The x-position on the screen
-	 * @param screenY The y-position on the screen
-	 * @param mouseButton The number of the button like Buttons.LEFT
-	 * @return True when the color bar has been clicked.
+	 * @return True when the color bar has been clicked since last call.
 	 */
-	private boolean checkColorBarClick(int screenX, int screenY, int mouseButton)
+	private boolean hasColorBarClicked()
 	{
-		boolean barClicked = false;
-		if(_colorBar.clickOnControlElement())
-		{
-			String msg = _lineSelectTool.setColor(_colorBar.getClickedColor());
-			if(!msg.equals("")) _messageLabel.setText(msg);
-			barClicked = true;
-		}
-		return barClicked;
+		return _colorBarClicked;
 	}
 
 	/**
-	 * Checks if the message label has been clicked and removes its content if needed.
+	 * Checks if the message label has been clicked since last call.
 	 * 
-	 * @param screenX The x-position on the screen
-	 * @param screenY The y-position on the screen
-	 * @param mouseButton The number of the button like Buttons.LEFT
-	 * @return True when label has been clicked.
+	 * @return True when the message label has been clicked since last call.
 	 */
-	private boolean checkMessageLabelClick(int screenX, int screenY, int mouseButton)
+	private boolean hasMessageLabelClicked()
 	{
-		boolean labelClicked = false;
-		if(_messageLabel.clickOnControlElement())
-		{
-			_messageLabel.setText("");
-			labelClicked = true;
-		}
-		return labelClicked;
+		return _messageLabelClicked;
 	}
 
 	/**
@@ -404,17 +423,19 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
+		// TODO implement ActionObserver
 		if(!_visible || _lineList.clickOnControlElement()) return;
 
 		// set lineNameField as inactive when mouse NOT clicked on it
+		// TODO implement ActionObserver
 		if(_lineNameField.clickOnControlElement()) _lineNameField.select();
 		else _lineNameField.disselect();
 
 		boolean controlClicked = false;
 
 		controlClicked |= hasButtonClicked();
-		controlClicked |= checkColorBarClick(screenX, screenY, mouseButton);
-		controlClicked |= checkMessageLabelClick(screenX, screenY, mouseButton);
+		controlClicked |= hasColorBarClicked();// checkColorBarClick(screenX, screenY, mouseButton);
+		controlClicked |= hasMessageLabelClicked();//checkMessageLabelClick(screenX, screenY, mouseButton);
 		// "create new train"/"finish" line has been pressed
 
 		// when no control was clicked and mouse out of TrainLineView, forward it to the SelectTool

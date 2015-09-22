@@ -13,7 +13,7 @@ import metro.Graphics.Draw;
  * @author hauke
  *
  */
-public class ColorBar implements ControlElement
+public class ColorBar extends ActionObservable implements ControlElement
 {
 	private Rectangle _position;
 	private float _saturation, _brightness;
@@ -49,6 +49,7 @@ public class ColorBar implements ControlElement
 		_brightness = brithness;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+		METRO.registerControl(this);
 		_enabled = true;
 		_drawBorder = true;
 		_clickedXPosition = -1;
@@ -193,6 +194,11 @@ public class ColorBar implements ControlElement
 	@Override
 	public boolean mouseLeftClicked(int screenX, int screenY, int button)
 	{
+		if(clickOnControlElement())
+		{
+			notifyClickOnControl(this);
+			return true;
+		}
 		return false;
 	}
 

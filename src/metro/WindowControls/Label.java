@@ -17,7 +17,7 @@ import metro.Graphics.Draw;
  *
  */
 
-public class Label implements ControlElement
+public class Label extends ActionObservable implements ControlElement
 {
 	private String _text = "";
 	private Point _position;
@@ -53,6 +53,7 @@ public class Label implements ControlElement
 		_windowHandle = window;
 		_areaWidth = areaWidth;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+		METRO.registerControl(this);
 		_color = Color.black;
 		_enabled = true;
 	}
@@ -150,6 +151,11 @@ public class Label implements ControlElement
 	@Override
 	public boolean mouseLeftClicked(int screenX, int screenY, int button)
 	{
+		if(clickOnControlElement())
+		{
+			notifyClickOnControl(this);
+			return true;
+		}
 		return false;
 	}
 
