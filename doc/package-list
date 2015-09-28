@@ -1,7 +1,8 @@
 metro
 metro.GameScreen
 metro.GameScreen.CityView
-metro.GameScreen.TrainLineView
+metro.GameScreen.LineView
+metro.GameScreen.MainView
 metro.GameScreen.TrainView
 metro.Graphics
 metro.TrainManagement.Lines

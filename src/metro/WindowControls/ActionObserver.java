@@ -18,7 +18,6 @@ public abstract class ActionObserver
 	 */
 	public void clickedOnControl(Object arg)
 	{
-		
 	}
 
 	/**
@@ -28,7 +27,6 @@ public abstract class ActionObserver
 	 */
 	public void gotInput(String text)
 	{
-		
 	}
 
 	/**
@@ -38,24 +36,21 @@ public abstract class ActionObserver
 	 */
 	public void checkStateChanged(boolean newState)
 	{
-		
 	}
 
 	/**
 	 * Is called when an entry of a list control gets selected.
 	 * 
-	 * @param text The text of the selected entry.
+	 * @param entry The text of the selected entry.
 	 */
 	public void selectionChanged(String entry)
 	{
-		
 	}
-	
+
 	/**
 	 * Is called when a control (e.g. a window) is closed.
 	 */
 	public void closed()
 	{
-		
 	}
 }
