@@ -49,7 +49,7 @@ public class Toolbar extends Observable implements TrainInteractionTool
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				resetToolbarButtonPosition(_buildStation);
+				resetExclusiveButtonPositions(_buildStation);
 				setChanged();
 				notifyObservers(new StationPlacingTool());
 			}
@@ -59,7 +59,7 @@ public class Toolbar extends Observable implements TrainInteractionTool
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				resetToolbarButtonPosition(_buildTracks);
+				resetExclusiveButtonPositions(_buildTracks);
 				setChanged();
 				notifyObservers(new TrackPlacingTool());
 			}
@@ -69,7 +69,7 @@ public class Toolbar extends Observable implements TrainInteractionTool
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				resetToolbarButtonPosition(_showTrainList);
+				resetExclusiveButtonPositions(_showTrainList);
 				setChanged();
 				notifyObservers(new LineView(new Point2D.Float(0, 0)));
 			}
@@ -79,7 +79,7 @@ public class Toolbar extends Observable implements TrainInteractionTool
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				resetToolbarButtonPosition(_createNewTrain);
+				resetExclusiveButtonPositions(_createNewTrain);
 				setChanged();
 				notifyObservers(new TrainView(new Point2D.Float(0, 0)));
 			}
@@ -100,47 +100,35 @@ public class Toolbar extends Observable implements TrainInteractionTool
 	}
 
 	/**
-	 * Resets the position of all toolbar buttons to -10 (like "off").
+	 * Resets the position of all toolbar buttons to -10 (like "off") except of the given button.
 	 *
 	 * @param exceptThisButton This button should not be reset.
 	 */
-	private void resetToolbarButtonPosition(Button exceptThisButton)
+	public void resetExclusiveButtonPositions(Button exceptThisButton)
 	{
+		_buildTracks.setPosition(new Point(-10, _buildTracks.getPosition().y));
+		_buildStation.setPosition(new Point(-10, _buildStation.getPosition().y));
+			_showTrainList.setPosition(new Point(-10, _showTrainList.getPosition().y));
+			_createNewTrain.setPosition(new Point(-10, _createNewTrain.getPosition().y));
 		// Build Tracks
 		if(exceptThisButton == _buildTracks)
 		{
 			_buildTracks.setPosition(new Point(0, _buildTracks.getPosition().y));
-		}
-		else
-		{
-			_buildTracks.setPosition(new Point(-10, _buildTracks.getPosition().y));
 		}
 		// Create new station
 		if(exceptThisButton == _buildStation)
 		{
 			_buildStation.setPosition(new Point(0, _buildStation.getPosition().y));
 		}
-		else
-		{
-			_buildStation.setPosition(new Point(-10, _buildStation.getPosition().y));
-		}
 		// show list of trains
 		if(exceptThisButton == _showTrainList)
 		{
 			_showTrainList.setPosition(new Point(0, _showTrainList.getPosition().y));
 		}
-		else
-		{
-			_showTrainList.setPosition(new Point(-10, _showTrainList.getPosition().y));
-		}
 		// create new train
 		if(exceptThisButton == _createNewTrain)
 		{
 			_createNewTrain.setPosition(new Point(0, _createNewTrain.getPosition().y));
-		}
-		else
-		{
-			_createNewTrain.setPosition(new Point(-10, _createNewTrain.getPosition().y));
 		}
 	}
 

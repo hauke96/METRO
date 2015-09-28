@@ -34,13 +34,10 @@ public class MainView extends GameScreen implements Observer
 {
 	private boolean _dragMode;
 	private Point _oldMousePos; // Mouse position from last frame
-	// private TrainStation _selectedTrainStation = null; // important for later stuff when the user can select a train station
 	private TrainInteractionTool _activeTool;
 	private Point2D _mapOffset; // offset for moving the map
 	private Toolbar _toolbar;
 	private CityView _cityView;
-	// private LineView _lineView;
-	// private TrainView _trainView;
 
 	public static List<TrainStation> _trainStationList;
 	public static Point _selectedCross; // out of screen;
@@ -58,12 +55,6 @@ public class MainView extends GameScreen implements Observer
 		_activeTool = null;
 
 		_cityView = new CityView(); // create extra instance for general purpose actions
-
-		// _lineView = new LineView(_mapOffset);
-		// _lineView.setVisibility(false);
-		//
-		// _trainView = new TrainView(_mapOffset);
-		// _trainView.setVisibility(false);
 	}
 
 	@Override
@@ -91,9 +82,6 @@ public class MainView extends GameScreen implements Observer
 		_toolbar.draw(sp, _mapOffset);
 
 		printDebugStuff(sp);
-
-		// if(_lineView != null) _lineView.updateGameScreen(sp);
-		// else if(_trainView != null) _trainView.updateGameScreen(sp);
 	}
 
 	/**
@@ -197,8 +185,6 @@ public class MainView extends GameScreen implements Observer
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		if(_cityView != null) _cityView.mouseClicked(screenX, screenY, mouseButton);
-		// if(_lineView != null) _lineView.mouseClicked(screenX, screenY, mouseButton);
-		// else if(_trainView != null) _trainView.mouseClicked(screenX, screenY, mouseButton);
 
 		if(mouseButton == Buttons.MIDDLE) // for drag-mode
 		{
@@ -213,7 +199,7 @@ public class MainView extends GameScreen implements Observer
 			_activeTool.rightClick(screenX, screenY, _mapOffset);
 			if(_activeTool.isClosed())
 			{
-				// resetToolbarButtonPosition(null);
+				_toolbar.resetExclusiveButtonPositions(null);
 				setTrainViewTool(null);
 			}
 		}
@@ -223,7 +209,6 @@ public class MainView extends GameScreen implements Observer
 	public void mouseReleased(int mouseButton)
 	{
 		if(_cityView != null) _cityView.mouseReleased(mouseButton);
-		// if(_lineView != null) _lineView.mouseReleased(mouseButton);
 
 		if(mouseButton == Buttons.MIDDLE)
 		{
