@@ -1,4 +1,4 @@
-package metro.GameScreen.TrainView;
+package metro.GameScreen.MainView;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -30,7 +30,7 @@ public class TrackPlacingTool implements TrainInteractionTool
 		{
 			Draw.setColor(Color.black);
 
-			int diagonalOffset = 0, B = TrainView._selectedCross.x - _currentRailwayNode.getPosition().x, H = TrainView._selectedCross.y - _currentRailwayNode.getPosition().y, preFactor = 1; // counts the amount of fields covered
+			int diagonalOffset = 0, B = MainView._selectedCross.x - _currentRailwayNode.getPosition().x, H = MainView._selectedCross.y - _currentRailwayNode.getPosition().y, preFactor = 1; // counts the amount of fields covered
 
 			if(Math.abs(H) > Math.abs(B)) // vertical tracks
 			{
@@ -76,8 +76,8 @@ public class TrackPlacingTool implements TrainInteractionTool
 			{
 				Draw.Line(offset.getX() + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing,
 					offset.getY() + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-					offset.getX() + TrainView._selectedCross.x * METRO.__baseNetSpacing,
-					offset.getY() + TrainView._selectedCross.y * METRO.__baseNetSpacing);
+					offset.getX() + MainView._selectedCross.x * METRO.__baseNetSpacing,
+					offset.getY() + MainView._selectedCross.y * METRO.__baseNetSpacing);
 			}
 		}
 	}
@@ -114,19 +114,19 @@ public class TrackPlacingTool implements TrainInteractionTool
 	{
 		if(_currentRailwayNode == null) // first click
 		{
-			_currentRailwayNode = RailwayNodeOverseer.getNodeByPosition(TrainView._selectedCross); // implicit check if node exists: null = node doesn't exist
+			_currentRailwayNode = RailwayNodeOverseer.getNodeByPosition(MainView._selectedCross); // implicit check if node exists: null = node doesn't exist
 
 			if(_currentRailwayNode == null) // if there's no node, create new one and set it as current node
 			{
-				RailwayNode node = new RailwayNode(TrainView._selectedCross, null);
+				RailwayNode node = new RailwayNode(MainView._selectedCross, null);
 				_currentRailwayNode = node;
 			}
 		}
 		else
 		// second click
 		{
-			int diagonalOffset = 0, B = TrainView._selectedCross.x - _currentRailwayNode.getPosition().x, // horizontal distance
-			H = TrainView._selectedCross.y - _currentRailwayNode.getPosition().y, // vertical distance
+			int diagonalOffset = 0, B = MainView._selectedCross.x - _currentRailwayNode.getPosition().x, // horizontal distance
+			H = MainView._selectedCross.y - _currentRailwayNode.getPosition().y, // vertical distance
 			preFactorH = 1, preFactorB = 1;
 			RailwayNode prevNode = _currentRailwayNode;
 

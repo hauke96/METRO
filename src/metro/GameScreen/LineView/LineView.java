@@ -1,9 +1,12 @@
-package metro.GameScreen.TrainLineView;
+package metro.GameScreen.LineView;
 
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
+
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
@@ -19,15 +22,13 @@ import metro.WindowControls.InputField;
 import metro.WindowControls.Label;
 import metro.WindowControls.List;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 /**
- * The TrainLineView is a dialog to manage the train lines in METRO. It allows the user to create, modify and remove lines.
+ * The LineView is a dialog to manage the train lines in METRO. It allows the user to create, modify and remove lines.
  * 
  * @author hauke
  *
  */
-public class TrainLineView extends GameScreen implements TrainInteractionTool
+public class LineView extends GameScreen implements TrainInteractionTool
 {
 	private int _windowWidth;
 	private List _lineList;
@@ -44,7 +45,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		_messageLabelClicked;
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private Point2D _mapOffset;
-	private TrainLineSelectTool _lineSelectTool;
+	private LineSelectTool _lineSelectTool;
 	private InputField _lineNameField;
 	private Label _lineNameFieldLabel,
 		_messageLabel;
@@ -55,7 +56,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	 * 
 	 * @param mapOffset The offset of the map (for correct mouse clicks)
 	 */
-	public TrainLineView(Point2D mapOffset)
+	public LineView(Point2D mapOffset)
 	{
 		_visible = true;
 		_lineSelectToolEnabled = false;
@@ -63,7 +64,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 		_buttonClicked = false;
 		_windowWidth = 400;
 		_mapOffset = mapOffset;
-		_lineSelectTool = new TrainLineSelectTool();
+		_lineSelectTool = new LineSelectTool();
 
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 40, 300),
@@ -312,7 +313,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	{
 		if(_lineSelectToolEnabled) return;
 
-		_lineSelectTool = new TrainLineSelectTool(); // create clean select tool
+		_lineSelectTool = new LineSelectTool(); // create clean select tool
 		if(_colorBar.getClickedColor() != null) _lineSelectTool.setColor(_colorBar.getClickedColor());
 		_lineSelectToolEnabled = true;
 		_buttonClicked = true;
@@ -423,6 +424,39 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
+		if(mouseButton == Buttons.RIGHT)
+		{
+			// LineSelectTool-Stuff:
+			if(!_visible) return;
+			if(_lineSelectToolEnabled)
+			{
+				_lineSelectTool.rightClick(screenX, screenY, _mapOffset); // if enables, than do something with it
+				_lineSelectToolEnabled = !_lineSelectTool.isClosed(); // after right click
+				if(!_lineSelectToolEnabled) // tool closed itself
+				{
+					TrainLine line = _lineSelectTool.getTrainLine();
+					TrainLineOverseer.removeLine(line);
+					resetControls();
+					_lineSelectTool = null;
+				}
+			}
+			else
+			{
+				_isClosed = true; // of not, close the TrainLineView
+				_visible = false;
+			}
+		}
+		else if(mouseButton == Buttons.LEFT)
+		{
+			if(!_visible) return;
+			if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
+			{
+				_lineSelectTool.leftClick(screenX, screenY, _mapOffset); // add node to list
+			}
+		}
+
+		// UI- and LineView-Stuff:
+
 		// TODO implement ActionObserver
 		if(!_visible || _lineList.clickOnControlElement()) return;
 
@@ -435,7 +469,7 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 
 		controlClicked |= hasButtonClicked();
 		controlClicked |= hasColorBarClicked();// checkColorBarClick(screenX, screenY, mouseButton);
-		controlClicked |= hasMessageLabelClicked();//checkMessageLabelClick(screenX, screenY, mouseButton);
+		controlClicked |= hasMessageLabelClicked();// checkMessageLabelClick(screenX, screenY, mouseButton);
 		// "create new train"/"finish" line has been pressed
 
 		// when no control was clicked and mouse out of TrainLineView, forward it to the SelectTool
@@ -472,39 +506,19 @@ public class TrainLineView extends GameScreen implements TrainInteractionTool
 	@Override
 	public void draw(SpriteBatch sp, Point2D offset)
 	{
+		updateGameScreen(sp);
 	}
 
 	@Override
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
-		if(!_visible) return;
-		if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
-		{
-			_lineSelectTool.leftClick(screenX, screenY, _mapOffset); // add node to list
-		}
+		mouseClicked(screenX, screenY, Buttons.LEFT);
 	}
 
 	@Override
 	public void rightClick(int screenX, int screenY, Point2D offset)
 	{
-		if(!_visible) return;
-		if(_lineSelectToolEnabled)
-		{
-			_lineSelectTool.rightClick(screenX, screenY, offset); // if enables, than do something with it
-			_lineSelectToolEnabled = !_lineSelectTool.isClosed(); // after right click
-			if(!_lineSelectToolEnabled) // tool closed itself
-			{
-				TrainLine line = _lineSelectTool.getTrainLine();
-				TrainLineOverseer.removeLine(line);
-				resetControls();
-				_lineSelectTool = null;
-			}
-		}
-		else
-		{
-			_isClosed = true; // of not, close the TrainLineView
-			_visible = false;
-		}
+		mouseClicked(screenX, screenY, Buttons.RIGHT);
 	}
 
 	@Override

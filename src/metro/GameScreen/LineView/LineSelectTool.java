@@ -1,4 +1,4 @@
-package metro.GameScreen.TrainLineView;
+package metro.GameScreen.LineView;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import metro.METRO;
 import metro.GameScreen.TrainInteractionTool;
-import metro.GameScreen.TrainView.TrainView;
+import metro.GameScreen.MainView.MainView;
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
@@ -14,13 +14,13 @@ import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * The TrainLineSelectTool allows the user to create train lines by clicking on all the nodes this line should contain.
+ * The LineSelectTool allows the user to create train lines by clicking on all the nodes this line should contain.
  * It can also generate a new train line from all selected nodes.
  * 
  * @author hauke
  *
  */
-public class TrainLineSelectTool implements TrainInteractionTool
+public class LineSelectTool implements TrainInteractionTool
 {
 	private ArrayList<RailwayNode> _listOfNodes;
 	private boolean _isClosed;
@@ -30,7 +30,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	/**
 	 * Creates a new tool to select the train line.
 	 */
-	public TrainLineSelectTool()
+	public LineSelectTool()
 	{
 		_listOfNodes = new ArrayList<RailwayNode>();
 		_isClosed = false;
@@ -113,7 +113,7 @@ public class TrainLineSelectTool implements TrainInteractionTool
 	@Override
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
-		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(TrainView._selectedCross);
+		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(MainView._selectedCross);
 		if(clickedNode == null) return;
 		ArrayList<RailwayNode> neighbors = clickedNode.getNeighbors();
 

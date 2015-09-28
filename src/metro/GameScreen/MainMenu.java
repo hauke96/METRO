@@ -4,7 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import metro.METRO;
-import metro.GameScreen.TrainView.TrainView;
+import metro.GameScreen.MainView.MainView;
 import metro.Graphics.Draw;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
@@ -90,7 +90,7 @@ public class MainMenu extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				_welcomeWindow.close();
-				METRO.__currentGameScreen = new TrainView();
+				METRO.__currentGameScreen = new MainView();
 				METRO.__controlDrawer = new ScreenInfoDrawer();
 			}
 		});

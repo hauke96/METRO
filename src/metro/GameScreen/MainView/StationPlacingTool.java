@@ -1,4 +1,4 @@
-package metro.GameScreen.TrainView;
+package metro.GameScreen.MainView;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -36,18 +36,18 @@ public class StationPlacingTool implements TrainInteractionTool
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		boolean positionOccupied = false;
-		Point selectPointOnScreen = new Point(TrainView._selectedCross.x * METRO.__baseNetSpacing + (int)offset.getX(),
-			TrainView._selectedCross.y * METRO.__baseNetSpacing + (int)offset.getY());
+		Point selectPointOnScreen = new Point(MainView._selectedCross.x * METRO.__baseNetSpacing + (int)offset.getX(),
+			MainView._selectedCross.y * METRO.__baseNetSpacing + (int)offset.getY());
 
 		Point offsetPoint = new Point((int)offset.getX(), (int)offset.getY());
-		for(TrainStation ts : TrainView._trainStationList)
+		for(TrainStation ts : MainView._trainStationList)
 		{
 			positionOccupied |= ts.getPositionOnScreen(offsetPoint).equals(selectPointOnScreen); // true if this cross has already a station
 		}
 
 		if(!positionOccupied) // no doubles
 		{
-			TrainView._trainStationList.add(new TrainStation(TrainView._selectedCross, 0));
+			MainView._trainStationList.add(new TrainStation(MainView._selectedCross, 0));
 			METRO.__money -= TrainStation._PRICE;
 		}
 	}

@@ -5,14 +5,15 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 import java.util.Observable;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import metro.METRO;
-import metro.GameScreen.TrainLineView.TrainLineView;
-import metro.GameScreen.TrainView.StationPlacingTool;
-import metro.GameScreen.TrainView.TrackPlacingTool;
+import metro.GameScreen.LineView.LineView;
+import metro.GameScreen.MainView.StationPlacingTool;
+import metro.GameScreen.MainView.TrackPlacingTool;
+import metro.GameScreen.TrainView.TrainView;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * This is the bar on the side with the "build station", "build tracks", "show line view" and "create train" buttons.
@@ -70,7 +71,7 @@ public class Toolbar extends Observable implements TrainInteractionTool
 			{
 				resetToolbarButtonPosition(_showTrainList);
 				setChanged();
-				notifyObservers(new TrainLineView(new Point2D.Float(0, 0)));
+				notifyObservers(new LineView(new Point2D.Float(0, 0)));
 			}
 		});
 		_createNewTrain.register(new ActionObserver()
@@ -80,7 +81,7 @@ public class Toolbar extends Observable implements TrainInteractionTool
 			{
 				resetToolbarButtonPosition(_createNewTrain);
 				setChanged();
-				notifyObservers(null);
+				notifyObservers(new TrainView(new Point2D.Float(0, 0)));
 			}
 		});
 	}
