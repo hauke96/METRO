@@ -131,14 +131,21 @@ public class CityView extends GameScreen
 	@Override
 	public void keyDown(int keyCode)
 	{
-		// if (keyCode == Keys.ESCAPE)
-		// {
-		// METRO.__close();
-		// }
 	}
 
 	@Override
 	public void mouseScrolled(int amount)
+	{
+	}
+
+	@Override
+	public boolean isActive()
+	{
+		return true;
+	}
+
+	@Override
+	public void reset()
 	{
 	}
 }

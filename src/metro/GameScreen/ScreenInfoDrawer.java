@@ -66,4 +66,15 @@ public class ScreenInfoDrawer extends GameScreen
 	public void mouseScrolled(int amount)
 	{
 	}
+
+	@Override
+	public boolean isActive()
+	{
+		return true;
+	}
+
+	@Override
+	public void reset()
+	{
+	}
 }

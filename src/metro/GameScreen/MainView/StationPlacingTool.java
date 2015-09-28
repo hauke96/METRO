@@ -4,25 +4,39 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import metro.METRO;
-import metro.GameScreen.TrainInteractionTool;
+import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.Trains.TrainStation;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-public class StationPlacingTool implements TrainInteractionTool
+/**
+ * A station placing tool makes it possible to create train stations.
+ * 
+ * @author hauke
+ *
+ */
+public class StationPlacingTool extends GameScreen
 {
-	private boolean _isClosed;
+	private boolean _isActive;
+	private Point _mapOffset;
 
-	public StationPlacingTool()
+	/**
+	 * Creates a new station placing tool.
+	 * 
+	 * @param mapOffset The current map offset.
+	 */
+	public StationPlacingTool(Point mapOffset)
 	{
-		_isClosed = false;
+		_isActive = true;
+		_mapOffset = mapOffset;
 	}
 
 	@Override
-	public void draw(SpriteBatch sp, Point2D offset)
+	public void updateGameScreen(SpriteBatch sp)
 	{
 		Point position = new Point(METRO.__mousePosition.x - 4,
 			METRO.__mousePosition.y - 8); // Position with offset etc.
@@ -33,6 +47,19 @@ public class StationPlacingTool implements TrainInteractionTool
 	}
 
 	@Override
+	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	{
+		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, _mapOffset);
+		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, _mapOffset);
+	}
+	
+	/**
+	 * Places a station on the pointed position (screenX, screenY).
+	 * 
+	 * @param screenX The y-coordinate of the click.
+	 * @param screenY The y-coordinate of the click.
+	 * @param offset The current map offset.
+	 */
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		boolean positionOccupied = false;
@@ -52,16 +79,41 @@ public class StationPlacingTool implements TrainInteractionTool
 		}
 	}
 
-	@Override
+	/**
+	 * Deactivates the tool to point out that this tool can be closed.
+	 * 
+	 * @param screenX The y-coordinate of the click.
+	 * @param screenY The y-coordinate of the click.
+	 * @param offset The current map offset.
+	 */
 	public void rightClick(int screenX, int screenY, Point2D offset)
 	{
-		_isClosed = true;
+		_isActive = false;
 	}
 
 	@Override
-	public boolean isClosed()
+	public boolean isActive()
 	{
-		return _isClosed;
+		return _isActive;
 	}
 
+	@Override
+	public void mouseReleased(int mouseButton)
+	{
+	}
+
+	@Override
+	public void keyDown(int keyCode)
+	{
+	}
+
+	@Override
+	public void mouseScrolled(int amount)
+	{
+	}
+
+	@Override
+	public void reset()
+	{
+	}
 }

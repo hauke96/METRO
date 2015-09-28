@@ -2,20 +2,21 @@ package metro.GameScreen;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Observable;
+
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Settings;
 import metro.Graphics.Draw;
-import metro.WindowControls.Checkbox;
-import metro.WindowControls.Input;
-import metro.WindowControls.List;
-import metro.WindowControls.Window;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
+import metro.WindowControls.Checkbox;
+import metro.WindowControls.Input;
 import metro.WindowControls.Label;
-
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import metro.WindowControls.List;
+import metro.WindowControls.Window;
 
 /**
  * Every Menu or Game Sreen has to implement this interface for start() and update(). This will make the creation process more easy.
@@ -24,7 +25,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * 
  */
 
-public abstract class GameScreen
+public abstract class GameScreen extends Observable
 {
 	public SettingsWindow _settingsWindow; // makes it possible to create a settings-window from every(!) game screen.
 	public InGameMenuWindow _inGameMenuWindow; // makes it possible to create a ingame-menu-window from every(!) game screen.
@@ -141,6 +142,18 @@ public abstract class GameScreen
 	{
 		return obj.getClass().equals(this.getClass());
 	}
+
+	/**
+	 * When a game screen is active it can be used, otherwise it'll be deleted, ignored, ...
+	 * 
+	 * @return True when active and usable, false when inactive, closed, ...
+	 */
+	public abstract boolean isActive();
+	
+	/**
+	 * Resets the game screen to its default values.
+	 */
+	public abstract void reset();
 
 	/**
 	 * This is the settings window, that provides some options to configure.

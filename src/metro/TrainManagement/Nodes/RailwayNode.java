@@ -147,7 +147,7 @@ public class RailwayNode
 		}
 		for(int i = 0; i < listOfColors.size(); i++)
 		{
-			// TODO: make more accurate draw algo. This won't work vor vertical lines :(
+			// TODO: make more accurate draw algo. This won't work for vertical lines :(
 			Draw.setColor(listOfColors.get(i));
 			Draw.Line(position.x - (i * 4) * diff.x,
 				position.y - (i * 4) * diff.y,

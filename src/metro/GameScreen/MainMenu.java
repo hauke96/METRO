@@ -128,4 +128,15 @@ public class MainMenu extends GameScreen
 	public void mouseScrolled(int amount)
 	{
 	}
+
+	@Override
+	public boolean isActive()
+	{
+		return true;
+	}
+
+	@Override
+	public void reset()
+	{
+	}
 }

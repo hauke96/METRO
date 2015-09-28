@@ -2,8 +2,6 @@ package metro.GameScreen;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Point2D;
-import java.util.Observable;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -21,24 +19,27 @@ import metro.WindowControls.Button;
  * @author hauke
  *
  */
-public class Toolbar extends Observable implements TrainInteractionTool
+public class Toolbar extends GameScreen
 {
 	private Button _buildStation,
 		_buildTracks,
 		_showTrainList,
 		_createNewTrain;
+	private Point _mapOffset;
 
 	/**
 	 * Creates a new toolbar.
 	 * 
 	 * @param position The position of the upper left corner.
+	 * @param mapOffset The current map offset.
 	 */
-	public Toolbar(Point position)
+	public Toolbar(Point position, Point mapOffset)
 	{
 		_buildStation = new Button(new Rectangle(-10 + position.x, position.y, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
 		_buildTracks = new Button(new Rectangle(-10 + position.x, 39 + position.y, 50, 40), new Rectangle(0, 68, 50, 40), METRO.__iconSet);
 		_showTrainList = new Button(new Rectangle(-10 + position.x, 100 + position.y, 50, 40), new Rectangle(0, 108, 50, 40), METRO.__iconSet);
 		_createNewTrain = new Button(new Rectangle(-10 + position.x, 139 + position.y, 50, 40), new Rectangle(0, 148, 50, 40), METRO.__iconSet);
+		_mapOffset = mapOffset;
 		registerObervations();
 	}
 
@@ -51,7 +52,7 @@ public class Toolbar extends Observable implements TrainInteractionTool
 			{
 				resetExclusiveButtonPositions(_buildStation);
 				setChanged();
-				notifyObservers(new StationPlacingTool());
+				notifyObservers(new StationPlacingTool(_mapOffset));
 			}
 		});
 		_buildTracks.register(new ActionObserver()
@@ -61,7 +62,7 @@ public class Toolbar extends Observable implements TrainInteractionTool
 			{
 				resetExclusiveButtonPositions(_buildTracks);
 				setChanged();
-				notifyObservers(new TrackPlacingTool());
+				notifyObservers(new TrackPlacingTool(_mapOffset));
 			}
 		});
 		_showTrainList.register(new ActionObserver()
@@ -71,7 +72,7 @@ public class Toolbar extends Observable implements TrainInteractionTool
 			{
 				resetExclusiveButtonPositions(_showTrainList);
 				setChanged();
-				notifyObservers(new LineView(new Point2D.Float(0, 0)));
+				notifyObservers(new LineView(_mapOffset));
 			}
 		});
 		_createNewTrain.register(new ActionObserver()
@@ -81,22 +82,9 @@ public class Toolbar extends Observable implements TrainInteractionTool
 			{
 				resetExclusiveButtonPositions(_createNewTrain);
 				setChanged();
-				notifyObservers(new TrainView(new Point2D.Float(0, 0)));
+				notifyObservers(new TrainView(_mapOffset));
 			}
 		});
-	}
-
-	/**
-	 * Draws the toolbar with its elements.
-	 * 
-	 * @param sp The SpriteBatch to draw on
-	 */
-	public void draw(SpriteBatch sp, Point2D offset)
-	{
-		_buildStation.draw();
-		_buildTracks.draw();
-		_showTrainList.draw();
-		_createNewTrain.draw();
 	}
 
 	/**
@@ -133,18 +121,42 @@ public class Toolbar extends Observable implements TrainInteractionTool
 	}
 
 	@Override
-	public void leftClick(int screenX, int screenY, Point2D offset)
+	public void updateGameScreen(SpriteBatch g)
+	{
+		_buildStation.draw();
+		_buildTracks.draw();
+		_showTrainList.draw();
+		_createNewTrain.draw();
+	}
+
+	@Override
+	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 	}
 
 	@Override
-	public void rightClick(int screenX, int screenY, Point2D offset)
+	public void mouseReleased(int mouseButton)
 	{
 	}
 
 	@Override
-	public boolean isClosed()
+	public void keyDown(int keyCode)
 	{
-		return false;
+	}
+
+	@Override
+	public void mouseScrolled(int amount)
+	{
+	}
+
+	@Override
+	public boolean isActive()
+	{
+		return true;
+	}
+
+	@Override
+	public void reset()
+	{
 	}
 }

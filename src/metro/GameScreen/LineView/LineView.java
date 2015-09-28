@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
-import metro.GameScreen.TrainInteractionTool;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.Lines.TrainLine;
@@ -28,7 +27,7 @@ import metro.WindowControls.List;
  * @author hauke
  *
  */
-public class LineView extends GameScreen implements TrainInteractionTool
+public class LineView extends GameScreen
 {
 	private int _windowWidth;
 	private List _lineList;
@@ -38,7 +37,6 @@ public class LineView extends GameScreen implements TrainInteractionTool
 		_saveButton; // to save settings/changes
 	private boolean _visible, // true: TrainLineView will be displayed
 		_lineSelectToolEnabled, // if enabled, the user can select nodes
-		_isClosed,
 		_editMode, // true when user edits a line
 		_buttonClicked,
 		_colorBarClicked,
@@ -60,11 +58,10 @@ public class LineView extends GameScreen implements TrainInteractionTool
 	{
 		_visible = true;
 		_lineSelectToolEnabled = false;
-		_isClosed = false;
 		_buttonClicked = false;
 		_windowWidth = 400;
 		_mapOffset = mapOffset;
-		_lineSelectTool = new LineSelectTool();
+		_lineSelectTool = new LineSelectTool(new Point((int)_mapOffset.getX(), (int)_mapOffset.getY()));
 
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 40, 300),
@@ -147,6 +144,9 @@ public class LineView extends GameScreen implements TrainInteractionTool
 		});
 	}
 
+	/**
+	 * Creates an observer for the message label. When a user clicks this label, the text will be removed.
+	 */
 	private void addMessageLabelObserver()
 	{
 		_messageLabel.register(new ActionObserver()
@@ -273,7 +273,7 @@ public class LineView extends GameScreen implements TrainInteractionTool
 			TrainLineOverseer.removeLine(_lineSelectTool.getTrainLine());
 			_lineSelectToolEnabled = false;
 		}
-		if(!_visible) resetControls();
+		if(!_visible) reset();
 	}
 
 	/**
@@ -313,11 +313,11 @@ public class LineView extends GameScreen implements TrainInteractionTool
 	{
 		if(_lineSelectToolEnabled) return;
 
-		_lineSelectTool = new LineSelectTool(); // create clean select tool
+		_lineSelectTool = new LineSelectTool(new Point((int)_mapOffset.getX(), (int)_mapOffset.getY())); // create clean select tool
 		if(_colorBar.getClickedColor() != null) _lineSelectTool.setColor(_colorBar.getClickedColor());
 		_lineSelectToolEnabled = true;
 		_buttonClicked = true;
-		resetControls();
+		reset();
 	}
 
 	/**
@@ -347,7 +347,7 @@ public class LineView extends GameScreen implements TrainInteractionTool
 			TrainLineOverseer.addLine(line);
 			if(!_editMode) _lineList.addElement(_lineNameField.getText());
 			_lineSelectToolEnabled = false;
-			resetControls();
+			reset();
 		}
 		_buttonClicked = true;
 	}
@@ -395,32 +395,6 @@ public class LineView extends GameScreen implements TrainInteractionTool
 		_buttonClicked = true;
 	}
 
-	/**
-	 * Resets all controls to their default values.
-	 */
-	private void resetControls()
-	{
-		// switch controls OFF when select tool is enabled
-		_editLineButton.setState(!_lineSelectToolEnabled);
-		_editMode = !_lineSelectToolEnabled;
-		_removeLineButton.setState(!_lineSelectToolEnabled);
-		_createLineButton.setState(!_lineSelectToolEnabled);
-
-		// switch controls ON when select tool is enabled
-		_lineNameField.setState(_lineSelectToolEnabled);
-		_lineNameFieldLabel.setState(_lineSelectToolEnabled);
-		_colorBar.setState(_lineSelectToolEnabled);
-		_saveButton.setState(_lineSelectToolEnabled);
-
-		_colorBar.clear();
-
-		_messageLabel.setText("");
-		_lineNameField.setText("");
-
-		_lineSelectTool.setState(false);
-
-	}
-
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
@@ -431,18 +405,17 @@ public class LineView extends GameScreen implements TrainInteractionTool
 			if(_lineSelectToolEnabled)
 			{
 				_lineSelectTool.rightClick(screenX, screenY, _mapOffset); // if enables, than do something with it
-				_lineSelectToolEnabled = !_lineSelectTool.isClosed(); // after right click
+				_lineSelectToolEnabled = !_lineSelectTool.isActive(); // after right click
 				if(!_lineSelectToolEnabled) // tool closed itself
 				{
 					TrainLine line = _lineSelectTool.getTrainLine();
 					TrainLineOverseer.removeLine(line);
-					resetControls();
+					reset();
 					_lineSelectTool = null;
 				}
 			}
 			else
 			{
-				_isClosed = true; // of not, close the TrainLineView
 				_visible = false;
 			}
 		}
@@ -504,26 +477,31 @@ public class LineView extends GameScreen implements TrainInteractionTool
 	}
 
 	@Override
-	public void draw(SpriteBatch sp, Point2D offset)
+	public boolean isActive()
 	{
-		updateGameScreen(sp);
+		return _visible;
 	}
 
 	@Override
-	public void leftClick(int screenX, int screenY, Point2D offset)
+	public void reset()
 	{
-		mouseClicked(screenX, screenY, Buttons.LEFT);
-	}
+		// switch controls OFF when select tool is enabled
+		_editLineButton.setState(!_lineSelectToolEnabled);
+		_editMode = !_lineSelectToolEnabled;
+		_removeLineButton.setState(!_lineSelectToolEnabled);
+		_createLineButton.setState(!_lineSelectToolEnabled);
 
-	@Override
-	public void rightClick(int screenX, int screenY, Point2D offset)
-	{
-		mouseClicked(screenX, screenY, Buttons.RIGHT);
-	}
+		// switch controls ON when select tool is enabled
+		_lineNameField.setState(_lineSelectToolEnabled);
+		_lineNameFieldLabel.setState(_lineSelectToolEnabled);
+		_colorBar.setState(_lineSelectToolEnabled);
+		_saveButton.setState(_lineSelectToolEnabled);
 
-	@Override
-	public boolean isClosed()
-	{
-		return _isClosed;
+		_colorBar.clear();
+
+		_messageLabel.setText("");
+		_lineNameField.setText("");
+
+		_lineSelectTool.setState(false);
 	}
 }

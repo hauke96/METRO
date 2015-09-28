@@ -1,17 +1,19 @@
 package metro.GameScreen.LineView;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import metro.METRO;
-import metro.GameScreen.TrainInteractionTool;
+import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainView.MainView;
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * The LineSelectTool allows the user to create train lines by clicking on all the nodes this line should contain.
@@ -20,29 +22,34 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author hauke
  *
  */
-public class LineSelectTool implements TrainInteractionTool
+public class LineSelectTool extends GameScreen
 {
 	private ArrayList<RailwayNode> _listOfNodes;
-	private boolean _isClosed;
+	private boolean _isActive;
 	private Color _color;
 	private String _lineName;
+	private Point _mapOffset;
 
 	/**
 	 * Creates a new tool to select the train line.
+	 * 
+	 * @param mapOffset The current map offset.
 	 */
-	public LineSelectTool()
+	public LineSelectTool(Point mapOffset)
 	{
+		_mapOffset = mapOffset;
 		_listOfNodes = new ArrayList<RailwayNode>();
-		_isClosed = false;
+		_isActive = true;
 		_color = METRO.__metroBlue;
 		_lineName = "";
 	}
 
 	/**
-	 * Generates the TrainLine object for further using.
+	 * Creates the TrainLine object for further using.
 	 * This method WON'T return null under any circumstances.
 	 * 
 	 * @return Won't be null! The train line as TrainLine object.
+	 * @ensure return != null
 	 */
 	public TrainLine getTrainLine()
 	{
@@ -102,17 +109,26 @@ public class LineSelectTool implements TrainInteractionTool
 	 */
 	public void setState(boolean enabled)
 	{
-		_isClosed = enabled;
+		_isActive = enabled;
 	}
 
 	@Override
-	public void draw(SpriteBatch sp, Point2D offset)
+	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
+		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, _mapOffset);
+		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, _mapOffset);
 	}
 
-	@Override
+	/**
+	 * Adds or removes a node at the clicked position (screenX, screenY).
+	 * 
+	 * @param screenX The y-coordinate of the click.
+	 * @param screenY The y-coordinate of the click.
+	 * @param offset The current map offset.
+	 */
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
+		//TODO bug in placing tracks here? Sometimes nodes are not selected
 		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(MainView._selectedCross);
 		if(clickedNode == null) return;
 		ArrayList<RailwayNode> neighbors = clickedNode.getNeighbors();
@@ -137,15 +153,46 @@ public class LineSelectTool implements TrainInteractionTool
 		else _listOfNodes.add(clickedNode);
 	}
 
-	@Override
+	/**
+	 * Deactivates the tool to point out that it can be closed.
+	 * 
+	 * @param screenX The y-coordinate of the click.
+	 * @param screenY The y-coordinate of the click.
+	 * @param offset The current map offset.
+	 */
 	public void rightClick(int screenX, int screenY, Point2D offset)
 	{
-		_isClosed = true;
+		_isActive = false;
 	}
 
 	@Override
-	public boolean isClosed()
+	public void updateGameScreen(SpriteBatch g)
 	{
-		return _isClosed;
+	}
+
+	@Override
+	public void mouseReleased(int mouseButton)
+	{
+	}
+
+	@Override
+	public void keyDown(int keyCode)
+	{
+	}
+
+	@Override
+	public void mouseScrolled(int amount)
+	{
+	}
+
+	@Override
+	public boolean isActive()
+	{
+		return _isActive;
+	}
+
+	@Override
+	public void reset()
+	{
 	}
 }

@@ -14,7 +14,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.Toolbar;
-import metro.GameScreen.TrainInteractionTool;
 import metro.GameScreen.CityView.CityView;
 import metro.GameScreen.LineView.LineView;
 import metro.GameScreen.TrainView.TrainView;
@@ -24,7 +23,9 @@ import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.TrainManagement.Trains.TrainStation;
 
 /**
- * GameScreen with the default view. It Shows the trains, tracks, stations and basic player information.
+ * The main view is the normal screen the player sees. 
+ * All subtools like the station placing tool or the train management will be organized and drawn by this tool.
+ * Furthermore it shows all player information and draws the whole map with its trains, stations and tracks.
  * 
  * @author Hauke
  *
@@ -34,7 +35,7 @@ public class MainView extends GameScreen implements Observer
 {
 	private boolean _dragMode;
 	private Point _oldMousePos; // Mouse position from last frame
-	private TrainInteractionTool _activeTool;
+	private GameScreen _activeTool;
 	private Point2D _mapOffset; // offset for moving the map
 	private Toolbar _toolbar;
 	private CityView _cityView;
@@ -42,13 +43,16 @@ public class MainView extends GameScreen implements Observer
 	public static List<TrainStation> _trainStationList;
 	public static Point _selectedCross; // out of screen;
 
+	/**
+	 * Creates a new main view with no active subtools.
+	 */
 	public MainView()
 	{
 		_selectedCross = new Point(-1, -1);
 		_trainStationList = new ArrayList<TrainStation>();
 		_mapOffset = new Point2D.Float(0, 0);// METRO.__baseNetSpacing * 3, METRO.__baseNetSpacing * 2 + 12);
 
-		_toolbar = new Toolbar(new Point(0, 100));
+		_toolbar = new Toolbar(new Point(0, 100), new Point((int)_mapOffset.getX(), (int)_mapOffset.getY()));
 		_toolbar.addObserver(this);
 
 		_dragMode = false;
@@ -74,12 +78,12 @@ public class MainView extends GameScreen implements Observer
 
 		_cityView.drawNumbers(sp, cursorDotPosition);
 
-		if(_activeTool != null) _activeTool.draw(sp, _mapOffset);
+		if(_activeTool != null) _activeTool.updateGameScreen(sp);//draw(sp, _mapOffset);
 
 		drawRailwayLines(sp);
 		drawTrainStations(sp);
 
-		_toolbar.draw(sp, _mapOffset);
+		_toolbar.updateGameScreen(sp);
 
 		printDebugStuff(sp);
 	}
@@ -176,7 +180,7 @@ public class MainView extends GameScreen implements Observer
 	 * 
 	 * @param tool The new tool.
 	 */
-	public void setTrainViewTool(TrainInteractionTool tool)
+	public void setTrainViewTool(GameScreen tool)
 	{
 		_activeTool = tool;
 	}
@@ -196,8 +200,8 @@ public class MainView extends GameScreen implements Observer
 		}
 		else if(mouseButton == Buttons.RIGHT && _activeTool != null)
 		{
-			_activeTool.rightClick(screenX, screenY, _mapOffset);
-			if(_activeTool.isClosed())
+			_activeTool.mouseClicked(screenX, screenY, mouseButton);
+			if(!_activeTool.isActive())
 			{
 				_toolbar.resetExclusiveButtonPositions(null);
 				setTrainViewTool(null);
@@ -236,7 +240,7 @@ public class MainView extends GameScreen implements Observer
 			if(arg1 instanceof Point && _activeTool != null) // there is an active tool, forward click to it
 			{
 				Point pos = (Point)arg1;
-				_activeTool.leftClick(pos.x, pos.y, _mapOffset);
+				_activeTool.mouseClicked(pos.x, pos.y, Buttons.LEFT);
 			}
 			else // there is no active tool -> create new one from argument
 			{
@@ -256,5 +260,16 @@ public class MainView extends GameScreen implements Observer
 				if(_activeTool instanceof TrainView) ((TrainView)_activeTool).setVisibility(true);
 			}
 		}
+	}
+
+	@Override
+	public boolean isActive()
+	{
+		return true;
+	}
+
+	@Override
+	public void reset()
+	{
 	}
 }
