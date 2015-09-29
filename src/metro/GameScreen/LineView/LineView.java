@@ -3,13 +3,14 @@ package metro.GameScreen.LineView;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Point2D;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
+import metro.GameScreen.MainMenu;
+import metro.GameScreen.MainView.MainView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.Lines.TrainLine;
@@ -42,7 +43,6 @@ public class LineView extends GameScreen
 		_colorBarClicked,
 		_messageLabelClicked;
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
-	private Point2D _mapOffset;
 	private LineSelectTool _lineSelectTool;
 	private InputField _lineNameField;
 	private Label _lineNameFieldLabel,
@@ -51,17 +51,14 @@ public class LineView extends GameScreen
 
 	/**
 	 * Creates a new TrainLineView.
-	 * 
-	 * @param mapOffset The offset of the map (for correct mouse clicks)
 	 */
-	public LineView(Point2D mapOffset)
+	public LineView()
 	{
 		_visible = true;
 		_lineSelectToolEnabled = false;
 		_buttonClicked = false;
 		_windowWidth = 400;
-		_mapOffset = mapOffset;
-		_lineSelectTool = new LineSelectTool(new Point((int)_mapOffset.getX(), (int)_mapOffset.getY()));
+		_lineSelectTool = new LineSelectTool();
 
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 40, 300),
@@ -313,7 +310,7 @@ public class LineView extends GameScreen
 	{
 		if(_lineSelectToolEnabled) return;
 
-		_lineSelectTool = new LineSelectTool(new Point((int)_mapOffset.getX(), (int)_mapOffset.getY())); // create clean select tool
+		_lineSelectTool = new LineSelectTool(); // create clean select tool
 		if(_colorBar.getClickedColor() != null) _lineSelectTool.setColor(_colorBar.getClickedColor());
 		_lineSelectToolEnabled = true;
 		_buttonClicked = true;
@@ -404,7 +401,7 @@ public class LineView extends GameScreen
 			if(!_visible) return;
 			if(_lineSelectToolEnabled)
 			{
-				_lineSelectTool.rightClick(screenX, screenY, _mapOffset); // if enables, than do something with it
+				_lineSelectTool.rightClick(screenX, screenY, MainView._mapOffset); // if enables, than do something with it
 				_lineSelectToolEnabled = !_lineSelectTool.isActive(); // after right click
 				if(!_lineSelectToolEnabled) // tool closed itself
 				{
@@ -424,7 +421,7 @@ public class LineView extends GameScreen
 			if(!_visible) return;
 			if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
 			{
-				_lineSelectTool.leftClick(screenX, screenY, _mapOffset); // add node to list
+				_lineSelectTool.leftClick(screenX, screenY, MainView._mapOffset); // add node to list
 			}
 		}
 

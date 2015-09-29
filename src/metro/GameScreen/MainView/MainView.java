@@ -2,7 +2,6 @@ package metro.GameScreen.MainView;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -24,7 +23,7 @@ import metro.TrainManagement.Trains.TrainStation;
 
 /**
  * The main view is the normal screen the player sees. 
- * All subtools like the station placing tool or the train management will be organized and drawn by this tool.
+ * All sub tools like the station placing tool or the train management will be organized and drawn by this tool.
  * Furthermore it shows all player information and draws the whole map with its trains, stations and tracks.
  * 
  * @author Hauke
@@ -36,12 +35,12 @@ public class MainView extends GameScreen implements Observer
 	private boolean _dragMode;
 	private Point _oldMousePos; // Mouse position from last frame
 	private GameScreen _activeTool;
-	private Point2D _mapOffset; // offset for moving the map
 	private Toolbar _toolbar;
 	private CityView _cityView;
 
 	public static List<TrainStation> _trainStationList;
-	public static Point _selectedCross; // out of screen;
+	public static Point _selectedCross, // out of screen;
+		_mapOffset; // offset for moving the map
 
 	/**
 	 * Creates a new main view with no active subtools.
@@ -50,9 +49,9 @@ public class MainView extends GameScreen implements Observer
 	{
 		_selectedCross = new Point(-1, -1);
 		_trainStationList = new ArrayList<TrainStation>();
-		_mapOffset = new Point2D.Float(0, 0);// METRO.__baseNetSpacing * 3, METRO.__baseNetSpacing * 2 + 12);
+		_mapOffset = new Point(0, 0);// METRO.__baseNetSpacing * 3, METRO.__baseNetSpacing * 2 + 12);
 
-		_toolbar = new Toolbar(new Point(0, 100), new Point((int)_mapOffset.getX(), (int)_mapOffset.getY()));
+		_toolbar = new Toolbar(new Point(0, 100));
 		_toolbar.addObserver(this);
 
 		_dragMode = false;
@@ -68,8 +67,8 @@ public class MainView extends GameScreen implements Observer
 
 		if(_dragMode)
 		{
-			_mapOffset = new Point2D.Float((float)_mapOffset.getX() + (METRO.__mousePosition.x - _oldMousePos.x),
-				(float)_mapOffset.getY() + (METRO.__mousePosition.y - _oldMousePos.y));
+			_mapOffset = new Point(_mapOffset.x + (METRO.__mousePosition.x - _oldMousePos.x),
+				_mapOffset.y + (METRO.__mousePosition.y - _oldMousePos.y));
 		}
 		_oldMousePos = METRO.__mousePosition;
 
@@ -115,11 +114,11 @@ public class MainView extends GameScreen implements Observer
 	private void drawBaseNet(SpriteBatch sp, Color color, int offset)
 	{
 		Draw.setColor(color);
-		for(int y = ((int)_mapOffset.getY() + offset) % METRO.__baseNetSpacing; y < METRO.__SCREEN_SIZE.height; y += METRO.__baseNetSpacing)
+		for(int y = (_mapOffset.y + offset) % METRO.__baseNetSpacing; y < METRO.__SCREEN_SIZE.height; y += METRO.__baseNetSpacing)
 		{
 			Draw.Line(offset, y, METRO.__SCREEN_SIZE.width, y);
 		}
-		for(int x = ((int)_mapOffset.getX() + offset) % METRO.__baseNetSpacing; x < METRO.__SCREEN_SIZE.width; x += METRO.__baseNetSpacing)
+		for(int x = (_mapOffset.x + offset) % METRO.__baseNetSpacing; x < METRO.__SCREEN_SIZE.width; x += METRO.__baseNetSpacing)
 		{
 			Draw.Line(x, offset, x, METRO.__SCREEN_SIZE.height);
 		}
@@ -240,7 +239,7 @@ public class MainView extends GameScreen implements Observer
 			if(arg1 instanceof Point && _activeTool != null) // there is an active tool, forward click to it
 			{
 				Point pos = (Point)arg1;
-				_activeTool.mouseClicked(pos.x, pos.y, Buttons.LEFT);
+				_activeTool.mouseClicked(pos.x, pos.y, Buttons.LEFT); //update(...) will only be executed when the left mouse button has been pressed
 			}
 			else // there is no active tool -> create new one from argument
 			{

@@ -387,6 +387,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static void __closeWindow(Window window)
 	{
 		__windowList.remove(window);
+		_controlActionManager.remove(window.getElements());
 	}
 
 	/**

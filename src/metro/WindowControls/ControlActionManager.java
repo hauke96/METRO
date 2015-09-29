@@ -26,9 +26,9 @@ public class ControlActionManager
 	}
 
 	/**
-	 * Registeres a new ControlElement and deleted one if it's already registered.
+	 * Registers a new ControlElement and deleted one if it's already registered.
 	 * If this all happens during another button click (or other ControlAction method), every control is written
-	 * into a buffer list and later (und the updateList() method) added to the real list.
+	 * into a buffer list and later (in the updateList() method) added to the real list.
 	 * 
 	 * @param control The control to register/remove.
 	 */
@@ -96,5 +96,10 @@ public class ControlActionManager
 			registerElement(control);
 		}
 		_bufferListOfControlElements.clear();
+	}
+
+	public void remove(ArrayList<ControlElement> elements)
+	{
+		_bufferListOfControlElements.addAll(elements);
 	}
 }

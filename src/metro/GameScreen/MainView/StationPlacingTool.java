@@ -22,17 +22,13 @@ import metro.TrainManagement.Trains.TrainStation;
 public class StationPlacingTool extends GameScreen
 {
 	private boolean _isActive;
-	private Point _mapOffset;
 
 	/**
 	 * Creates a new station placing tool.
-	 * 
-	 * @param mapOffset The current map offset.
 	 */
-	public StationPlacingTool(Point mapOffset)
+	public StationPlacingTool()
 	{
 		_isActive = true;
-		_mapOffset = mapOffset;
 	}
 
 	@Override
@@ -49,8 +45,8 @@ public class StationPlacingTool extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, _mapOffset);
-		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, _mapOffset);
+		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, MainView._mapOffset);
+		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, MainView._mapOffset);
 	}
 	
 	/**

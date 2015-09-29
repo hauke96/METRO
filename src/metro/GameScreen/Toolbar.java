@@ -25,21 +25,18 @@ public class Toolbar extends GameScreen
 		_buildTracks,
 		_showTrainList,
 		_createNewTrain;
-	private Point _mapOffset;
 
 	/**
 	 * Creates a new toolbar.
 	 * 
 	 * @param position The position of the upper left corner.
-	 * @param mapOffset The current map offset.
 	 */
-	public Toolbar(Point position, Point mapOffset)
+	public Toolbar(Point position)
 	{
 		_buildStation = new Button(new Rectangle(-10 + position.x, position.y, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
 		_buildTracks = new Button(new Rectangle(-10 + position.x, 39 + position.y, 50, 40), new Rectangle(0, 68, 50, 40), METRO.__iconSet);
 		_showTrainList = new Button(new Rectangle(-10 + position.x, 100 + position.y, 50, 40), new Rectangle(0, 108, 50, 40), METRO.__iconSet);
 		_createNewTrain = new Button(new Rectangle(-10 + position.x, 139 + position.y, 50, 40), new Rectangle(0, 148, 50, 40), METRO.__iconSet);
-		_mapOffset = mapOffset;
 		registerObervations();
 	}
 
@@ -52,7 +49,7 @@ public class Toolbar extends GameScreen
 			{
 				resetExclusiveButtonPositions(_buildStation);
 				setChanged();
-				notifyObservers(new StationPlacingTool(_mapOffset));
+				notifyObservers(new StationPlacingTool());
 			}
 		});
 		_buildTracks.register(new ActionObserver()
@@ -62,7 +59,7 @@ public class Toolbar extends GameScreen
 			{
 				resetExclusiveButtonPositions(_buildTracks);
 				setChanged();
-				notifyObservers(new TrackPlacingTool(_mapOffset));
+				notifyObservers(new TrackPlacingTool());
 			}
 		});
 		_showTrainList.register(new ActionObserver()
@@ -72,7 +69,7 @@ public class Toolbar extends GameScreen
 			{
 				resetExclusiveButtonPositions(_showTrainList);
 				setChanged();
-				notifyObservers(new LineView(_mapOffset));
+				notifyObservers(new LineView());
 			}
 		});
 		_createNewTrain.register(new ActionObserver()
@@ -82,7 +79,7 @@ public class Toolbar extends GameScreen
 			{
 				resetExclusiveButtonPositions(_createNewTrain);
 				setChanged();
-				notifyObservers(new TrainView(_mapOffset));
+				notifyObservers(new TrainView());
 			}
 		});
 	}

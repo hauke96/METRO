@@ -257,7 +257,6 @@ public class Window extends ActionObservable implements ControlElement
 	public void close()
 	{
 		METRO.__closeWindow(this); // closes this window and removes it from the list
-		_elementList.clear();
 		_closed = true;
 	}
 
@@ -335,5 +334,10 @@ public class Window extends ActionObservable implements ControlElement
 	@Override
 	public void moveElement(Point offset)
 	{
+	}
+	
+	public ArrayList<ControlElement> getElements()
+	{
+		return _elementList;
 	}
 }

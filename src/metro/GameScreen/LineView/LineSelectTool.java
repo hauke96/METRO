@@ -1,11 +1,9 @@
 package metro.GameScreen.LineView;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
@@ -28,16 +26,12 @@ public class LineSelectTool extends GameScreen
 	private boolean _isActive;
 	private Color _color;
 	private String _lineName;
-	private Point _mapOffset;
 
 	/**
 	 * Creates a new tool to select the train line.
-	 * 
-	 * @param mapOffset The current map offset.
 	 */
-	public LineSelectTool(Point mapOffset)
+	public LineSelectTool()
 	{
-		_mapOffset = mapOffset;
 		_listOfNodes = new ArrayList<RailwayNode>();
 		_isActive = true;
 		_color = METRO.__metroBlue;
@@ -115,8 +109,6 @@ public class LineSelectTool extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, _mapOffset);
-		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, _mapOffset);
 	}
 
 	/**
@@ -128,7 +120,6 @@ public class LineSelectTool extends GameScreen
 	 */
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
-		//TODO bug in placing tracks here? Sometimes nodes are not selected
 		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(MainView._selectedCross);
 		if(clickedNode == null) return;
 		ArrayList<RailwayNode> neighbors = clickedNode.getNeighbors();

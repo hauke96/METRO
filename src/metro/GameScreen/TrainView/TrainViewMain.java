@@ -3,7 +3,6 @@ package metro.GameScreen.TrainView;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Point2D;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -26,8 +25,7 @@ public class TrainViewMain extends GameScreen
 		_editTrainButton, // to change a train
 		_sellTrainButton, // to remove a train
 		_saveButton; // to save settings/changes
-	private boolean	_buttonClicked,
-		_messageLabelClicked;
+	private boolean	_messageLabelClicked;
 	private Label _messageLabel;
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	
@@ -40,7 +38,6 @@ public class TrainViewMain extends GameScreen
 	public TrainViewMain(Point areaOffset, int windowWidth)
 	{
 		_windowWidth = windowWidth;
-		_buttonClicked = false;
 		_areaOffset = areaOffset;
 		_trainList = new List(new Rectangle(_areaOffset.x + 121, 130, _windowWidth - 140, 300),
 			null, null, true);
@@ -160,9 +157,9 @@ public class TrainViewMain extends GameScreen
 	 */
 	private void buyTrainButton_action()
 	{
-		//TODO open buy-train-dialog. Do this via observer or let the TrainView ask this tool
-		_buttonClicked = true;
 		reset();
+		setChanged();
+		notifyObservers(new TrainViewBuy(_areaOffset, _windowWidth));
 	}
 
 	/**
@@ -170,18 +167,6 @@ public class TrainViewMain extends GameScreen
 	 */
 	private void saveButton_action()
 	{
-		_buttonClicked = true;
-	}
-
-	/**
-	 * Checks if a button has been clicked since last call.
-	 * 
-	 * @return True when one of the buttons has been clicked since last call.
-	 */
-	private boolean hasButtonClicked()
-	{
-//		return _buttonClicked;
-		return false; //TODO create variable
 	}
 
 	/**
@@ -201,7 +186,6 @@ public class TrainViewMain extends GameScreen
 	{
 		TrainLineOverseer.removeLine(_trainList.getText(_trainList.getSelected()));
 		_trainList.remove(_trainList.getSelected());
-		_buttonClicked = true;
 	}
 
 	/**
@@ -223,8 +207,6 @@ public class TrainViewMain extends GameScreen
 		_editTrainButton.setState(false);
 		_sellTrainButton.setState(false);
 		_saveButton.setState(true);
-
-		_buttonClicked = true;
 	}
 
 	@Override
@@ -238,15 +220,6 @@ public class TrainViewMain extends GameScreen
 	{
 		// TODO implement ActionObserver
 		if(_trainList.clickOnControlElement()) return;
-
-		// set lineNameField as inactive when mouse NOT clicked on it
-		// TODO implement ActionObserver
-
-		boolean controlClicked = false;
-
-		controlClicked |= hasButtonClicked();
-		controlClicked |= hasMessageLabelClicked();//checkMessageLabelClick(screenX, screenY, mouseButton);
-		// "create new train"/"finish" line has been pressed
 	}
 
 	@Override

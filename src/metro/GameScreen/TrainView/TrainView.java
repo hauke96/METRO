@@ -2,7 +2,8 @@ package metro.GameScreen.TrainView;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.geom.Point2D;
+import java.util.Observable;
+import java.util.Observer;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -20,14 +21,33 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 
 	/**
 	 * Creates a new TrainLineView.
-	 * 
-	 * @param mapOffset The offset of the map (for correct mouse clicks)
 	 */
-	public TrainView(Point2D mapOffset)
+	public TrainView()
 	{
 		_windowWidth = 400;
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
 		_activeTool = new TrainViewMain(_areaOffset, _windowWidth);
+		addObserver();
+	}
+
+	private void addObserver()
+	{
+		_activeTool.addObserver(new Observer()
+		{
+			@Override
+			public void update(Observable o, Object arg)
+			{
+				if(arg != null)
+				{
+					_activeTool = (GameScreen)arg;
+					addObserver(); // re-add observer for the new tool
+				}
+				else
+				{
+					_visible = false;
+				}
+			}
+		});
 	}
 
 	@Override
