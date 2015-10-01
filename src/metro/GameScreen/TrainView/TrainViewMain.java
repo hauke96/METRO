@@ -1,6 +1,5 @@
 package metro.GameScreen.TrainView;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -9,11 +8,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
-import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
-import metro.WindowControls.Label;
 import metro.WindowControls.List;
 
 public class TrainViewMain extends GameScreen
@@ -21,12 +18,8 @@ public class TrainViewMain extends GameScreen
 	private int _windowWidth;
 	private List _trainList,
 		_lineList;
-	private Button _buyTrainButton, // to create a new train
-		_editTrainButton, // to change a train
-		_sellTrainButton, // to remove a train
-		_saveButton; // to save settings/changes
-	private boolean	_messageLabelClicked;
-	private Label _messageLabel;
+	private Button _moveTrainButton, // to change a train
+		_sellTrainButton; // to remove a train
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	
 	/**
@@ -39,22 +32,16 @@ public class TrainViewMain extends GameScreen
 	{
 		_windowWidth = windowWidth;
 		_areaOffset = areaOffset;
-		_trainList = new List(new Rectangle(_areaOffset.x + 121, 130, _windowWidth - 140, 300),
+		
+		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 300, 250),
 			null, null, true);
-		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 300, 300),
+		_trainList = new List(new Rectangle(_areaOffset.x + 121, 130, _windowWidth - 141, 250),
 			null, null, true);
-		_buyTrainButton = new Button(new Rectangle(_areaOffset.x + 20, 450, (_windowWidth - 40) / 3 - 10, 20), "Buy train");
-		_editTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), 450, (_windowWidth - 40) / 3 - 10, 20), "Edit train");
-		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, 450, (_windowWidth - 40) / 3 - 10, 20), "Sell train");
-
-		_saveButton = new Button(new Rectangle(_areaOffset.x + (_windowWidth / 2) - 75, METRO.__SCREEN_SIZE.height - _areaOffset.y - 60, 150, 20), "Save");
-		_saveButton.setState(false);
-
-		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 30));
-		_messageLabel.setColor(METRO.__metroRed);
+		
+		_moveTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), 400, (_windowWidth - 40) / 3 - 10, 20), "Move train");
+		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, 400, (_windowWidth - 40) / 3 - 10, 20), "Sell train");
 
 		addButtonObserver();
-		addMessageLabelObserver();
 	}
 
 	/**
@@ -62,15 +49,7 @@ public class TrainViewMain extends GameScreen
 	 */
 	private void addButtonObserver()
 	{
-		_buyTrainButton.register(new ActionObserver()
-		{
-			@Override
-			public void clickedOnControl(Object arg)
-			{
-				buyTrainButton_action();
-			}
-		});
-		_editTrainButton.register(new ActionObserver()
+		_moveTrainButton.register(new ActionObserver()
 		{
 			@Override
 			public void clickedOnControl(Object arg)
@@ -86,27 +65,6 @@ public class TrainViewMain extends GameScreen
 				sellTrainButton_action();
 			}
 		});
-		_saveButton.register(new ActionObserver()
-		{
-			@Override
-			public void clickedOnControl(Object arg)
-			{
-				saveButton_action();
-			}
-		});
-	}
-
-	private void addMessageLabelObserver()
-	{
-		_messageLabel.register(new ActionObserver()
-		{
-			@Override
-			public void clickedOnControl(Object arg)
-			{
-				_messageLabel.setText("");
-				_messageLabelClicked = true;
-			}
-		});
 	}
 
 	@Override
@@ -114,8 +72,6 @@ public class TrainViewMain extends GameScreen
 	{
 		drawListBox();
 		drawButtons();
-
-		_messageLabel.draw();
 	}
 
 	/**
@@ -146,37 +102,8 @@ public class TrainViewMain extends GameScreen
 	 */
 	private void drawButtons()
 	{
-		_buyTrainButton.draw();
-		_editTrainButton.draw();
+		_moveTrainButton.draw();
 		_sellTrainButton.draw();
-		_saveButton.draw();
-	}
-
-	/**
-	 * Will be executed after a click on the "Create Line" button. This will unlock/lock all necessary controls.
-	 */
-	private void buyTrainButton_action()
-	{
-		reset();
-		setChanged();
-		notifyObservers(new TrainViewBuy(_areaOffset, _windowWidth));
-	}
-
-	/**
-	 * Creates a new train line and saves it correctly. If something went wrong, an error message will be shown.
-	 */
-	private void saveButton_action()
-	{
-	}
-
-	/**
-	 * Checks if the message label has been clicked since last call.
-	 * 
-	 * @return True when the message label has been clicked since last call.
-	 */
-	private boolean hasMessageLabelClicked()
-	{
-		return _messageLabelClicked;
 	}
 
 	/**
@@ -194,25 +121,14 @@ public class TrainViewMain extends GameScreen
 	private void editTrainButton_action()
 	{
 		if(_trainList.getSelected() == -1) return;
-		Color color = TrainLineOverseer.getColor(_trainList.getText(_trainList.getSelected()));
-		TrainLine line = TrainLineOverseer.getLine(_trainList.getText(_trainList.getSelected()));
 
-		if(color == null || line == null)
-		{
-			_messageLabel.setText("An erorr occured while reading data :(");
-			return;
-		}
-
-		_buyTrainButton.setState(false);
-		_editTrainButton.setState(false);
+		_moveTrainButton.setState(false);
 		_sellTrainButton.setState(false);
-		_saveButton.setState(true);
 	}
 
 	@Override
 	public void reset()
 	{
-		_messageLabel.setText("");
 	}
 
 	@Override

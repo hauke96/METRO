@@ -2,8 +2,6 @@ package metro.GameScreen.MainView;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 

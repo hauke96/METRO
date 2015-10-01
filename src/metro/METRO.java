@@ -165,7 +165,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		// Create special colors
 		__metroBlue = new Color(100, 180, 255);
 		__metroRed = new Color(255, 100, 100);
-		
+
 		__gameState = GameState.getInstance();
 	}
 
@@ -202,7 +202,8 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 		if(!Boolean.parseBoolean(Settings.get("fullscreen.on").toString()))
 		{
-			__mousePosition.translate(-_config.x, -_config.y - 25);
+			__mousePosition.translate(-_config.x - 3, -_config.y - 24);
+//			__mousePosition.translate(-3, 1); // correction because the normal cursor is NOT in the center
 		}
 		__originalMousePosition = (Point)__mousePosition.clone();
 
@@ -304,13 +305,13 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	 * Is executed when the user clicks with the mouse.
 	 * 
 	 * The click-hirarchy:
-	 *   1.) Check if a control has been clicked.
-	 *       If yes: return
-	 *       If no : do check 2
-	 *   2.) Check if a window has been clicked.
-	 *       If yes: Close the window if needed and then return
-	 *       If no : do check 3
-	 *   3.) Forward click to the game screen.
+	 * 1.) Check if a control has been clicked.
+	 * If yes: return
+	 * If no : do check 2
+	 * 2.) Check if a window has been clicked.
+	 * If yes: Close the window if needed and then return
+	 * If no : do check 3
+	 * 3.) Forward click to the game screen.
 	 */
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{

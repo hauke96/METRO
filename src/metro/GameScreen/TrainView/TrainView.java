@@ -17,7 +17,8 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 	private int _windowWidth;
 	private boolean _visible;
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
-	private GameScreen _activeTool;
+	private TrainViewMain _trainViewMain;
+	private TrainViewBuy _trainViewBuy;
 
 	/**
 	 * Creates a new TrainLineView.
@@ -26,28 +27,8 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 	{
 		_windowWidth = 400;
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
-		_activeTool = new TrainViewMain(_areaOffset, _windowWidth);
-		addObserver();
-	}
-
-	private void addObserver()
-	{
-		_activeTool.addObserver(new Observer()
-		{
-			@Override
-			public void update(Observable o, Object arg)
-			{
-				if(arg != null)
-				{
-					_activeTool = (GameScreen)arg;
-					addObserver(); // re-add observer for the new tool
-				}
-				else
-				{
-					_visible = false;
-				}
-			}
-		});
+		_trainViewMain = new TrainViewMain(_areaOffset, _windowWidth);
+		_trainViewBuy = new TrainViewBuy(_areaOffset, _windowWidth);
 	}
 
 	@Override
@@ -55,7 +36,8 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 	{
 		drawBackground();
 		drawTitleBox();
-		_activeTool.updateGameScreen(g);
+		_trainViewMain.updateGameScreen(g);
+		_trainViewBuy.updateGameScreen(g);
 	}
 
 	/**
@@ -103,7 +85,11 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 	public void setVisibility(boolean visible)
 	{
 		_visible = visible;
-		if(!_visible) _activeTool.reset();
+		if(!_visible)
+		{
+			_trainViewMain.reset();
+			_trainViewBuy.reset();
+		}
 	}
 
 	@Override
