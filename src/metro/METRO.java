@@ -74,14 +74,14 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		__viewPortButton_Train;
 	public static Color __metroRed,
 		__metroBlue;
-	public static int __money = 50000,
-		__baseNetSpacing = 25; // amount of pixel between lines of the base net
+	public static int __baseNetSpacing = 25; // amount of pixel between lines of the base net
 	public static ArrayList<Window> __windowList = new ArrayList<Window>();
 	public static Point __mousePosition,
 		__originalMousePosition;
 	public static OrthographicCamera __camera;
 	public static SpriteBatch __spriteBatch;
 	public static LwjglApplication __application;
+	public static GameState __gameState;
 
 	private Point _oldMousePosition = new Point(0, 0);
 	private LwjglApplicationConfiguration _config;
@@ -165,6 +165,8 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		// Create special colors
 		__metroBlue = new Color(100, 180, 255);
 		__metroRed = new Color(255, 100, 100);
+		
+		__gameState = GameState.getInstance();
 	}
 
 	@Override

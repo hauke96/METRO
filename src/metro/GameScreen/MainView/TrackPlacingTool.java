@@ -217,7 +217,7 @@ public class TrackPlacingTool extends GameScreen
 					prevNode.getPosition().x + offsetB,
 					prevNode.getPosition().y + offsetH),
 					prevNode);
-				METRO.__money -= RailwayNode.PRICE;
+				METRO.__gameState.addMoney(-RailwayNode.PRICE);
 			}
 			else
 			// if there's a node at this position, set it as node instead of new one

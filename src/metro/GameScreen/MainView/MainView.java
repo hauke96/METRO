@@ -38,7 +38,6 @@ public class MainView extends GameScreen implements Observer
 	private Toolbar _toolbar;
 	private CityView _cityView;
 
-	public static List<TrainStation> _trainStationList;
 	public static Point _selectedCross, // out of screen;
 		_mapOffset; // offset for moving the map
 
@@ -48,7 +47,6 @@ public class MainView extends GameScreen implements Observer
 	public MainView()
 	{
 		_selectedCross = new Point(-1, -1);
-		_trainStationList = new ArrayList<TrainStation>();
 		_mapOffset = new Point(0, 0);// METRO.__baseNetSpacing * 3, METRO.__baseNetSpacing * 2 + 12);
 
 		_toolbar = new Toolbar(new Point(0, 100));
@@ -156,7 +154,7 @@ public class MainView extends GameScreen implements Observer
 		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
 
 		// Draw stations:
-		for(TrainStation ts : _trainStationList)
+		for(TrainStation ts : METRO.__gameState.getStations())
 		{
 			ts.draw(sp, offset);
 		}

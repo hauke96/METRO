@@ -63,15 +63,15 @@ public class StationPlacingTool extends GameScreen
 			MainView._selectedCross.y * METRO.__baseNetSpacing + (int)offset.getY());
 
 		Point offsetPoint = new Point((int)offset.getX(), (int)offset.getY());
-		for(TrainStation ts : MainView._trainStationList)
+		for(TrainStation ts : METRO.__gameState.getStations())
 		{
 			positionOccupied |= ts.getPositionOnScreen(offsetPoint).equals(selectPointOnScreen); // true if this cross has already a station
 		}
 
 		if(!positionOccupied) // no doubles
 		{
-			MainView._trainStationList.add(new TrainStation(MainView._selectedCross, 0));
-			METRO.__money -= TrainStation._PRICE;
+			METRO.__gameState.getStations().add(new TrainStation(MainView._selectedCross, 0));
+			METRO.__gameState.addMoney(-TrainStation._PRICE);
 		}
 	}
 

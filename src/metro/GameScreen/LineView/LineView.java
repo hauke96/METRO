@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
-import metro.GameScreen.MainMenu;
 import metro.GameScreen.MainView.MainView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
@@ -342,7 +341,11 @@ public class LineView extends GameScreen
 		else if(line.isValid()) // only change something when line and name are valid
 		{
 			TrainLineOverseer.addLine(line);
-			if(!_editMode) _lineList.addElement(_lineNameField.getText());
+			if(!_editMode)
+			{
+				_lineList.addElement(_lineNameField.getText());
+				METRO.__gameState.getLines().add(line);
+			}
 			_lineSelectToolEnabled = false;
 			reset();
 		}
@@ -356,6 +359,7 @@ public class LineView extends GameScreen
 	{
 		TrainLineOverseer.removeLine(_lineList.getText(_lineList.getSelected()));
 		_lineList.remove(_lineList.getSelected());
+		METRO.__gameState.getLines().remove(_lineList.getSelected());
 		_buttonClicked = true;
 	}
 
