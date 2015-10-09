@@ -12,11 +12,16 @@ import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 
-public class InputField extends Input
+public class InputField extends ActionObservable implements ControlElement
 {
+	private String _text;
+	private Rectangle _position;
+	private Window _windowHandle;
 	private int _curserPos = 0,
 		_xOffset = 0; // in pixel
-	private boolean _enabled;
+	private boolean _enabled,
+		_shift,
+		_selected;
 
 	/**
 	 * Creates a new InputField with one line to input text. The start-text is "" and the window is null
@@ -53,6 +58,7 @@ public class InputField extends Input
 		_text = text;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
+		METRO.__registerControl(this);
 	}
 
 	@Override
@@ -73,6 +79,8 @@ public class InputField extends Input
 		Fill.Rect(_position);
 
 		// draw text
+		if(_enabled)Draw.setColor(Color.black);
+		else Draw.setColor(Color.lightGray);
 		Draw.String(_text, _position.x - _xOffset + 3, _position.y + 3);
 
 		// Draw border
@@ -84,7 +92,7 @@ public class InputField extends Input
 		String str = _text.substring(0, _curserPos);
 		int width = Draw.getStringSize(str).width;
 
-		if(_enabled) Draw.setColor(Color.gray);
+		if(_enabled)Draw.setColor(Color.gray);
 		else Draw.setColor(Color.lightGray);
 		Draw.Line(_position.x + width + 3, _position.y + 2, _position.x + width + 3, _position.y + _position.height - 4);
 
@@ -96,7 +104,12 @@ public class InputField extends Input
 	{
 		if(!_enabled) return false;
 		Point mPos = METRO.__originalMousePosition;
-		return _position.contains(mPos);
+		boolean clickedOnControl = _position.contains(mPos);
+		
+		if(clickedOnControl) select();
+		else disselect();
+		
+		return clickedOnControl;
 	}
 
 	@Override
@@ -110,10 +123,15 @@ public class InputField extends Input
 	{
 		return _position.getLocation();
 	}
-	
+
 	@Override
-	public boolean mouseLeftClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
+		if(clickOnControlElement())
+		{
+			notifyClickOnControl(null);
+			return true;
+		}
 		return false;
 	}
 
@@ -218,7 +236,21 @@ public class InputField extends Input
 		}
 	}
 
-	@Override
+	/**
+	 * Returns the current text of the control.
+	 * 
+	 * @return The current input.
+	 */
+	public String getText()
+	{
+		return _text;
+	}
+
+	/**
+	 * Sets the whole text and deletes the old one.
+	 * 
+	 * @param text The new text of the input.
+	 */
 	public void setText(String text)
 	{
 		_text = text;
@@ -229,5 +261,21 @@ public class InputField extends Input
 	public void setState(boolean enable)
 	{
 		_enabled = enable;
+	}
+
+	/**
+	 * Sets this input as selected which enables inputs.
+	 */
+	public void select()
+	{
+		_selected = true;
+	}
+
+	/**
+	 * Sets this input as non-selected which disables inputs.
+	 */
+	public void disselect()
+	{
+		_selected = false;
 	}
 }

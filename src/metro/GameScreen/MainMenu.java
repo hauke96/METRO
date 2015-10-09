@@ -92,6 +92,9 @@ public class MainMenu extends GameScreen
 				_welcomeWindow.close();
 				METRO.__currentGameScreen = new MainView();
 				METRO.__controlDrawer = new ScreenInfoDrawer();
+				METRO.__unregisterControl(_button_startGame);
+				METRO.__unregisterControl(_button_settings);
+				METRO.__unregisterControl(_button_exitGame);
 			}
 		});
 	}

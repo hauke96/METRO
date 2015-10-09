@@ -57,7 +57,7 @@ public class Button extends ActionObservable implements ControlElement
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
-		METRO.registerControl(this);
+		METRO.__registerControl(this);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class Button extends ActionObservable implements ControlElement
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
-		METRO.registerControl(this);
+		METRO.__registerControl(this);
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class Button extends ActionObservable implements ControlElement
 	}
 	
 	@Override
-	public boolean mouseLeftClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{

@@ -49,7 +49,7 @@ public class ColorBar extends ActionObservable implements ControlElement
 		_brightness = brithness;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		METRO.registerControl(this);
+		METRO.__registerControl(this);
 		_enabled = true;
 		_drawBorder = true;
 		_clickedXPosition = -1;
@@ -192,7 +192,7 @@ public class ColorBar extends ActionObservable implements ControlElement
 	}
 	
 	@Override
-	public boolean mouseLeftClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{

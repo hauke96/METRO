@@ -48,7 +48,6 @@ public class Window extends ActionObservable implements ControlElement
 		_color = color;
 
 		METRO.__windowList.add(this);
-		METRO.registerControl(this);
 	}
 
 	/**
@@ -178,16 +177,16 @@ public class Window extends ActionObservable implements ControlElement
 	public void mousePressed(int screenX, int screenY, int mouseButton)
 	{
 		boolean inputPressed = false; // true if an input field has been clicked
-		// for(ControlElement cElement : _elementList)
-		// {
-		// boolean b = cElement.clickOnControlElement();
-		//
-		// if(b && cElement instanceof Input) // if clicked element is an input field, set this as selected field
-		// {
-		// inputPressed = true;
-		// METRO.__currentGameScreen.setSelectedInput((Input)cElement);
-		// }
-		// }
+		for(ControlElement cElement : _elementList)
+		{
+			boolean b = cElement.mouseClicked(screenX, screenY, mouseButton);// .clickOnControlElement();
+
+			if(b && cElement instanceof InputField) // if clicked element is an input field, set this as selected field
+			{
+				inputPressed = true;
+				METRO.__currentGameScreen.setSelectedInput((InputField)cElement);
+			}
+		}
 		if(!inputPressed) METRO.__currentGameScreen.setSelectedInput(null); // reset the selected input field
 
 		// Check for drag-mode:
@@ -224,7 +223,7 @@ public class Window extends ActionObservable implements ControlElement
 	}
 
 	/**
-	 * Closes the window if the mouse is on the cross. NO CLICK is needed in this function, be careful. This function calls the METRO.__close() function to close itself.
+	 * Closes the window if the mouse is on the cross. NO CLICK is needed in this function, be careful. This function calls the close() function to mark himself as closed.
 	 * 
 	 * @return True if the window has been closed, false if not.
 	 */
@@ -235,7 +234,7 @@ public class Window extends ActionObservable implements ControlElement
 			&& screenY >= _position.y
 			&& screenY <= _position.y + 20)
 		{
-			close(); // closes this window and removes it from the memory
+			close(); // mark whis window as "closed" to tell the METRO class to remove it
 			return true;
 		}
 		return false;
@@ -252,11 +251,17 @@ public class Window extends ActionObservable implements ControlElement
 	}
 
 	/**
-	 * Closes the window softly.
+	 * Marks this window as closed to let the METRO class know, that this instance/window can be removed.
 	 */
 	public void close()
 	{
-		METRO.__closeWindow(this); // closes this window and removes it from the list
+		if(_closed) return; // "_closed" is already true -> all controls have been removed already
+		
+		// Removes all controls from the action manager via second registering
+		for(ControlElement cElement : _elementList)
+		{
+			METRO.__unregisterControl(cElement);
+		}
 		_closed = true;
 	}
 
@@ -318,7 +323,7 @@ public class Window extends ActionObservable implements ControlElement
 	}
 
 	@Override
-	public boolean mouseLeftClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(screenX >= _position.x + _size.x - 20
 			&& screenX <= _position.x + _size.x
@@ -335,7 +340,7 @@ public class Window extends ActionObservable implements ControlElement
 	public void moveElement(Point offset)
 	{
 	}
-	
+
 	public ArrayList<ControlElement> getElements()
 	{
 		return _elementList;

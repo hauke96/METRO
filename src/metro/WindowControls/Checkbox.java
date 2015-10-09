@@ -88,7 +88,7 @@ public class Checkbox extends ActionObservable implements ControlElement
 		_enabled = enabled;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		METRO.registerControl(this);
+		METRO.__registerControl(this);
 	}
 
 	/**
@@ -171,7 +171,7 @@ public class Checkbox extends ActionObservable implements ControlElement
 	}
 	
 	@Override
-	public boolean mouseLeftClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{

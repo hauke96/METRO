@@ -36,7 +36,8 @@ public class ControlActionManager
 	{
 		if(_currentlyIterating)
 		{
-			_bufferListOfControlElements.add(control);
+			if(_bufferListOfControlElements.contains(control)) _bufferListOfControlElements.remove(control);
+			else _bufferListOfControlElements.add(control);
 		}
 		else
 		{
@@ -69,7 +70,7 @@ public class ControlActionManager
 			_currentlyIterating = true;
 			for(ControlElement control : _listOfControlElements)
 			{
-				controlClicked |= control.mouseLeftClicked(screenX, screenY, button);
+				controlClicked |= control.mouseClicked(screenX, screenY, button);
 			}
 			_currentlyIterating = false;
 			updateList();
@@ -98,8 +99,24 @@ public class ControlActionManager
 		_bufferListOfControlElements.clear();
 	}
 
+	/**
+	 * Removes a control from the list of controls of the action manager.
+	 * 
+	 * @param elements The control to remove.
+	 */
 	public void remove(ArrayList<ControlElement> elements)
 	{
 		_bufferListOfControlElements.addAll(elements);
+	}
+
+	/**
+	 * Removes the given control element from the list of all controls.
+	 * You can also remove a whole list by using remove(ArrayList\<ControlElement\>);
+	 * 
+	 * @param control The control to remove.
+	 */
+	public void remove(ControlElement control)
+	{
+		_bufferListOfControlElements.add(control);
 	}
 }

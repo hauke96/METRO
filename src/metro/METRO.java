@@ -203,7 +203,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		if(!Boolean.parseBoolean(Settings.get("fullscreen.on").toString()))
 		{
 			__mousePosition.translate(-_config.x - 3, -_config.y - 24);
-//			__mousePosition.translate(-3, 1); // correction because the normal cursor is NOT in the center
+			// __mousePosition.translate(-3, 1); // correction because the normal cursor is NOT in the center
 		}
 		__originalMousePosition = (Point)__mousePosition.clone();
 
@@ -317,26 +317,30 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		Window clickedWindow = null;
 
-		if(!_controlActionManager.mouseClicked(screenX, screenY, button))
+		for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
 		{
-			for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
+			__windowList.get(i).mousePressed(screenX, screenY, button); // also triggers the click event of the controls
+			if(__windowList.get(i).isMouseOnWindow(screenX, screenY)) // if mouse is just on the window area
 			{
-				__windowList.get(i).mousePressed(screenX, screenY, button);
-				if(__windowList.get(i).isMouseOnWindow(screenX, screenY)) // if mouse is just on the window area
-				{
-					clickedWindow = __windowList.get(i);
-					break;
-				}
+				System.out.println("OK");
+				clickedWindow = __windowList.get(i);
+				break;
 			}
-			if(clickedWindow == null) // if no window has been clicked
+		}
+		if(clickedWindow == null) // if no window has been clicked
+		{
+			if(!_controlActionManager.mouseClicked(screenX, screenY, button))
 			{
 				__currentGameScreen.mouseClicked(screenX, screenY, button); // forward click to game screen
 				if(__controlDrawer != null) __controlDrawer.mouseClicked(screenX, screenY, button);
 			}
-			else
-			{
-				clickedWindow.closeIfNeeded(screenX, screenY, button);
-			}
+		}
+		
+		// close all windows after handling all clicks:
+		for(int i = 0; i < __windowList.size(); i++)
+		{
+			boolean closed = __windowList.get(i).closeIfNeeded(screenX, screenY, button) || __windowList.get(i).isClosed();
+			if(closed) __windowList.remove(__windowList.get(i));
 		}
 
 		return false;
@@ -383,24 +387,18 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	}
 
 	/**
-	 * Closes a specific window (please do window.close() instead).
-	 * 
-	 * @param window The window that should be closed.
-	 */
-	public static void __closeWindow(Window window)
-	{
-		__windowList.remove(window);
-		_controlActionManager.remove(window.getElements());
-	}
-
-	/**
 	 * Registers a control in the control manager. If the control already is registered, it'll be deleted.
 	 * 
 	 * @param control The control to add/remove.
 	 */
-	public static void registerControl(ControlElement control)
+	public static void __registerControl(ControlElement control)
 	{
 		_controlActionManager.registerElement(control);
+	}
+	
+	public static void __unregisterControl(ControlElement control)
+	{
+		_controlActionManager.remove(control);
 	}
 
 	/**

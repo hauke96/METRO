@@ -21,6 +21,7 @@ public interface ControlElement
 	 * 
 	 * @return True when user clicked on control.
 	 */
+	// TODO make this private when all observers are implemented
 	public boolean clickOnControlElement();
 
 	/**
@@ -50,14 +51,16 @@ public interface ControlElement
 	 * @return Position as Point.
 	 */
 	public Point getPosition();
-	
+
 	/**
 	 * Is called when mouse clicked with its left button.
+	 * 
 	 * @param screenX The x coordinate of the click.
 	 * @param screenY The y coordinate of the click.
 	 * @param button The button related to Buttons.xy.
+	 * @return True when mouse clicked on control, false when not.
 	 */
-	public boolean mouseLeftClicked(int screenX, int screenY, int button);
+	public boolean mouseClicked(int screenX, int screenY, int button);
 
 	/**
 	 * Moves the element.

@@ -104,7 +104,8 @@ public class List extends ActionObservable implements ControlElement
 
 		_windowHandle = win;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-
+		METRO.__registerControl(this);
+		
 		_compact = compact;
 	}
 
@@ -157,6 +158,7 @@ public class List extends ActionObservable implements ControlElement
 	public void setSelectedEntry(int entryIndex)
 	{
 		_selectedEntry = entryIndex;
+		notifySelectionChanged(_selectedEntry != -1 ? _entries.get(_selectedEntry): null);
 	}
 
 	/**
@@ -197,6 +199,7 @@ public class List extends ActionObservable implements ControlElement
 		if(entryIndex < 0 || entryIndex >= _entries.size()) return;
 		_entries.remove(entryIndex);
 		_selectedEntry = -1;
+		notifySelectionChanged(null);
 	}
 
 	/**
@@ -324,6 +327,7 @@ public class List extends ActionObservable implements ControlElement
 			if(_enabled && entryRect.contains(mPos)) // when mouse is in an entry, make background light-light-gray
 			{
 				_selectedEntry = i;
+				notifySelectionChanged(_entries.get(_selectedEntry));
 				return true;
 			}
 
@@ -333,8 +337,9 @@ public class List extends ActionObservable implements ControlElement
 		}
 
 		_selectedEntry = -1;
+		notifySelectionChanged(null);
 
-		return false;
+		return _position.contains(mPos);
 	}
 
 	@Override
@@ -350,11 +355,11 @@ public class List extends ActionObservable implements ControlElement
 	}
 	
 	@Override
-	public boolean mouseLeftClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{
-			notifyClosed();
+			notifyClickOnControl(null);
 			return true;
 		}
 		return false;

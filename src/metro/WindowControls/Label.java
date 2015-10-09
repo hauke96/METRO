@@ -53,7 +53,7 @@ public class Label extends ActionObservable implements ControlElement
 		_windowHandle = window;
 		_areaWidth = areaWidth;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		METRO.registerControl(this);
+		METRO.__registerControl(this);
 		_color = Color.black;
 		_enabled = true;
 	}
@@ -110,11 +110,6 @@ public class Label extends ActionObservable implements ControlElement
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see WindowControls.ControlElement#clickOnControlElement()
-	 */
 	@Override
 	public boolean clickOnControlElement()
 	{
@@ -126,22 +121,12 @@ public class Label extends ActionObservable implements ControlElement
 		return pos.contains(mPos);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see WindowControls.ControlElement#setPosition(java.awt.Point)
-	 */
 	@Override
 	public void setPosition(Point pos)
 	{
 		_position = pos;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see WindowControls.ControlElement#getPosition()
-	 */
 	@Override
 	public Point getPosition()
 	{
@@ -149,7 +134,7 @@ public class Label extends ActionObservable implements ControlElement
 	}
 	
 	@Override
-	public boolean mouseLeftClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{

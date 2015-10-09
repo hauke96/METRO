@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Observable;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -13,7 +14,7 @@ import metro.Graphics.Draw;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.Checkbox;
-import metro.WindowControls.Input;
+import metro.WindowControls.InputField;
 import metro.WindowControls.Label;
 import metro.WindowControls.List;
 import metro.WindowControls.Window;
@@ -29,7 +30,7 @@ public abstract class GameScreen extends Observable
 {
 	public SettingsWindow _settingsWindow; // makes it possible to create a settings-window from every(!) game screen.
 	public InGameMenuWindow _inGameMenuWindow; // makes it possible to create a ingame-menu-window from every(!) game screen.
-	private static Input _selectedInput = null;
+	private static InputField _selectedInput = null;
 
 	/**
 	 * Will be executed as fast as possible ;)
@@ -120,7 +121,7 @@ public abstract class GameScreen extends Observable
 	 * 
 	 * @param field The selected input component.
 	 */
-	public void setSelectedInput(Input field)
+	public void setSelectedInput(InputField field)
 	{
 		if(field != null) field.select();
 		else if(_selectedInput != null) _selectedInput.disselect();
@@ -132,7 +133,7 @@ public abstract class GameScreen extends Observable
 	 * 
 	 * @return Selected input field.
 	 */
-	public Input getSelectedInput()
+	public InputField getSelectedInput()
 	{
 		return _selectedInput;
 	}
@@ -309,7 +310,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void selectionChanged(String entry)
 				{
-					if(!Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())) // ... and fullscreen-mode is off
+					if(entry != null && !Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())) // ... and fullscreen-mode is off
 					{
 						System.out
 							.println(Settings.getNew("screen.width") + "x" + Settings.getNew("screen.height") + " -- " + _resolutionList.getText(_resolutionList.getSelected()));
@@ -327,7 +328,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void selectionChanged(String entry)
 				{
-					if(!entry.equals("")) Settings.set("amount.samples", Integer.parseInt(entry));
+					if(entry != null && !entry.equals("")) Settings.set("amount.samples", Integer.parseInt(entry));
 				}
 			});
 			_segmentList.register(new ActionObserver()
@@ -335,7 +336,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void selectionChanged(String entry)
 				{
-					if(!entry.equals("")) Settings.set("amount.segments", Integer.parseInt(entry));
+					if(entry != null && !entry.equals("")) Settings.set("amount.segments", Integer.parseInt(entry));
 				}
 			});
 		}
