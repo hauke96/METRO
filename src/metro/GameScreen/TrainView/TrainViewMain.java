@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
+import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
@@ -38,10 +39,24 @@ public class TrainViewMain extends GameScreen
 		_trainList = new List(new Rectangle(_areaOffset.x + 121, 130, _windowWidth - 141, 250),
 			null, null, true);
 		
+		fillLineList();
+		
 		_moveTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), 400, (_windowWidth - 40) / 3 - 10, 20), "Move train");
 		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, 400, (_windowWidth - 40) / 3 - 10, 20), "Sell train");
 
 		addButtonObserver();
+	}
+
+	/**
+	 * Fills the line list with the lines.
+	 */
+	private void fillLineList()
+	{
+		// Fill line list with all lines:
+		for(TrainLine line : METRO.__gameState.getLines())
+		{
+			_lineList.addElement(line.getName());
+		}
 	}
 
 	/**

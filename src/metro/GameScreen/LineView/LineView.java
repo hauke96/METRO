@@ -60,6 +60,8 @@ public class LineView extends GameScreen
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 40, 300),
 			null, null, true);
+		fillLineList();
+		
 		_createLineButton = new Button(new Rectangle(_areaOffset.x + 20, 450, (_windowWidth - 40) / 3 - 10, 20), "Create line");
 		_editLineButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), 450, (_windowWidth - 40) / 3 - 10, 20), "Edit line");
 		_removeLineButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, 450, (_windowWidth - 40) / 3 - 10, 20), "Remove line");
@@ -82,6 +84,18 @@ public class LineView extends GameScreen
 		addSaveButtonObserver();
 		addColorBarObserver();
 		addMessageLabelObserver();
+	}
+
+	/**
+	 * Fills the line list with the lines.
+	 */
+	private void fillLineList()
+	{
+		// Fill line list with all lines:
+		for(TrainLine line : METRO.__gameState.getLines())
+		{
+			_lineList.addElement(line.getName());
+		}
 	}
 
 	/**

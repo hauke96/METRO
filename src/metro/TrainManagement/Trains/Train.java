@@ -1,15 +1,16 @@
 package metro.TrainManagement.Trains;
 
 /**
- * WILL handle all the train stuff like animations, etc.
+ * Trains have all same properties but their values are different. This interface makes it easier to manage all trains.
  * 
  * @author hauke
  *
  */
 
-public class Train
+public interface Train
 {
-	public Train()
-	{
-	}
+	/**
+	 * @return The model designation of the train.
+	 */
+	public String getName();
 }
