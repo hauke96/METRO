@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
-import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.List;
 
@@ -25,7 +24,9 @@ public class TrainViewBuy extends GameScreen
 		_areaOffset = areaOffset;
 		
 		_buyButton = new Button(new Rectangle(_areaOffset.x + 130, 680, 250, 20), "Buy");
+		registerControl(_buyButton);
 		_modelList = new List(new Rectangle(_areaOffset.x + 20, 460, 100, 240), null, true);
+		registerControl(_modelList);
 	}
 
 	@Override

@@ -72,6 +72,7 @@ public class TrainLineOverseer
 
 	/**
 	 * Searches for a special line.
+	 * 
 	 * @param lineName The name of the line.
 	 * @return The line. null if line does not exist.
 	 */

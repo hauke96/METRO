@@ -322,7 +322,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 			__windowList.get(i).mousePressed(screenX, screenY, button); // also triggers the click event of the controls
 			if(__windowList.get(i).isMouseOnWindow(screenX, screenY)) // if mouse is just on the window area
 			{
-				System.out.println("OK");
 				clickedWindow = __windowList.get(i);
 				break;
 			}
@@ -335,7 +334,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 				if(__controlDrawer != null) __controlDrawer.mouseClicked(screenX, screenY, button);
 			}
 		}
-		
+
 		// close all windows after handling all clicks:
 		for(int i = 0; i < __windowList.size(); i++)
 		{
@@ -389,16 +388,31 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	/**
 	 * Registers a control in the control manager. If the control already is registered, it'll be deleted.
 	 * 
-	 * @param control The control to add/remove.
+	 * @param control The control to add.
 	 */
 	public static void __registerControl(ControlElement control)
 	{
 		_controlActionManager.registerElement(control);
 	}
-	
+
+	/**
+	 * Removes a control from the control action manager to disable user interactions with it.
+	 * 
+	 * @param control The control to remove.
+	 */
 	public static void __unregisterControl(ControlElement control)
 	{
 		_controlActionManager.remove(control);
+	}
+
+	/**
+	 * Closes a game game screen meaning removing all its controls.
+	 * 
+	 * @param screen The game screen to close.
+	 */
+	public static void __closeGameSreen(GameScreen screen)
+	{
+		screen.close(_controlActionManager);
 	}
 
 	/**

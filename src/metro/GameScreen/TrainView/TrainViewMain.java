@@ -36,13 +36,17 @@ public class TrainViewMain extends GameScreen
 		
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 300, 250),
 			null, null, true);
+		registerControl(_lineList);
 		_trainList = new List(new Rectangle(_areaOffset.x + 121, 130, _windowWidth - 141, 250),
 			null, null, true);
+		registerControl(_trainList);
 		
 		fillLineList();
 		
 		_moveTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), 400, (_windowWidth - 40) / 3 - 10, 20), "Move train");
+		registerControl(_moveTrainButton);
 		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, 400, (_windowWidth - 40) / 3 - 10, 20), "Sell train");
+		registerControl(_sellTrainButton);
 
 		addButtonObserver();
 	}

@@ -2,9 +2,9 @@ package metro.GameScreen;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.Observable;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -14,6 +14,8 @@ import metro.Graphics.Draw;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.Checkbox;
+import metro.WindowControls.ControlActionManager;
+import metro.WindowControls.ControlElement;
 import metro.WindowControls.InputField;
 import metro.WindowControls.Label;
 import metro.WindowControls.List;
@@ -31,6 +33,7 @@ public abstract class GameScreen extends Observable
 	public SettingsWindow _settingsWindow; // makes it possible to create a settings-window from every(!) game screen.
 	public InGameMenuWindow _inGameMenuWindow; // makes it possible to create a ingame-menu-window from every(!) game screen.
 	private static InputField _selectedInput = null;
+	private ArrayList<ControlElement> _allControls = new ArrayList<>();
 
 	/**
 	 * Will be executed as fast as possible ;)
@@ -150,11 +153,45 @@ public abstract class GameScreen extends Observable
 	 * @return True when active and usable, false when inactive, closed, ...
 	 */
 	public abstract boolean isActive();
-	
+
 	/**
 	 * Resets the game screen to its default values.
 	 */
 	public abstract void reset();
+
+	/**
+	 * Registers a control in the control manager. If the control already is registered, it'll be deleted.
+	 * 
+	 * @param control The control to add.
+	 */
+	public void registerControl(ControlElement control)
+	{
+		METRO.__registerControl(control);
+		_allControls.add(control);
+	}
+
+	/**
+	 * Unregistered an control element from the control manager to disable user interactions with it.
+	 * 
+	 * @param control The control to remove.
+	 */
+	public void unregisterControl(ControlElement control)
+	{
+		METRO.__unregisterControl(control);
+		_allControls.remove(control);
+	}
+
+	/**
+	 * Closes the game screen by removing all controls from the game screen.
+	 * Normally this method is called via METRO.closeGameScreen(GameScreen) to use the correct control manager.
+	 * 
+	 * @param manager The control action manager from which the control should be removed.
+	 */
+	public void close(ControlActionManager manager)
+	{
+		manager.remove(_allControls);
+		_allControls.clear();
+	}
 
 	/**
 	 * This is the settings window, that provides some options to configure.

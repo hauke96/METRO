@@ -88,7 +88,7 @@ public class Checkbox extends ActionObservable implements ControlElement
 		_enabled = enabled;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		METRO.__registerControl(this);
+//		METRO.__registerControl(this);
 	}
 
 	/**

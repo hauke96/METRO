@@ -20,7 +20,7 @@ import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.TrainManagement.Trains.TrainStation;
 
 /**
- * The main view is the normal screen the player sees. 
+ * The main view is the normal screen the player sees.
  * All sub tools like the station placing tool or the train management will be organized and drawn by this tool.
  * Furthermore it shows all player information and draws the whole map with its trains, stations and tracks.
  * 
@@ -73,7 +73,7 @@ public class MainView extends GameScreen implements Observer
 
 		_cityView.drawNumbers(sp, cursorDotPosition);
 
-		if(_activeTool != null) _activeTool.updateGameScreen(sp);//draw(sp, _mapOffset);
+		if(_activeTool != null) _activeTool.updateGameScreen(sp);// draw(sp, _mapOffset);
 
 		drawRailwayLines(sp);
 		drawTrainStations(sp);
@@ -235,10 +235,12 @@ public class MainView extends GameScreen implements Observer
 			if(arg1 instanceof Point && _activeTool != null) // there is an active tool, forward click to it
 			{
 				Point pos = (Point)arg1;
-				_activeTool.mouseClicked(pos.x, pos.y, Buttons.LEFT); //update(...) will only be executed when the left mouse button has been pressed
+				_activeTool.mouseClicked(pos.x, pos.y, Buttons.LEFT); // update(...) will only be executed when the left mouse button has been pressed
 			}
 			else // there is no active tool -> create new one from argument
 			{
+				if(_activeTool != null) METRO.__closeGameSreen(_activeTool);
+
 				if(_activeTool instanceof LineView && !(arg1 instanceof LineView)) ((LineView)_activeTool).setVisibility(false);
 				if(_activeTool instanceof TrainView && !(arg1 instanceof TrainView)) ((TrainView)_activeTool).setVisibility(false);
 

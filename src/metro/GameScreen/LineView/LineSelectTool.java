@@ -37,6 +37,14 @@ public class LineSelectTool extends GameScreen
 		_color = METRO.__metroBlue;
 		_lineName = "";
 	}
+	
+	public LineSelectTool(TrainLine line)
+	{
+		_listOfNodes = line.getNodes();
+		_isActive = true;
+		_color = line.getColor();
+		_lineName = line.getName();
+	}
 
 	/**
 	 * Creates the TrainLine object for further using.

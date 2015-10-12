@@ -57,7 +57,7 @@ public class Button extends ActionObservable implements ControlElement
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
-		METRO.__registerControl(this);
+//		METRO.__registerControl(this);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class Button extends ActionObservable implements ControlElement
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
-		METRO.__registerControl(this);
+//		METRO.__registerControl(this);
 	}
 
 	/**

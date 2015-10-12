@@ -104,7 +104,7 @@ public class List extends ActionObservable implements ControlElement
 
 		_windowHandle = win;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		METRO.__registerControl(this);
+//		METRO.__registerControl(this);
 		
 		_compact = compact;
 	}

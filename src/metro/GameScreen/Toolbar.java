@@ -34,9 +34,13 @@ public class Toolbar extends GameScreen
 	public Toolbar(Point position)
 	{
 		_buildStation = new Button(new Rectangle(-10 + position.x, position.y, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
+		registerControl(_buildStation);
 		_buildTracks = new Button(new Rectangle(-10 + position.x, 39 + position.y, 50, 40), new Rectangle(0, 68, 50, 40), METRO.__iconSet);
+		registerControl(_buildTracks);
 		_showTrainList = new Button(new Rectangle(-10 + position.x, 100 + position.y, 50, 40), new Rectangle(0, 108, 50, 40), METRO.__iconSet);
+		registerControl(_showTrainList);
 		_createNewTrain = new Button(new Rectangle(-10 + position.x, 139 + position.y, 50, 40), new Rectangle(0, 148, 50, 40), METRO.__iconSet);
+		registerControl(_createNewTrain);
 		registerObervations();
 	}
 
@@ -93,8 +97,8 @@ public class Toolbar extends GameScreen
 	{
 		_buildTracks.setPosition(new Point(-10, _buildTracks.getPosition().y));
 		_buildStation.setPosition(new Point(-10, _buildStation.getPosition().y));
-			_showTrainList.setPosition(new Point(-10, _showTrainList.getPosition().y));
-			_createNewTrain.setPosition(new Point(-10, _createNewTrain.getPosition().y));
+		_showTrainList.setPosition(new Point(-10, _showTrainList.getPosition().y));
+		_createNewTrain.setPosition(new Point(-10, _createNewTrain.getPosition().y));
 		// Build Tracks
 		if(exceptThisButton == _buildTracks)
 		{

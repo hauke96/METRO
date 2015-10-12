@@ -32,17 +32,20 @@ public class MainMenu extends GameScreen
 		// Create MainMenu buttons:
 		_button_startGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 - 25, 200, 50),
 			new Rectangle(0, 0, 200, 50), METRO.__mainMenu_Buttons);
+		registerControl(_button_startGame);
 		_button_settings = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 35, 200, 50),
 			new Rectangle(0, 50, 200, 50), METRO.__mainMenu_Buttons);
+		registerControl(_button_settings);
 		_button_exitGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 95, 200, 50),
 			new Rectangle(0, 100, 200, 50), METRO.__mainMenu_Buttons);
+		registerControl(_button_exitGame);
 		addActionObservations();
 
 		// Create welcome-window:
 		_welcomeWindow = new Window("Welcome to METRO - ver.:" + METRO.__VERSION,
 			new Point(50, METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 300), // same y-pos as title image
 			new Point(500, 360));
-		new Button(
+		Button button = new Button(
 			new Rectangle((500 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2,
 				(260 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2,
 				(int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f),
@@ -52,8 +55,9 @@ public class MainMenu extends GameScreen
 				METRO.__mainMenu_TitleImage.getRegionWidth(),
 				METRO.__mainMenu_TitleImage.getRegionHeight()),
 			METRO.__mainMenu_TitleImage, _welcomeWindow);
+		registerControl(button);
 
-		new Label("METRO stands for \"Master of established transport railway operators\" and is a simple Subway/Rapid-Transit and economic simulator."
+		Label label = new Label("METRO stands for \"Master of established transport railway operators\" and is a simple Subway/Rapid-Transit and economic simulator."
 			+ "\n\nFor all changes take a look into the 'changelog.txt'"
 			+ "\nNew main-features of ver." + METRO.__VERSION + ":"
 			+ "\n\n   * Dialog for creating a train line"
@@ -61,6 +65,7 @@ public class MainMenu extends GameScreen
 			+ "\n   * Lines are drawn within their color"
 			+ "\n\nAnd now: Have fun and earn money ;)",
 			new Point(20, 100), 450, _welcomeWindow);
+		registerControl(label);
 	}
 
 	/**
@@ -92,6 +97,7 @@ public class MainMenu extends GameScreen
 				_welcomeWindow.close();
 				METRO.__currentGameScreen = new MainView();
 				METRO.__controlDrawer = new ScreenInfoDrawer();
+				METRO.__closeGameSreen(MainMenu.this);
 				METRO.__unregisterControl(_button_startGame);
 				METRO.__unregisterControl(_button_settings);
 				METRO.__unregisterControl(_button_exitGame);

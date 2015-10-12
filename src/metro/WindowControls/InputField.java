@@ -58,7 +58,7 @@ public class InputField extends ActionObservable implements ControlElement
 		_text = text;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
-		METRO.__registerControl(this);
+//		METRO.__registerControl(this);
 	}
 
 	@Override
