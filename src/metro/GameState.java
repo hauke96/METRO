@@ -1,6 +1,7 @@
 package metro;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Trains.Train;
@@ -17,23 +18,26 @@ import metro.TrainManagement.Trains.TrainStation;
 public class GameState
 {
 	private static final GameState __INSTANCE = new GameState();
-	
+
 	private int _money;
 	private ArrayList<TrainStation> _stationList;
 	private ArrayList<TrainLine> _lineList;
 	private ArrayList<Train> _trainList;
+	private HashMap<String, Train> _availableTrains;
 
 	/**
 	 * Creates a new game state. This can't be done by an external class.
 	 */
 	private GameState()
 	{
-		_money = 50000;
+		_money = 500000;
 		_stationList = new ArrayList<>();
 		_lineList = new ArrayList<>();
 		_trainList = new ArrayList<>();
+		_availableTrains = new HashMap<>();
+		// TODO parsing method for the ./data/trains.txt
 	}
-	
+
 	/**
 	 * @return The instance of the game state. There can only be one instance per game.
 	 */
@@ -84,5 +88,16 @@ public class GameState
 	public ArrayList<Train> getTrains()
 	{
 		return _trainList;
+	}
+
+	/**
+	 * Gets a train by giving the name of the train.
+	 * 
+	 * @param name The name of the train.
+	 * @return A new train object.
+	 */
+	public Train getTrain(String name)
+	{
+		return _availableTrains.get(name);
 	}
 }

@@ -1,0 +1,36 @@
+# This file contains all trains that are available for the player.
+
+# blank lines will be ignored by the parsing method of METRO.
+# Lines beginning with # are comments and will also be ignored.
+
+# Here a short description of all train properties. 
+# NOTE: EVERY property must be used in a train, otherwise the train will not be available for the player due reading errors.
+#     NAME         - Model name of the train
+#     MANUFACTURER - Name of the manufacturer
+#     PRICE        - Price of the train
+#     COSTS        - Costs of the train per month
+#     COSTSFACTOR  - Monthly increase of costs per month
+#     PASSENGER    - Amount of passengers this train can carry
+
+# There mustn't be any separating stuff between the information blocks but an empty line makes the structure clearer ;) 
+
+NAME:CT-1
+MANUFACTURER:Colman
+PRICE:90000
+COSTS:500
+COSTSFACTOR:1.05
+PASSENGER:150
+
+NAME:CT-2
+MANUFACTURER:Colman
+PRICE:170000
+COSTS:1500
+COSTSFACTOR:1.035
+PASSENGER:400
+
+NAME:BR 102-532
+MANUFACTURER:Kohlbrandt & Müller AG
+PRICE:250000
+COSTS:1900
+COSTSFACTOR:1.025
+PASSENGER:500
