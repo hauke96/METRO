@@ -302,12 +302,6 @@ public class Window extends ActionObservable implements ControlElement
 	}
 
 	@Override
-	public boolean clickOnControlElement()
-	{
-		return false;
-	}
-
-	@Override
 	public void setPosition(Point pos)
 	{
 	}

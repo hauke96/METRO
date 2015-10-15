@@ -110,7 +110,11 @@ public class Label extends ActionObservable implements ControlElement
 		}
 	}
 
-	@Override
+	/**
+	 * Does all actions when the mouse clicked on this control.
+	 * 
+	 * @return True when user clicked on control, false if not.
+	 */
 	public boolean clickOnControlElement()
 	{
 		if(!_enabled) return false;

@@ -153,8 +153,6 @@ public class TrainViewMain extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		// TODO implement ActionObserver
-		if(_trainList.clickOnControlElement()) return;
 	}
 
 	@Override

@@ -73,10 +73,10 @@ public class MainView extends GameScreen implements Observer
 
 		_cityView.drawNumbers(sp, cursorDotPosition);
 
-		if(_activeTool != null) _activeTool.updateGameScreen(sp);// draw(sp, _mapOffset);
-
 		drawRailwayLines(sp);
 		drawTrainStations(sp);
+		
+		if(_activeTool != null) _activeTool.updateGameScreen(sp);// draw(sp, _mapOffset);
 
 		_toolbar.updateGameScreen(sp);
 

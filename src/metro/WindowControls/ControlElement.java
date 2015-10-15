@@ -17,14 +17,6 @@ public interface ControlElement
 	public void draw();
 
 	/**
-	 * When mouse clicked on control.
-	 * 
-	 * @return True when user clicked on control.
-	 */
-	// TODO make this private when all observers are implemented
-	public boolean clickOnControlElement();
-
-	/**
 	 * Sets a new position
 	 * 
 	 * @param pos New position as Point.
