@@ -11,6 +11,14 @@ import metro.Graphics.Draw;
 import metro.WindowControls.Button;
 import metro.WindowControls.List;
 
+/**
+ * A part of the TrainView where the user can buy new trains.
+ * It will also show information about different train types but this tool can't edit the trains per line.
+ * The player can only buy trains with this dialog but can't sell any trains.
+ * 
+ * @author hauke
+ *
+ */
 public class TrainViewBuy extends GameScreen
 {
 	private List _modelList; // all available train models
@@ -18,11 +26,17 @@ public class TrainViewBuy extends GameScreen
 	private Point _areaOffset;
 	private Button _buyButton;
 
+	/**
+	 * Creates a new dialog.
+	 * 
+	 * @param areaOffset The position of the right edge of the main dialog (to better determine positions).
+	 * @param windowWidth The width of the main dialog.
+	 */
 	public TrainViewBuy(Point areaOffset, int windowWidth)
 	{
 		_windowWidth = windowWidth;
 		_areaOffset = areaOffset;
-		
+
 		_buyButton = new Button(new Rectangle(_areaOffset.x + 130, 680, 250, 20), "Buy");
 		registerControl(_buyButton);
 		_modelList = new List(new Rectangle(_areaOffset.x + 20, 460, 100, 240), null, true);
@@ -33,15 +47,15 @@ public class TrainViewBuy extends GameScreen
 	public void updateGameScreen(SpriteBatch g)
 	{
 		Draw.setColor(METRO.__metroRed);
-		
+
 		String text = "Available train models:";
 		int length = Draw.getStringSize(text).width;
 		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 25, 440);
 		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 25, 455,
 			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, 455);
-		
+
 		Draw.String("INFOS ABOUT SELECTED TRAIN HERE!", _areaOffset.x + 170, 530, 160);
-		
+
 		_modelList.draw();
 		_buyButton.draw();
 	}

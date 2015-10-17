@@ -3,6 +3,8 @@ package metro.GameScreen;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import metro.METRO;
 import metro.GameScreen.MainView.MainView;
 import metro.Graphics.Draw;
@@ -10,8 +12,6 @@ import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.Label;
 import metro.WindowControls.Window;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * The main menu is the first menu you'll see after starting the game. It provides some basic options like start, exit and settings.
@@ -27,6 +27,9 @@ public class MainMenu extends GameScreen
 		_button_exitGame;
 	private Window _welcomeWindow;
 
+	/**
+	 * Creates a main menu with the welcome-window, and the three buttons "Play", "Settings" and "Exit".
+	 */
 	public MainMenu()
 	{
 		// Create MainMenu buttons:
@@ -95,12 +98,8 @@ public class MainMenu extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				_welcomeWindow.close();
-				METRO.__currentGameScreen = new MainView();
-				METRO.__controlDrawer = new ScreenInfoDrawer();
-				METRO.__closeGameSreen(MainMenu.this);
-				METRO.__unregisterControl(_button_startGame);
-				METRO.__unregisterControl(_button_settings);
-				METRO.__unregisterControl(_button_exitGame);
+				METRO.__changeGameScreen(new MainView());
+				close();
 			}
 		});
 	}

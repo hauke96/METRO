@@ -143,6 +143,7 @@ public class List extends ActionObservable implements ControlElement
 	 * Gets the text of a given entry.
 	 * 
 	 * @param entryIndex The number of the entry.
+	 * @return String The text of the entry. It's "" if the entry doesn't exist.
 	 */
 	public String getText(int entryIndex)
 	{

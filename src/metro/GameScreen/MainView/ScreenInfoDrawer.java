@@ -1,8 +1,9 @@
-package metro.GameScreen;
+package metro.GameScreen.MainView;
 
 import java.awt.Color;
 
 import metro.METRO;
+import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 

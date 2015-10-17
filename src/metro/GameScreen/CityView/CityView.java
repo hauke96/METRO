@@ -23,6 +23,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class CityView extends GameScreen
 {
+	/**
+	 * The offset of the city view win pixel.
+	 */
 	public static Point2D _offset = new Point2D.Float(0, 0);
 
 	private List<CityTravelerSpot> _travelerSpots = new ArrayList<CityTravelerSpot>();

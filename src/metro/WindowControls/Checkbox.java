@@ -6,6 +6,12 @@ import java.awt.Point;
 import metro.METRO;
 import metro.Graphics.Draw;
 
+/**
+ * A checkbox is a simple control to (de)activate things. This class provides lots of features to do this and draws the control.
+ * 
+ * @author hauke
+ *
+ */
 public class Checkbox extends ActionObservable implements ControlElement
 {
 	private boolean _checked,
@@ -88,7 +94,7 @@ public class Checkbox extends ActionObservable implements ControlElement
 		_enabled = enabled;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-//		METRO.__registerControl(this);
+		// METRO.__registerControl(this);
 	}
 
 	/**
@@ -113,6 +119,12 @@ public class Checkbox extends ActionObservable implements ControlElement
 		return hasChanged;
 	}
 
+	/**
+	 * This method checks if the mouse is in the area of the box.
+	 * Notice: The mouse does NOT need to be clicked to return true!
+	 * 
+	 * @return True when the mouse is in the area of the box, false when not.
+	 */
 	public boolean isPressed()
 	{
 		Point mPos = METRO.__originalMousePosition;
@@ -173,7 +185,7 @@ public class Checkbox extends ActionObservable implements ControlElement
 	{
 		return _position;
 	}
-	
+
 	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{

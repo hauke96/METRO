@@ -10,6 +10,12 @@ import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 
+/**
+ * The dialog to buy, sell and manage trains.
+ * 
+ * @author hauke
+ *
+ */
 public class TrainView extends GameScreen// implements TrainInteractionTool
 {
 	private int _windowWidth;

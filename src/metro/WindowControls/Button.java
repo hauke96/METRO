@@ -160,6 +160,8 @@ public class Button extends ActionObservable implements ControlElement
 
 	/**
 	 * Check if mouse is on the button and sets its clicked-flag to true (isPressed() would return true now).
+	 * 
+	 * @return boolean True when user clicked on control, false when not.
 	 */
 	public boolean clickOnControlElement()
 	{

@@ -18,7 +18,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class CityTravelerSpot
 {
-	public static int _circleRadiusStep = 25 * 2; // difference between the circles radius
+	/**
+	 * The difference between two circles in pixel.
+	 */
+	public static int _circleRadiusStep = 25 * 2;
 	private Point _position;
 	private int _strength;
 

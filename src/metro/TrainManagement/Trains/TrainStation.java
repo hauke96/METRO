@@ -21,7 +21,10 @@ public class TrainStation
 	private int _waitingPassengers;
 	private Point _position; // Position
 
-	public static final int _PRICE = 1000;
+	/**
+	 * The price to build one train station.
+	 */
+	public static final int _PRICE = 5000;
 
 	/**
 	 * Creates a new train station.

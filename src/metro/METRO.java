@@ -24,14 +24,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import metro.GameScreen.GameScreen;
-import metro.GameScreen.MainMenu;
-import metro.Graphics.Draw;
-import metro.WindowControls.Button;
-import metro.WindowControls.ControlActionManager;
-import metro.WindowControls.ControlElement;
-import metro.WindowControls.Window;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -49,6 +41,15 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
+import metro.GameScreen.GameScreen;
+import metro.GameScreen.MainMenu;
+import metro.Graphics.Draw;
+import metro.WindowControls.Button;
+import metro.WindowControls.ControlActionManager;
+import metro.WindowControls.ControlElement;
+import metro.WindowControls.InputField;
+import metro.WindowControls.Window;
+
 /**
  * @author Hauke
  * @version 0.1.3_indev
@@ -57,15 +58,15 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 {
 	private static final long serialVersionUID = 1L;
 
-	public static Dimension __SCREEN_SIZE;// = Toolkit.getDefaultToolkit().getScreenSize();
+	public static Dimension __SCREEN_SIZE;
 	public static final String __TITLE = "METRO",
 		__VERSION = "0.1.3_indev";
 
 	private static OSType _detected_OS = OSType.UNKNOWN;
 	private static ControlActionManager _controlActionManager;
+	private static GameScreen _currentGameScreen;
 
 	public static BitmapFont __stdFont;
-	public static GameScreen __currentGameScreen, __controlDrawer; // draws all the important controls and infos after rendering the scene
 	public static TextureRegion __mainMenu_Buttons,
 		__mainMenu_TitleImage,
 		__iconSet,
@@ -100,6 +101,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public void create()
 	{
 		_controlActionManager = new ControlActionManager();
+		GameScreen.setActionManager(_controlActionManager);
 
 		// __CURRENT_OS
 		String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
@@ -160,7 +162,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		generator.dispose();
 
 		// Create MainMenu Screen
-		__currentGameScreen = new MainMenu();
+		_currentGameScreen = new MainMenu();
 
 		// Create special colors
 		__metroBlue = new Color(100, 180, 255);
@@ -231,8 +233,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	 */
 	private void renderGameScreen()
 	{
-		__currentGameScreen.update(__spriteBatch);
-		if(__controlDrawer != null) __controlDrawer.update(__spriteBatch);
+		_currentGameScreen.update(__spriteBatch);
 	}
 
 	/**
@@ -279,19 +280,22 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyDown(int keyCode)
 	{
-		__currentGameScreen.keyPressed(keyCode);
-		_controlActionManager.keyPressed(keyCode);
+		_currentGameScreen.keyPressed(keyCode);
+		for(Window win : __windowList)
+		{
+			win.keyPressed(keyCode);
+		}
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keyCode)
 	{
+		_currentGameScreen.keyUp(keyCode);
 		for(Window win : __windowList)
 		{
 			win.keyUp(keyCode);
 		}
-		_controlActionManager.keyUp(keyCode);
 		return false;
 	}
 
@@ -305,13 +309,10 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	 * Is executed when the user clicks with the mouse.
 	 * 
 	 * The click-hirarchy:
-	 * 1.) Check if a control has been clicked.
-	 * If yes: return
-	 * If no : do check 2
-	 * 2.) Check if a window has been clicked.
-	 * If yes: Close the window if needed and then return
-	 * If no : do check 3
-	 * 3.) Forward click to the game screen.
+	 * 1.) Check if a window or one control on a window has been clicked.
+	 * If no: Check if any other control has been clicked.
+	 * If no: Forward click to game screen.
+	 * 2.) Close windows if needed and remove if window has been closed.
 	 */
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
@@ -326,13 +327,9 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 				break;
 			}
 		}
-		if(clickedWindow == null) // if no window has been clicked
+		if(clickedWindow == null && !_controlActionManager.mouseClicked(screenX, screenY, button))
 		{
-			if(!_controlActionManager.mouseClicked(screenX, screenY, button))
-			{
-				__currentGameScreen.mouseClicked(screenX, screenY, button); // forward click to game screen
-				if(__controlDrawer != null) __controlDrawer.mouseClicked(screenX, screenY, button);
-			}
+			_currentGameScreen.mouseClicked(screenX, screenY, button); // forward click to game screen
 		}
 
 		// close all windows after handling all clicks:
@@ -348,7 +345,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{
-		__currentGameScreen.mouseReleased(button);
+		_currentGameScreen.mouseReleased(button);
 
 		for(Window win : __windowList)
 		{
@@ -372,7 +369,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public boolean scrolled(int amount)
 	{
-		__currentGameScreen.mouseScrolled(amount);
+		_currentGameScreen.mouseScrolled(amount);
 		Point mPos = METRO.__originalMousePosition;
 		for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
 		{
@@ -386,17 +383,8 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	}
 
 	/**
-	 * Registers a control in the control manager. If the control already is registered, it'll be deleted.
-	 * 
-	 * @param control The control to add.
-	 */
-	public static void __registerControl(ControlElement control)
-	{
-		_controlActionManager.registerElement(control);
-	}
-
-	/**
 	 * Removes a control from the control action manager to disable user interactions with it.
+	 * Notice: Don't use this from a game screen there's the method "unregisterControl(ControlElement control)" in the GameScreen class!
 	 * 
 	 * @param control The control to remove.
 	 */
@@ -406,13 +394,24 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	}
 
 	/**
-	 * Closes a game game screen meaning removing all its controls.
+	 * Closes the current game screen and makes the given screen to the new one.
 	 * 
-	 * @param screen The game screen to close.
+	 * @param newScreen The new game screen.
 	 */
-	public static void __closeGameSreen(GameScreen screen)
+	public static void __changeGameScreen(GameScreen newScreen)
 	{
-		screen.close(_controlActionManager);
+		_currentGameScreen.close();
+		_currentGameScreen = newScreen;
+	}
+
+	/**
+	 * Sets the selected input of the current game screen. This enables to change the focus of the input fields.
+	 * 
+	 * @param field The input field that should get the focus.
+	 */
+	public static void __setSelectedInput(InputField field)
+	{
+		_currentGameScreen.setSelectedInput(field);
 	}
 
 	/**

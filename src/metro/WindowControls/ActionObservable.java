@@ -13,6 +13,9 @@ public class ActionObservable
 {
 	private ArrayList<ActionObserver> _listOfObserver;
 
+	/**
+	 * Creates the list of all observers of this observable object.
+	 */
 	public ActionObservable()
 	{
 		_listOfObserver = new ArrayList<ActionObserver>();
@@ -79,7 +82,7 @@ public class ActionObservable
 			observer.selectionChanged(entry);
 		}
 	}
-	
+
 	protected void notifyClosed()
 	{
 		for(ActionObserver observer : _listOfObserver)

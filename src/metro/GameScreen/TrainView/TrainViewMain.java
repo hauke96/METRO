@@ -14,6 +14,13 @@ import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.List;
 
+/**
+ * This dialog part shows the lines and the trains attached to them.
+ * The player can't buy a train with this dialog but can sell one.
+ * 
+ * @author hauke
+ *
+ */
 public class TrainViewMain extends GameScreen
 {
 	private int _windowWidth;
@@ -22,7 +29,7 @@ public class TrainViewMain extends GameScreen
 	private Button _moveTrainButton, // to change a train
 		_sellTrainButton; // to remove a train
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
-	
+
 	/**
 	 * Creates a new main view for the train screen.
 	 * 
@@ -33,16 +40,16 @@ public class TrainViewMain extends GameScreen
 	{
 		_windowWidth = windowWidth;
 		_areaOffset = areaOffset;
-		
+
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 300, 250),
 			null, null, true);
 		registerControl(_lineList);
 		_trainList = new List(new Rectangle(_areaOffset.x + 121, 130, _windowWidth - 141, 250),
 			null, null, true);
 		registerControl(_trainList);
-		
+
 		fillLineList();
-		
+
 		_moveTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), 400, (_windowWidth - 40) / 3 - 10, 20), "Move train");
 		registerControl(_moveTrainButton);
 		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, 400, (_windowWidth - 40) / 3 - 10, 20), "Sell train");
@@ -99,19 +106,19 @@ public class TrainViewMain extends GameScreen
 	private void drawListBox()
 	{
 		Draw.setColor(METRO.__metroRed);
-		
+
 		String text = "Your lines:";
 		int length = Draw.getStringSize(text).width;
 		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 25, 110);
 		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 25, 125,
 			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, 125);
-		
+
 		text = "Your trains:";
 		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 125, 110);
 		length = Draw.getStringSize(text).width;
 		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 125, 125,
 			METRO.__SCREEN_SIZE.width - _windowWidth + 125 + length, 125);
-		
+
 		_trainList.draw();
 		_lineList.draw();
 	}

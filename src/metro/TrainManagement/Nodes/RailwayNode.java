@@ -24,8 +24,17 @@ public class RailwayNode
 	private HashMap<RailwayNode, ArrayList<Color>> _mapOfColors = new HashMap<RailwayNode, ArrayList<Color>>();
 	private Point _position; // not in pixel, cross number/pos
 
-	public static final int PRICE = 200;
+	/**
+	 * The price of one node.
+	 */
+	public static final int PRICE = 2000;
 
+	/**
+	 * Creates a new node at the given position with a specific neighbor.
+	 * 
+	 * @param position The position (NOT pixel) of the node.
+	 * @param neighbor The neighbor of the node.
+	 */
 	public RailwayNode(Point position, RailwayNode neighbor)
 	{
 		_position = position;
@@ -189,9 +198,10 @@ public class RailwayNode
 		if(!_mapOfColors.containsKey(node)) _mapOfColors.put(node, new ArrayList<Color>());
 		_mapOfColors.get(node).add(color);
 	}
-	
+
 	/**
 	 * Removes the connection "this node" <--[color]--> "parameter node".
+	 * 
 	 * @param node The neighbor node with the same color.
 	 * @param color The color of these nodes.
 	 */
@@ -222,6 +232,7 @@ public class RailwayNode
 	 * 
 	 * @param oldColor The color to replace.
 	 * @param newColor The new color.
+	 * @throws IllegalArgumentException Throws this exception when the user selected a color that has already been taken (exception because no duplicate colors are allowed).
 	 */
 	public void changeColor(Color oldColor, Color newColor) throws IllegalArgumentException
 	{

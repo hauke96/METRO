@@ -30,10 +30,27 @@ import metro.WindowControls.Window;
 
 public abstract class GameScreen extends Observable
 {
-	public SettingsWindow _settingsWindow; // makes it possible to create a settings-window from every(!) game screen.
-	public InGameMenuWindow _inGameMenuWindow; // makes it possible to create a ingame-menu-window from every(!) game screen.
+	/**
+	 * Makes it possible to create a settings-window from every(!) game screen.
+	 */
+	public SettingsWindow _settingsWindow;
+	/**
+	 * Makes it possible to create a ingame-menu-window from every(!) game screen.
+	 */
+	public InGameMenuWindow _inGameMenuWindow;
 	private static InputField _selectedInput = null;
+	private static ControlActionManager _controlActionManager;
 	private ArrayList<ControlElement> _allControls = new ArrayList<>();
+
+	/**
+	 * Sets the new control action manager.
+	 * 
+	 * @param manager An instance of the ControlActionManager.
+	 */
+	public static void setActionManager(ControlActionManager manager)
+	{
+		_controlActionManager = manager;
+	}
 
 	/**
 	 * Will be executed as fast as possible ;)
@@ -85,8 +102,22 @@ public abstract class GameScreen extends Observable
 			{
 				createMenuWindow();
 			}
+			keyDown(keyCode);
 		} // Window-class will do not-null-stuff, and Input-class will check if the input is selected -> nothing to do here
-		keyDown(keyCode);
+		else
+		{
+			_selectedInput.keyPressed(keyCode);
+		}
+	}
+
+	/**
+	 * Forwards the key up event to the active input control.
+	 * 
+	 * @param keyCode Key number from Gdx.Input
+	 */
+	public void keyUp(int keyCode)
+	{
+		if(_selectedInput != null) _selectedInput.keyUp(keyCode);
 	}
 
 	/**
@@ -166,30 +197,29 @@ public abstract class GameScreen extends Observable
 	 */
 	public void registerControl(ControlElement control)
 	{
-		METRO.__registerControl(control);
+		_controlActionManager.registerElement(control);
 		_allControls.add(control);
 	}
 
 	/**
 	 * Unregistered an control element from the control manager to disable user interactions with it.
+	 * Use this method from a game screen and NOT the METRO.__unregisterControl(ControlElement) method!
 	 * 
 	 * @param control The control to remove.
 	 */
 	public void unregisterControl(ControlElement control)
 	{
-		METRO.__unregisterControl(control);
+		_controlActionManager.remove(control);
 		_allControls.remove(control);
 	}
 
 	/**
 	 * Closes the game screen by removing all controls from the game screen.
 	 * Normally this method is called via METRO.closeGameScreen(GameScreen) to use the correct control manager.
-	 * 
-	 * @param manager The control action manager from which the control should be removed.
 	 */
-	public void close(ControlActionManager manager)
+	public void close()
 	{
-		manager.remove(_allControls);
+		_controlActionManager.remove(_allControls);
 		_allControls.clear();
 	}
 
@@ -230,12 +260,17 @@ public abstract class GameScreen extends Observable
 			_okButton = new Button(new Rectangle(200, 420, 100, 20),
 				"OK",
 				_window);
+			registerControl(_okButton);
 			addButtonObserver();
 
 			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString()), true, _window);
+			registerControl(_fullscreenOn);
 			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Boolean.parseBoolean(Settings.getNew("use.opengl30").toString()), true, _window);
+			registerControl(_useOpenGL30);
 			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Boolean.parseBoolean(Settings.getNew("use.vsync").toString()), true, _window);
+			registerControl(_useVSync);
 			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Boolean.parseBoolean(Settings.getNew("use.hdpi").toString()), true, _window);
+			registerControl(_useHDPI);
 			addCheckboxObserver();
 
 			new Label("Screen Resolution:", new Point(20, 180), _window);
@@ -251,6 +286,7 @@ public abstract class GameScreen extends Observable
 			if(Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())) _resolutionList.setState(false);
 			int index = _resolutionList.getIndex(Integer.parseInt(Settings.getNew("screen.width").toString()) + "x" + Integer.parseInt(Settings.getNew("screen.width").toString())); // get the entry with the current resolution
 			_resolutionList.setSelectedEntry(index);
+			registerControl(_resolutionList);
 
 			new Label("Amount Samples:", new Point(240, 180), _window);
 			_sampleList = new List(new Rectangle(240, 200, 90, 150), _window, true);
@@ -261,6 +297,7 @@ public abstract class GameScreen extends Observable
 			_sampleList.addElement("16");
 			index = _sampleList.getIndex(Settings.getNew("amount.samples") + ""); // get the entry with the current resolution
 			_sampleList.setSelectedEntry(index);
+			registerControl(_sampleList);
 
 			new Label("Amount Segments:", new Point(360, 180), _window);
 			_segmentList = new List(new Rectangle(360, 200, 90, 150), _window, true);
@@ -271,6 +308,7 @@ public abstract class GameScreen extends Observable
 			_segmentList.addElement("256");
 			index = _segmentList.getIndex(Settings.getNew("amount.segments") + ""); // get the entry with the current resolution
 			_segmentList.setSelectedEntry(index);
+			registerControl(_segmentList);
 			addListObserver();
 
 			Settings.save();
@@ -417,11 +455,16 @@ public abstract class GameScreen extends Observable
 			_window = new Window("Really quit?", new Point(METRO.__SCREEN_SIZE.width / 2 - 200,
 				METRO.__SCREEN_SIZE.height / 2 - 50), new Point(400, 100), METRO.__metroRed);
 			addWindowObserver();
-			_yesButton = new metro.WindowControls.Button(new Rectangle(10, 70, 120, 20), "Yes", _window);
-			_settingsButton = new metro.WindowControls.Button(new Rectangle(140, 70, 120, 20), "Settings", _window);
-			_noButton = new metro.WindowControls.Button(new Rectangle(270, 70, 120, 20), "No", _window);
+
+			_yesButton = new Button(new Rectangle(10, 70, 120, 20), "Yes", _window);
+			registerControl(_yesButton);
+			_settingsButton = new Button(new Rectangle(140, 70, 120, 20), "Settings", _window);
+			registerControl(_settingsButton);
+			_noButton = new Button(new Rectangle(270, 70, 120, 20), "No", _window);
+			registerControl(_noButton);
 			addButtonObserver();
-			new metro.WindowControls.Label("Really quit METRO? Or go into settings?",
+
+			new Label("Really quit METRO? Or go into settings?",
 				new Point(200 - (Draw.getStringSize("Really quit METRO? Or go into settings?").width) / 2, 25), _window);
 		}
 

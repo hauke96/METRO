@@ -24,10 +24,22 @@ public class Window extends ActionObservable implements ControlElement
 		_size,
 		_oldMousePos;
 	private String _title = "";
-	private ArrayList<ControlElement> _elementList = new ArrayList<ControlElement>();
-	private boolean _dragMode = false, // to drag the window
-		_closed = false; // even if window has been deleted from the window list, that does not mean, that this object doesn't exist anymore, to this indicates that this window has been deleted
+	private ArrayList<ControlElement> _elementList;
+	private boolean _dragMode, // to drag the window
+		_closed; // even if window has been deleted from the window list, that does not mean, that this object doesn't exist anymore, to this indicates that this window has been deleted
 	private Color _color; // color of borders
+
+	/**
+	 * Creates a new window.
+	 * 
+	 * @param title The title of the Window, is shown in the top area.
+	 * @param position The position on the Screen (absolute)
+	 * @param size The size in pixel (absolute)
+	 */
+	public Window(String title, Point position, Point size)
+	{
+		this(title, position, size, METRO.__metroBlue);
+	}
 
 	/**
 	 * Creates a new window.
@@ -47,19 +59,11 @@ public class Window extends ActionObservable implements ControlElement
 		_size.y += 20; // for title
 		_color = color;
 
-		METRO.__windowList.add(this);
-	}
+		_closed = false;
+		_dragMode = false;
+		_elementList = new ArrayList<ControlElement>();
 
-	/**
-	 * Creates a new window.
-	 * 
-	 * @param title The title of the Window, is shown in the top area.
-	 * @param position The position on the Screen (absolute)
-	 * @param size The size in pixel (absolute)
-	 */
-	public Window(String title, Point position, Point size)
-	{
-		this(title, position, size, METRO.__metroBlue);
+		METRO.__windowList.add(this);
 	}
 
 	/**
@@ -71,6 +75,19 @@ public class Window extends ActionObservable implements ControlElement
 	{
 		update();
 
+		drawWindow();
+
+		for(ControlElement cElement : _elementList)
+		{
+			cElement.draw();
+		}
+	}
+
+	/**
+	 * Draws the background, border, head bar with title and the close cross.
+	 */
+	private void drawWindow()
+	{
 		// Clear background
 		Fill.setColor(Color.white);
 		Fill.Rect(_position.x,
@@ -105,11 +122,6 @@ public class Window extends ActionObservable implements ControlElement
 		Draw.Image(METRO.__iconSet,
 			new Rectangle(_position.x + _size.x - 19, _position.y + 1, 19, 19),
 			new Rectangle(0, 0, 19, 19));
-
-		for(ControlElement cElement : _elementList)
-		{
-			cElement.draw();
-		}
 	}
 
 	/**
@@ -179,15 +191,15 @@ public class Window extends ActionObservable implements ControlElement
 		boolean inputPressed = false; // true if an input field has been clicked
 		for(ControlElement cElement : _elementList)
 		{
-			boolean b = cElement.mouseClicked(screenX, screenY, mouseButton);// .clickOnControlElement();
+			boolean b = cElement.mouseClicked(screenX, screenY, mouseButton);// TODO controls are getting clicks twice - not nice, try to remove this call and only use the manager
 
 			if(b && cElement instanceof InputField) // if clicked element is an input field, set this as selected field
 			{
 				inputPressed = true;
-				METRO.__currentGameScreen.setSelectedInput((InputField)cElement);
+				METRO.__setSelectedInput((InputField)cElement);
 			}
 		}
-		if(!inputPressed) METRO.__currentGameScreen.setSelectedInput(null); // reset the selected input field
+		if(!inputPressed) METRO.__setSelectedInput(null); // reset the selected input field
 
 		// Check for drag-mode:
 		if(screenX >= _position.x
@@ -225,6 +237,9 @@ public class Window extends ActionObservable implements ControlElement
 	/**
 	 * Closes the window if the mouse is on the cross. NO CLICK is needed in this function, be careful. This function calls the close() function to mark himself as closed.
 	 * 
+	 * @param screenX The x-coordinate of the click.
+	 * @param screenY The y-coordinate of the click.
+	 * @param mouseButton The button that has been clicked.
 	 * @return True if the window has been closed, false if not.
 	 */
 	public boolean closeIfNeeded(int screenX, int screenY, int mouseButton)
@@ -234,6 +249,7 @@ public class Window extends ActionObservable implements ControlElement
 			&& screenY >= _position.y
 			&& screenY <= _position.y + 20)
 		{
+			notifyClosed();
 			close(); // mark whis window as "closed" to tell the METRO class to remove it
 			return true;
 		}
@@ -255,8 +271,6 @@ public class Window extends ActionObservable implements ControlElement
 	 */
 	public void close()
 	{
-		if(_closed) return; // "_closed" is already true -> all controls have been removed already
-		
 		// Removes all controls from the action manager via second registering
 		for(ControlElement cElement : _elementList)
 		{
@@ -275,11 +289,7 @@ public class Window extends ActionObservable implements ControlElement
 		return _closed;
 	}
 
-	/**
-	 * Gets called when a key is pressed. Controls should
-	 * 
-	 * @param keyCode Key code of the pressed key.
-	 */
+	@Override
 	public void keyPressed(int keyCode)
 	{
 		for(ControlElement cElement : _elementList)
@@ -288,6 +298,7 @@ public class Window extends ActionObservable implements ControlElement
 		}
 	}
 
+	@Override
 	public void keyUp(int keyCode)
 	{
 		for(ControlElement cElement : _elementList)
@@ -319,14 +330,6 @@ public class Window extends ActionObservable implements ControlElement
 	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
-		if(screenX >= _position.x + _size.x - 20
-			&& screenX <= _position.x + _size.x
-			&& screenY >= _position.y
-			&& screenY <= _position.y + 20)
-		{
-			notifyClosed();
-			return true;
-		}
 		return false;
 	}
 
@@ -335,6 +338,9 @@ public class Window extends ActionObservable implements ControlElement
 	{
 	}
 
+	/**
+	 * @return A list of all controls attached to this window excluding itself.
+	 */
 	public ArrayList<ControlElement> getElements()
 	{
 		return _elementList;

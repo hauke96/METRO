@@ -49,7 +49,7 @@ public class ColorBar extends ActionObservable implements ControlElement
 		_brightness = brithness;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-//		METRO.__registerControl(this);
+		// METRO.__registerControl(this);
 		_enabled = true;
 		_drawBorder = true;
 		_clickedXPosition = -1;
@@ -95,9 +95,17 @@ public class ColorBar extends ActionObservable implements ControlElement
 		_clickedColor = Color.getHSBColor(hue / 360f, _saturation, _brightness);
 	}
 
+	/**
+	 * Calculates the hue-value of the given rgb-values.
+	 * This implements just one way of calculating this value and there are many other ways but this is absolutely sufficient.
+	 * 
+	 * @param red The red-value of the color.
+	 * @param green The green-value of the color.
+	 * @param blue The blue-value of the color.
+	 * @return The hue of the color.
+	 */
 	public int getHue(int red, int green, int blue)
 	{
-
 		float min = Math.min(Math.min(red, green), blue);
 		float max = Math.max(Math.max(red, green), blue);
 
@@ -105,12 +113,10 @@ public class ColorBar extends ActionObservable implements ControlElement
 		if(max == red)
 		{
 			hue = (green - blue) / (max - min);
-
 		}
 		else if(max == green)
 		{
 			hue = 2f + (blue - red) / (max - min);
-
 		}
 		else
 		{
@@ -194,7 +200,7 @@ public class ColorBar extends ActionObservable implements ControlElement
 	{
 		return _position.getLocation();
 	}
-	
+
 	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{

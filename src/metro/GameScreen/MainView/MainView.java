@@ -35,9 +35,16 @@ public class MainView extends GameScreen implements Observer
 	private GameScreen _activeTool;
 	private Toolbar _toolbar;
 	private CityView _cityView;
+	private GameScreen _controlDrawer; //TODO move into MainView
 
-	public static Point _selectedCross, // out of screen;
-		_mapOffset; // offset for moving the map
+	/**
+	 * The position of the selected cross of the game grid.
+	 */
+	public static Point _selectedCross;
+	/**
+	 * The offset of the map in pixel.
+	 */
+	public static Point _mapOffset;
 
 	/**
 	 * Creates a new main view with no active subtools.
@@ -54,6 +61,7 @@ public class MainView extends GameScreen implements Observer
 		_activeTool = null;
 
 		_cityView = new CityView(); // create extra instance for general purpose actions
+		_controlDrawer = new ScreenInfoDrawer();
 	}
 
 	@Override
@@ -75,12 +83,13 @@ public class MainView extends GameScreen implements Observer
 
 		drawRailwayLines(sp);
 		drawTrainStations(sp);
-		
+
 		if(_activeTool != null) _activeTool.updateGameScreen(sp);
 
 		_toolbar.updateGameScreen(sp);
 
 		printDebugStuff(sp);
+		_controlDrawer.update(sp);
 	}
 
 	/**
@@ -239,7 +248,7 @@ public class MainView extends GameScreen implements Observer
 			}
 			else // there is no active tool -> create new one from argument
 			{
-				if(_activeTool != null) METRO.__closeGameSreen(_activeTool);
+				if(_activeTool != null) close();
 
 				if(_activeTool instanceof LineView && !(arg1 instanceof LineView)) ((LineView)_activeTool).setVisibility(false);
 				if(_activeTool instanceof TrainView && !(arg1 instanceof TrainView)) ((TrainView)_activeTool).setVisibility(false);

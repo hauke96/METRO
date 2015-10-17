@@ -37,7 +37,12 @@ public class LineSelectTool extends GameScreen
 		_color = METRO.__metroBlue;
 		_lineName = "";
 	}
-	
+
+	/**
+	 * Creates a new tool to edit the given line.
+	 * 
+	 * @param line A line to edit.
+	 */
 	public LineSelectTool(TrainLine line)
 	{
 		_listOfNodes = line.getNodes();

@@ -12,6 +12,13 @@ import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 
+/**
+ * Provides an input field control to make user inputs (in form of a string) possible.
+ * There are no events triggered after typing something in but the method .getText() return the whole text.
+ * 
+ * @author hauke
+ *
+ */
 public class InputField extends ActionObservable implements ControlElement
 {
 	private String _text;
@@ -58,7 +65,7 @@ public class InputField extends ActionObservable implements ControlElement
 		_text = text;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
-//		METRO.__registerControl(this);
+		// METRO.__registerControl(this);
 	}
 
 	@Override
@@ -79,7 +86,7 @@ public class InputField extends ActionObservable implements ControlElement
 		Fill.Rect(_position);
 
 		// draw text
-		if(_enabled)Draw.setColor(Color.black);
+		if(_enabled) Draw.setColor(Color.black);
 		else Draw.setColor(Color.lightGray);
 		Draw.String(_text, _position.x - _xOffset + 3, _position.y + 3);
 
@@ -92,7 +99,7 @@ public class InputField extends ActionObservable implements ControlElement
 		String str = _text.substring(0, _curserPos);
 		int width = Draw.getStringSize(str).width;
 
-		if(_enabled)Draw.setColor(Color.gray);
+		if(_enabled) Draw.setColor(Color.gray);
 		else Draw.setColor(Color.lightGray);
 		Draw.Line(_position.x + width + 3, _position.y + 2, _position.x + width + 3, _position.y + _position.height - 4);
 
@@ -109,10 +116,10 @@ public class InputField extends ActionObservable implements ControlElement
 		if(!_enabled) return false;
 		Point mPos = METRO.__originalMousePosition;
 		boolean clickedOnControl = _position.contains(mPos);
-		
+
 		if(clickedOnControl) select();
 		else disselect();
-		
+
 		return clickedOnControl;
 	}
 
@@ -198,7 +205,7 @@ public class InputField extends ActionObservable implements ControlElement
 				break;
 			case Keys.ENTER:
 			case Keys.ESCAPE:
-				METRO.__currentGameScreen.setSelectedInput(null);
+				METRO.__setSelectedInput(null);
 				break;
 		}
 		// for ranges:

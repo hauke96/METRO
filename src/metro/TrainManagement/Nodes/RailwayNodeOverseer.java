@@ -15,7 +15,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class RailwayNodeOverseer
 {
-	public static Map<Point, RailwayNode> _nodeMap = new HashMap<Point, RailwayNode>(); // yeah, i know, it sound like "road map" ...
+	/**
+	 * This map connects a point on the grid with a possibly existing node.
+	 * An yeah, i know, it sound like "road map" ...
+	 */
+	public static Map<Point, RailwayNode> _nodeMap = new HashMap<Point, RailwayNode>();
 
 	/**
 	 * Gets the RailwayNode at a specific position.
