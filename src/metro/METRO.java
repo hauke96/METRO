@@ -370,15 +370,14 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public boolean scrolled(int amount)
 	{
 		_currentGameScreen.mouseScrolled(amount);
-		Point mPos = METRO.__originalMousePosition;
-		for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
+
+		boolean mouseOnWindow = false;
+		for(Window win : __windowList)
 		{
-			if(__windowList.get(i).isMouseOnWindow(mPos.x, mPos.y)) // if mouse is just on the window area
-			{
-				__windowList.get(i).mouseScrolled(amount);
-				break;
-			}
+			mouseOnWindow |= win.isMouseOnWindow(__originalMousePosition.x, __originalMousePosition.y);
 		}
+		if(!mouseOnWindow) _controlActionManager.mouseScroll(amount);
+
 		return false;
 	}
 

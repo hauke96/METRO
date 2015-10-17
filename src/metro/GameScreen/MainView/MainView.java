@@ -35,7 +35,7 @@ public class MainView extends GameScreen implements Observer
 	private GameScreen _activeTool;
 	private Toolbar _toolbar;
 	private CityView _cityView;
-	private GameScreen _controlDrawer; //TODO move into MainView
+	private GameScreen _controlDrawer;
 
 	/**
 	 * The position of the selected cross of the game grid.

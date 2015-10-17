@@ -348,6 +348,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void checkStateChanged(boolean newState)
 				{
+					System.out.println("OKfs");
 					Settings.set("fullscreen.on", _fullscreenOn.isChecked());
 					_resolutionList.setState(!(Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())));
 				}

@@ -25,11 +25,11 @@ public class List extends ActionObservable implements ControlElement
 	private Rectangle _position;
 	private Window _windowHandle;
 	private int _offset,
-		_defaultYSpace,
-		_compactYSpace,
+		_defaultYSpace, // space between text and border in the normal mode
+		_compactYSpace, // space between text and border in the compact mode
 		_selectedEntry; // the entry, that was clicked
 	private float _maxOffset,
-		_scrollHeight; // height of one scroll
+		_scrollHeight; // height of one scroll step
 	private boolean _compact = false, // less space between text and top/bottom edge
 		_enabled = true;
 
@@ -81,6 +81,7 @@ public class List extends ActionObservable implements ControlElement
 		if(entries != null) _entries = entries;
 
 		_position = position;
+		_compact = compact;
 		_offset = 0;
 		_defaultYSpace = 30;
 		_compactYSpace = 8;
@@ -88,6 +89,18 @@ public class List extends ActionObservable implements ControlElement
 		_maxOffset = 0;
 		_scrollHeight = 20;
 
+		calcOffset();
+
+		_windowHandle = win;
+		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
+
+	}
+
+	/**
+	 * Calculates the maximum offset for the list to scroll. If there're to less elements for scrolling the maximum offset is 0.
+	 */
+	private void calcOffset()
+	{
 		int ySpace = _defaultYSpace;
 		if(_compact) ySpace = _compactYSpace;
 		int yOffset = ySpace;
@@ -96,17 +109,13 @@ public class List extends ActionObservable implements ControlElement
 		{
 			int amountRows = Draw.getStringLines(e, _position.width - 6);
 
-			yOffset += 2 * ySpace + // 2 * 30px space above and below string
+			yOffset += 2 * ySpace + // space above and below string
 				Draw.getStringSize(e).height * amountRows + // rows * height of string
 				(amountRows - 1) * 8; // space between lines
 		}
-		if(yOffset > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight - 3;
-
-		_windowHandle = win;
-		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-//		METRO.__registerControl(this);
-		
-		_compact = compact;
+		int magicFactor = (23 / 20) * (ySpace - 10) + 17; // fine-tuning for the maximum offset for scrolling (with this factor, the space between last element and bottom of list are matching automagically)
+		if(yOffset - _scrollHeight - 3 > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight + magicFactor;
+		else _maxOffset = 0;
 	}
 
 	/**
@@ -117,20 +126,7 @@ public class List extends ActionObservable implements ControlElement
 	public void addElement(String element)
 	{
 		_entries.add(element);
-		int ySpace = _defaultYSpace;
-		if(_compact) ySpace = _compactYSpace;
-		int yOffset = ySpace;
-		for(String e : _entries)
-		{
-			int amountRows = Draw.getStringLines(e,
-				_position.width - 6);
-
-			yOffset += 2 * ySpace + // space above and below string
-				Draw.getStringSize(e).height * amountRows + // rows * height of string
-				(amountRows - 1) * 8; // space between lines
-		}
-		int magicFactor = (0 - (23 / 20)) * (ySpace - 10) + 17; // fine-tuning for the maximum offset for scrolling (with this factor, the space between last element and bottom of list are matching automagically)
-		if(yOffset - _scrollHeight - 3 > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight + magicFactor;
+		calcOffset();
 	}
 
 	@Override
@@ -159,7 +155,7 @@ public class List extends ActionObservable implements ControlElement
 	public void setSelectedEntry(int entryIndex)
 	{
 		_selectedEntry = entryIndex;
-		notifySelectionChanged(_selectedEntry != -1 ? _entries.get(_selectedEntry): null);
+		notifySelectionChanged(_selectedEntry != -1 ? _entries.get(_selectedEntry) : null);
 	}
 
 	/**
@@ -269,8 +265,7 @@ public class List extends ActionObservable implements ControlElement
 
 			// Draw the string
 			Draw.setColor((_enabled ? Color.black : Color.gray)); // gray when disabled
-			Draw.String(_entries.get(i), _position.x + 20, _position.y + _offset + yOffset + 4
-				, _position.width - 40);
+			Draw.String(_entries.get(i), _position.x + 20, _position.y + _offset + yOffset + 4, _position.width - 40);
 
 			yOffset += 2 * ySpace + // 2 * 30px space above and below string
 				Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
@@ -289,8 +284,8 @@ public class List extends ActionObservable implements ControlElement
 		Draw.Line(_position.x, _position.y + 2, _position.x + _position.width - 3, _position.y + 2); // top 2
 
 		// Draw scroll bar
-		int height = (int)(_position.height * (_position.height / (_maxOffset * _scrollHeight))), // gets the height of the scrollbar. E.g.: The area is 2*_pos.height, then is _max/_scrollHeight = 0.5
-		yPos = (int)((_position.height - height) * -(_offset / _maxOffset));
+		int height = _maxOffset == 0 ? _position.height : 20;
+		int yPos = (int)((_position.height - height) * -(_offset / _maxOffset));
 
 		Fill.setColor(METRO.__metroBlue);
 		Fill.Rect(_position.x + _position.width - 3,
@@ -358,7 +353,7 @@ public class List extends ActionObservable implements ControlElement
 	{
 		return new Point(_position.x, _position.y);
 	}
-	
+
 	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
@@ -401,5 +396,11 @@ public class List extends ActionObservable implements ControlElement
 	@Override
 	public void setText(String text)
 	{
+	}
+
+	@Override
+	public Rectangle getArea()
+	{
+		return _position;
 	}
 }

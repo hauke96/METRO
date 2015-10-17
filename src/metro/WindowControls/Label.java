@@ -53,7 +53,6 @@ public class Label extends ActionObservable implements ControlElement
 		_windowHandle = window;
 		_areaWidth = areaWidth;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-//		METRO.__registerControl(this);
 		_color = Color.black;
 		_enabled = true;
 	}
@@ -180,5 +179,11 @@ public class Label extends ActionObservable implements ControlElement
 	public void setState(boolean enable)
 	{
 		_enabled = enable;
+	}
+
+	@Override
+	public Rectangle getArea()
+	{
+		return new Rectangle(_position.x, _position.y, Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
 	}
 }

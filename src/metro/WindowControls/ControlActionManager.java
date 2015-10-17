@@ -1,5 +1,6 @@
 package metro.WindowControls;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Input.Buttons;
@@ -45,11 +46,7 @@ public class ControlActionManager
 		}
 		else
 		{
-			if(_listOfControlElements.contains(control))
-			{
-				System.out.println(control.getClass());
-				_listOfControlElements.remove(control);
-			}
+			if(_listOfControlElements.contains(control)) _listOfControlElements.remove(control);
 			else _listOfControlElements.add(control);
 		}
 	}
@@ -69,19 +66,43 @@ public class ControlActionManager
 		if(button == Buttons.LEFT)
 		{
 			_currentlyIterating = true;
+			boolean inputClicked = false;
 			for(ControlElement control : _listOfControlElements)
 			{
 				boolean b = control.mouseClicked(screenX, screenY, button);
 				if(b && control instanceof InputField) // if clicked element is an input field, set this as selected field
 				{
+					inputClicked = true;
 					METRO.__setSelectedInput((InputField)control);
 				}
+
 				controlClicked |= b;
 			}
+			if(!inputClicked) METRO.__setSelectedInput(null);
 			_currentlyIterating = false;
 			updateList();
 		}
 		return controlClicked;
+	}
+
+	/**
+	 * Calls the scroll method on the control the mouse hovers currently.
+	 * The checking if the mouse hovers an object or not goes from back to front.
+	 * 
+	 * @param amount The amount of scroll steps.
+	 */
+	public void mouseScroll(int amount)
+	{
+		Point mPos = METRO.__originalMousePosition;
+		for(int i = _listOfControlElements.size() - 1; i > 0; i--)
+		{
+			ControlElement control = _listOfControlElements.get(i);
+			if(control.getArea().contains(mPos))
+			{
+				control.mouseScrolled(amount);
+				break;
+			}
+		}
 	}
 
 	/**

@@ -65,7 +65,6 @@ public class InputField extends ActionObservable implements ControlElement
 		_text = text;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
-		// METRO.__registerControl(this);
 	}
 
 	@Override
@@ -288,5 +287,11 @@ public class InputField extends ActionObservable implements ControlElement
 	public void disselect()
 	{
 		_selected = false;
+	}
+
+	@Override
+	public Rectangle getArea()
+	{
+		return _position;
 	}
 }

@@ -173,7 +173,15 @@ public class Window extends ActionObservable implements ControlElement
 	 */
 	public boolean isMouseOnWindow(int screenX, int screenY)
 	{
-		return screenX >= _position.x
+		boolean mouseOnControl = false;
+		Point mPos = new Point(screenX, screenY);
+		for(ControlElement control : _elementList)
+		{
+			mouseOnControl |= control.getArea().contains(mPos);
+		}
+		
+		return !mouseOnControl
+			&& screenX >= _position.x
 			&& screenX <= _position.x + _size.x
 			&& screenY >= _position.y
 			&& screenY <= _position.y + _size.y;
@@ -188,19 +196,6 @@ public class Window extends ActionObservable implements ControlElement
 	 */
 	public void mousePressed(int screenX, int screenY, int mouseButton)
 	{
-		boolean inputPressed = false; // true if an input field has been clicked
-		for(ControlElement cElement : _elementList)
-		{
-			boolean b = cElement.mouseClicked(screenX, screenY, mouseButton);// TODO controls are getting clicks twice - not nice, try to remove this call and only use the manager
-
-			if(b && cElement instanceof InputField) // if clicked element is an input field, set this as selected field
-			{
-				inputPressed = true;
-				METRO.__setSelectedInput((InputField)cElement);
-			}
-		}
-		if(!inputPressed) METRO.__setSelectedInput(null); // reset the selected input field
-
 		// Check for drag-mode:
 		if(screenX >= _position.x
 			&& screenX <= _position.x + _size.x - 20
@@ -221,17 +216,9 @@ public class Window extends ActionObservable implements ControlElement
 		_dragMode = false;
 	}
 
-	/**
-	 * Fires when users scrolls.
-	 * 
-	 * @param amount Positive or negative amount of steps since last frame.
-	 */
+	@Override
 	public void mouseScrolled(int amount)
 	{
-		for(ControlElement cElement : _elementList)
-		{
-			cElement.mouseScrolled(amount);
-		}
 	}
 
 	/**
@@ -344,5 +331,11 @@ public class Window extends ActionObservable implements ControlElement
 	public ArrayList<ControlElement> getElements()
 	{
 		return _elementList;
+	}
+
+	@Override
+	public Rectangle getArea()
+	{
+		return new Rectangle(_position.x, _position.y, _size.x, _size.y);
 	}
 }

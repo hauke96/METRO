@@ -57,7 +57,6 @@ public class Button extends ActionObservable implements ControlElement
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
-//		METRO.__registerControl(this);
 	}
 
 	/**
@@ -75,7 +74,6 @@ public class Button extends ActionObservable implements ControlElement
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_enabled = true;
-//		METRO.__registerControl(this);
 	}
 
 	/**
@@ -219,5 +217,11 @@ public class Button extends ActionObservable implements ControlElement
 	public void setState(boolean enable)
 	{
 		_enabled = enable;
+	}
+
+	@Override
+	public Rectangle getArea()
+	{
+		return _position;
 	}
 }

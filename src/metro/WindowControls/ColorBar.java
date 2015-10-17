@@ -49,7 +49,6 @@ public class ColorBar extends ActionObservable implements ControlElement
 		_brightness = brithness;
 		_windowHandle = window;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		// METRO.__registerControl(this);
 		_enabled = true;
 		_drawBorder = true;
 		_clickedXPosition = -1;
@@ -238,5 +237,11 @@ public class ColorBar extends ActionObservable implements ControlElement
 	@Override
 	public void keyUp(int keyCode)
 	{
+	}
+
+	@Override
+	public Rectangle getArea()
+	{
+		return _position;
 	}
 }

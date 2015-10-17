@@ -1,6 +1,7 @@
 package metro.WindowControls;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 
 /**
  * The interface with all the important methods every control element should have.
@@ -81,4 +82,11 @@ public interface ControlElement
 	 * @param keyCode The code of the key from Input.Keys
 	 */
 	public void keyUp(int keyCode);
+
+	/**
+	 * Gets an rectangle which covers the whole area of this control.
+	 * 
+	 * @return The area of this control as rectangle.
+	 */
+	public Rectangle getArea();
 }
