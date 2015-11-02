@@ -212,17 +212,18 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		boolean mouseInWindow = false;
 		for(Window win : __windowList)
 		{
-			mouseInWindow |= win.isMouseOnWindowArea(__mousePosition.x, __mousePosition.y);
+			mouseInWindow |= win.isMouseOnWindow(__mousePosition.x, __mousePosition.y);
 		}
 		if(mouseInWindow) __mousePosition = _oldMousePosition;
 		else _oldMousePosition = __mousePosition;
 	}
 
 	/**
-	 * Initializes the rendering and clears the screen.
+	 * Initializes the rendering anc cleares the screen.
 	 */
 	private void renderInit()
 	{
+		// Clear screen
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 	}
@@ -317,25 +318,25 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		Window clickedWindow = null;
 
-		// go from the last to first window when no window has been clicked yet
-		for(int i = __windowList.size() - 1; i >= 0 && clickedWindow == null; i--)
+		for(int i = __windowList.size() - 1; i >= 0; i--) // from last to first window
 		{
-			if(__windowList.get(i).isMouseOnWindowArea(screenX, screenY)) // if mouse is just on the window area
+			__windowList.get(i).mousePressed(screenX, screenY, button); // also triggers the click event of the controls
+			if(__windowList.get(i).isMouseOnWindow(screenX, screenY)) // if mouse is just on the window area
 			{
-				__windowList.get(i).mousePressed(screenX, screenY, button);
 				clickedWindow = __windowList.get(i);
+				break;
 			}
 		}
-		if(!_controlActionManager.mouseClicked(screenX, screenY, button, clickedWindow) && clickedWindow == null)
+		if(clickedWindow == null && !_controlActionManager.mouseClicked(screenX, screenY, button))
 		{
 			_currentGameScreen.mouseClicked(screenX, screenY, button); // forward click to game screen
 		}
 
-		// close the clicked window after handling the click
-		if(clickedWindow != null)
+		// close all windows after handling all clicks:
+		for(int i = 0; i < __windowList.size(); i++)
 		{
-			boolean closed = clickedWindow.closeIfNeeded(screenX, screenY, button) || clickedWindow.isClosed();
-			if(closed) __windowList.remove(clickedWindow);
+			boolean closed = __windowList.get(i).closeIfNeeded(screenX, screenY, button) || __windowList.get(i).isClosed();
+			if(closed) __windowList.remove(__windowList.get(i));
 		}
 
 		return false;
