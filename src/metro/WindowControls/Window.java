@@ -165,7 +165,7 @@ public class Window extends ActionObservable implements ControlElement
 	}
 
 	/**
-	 * Returns true is mouse is in window, false if not and also false if in window but e.g. on a button.
+	 * Returns true is mouse is in window, false if not and also false if in window but on a control element.
 	 * 
 	 * @param screenX x-coordinate of mouse
 	 * @param screenY y-coordinate of mouse

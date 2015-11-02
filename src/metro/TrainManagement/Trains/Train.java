@@ -12,7 +12,7 @@ package metro.TrainManagement.Trains;
 public class Train
 {
 	private String _name, _manufacturer;
-	private int _price, _costs, _passengers;
+	private int _price, _costs, _maxPassengers, _currPassengers;
 	private float _costsFactor;
 
 	/**
@@ -33,7 +33,8 @@ public class Train
 		_price = price;
 		_costs = costs;
 		_costsFactor = costsFactor;
-		_passengers = passengers;
+		_maxPassengers = passengers;
+		_currPassengers = 0;
 	}
 
 	/**

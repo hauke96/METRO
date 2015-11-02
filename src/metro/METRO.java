@@ -389,9 +389,18 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		_currentGameScreen.mouseScrolled(amount);
 
 		boolean mouseOnWindow = false;
-		for(Window win : __windowList)
+		/*
+		 * Go from the last to first window when no window has been clicked yet.
+		 * This will consider the "depth-position" of the window (windows are behind/before others).
+		 * Thus only the frontmost window will receive a scroll event, all others don't to prevent weird behaviour.
+		 */
+		for(int i = __windowList.size() - 1; i >= 0 && !mouseOnWindow; i--)
 		{
-			mouseOnWindow |= win.isMouseOnWindow(__originalMousePosition.x, __originalMousePosition.y);
+			if(__windowList.get(i).isMouseOnWindow(__mousePosition.x, __mousePosition.y)) // if mouse is on window area but not on a control
+			{
+				__windowList.get(i).mouseScrolled(amount);
+				mouseOnWindow = true;
+			}
 		}
 		if(!mouseOnWindow) _controlActionManager.mouseScroll(amount);
 
