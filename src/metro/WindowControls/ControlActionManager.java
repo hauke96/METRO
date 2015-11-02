@@ -61,18 +61,18 @@ public class ControlActionManager
 	 * @param clickedWindow The clicked window. Hand over {@code null} when no window has been clicked.
 	 * @return boolean True when the mouse clicked on one control, false when not.
 	 */
-	public boolean mouseClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button, Window clickedWindow)
 	{
+		ArrayList<ControlElement> listOfControls = clickedWindow != null
+			? clickedWindow.getElements()
+			: _listOfControlElements;
 		boolean controlClicked = false;
-<<<<<<< HEAD
 
-=======
->>>>>>> 56bf8a70a7f574f91b53f3e3a9ceb9529982f89d
 		if(button == Buttons.LEFT)
 		{
 			_currentlyIterating = true;
 			boolean inputClicked = false;
-			for(ControlElement control : _listOfControlElements)
+			for(ControlElement control : listOfControls)
 			{
 				boolean b = control.mouseClicked(screenX, screenY, button);
 				if(b && control instanceof InputField) // if clicked element is an input field, set this as selected field
