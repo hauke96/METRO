@@ -306,18 +306,27 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 	/**
 	 * Is executed when the user clicks with the mouse.
+	 * This method will forward the click event to the right control, window or game screen.
+	 * The exact hierarchy is shown below.
 	 * 
-	 * The click-hirarchy:
-	 * 1.) Check if a window or one control on a window has been clicked.
-	 * If no: Check if any other control has been clicked.
-	 * If no: Forward click to game screen.
-	 * 2.) Close windows if needed and remove if window has been closed.
+	 * The click-hierarchy:
+	 * 1.) Check if the mouse is in a window
+	 *     If yes: Forward click to this window and remind it
+	 *     If no : Go to next window.
+	 * 2.) Forward click to ControlActionManager with the clicked window as parameter
+	 * 3.) Check if the clicked window is null (=there has no window been clicked)
+	 *     If yes: Close the window if needed
+	 *     If no : Forward click to game screen
 	 */
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
 		Window clickedWindow = null;
 
-		// go from the last to first window when no window has been clicked yet
+		/*
+		 * Go from the last to first window when no window has been clicked yet.
+		 * This will consider the "depth-position" of the window (windows are behind/before others).
+		 * Thus only the frontmost window will receive a click, all others don't to prevent weird behaviour.
+		 */
 		for(int i = __windowList.size() - 1; i >= 0 && clickedWindow == null; i--)
 		{
 			if(__windowList.get(i).isMouseOnWindowArea(screenX, screenY)) // if mouse is just on the window area
@@ -326,16 +335,25 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 				clickedWindow = __windowList.get(i);
 			}
 		}
-		if(!_controlActionManager.mouseClicked(screenX, screenY, button, clickedWindow) && clickedWindow == null)
-		{
-			_currentGameScreen.mouseClicked(screenX, screenY, button); // forward click to game screen
-		}
-
-		// close the clicked window after handling the click
+		
+		boolean controlHasBeenClicked = !_controlActionManager.mouseClicked(screenX, screenY, button, clickedWindow);
+		
+		/* 
+		 * Decide: Close window (if needed) when clickedWindow is null 
+		 * XOR 
+		 * forward click to game screen when no control has been clicked AND the clicked window is null
+		 *     
+		 */
 		if(clickedWindow != null)
 		{
+			// close the clicked window after handling the click
 			boolean closed = clickedWindow.closeIfNeeded(screenX, screenY, button) || clickedWindow.isClosed();
 			if(closed) __windowList.remove(clickedWindow);
+		}
+		else if(controlHasBeenClicked)
+		{
+			// forward click to game screen
+			_currentGameScreen.mouseClicked(screenX, screenY, button);
 		}
 
 		return false;

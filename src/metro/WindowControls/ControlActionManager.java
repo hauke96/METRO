@@ -58,6 +58,7 @@ public class ControlActionManager
 	 * @param screenX The x coordinate of the mouse.
 	 * @param screenY The y coordinate of the mouse.
 	 * @param button The mouse button (Buttons.xy).
+	 * @param clickedWindow The clicked window. Hand over {@code null} when no window has been clicked.
 	 * @return boolean True when the mouse clicked on one control, false when not.
 	 */
 	public boolean mouseClicked(int screenX, int screenY, int button, Window clickedWindow)
@@ -66,9 +67,6 @@ public class ControlActionManager
 			? clickedWindow.getElements()
 			: _listOfControlElements;
 		boolean controlClicked = false;
-
-		// if(clickedWindow != null) listOfControls = clickedWindow.getElements();
-		// else listOfControls = _listOfControlElements;
 
 		if(button == Buttons.LEFT)
 		{
