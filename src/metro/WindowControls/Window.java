@@ -169,7 +169,7 @@ public class Window extends ActionObservable implements ControlElement
 	 * 
 	 * @param screenX x-coordinate of mouse
 	 * @param screenY y-coordinate of mouse
-	 * @return boolean True/false if mouse is in window.
+	 * @return boolean True/false if mouse is in plain window area without touching controls.
 	 */
 	public boolean isMouseOnWindow(int screenX, int screenY)
 	{
@@ -179,9 +179,20 @@ public class Window extends ActionObservable implements ControlElement
 		{
 			mouseOnControl |= control.getArea().contains(mPos);
 		}
-		
-		return !mouseOnControl
-			&& screenX >= _position.x
+
+		return !mouseOnControl && isMouseOnWindowArea(screenX, screenY);
+	}
+
+	/**
+	 * Checks if the mouse is in the window. This will NOT consider controls like the {@link #isMouseOnWindow(int, int)} method does.
+	 * 
+	 * @param screenX x-coordinate of mouse
+	 * @param screenY y-coordinate of mouse
+	 * @return boolean True/false if mouse is in window.
+	 */
+	public boolean isMouseOnWindowArea(int screenX, int screenY)
+	{
+		return screenX >= _position.x
 			&& screenX <= _position.x + _size.x
 			&& screenY >= _position.y
 			&& screenY <= _position.y + _size.y;

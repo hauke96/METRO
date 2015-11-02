@@ -60,14 +60,21 @@ public class ControlActionManager
 	 * @param button The mouse button (Buttons.xy).
 	 * @return boolean True when the mouse clicked on one control, false when not.
 	 */
-	public boolean mouseClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button, Window clickedWindow)
 	{
+		ArrayList<ControlElement> listOfControls = clickedWindow != null
+			? clickedWindow.getElements()
+			: _listOfControlElements;
 		boolean controlClicked = false;
+
+		// if(clickedWindow != null) listOfControls = clickedWindow.getElements();
+		// else listOfControls = _listOfControlElements;
+
 		if(button == Buttons.LEFT)
 		{
 			_currentlyIterating = true;
 			boolean inputClicked = false;
-			for(ControlElement control : _listOfControlElements)
+			for(ControlElement control : listOfControls)
 			{
 				boolean b = control.mouseClicked(screenX, screenY, button);
 				if(b && control instanceof InputField) // if clicked element is an input field, set this as selected field
