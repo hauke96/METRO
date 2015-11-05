@@ -1,5 +1,8 @@
 You'll find all changes made in the versions here:
 
+VERSION 0.1.3: (01.12.2015)
+	- Train buy dialog
+
 VERSION 0.1.2: (30.08.2015)
 (mainly features from #8; for implementation-ideas see #13)
 	- Train line dialog with a list of all lines, buttons and settings
