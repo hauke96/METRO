@@ -2,7 +2,6 @@ package metro.GameScreen.TrainView;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -11,7 +10,6 @@ import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Lines.TrainLineOverseer;
-import metro.TrainManagement.Trains.Train;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.List;

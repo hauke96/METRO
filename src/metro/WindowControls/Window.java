@@ -63,7 +63,7 @@ public class Window extends ActionObservable implements ControlElement
 		_dragMode = false;
 		_elementList = new ArrayList<ControlElement>();
 
-		METRO.__windowList.add(this);
+		METRO.__registerWindow(this);
 	}
 
 	/**
@@ -247,7 +247,6 @@ public class Window extends ActionObservable implements ControlElement
 			&& screenY >= _position.y
 			&& screenY <= _position.y + 20)
 		{
-			notifyClosed();
 			close(); // mark whis window as "closed" to tell the METRO class to remove it
 			return true;
 		}
@@ -269,6 +268,7 @@ public class Window extends ActionObservable implements ControlElement
 	 */
 	public void close()
 	{
+		notifyClosed(this);
 		// Removes all controls from the action manager via second registering
 		for(ControlElement cElement : _elementList)
 		{

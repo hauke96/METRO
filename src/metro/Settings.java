@@ -5,11 +5,22 @@ import java.awt.GraphicsEnvironment;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Holds all necessary information that are stored in the settings.cfg file.
+ * This class can also load and parse this file by calling {@code read()}.
+ * By calling {@code set(String, Object)}, the settings will automagically saved into the settings.cfg, so no manual call is necessary.
+ * 
+ * This class differes between {@code _settings} and {@code _newSettings}. The {@code _newSettings} fiel holds all settings including the
+ * changed ones whereas {@code _settings} holds only the old ones. To get the old settings just call {@code getOld(String)} and to get
+ * the new ones call {@code get(String)}.
+ * 
+ * @author hauke
+ *
+ */
 public class Settings
 {
-	private static java.util.Map<String, Object> _settings,
+	private static Map<String, Object> _settings,
 		_newSettings;
-	private static boolean _newSettingsHaveChanged = false; // true when something changed and has to be saved
 
 	private static String __praeambel = "* comments begin with *\n* Settings: [name]=[value]\n";
 
@@ -88,8 +99,9 @@ public class Settings
 		{
 		}
 
-		if(str == null) return "[eol]";
-		if(str.charAt(0) == '*' || str.charAt(0) == ' ') return getNextEntry(reader);
+		if(str == null) str = "[eol]";
+		else if(str.charAt(0) == '*' || str.charAt(0) == ' ') return getNextEntry(reader);
+
 		return str;
 	}
 
@@ -98,8 +110,6 @@ public class Settings
 	 */
 	public static void save()
 	{
-		if(!_newSettingsHaveChanged) return; // when nothing changed
-
 		File oldFile = new File("./settings.cfg");
 		if(oldFile.exists()) oldFile.delete();
 
@@ -132,24 +142,36 @@ public class Settings
 	}
 
 	/**
-	 * Returns the value of the key.
+	 * Returns the original value (the value after starting the game with no changes) of the settings.
 	 * 
 	 * @param settingsKey The key which value you want to have.
-	 * @return The value of the key. "" when key does not exist
+	 * @return The value of the key. "" when key does not exist.
 	 */
-	public static Object get(String settingsKey)
+	public static Object getOld(String settingsKey)
 	{
 		return _settings.containsKey(settingsKey) ? _settings.get(settingsKey) : "";
 	}
 
-	public static Object getNew(String settingsKey)
+	/**
+	 * Returns the value of the given setting.
+	 * 
+	 * @param settingsKey The key which value you want to have.
+	 * @return The value of the key. "" when key does not exist.
+	 */
+	public static Object get(String settingsKey)
 	{
 		return _newSettings.containsKey(settingsKey) ? _newSettings.get(settingsKey) : "";
 	}
 
+	/**
+	 * Sets a setting to the given value. This method will automagically save the settings, you don't have to call {@code save()} manually.
+	 * 
+	 * @param key The the key of the setting.
+	 * @param value The new value of the setting.
+	 */
 	public static void set(String key, Object value)
 	{
 		_newSettings.put(key, value);
-		_newSettingsHaveChanged = true;
+		save();
 	}
 }

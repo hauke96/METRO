@@ -44,6 +44,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainMenu;
 import metro.Graphics.Draw;
+import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.ControlActionManager;
 import metro.WindowControls.ControlElement;
@@ -62,9 +63,11 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static final String __TITLE = "METRO",
 		__VERSION = "0.1.3_indev";
 
-	private static OSType _detected_OS = OSType.UNKNOWN;
+	private static OSType _detected_OS;
 	private static ControlActionManager _controlActionManager;
 	private static GameScreen _currentGameScreen;
+	private static ArrayList<Window> _windowList;
+	private static ActionObserver _windowObserver;
 
 	public static BitmapFont __stdFont;
 	public static TextureRegion __mainMenu_Buttons,
@@ -75,8 +78,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		__viewPortButton_Train;
 	public static Color __metroRed,
 		__metroBlue;
-	public static int __baseNetSpacing = 25; // amount of pixel between lines of the base net
-	public static ArrayList<Window> __windowList = new ArrayList<Window>();
+	public static int __baseNetSpacing; // amount of pixel between lines of the base net
 	public static Point __mousePosition,
 		__originalMousePosition;
 	public static OrthographicCamera __camera;
@@ -84,9 +86,14 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static LwjglApplication __application;
 	public static GameState __gameState;
 
-	private Point _oldMousePosition = new Point(0, 0);
+	private Point _oldMousePosition;
 	private LwjglApplicationConfiguration _config;
 
+	/**
+	 * Creates a new METRO Game.
+	 * 
+	 * @param args The console arguments that have no function here.
+	 */
 	public static void main(String[] args)
 	{
 		new METRO();
@@ -103,7 +110,27 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		_controlActionManager = new ControlActionManager();
 		GameScreen.setActionManager(_controlActionManager);
 
-		// __CURRENT_OS
+		__baseNetSpacing = 25;
+		_oldMousePosition = new Point(0, 0);
+		
+		detectOS();
+		
+		initGdx();
+
+		loadVisuals();
+
+		initWindowStuff();
+
+		_currentGameScreen = new MainMenu();
+
+		__gameState = GameState.getInstance();
+	}
+
+	/**
+	 * Detects the current operating system and saves it.
+	 */
+	private void detectOS()
+	{
 		String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
 		if(os.contains("win"))
 		{
@@ -117,7 +144,17 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		{
 			_detected_OS = OSType.MAC;
 		}
-
+		else
+		{
+			_detected_OS = OSType.UNKNOWN;
+		}
+	}
+	
+	/**
+	 * Initializes the gdx system by creating a sprite batch, a camera and an input processor.
+	 */
+	private void initGdx()
+	{
 		__spriteBatch = new SpriteBatch();
 
 		__camera = new OrthographicCamera();
@@ -126,8 +163,37 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 		// Set up the input event handling
 		Gdx.input.setInputProcessor(this);
+	}
 
-		// load new cursor image
+	/**
+	 * Loads everything that has to do with visual things like textures and also the fonts.
+	 * This method loads all textures including main menu button, title image, icon set and cursor image.
+	 * It also creates the two default colors {@code __metroBlue} and {@code __metroRed}.
+	 */
+	private void loadVisuals()
+	{
+		__mainMenu_Buttons = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
+		__mainMenu_Buttons.flip(false, true);
+
+		__mainMenu_TitleImage = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_TitleImage.png")));
+		__mainMenu_TitleImage.flip(false, true);
+
+		__iconSet = new TextureRegion(new Texture(Gdx.files.internal("textures/IconSet.png")));
+		__iconSet.flip(false, true);
+		
+		loadCursorImage();
+		loadFonts();
+
+		// Create special colors
+		__metroBlue = new Color(100, 180, 255);
+		__metroRed = new Color(255, 100, 100);
+	}
+	
+	/**
+	 * Loads the cursor image based on the operating system (setting default cursor doesn't work in windows -> loading the cursor as texture).
+	 */
+	private void loadCursorImage()
+	{
 		try
 		{
 			Pixmap pixmap = new Pixmap(Gdx.files.internal("textures/Cursor.png")); // has to be a width of 2^x (2, 4, 8, 16, 32, ...)
@@ -142,17 +208,13 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		{
 			System.out.println(ex.getMessage()); // TODO: Put into popup-message-box
 		}
+	}
 
-		__mainMenu_Buttons = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
-		__mainMenu_Buttons.flip(false, true);
-
-		__mainMenu_TitleImage = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_TitleImage.png")));
-		__mainMenu_TitleImage.flip(false, true);
-
-		__iconSet = new TextureRegion(new Texture(Gdx.files.internal("textures/IconSet.png")));
-		__iconSet.flip(false, true);
-
-		// Load fonts
+	/**
+	 * Load the font {@code GatsbyFLF-Bold} in size 21.
+	 */
+	private void loadFonts()
+	{
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/GatsbyFLF-Bold.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.magFilter = TextureFilter.Linear;
@@ -160,15 +222,23 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		parameter.flip = true;
 		__stdFont = generator.generateFont(parameter); // font size 20 pixels
 		generator.dispose();
+	}
 
-		// Create MainMenu Screen
-		_currentGameScreen = new MainMenu();
-
-		// Create special colors
-		__metroBlue = new Color(100, 180, 255);
-		__metroRed = new Color(255, 100, 100);
-
-		__gameState = GameState.getInstance();
+	/**
+	 * Creates the list of all windows and the default observer ({@code _windowObserver}) that removes a closed window from this list.
+	 * The default observer is an anonymous class, because of java 7 I don't use a lambda in this case.
+	 */
+	private void initWindowStuff()
+	{
+		_windowList = new ArrayList<Window>();
+		_windowObserver = new ActionObserver()
+		{
+			@Override
+			public void closed(Window window)
+			{
+				_windowList.remove(window);
+			}
+		};
 	}
 
 	@Override
@@ -181,7 +251,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public void render()
 	{
-		System.out.println(_controlActionManager._listOfControlElements.size() + " - " + _controlActionManager._bufferListOfControlElements.size());
 		calculateMousePosition();
 
 		__spriteBatch.begin();
@@ -203,7 +272,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		__mousePosition = MouseInfo.getPointerInfo().getLocation();
 
-		if(!Boolean.parseBoolean(Settings.get("fullscreen.on").toString()))
+		if(!Boolean.parseBoolean(Settings.getOld("fullscreen.on").toString()))
 		{
 			__mousePosition.translate(-_config.x - 3, -_config.y - 24);
 			// __mousePosition.translate(-3, 1); // correction because the normal cursor is NOT in the center
@@ -211,7 +280,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		__originalMousePosition = (Point)__mousePosition.clone();
 
 		boolean mouseInWindow = false;
-		for(Window win : __windowList)
+		for(Window win : _windowList)
 		{
 			mouseInWindow |= win.isMouseOnWindowArea(__mousePosition.x, __mousePosition.y);
 		}
@@ -226,7 +295,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
-		
+
 		_controlActionManager.updateList();
 	}
 
@@ -243,7 +312,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	 */
 	private void renderWindows()
 	{
-		for(Window win : __windowList)
+		for(Window win : _windowList)
 		{
 			win.draw(__spriteBatch);
 		}
@@ -283,7 +352,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public boolean keyDown(int keyCode)
 	{
 		_currentGameScreen.keyPressed(keyCode);
-		for(Window win : __windowList)
+		for(Window win : _windowList)
 		{
 			win.keyPressed(keyCode);
 		}
@@ -294,7 +363,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public boolean keyUp(int keyCode)
 	{
 		_currentGameScreen.keyUp(keyCode);
-		for(Window win : __windowList)
+		for(Window win : _windowList)
 		{
 			win.keyUp(keyCode);
 		}
@@ -314,12 +383,12 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	 * 
 	 * The click-hierarchy:
 	 * 1.) Check if the mouse is in a window
-	 *     If yes: Forward click to this window and remind it
-	 *     If no : Go to next window.
+	 * If yes: Forward click to this window and remind it
+	 * If no : Go to next window.
 	 * 2.) Forward click to ControlActionManager with the clicked window as parameter
 	 * 3.) Check if the clicked window is null (=there has no window been clicked)
-	 *     If yes: Close the window if needed
-	 *     If no : Forward click to game screen
+	 * If yes: Close the window if needed
+	 * If no : Forward click to game screen
 	 */
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
@@ -330,28 +399,27 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		 * This will consider the "depth-position" of the window (windows are behind/before others).
 		 * Thus only the frontmost window will receive a click, all others don't to prevent weird behaviour.
 		 */
-		for(int i = __windowList.size() - 1; i >= 0 && clickedWindow == null; i--)
+		for(int i = _windowList.size() - 1; i >= 0 && clickedWindow == null; i--)
 		{
-			if(__windowList.get(i).isMouseOnWindowArea(screenX, screenY)) // if mouse is just on the window area
+			if(_windowList.get(i).isMouseOnWindowArea(screenX, screenY)) // if mouse is just on the window area
 			{
-				__windowList.get(i).mousePressed(screenX, screenY, button);
-				clickedWindow = __windowList.get(i);
+				_windowList.get(i).mousePressed(screenX, screenY, button);
+				clickedWindow = _windowList.get(i);
 			}
 		}
-		
+
 		boolean controlHasBeenClicked = !_controlActionManager.mouseClicked(screenX, screenY, button, clickedWindow);
-		
-		/* 
-		 * Decide: Close window (if needed) when clickedWindow is null 
-		 * XOR 
+
+		/*
+		 * Decide: Close window (if needed) when clickedWindow is null
+		 * XOR
 		 * forward click to game screen when no control has been clicked AND the clicked window is null
-		 *     
 		 */
 		if(clickedWindow != null)
 		{
 			// close the clicked window after handling the click
 			boolean closed = clickedWindow.closeIfNeeded(screenX, screenY, button) || clickedWindow.isClosed();
-			if(closed) __windowList.remove(clickedWindow);
+			if(closed) _windowList.remove(clickedWindow);
 		}
 		else if(controlHasBeenClicked)
 		{
@@ -367,7 +435,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		_currentGameScreen.mouseReleased(button);
 
-		for(Window win : __windowList)
+		for(Window win : _windowList)
 		{
 			win.mouseReleased();
 		}
@@ -397,11 +465,11 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		 * This will consider the "depth-position" of the window (windows are behind/before others).
 		 * Thus only the frontmost window will receive a scroll event, all others don't to prevent weird behaviour.
 		 */
-		for(int i = __windowList.size() - 1; i >= 0 && !mouseOnWindow; i--)
+		for(int i = _windowList.size() - 1; i >= 0 && !mouseOnWindow; i--)
 		{
-			if(__windowList.get(i).isMouseOnWindow(__mousePosition.x, __mousePosition.y)) // if mouse is on window area but not on a control
+			if(_windowList.get(i).isMouseOnWindow(__mousePosition.x, __mousePosition.y)) // if mouse is on window area but not on a control
 			{
-				__windowList.get(i).mouseScrolled(amount);
+				_windowList.get(i).mouseScrolled(amount);
 				mouseOnWindow = true;
 			}
 		}
@@ -419,6 +487,22 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static void __unregisterControl(ControlElement control)
 	{
 		_controlActionManager.remove(control);
+	}
+
+	/**
+	 * Adds the window to the list of all windows so that it'll get click- or scroll-events.
+	 * This method also adds the {@code _windowObserver} to the window so that it'll be closed correctly.
+	 * There are no doubles allowed in this list, so a second call with the same window won#t add it.
+	 * 
+	 * @param window The window that should be added to the list of all windows.
+	 */
+	public static void __registerWindow(Window window)
+	{
+		if(!_windowList.contains(window))
+		{
+			_windowList.add(window);
+			window.register(_windowObserver);
+		}
 	}
 
 	/**
@@ -451,20 +535,20 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 		try
 		{
-			__SCREEN_SIZE = new Dimension(Integer.parseInt(Settings.get("screen.width").toString()),
-				Integer.parseInt(Settings.get("screen.height").toString()));
+			__SCREEN_SIZE = new Dimension(Integer.parseInt(Settings.getOld("screen.width").toString()),
+				Integer.parseInt(Settings.getOld("screen.height").toString()));
 
 			_config = new LwjglApplicationConfiguration();
 			_config.title = __TITLE + "  " + __VERSION;
-			_config.width = Integer.parseInt(Settings.get("screen.width").toString());
-			_config.height = Integer.parseInt(Settings.get("screen.height").toString());
-			_config.useGL30 = Boolean.parseBoolean(Settings.get("use.opengl30").toString());
+			_config.width = Integer.parseInt(Settings.getOld("screen.width").toString());
+			_config.height = Integer.parseInt(Settings.getOld("screen.height").toString());
+			_config.useGL30 = Boolean.parseBoolean(Settings.getOld("use.opengl30").toString());
 			_config.resizable = false;
-			_config.fullscreen = Boolean.parseBoolean(Settings.get("fullscreen.on").toString());
+			_config.fullscreen = Boolean.parseBoolean(Settings.getOld("fullscreen.on").toString());
 			_config.foregroundFPS = -1; // max frames
-			_config.samples = Integer.parseInt(Settings.get("amount.samples").toString());
-			_config.vSyncEnabled = false;//Boolean.parseBoolean(Settings.get("use.vsync").toString());
-			_config.useHDPI = Boolean.parseBoolean(Settings.get("use.hdpi").toString());
+			_config.samples = Integer.parseInt(Settings.getOld("amount.samples").toString());
+			_config.vSyncEnabled = false;// Boolean.parseBoolean(Settings.get("use.vsync").toString());
+			_config.useHDPI = Boolean.parseBoolean(Settings.getOld("use.hdpi").toString());
 
 			__application = new LwjglApplication(this, _config);
 		}

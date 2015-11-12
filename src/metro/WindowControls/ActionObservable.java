@@ -83,11 +83,11 @@ public class ActionObservable
 		}
 	}
 
-	protected void notifyClosed()
+	protected void notifyClosed(Window window)
 	{
 		for(ActionObserver observer : _listOfObserver)
 		{
-			observer.closed();
+			observer.closed(window);
 		}
 	}
 }

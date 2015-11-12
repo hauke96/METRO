@@ -63,9 +63,6 @@ public abstract class GameScreen extends Observable
 	 */
 	public void update(SpriteBatch g)
 	{
-		if(_inGameMenuWindow != null) _inGameMenuWindow.update();
-		if(_settingsWindow != null) _settingsWindow.update();
-
 		updateGameScreen(g);
 	}
 
@@ -228,6 +225,7 @@ public abstract class GameScreen extends Observable
 
 	/**
 	 * This is the settings window, that provides some options to configure.
+	 * These options are: Resolution, fullscreen, OpenGL settings, amount of segments and amount of samples. 
 	 * 
 	 * @author hauke
 	 *
@@ -253,7 +251,6 @@ public abstract class GameScreen extends Observable
 				new Point(METRO.__SCREEN_SIZE.width / 2 - 250, METRO.__SCREEN_SIZE.height / 2 - 225),
 				new Point(500, 450),
 				METRO.__metroBlue);
-			addWindowListener();
 
 			new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.",
 				new Point(20, 20),
@@ -266,13 +263,13 @@ public abstract class GameScreen extends Observable
 			registerControl(_okButton);
 			addButtonObserver();
 
-			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString()), true, _window);
+			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Boolean.parseBoolean(Settings.get("fullscreen.on").toString()), true, _window);
 			registerControl(_fullscreenOn);
-			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Boolean.parseBoolean(Settings.getNew("use.opengl30").toString()), true, _window);
+			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Boolean.parseBoolean(Settings.get("use.opengl30").toString()), true, _window);
 			registerControl(_useOpenGL30);
-			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Boolean.parseBoolean(Settings.getNew("use.vsync").toString()), true, _window);
+			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Boolean.parseBoolean(Settings.get("use.vsync").toString()), true, _window);
 			registerControl(_useVSync);
-			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Boolean.parseBoolean(Settings.getNew("use.hdpi").toString()), true, _window);
+			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Boolean.parseBoolean(Settings.get("use.hdpi").toString()), true, _window);
 			registerControl(_useHDPI);
 			addCheckboxObserver();
 
@@ -286,8 +283,8 @@ public abstract class GameScreen extends Observable
 			_resolutionList.addElement("1360x768");
 			_resolutionList.addElement("1280x768");
 			_resolutionList.addElement("1280x720");
-			if(Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())) _resolutionList.setState(false);
-			int index = _resolutionList.getIndex(Integer.parseInt(Settings.getNew("screen.width").toString()) + "x" + Integer.parseInt(Settings.getNew("screen.width").toString())); // get the entry with the current resolution
+			if(Boolean.parseBoolean(Settings.get("fullscreen.on").toString())) _resolutionList.setState(false);
+			int index = _resolutionList.getIndex(Integer.parseInt(Settings.get("screen.width").toString()) + "x" + Integer.parseInt(Settings.get("screen.width").toString())); // get the entry with the current resolution
 			_resolutionList.setSelectedEntry(index);
 			registerControl(_resolutionList);
 
@@ -298,7 +295,7 @@ public abstract class GameScreen extends Observable
 			_sampleList.addElement("4");
 			_sampleList.addElement("8");
 			_sampleList.addElement("16");
-			index = _sampleList.getIndex(Settings.getNew("amount.samples") + ""); // get the entry with the current resolution
+			index = _sampleList.getIndex(Settings.get("amount.samples") + ""); // get the entry with the current resolution
 			_sampleList.setSelectedEntry(index);
 			registerControl(_sampleList);
 
@@ -309,26 +306,15 @@ public abstract class GameScreen extends Observable
 			_segmentList.addElement("64");
 			_segmentList.addElement("128");
 			_segmentList.addElement("256");
-			index = _segmentList.getIndex(Settings.getNew("amount.segments") + ""); // get the entry with the current resolution
+			index = _segmentList.getIndex(Settings.get("amount.segments") + ""); // get the entry with the current resolution
 			_segmentList.setSelectedEntry(index);
 			registerControl(_segmentList);
 			addListObserver();
-
-			Settings.save();
 		}
 
-		private void addWindowListener()
-		{
-			_window.register(new ActionObserver()
-			{
-				@Override
-				public void closed()
-				{
-					close();
-				}
-			});
-		}
-
+		/**
+		 * Adds the observer for the "ok" button that closes the window.
+		 */
 		private void addButtonObserver()
 		{
 			_okButton.register(new ActionObserver()
@@ -353,7 +339,7 @@ public abstract class GameScreen extends Observable
 				{
 					System.out.println("OKfs");
 					Settings.set("fullscreen.on", _fullscreenOn.isChecked());
-					_resolutionList.setState(!(Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())));
+					_resolutionList.setState(!(Boolean.parseBoolean(Settings.get("fullscreen.on").toString())));
 				}
 			});
 			_useOpenGL30.register(new ActionObserver()
@@ -382,6 +368,9 @@ public abstract class GameScreen extends Observable
 			});
 		}
 
+		/**
+		 * Add observer for all lists (resolution, samples and segments)
+		 */
 		private void addListObserver()
 		{
 			_resolutionList.register(new ActionObserver()
@@ -389,10 +378,10 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void selectionChanged(String entry)
 				{
-					if(entry != null && !Boolean.parseBoolean(Settings.getNew("fullscreen.on").toString())) // ... and fullscreen-mode is off
+					if(entry != null && !Boolean.parseBoolean(Settings.get("fullscreen.on").toString())) // ... and fullscreen-mode is off
 					{
 						System.out
-							.println(Settings.getNew("screen.width") + "x" + Settings.getNew("screen.height") + " -- " + _resolutionList.getText(_resolutionList.getSelected()));
+							.println(Settings.get("screen.width") + "x" + Settings.get("screen.height") + " -- " + _resolutionList.getText(_resolutionList.getSelected()));
 						String splitted[] = entry.split("x");
 						if(splitted.length == 2)
 						{
@@ -421,14 +410,6 @@ public abstract class GameScreen extends Observable
 		}
 
 		/**
-		 * Updates everything and handles clicks.
-		 */
-		public void update()
-		{
-			Settings.save(); // there will be no unnecessary writing, cause of boolean-variable
-		}
-
-		/**
 		 * Just closes the window and sets the _settingsWindow to null.
 		 */
 		private void close()
@@ -439,7 +420,10 @@ public abstract class GameScreen extends Observable
 	}
 
 	/**
-	 * This is the menu that'll appear when ESC is pressed during the game. It provides exit options and a settings button.
+	 * This is the menu that'll appear after pressing ESC during the game.
+	 * It provides exit options and a settings button.
+	 * This window will ask the user if he wants to quit and the user can choose between "yes" and "no".
+	 * There's also a "settings" button that will open the settings window.
 	 * 
 	 * @author hauke
 	 *
@@ -458,7 +442,6 @@ public abstract class GameScreen extends Observable
 		{
 			_window = new Window("Really quit?", new Point(METRO.__SCREEN_SIZE.width / 2 - 200,
 				METRO.__SCREEN_SIZE.height / 2 - 50), new Point(400, 100), METRO.__metroRed);
-			addWindowObserver();
 
 			_yesButton = new Button(new Rectangle(10, 70, 120, 20), "Yes", _window);
 			registerControl(_yesButton);
@@ -472,18 +455,9 @@ public abstract class GameScreen extends Observable
 				new Point(200 - (Draw.getStringSize("Really quit METRO? Or go into settings?").width) / 2, 25), _window);
 		}
 
-		private void addWindowObserver()
-		{
-			_window.register(new ActionObserver()
-			{
-				@Override
-				public void closed()
-				{
-					close();
-				}
-			});
-		}
-
+		/**
+		 * Creates observer for all buttons ("yes", "no" and "settings").
+		 */
 		private void addButtonObserver()
 		{
 			_yesButton.register(new ActionObserver()
@@ -499,16 +473,8 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void clickedOnControl(Object arg)
 				{
-					if(_settingsWindow == null)
-					{
-						_settingsWindow = new SettingsWindow();
-						close();
-					}
-					else
-					{
-						METRO.__windowList.remove(_settingsWindow._window);
-						METRO.__windowList.add(_settingsWindow._window);
-					}
+					_settingsWindow = new SettingsWindow();
+					close();
 				}
 			});
 			_noButton.register(new ActionObserver()
@@ -519,13 +485,6 @@ public abstract class GameScreen extends Observable
 					close();
 				}
 			});
-		}
-
-		/**
-		 * Updates everything and handles clicks.
-		 */
-		public void update()
-		{
 		}
 
 		/**

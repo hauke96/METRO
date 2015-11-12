@@ -62,18 +62,29 @@ public class TrainViewBuy extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch g)
 	{
+		drawHeader();
+		drawInformation();
+
+//		Draw.String("INFOS ABOUT SELECTED TRAIN HERE!", _areaOffset.x + 220, 530, 160);
+
+		_availableTrains.draw();
+		_buyButton.draw();
+	}
+
+	private void drawHeader()
+	{
 		Draw.setColor(METRO.__metroRed);
 
 		String text = "Available train models:";
 		int length = Draw.getStringSize(text).width;
 		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 25, 440);
 		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 25, 455,
-			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, 455);
+			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, 455);		
+	}
 
-		Draw.String("INFOS ABOUT SELECTED TRAIN HERE!", _areaOffset.x + 220, 530, 160);
-
-		_availableTrains.draw();
-		_buyButton.draw();
+	private void drawInformation()
+	{
+		
 	}
 
 	@Override

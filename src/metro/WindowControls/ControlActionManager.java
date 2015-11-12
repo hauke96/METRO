@@ -16,7 +16,7 @@ import metro.METRO;
  */
 public class ControlActionManager
 {
-	public ArrayList<ControlElement> _listOfControlElements,
+	private ArrayList<ControlElement> _listOfControlElements,
 		_bufferListOfControlElements;
 	boolean _currentlyIterating;
 
@@ -29,10 +29,16 @@ public class ControlActionManager
 		_bufferListOfControlElements = new ArrayList<ControlElement>();
 		_currentlyIterating = false;
 	}
-	
+
+	/**
+	 * Registers a new ControlElement by adding the control into a buffer list. The METRO class will update the real list of control before starting a new render cycle.
+	 * By adding these buffered controls to the list of actual controls, a second registration will delete the control
+	 * (first appearance of control A will be added, second appearance of A will delete first -> no control left).
+	 * 
+	 * @param control The control to register/remove.
+	 */
 	public void registerElement(ControlElement control)
 	{
-		// doubled elements won't be added to the list of control (first control will be added, second control will be deletes -> no control left)
 		if(!_bufferListOfControlElements.contains(control)) _bufferListOfControlElements.add(control);
 	}
 
