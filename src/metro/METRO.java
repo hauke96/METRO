@@ -181,6 +181,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public void render()
 	{
+		System.out.println(_controlActionManager._listOfControlElements.size() + " - " + _controlActionManager._bufferListOfControlElements.size());
 		calculateMousePosition();
 
 		__spriteBatch.begin();
@@ -219,12 +220,14 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	}
 
 	/**
-	 * Initializes the rendering and clears the screen.
+	 * Initializes the rendering by clearing the screen and updating the control list.
 	 */
 	private void renderInit()
 	{
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
+		
+		_controlActionManager.updateList();
 	}
 
 	/**
@@ -458,9 +461,9 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 			_config.useGL30 = Boolean.parseBoolean(Settings.get("use.opengl30").toString());
 			_config.resizable = false;
 			_config.fullscreen = Boolean.parseBoolean(Settings.get("fullscreen.on").toString());
-			// config.foregroundFPS = -1; // max frames
+			_config.foregroundFPS = -1; // max frames
 			_config.samples = Integer.parseInt(Settings.get("amount.samples").toString());
-			_config.vSyncEnabled = Boolean.parseBoolean(Settings.get("use.vsync").toString());
+			_config.vSyncEnabled = false;//Boolean.parseBoolean(Settings.get("use.vsync").toString());
 			_config.useHDPI = Boolean.parseBoolean(Settings.get("use.hdpi").toString());
 
 			__application = new LwjglApplication(this, _config);

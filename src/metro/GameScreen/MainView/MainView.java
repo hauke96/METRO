@@ -248,7 +248,7 @@ public class MainView extends GameScreen implements Observer
 			}
 			else // there is no active tool -> create new one from argument
 			{
-				if(_activeTool != null) close();
+				if(_activeTool != null) _activeTool.close();
 
 				if(_activeTool instanceof LineView && !(arg1 instanceof LineView)) ((LineView)_activeTool).setVisibility(false);
 				if(_activeTool instanceof TrainView && !(arg1 instanceof TrainView)) ((TrainView)_activeTool).setVisibility(false);

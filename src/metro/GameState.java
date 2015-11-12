@@ -138,7 +138,6 @@ public class GameState
 				}
 			}
 		}
-		System.out.println(_availableTrains);
 	}
 
 	/**

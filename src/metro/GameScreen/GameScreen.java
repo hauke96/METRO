@@ -40,6 +40,9 @@ public abstract class GameScreen extends Observable
 	public InGameMenuWindow _inGameMenuWindow;
 	private static InputField _selectedInput = null;
 	private static ControlActionManager _controlActionManager;
+	/**
+	 * A list of all control. Seems senseless due to the list in the ActionControlManager, but this is a list with control that only belongs to this game screen.
+	 */
 	private ArrayList<ControlElement> _allControls = new ArrayList<>();
 
 	/**

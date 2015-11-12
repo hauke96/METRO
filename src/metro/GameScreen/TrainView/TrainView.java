@@ -126,4 +126,12 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 	public void reset()
 	{
 	}
+	
+	@Override
+	public void close()
+	{
+		_trainViewBuy.close();
+		_trainViewMain.close();
+		super.close();
+	}
 }
