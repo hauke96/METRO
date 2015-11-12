@@ -44,4 +44,52 @@ public class Train
 	{
 		return _name;
 	}
+
+	/**
+	 * @return Gets the name of the manufacturer of this train.
+	 */
+	public String getManufacturer()
+	{
+		return _manufacturer;
+	}
+	
+	/**
+	 * @return Gets the price this train costs.
+	 */
+	public int getPrice()
+	{
+		return _price;
+	}
+	
+	/**
+	 * @return Gets the monthly costs of this train without any consideration of the age.
+	 */
+	public int getCosts()
+	{
+		return _costs;
+	}
+	
+	/**
+	 * @return Gets the monthly increase of this train.
+	 */
+	public float getCostFactor()
+	{
+		return _costsFactor;
+	}
+	
+	/**
+	 * @return Gets the maximum amount of passengers that can travel with this train.
+	 */
+	public int getMaxPassenger()
+	{
+		return _maxPassengers;
+	}
+	
+	/**
+	 * @return Gets the current amount of passenger that are travelling with this train.
+	 */
+	public int getCurrPassenger()
+	{
+		return _currPassengers;
+	}
 }

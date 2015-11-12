@@ -2,7 +2,6 @@ package metro.GameScreen.TrainView;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -41,19 +40,17 @@ public class TrainViewBuy extends GameScreen
 
 		_buyButton = new Button(new Rectangle(_areaOffset.x + 180, 680, 200, 20), "Buy");
 		registerControl(_buyButton);
-		_availableTrains = new List(new Rectangle(_areaOffset.x + 20, 460, 150, 240), null, true);
+		_availableTrains = new List(new Rectangle(_areaOffset.x + 20, 460, 140, 240), null, true);
 		registerControl(_availableTrains);
 		fillTrainList();
 	}
-
 
 	/**
 	 * Fills the list with the available trains.
 	 */
 	private void fillTrainList()
 	{
-		ArrayList<Train> list = METRO.__gameState.getAvailableTrains();
-		for(Train train : list)
+		for(Train train : METRO.__gameState.getAvailableTrains())
 		{
 			_availableTrains.addElement(train.getName());
 		}
@@ -64,8 +61,6 @@ public class TrainViewBuy extends GameScreen
 	{
 		drawHeader();
 		drawInformation();
-
-//		Draw.String("INFOS ABOUT SELECTED TRAIN HERE!", _areaOffset.x + 220, 530, 160);
 
 		_availableTrains.draw();
 		_buyButton.draw();
@@ -79,12 +74,37 @@ public class TrainViewBuy extends GameScreen
 		int length = Draw.getStringSize(text).width;
 		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 25, 440);
 		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 25, 455,
-			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, 455);		
+			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, 455);
 	}
 
 	private void drawInformation()
 	{
-		
+		Train train = METRO.__gameState.getTrain(_availableTrains.getText(_availableTrains.getSelected()));
+
+		Draw.setColor(METRO.__metroBlue);
+		Draw.String("Name", _areaOffset.x + 170, 460);
+		Draw.String("Manufacturer", _areaOffset.x + 170, 485);
+		Draw.String("Price", _areaOffset.x + 170, 510);
+		Draw.String("Costs", _areaOffset.x + 170, 535);
+		Draw.String("Cost-factor", _areaOffset.x + 170, 560);
+		Draw.String("Passenger", _areaOffset.x + 170, 585);
+
+		Draw.String("=", _areaOffset.x + 250, 460);
+		Draw.String("=", _areaOffset.x + 250, 485);
+		Draw.String("=", _areaOffset.x + 250, 510);
+		Draw.String("=", _areaOffset.x + 250, 535);
+		Draw.String("=", _areaOffset.x + 250, 560);
+		Draw.String("=", _areaOffset.x + 250, 585);
+
+		if(train != null)
+		{
+			Draw.String(train.getName(), _areaOffset.x + 260, 460);
+			Draw.String(train.getManufacturer(), _areaOffset.x + 260, 485);
+			Draw.String("" + train.getPrice(), _areaOffset.x + 260, 510);
+			Draw.String("" + train.getCosts(), _areaOffset.x + 260, 535);
+			Draw.String("" + train.getCostFactor(), _areaOffset.x + 260, 560);
+			Draw.String("" + train.getMaxPassenger(), _areaOffset.x + 260, 585);
+		}
 	}
 
 	@Override

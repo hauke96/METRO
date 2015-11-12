@@ -112,9 +112,9 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 		__baseNetSpacing = 25;
 		_oldMousePosition = new Point(0, 0);
-		
+
 		detectOS();
-		
+
 		initGdx();
 
 		loadVisuals();
@@ -149,7 +149,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 			_detected_OS = OSType.UNKNOWN;
 		}
 	}
-	
+
 	/**
 	 * Initializes the gdx system by creating a sprite batch, a camera and an input processor.
 	 */
@@ -180,7 +180,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 		__iconSet = new TextureRegion(new Texture(Gdx.files.internal("textures/IconSet.png")));
 		__iconSet.flip(false, true);
-		
+
 		loadCursorImage();
 		loadFonts();
 
@@ -188,7 +188,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		__metroBlue = new Color(100, 180, 255);
 		__metroRed = new Color(255, 100, 100);
 	}
-	
+
 	/**
 	 * Loads the cursor image based on the operating system (setting default cursor doesn't work in windows -> loading the cursor as texture).
 	 */
@@ -545,7 +545,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 			_config.useGL30 = Boolean.parseBoolean(Settings.getOld("use.opengl30").toString());
 			_config.resizable = false;
 			_config.fullscreen = Boolean.parseBoolean(Settings.getOld("fullscreen.on").toString());
-			_config.foregroundFPS = -1; // max frames
+			// _config.foregroundFPS = -1; // max frames
 			_config.samples = Integer.parseInt(Settings.getOld("amount.samples").toString());
 			_config.vSyncEnabled = false;// Boolean.parseBoolean(Settings.get("use.vsync").toString());
 			_config.useHDPI = Boolean.parseBoolean(Settings.getOld("use.hdpi").toString());

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -29,7 +29,7 @@ public class GameState
 	private ArrayList<TrainStation> _stationList;
 	private ArrayList<TrainLine> _lineList;
 	private ArrayList<Train> _trainList;
-	private HashMap<String, Train> _availableTrains;
+	private LinkedHashMap<String, Train> _availableTrains;
 
 	/**
 	 * Creates a new game state. This can't be done by an external class.
@@ -40,7 +40,7 @@ public class GameState
 		_stationList = new ArrayList<>();
 		_lineList = new ArrayList<>();
 		_trainList = new ArrayList<>();
-		_availableTrains = new HashMap<>();
+		_availableTrains = new LinkedHashMap<>();
 		try
 		{
 			createTrains();
