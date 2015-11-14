@@ -2,6 +2,8 @@
 
 `METRO` is a small and simple rapid transit simulator. You can build tracks and stations, buy trains and realize a massive transport system by creating an efficient railway network.
 
+In addition to this page, there's also a [wiki](https://github.com/hauke96/METRO/wiki) for more detailed non-tech information.
+
 ## For developer
 
 * The documentation as website: http://hauke-stieler.de/public/METRO/doc/
@@ -11,7 +13,9 @@
 There's currently only one thing you can contribute: Report bugs, errors and feature wishes.
 If you have something you want to tell me, just go into the [`issues`](https://github.com/hauke96/METRO/issues) section and create a new ticket. I'll process the ticket as soon as possible.
 
-## Everything you need to know
+## For Player
+* The wiki: https://github.com/hauke96/METRO/wiki
+
 If you have compiled the source into a jar or started the project via you favorite IDE, there will appear the main menu. Just click on Play and the game starts. Currently there are no save games implemented (this comes later).
 
 #### Settings
