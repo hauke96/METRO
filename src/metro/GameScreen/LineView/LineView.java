@@ -143,7 +143,7 @@ public class LineView extends GameScreen
 			{
 				if(_lineList.getSelected() == -1) return;
 				
-				_oldLineName = _lineList.getText(_lineList.getSelected());
+				_oldLineName = _lineList.getText();
 				
 				Color color = TrainLineOverseer.getColor(_oldLineName);
 				TrainLine line = TrainLineOverseer.getLine(_oldLineName);
@@ -191,7 +191,7 @@ public class LineView extends GameScreen
 			{
 				if(_lineList.getSelected() < 0 || _lineList.getSelected() >= METRO.__gameState.getLines().size()) return; // out of bounds
 
-				TrainLineOverseer.removeLine(_lineList.getText(_lineList.getSelected()));
+				TrainLineOverseer.removeLine(_lineList.getText());
 				METRO.__gameState.getLines().remove(_lineList.getSelected());
 				_lineList.remove(_lineList.getSelected());
 				_lineSelectToolEnabled = false;

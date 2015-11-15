@@ -137,7 +137,7 @@ public class TrainViewMain extends GameScreen
 	 */
 	private void sellTrainButton_action()
 	{
-		TrainLineOverseer.removeLine(_trainList.getText(_trainList.getSelected()));
+		TrainLineOverseer.removeLine(_trainList.getText());
 		_trainList.remove(_trainList.getSelected());
 	}
 
@@ -150,6 +150,22 @@ public class TrainViewMain extends GameScreen
 
 		_moveTrainButton.setState(false);
 		_sellTrainButton.setState(false);
+	}
+	
+	/**
+	 * @return The list with all trains of the selected line. 
+	 */
+	public List getTrainList()
+	{
+		return _trainList;
+	}
+
+	/**
+	 * @return The list with all lines.
+	 */
+	public List getLineList()
+	{
+		return _lineList;
 	}
 
 	@Override

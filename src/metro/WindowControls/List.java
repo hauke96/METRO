@@ -85,7 +85,7 @@ public class List extends ActionObservable implements ControlElement
 		_offset = 0;
 		_defaultYSpace = 30;
 		_compactYSpace = 8;
-		_selectedEntry = -1;
+		setSelectedEntry(-1);
 		_maxOffset = 0;
 		_scrollHeight = 20;
 
@@ -148,6 +148,17 @@ public class List extends ActionObservable implements ControlElement
 	}
 
 	/**
+	 * Returns the text of the selected entry of this list.
+	 * When the entry does not exists or nothing is selected an empty string will be returned.
+	 * 
+	 * @return The text of the selecting entry. {@code ""} when selection is invalid.
+	 */
+	public String getText()
+	{
+		return getText(_selectedEntry);
+	}
+
+	/**
 	 * Sets the selected Entry to a specific.
 	 * 
 	 * @param entryIndex The entry number.
@@ -195,8 +206,7 @@ public class List extends ActionObservable implements ControlElement
 	{
 		if(entryIndex < 0 || entryIndex >= _entries.size()) return;
 		_entries.remove(entryIndex);
-		_selectedEntry = -1;
-		notifySelectionChanged(null);
+		setSelectedEntry(-1);
 	}
 
 	/**
@@ -326,8 +336,7 @@ public class List extends ActionObservable implements ControlElement
 
 			if(_enabled && entryRect.contains(mPos)) // when mouse is in an entry, make background light-light-gray
 			{
-				_selectedEntry = i;
-				notifySelectionChanged(_entries.get(_selectedEntry));
+				setSelectedEntry(i);
 				return true;
 			}
 
@@ -335,9 +344,6 @@ public class List extends ActionObservable implements ControlElement
 				Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
 				(amountRows - 1) * 8; // space between lines
 		}
-
-		_selectedEntry = -1;
-		notifySelectionChanged(null);
 
 		return _position.contains(mPos);
 	}

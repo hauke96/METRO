@@ -10,6 +10,7 @@ import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.TrainManagement.Trains.Train;
 import metro.WindowControls.Button;
+import metro.WindowControls.Label;
 import metro.WindowControls.List;
 
 /**
@@ -26,6 +27,7 @@ public class TrainViewBuy extends GameScreen
 	private int _windowWidth;
 	private Point _areaOffset;
 	private Button _buyButton;
+	private Label _messageLabel;
 
 	/**
 	 * Creates a new dialog.
@@ -38,10 +40,15 @@ public class TrainViewBuy extends GameScreen
 		_windowWidth = windowWidth;
 		_areaOffset = areaOffset;
 
-		_buyButton = new Button(new Rectangle(_areaOffset.x + 180, 680, 200, 20), "Buy");
+		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, 680, 210, 20), "Buy");
 		registerControl(_buyButton);
+		
 		_availableTrains = new List(new Rectangle(_areaOffset.x + 20, 460, 140, 240), null, true);
 		registerControl(_availableTrains);
+		
+		_messageLabel = new Label("", new Point(_areaOffset.x + 170, 610), 200);
+		registerControl(_messageLabel);
+		
 		fillTrainList();
 	}
 
@@ -63,6 +70,7 @@ public class TrainViewBuy extends GameScreen
 		drawInformation();
 
 		_availableTrains.draw();
+		_messageLabel.draw();
 		_buyButton.draw();
 	}
 
@@ -79,7 +87,7 @@ public class TrainViewBuy extends GameScreen
 
 	private void drawInformation()
 	{
-		Train train = METRO.__gameState.getTrain(_availableTrains.getText(_availableTrains.getSelected()));
+		Train train = METRO.__gameState.getTrain(_availableTrains.getText());
 
 		Draw.setColor(METRO.__metroBlue);
 		Draw.String("Name", _areaOffset.x + 170, 460);
@@ -105,6 +113,30 @@ public class TrainViewBuy extends GameScreen
 			Draw.String("" + train.getCostFactor(), _areaOffset.x + 260, 560);
 			Draw.String("" + train.getMaxPassenger(), _areaOffset.x + 260, 585);
 		}
+	}
+	
+	/**
+	 * @return The buy train button.
+	 */
+	public Button getBuyButton()
+	{
+		return _buyButton;
+	}
+	
+	/**
+	 * @return The message label that shows error messages.
+	 */
+	public Label getMessageLabel()
+	{
+		return _messageLabel;
+	}
+
+	/**
+	 * @return The list of all available train models
+	 */
+	public List getTrainList()
+	{
+		return _availableTrains;
 	}
 
 	@Override

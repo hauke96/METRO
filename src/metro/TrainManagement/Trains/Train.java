@@ -38,6 +38,22 @@ public class Train
 	}
 
 	/**
+	 * Creates a new Train with the properties of the given one.
+	 * This constructor constructs a copy if you want so.
+	 * 
+	 * @param trainTemplate A train that should be copied.
+	 */
+	public Train(Train trainTemplate)
+	{
+		this(trainTemplate.getName(),
+			trainTemplate.getManufacturer(),
+			trainTemplate.getPrice(),
+			trainTemplate.getCosts(),
+			trainTemplate.getCostFactor(),
+			trainTemplate.getMaxPassenger());
+	}
+
+	/**
 	 * @return The model designation of the train.
 	 */
 	public String getName()
@@ -52,7 +68,7 @@ public class Train
 	{
 		return _manufacturer;
 	}
-	
+
 	/**
 	 * @return Gets the price this train costs.
 	 */
@@ -60,7 +76,7 @@ public class Train
 	{
 		return _price;
 	}
-	
+
 	/**
 	 * @return Gets the monthly costs of this train without any consideration of the age.
 	 */
@@ -68,7 +84,7 @@ public class Train
 	{
 		return _costs;
 	}
-	
+
 	/**
 	 * @return Gets the monthly increase of this train.
 	 */
@@ -76,7 +92,7 @@ public class Train
 	{
 		return _costsFactor;
 	}
-	
+
 	/**
 	 * @return Gets the maximum amount of passengers that can travel with this train.
 	 */
@@ -84,7 +100,7 @@ public class Train
 	{
 		return _maxPassengers;
 	}
-	
+
 	/**
 	 * @return Gets the current amount of passenger that are travelling with this train.
 	 */

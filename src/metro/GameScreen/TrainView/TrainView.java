@@ -9,6 +9,8 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
+import metro.TrainManagement.Trains.Train;
+import metro.WindowControls.ActionObserver;
 
 /**
  * The dialog to buy, sell and manage trains.
@@ -33,6 +35,30 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
 		_trainViewMain = new TrainViewMain(_areaOffset, _windowWidth);
 		_trainViewBuy = new TrainViewBuy(_areaOffset, _windowWidth);
+		_trainViewBuy.getBuyButton().register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				if(_trainViewMain.getLineList().getSelected() == -1)
+				{
+					_trainViewBuy.getMessageLabel().setText("Please select the line this train should drive on.");
+				}
+				else if(_trainViewBuy.getTrainList().getSelected() == -1)
+				{
+					_trainViewBuy.getMessageLabel().setText("Please select the train model you want to buy.");
+				}
+				else
+				{
+					Train train = new Train(METRO.__gameState.getTrain(_trainViewBuy.getTrainList().getText()));
+					METRO.__gameState.getTrains().add(train);
+					_trainViewBuy.getMessageLabel().setText("");
+					_trainViewMain.getTrainList().addElement(train.getName());
+					_trainViewMain.getLineList().setSelectedEntry(-1);
+					_trainViewBuy.getTrainList().setSelectedEntry(-1);
+				}
+			}
+		});
 	}
 
 	@Override

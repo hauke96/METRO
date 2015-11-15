@@ -381,7 +381,7 @@ public abstract class GameScreen extends Observable
 					if(entry != null && !Boolean.parseBoolean(Settings.get("fullscreen.on").toString())) // ... and fullscreen-mode is off
 					{
 						System.out
-							.println(Settings.get("screen.width") + "x" + Settings.get("screen.height") + " -- " + _resolutionList.getText(_resolutionList.getSelected()));
+							.println(Settings.get("screen.width") + "x" + Settings.get("screen.height") + " -- " + _resolutionList.getText());
 						String splitted[] = entry.split("x");
 						if(splitted.length == 2)
 						{
