@@ -3,6 +3,8 @@ package metro;
 /**
  * METRO - Master of established transport railway operators
  * 
+ * 
+ * 
  * Code convention:
  * 
  * final: _WITH_BIG_NAME
@@ -14,6 +16,19 @@ package metro;
  * final and local with small beginning char and capitol for every following word ( e.g.: int myVariableIsCool = 42; ).
  * 
  * Method names has to be clear ( not a(){...} but createCharacter(){...} )
+ * 
+ * 
+ * 
+ * Debug convention:
+ * 
+ * When you want to print something for debug on the console and you want to commit that, please be shure that you have the following output syntax:
+ * 
+ * [UniqueNameTag]
+ * After 4 characters intention comes the message
+ * with other correct intended information.
+ * 
+ * [AnotherTag]
+ * Between to tags should be a blank line.
  */
 import java.awt.Color;
 import java.awt.Dimension;
@@ -26,7 +41,6 @@ import java.util.Locale;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -86,6 +100,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static SpriteBatch __spriteBatch;
 	public static LwjglApplication __application;
 	public static GameState __gameState;
+	public static boolean __debug;
 
 	private Point _oldMousePosition;
 	private LwjglApplicationConfiguration _config;
@@ -112,6 +127,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		GameScreen.setActionManager(_controlActionManager);
 
 		__baseNetSpacing = 25;
+		__debug = false;
 		_oldMousePosition = new Point(0, 0);
 
 		detectOS();
@@ -207,7 +223,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		}
 		catch(GdxRuntimeException ex)
 		{
-			System.out.println(ex.getMessage()); // TODO: Put into popup-message-box
+			if( METRO.__debug) System.out.println("[LoadCursorError]\n" + ex.getMessage() + "\n"); // TODO: Put into popup-message-box
 		}
 	}
 
@@ -567,7 +583,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 				// try to rename settings.cfg
 				if(!file.renameTo(new File("./settings.backup." + formattedDate + ".cfg")))
 				{
-					System.out.println("No backup of settings.cfg has been created."); // TODO: Put into popup-message-box
+					if( METRO.__debug) System.out.println("[SettingsSaveError]\nNo backup of settings.cfg has been created.\n"); // TODO: Put into popup-message-box
 				}
 
 				// no

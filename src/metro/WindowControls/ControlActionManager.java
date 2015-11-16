@@ -16,8 +16,9 @@ import metro.METRO;
  */
 public class ControlActionManager
 {
-	private ArrayList<ControlElement> _listOfControlElements,
-		_bufferListOfControlElements;
+	private ArrayList<ControlElement> _controlElements,
+		_bufferedControlElements,
+		_removedControlElements;
 	boolean _currentlyIterating;
 
 	/**
@@ -25,25 +26,25 @@ public class ControlActionManager
 	 */
 	public ControlActionManager()
 	{
-		_listOfControlElements = new ArrayList<ControlElement>();
-		_bufferListOfControlElements = new ArrayList<ControlElement>();
+		_controlElements = new ArrayList<ControlElement>();
+		_bufferedControlElements = new ArrayList<ControlElement>();
+		_removedControlElements = new ArrayList<ControlElement>();
 		_currentlyIterating = false;
 	}
 
 	/**
-	 * Registers a new ControlElement by adding the control into a buffer list. The METRO class will update the real list of control before starting a new render cycle.
-	 * By adding these buffered controls to the list of actual controls, a second registration will delete the control
-	 * (first appearance of control A will be added, second appearance of A will delete first -> no control left).
+	 * Registers a new ControlElement by adding the control into a buffer list.
+	 * The METRO class will update the real list of control before starting a new render cycle.
 	 * 
 	 * @param control The control to register/remove.
 	 */
 	public void registerElement(ControlElement control)
 	{
-		if(!_bufferListOfControlElements.contains(control)) _bufferListOfControlElements.add(control);
+		if(!_bufferedControlElements.contains(control)) _bufferedControlElements.add(control);
 	}
 
 	/**
-	 * Registers a new ControlElement and deleted one if it's already registered.
+	 * Registers a new ControlElement.
 	 * If this all happens during another button click (or other ControlAction method), every control is written
 	 * into a buffer list and later (in the updateList() method) added to the real list.
 	 * 
@@ -53,13 +54,26 @@ public class ControlActionManager
 	{
 		if(_currentlyIterating)
 		{
-			if(_bufferListOfControlElements.contains(control)) _bufferListOfControlElements.remove(control);
-			else _bufferListOfControlElements.add(control);
+			_bufferedControlElements.add(control);
 		}
 		else
 		{
-			if(_listOfControlElements.contains(control)) _listOfControlElements.remove(control);
-			else _listOfControlElements.add(control);
+			_controlElements.add(control);
+		}
+	}
+
+	/**
+	 * Removes a control from the lists of control elements.
+	 * In comparison to the {@code registerElementIntern()} method,
+	 * this one won't change the buffer list.
+	 * 
+	 * @param control The control that should be removed.
+	 */
+	private void removeElementIntern(ControlElement control)
+	{
+		if(!_currentlyIterating)
+		{
+			_controlElements.remove(control);
 		}
 	}
 
@@ -77,7 +91,7 @@ public class ControlActionManager
 	{
 		ArrayList<ControlElement> listOfControls = clickedWindow != null
 			? clickedWindow.getElements()
-			: _listOfControlElements;
+			: _controlElements;
 		boolean controlClicked = false;
 
 		if(button == Buttons.LEFT)
@@ -111,9 +125,9 @@ public class ControlActionManager
 	public void mouseScroll(int amount)
 	{
 		Point mPos = METRO.__originalMousePosition;
-		for(int i = _listOfControlElements.size() - 1; i > 0; i--)
+		for(int i = _controlElements.size() - 1; i > 0; i--)
 		{
-			ControlElement control = _listOfControlElements.get(i);
+			ControlElement control = _controlElements.get(i);
 			if(control.getArea().contains(mPos))
 			{
 				control.mouseScrolled(amount);
@@ -128,11 +142,18 @@ public class ControlActionManager
 	 */
 	public void updateList()
 	{
-		for(ControlElement control : _bufferListOfControlElements)
+		for(ControlElement control : _removedControlElements)
+		{
+			_bufferedControlElements.remove(control);
+			removeElementIntern(control);
+		}
+		_removedControlElements.clear();
+
+		for(ControlElement control : _bufferedControlElements)
 		{
 			registerElementIntern(control);
 		}
-		_bufferListOfControlElements.clear();
+		_bufferedControlElements.clear();
 	}
 
 	/**
@@ -142,7 +163,15 @@ public class ControlActionManager
 	 */
 	public void remove(ArrayList<ControlElement> elements)
 	{
-		_bufferListOfControlElements.addAll(elements);
+		/*
+		 * I know that there's the addAll() method but i don't
+		 * want to have doubles and remove(ControlElement)
+		 * ensures this fact.
+		 */
+		for(ControlElement control : elements)
+		{
+			remove(control);
+		}
 	}
 
 	/**
@@ -153,6 +182,6 @@ public class ControlActionManager
 	 */
 	public void remove(ControlElement control)
 	{
-		if(!_bufferListOfControlElements.contains(control))_bufferListOfControlElements.add(control);
+		if(!_removedControlElements.contains(control)) _removedControlElements.add(control);
 	}
 }

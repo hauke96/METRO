@@ -219,13 +219,14 @@ public abstract class GameScreen extends Observable
 	 */
 	public void close()
 	{
+		if(METRO.__debug) System.out.println("[GameScreen]\nClosed game screen " + this + "\n");
 		_controlActionManager.remove(_allControls);
 		_allControls.clear();
 	}
 
 	/**
 	 * This is the settings window, that provides some options to configure.
-	 * These options are: Resolution, fullscreen, OpenGL settings, amount of segments and amount of samples. 
+	 * These options are: Resolution, fullscreen, OpenGL settings, amount of segments and amount of samples.
 	 * 
 	 * @author hauke
 	 *
@@ -252,10 +253,11 @@ public abstract class GameScreen extends Observable
 				new Point(500, 450),
 				METRO.__metroBlue);
 
-			new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.",
+			Label label = new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.",
 				new Point(20, 20),
 				460,
 				_window);
+			registerControl(label);
 
 			_okButton = new Button(new Rectangle(200, 420, 100, 20),
 				"OK",
@@ -273,7 +275,8 @@ public abstract class GameScreen extends Observable
 			registerControl(_useHDPI);
 			addCheckboxObserver();
 
-			new Label("Screen Resolution:", new Point(20, 180), _window);
+			label = new Label("Screen Resolution:", new Point(20, 180), _window);
+			registerControl(label);
 			_resolutionList = new List(new Rectangle(20, 200, 190, 150), _window, true);
 			_resolutionList.addElement("1920x1200");
 			_resolutionList.addElement("1920x1080");
@@ -288,7 +291,8 @@ public abstract class GameScreen extends Observable
 			_resolutionList.setSelectedEntry(index);
 			registerControl(_resolutionList);
 
-			new Label("Amount Samples:", new Point(240, 180), _window);
+			label = new Label("Amount Samples:", new Point(240, 180), _window);
+			registerControl(label);
 			_sampleList = new List(new Rectangle(240, 200, 90, 150), _window, true);
 			_sampleList.addElement("0");
 			_sampleList.addElement("2");
@@ -299,7 +303,8 @@ public abstract class GameScreen extends Observable
 			_sampleList.setSelectedEntry(index);
 			registerControl(_sampleList);
 
-			new Label("Amount Segments:", new Point(360, 180), _window);
+			label = new Label("Amount Segments:", new Point(360, 180), _window);
+			registerControl(label);
 			_segmentList = new List(new Rectangle(360, 200, 90, 150), _window, true);
 			_segmentList.addElement("6");
 			_segmentList.addElement("32");
@@ -337,7 +342,6 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void checkStateChanged(boolean newState)
 				{
-					System.out.println("OKfs");
 					Settings.set("fullscreen.on", _fullscreenOn.isChecked());
 					_resolutionList.setState(!(Boolean.parseBoolean(Settings.get("fullscreen.on").toString())));
 				}
@@ -380,8 +384,10 @@ public abstract class GameScreen extends Observable
 				{
 					if(entry != null && !Boolean.parseBoolean(Settings.get("fullscreen.on").toString())) // ... and fullscreen-mode is off
 					{
-						System.out
-							.println(Settings.get("screen.width") + "x" + Settings.get("screen.height") + " -- " + _resolutionList.getText());
+						System.out.println("[ResolutionChanged]\n" +
+							"Old res.: " + Settings.get("screen.width") + "x" + Settings.get("screen.height")
+							+ " -- " +
+							"New res.: " + _resolutionList.getText() + "\n");
 						String splitted[] = entry.split("x");
 						if(splitted.length == 2)
 						{
@@ -451,8 +457,9 @@ public abstract class GameScreen extends Observable
 			registerControl(_noButton);
 			addButtonObserver();
 
-			new Label("Really quit METRO? Or go into settings?",
+			Label label = new Label("Really quit METRO? Or go into settings?",
 				new Point(200 - (Draw.getStringSize("Really quit METRO? Or go into settings?").width) / 2, 25), _window);
+			registerControl(label);
 		}
 
 		/**
