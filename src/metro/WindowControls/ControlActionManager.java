@@ -153,6 +153,6 @@ public class ControlActionManager
 	 */
 	public void remove(ControlElement control)
 	{
-		_bufferListOfControlElements.add(control);
+		if(!_bufferListOfControlElements.contains(control))_bufferListOfControlElements.add(control);
 	}
 }

@@ -51,6 +51,7 @@ public class MainMenu extends GameScreen
 		_welcomeWindow = new Window("Welcome to METRO - ver.:" + METRO.__VERSION,
 			new Point(50, METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 300), // same y-pos as title image
 			new Point(500, 360));
+		
 		Button button = new Button(
 			new Rectangle((500 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2,
 				(260 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2,
@@ -102,7 +103,6 @@ public class MainMenu extends GameScreen
 			{
 				_welcomeWindow.close();
 				METRO.__changeGameScreen(new MainView());
-				close();
 			}
 		});
 	}
