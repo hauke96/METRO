@@ -119,7 +119,7 @@ public class GameState
 				{
 					if(METRO.__debug)
 					{
-						System.out.println("[SuccesfullTrainRead]\n" + 
+						System.out.println("[SuccesfullTrainRead]\n" +
 							name + "\n" +
 							manufacturer + "\n" +
 							Integer.parseInt(price) + "\n" +
@@ -213,5 +213,25 @@ public class GameState
 	public ArrayList<Train> getAvailableTrains()
 	{
 		return new ArrayList<Train>(_availableTrains.values());
+	}
+
+	/**
+	 * Gets the train line with the given name. Thats why every line has to have an unique name ;)
+	 * 
+	 * @param name The name of the train line.
+	 * @return The train line with the given name.
+	 */
+	public TrainLine getLine(String name)
+	{
+		TrainLine line = null;
+		for(TrainLine l : _lineList)
+		{
+			if(l.getName().equals(name))
+			{
+				line = l;
+				break;
+			}
+		}
+		return line;
 	}
 }

@@ -51,11 +51,10 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 				else
 				{
 					Train train = new Train(METRO.__gameState.getTrain(_trainViewBuy.getTrainList().getText()));
+					train.setLine(METRO.__gameState.getLine(_trainViewMain.getLineList().getText()));
 					METRO.__gameState.getTrains().add(train);
 					_trainViewBuy.getMessageLabel().setText("");
 					_trainViewMain.getTrainList().addElement(train.getName());
-					_trainViewMain.getLineList().setSelectedEntry(-1);
-					_trainViewBuy.getTrainList().setSelectedEntry(-1);
 				}
 			}
 		});

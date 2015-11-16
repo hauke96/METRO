@@ -10,6 +10,7 @@ import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Lines.TrainLineOverseer;
+import metro.TrainManagement.Trains.Train;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.List;
@@ -43,7 +44,21 @@ public class TrainViewMain extends GameScreen
 
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 300, 250),
 			null, null, true);
+		_lineList.register(new ActionObserver()
+		{
+			@Override
+			public void selectionChanged(String entry)
+			{
+				_trainList.clear();
+				TrainLine line = METRO.__gameState.getLine(_lineList.getText());
+				for(Train train : METRO.__gameState.getTrains())
+				{
+					if(train.getLine().equals(line)) _trainList.addElement(train.getName());
+				}
+			}
+		});
 		registerControl(_lineList);
+		
 		_trainList = new List(new Rectangle(_areaOffset.x + 121, 130, _windowWidth - 141, 250),
 			null, null, true);
 		registerControl(_trainList);
@@ -151,9 +166,9 @@ public class TrainViewMain extends GameScreen
 		_moveTrainButton.setState(false);
 		_sellTrainButton.setState(false);
 	}
-	
+
 	/**
-	 * @return The list with all trains of the selected line. 
+	 * @return The list with all trains of the selected line.
 	 */
 	public List getTrainList()
 	{

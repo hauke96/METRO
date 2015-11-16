@@ -1,5 +1,7 @@
 package metro.TrainManagement.Trains;
 
+import metro.TrainManagement.Lines.TrainLine;
+
 /**
  * A Train can carry passengers, costs a bit to buy and maintain it.
  * The costs of maintaining will also increase every month by a given factor (_costsFactor) and there is a maximum amount of passengers per train as well.
@@ -14,6 +16,7 @@ public class Train
 	private String _name, _manufacturer;
 	private int _price, _costs, _maxPassengers, _currPassengers;
 	private float _costsFactor;
+	private TrainLine _trainLine;
 
 	/**
 	 * Creates a new train with the following properties.
@@ -51,6 +54,16 @@ public class Train
 			trainTemplate.getCosts(),
 			trainTemplate.getCostFactor(),
 			trainTemplate.getMaxPassenger());
+	}
+
+	/**
+	 * Sets the line of this train.
+	 * 
+	 * @param line The new line.
+	 */
+	public void setLine(TrainLine line)
+	{
+		_trainLine = line;
 	}
 
 	/**
@@ -107,5 +120,13 @@ public class Train
 	public int getCurrPassenger()
 	{
 		return _currPassengers;
+	}
+
+	/**
+	 * @return The train line this train is driving on.
+	 */
+	public TrainLine getLine()
+	{
+		return _trainLine;
 	}
 }

@@ -348,6 +348,20 @@ public class List extends ActionObservable implements ControlElement
 		return _position.contains(mPos);
 	}
 
+	/**
+	 * Removes all entries from this list control including the selected entry.
+	 */
+	public void clear()
+	{
+		_entries.clear();
+		_offset = 0;
+		_defaultYSpace = 30;
+		_compactYSpace = 8;
+		setSelectedEntry(-1);
+		_maxOffset = 0;
+		_scrollHeight = 20;
+	}
+
 	@Override
 	public void setPosition(Point pos)
 	{
