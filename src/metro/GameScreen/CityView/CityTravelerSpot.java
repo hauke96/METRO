@@ -34,7 +34,7 @@ public class CityTravelerSpot
 	public CityTravelerSpot(Point position, int strength)
 	{
 		_position = position;
-		_strength = strength;
+		_strength = strength > 10 ? 10 : strength;
 	}
 
 	/**
@@ -51,11 +51,9 @@ public class CityTravelerSpot
 		Point position = new Point(_position.x + (int)CityView._offset.getX(), _position.y + (int)CityView._offset.getY());
 
 		boolean isInCurrentCircle = Math.pow(METRO.__mousePosition.x - position.x, 2)
-			+ Math.pow(METRO.__mousePosition.y - position.y, 2)
-			< Math.pow(_circleRadiusStep * layerIndex, 2); // true: Mouse cursor is in circle
+			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(_circleRadiusStep * layerIndex, 2); // true: Mouse cursor is in circle
 		boolean isInNextCircle = Math.pow(METRO.__mousePosition.x - position.x, 2)
-			+ Math.pow(METRO.__mousePosition.y - position.y, 2)
-			< Math.pow(_circleRadiusStep * (layerIndex - 1), 2); // true: Mouse cursor is in circle
+			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(_circleRadiusStep * (layerIndex - 1), 2); // true: Mouse cursor is in circle
 
 		return isInCurrentCircle && !isInNextCircle;
 	}

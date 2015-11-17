@@ -562,7 +562,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 			_config.useGL30 = Boolean.parseBoolean(Settings.getOld("use.opengl30").toString());
 			_config.resizable = false;
 			_config.fullscreen = Boolean.parseBoolean(Settings.getOld("fullscreen.on").toString());
-			// _config.foregroundFPS = -1; // max frames
+//			_config.foregroundFPS = -1; // max frames
 			_config.samples = Integer.parseInt(Settings.getOld("amount.samples").toString());
 			_config.vSyncEnabled = false;// Boolean.parseBoolean(Settings.get("use.vsync").toString());
 			_config.useHDPI = Boolean.parseBoolean(Settings.getOld("use.hdpi").toString());

@@ -118,8 +118,8 @@ public class Settings
 			GraphicsEnvironment gEnviroment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			GraphicsDevice[] devices = gEnviroment.getScreenDevices();
 
-			set("screen.width", devices[0].getDisplayMode().getWidth());
-			set("screen.height", devices[0].getDisplayMode().getHeight());
+			_newSettings.put("screen.width", devices[0].getDisplayMode().getWidth());
+			_newSettings.put("screen.height", devices[0].getDisplayMode().getHeight());
 		}
 
 		try

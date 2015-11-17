@@ -41,7 +41,13 @@ public class CityView extends GameScreen
 		_travelerSpots.add(new CityTravelerSpot(new Point(500, 500), 7));
 		_travelerSpots.add(new CityTravelerSpot(new Point(700, 700), 5));
 		_travelerSpots.add(new CityTravelerSpot(new Point(550, 850), 6));
+		_travelerSpots.add(new CityTravelerSpot(new Point(484, 714), 5));
 		_travelerSpots.add(new CityTravelerSpot(new Point(200, 650), 8));
+		_travelerSpots.add(new CityTravelerSpot(new Point(-90, 150), 6));
+		_travelerSpots.add(new CityTravelerSpot(new Point(200, 450), 5));
+		_travelerSpots.add(new CityTravelerSpot(new Point(242, 497), 8));
+		_travelerSpots.add(new CityTravelerSpot(new Point(1214, 320), 3));
+		_travelerSpots.add(new CityTravelerSpot(new Point(1103, 402), 4));
 	}
 
 	@Override
