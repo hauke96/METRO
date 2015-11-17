@@ -8,7 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
-import metro.TrainManagement.Trains.Train;
+import metro.TrainManagement.Trains.TrainTemplate;
+import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.Label;
 import metro.WindowControls.List;
@@ -27,7 +28,9 @@ public class TrainViewBuy extends GameScreen
 	private int _windowWidth;
 	private Point _areaOffset;
 	private Button _buyButton;
-	private Label _messageLabel;
+	private Label _messageLabel,
+		_informationKeys, // like name=, manufacturer=, ...
+		_informationValues; // like CT-01, 1.03, ...
 
 	/**
 	 * Creates a new dialog.
@@ -42,13 +45,39 @@ public class TrainViewBuy extends GameScreen
 
 		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, 680, 210, 20), "Buy");
 		registerControl(_buyButton);
-		
+
 		_availableTrains = new List(new Rectangle(_areaOffset.x + 20, 460, 140, 240), null, true);
+		_availableTrains.register(new ActionObserver()
+		{
+			@Override
+			public void selectionChanged(String entry)
+			{
+				TrainTemplate train = METRO.__gameState.getTemplateTrain(_availableTrains.getText());
+
+				if(train != null)
+				{
+					_informationValues.setText("= " + train.getName() + "\n= " +
+						train.getManufacturer() + "\n= " +
+						train.getPrice() + "\n= " +
+						train.getCosts() + "\n= " +
+						train.getCostFactor() + "\n= " +
+						train.getMaxPassenger());
+				}
+			}
+		});
 		registerControl(_availableTrains);
-		
+
 		_messageLabel = new Label("", new Point(_areaOffset.x + 170, 610), 200);
 		registerControl(_messageLabel);
-		
+
+		_informationKeys = new Label("Name\nProducer\nPrice\nCosts\nCost-factor\nPassenger", new Point(_areaOffset.x + 170, 460));
+		_informationKeys.setColor(METRO.__metroBlue);
+		registerControl(_informationKeys);
+
+		_informationValues = new Label("=\n=\n=\n=\n=\n=\n", new Point(_areaOffset.x + 235, 460));
+		_informationValues.setColor(METRO.__metroBlue);
+		registerControl(_informationValues);
+
 		fillTrainList();
 	}
 
@@ -57,7 +86,7 @@ public class TrainViewBuy extends GameScreen
 	 */
 	private void fillTrainList()
 	{
-		for(Train train : METRO.__gameState.getAvailableTrains())
+		for(TrainTemplate train : METRO.__gameState.getTemplateTrains())
 		{
 			_availableTrains.addElement(train.getName());
 		}
@@ -67,10 +96,12 @@ public class TrainViewBuy extends GameScreen
 	public void updateGameScreen(SpriteBatch g)
 	{
 		drawHeader();
-		drawInformation();
 
 		_availableTrains.draw();
 		_messageLabel.draw();
+		Draw.setColor(METRO.__metroBlue);
+		_informationKeys.draw();
+		_informationValues.draw();
 		_buyButton.draw();
 	}
 
@@ -85,36 +116,20 @@ public class TrainViewBuy extends GameScreen
 			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, 455);
 	}
 
-	private void drawInformation()
+	/**
+	 * Changes the selected train in the list to the given one.
+	 * This will also update the information list. When the model doesn't exist, nothing changes.
+	 * 
+	 * @param modelName The model name of the selection.
+	 */
+	public void setTrain(String modelName)
 	{
-		Train train = METRO.__gameState.getTrain(_availableTrains.getText());
-
-		Draw.setColor(METRO.__metroBlue);
-		Draw.String("Name", _areaOffset.x + 170, 460);
-		Draw.String("Manufacturer", _areaOffset.x + 170, 485);
-		Draw.String("Price", _areaOffset.x + 170, 510);
-		Draw.String("Costs", _areaOffset.x + 170, 535);
-		Draw.String("Cost-factor", _areaOffset.x + 170, 560);
-		Draw.String("Passenger", _areaOffset.x + 170, 585);
-
-		Draw.String("=", _areaOffset.x + 250, 460);
-		Draw.String("=", _areaOffset.x + 250, 485);
-		Draw.String("=", _areaOffset.x + 250, 510);
-		Draw.String("=", _areaOffset.x + 250, 535);
-		Draw.String("=", _areaOffset.x + 250, 560);
-		Draw.String("=", _areaOffset.x + 250, 585);
-
-		if(train != null)
+		if(_availableTrains.contains(modelName))
 		{
-			Draw.String(train.getName(), _areaOffset.x + 260, 460);
-			Draw.String(train.getManufacturer(), _areaOffset.x + 260, 485);
-			Draw.String("" + train.getPrice(), _areaOffset.x + 260, 510);
-			Draw.String("" + train.getCosts(), _areaOffset.x + 260, 535);
-			Draw.String("" + train.getCostFactor(), _areaOffset.x + 260, 560);
-			Draw.String("" + train.getMaxPassenger(), _areaOffset.x + 260, 585);
+			_availableTrains.setText(modelName);
 		}
 	}
-	
+
 	/**
 	 * @return The buy train button.
 	 */
@@ -122,7 +137,7 @@ public class TrainViewBuy extends GameScreen
 	{
 		return _buyButton;
 	}
-	
+
 	/**
 	 * @return The message label that shows error messages.
 	 */

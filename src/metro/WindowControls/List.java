@@ -413,9 +413,21 @@ public class List extends ActionObservable implements ControlElement
 	{
 	}
 
-	@Override
-	public void setText(String text)
+	/**
+	 * Sets the selected entry of this list.
+	 * When the entry does not exist, nothing changes.
+	 * Beware: When there's more than one entry with this value, it can happen that an entry becomes selected you don't want to have selected.
+	 */
+	public void setText(String entry)
 	{
+		if(_entries.contains(entry))
+		{
+			_selectedEntry = getIndex(entry);
+			if(_selectedEntry != -1)
+			{
+				setSelectedEntry(_selectedEntry);
+			}
+		}
 	}
 
 	@Override

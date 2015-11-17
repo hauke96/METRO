@@ -146,6 +146,8 @@ public class RailwayNode
 	 */
 	private void drawColoredLines(Point position, Point positionNext, Point nodePosition, ArrayList<Color> listOfColors)
 	{
+		if(listOfColors == null || listOfColors.size() == 0) return; 
+		
 		Point diff = new Point(_position.y - nodePosition.y, _position.x - nodePosition.x);
 		boolean diagonal = false;
 		if(diff.x != 0 && diff.y != 0)

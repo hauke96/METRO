@@ -2,10 +2,20 @@ You'll find all changes made in the versions here:
 
 VERSION 0.1.3: (01.12.2015)
 	- Train buy dialog
+		* Player can buy trains
+		* information about trains in list
+		* list of lines with assigned trains
 	- Bug fixes in window management
 	
 	REVISIONS:
-		1: (11.11.2015)
+		r2: (17.11.2015)
+			- Train buy dialog
+				* Player can buy trains
+				* information about trains in list
+				* list of lines with assigned trains
+			- Bug fixes in window management
+			
+		r1: (11.11.2015)
 			- Train buy dialog
 			- Bug fixes in window management
 

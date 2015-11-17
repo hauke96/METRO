@@ -2,6 +2,7 @@ package metro.GameScreen.TrainView;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -58,7 +59,7 @@ public class TrainViewMain extends GameScreen
 			}
 		});
 		registerControl(_lineList);
-		
+
 		_trainList = new List(new Rectangle(_areaOffset.x + 121, 130, _windowWidth - 141, 250),
 			null, null, true);
 		registerControl(_trainList);
@@ -79,9 +80,15 @@ public class TrainViewMain extends GameScreen
 	private void fillLineList()
 	{
 		// Fill line list with all lines:
-		for(TrainLine line : METRO.__gameState.getLines())
+		ArrayList<TrainLine> lineList = METRO.__gameState.getLines();
+		for(TrainLine line : lineList)
 		{
 			_lineList.addElement(line.getName());
+		}
+
+		if(lineList.size() > 0)
+		{
+			_lineList.setSelectedEntry(0); // simply select the first entry
 		}
 	}
 

@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainStation;
+import metro.TrainManagement.Trains.TrainTemplate;
 
 /**
  * A game state is the place where all game relevant information are stored.
@@ -29,7 +30,7 @@ public class GameState
 	private ArrayList<TrainStation> _stationList;
 	private ArrayList<TrainLine> _lineList;
 	private ArrayList<Train> _trainList;
-	private LinkedHashMap<String, Train> _availableTrains;
+	private LinkedHashMap<String, TrainTemplate> _templateTrains;
 
 	/**
 	 * Creates a new game state. This can't be done by an external class.
@@ -40,7 +41,7 @@ public class GameState
 		_stationList = new ArrayList<>();
 		_lineList = new ArrayList<>();
 		_trainList = new ArrayList<>();
-		_availableTrains = new LinkedHashMap<>();
+		_templateTrains = new LinkedHashMap<>();
 		try
 		{
 			createTrains();
@@ -127,7 +128,7 @@ public class GameState
 							Float.parseFloat(costsfactor) + "\n" +
 							Integer.parseInt(passenger) + "\n");
 					}
-					_availableTrains.put(name, new Train(name,
+					_templateTrains.put(name, new TrainTemplate(name,
 						manufacturer,
 						Integer.parseInt(price),
 						Integer.parseInt(costs),
@@ -197,22 +198,22 @@ public class GameState
 	}
 
 	/**
-	 * Gets a train by giving the name of the train.
+	 * Gets a train template by giving its model name.
 	 * 
-	 * @param name The name of the train.
-	 * @return A new train object.
+	 * @param name The model name of the train.
+	 * @return A new train template object.
 	 */
-	public Train getTrain(String name)
+	public TrainTemplate getTemplateTrain(String name)
 	{
-		return _availableTrains.get(name);
+		return _templateTrains.get(name);
 	}
 
 	/**
 	 * @return A list with all available trains. This does NOT mean that the player already bought them, they are just available for him.
 	 */
-	public ArrayList<Train> getAvailableTrains()
+	public ArrayList<TrainTemplate> getTemplateTrains()
 	{
-		return new ArrayList<Train>(_availableTrains.values());
+		return new ArrayList<TrainTemplate>(_templateTrains.values());
 	}
 
 	/**

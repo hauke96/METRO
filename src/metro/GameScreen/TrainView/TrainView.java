@@ -35,6 +35,12 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
 		_trainViewMain = new TrainViewMain(_areaOffset, _windowWidth);
 		_trainViewBuy = new TrainViewBuy(_areaOffset, _windowWidth);
+
+		registerObserver();
+	}
+
+	private void registerObserver()
+	{
 		_trainViewBuy.getBuyButton().register(new ActionObserver()
 		{
 			@Override
@@ -50,12 +56,21 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 				}
 				else
 				{
-					Train train = new Train(METRO.__gameState.getTrain(_trainViewBuy.getTrainList().getText()));
+					Train train = new Train(METRO.__gameState.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
 					train.setLine(METRO.__gameState.getLine(_trainViewMain.getLineList().getText()));
 					METRO.__gameState.getTrains().add(train);
 					_trainViewBuy.getMessageLabel().setText("");
 					_trainViewMain.getTrainList().addElement(train.getName());
 				}
+			}
+		});
+
+		_trainViewMain.getTrainList().register(new ActionObserver()
+		{
+			@Override
+			public void selectionChanged(String entry)
+			{
+				_trainViewBuy.setTrain(entry);
 			}
 		});
 	}
@@ -151,7 +166,7 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 	public void reset()
 	{
 	}
-	
+
 	@Override
 	public void close()
 	{

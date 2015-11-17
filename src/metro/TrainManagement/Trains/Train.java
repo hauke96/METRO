@@ -22,7 +22,7 @@ public class Train
 	 * Creates a new train with the following properties.
 	 * Every data for the trains are in the ./data/trains.txt file and will be read & parsed by the GameState class.
 	 * 
-	 * @param name Name of the train.
+	 * @param name The model name of the train.
 	 * @param manufacturer Manufacturer of the train.
 	 * @param price Price for buying the train.
 	 * @param costs Costs per month.
@@ -46,7 +46,7 @@ public class Train
 	 * 
 	 * @param trainTemplate A train that should be copied.
 	 */
-	public Train(Train trainTemplate)
+	public Train(TrainTemplate trainTemplate)
 	{
 		this(trainTemplate.getName(),
 			trainTemplate.getManufacturer(),

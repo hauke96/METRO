@@ -209,8 +209,17 @@ public class Draw
 	 */
 	public static void String(String text, int x, int y, BitmapFont font)
 	{
-		font.setColor(r, g, b, a);
-		font.draw(METRO.__spriteBatch, text, x, y);
+		int stringHeight = (int)font.getCache().getBounds().height, vOffset = 0;
+		String[] segments = text.split("\n"); // split by new line
+
+		for(String segment : segments)
+		{
+			font.setColor(r, g, b, a);
+			font.draw(METRO.__spriteBatch, segment, x, y + vOffset);
+			
+			vOffset += stringHeight + 8; // y-pos for next line
+		}
+
 	}
 
 	/**
