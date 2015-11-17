@@ -61,5 +61,6 @@ To buy a new train you can click on the last button on the toolbar which will le
 ##### Train Models
 There will be many train models you can choose between. Some are more expensive but also more lucrative than others and so on.
 One important part of the trains is their lifetime. They don't get any damage or something but the money you have to pay each month to pay the operating costs, is rising with each month. After some years the costs of a train are so high that the earning of a full train is less than its costs.
-On that point you can decide between rising the price per ticket or buying a new train (buying the same model again won't be a good idea because it wouln't reset anything).
+
+On that point you can decide between increasing rising the price per ticket or buying a new train (you can also buy the same model again).
 > Theres neither a 'buy' functionality nor a 'manage' functionality or something.
