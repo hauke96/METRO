@@ -63,4 +63,4 @@ There will be many train models you can choose between. Some are more expensive 
 One important part of the trains is their lifetime. They don't get any damage or something but the money you have to pay each month to pay the operating costs, is rising with each month. After some years the costs of a train are so high that the earning of a full train is less than its costs.
 
 On that point you can decide between increasing rising the price per ticket or buying a new train (you can also buy the same model again).
-> Theres neither a 'buy' functionality nor a 'manage' functionality or something.
+> There's already a 'buy'- but no 'manage'- or any other functionality yet.
