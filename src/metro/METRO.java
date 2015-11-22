@@ -127,7 +127,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		GameScreen.setActionManager(_controlActionManager);
 
 		__baseNetSpacing = 25;
-		__debug = false;
+		__debug = true;
 		_oldMousePosition = new Point(0, 0);
 
 		detectOS();

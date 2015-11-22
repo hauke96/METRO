@@ -17,6 +17,7 @@ import metro.GameScreen.TrainView.TrainView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
+import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainStation;
 
 /**
@@ -83,6 +84,7 @@ public class MainView extends GameScreen implements Observer
 
 		drawRailwayLines(sp);
 		drawTrainStations(sp);
+		drawTrains(sp);
 
 		if(_activeTool != null) _activeTool.updateGameScreen(sp);
 
@@ -152,6 +154,18 @@ public class MainView extends GameScreen implements Observer
 	}
 
 	/**
+	 * Draws all the railway lines
+	 * 
+	 * @param sp The SpriteBatch to draw on
+	 */
+	private void drawRailwayLines(SpriteBatch sp)
+	{
+		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
+
+		RailwayNodeOverseer.drawAllNodes(offset, sp);
+	}
+
+	/**
 	 * Draws all the train stations with conenctions and labels.
 	 * 
 	 * @param sp The SpriteBatch to draw on
@@ -167,16 +181,12 @@ public class MainView extends GameScreen implements Observer
 		}
 	}
 
-	/**
-	 * Draws all the railway lines
-	 * 
-	 * @param sp The SpriteBatch to draw on
-	 */
-	private void drawRailwayLines(SpriteBatch sp)
+	private void drawTrains(SpriteBatch sp)
 	{
-		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
-
-		RailwayNodeOverseer.drawAllNodes(offset, sp);
+		for(Train train : METRO.__gameState.getTrains())
+		{
+			train.draw(sp);
+		}
 	}
 
 	/**

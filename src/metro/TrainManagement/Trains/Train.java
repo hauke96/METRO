@@ -1,5 +1,9 @@
 package metro.TrainManagement.Trains;
 
+import java.awt.Rectangle;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import metro.TrainManagement.Lines.TrainLine;
 
 /**
@@ -15,7 +19,7 @@ public class Train
 {
 	private String _name, _manufacturer;
 	private int _price, _costs, _maxPassengers, _currPassengers;
-	private float _costsFactor;
+	private float _costsFactor, _relativeOnLine;
 	private TrainLine _trainLine;
 
 	/**
@@ -38,6 +42,7 @@ public class Train
 		_costsFactor = costsFactor;
 		_maxPassengers = passengers;
 		_currPassengers = 0;
+		_relativeOnLine = 0f;
 	}
 
 	/**
@@ -128,5 +133,19 @@ public class Train
 	public TrainLine getLine()
 	{
 		return _trainLine;
+	}
+	
+	public void draw(SpriteBatch sp)
+	{
+		Rectangle rect = calcPosition();
+		//TODO draw correct train dummy
+//		Fill.setColor(Color.lightGray);
+//		Fill.Rect(rect);
+	}
+
+	private Rectangle calcPosition()
+	{
+		//TODO ask trainline for the two nodes that enclose the position of the train
+		return null;
 	}
 }

@@ -3,6 +3,7 @@ package metro.TrainManagement.Lines;
 import java.awt.Color;
 import java.util.ArrayList;
 
+import metro.METRO;
 import metro.TrainManagement.Nodes.RailwayNode;
 
 /**
@@ -18,6 +19,7 @@ public class TrainLine
 	private ArrayList<RailwayNode> _listOfNodes;
 	private Color _lineColor;
 	private String _name;
+	private double _length;
 
 	/**
 	 * Creates an empty new train line with a given title and a color.
@@ -43,6 +45,28 @@ public class TrainLine
 		else _listOfNodes = new ArrayList<RailwayNode>();
 		_name = name;
 		_lineColor = lineColor;
+		_length = calcLength();
+	}
+
+	private int calcLength()
+	{
+		// TODO calculate the length in baseNetSpacing (meaning in fields not in pixel)
+		_length = 0.0;
+
+		if(METRO.__debug) System.out.println("[LengthOfTrainLine]");
+		for(int i = 0; i < _listOfNodes.size() - 1; i++)
+		{
+			int xDiff = Math.abs(_listOfNodes.get(i).getPosition().x - _listOfNodes.get(i + 1).getPosition().x);
+			int yDiff = Math.abs(_listOfNodes.get(i).getPosition().y - _listOfNodes.get(i + 1).getPosition().y);
+			
+			double v = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
+			_length += v;
+			if(METRO.__debug) System.out.println(i + ": i: " + _listOfNodes.get(i).getPosition() + ", i+1: " + _listOfNodes.get(i + 1).getPosition() + v + " --> " + _length);
+		}
+
+		if(METRO.__debug) System.out.println("Length of line " + this + ": " + _length + "\n");
+
+		return 0;
 	}
 
 	/**
