@@ -286,6 +286,7 @@ public abstract class GameScreen extends Observable
 			_resolutionList.addElement("1360x768");
 			_resolutionList.addElement("1280x768");
 			_resolutionList.addElement("1280x720");
+			_resolutionList.addElement("1024x768");
 			if(Boolean.parseBoolean(Settings.get("fullscreen.on").toString())) _resolutionList.setState(false);
 			int index = _resolutionList.getIndex(Integer.parseInt(Settings.get("screen.width").toString()) + "x" + Integer.parseInt(Settings.get("screen.width").toString())); // get the entry with the current resolution
 			_resolutionList.setSelectedEntry(index);
