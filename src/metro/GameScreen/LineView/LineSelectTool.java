@@ -55,11 +55,11 @@ public class LineSelectTool extends GameScreen
 	 * Creates the TrainLine object for further using.
 	 * This method WON'T return null under any circumstances.
 	 * 
-	 * @return Won't be null! The train line as TrainLine object.
-	 * @ensure return != null
+	 * @return The train line as TrainLine object. It won't be null! 
 	 */
 	public TrainLine getTrainLine()
 	{
+		//TODO sort the list of nodes so that everybody (including the train) can be shure that the list is sorted (this is used for length and position calculation)
 		return new TrainLine(_listOfNodes, _lineName, _color);
 	}
 

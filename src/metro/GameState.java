@@ -48,11 +48,11 @@ public class GameState
 		}
 		catch(IOException e)
 		{
-			if(METRO.__debug) System.out.println("[TrainReadError]\nCan't read train.txt due to an error: " + e.getMessage() + "\n");
+			METRO.__debug("[TrainReadError]\nCan't read train.txt due to an error: " + e.getMessage() + "\n");
 		}
 		catch(IllegalArgumentException e)
 		{
-			if(METRO.__debug) System.out.println("[TrainFileSyntaxError]\n" + e.getMessage() + "\n");
+			METRO.__debug("[TrainFileSyntaxError]\n" + e.getMessage() + "\n");
 		}
 	}
 

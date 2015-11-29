@@ -174,7 +174,6 @@ public class MainView extends GameScreen implements Observer
 	{
 		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
 
-		// Draw stations:
 		for(TrainStation ts : METRO.__gameState.getStations())
 		{
 			ts.draw(sp, offset);
@@ -183,9 +182,11 @@ public class MainView extends GameScreen implements Observer
 
 	private void drawTrains(SpriteBatch sp)
 	{
+		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
+		
 		for(Train train : METRO.__gameState.getTrains())
 		{
-			train.draw(sp);
+			train.draw(sp, offset);
 		}
 	}
 

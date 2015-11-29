@@ -1,9 +1,13 @@
 package metro.TrainManagement.Trains;
 
-import java.awt.Rectangle;
+import java.awt.Color;
+import java.awt.Point;
+import java.awt.geom.Point2D;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.METRO;
+import metro.Graphics.Fill;
 import metro.TrainManagement.Lines.TrainLine;
 
 /**
@@ -42,7 +46,7 @@ public class Train
 		_costsFactor = costsFactor;
 		_maxPassengers = passengers;
 		_currPassengers = 0;
-		_relativeOnLine = 0f;
+		_relativeOnLine = 0.3f;
 	}
 
 	/**
@@ -134,18 +138,33 @@ public class Train
 	{
 		return _trainLine;
 	}
-	
-	public void draw(SpriteBatch sp)
+
+	/**
+	 * Draws the train on its train line.
+	 * 
+	 * @param sp The sprite Batch to draw on.
+	 * @param offset The offset of the map.
+	 */
+	public void draw(SpriteBatch sp, Point offset)
 	{
-		Rectangle rect = calcPosition();
-		//TODO draw correct train dummy
-//		Fill.setColor(Color.lightGray);
-//		Fill.Rect(rect);
+		Point2D position = calcPosition();
+		Fill.setColor(Color.lightGray);
+		Fill.Rect(
+			(int)(offset.x + position.getX() * METRO.__baseNetSpacing),
+			(int)(offset.y + position.getY() * METRO.__baseNetSpacing),
+			10,
+			10);
 	}
 
-	private Rectangle calcPosition()
+	/**
+	 * Calculates the position of the train considering the relative position on the line.
+	 * 
+	 * @return The coordinates of the train.
+	 */
+	private Point2D calcPosition()
 	{
-		//TODO ask trainline for the two nodes that enclose the position of the train
-		return null;
+		// TODO change _trainLine.getNodes().get(0) to real start node
+		Point2D p = _trainLine.getPositionOfTrain(_relativeOnLine, _trainLine.getNodes().get(0));
+		return p;
 	}
 }

@@ -3,6 +3,7 @@ package metro.GameScreen.LineView;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +15,7 @@ import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Lines.TrainLineOverseer;
+import metro.TrainManagement.Trains.Train;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.ColorBar;
@@ -142,9 +144,9 @@ public class LineView extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				if(_lineList.getSelected() == -1) return;
-				
+
 				_oldLineName = _lineList.getText();
-				
+
 				Color color = TrainLineOverseer.getColor(_oldLineName);
 				TrainLine line = TrainLineOverseer.getLine(_oldLineName);
 
@@ -168,11 +170,11 @@ public class LineView extends GameScreen
 
 				_lineSelectTool = new LineSelectTool(line); // create clean select tool
 				_lineSelectToolEnabled = true;
-				
+
 				_lineList.setState(false);
 
 				_controlClicked = true;
-				
+
 				METRO.__gameState.getLines().remove(line);
 			}
 		});
@@ -231,17 +233,46 @@ public class LineView extends GameScreen
 				}
 				else if(line.isValid()) // only change something when line and name are valid
 				{
+					// remove old line
+					ArrayList<Train> oldTrains = getTrainsOfLine(_oldLineName);
 					_lineList.remove(_lineList.getIndex(_oldLineName));
+					METRO.__gameState.getLines().remove(TrainLineOverseer.getLine(_oldLineName));
+
+					// add new line
+					for(Train train : oldTrains)
+					{
+						train.setLine(line);
+					}
 					line.setName(_lineNameField.getText());
 					TrainLineOverseer.addLine(line);
 					METRO.__gameState.getLines().add(line);
 					_lineList.addElement(_lineNameField.getText());
 					_lineSelectToolEnabled = false;
-					
+
 					reset();
 					_lineList.setState(true);
 				}
 				_controlClicked = true;
+			}
+
+			/**
+			 * Gets all trains that belongs to that given line.
+			 * 
+			 * @param oldLineName The name of the line
+			 * @return All trains of that line.
+			 */
+			private ArrayList<Train> getTrainsOfLine(String oldLineName)
+			{
+				ArrayList<Train> trains = new ArrayList<>();
+				TrainLine line = TrainLineOverseer.getLine(oldLineName);
+				for(Train train : METRO.__gameState.getTrains())
+				{
+					if(train.getLine().equals(line))
+					{
+						trains.add(train);
+					}
+				}
+				return trains;
 			}
 		});
 	}

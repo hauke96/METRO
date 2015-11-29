@@ -223,7 +223,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		}
 		catch(GdxRuntimeException ex)
 		{
-			if( METRO.__debug) System.out.println("[LoadCursorError]\n" + ex.getMessage() + "\n"); // TODO: Put into popup-message-box
+			METRO.__debug("[LoadCursorError]\n" + ex.getMessage() + "\n"); // TODO: Put into popup-message-box
 		}
 	}
 
@@ -544,6 +544,16 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	}
 
 	/**
+	 * Prints a debug message into the console but only if the debug mode is on.
+	 * 
+	 * @param message The message to print.
+	 */
+	public static void __debug(String message)
+	{
+		if(__debug) System.out.println(message);
+	}
+
+	/**
 	 * Reads the settings from the settings.cfg and sets them to the variables of METRO.
 	 */
 	private void setSettings()
@@ -562,7 +572,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 			_config.useGL30 = Boolean.parseBoolean(Settings.getOld("use.opengl30").toString());
 			_config.resizable = false;
 			_config.fullscreen = Boolean.parseBoolean(Settings.getOld("fullscreen.on").toString());
-//			_config.foregroundFPS = -1; // max frames
+			// _config.foregroundFPS = -1; // max frames
 			_config.samples = Integer.parseInt(Settings.getOld("amount.samples").toString());
 			_config.vSyncEnabled = false;// Boolean.parseBoolean(Settings.get("use.vsync").toString());
 			_config.useHDPI = Boolean.parseBoolean(Settings.getOld("use.hdpi").toString());
@@ -583,7 +593,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 				// try to rename settings.cfg
 				if(!file.renameTo(new File("./settings.backup." + formattedDate + ".cfg")))
 				{
-					if( METRO.__debug) System.out.println("[SettingsSaveError]\nNo backup of settings.cfg has been created.\n"); // TODO: Put into popup-message-box
+					METRO.__debug("[SettingsSaveError]\nNo backup of settings.cfg has been created.\n"); // TODO: Put into popup-message-box
 				}
 
 				// no

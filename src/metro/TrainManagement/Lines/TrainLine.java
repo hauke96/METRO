@@ -1,6 +1,8 @@
 package metro.TrainManagement.Lines;
 
 import java.awt.Color;
+import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import metro.METRO;
@@ -10,16 +12,17 @@ import metro.TrainManagement.Nodes.RailwayNode;
  * A Train line is a collection of several railway connections that touches each other (building one big line).
  * Trains can only move on one of this train lines.
  * To create this line, the TrainLineSelectTool is used to select different nodes, put them into connections and building this line.
+ * A train line in immutable which means that the line stays sorted as it is. To change something you have to create a new line.
  * 
  * @author hauke
  *
  */
 public class TrainLine
 {
-	private ArrayList<RailwayNode> _listOfNodes;
+	private final ArrayList<RailwayNode> _listOfNodes;
 	private Color _lineColor;
 	private String _name;
-	private double _length;
+	private final double _length;
 
 	/**
 	 * Creates an empty new train line with a given title and a color.
@@ -45,28 +48,90 @@ public class TrainLine
 		else _listOfNodes = new ArrayList<RailwayNode>();
 		_name = name;
 		_lineColor = lineColor;
+		METRO.__debug("[CalcTrainLineLength]");
 		_length = calcLength();
+		METRO.__debug("Length: " + _length);
 	}
 
-	private int calcLength()
+	/**
+	 * Calculates the length of the train line.
+	 * The length is scaled by the {@code METRO.__baseNetSpacing} and is NOT given in pixel.
+	 * 
+	 * @return The length of the train line.
+	 */
+	private double calcLength()
 	{
-		// TODO calculate the length in baseNetSpacing (meaning in fields not in pixel)
-		_length = 0.0;
+		return calcPartLength(0, _listOfNodes.size() - 1);
+	}
 
-		if(METRO.__debug) System.out.println("[LengthOfTrainLine]");
-		for(int i = 0; i < _listOfNodes.size() - 1; i++)
+	/**
+	 * calculates the distance between two nodes.
+	 * 
+	 * @param startNode The index of the start node.
+	 * @param endNode The index of the end node.
+	 * @return The distance between them.
+	 */
+	private double calcPartLength(int startNode, int endNode)
+	{
+		double length = 0.0;
+
+		for(int i = startNode; i < endNode; i++) // don't cycle over the last element of the list because of (i + 1) index usages
 		{
 			int xDiff = Math.abs(_listOfNodes.get(i).getPosition().x - _listOfNodes.get(i + 1).getPosition().x);
 			int yDiff = Math.abs(_listOfNodes.get(i).getPosition().y - _listOfNodes.get(i + 1).getPosition().y);
-			
+
+			// distance between two nodes
 			double v = Math.sqrt(Math.pow(xDiff, 2) + Math.pow(yDiff, 2));
-			_length += v;
-			if(METRO.__debug) System.out.println(i + ": i: " + _listOfNodes.get(i).getPosition() + ", i+1: " + _listOfNodes.get(i + 1).getPosition() + v + " --> " + _length);
+			length += v;
 		}
 
-		if(METRO.__debug) System.out.println("Length of line " + this + ": " + _length + "\n");
+		return length;
+	}
 
-		return 0;
+	/**
+	 * Calculates the position of a train that traveled a specific distance from the start node.
+	 * The idea of searching the position is to find two nodes that are around the distance (E.g. the distance is 5 and one node is at 4.5 and one at 5.5).
+	 * 
+	 * @param distance The traveled distance of a train.
+	 * @param startNode The node the train started.
+	 * @return The position of the train.
+	 */
+	public Point2D getPositionOfTrain(double distance, RailwayNode startNode)
+	{
+		// to be able to use one algorithm that starts at the first node, convert the distance in
+		if(_listOfNodes.get(_listOfNodes.size() - 1).equals(startNode)) distance = _length - distance;
+		distance *= _length;
+
+		double length = 0.0,
+			lastLength = 0.0;
+		Point nodePre = null,
+			nodeSuc = null;
+
+		// iterate over the nodes and calculate the distance until it's over the distance or at the end of the list
+		for(int i = 0; i < _listOfNodes.size() - 1 && nodePre == null; i++)
+		{
+			lastLength = calcPartLength(i, i + 1);
+			length += lastLength;
+			if(length >= distance)
+			{
+				nodePre = _listOfNodes.get(i).getPosition();
+				nodeSuc = _listOfNodes.get(i + 1).getPosition();
+			}
+		}
+		// calculate the rest of the distance and some delta values to work with it below
+		distance -= length; // maybe (length - lastLength);
+		int deltaX = nodePre.x - nodeSuc.x;
+		int deltaY = nodePre.y - nodeSuc.y;
+
+		// calculate the distance between the two nodes
+		double s = Math.sqrt(Math.hypot(deltaX, deltaX));
+		// calculate the ratio of the node distance to the rest of the distance
+		double ratio = distance / s;
+		// determine the smaller value of the two x and y values
+		double x = nodePre.x <= nodeSuc.x ? nodePre.x : nodeSuc.x;
+		double y = nodePre.y <= nodeSuc.y ? nodePre.y : nodeSuc.y;
+		// and finally calculate the position by adding ratio based value to the smallest x and y coordinate
+		return new Point2D.Double(x + ratio * deltaX, y + ratio * deltaY);
 	}
 
 	/**
@@ -156,7 +221,7 @@ public class TrainLine
 		if(o instanceof TrainLine)
 		{
 			TrainLine line = (TrainLine)o;
-			return _listOfNodes.equals(line._listOfNodes);// old: line._name.equals(_name) && line._lineColor.equals(_lineColor); // equal when color and name are equal
+			return _listOfNodes.equals(line._listOfNodes);
 		}
 		return false;
 	}
