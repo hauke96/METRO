@@ -216,8 +216,6 @@ public class LineView extends GameScreen
 			{
 				if(!_lineSelectToolEnabled) return;
 
-				TrainLine line = _lineSelectTool.getTrainLine();
-
 				// if something went wrong:
 				if(_lineList.contains(_lineNameField.getText()) && !_editMode) // when edit mode, then don't change the list
 				{
@@ -227,30 +225,43 @@ public class LineView extends GameScreen
 				{
 					_messageLabel.setText("Please enter a name!");
 				}
-				else if(!line.isValid())
+				else
 				{
-					_messageLabel.setText("Train Line is not valid!");
-				}
-				else if(line.isValid()) // only change something when line and name are valid
-				{
-					// remove old line
-					ArrayList<Train> oldTrains = getTrainsOfLine(_oldLineName);
-					_lineList.remove(_lineList.getIndex(_oldLineName));
-					METRO.__gameState.getLines().remove(TrainLineOverseer.getLine(_oldLineName));
-
-					// add new line
-					for(Train train : oldTrains)
+					// get old line before the new one gets creates because it could have the same name.
+					TrainLine oldLine = TrainLineOverseer.getLine(_oldLineName);
+					TrainLine line = _lineSelectTool.getTrainLine();
+					
+					if(line.isValid()) // only change something when line and name are valid
 					{
-						train.setLine(line);
-					}
-					line.setName(_lineNameField.getText());
-					TrainLineOverseer.addLine(line);
-					METRO.__gameState.getLines().add(line);
-					_lineList.addElement(_lineNameField.getText());
-					_lineSelectToolEnabled = false;
+						//TODO remove color from nodes because the color was no line, just a preview
+						if(oldLine != null)
+						{
+							TrainLineOverseer.removeLine(oldLine);
+							METRO.__gameState.getLines().remove(oldLine);
+							_lineList.remove(_lineList.getIndex(_oldLineName));
 
-					reset();
-					_lineList.setState(true);
+							ArrayList<Train> oldTrains = getTrainsOfLine(oldLine);
+
+							// add new line
+							for(Train train : oldTrains)
+							{
+								train.setLine(line);
+							}
+						}
+						
+						line.setName(_lineNameField.getText());
+						TrainLineOverseer.addLine(line);
+						METRO.__gameState.getLines().add(line);
+						_lineList.addElement(_lineNameField.getText());
+						_lineSelectToolEnabled = false;
+
+						reset();
+						_lineList.setState(true);
+					}
+					else
+					{
+						_messageLabel.setText("Train Line is not valid!");
+					}
 				}
 				_controlClicked = true;
 			}
@@ -258,13 +269,12 @@ public class LineView extends GameScreen
 			/**
 			 * Gets all trains that belongs to that given line.
 			 * 
-			 * @param oldLineName The name of the line
+			 * @param line The train line whose trains you want.
 			 * @return All trains of that line.
 			 */
-			private ArrayList<Train> getTrainsOfLine(String oldLineName)
+			private ArrayList<Train> getTrainsOfLine(TrainLine line)
 			{
 				ArrayList<Train> trains = new ArrayList<>();
-				TrainLine line = TrainLineOverseer.getLine(oldLineName);
 				for(Train train : METRO.__gameState.getTrains())
 				{
 					if(train.getLine().equals(line))

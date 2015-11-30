@@ -59,10 +59,8 @@ public class LineSelectTool extends GameScreen
 	 */
 	public TrainLine getTrainLine()
 	{
-		TrainLine line = new TrainLine(_listOfNodes, _lineName, _color);
-
-		ArrayList<RailwayNode> newList = sortNodes(_listOfNodes, getAnyEndNode(line));
-
+		@SuppressWarnings("unchecked") // _listOfNodes.clone can safely be converted into an array list (because listOfNodes is an array list)
+		ArrayList<RailwayNode> newList = sortNodes((ArrayList<RailwayNode>)_listOfNodes.clone(), getAnyEndNode());
 		return new TrainLine(newList, _lineName, _color);
 	}
 
@@ -75,26 +73,30 @@ public class LineSelectTool extends GameScreen
 	 */
 	private ArrayList<RailwayNode> sortNodes(ArrayList<RailwayNode> list, RailwayNode startNode)
 	{
-		METRO.__debug("[TrainLineSorting]");
+		METRO.__debug("[TrainLineSorting]\n" + list.size());
 		ArrayList<RailwayNode> newList = new ArrayList<>();
 		// be sure that an end node is the first element in this list
 		newList.add(startNode);
+		list.remove(startNode);
 
 		// create a dummy node to enter toe first for-loop
 		RailwayNode neighbor = new RailwayNode(null, null);
+		int listLength = list.size();
 
-		for(int i = 0; i < list.size() && neighbor != null; ++i)
+		for(int i = 0; i < listLength && neighbor != null; ++i)
 		{
 			neighbor = null;
-			int k; // the index of the neighbor for node at index i
-			for(k = i + 1; k < list.size() && neighbor == null; ++k)
+			int k; // the index of the neighbor for the node at index i
+			for(k = 0; k < list.size() && neighbor == null; ++k)
 			{
-				if(newList.get(i).isNeighbor(list.get(k))) neighbor = list.get(k);
+				if(newList.get(i).isNeighbor(list.get(k)))
+					neighbor = list.get(k);
 			}
 			if(neighbor != null)
 			{
 				METRO.__debug("    " + newList.get(i).getPosition() + "  ==>  " + neighbor.getPosition());
-				newList.add(list.get(k - 1));
+				newList.add(neighbor);
+				list.remove(neighbor);
 			}
 		}
 
@@ -108,11 +110,11 @@ public class LineSelectTool extends GameScreen
 	 * @param line The line whose end node you want to know.
 	 * @return One of the two end nodes of the given line.
 	 */
-	private RailwayNode getAnyEndNode(TrainLine line)
+	private RailwayNode getAnyEndNode()
 	{
 		for(RailwayNode node : _listOfNodes)
 		{
-			if(line.isEndNode(node)) return node;
+			if(TrainLine.isEndNode(node, _listOfNodes)) return node;
 		}
 
 		return null;

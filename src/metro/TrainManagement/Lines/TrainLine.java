@@ -50,7 +50,7 @@ public class TrainLine
 		_lineColor = lineColor;
 		METRO.__debug("[CalcTrainLineLength]");
 		_length = calcLength();
-		METRO.__debug("Length: " + _length);
+		METRO.__debug("Length: " + _length + "\n");
 	}
 
 	/**
@@ -189,25 +189,26 @@ public class TrainLine
 
 		for(RailwayNode node : _listOfNodes)
 		{
-			if(isEndNode(node)) ++amountEndNodes;
+			if(isEndNode(node, _listOfNodes)) ++amountEndNodes;
 		}
 
 		return _listOfNodes.size() >= 2 && amountEndNodes == 2;
 	}
 
 	/**
-	 * Checks if the given node is one of the two end nodes of this line.
+	 * Checks if the given node is one of the end nodes in the list of given nodes.
 	 * 
 	 * @param node The node that's probably an end node.
+	 * @param listOfNodes The list of all available nodes.
 	 * @return True when the given node is an end node, false if not.
 	 */
-	public boolean isEndNode(RailwayNode node)
+	public static boolean isEndNode(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
 	{
 		int counter = 0;
 
 		for(RailwayNode neighborNode : node.getNeighbors())
 		{
-			for(RailwayNode Node : _listOfNodes)
+			for(RailwayNode Node : listOfNodes)
 			{
 				if(neighborNode.equals(Node)) ++counter;
 			}

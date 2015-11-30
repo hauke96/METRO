@@ -22,6 +22,7 @@ public class TrainLineOverseer
 	{
 		_listOfTrainLines.remove(line); // remove old line, because maybe line.equals(old-line) == true
 		_listOfTrainLines.add(line); // adds the new line to the list
+		// TODO add colors to nodes because there's no color yet.
 	}
 
 	/**
