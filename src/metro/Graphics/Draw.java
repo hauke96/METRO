@@ -242,14 +242,14 @@ public class Draw
 			String line = "";
 
 			// recunstruct string with length < area width
-			for(int i = 0; i < subSegments.length; i++)
+			for(int i = 0; i < subSegments.length; ++i)
 			{
 				if(Draw.getStringSize(line + " " + subSegments[i]).width >= width) // if next addition would be out of area
 				{
 					Draw.String(line, x, y + vOffset);
 					vOffset += stringHeight + 8; // y-pos for next line
 					line = subSegments[i] + " "; // choose first char for next line
-					rowCount++;
+					++rowCount;
 				}
 				else
 				// if new addition is in area
@@ -259,7 +259,7 @@ public class Draw
 			}
 			Draw.String(line, x, y + vOffset);
 			vOffset += stringHeight + 8; // y-pos for next line
-			rowCount++;
+			++rowCount;
 		}
 
 		return rowCount;
@@ -307,11 +307,11 @@ public class Draw
 			String line = "";
 
 			// recunstruct string with length < area width
-			for(int i = 0; i < subSegments.length; i++)
+			for(int i = 0; i < subSegments.length; ++i)
 			{
 				if(Draw.getStringSize(line + " " + subSegments[i]).width >= width) // if next addition would be out of area
 				{
-					rowCount++;
+					++rowCount;
 					line = subSegments[i] + " "; // choose first char for next line
 				}
 				else
@@ -320,7 +320,7 @@ public class Draw
 					line += subSegments[i] + " ";
 				}
 			}
-			rowCount++;
+			++rowCount;
 		}
 
 		return rowCount;

@@ -128,7 +128,7 @@ public class Settings
 			writer.write(__praeambel);
 			Object[] keys = _newSettings.keySet().toArray();
 			Object[] values = _newSettings.values().toArray();
-			for(int i = 0; i < keys.length; i++)
+			for(int i = 0; i < keys.length; ++i)
 			{
 				writer.write(keys[i] + "=" + values[i] + "\n");
 			}

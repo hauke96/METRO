@@ -21,7 +21,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class RailwayNode
 {
 	private ArrayList<RailwayNode> _listOfNeighbors = new ArrayList<RailwayNode>(); // a list of all nodes this node is connected to
-	private HashMap<RailwayNode, ArrayList<Color>> _mapOfColors = new HashMap<RailwayNode, ArrayList<Color>>();
+	private HashMap<RailwayNode, ArrayList<Color>> _mapOfColors = new HashMap<RailwayNode, ArrayList<Color>>(); // all colors of connections to another nodes
 	private Point _position; // not in pixel, cross number/pos
 
 	/**
@@ -32,14 +32,14 @@ public class RailwayNode
 	/**
 	 * Creates a new node at the given position with a specific neighbor.
 	 * 
-	 * @param position The position (NOT pixel) of the node.
+	 * @param position The position (NOT pixel) of the node. {@code null} indicates that the node will not be added to the overseer (because it's invalid).
 	 * @param neighbor The neighbor of the node.
 	 */
 	public RailwayNode(Point position, RailwayNode neighbor)
 	{
 		_position = position;
 		if(neighbor != null) _listOfNeighbors.add(neighbor);
-		RailwayNodeOverseer.add(this);
+		if(_position != null) RailwayNodeOverseer.add(this);
 	}
 
 	/**
@@ -90,6 +90,17 @@ public class RailwayNode
 	}
 
 	/**
+	 * Checks if the given node is a neighbor of this node.
+	 * 
+	 * @param node The presumed neighbor.
+	 * @return True when the given node is a neighbor, otherwise false.
+	 */
+	public boolean isNeighbor(RailwayNode node)
+	{
+		return _listOfNeighbors.contains(node);
+	}
+
+	/**
 	 * Draws a railway node and its neighbors. An algorithm takes care of NOT drawing nodes twice.
 	 * 
 	 * @param sp The sprite batch.
@@ -128,7 +139,7 @@ public class RailwayNode
 			}
 		}
 		ArrayList<Color> colorList = _mapOfColors.get(this);
-		for(int i = 0; colorList != null && i < colorList.size(); i++)
+		for(int i = 0; colorList != null && i < colorList.size(); ++i)
 		{
 			Draw.setColor(colorList.get(i));
 			Draw.setColor(METRO.__metroBlue);
@@ -146,8 +157,8 @@ public class RailwayNode
 	 */
 	private void drawColoredLines(Point position, Point positionNext, Point nodePosition, ArrayList<Color> listOfColors)
 	{
-		if(listOfColors == null || listOfColors.size() == 0) return; 
-		
+		if(listOfColors == null || listOfColors.size() == 0) return;
+
 		Point diff = new Point(_position.y - nodePosition.y, _position.x - nodePosition.x);
 		boolean diagonal = false;
 		if(diff.x != 0 && diff.y != 0)
@@ -156,7 +167,7 @@ public class RailwayNode
 			else if(diff.x == 1 && diff.y == -1) diff.y = 1;
 			diagonal = true;
 		}
-		for(int i = 0; i < listOfColors.size(); i++)
+		for(int i = 0; i < listOfColors.size(); ++i)
 		{
 			// TODO: make more accurate draw algo. This won't work for vertical lines :(
 			Draw.setColor(listOfColors.get(i));
@@ -249,22 +260,22 @@ public class RailwayNode
 		}
 	}
 
-	/**
-	 * Checks if this node is the end/start node of the train line specified by the given color.
-	 * 
-	 * @param colorOfLine The color of the train line this node may be an end/start node.
-	 * @return True when it's an end/start node.
-	 */
-	public boolean isEndOfLine(Color colorOfLine)
-	{
-		int i = 0;
-		for(ArrayList<Color> list : _mapOfColors.values())
-		{
-			if(list.contains(colorOfLine)) i++;
-		}
-
-		return i == 1;
-	}
+	// /**
+	// * Checks if this node is the end/start node of the train line specified by the given color.
+	// *
+	// * @param colorOfLine The color of the train line this node may be an end/start node.
+	// * @return True when it's an end/start node.
+	// */
+	// public boolean isEndOfLine(Color colorOfLine)
+	// {
+	// int i = 0;
+	// for(ArrayList<Color> list : _mapOfColors.values())
+	// {
+	// if(list.contains(colorOfLine)) ++i;
+	// }
+	//
+	// return i == 1;
+	// }
 
 	@Override
 	public boolean equals(Object obj)

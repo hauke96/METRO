@@ -72,10 +72,10 @@ public class CityView extends GameScreen
 	{
 		_selectedLayerNumber = -1;
 		// get the selected circle number
-		for(int i = 0; i < 10; i++) // go through all layers
+		for(int i = 0; i < 10; ++i) // go through all layers
 		{
 			boolean isLayerSelected = false;
-			for(int k = 0; !isLayerSelected && k < _travelerSpots.size(); k++) // go through all spots
+			for(int k = 0; !isLayerSelected && k < _travelerSpots.size(); ++k) // go through all spots
 			{
 				isLayerSelected = _travelerSpots.get(k).isMouseInCircle(i); // if mouse is in ANY circle of this layer
 				if(isLayerSelected)
@@ -85,14 +85,14 @@ public class CityView extends GameScreen
 			}
 		}
 		// draw all the circles
-		for(int i = 0; i < 10; i++)
+		for(int i = 0; i < 10; ++i)
 		{
-			for(int k = 0; k < _travelerSpots.size(); k++)
+			for(int k = 0; k < _travelerSpots.size(); ++k)
 			{
 				if(_travelerSpots.get(k).getStrength() <= i) continue;
 				_travelerSpots.get(k).draw(sp, i, i == _selectedLayerNumber, true); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 			}
-			for(int k = 0; k < _travelerSpots.size(); k++)
+			for(int k = 0; k < _travelerSpots.size(); ++k)
 			{
 				if(_travelerSpots.get(k).getStrength() <= i) continue;
 				_travelerSpots.get(k).draw(sp, i, i == _selectedLayerNumber, false); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different

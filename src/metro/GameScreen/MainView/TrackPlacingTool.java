@@ -206,7 +206,7 @@ public class TrackPlacingTool extends GameScreen
 	 */
 	private RailwayNode createTrack(int offsetB, int offsetH, int start, int end, RailwayNode prevNode)
 	{
-		for(int i = start; i < end; i++)
+		for(int i = start; i < end; ++i)
 		{
 			Point nodePosition = new Point(prevNode.getPosition().x + offsetB, prevNode.getPosition().y + offsetH);
 			RailwayNode node = null;

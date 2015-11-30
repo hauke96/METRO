@@ -55,12 +55,67 @@ public class LineSelectTool extends GameScreen
 	 * Creates the TrainLine object for further using.
 	 * This method WON'T return null under any circumstances.
 	 * 
-	 * @return The train line as TrainLine object. It won't be null! 
+	 * @return The train line with sorted nodes as TrainLine object. It won't be null!
 	 */
 	public TrainLine getTrainLine()
 	{
-		//TODO sort the list of nodes so that everybody (including the train) can be shure that the list is sorted (this is used for length and position calculation)
-		return new TrainLine(_listOfNodes, _lineName, _color);
+		TrainLine line = new TrainLine(_listOfNodes, _lineName, _color);
+
+		ArrayList<RailwayNode> newList = sortNodes(_listOfNodes, getAnyEndNode(line));
+
+		return new TrainLine(newList, _lineName, _color);
+	}
+
+	/**
+	 * Sorts the given list of nodes by choosing one start node an then the neighbors.
+	 * 
+	 * @param list The list of nodes that should be sorted.
+	 * @param startNode An end node of the line.
+	 * @return A sorted list with all the nodes.
+	 */
+	private ArrayList<RailwayNode> sortNodes(ArrayList<RailwayNode> list, RailwayNode startNode)
+	{
+		METRO.__debug("[TrainLineSorting]");
+		ArrayList<RailwayNode> newList = new ArrayList<>();
+		// be sure that an end node is the first element in this list
+		newList.add(startNode);
+
+		// create a dummy node to enter toe first for-loop
+		RailwayNode neighbor = new RailwayNode(null, null);
+
+		for(int i = 0; i < list.size() && neighbor != null; ++i)
+		{
+			neighbor = null;
+			int k; // the index of the neighbor for node at index i
+			for(k = i + 1; k < list.size() && neighbor == null; ++k)
+			{
+				if(newList.get(i).isNeighbor(list.get(k))) neighbor = list.get(k);
+			}
+			if(neighbor != null)
+			{
+				METRO.__debug("    " + newList.get(i).getPosition() + "  ==>  " + neighbor.getPosition());
+				newList.add(list.get(k - 1));
+			}
+		}
+
+		return newList;
+	}
+
+	/**
+	 * This method determines an end node of the given line.
+	 * It's not specified which node of the two end nodes will be chosen, because the algorithm will take the first in the list of nodes.
+	 * 
+	 * @param line The line whose end node you want to know.
+	 * @return One of the two end nodes of the given line.
+	 */
+	private RailwayNode getAnyEndNode(TrainLine line)
+	{
+		for(RailwayNode node : _listOfNodes)
+		{
+			if(line.isEndNode(node)) return node;
+		}
+
+		return null;
 	}
 
 	/**

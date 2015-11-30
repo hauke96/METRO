@@ -166,7 +166,7 @@ public class InputField extends ActionObservable implements ControlElement
 		switch(key)
 		{
 			case Keys.RIGHT:
-				_curserPos++;
+				++_curserPos;
 				_curserPos %= (_text.length() + 1);
 				break;
 			case Keys.LEFT:
@@ -232,7 +232,7 @@ public class InputField extends ActionObservable implements ControlElement
 	private void charTyped(char c)
 	{
 		_text = new StringBuilder(_text).insert(_curserPos, c).toString();
-		_curserPos++;
+		++_curserPos;
 	}
 
 	@Override

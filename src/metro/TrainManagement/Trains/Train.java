@@ -124,7 +124,7 @@ public class Train
 	}
 
 	/**
-	 * @return Gets the current amount of passenger that are travelling with this train.
+	 * @return Gets the current amount of passenger that are traveling with this train.
 	 */
 	public int getCurrPassenger()
 	{

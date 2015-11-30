@@ -75,7 +75,7 @@ public class TrainLine
 	{
 		double length = 0.0;
 
-		for(int i = startNode; i < endNode; i++) // don't cycle over the last element of the list because of (i + 1) index usages
+		for(int i = startNode; i < endNode; ++i) // don't cycle over the last element of the list because of (i + 1) index usages
 		{
 			int xDiff = Math.abs(_listOfNodes.get(i).getPosition().x - _listOfNodes.get(i + 1).getPosition().x);
 			int yDiff = Math.abs(_listOfNodes.get(i).getPosition().y - _listOfNodes.get(i + 1).getPosition().y);
@@ -108,7 +108,7 @@ public class TrainLine
 			nodeSuc = null;
 
 		// iterate over the nodes and calculate the distance until it's over the distance or at the end of the list
-		for(int i = 0; i < _listOfNodes.size() - 1 && nodePre == null; i++)
+		for(int i = 0; i < _listOfNodes.size() - 1 && nodePre == null; ++i)
 		{
 			lastLength = calcPartLength(i, i + 1);
 			length += lastLength;
@@ -189,10 +189,31 @@ public class TrainLine
 
 		for(RailwayNode node : _listOfNodes)
 		{
-			if(node.isEndOfLine(_lineColor)) amountEndNodes++;
+			if(isEndNode(node)) ++amountEndNodes;
 		}
 
 		return _listOfNodes.size() >= 2 && amountEndNodes == 2;
+	}
+
+	/**
+	 * Checks if the given node is one of the two end nodes of this line.
+	 * 
+	 * @param node The node that's probably an end node.
+	 * @return True when the given node is an end node, false if not.
+	 */
+	public boolean isEndNode(RailwayNode node)
+	{
+		int counter = 0;
+
+		for(RailwayNode neighborNode : node.getNeighbors())
+		{
+			for(RailwayNode Node : _listOfNodes)
+			{
+				if(neighborNode.equals(Node)) ++counter;
+			}
+		}
+
+		return counter == 1;
 	}
 
 	/**

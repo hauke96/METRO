@@ -133,7 +133,7 @@ public class ColorBar extends ActionObservable implements ControlElement
 	{
 		Color color;
 
-		for(int i = 0; i < _position.width; i++)
+		for(int i = 0; i < _position.width; ++i)
 		{
 			color = Color.getHSBColor((float)i / (float)_position.width, _saturation, _brightness);
 			if(!_enabled) // calculate grayscale color

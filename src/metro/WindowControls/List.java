@@ -187,7 +187,7 @@ public class List extends ActionObservable implements ControlElement
 	 */
 	public int getIndex(String entryText)
 	{
-		for(int i = 0; i < _entries.size(); i++)
+		for(int i = 0; i < _entries.size(); ++i)
 		{
 			if(_entries.get(i).equals(entryText))
 			{
@@ -240,7 +240,7 @@ public class List extends ActionObservable implements ControlElement
 		if(_compact) ySpace = _compactYSpace;
 		int yOffset = ySpace;
 		Point mPos = METRO.__originalMousePosition;
-		for(int i = 0; i < _entries.size(); i++)
+		for(int i = 0; i < _entries.size(); ++i)
 		{
 			int amountRows = Draw.getStringLines(_entries.get(i), _position.width - 6);
 			Draw.setColor(Color.lightGray);
@@ -320,7 +320,7 @@ public class List extends ActionObservable implements ControlElement
 		if(_compact) ySpace = _compactYSpace;
 		int yOffset = ySpace;
 
-		for(int i = 0; i < _entries.size(); i++)
+		for(int i = 0; i < _entries.size(); ++i)
 		{
 			int amountRows = Draw.getStringLines(_entries.get(i), _position.width - 6);
 			Draw.setColor(Color.lightGray);
