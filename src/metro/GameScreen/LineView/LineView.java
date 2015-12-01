@@ -233,7 +233,6 @@ public class LineView extends GameScreen
 					
 					if(line.isValid()) // only change something when line and name are valid
 					{
-						//TODO remove color from nodes because the color was no line, just a preview
 						if(oldLine != null)
 						{
 							TrainLineOverseer.removeLine(oldLine);
@@ -251,7 +250,7 @@ public class LineView extends GameScreen
 						
 						line.setName(_lineNameField.getText());
 						TrainLineOverseer.addLine(line);
-						METRO.__gameState.getLines().add(line);
+						METRO.__gameState.getLines().add(line); // TODO change to something like METRO.__gameState.addLine(TrainLine)
 						_lineList.addElement(_lineNameField.getText());
 						_lineSelectToolEnabled = false;
 

@@ -202,6 +202,7 @@ public class RailwayNode
 
 	/**
 	 * Adds a color to the connection "this node" <--[color]--> "parameter node".
+	 * A color won't be added multiple times
 	 * 
 	 * @param node The other node with same color.
 	 * @param color The color of both nodes.
@@ -209,7 +210,7 @@ public class RailwayNode
 	public void addColorTo(RailwayNode node, Color color)
 	{
 		if(!_mapOfColors.containsKey(node)) _mapOfColors.put(node, new ArrayList<Color>());
-		_mapOfColors.get(node).add(color);
+		if(!_mapOfColors.get(node).contains(color)) _mapOfColors.get(node).add(color);
 	}
 
 	/**

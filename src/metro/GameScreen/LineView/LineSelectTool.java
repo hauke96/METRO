@@ -73,7 +73,7 @@ public class LineSelectTool extends GameScreen
 	 */
 	private ArrayList<RailwayNode> sortNodes(ArrayList<RailwayNode> list, RailwayNode startNode)
 	{
-		METRO.__debug("[TrainLineSorting]\n" + list.size());
+		METRO.__debug("[TrainLineSorting]\nLine length (amount of nodes): " + list.size());
 		ArrayList<RailwayNode> newList = new ArrayList<>();
 		// be sure that an end node is the first element in this list
 		newList.add(startNode);
@@ -94,12 +94,14 @@ public class LineSelectTool extends GameScreen
 			}
 			if(neighbor != null)
 			{
-				METRO.__debug("    " + newList.get(i).getPosition() + "  ==>  " + neighbor.getPosition());
+				METRO.__debug(newList.get(i).getPosition() + "  ==>  " + neighbor.getPosition());
 				newList.add(neighbor);
 				list.remove(neighbor);
 			}
 		}
 
+		METRO.__debug("");
+		
 		return newList;
 	}
 
