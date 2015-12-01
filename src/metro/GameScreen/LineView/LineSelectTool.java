@@ -99,8 +99,6 @@ public class LineSelectTool extends GameScreen
 				list.remove(neighbor);
 			}
 		}
-
-		METRO.__debug("");
 		
 		return newList;
 	}

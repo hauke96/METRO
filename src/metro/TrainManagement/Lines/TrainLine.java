@@ -50,7 +50,7 @@ public class TrainLine
 		_lineColor = lineColor;
 		METRO.__debug("[CalcTrainLineLength]");
 		_length = calcLength();
-		METRO.__debug("Length: " + _length + "\n");
+		METRO.__debug("Length: " + _length);
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class TrainLine
 			int xDiff = Math.abs(_listOfNodes.get(i).getPosition().x - _listOfNodes.get(i + 1).getPosition().x);
 			int yDiff = Math.abs(_listOfNodes.get(i).getPosition().y - _listOfNodes.get(i + 1).getPosition().y);
 
-			METRO.__debug("    i: " + i + " :: " +_listOfNodes.get(i).getPosition() + " --> " + _listOfNodes.get(i + 1).getPosition());
+			METRO.__debug("i: " + i + " :: " +_listOfNodes.get(i).getPosition() + " --> " + _listOfNodes.get(i + 1).getPosition());
 			
 			// distance between two nodes
 			double v = Math.sqrt(Math.hypot(xDiff, yDiff));

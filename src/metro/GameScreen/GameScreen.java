@@ -219,7 +219,7 @@ public abstract class GameScreen extends Observable
 	 */
 	public void close()
 	{
-		if(METRO.__debug) System.out.println("[GameScreen]\nClosed game screen " + this + "\n");
+		METRO.__debug("[GameScreen]\nClosed game screen " + this);
 		_controlActionManager.remove(_allControls);
 		_allControls.clear();
 	}
@@ -385,10 +385,10 @@ public abstract class GameScreen extends Observable
 				{
 					if(entry != null && !Boolean.parseBoolean(Settings.get("fullscreen.on").toString())) // ... and fullscreen-mode is off
 					{
-						System.out.println("[ResolutionChanged]\n" +
+						METRO.__debug("[ResolutionChanged]\n" +
 							"Old res.: " + Settings.get("screen.width") + "x" + Settings.get("screen.height")
 							+ " -- " +
-							"New res.: " + _resolutionList.getText() + "\n");
+							"New res.: " + _resolutionList.getText());
 						String splitted[] = entry.split("x");
 						if(splitted.length == 2)
 						{

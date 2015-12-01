@@ -223,7 +223,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		}
 		catch(GdxRuntimeException ex)
 		{
-			METRO.__debug("[LoadCursorError]\n" + ex.getMessage() + "\n"); // TODO: Put into popup-message-box
+			METRO.__debug("[LoadCursorError]\n" + ex.getMessage()); // TODO: Put into popup-message-box
 		}
 	}
 
@@ -550,7 +550,13 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	 */
 	public static void __debug(String message)
 	{
-		if(__debug) System.out.println(message);
+		if(__debug && message.length() > 0)
+		{
+			message = message.replace("\n", "\n    ");
+			if(message.charAt(0) == '[') message = message.replaceFirst("\\[", "\n\\[");
+			else message = "    " + message;
+			System.out.println(message);
+		}
 	}
 
 	/**

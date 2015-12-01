@@ -48,11 +48,11 @@ public class GameState
 		}
 		catch(IOException e)
 		{
-			METRO.__debug("[TrainReadError]\nCan't read train.txt due to an error: " + e.getMessage() + "\n");
+			METRO.__debug("[TrainReadError]\nCan't read train.txt due to an error: " + e.getMessage());
 		}
 		catch(IllegalArgumentException e)
 		{
-			METRO.__debug("[TrainFileSyntaxError]\n" + e.getMessage() + "\n");
+			METRO.__debug("[TrainFileSyntaxError]\n" + e.getMessage());
 		}
 	}
 
@@ -118,16 +118,13 @@ public class GameState
 					&& !costsfactor.equals("")
 					&& !passenger.equals(""))
 				{
-					if(METRO.__debug)
-					{
-						System.out.println("[SuccesfullTrainRead]\n" +
-							name + "\n" +
-							manufacturer + "\n" +
-							Integer.parseInt(price) + "\n" +
-							Integer.parseInt(costs) + "\n" +
-							Float.parseFloat(costsfactor) + "\n" +
-							Integer.parseInt(passenger) + "\n");
-					}
+					METRO.__debug("[SuccesfullTrainRead]\n" +
+						name + "\n" +
+						manufacturer + "\n" +
+						Integer.parseInt(price) + "\n" +
+						Integer.parseInt(costs) + "\n" +
+						Float.parseFloat(costsfactor) + "\n" +
+						Integer.parseInt(passenger));
 					_templateTrains.put(name, new TrainTemplate(name,
 						manufacturer,
 						Integer.parseInt(price),
