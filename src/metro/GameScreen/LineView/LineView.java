@@ -230,7 +230,10 @@ public class LineView extends GameScreen
 					// get old line before the new one gets creates because it could have the same name.
 					TrainLine oldLine = TrainLineOverseer.getLine(_oldLineName);
 					TrainLine line = _lineSelectTool.getTrainLine();
-					
+
+					METRO.__debug("[StartFinishEditLine]");
+					METRO.__debug("Amount of lines: " + METRO.__gameState.getLines().size());
+
 					if(line.isValid()) // only change something when line and name are valid
 					{
 						if(oldLine != null)
@@ -247,7 +250,7 @@ public class LineView extends GameScreen
 								train.setLine(line);
 							}
 						}
-						
+
 						line.setName(_lineNameField.getText());
 						TrainLineOverseer.addLine(line);
 						METRO.__gameState.getLines().add(line); // TODO change to something like METRO.__gameState.addLine(TrainLine)
@@ -261,6 +264,8 @@ public class LineView extends GameScreen
 					{
 						_messageLabel.setText("Train Line is not valid!");
 					}
+					METRO.__debug("[EndFinishEditLine]");
+					METRO.__debug("Amount of lines: " + METRO.__gameState.getLines().size());
 				}
 				_controlClicked = true;
 			}
@@ -450,42 +455,39 @@ public class LineView extends GameScreen
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		if(!_visible) return;
-		if(mouseButton == Buttons.RIGHT)
+		if(_lineSelectToolEnabled)
 		{
-			// LineSelectTool-Stuff:
-			if(_lineSelectToolEnabled)
+			// something will probably change so remove the old line (new one will be added later)
+			TrainLineOverseer.removeLine(_lineSelectTool.getTrainLine());
+			if(mouseButton == Buttons.RIGHT)
 			{
+				// LineSelectTool-Stuff:
 				_lineSelectTool.rightClick(screenX, screenY, MainView._mapOffset); // if enables, than do something with the select tool
 				_lineSelectToolEnabled = !_lineSelectTool.isActive(); // turn activation after right click
-				if(!_lineSelectToolEnabled) // tool closes itself
+			}
+			else if(mouseButton == Buttons.LEFT)
+			{
+				// if select tool exists and mouse is in the area of the select tool, forward click to tool
+				if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
 				{
-					TrainLine line = _lineSelectTool.getTrainLine();
-					TrainLineOverseer.removeLine(line);
-					reset();
-					_lineSelectTool = null;
+					_lineSelectTool.leftClick(screenX, screenY, MainView._mapOffset); // add node to list
 				}
 			}
-			else // if select tool is not enabled, hide/close the whole line view
-			{
-				_visible = false;
-			}
 		}
-		else if(mouseButton == Buttons.LEFT)
+		else if(mouseButton == Buttons.RIGHT)// if select tool is not enabled, hide/close the whole line view
 		{
-			// if select tool exists and mouse is in the area of the select tool, forward click to tool
-			if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
-			{
-				_lineSelectTool.leftClick(screenX, screenY, MainView._mapOffset); // add node to list
-			}
+			reset();
+			_lineSelectTool = null;
+			_visible = false;
 		}
 
-		// when no control was clicked and mouse out of TrainLineView, get line the new from the select tool
-		if(!hasControlClicked() && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
-		{
-			// the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
-			TrainLine line = _lineSelectTool.getTrainLine();
-			TrainLineOverseer.addLine(line); // this will only change something when line is valid
-		}
+	// when no control was clicked and mouse out of TrainLineView, get line the new from the select tool
+	// if(!hasControlClicked() && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
+	// {
+	// the list of nodes in the selectTool has been updated, so get the new line and save it in the overseer
+	TrainLineOverseer.addLine(_lineSelectTool.getTrainLine()); // this will only change something when line is valid
+	// }
+
 	}
 
 	@Override

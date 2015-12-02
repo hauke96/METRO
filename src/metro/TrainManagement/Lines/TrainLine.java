@@ -4,8 +4,13 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g3d.model.Node;
 
 import metro.METRO;
+import metro.Graphics.Draw;
 import metro.TrainManagement.Nodes.RailwayNode;
 
 /**
@@ -80,8 +85,8 @@ public class TrainLine
 			int xDiff = Math.abs(_listOfNodes.get(i).getPosition().x - _listOfNodes.get(i + 1).getPosition().x);
 			int yDiff = Math.abs(_listOfNodes.get(i).getPosition().y - _listOfNodes.get(i + 1).getPosition().y);
 
-			METRO.__debug("i: " + i + " :: " +_listOfNodes.get(i).getPosition() + " --> " + _listOfNodes.get(i + 1).getPosition());
-			
+			METRO.__debug("i: " + i + " :: " + _listOfNodes.get(i).getPosition() + " --> " + _listOfNodes.get(i + 1).getPosition());
+
 			// distance between two nodes
 			double v = Math.sqrt(Math.hypot(xDiff, yDiff));
 			length += v;
@@ -172,10 +177,11 @@ public class TrainLine
 	 */
 	public void clear()
 	{
-		for(RailwayNode node : _listOfNodes)
-		{
-			node.removeColor(_lineColor);
-		}
+		_listOfNodes.clear();
+		// for(RailwayNode node : _listOfNodes)
+		// {
+		// node.removeColor(_lineColor);
+		// }
 	}
 
 	/**
@@ -248,5 +254,84 @@ public class TrainLine
 			return _listOfNodes.equals(line._listOfNodes);
 		}
 		return false;
+	}
+
+	public void draw(Point offset, SpriteBatch sp, HashMap<RailwayNode, Integer> map)
+	{
+		for(int i = 0; i < _listOfNodes.size() - 1; i++)
+		{
+			// the list is sorted so we know that i+1 is the direct neighbor
+			RailwayNode node = _listOfNodes.get(i);
+			RailwayNode neighbor = _listOfNodes.get(i + 1);
+
+			Point position, positionNext;
+			position = new Point(offset.x + node.getPosition().x * METRO.__baseNetSpacing,
+				offset.y + node.getPosition().y * METRO.__baseNetSpacing); // Position with offset etc.
+			positionNext = new Point(offset.x + neighbor.getPosition().x * METRO.__baseNetSpacing,
+				offset.y + neighbor.getPosition().y * METRO.__baseNetSpacing); // Position with offset etc. for second point
+
+			if(position.y < positionNext.y ||
+				(position.y == positionNext.y && position.x < positionNext.x))
+			{
+
+				// if the track is a straight one (horizontal or vertical but not diagonal), make it longer (because of drawing inaccuracy)
+				if(position.y == positionNext.y) positionNext.x--;
+				if(position.x == positionNext.x) positionNext.y--;
+
+				drawColoredLine(offset, position, positionNext, map.get(node).intValue());
+				
+				// update the map value
+				int layers = map.get(node).intValue();
+				map.remove(node);
+				map.put(node, layers + 1);
+			}
+		}
+	}
+
+	private void drawColoredLine(Point offset, Point position, Point positionNext, int layer)
+	{
+//		Point position = nodeFrom.getPosition();
+		// position.translate(offset.x, offset.y);
+//		Point positionNext = nodeTo.getPosition();
+		// positionNext.translate(offset.x, offset.y);
+
+		Point diff = new Point((position.y - positionNext.y) / METRO.__baseNetSpacing,
+			(position.x - positionNext.x) / METRO.__baseNetSpacing);
+
+		boolean diagonal = false;
+		if(diff.x != 0 && diff.y != 0)
+		{
+			if(diff.x == 1 && diff.y == 1) diff.x = -1;
+			else if(diff.x == 1 && diff.y == -1) diff.y = 1;
+			diagonal = true;
+		}
+		// TODO: make more accurate draw algo. This won't work for vertical lines :(
+		Draw.setColor(_lineColor);
+		Draw.Line(position.x - (layer * 4) * diff.x,
+			position.y - (layer * 4) * diff.y,
+			positionNext.x - (layer * 4) * diff.x,
+			positionNext.y - (layer * 4) * diff.y);
+		Draw.Line(position.x - (1 + layer * 4) * diff.x,
+			position.y - (1 + 4 * layer) * diff.y,
+			positionNext.x - (1 + layer * 4) * diff.x,
+			positionNext.y - (1 + layer * 4) * diff.y);
+		if(!diagonal)
+		{
+			Draw.Line(position.x - (2 + layer * 4) * diff.x,
+				position.y - (2 + 4 * layer) * diff.y,
+				positionNext.x - (2 + layer * 4) * diff.x,
+				positionNext.y - (2 + layer * 4) * diff.y);
+		}
+		else
+		{
+			Draw.Line(position.x - (1 + layer * 4) * diff.x,
+				position.y - (4 * layer) * diff.y,
+				positionNext.x - (1 + layer * 4) * diff.x,
+				positionNext.y - (layer * 4) * diff.y);
+			Draw.Line(position.x - (-1 + layer * 4) * diff.x,
+				position.y - (layer * 4) * diff.y,
+				positionNext.x - (-1 + layer * 4) * diff.x,
+				positionNext.y - (layer * 4) * diff.y);
+		}
 	}
 }

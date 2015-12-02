@@ -1,7 +1,11 @@
 package metro.TrainManagement.Lines;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.TrainManagement.Nodes.RailwayNode;
@@ -26,11 +30,11 @@ public class TrainLineOverseer
 		_listOfTrainLines.remove(line); // remove old line, because maybe line.equals(old-line) == true
 		_listOfTrainLines.add(line); // adds the new line to the list
 		
-		METRO.__debug("[ChangeColorOfAddedLine]\nNew color: " + line.getColor());
-		for(int i = 0; i < line.getNodes().size() - 1; ++i)
-		{
-			line.getNodes().get(i).addColorTo(line.getNodes().get(i + 1), line.getColor());
-		}
+//		METRO.__debug("[ChangeColorOfAddedLine]\nNew color: " + line.getColor());
+//		for(int i = 0; i < line.getNodes().size() - 1; ++i)
+//		{
+//			line.getNodes().get(i).addColorTo(line.getNodes().get(i + 1), line.getColor());
+//		}
 	}
 
 	/**
@@ -95,5 +99,13 @@ public class TrainLineOverseer
 			}
 		}
 		return null;
+	}
+
+	public static void drawLines(Point offset, SpriteBatch sp, HashMap<RailwayNode, Integer> map)
+	{
+		for(TrainLine line : _listOfTrainLines)
+		{
+			line.draw(offset, sp, map);
+		}
 	}
 }

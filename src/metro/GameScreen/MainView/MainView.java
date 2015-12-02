@@ -2,6 +2,7 @@ package metro.GameScreen.MainView;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -16,6 +17,8 @@ import metro.GameScreen.LineView.LineView;
 import metro.GameScreen.TrainView.TrainView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
+import metro.TrainManagement.Lines.TrainLineOverseer;
+import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainStation;
@@ -82,6 +85,7 @@ public class MainView extends GameScreen implements Observer
 
 		_cityView.drawNumbers(sp, cursorDotPosition);
 
+		RailwayNodeOverseer.drawAllNodes(_mapOffset, sp);
 		drawRailwayLines(sp);
 		drawTrainStations(sp);
 		drawTrains(sp);
@@ -162,7 +166,13 @@ public class MainView extends GameScreen implements Observer
 	{
 		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
 
-		RailwayNodeOverseer.drawAllNodes(offset, sp);
+//		RailwayNodeOverseer.drawAllNodes(offset, sp);
+		HashMap<RailwayNode, Integer> map = new HashMap<RailwayNode, Integer>();
+		for(RailwayNode node : RailwayNodeOverseer._nodeMap.values())
+		{
+			map.put(node, new Integer(0));
+		}
+		TrainLineOverseer.drawLines(offset, sp, map);
 	}
 
 	/**

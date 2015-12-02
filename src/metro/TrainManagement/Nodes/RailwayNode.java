@@ -21,7 +21,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class RailwayNode
 {
 	private ArrayList<RailwayNode> _listOfNeighbors = new ArrayList<RailwayNode>(); // a list of all nodes this node is connected to
-	private HashMap<RailwayNode, ArrayList<Color>> _mapOfColors = new HashMap<RailwayNode, ArrayList<Color>>(); // all colors of connections to another nodes
+	// private HashMap<RailwayNode, ArrayList<Color>> _mapOfColors = new HashMap<RailwayNode, ArrayList<Color>>(); // all colors of connections to another nodes
 	private Point _position; // not in pixel, cross number/pos
 
 	/**
@@ -126,24 +126,9 @@ public class RailwayNode
 				if(position.y == positionNext.y) positionNext.x--;
 				if(position.x == positionNext.x) positionNext.y--;
 
-				ArrayList<Color> colors = _mapOfColors.get(node);
-				if(colors == null || colors.size() == 0)
-				{
-					Draw.setColor(Color.black);
-					Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
-				}
-				else
-				{
-					drawColoredLines(position, positionNext, node.getPosition(), colors);
-				}
+				Draw.setColor(Color.black);
+				Draw.Line(position.x, position.y, positionNext.x, positionNext.y);
 			}
-		}
-		ArrayList<Color> colorList = _mapOfColors.get(this);
-		for(int i = 0; colorList != null && i < colorList.size(); ++i)
-		{
-			Draw.setColor(colorList.get(i));
-			Draw.setColor(METRO.__metroBlue);
-			Draw.Circle(position.x - 4 - i, position.y - 4 - i, 9 + 2 * i);
 		}
 	}
 
@@ -155,50 +140,6 @@ public class RailwayNode
 	 * @param nodePosition The node position (in fields, not pixel).
 	 * @param listOfColors List of all colors of this track.
 	 */
-	private void drawColoredLines(Point position, Point positionNext, Point nodePosition, ArrayList<Color> listOfColors)
-	{
-		if(listOfColors == null || listOfColors.size() == 0) return;
-
-		Point diff = new Point(_position.y - nodePosition.y, _position.x - nodePosition.x);
-		boolean diagonal = false;
-		if(diff.x != 0 && diff.y != 0)
-		{
-			if(diff.x == 1 && diff.y == 1) diff.x = -1;
-			else if(diff.x == 1 && diff.y == -1) diff.y = 1;
-			diagonal = true;
-		}
-		for(int i = 0; i < listOfColors.size(); ++i)
-		{
-			// TODO: make more accurate draw algo. This won't work for vertical lines :(
-			Draw.setColor(listOfColors.get(i));
-			Draw.Line(position.x - (i * 4) * diff.x,
-				position.y - (i * 4) * diff.y,
-				positionNext.x - (i * 4) * diff.x,
-				positionNext.y - (i * 4) * diff.y);
-			Draw.Line(position.x - (1 + i * 4) * diff.x,
-				position.y - (1 + 4 * i) * diff.y,
-				positionNext.x - (1 + i * 4) * diff.x,
-				positionNext.y - (1 + i * 4) * diff.y);
-			if(!diagonal)
-			{
-				Draw.Line(position.x - (2 + i * 4) * diff.x,
-					position.y - (2 + 4 * i) * diff.y,
-					positionNext.x - (2 + i * 4) * diff.x,
-					positionNext.y - (2 + i * 4) * diff.y);
-			}
-			else
-			{
-				Draw.Line(position.x - (1 + i * 4) * diff.x,
-					position.y - (4 * i) * diff.y,
-					positionNext.x - (1 + i * 4) * diff.x,
-					positionNext.y - (i * 4) * diff.y);
-				Draw.Line(position.x - (-1 + i * 4) * diff.x,
-					position.y - (i * 4) * diff.y,
-					positionNext.x - (-1 + i * 4) * diff.x,
-					positionNext.y - (i * 4) * diff.y);
-			}
-		}
-	}
 
 	/**
 	 * Adds a color to the connection "this node" <--[color]--> "parameter node".
@@ -207,11 +148,11 @@ public class RailwayNode
 	 * @param node The other node with same color.
 	 * @param color The color of both nodes.
 	 */
-	public void addColorTo(RailwayNode node, Color color)
-	{
-		if(!_mapOfColors.containsKey(node)) _mapOfColors.put(node, new ArrayList<Color>());
-		if(!_mapOfColors.get(node).contains(color)) _mapOfColors.get(node).add(color);
-	}
+	// public void addColorTo(RailwayNode node, Color color)
+	// {
+	// if(!_mapOfColors.containsKey(node)) _mapOfColors.put(node, new ArrayList<Color>());
+	// if(!_mapOfColors.get(node).contains(color)) _mapOfColors.get(node).add(color);
+	// }
 
 	/**
 	 * Removes the connection "this node" <--[color]--> "parameter node".
@@ -219,26 +160,26 @@ public class RailwayNode
 	 * @param node The neighbor node with the same color.
 	 * @param color The color of these nodes.
 	 */
-	public void removeColorTo(RailwayNode node, Color color)
-	{
-		if(_mapOfColors.containsKey(node))
-		{
-			_mapOfColors.get(node).remove(color);
-		}
-	}
+	// public void removeColorTo(RailwayNode node, Color color)
+	// {
+	// if(_mapOfColors.containsKey(node))
+	// {
+	// _mapOfColors.get(node).remove(color);
+	// }
+	// }
 
 	/**
 	 * Removes a specific color from this node.
 	 * 
 	 * @param color The color to remove.
 	 */
-	public void removeColor(Color color)
-	{
-		for(ArrayList<Color> list : _mapOfColors.values())
-		{
-			list.remove(color);
-		}
-	}
+	// public void removeColor(Color color)
+	// {
+	// for(ArrayList<Color> list : _mapOfColors.values())
+	// {
+	// list.remove(color);
+	// }
+	// }
 
 	/**
 	 * Replaces all colors to a new color.
@@ -248,18 +189,18 @@ public class RailwayNode
 	 * @param newColor The new color.
 	 * @throws IllegalArgumentException Throws this exception when the user selected a color that has already been taken (exception because no duplicate colors are allowed).
 	 */
-	public void changeColor(Color oldColor, Color newColor) throws IllegalArgumentException
-	{
-		for(ArrayList<Color> list : _mapOfColors.values())
-		{
-			if(list.contains(newColor)) throw new IllegalArgumentException("No duplicate colors are allowed!"); // to avoid duplicates
-			if(list.contains(oldColor))
-			{
-				list.remove(oldColor);
-				list.add(newColor);
-			}
-		}
-	}
+	// public void changeColor(Color oldColor, Color newColor) throws IllegalArgumentException
+	// {
+	// for(ArrayList<Color> list : _mapOfColors.values())
+	// {
+	// if(list.contains(newColor)) throw new IllegalArgumentException("No duplicate colors are allowed!"); // to avoid duplicates
+	// if(list.contains(oldColor))
+	// {
+	// list.remove(oldColor);
+	// list.add(newColor);
+	// }
+	// }
+	// }
 
 	// /**
 	// * Checks if this node is the end/start node of the train line specified by the given color.
