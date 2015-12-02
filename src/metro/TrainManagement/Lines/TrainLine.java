@@ -7,17 +7,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g3d.model.Node;
 
 import metro.METRO;
 import metro.Graphics.Draw;
 import metro.TrainManagement.Nodes.RailwayNode;
 
 /**
- * A Train line is a collection of several railway connections that touches each other (building one big line).
+ * A Train line is a collection of several railway connections that touches each other (building one big line) or mostly touching each other (building an invalid line).
  * Trains can only move on one of this train lines.
- * To create this line, the TrainLineSelectTool is used to select different nodes, put them into connections and building this line.
+ * To create a line, the {@code TrainLineSelectTool} is used to select different nodes, put them into connections and building this line.
  * A train line in immutable which means that the line stays sorted as it is. To change something you have to create a new line.
+ * "Sorted" means that there're no jumps in the connections (e.g. (0,1) -> (0,5) -> (0,3)  but   (0,1) -> (0,3) -> (0,5) ).
+ * An invalid line (= a line with gaps) is partly sorted, so every part is sorted in itself. The order of these parts must not be sorted.  
  * 
  * @author hauke
  *
@@ -28,6 +29,7 @@ public class TrainLine
 	private Color _lineColor;
 	private String _name;
 	private final double _length;
+	private final int _thickness;
 
 	/**
 	 * Creates an empty new train line with a given title and a color.
@@ -53,6 +55,7 @@ public class TrainLine
 		else _listOfNodes = new ArrayList<RailwayNode>();
 		_name = name;
 		_lineColor = lineColor;
+		_thickness = 3;
 		METRO.__debug("[CalcTrainLineLength]");
 		_length = calcLength();
 		METRO.__debug("Length: " + _length);
@@ -84,8 +87,6 @@ public class TrainLine
 		{
 			int xDiff = Math.abs(_listOfNodes.get(i).getPosition().x - _listOfNodes.get(i + 1).getPosition().x);
 			int yDiff = Math.abs(_listOfNodes.get(i).getPosition().y - _listOfNodes.get(i + 1).getPosition().y);
-
-			METRO.__debug("i: " + i + " :: " + _listOfNodes.get(i).getPosition() + " --> " + _listOfNodes.get(i + 1).getPosition());
 
 			// distance between two nodes
 			double v = Math.sqrt(Math.hypot(xDiff, yDiff));
@@ -138,7 +139,7 @@ public class TrainLine
 		double x = nodePre.x <= nodeSuc.x ? nodePre.x : nodeSuc.x;
 		double y = nodePre.y <= nodeSuc.y ? nodePre.y : nodeSuc.y;
 		// and finally calculate the position by adding ratio based value to the smallest x and y coordinate
-		return new Point2D.Double(x + ratio * deltaX, y + ratio * deltaY);
+		return new Point2D.Double(x + ratio * deltaX, y + ratio * deltaY); // nodePre.x, nodePre.y); // <-- works!
 	}
 
 	/**
@@ -173,34 +174,23 @@ public class TrainLine
 	}
 
 	/**
-	 * Clears this train line, which means that the color of all nodes will be removed.
-	 */
-	public void clear()
-	{
-		_listOfNodes.clear();
-		// for(RailwayNode node : _listOfNodes)
-		// {
-		// node.removeColor(_lineColor);
-		// }
-	}
-
-	/**
 	 * Check if this train line is a valid line. A line is valid when both of the following conditions apply:
 	 * 1.) There're more than 2 nodes in this line.
 	 * 2.) There're exactly 2 end/start nodes in this line. These nodes only have one neighbor.
 	 * 
+	 * @param listOfNodes The list of nodes that may be valid.
 	 * @return True when valid.
 	 */
-	public boolean isValid()
+	public static boolean isValid(ArrayList<RailwayNode> listOfNodes)
 	{
 		int amountEndNodes = 0;
 
-		for(RailwayNode node : _listOfNodes)
+		for(RailwayNode node : listOfNodes)
 		{
-			if(isEndNode(node, _listOfNodes)) ++amountEndNodes;
+			if(isEndNode(node, listOfNodes)) ++amountEndNodes;
 		}
 
-		return _listOfNodes.size() >= 2 && amountEndNodes == 2;
+		return listOfNodes.size() >= 2 && amountEndNodes == 2;
 	}
 
 	/**
@@ -245,19 +235,40 @@ public class TrainLine
 		return _listOfNodes;
 	}
 
-	@Override
+	/**
+	 * Checks if two lines are equal. They are equal when line A has the same nodes as B.
+	 * The order of the nodes doesn't matter.
+	 */
 	public boolean equals(Object o)
 	{
 		if(o instanceof TrainLine)
 		{
 			TrainLine line = (TrainLine)o;
-			return _listOfNodes.equals(line._listOfNodes);
+
+			if(line.getNodes().size() != _listOfNodes.size()) return false;
+
+			boolean isEqual = true;
+
+			for(RailwayNode node : line.getNodes())
+			{
+				isEqual &= _listOfNodes.contains(node);
+			}
+
+			return isEqual;
 		}
 		return false;
 	}
 
+	/**
+	 * Draws the train line. The line doesn't need to be valid because all parts are drawn by their own.
+	 * 
+	 * @param offset The map offset in pixel.
+	 * @param sp The sprite batch to draw on.
+	 * @param map A map (node -> Integer) that says how many lines are already drawn on this node (normally all integers are 0).
+	 */
 	public void draw(Point offset, SpriteBatch sp, HashMap<RailwayNode, Integer> map)
 	{
+		Draw.setColor(isValid(_listOfNodes) ? _lineColor : METRO.__metroRed);
 		for(int i = 0; i < _listOfNodes.size() - 1; i++)
 		{
 			// the list is sorted so we know that i+1 is the direct neighbor
@@ -270,68 +281,41 @@ public class TrainLine
 			positionNext = new Point(offset.x + neighbor.getPosition().x * METRO.__baseNetSpacing,
 				offset.y + neighbor.getPosition().y * METRO.__baseNetSpacing); // Position with offset etc. for second point
 
-			if(position.y < positionNext.y ||
-				(position.y == positionNext.y && position.x < positionNext.x))
+			if(node.isNeighbor(neighbor))
 			{
+				drawColoredLine(offset, position, positionNext, map.get(neighbor).intValue());
 
-				// if the track is a straight one (horizontal or vertical but not diagonal), make it longer (because of drawing inaccuracy)
-				if(position.y == positionNext.y) positionNext.x--;
-				if(position.x == positionNext.x) positionNext.y--;
-
-				drawColoredLine(offset, position, positionNext, map.get(node).intValue());
-				
 				// update the map value
 				int layers = map.get(node).intValue();
 				map.remove(node);
 				map.put(node, layers + 1);
 			}
+
+			Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
 		}
+
+		// Draw also a circle for the last node which won't be drawn in the for loop
+		Point position = new Point(offset.x + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().x * METRO.__baseNetSpacing,
+			offset.y + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().y * METRO.__baseNetSpacing); // Position with offset etc.
+		Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
 	}
 
 	private void drawColoredLine(Point offset, Point position, Point positionNext, int layer)
 	{
-//		Point position = nodeFrom.getPosition();
-		// position.translate(offset.x, offset.y);
-//		Point positionNext = nodeTo.getPosition();
-		// positionNext.translate(offset.x, offset.y);
-
 		Point diff = new Point((position.y - positionNext.y) / METRO.__baseNetSpacing,
 			(position.x - positionNext.x) / METRO.__baseNetSpacing);
 
-		boolean diagonal = false;
 		if(diff.x != 0 && diff.y != 0)
 		{
 			if(diff.x == 1 && diff.y == 1) diff.x = -1;
 			else if(diff.x == 1 && diff.y == -1) diff.y = 1;
-			diagonal = true;
 		}
 		// TODO: make more accurate draw algo. This won't work for vertical lines :(
-		Draw.setColor(_lineColor);
+		// FIXME Layers not working when trainline has been edited :(
 		Draw.Line(position.x - (layer * 4) * diff.x,
 			position.y - (layer * 4) * diff.y,
 			positionNext.x - (layer * 4) * diff.x,
-			positionNext.y - (layer * 4) * diff.y);
-		Draw.Line(position.x - (1 + layer * 4) * diff.x,
-			position.y - (1 + 4 * layer) * diff.y,
-			positionNext.x - (1 + layer * 4) * diff.x,
-			positionNext.y - (1 + layer * 4) * diff.y);
-		if(!diagonal)
-		{
-			Draw.Line(position.x - (2 + layer * 4) * diff.x,
-				position.y - (2 + 4 * layer) * diff.y,
-				positionNext.x - (2 + layer * 4) * diff.x,
-				positionNext.y - (2 + layer * 4) * diff.y);
-		}
-		else
-		{
-			Draw.Line(position.x - (1 + layer * 4) * diff.x,
-				position.y - (4 * layer) * diff.y,
-				positionNext.x - (1 + layer * 4) * diff.x,
-				positionNext.y - (layer * 4) * diff.y);
-			Draw.Line(position.x - (-1 + layer * 4) * diff.x,
-				position.y - (layer * 4) * diff.y,
-				positionNext.x - (-1 + layer * 4) * diff.x,
-				positionNext.y - (layer * 4) * diff.y);
-		}
+			positionNext.y - (layer * 4) * diff.y,
+			_thickness);
 	}
 }

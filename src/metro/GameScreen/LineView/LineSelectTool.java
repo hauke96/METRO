@@ -10,6 +10,7 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainView.MainView;
 import metro.TrainManagement.Lines.TrainLine;
+import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 
@@ -52,15 +53,23 @@ public class LineSelectTool extends GameScreen
 	}
 
 	/**
-	 * Creates the TrainLine object for further using.
-	 * This method WON'T return null under any circumstances.
-	 * 
-	 * @return The train line with sorted nodes as TrainLine object. It won't be null!
+	 * @return The list with all selected nodes.
 	 */
+	public ArrayList<RailwayNode> getNodeList()
+	{
+		return _listOfNodes;
+	}
+
+	/**
+	 * Creates a train line which can never be {@code null}!
+	 * This line might be invalid but all parts of it are sorted.
+	 * 
+	 * @return A sorted train line (can also be {@code null}!).
+	 */
+	@SuppressWarnings("unchecked") // _listOfNodes.clone can safely be converted into an array list (because listOfNodes is an array list)
 	public TrainLine getTrainLine()
 	{
-		@SuppressWarnings("unchecked") // _listOfNodes.clone can safely be converted into an array list (because listOfNodes is an array list)
-		ArrayList<RailwayNode> newList = sortNodes((ArrayList<RailwayNode>)_listOfNodes.clone(), getAnyEndNode());
+		ArrayList<RailwayNode> newList = sortNodes((ArrayList<RailwayNode>)_listOfNodes.clone(), getAnyEndNode(_listOfNodes));// (ArrayList<RailwayNode>)_listOfNodes.clone(), getAnyEndNode(_listOfNodes));
 		return new TrainLine(newList, _lineName, _color);
 	}
 
@@ -73,8 +82,12 @@ public class LineSelectTool extends GameScreen
 	 */
 	private ArrayList<RailwayNode> sortNodes(ArrayList<RailwayNode> list, RailwayNode startNode)
 	{
-		METRO.__debug("[TrainLineSorting]\nLine length (amount of nodes): " + list.size());
-		if(list.size() <= 1) return list;
+		if(list.size() <= 1 || startNode == null) return list;
+
+		METRO.__debug("[TrainLineSorting]\n"
+			+ "Start Node: " + startNode.getPosition() + "\n"
+			+ "Line length (amount of nodes): " + list.size());
+
 		ArrayList<RailwayNode> newList = new ArrayList<>();
 		// be sure that an end node is the first element in this list
 		newList.add(startNode);
@@ -84,19 +97,30 @@ public class LineSelectTool extends GameScreen
 		RailwayNode neighbor = new RailwayNode(null, null);
 		int listLength = list.size();
 
-		for(int i = 0; i < listLength && neighbor != null; ++i)
+		for(int i = 0; i < listLength; ++i)
 		{
 			neighbor = null;
 			int k; // the index of the neighbor for the node at index i
+			// search for the left neighbor of node i 
 			for(k = 0; k < list.size() && neighbor == null; ++k)
 			{
 				if(newList.get(i).isNeighbor(list.get(k))) neighbor = list.get(k);
 			}
+			
 			if(neighbor != null)
 			{
 				METRO.__debug(newList.get(i).getPosition() + "  ==>  " + neighbor.getPosition());
 				newList.add(neighbor);
 				list.remove(neighbor);
+			}
+			else
+			{
+				METRO.__debug("No Neighbor found, try other start node ...");
+				/* 
+				 * When there's no neighbor, choose another start node and try to sort this branch.
+				 * This also means that this line is invalid!
+				 */
+				newList.addAll(sortNodes(list, getAnyEndNode(list)));
 			}
 		}
 
@@ -107,14 +131,14 @@ public class LineSelectTool extends GameScreen
 	 * This method determines an end node of the given line.
 	 * It's not specified which node of the two end nodes will be chosen, because the algorithm will take the first in the list of nodes.
 	 * 
-	 * @param line The line whose end node you want to know.
+	 * @param list A list with all nodes where the end nodes should be determined.
 	 * @return One of the two end nodes of the given line.
 	 */
-	private RailwayNode getAnyEndNode()
+	private RailwayNode getAnyEndNode(ArrayList<RailwayNode> list)
 	{
-		for(RailwayNode node : _listOfNodes)
+		for(RailwayNode node : list)
 		{
-			if(TrainLine.isEndNode(node, _listOfNodes)) return node;
+			if(TrainLine.isEndNode(node, list)) return node;
 		}
 
 		return null;
@@ -128,17 +152,10 @@ public class LineSelectTool extends GameScreen
 	 */
 	public String setColor(Color newColor)
 	{
-		// for(RailwayNode node : _listOfNodes)
-		// {
-		// try
-		// {
-		// node.changeColor(_color, newColor);
-		// }
-		// catch(IllegalArgumentException ex)
-		// {
-		// return ex.getMessage();
-		// }
-		// }
+		if(TrainLineOverseer.isColorUsed(newColor))
+		{
+			return "No duplicate colors allowed!";
+		}
 
 		_color = newColor;
 		return "";
@@ -152,18 +169,6 @@ public class LineSelectTool extends GameScreen
 	public void setName(String newName)
 	{
 		_lineName = newName;
-	}
-
-	/**
-	 * Sets the current line to a new one.
-	 * 
-	 * @param line The new line.
-	 */
-	public void setLine(TrainLine line)
-	{
-		_listOfNodes = new ArrayList<RailwayNode>(line.getNodes());
-		_color = line.getColor();
-		_lineName = line.getName();
 	}
 
 	/**
@@ -192,38 +197,17 @@ public class LineSelectTool extends GameScreen
 	{
 		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(MainView._selectedCross);
 		if(clickedNode == null) return;
-		// ArrayList<RailwayNode> neighbors = clickedNode.getNeighbors();
-
-		// for(RailwayNode neighborNode : neighbors)
-		// {
-		// if(_listOfNodes.contains(neighborNode))
-		// {
-		// if(_listOfNodes.contains(clickedNode)) // if list contains node, remove it
-		// {
-		// neighborNode.removeColorTo(clickedNode, _color);
-		// clickedNode.removeColorTo(neighborNode, _color);
-		// }
-		// else
-		// {
-		// neighborNode.addColorTo(clickedNode, _color);
-		// clickedNode.addColorTo(neighborNode, _color);
-		// }
-		// }
-		// }
-		if(_listOfNodes.contains(clickedNode)) _listOfNodes.remove(clickedNode);
-		else _listOfNodes.add(clickedNode);
-	}
-
-	/**
-	 * Deactivates the tool to point out that it can be closed.
-	 * 
-	 * @param screenX The y-coordinate of the click.
-	 * @param screenY The y-coordinate of the click.
-	 * @param offset The current map offset.
-	 */
-	public void rightClick(int screenX, int screenY, Point2D offset)
-	{
-		_isActive = false;
+		METRO.__debug("[ClickOnNode]");
+		if(_listOfNodes.contains(clickedNode))
+		{
+			METRO.__debug("Removed node " + clickedNode.getPosition());
+			_listOfNodes.remove(clickedNode);
+		}
+		else
+		{
+			METRO.__debug("Added node " + clickedNode.getPosition());
+			_listOfNodes.add(clickedNode);
+		}
 	}
 
 	@Override

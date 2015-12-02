@@ -3,16 +3,15 @@ package metro.TrainManagement.Nodes;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Graphics.Draw;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 /**
- * A railway node is a point that's used by train lines.
- * Every node has neighbors (both know each other) and by drawing a railway node, lines are drawed to these neighbors.
+ * A railway node is a point that's used by train lines and every node has neighbors (both know each other).
+ * Train lines are not drawn here even if they're only node connections (they are drawn in the {@code TrainLine} class).
  * 
  * @author hauke
  *
@@ -21,7 +20,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class RailwayNode
 {
 	private ArrayList<RailwayNode> _listOfNeighbors = new ArrayList<RailwayNode>(); // a list of all nodes this node is connected to
-	// private HashMap<RailwayNode, ArrayList<Color>> _mapOfColors = new HashMap<RailwayNode, ArrayList<Color>>(); // all colors of connections to another nodes
 	private Point _position; // not in pixel, cross number/pos
 
 	/**
@@ -131,93 +129,6 @@ public class RailwayNode
 			}
 		}
 	}
-
-	/**
-	 * Draws all train lines in their own color.
-	 * 
-	 * @param position The position with offset.
-	 * @param positionNext The position of the next node (also with offset).
-	 * @param nodePosition The node position (in fields, not pixel).
-	 * @param listOfColors List of all colors of this track.
-	 */
-
-	/**
-	 * Adds a color to the connection "this node" <--[color]--> "parameter node".
-	 * A color won't be added multiple times
-	 * 
-	 * @param node The other node with same color.
-	 * @param color The color of both nodes.
-	 */
-	// public void addColorTo(RailwayNode node, Color color)
-	// {
-	// if(!_mapOfColors.containsKey(node)) _mapOfColors.put(node, new ArrayList<Color>());
-	// if(!_mapOfColors.get(node).contains(color)) _mapOfColors.get(node).add(color);
-	// }
-
-	/**
-	 * Removes the connection "this node" <--[color]--> "parameter node".
-	 * 
-	 * @param node The neighbor node with the same color.
-	 * @param color The color of these nodes.
-	 */
-	// public void removeColorTo(RailwayNode node, Color color)
-	// {
-	// if(_mapOfColors.containsKey(node))
-	// {
-	// _mapOfColors.get(node).remove(color);
-	// }
-	// }
-
-	/**
-	 * Removes a specific color from this node.
-	 * 
-	 * @param color The color to remove.
-	 */
-	// public void removeColor(Color color)
-	// {
-	// for(ArrayList<Color> list : _mapOfColors.values())
-	// {
-	// list.remove(color);
-	// }
-	// }
-
-	/**
-	 * Replaces all colors to a new color.
-	 * This method may throw an IllegalArgumentException when the newColor is already in use!
-	 * 
-	 * @param oldColor The color to replace.
-	 * @param newColor The new color.
-	 * @throws IllegalArgumentException Throws this exception when the user selected a color that has already been taken (exception because no duplicate colors are allowed).
-	 */
-	// public void changeColor(Color oldColor, Color newColor) throws IllegalArgumentException
-	// {
-	// for(ArrayList<Color> list : _mapOfColors.values())
-	// {
-	// if(list.contains(newColor)) throw new IllegalArgumentException("No duplicate colors are allowed!"); // to avoid duplicates
-	// if(list.contains(oldColor))
-	// {
-	// list.remove(oldColor);
-	// list.add(newColor);
-	// }
-	// }
-	// }
-
-	// /**
-	// * Checks if this node is the end/start node of the train line specified by the given color.
-	// *
-	// * @param colorOfLine The color of the train line this node may be an end/start node.
-	// * @return True when it's an end/start node.
-	// */
-	// public boolean isEndOfLine(Color colorOfLine)
-	// {
-	// int i = 0;
-	// for(ArrayList<Color> list : _mapOfColors.values())
-	// {
-	// if(list.contains(colorOfLine)) ++i;
-	// }
-	//
-	// return i == 1;
-	// }
 
 	@Override
 	public boolean equals(Object obj)

@@ -143,7 +143,21 @@ public class Draw
 	 */
 	public static void Line(int x1, int y1, int x2, int y2)
 	{
-		Line(x1, y1, x2, y2, METRO.__spriteBatch);
+		Line(x1, y1, x2, y2, 1, METRO.__spriteBatch);
+	}
+
+	/**
+	 * Draws a line with a specified width from one coordinate pair to another. This uses the METRO.__spriteBatch as default.
+	 * 
+	 * @param x1 First x-coordinate.
+	 * @param y1 First y-coordinate.
+	 * @param x2 Second x-coordinate.
+	 * @param y2 Second y-coordinate.
+	 * @param w The width of the line.
+	 */
+	public static void Line(int x1, int y1, int x2, int y2, int w)
+	{
+		Line(x1, y1, x2, y2, w, METRO.__spriteBatch);
 	}
 
 	/**
@@ -156,7 +170,7 @@ public class Draw
 	 */
 	public static void Line(double x1, double y1, double x2, double y2)
 	{
-		Line((int)x1, (int)y1, (int)x2, (int)y2, METRO.__spriteBatch);
+		Line((int)x1, (int)y1, (int)x2, (int)y2, 1, METRO.__spriteBatch);
 	}
 
 	/**
@@ -166,25 +180,36 @@ public class Draw
 	 * @param y1 First y-coordinate.
 	 * @param x2 Second x-coordinate.
 	 * @param y2 Second y-coordinate.
+	 * @param w The width of the line
 	 * @param spriteBatch The spriteBatch to draw on.
 	 */
-	public static void Line(int x1, int y1, int x2, int y2, SpriteBatch spriteBatch)
+	public static void Line(int x1, int y1, int x2, int y2, int w, SpriteBatch spriteBatch)
 	{
+		spriteBatch.setColor(r, g, b, a);
 		spriteBatch.end();
 		spriteBatch.begin();
 		if(x1 != x2 && y1 != y2) // -> diagonal line -> shapeRenderer for antialising
 		{
-			init();
-			shapeRenderer.line(x1, y1, x2, y2);
-			reset();
+			Fill.setColor(new Color(r, g, b, a));
+			Fill.Line(x1, y1, x2, y2, w, spriteBatch);
 		}
 		else
 		// -> straight line -> texture for non-antialised drawing
 		{
-			spriteBatch.setColor(r, g, b, a);
-			spriteBatch.draw(METRO.__iconSet.getTexture(), x1, y1, x2 - x1 + 1, y2 - y1 + 1, 20, 0, 1, 1, false, false);
-			spriteBatch.setColor(1, 1, 1, 1);
+			int offset = -w / 2;
+			for(int i = 0; i <= w; i++)
+			{
+				spriteBatch.draw(METRO.__iconSet.getTexture(),
+					x1,
+					y1,
+					x2 - x1 != 0 ? x2 - x1 + 1 : x2 - x1 + offset + i,
+					y2 - y1 != 0 ? y2 - y1 : y2 - y1 + offset + i,
+					20, 0, 1, 1,
+					false,
+					false);
+			}
 		}
+		spriteBatch.setColor(1, 1, 1, 1);
 	}
 
 	/**
@@ -216,7 +241,7 @@ public class Draw
 		{
 			font.setColor(r, g, b, a);
 			font.draw(METRO.__spriteBatch, segment, x, y + vOffset);
-			
+
 			vOffset += stringHeight + 8; // y-pos for next line
 		}
 

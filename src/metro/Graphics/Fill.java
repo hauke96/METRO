@@ -127,4 +127,21 @@ public class Fill
 	{
 		Rect(rect.x, rect.y, rect.width, rect.height, spriteBatch);
 	}
+
+	/**
+	 * Draws a thick line from one coordinate pair to another onto the given sprite batch.
+	 * 
+	 * @param x1 First x-coordinate.
+	 * @param y1 First y-coordinate.
+	 * @param x2 Second x-coordinate.
+	 * @param y2 Second y-coordinate.
+	 * @param w The width of the line
+	 * @param spriteBatch The spriteBatch to draw on.
+	 */
+	public static void Line(int x1, int y1, int x2, int y2, int w, SpriteBatch spriteBatch)
+	{
+		init();
+		shapeRenderer.rectLine(x1, y1, x2, y2, w);
+		reset();
+	}
 }
