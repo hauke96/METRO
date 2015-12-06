@@ -33,11 +33,23 @@ public class RailwayNode
 	 * @param position The position (NOT pixel) of the node. {@code null} indicates that the node will not be added to the overseer (because it's invalid).
 	 * @param neighbor The neighbor of the node.
 	 */
-	public RailwayNode(Point position, RailwayNode neighbor)
+	RailwayNode(Point position, RailwayNode neighbor)
 	{
 		_position = position;
 		if(neighbor != null) _listOfNeighbors.add(neighbor);
 		if(_position != null) RailwayNodeOverseer.add(this);
+	}
+	
+	/**
+	 * Creates a new node at the given position with some specified neighbors.
+	 * 
+	 * @param position The position (NOT pixel) of the node. {@code null} indicates that the node will not be added to the overseer (because it's invalid).
+	 * @param neighbors The neighbors of the node.
+	 */
+	RailwayNode(Point position, ArrayList<RailwayNode> neighbors)
+	{
+		this(position, (RailwayNode)null); // just cast to RailwayNode to bypass the ambiguity. Ugly but works :/
+		if(neighbors != null) _listOfNeighbors.addAll(neighbors);
 	}
 
 	/**

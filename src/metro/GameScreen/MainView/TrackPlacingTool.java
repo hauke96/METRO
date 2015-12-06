@@ -150,7 +150,7 @@ public class TrackPlacingTool extends GameScreen
 
 			if(_currentRailwayNode == null) // if there's no node, create new one and set it as current node
 			{
-				RailwayNode node = new RailwayNode(MainView._selectedCross, null);
+				RailwayNode node = RailwayNodeOverseer.createNode(MainView._selectedCross); 
 				_currentRailwayNode = node;
 			}
 		}
@@ -213,7 +213,7 @@ public class TrackPlacingTool extends GameScreen
 
 			if(!RailwayNodeOverseer.isNodeAt(nodePosition)) // if there's NO node at this position
 			{
-				node = new RailwayNode(new Point(
+				node = RailwayNodeOverseer.createNode(new Point(
 					prevNode.getPosition().x + offsetB,
 					prevNode.getPosition().y + offsetH),
 					prevNode);

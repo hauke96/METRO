@@ -22,6 +22,59 @@ public class RailwayNodeOverseer
 	public static Map<Point, RailwayNode> _nodeMap = new HashMap<Point, RailwayNode>();
 
 	/**
+	 * Creates a new node when there's no node at the given position yet.
+	 * If there's already a node, return this existing node.
+	 * 
+	 * @param position The position of the node.
+	 * @return A new or existing node at the given position.
+	 */
+	public static RailwayNode createNode(Point position)
+	{
+		return createNode(position, (RailwayNode)null); // just cast to RailwayNode to bypass the ambiguity. Ugly but works :/
+	}
+
+	/**
+	 * Creates a new node when there's no node at the given position yet.
+	 * If there's already a node, return this existing node (it might have different neighbors then the given one).
+	 * 
+	 * @param position The position of the node.
+	 * @param neighbor The neighbor of the node.
+	 * @return A new or existing node at the given position.
+	 */
+	public static RailwayNode createNode(Point position, RailwayNode neighbor)
+	{
+		ArrayList<RailwayNode> list = null;
+		if(neighbor != null)
+		{
+			list = new ArrayList<RailwayNode>();
+			list.add(neighbor);
+		}
+		return createNode(position, list);
+	}
+
+	/**
+	 * Creates a new node when there's no node at the given position yet.
+	 * If there's already a node, return this existing node (it might have different neighbors then the given list of neighbor nodes).
+	 * 
+	 * @param position The position of the node.
+	 * @param neighbors A list of neighbors of this node.
+	 * @return A new or existing node at the given position.
+	 */
+	public static RailwayNode createNode(Point position, ArrayList<RailwayNode> neighbors)
+	{
+		if(isNodeAt(position))
+		{
+			return _nodeMap.get(position);
+		}
+		else
+		{
+			RailwayNode node = new RailwayNode(position, neighbors);
+			add(node);
+			return node;
+		}
+	}
+
+	/**
 	 * Gets the RailwayNode at a specific position.
 	 * 
 	 * @param position The position.
@@ -55,7 +108,7 @@ public class RailwayNodeOverseer
 	}
 
 	/**
-	 * Adds a node to the list of nodes (better: to the map).
+	 * Adds a node to the map of nodes.
 	 * 
 	 * @param node The RailwayNode that should be added
 	 */

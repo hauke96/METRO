@@ -49,11 +49,12 @@ public class TrainLine
 	 * @param name The name.
 	 * @param lineColor The color.
 	 */
+	@SuppressWarnings("unchecked")
 	public TrainLine(ArrayList<RailwayNode> connections, String name, Color lineColor)
 	{
 		if(connections != null)
 		{
-			_listOfNodes = sortNodes(connections, getAnyEndNode(connections));
+			_listOfNodes = sortNodes((ArrayList<RailwayNode>)connections.clone(), getAnyEndNode(connections));
 		}
 		else
 		{
@@ -88,7 +89,7 @@ public class TrainLine
 		list.remove(startNode);
 
 		// create a dummy node to enter toe first for-loop
-		RailwayNode neighbor = new RailwayNode(null, null);
+		RailwayNode neighbor = null;
 		int listLength = list.size();
 
 		for(int i = 0; i < listLength; ++i)
@@ -365,7 +366,7 @@ public class TrainLine
 				// update the map value
 				int layers = map.get(node).intValue();
 				map.remove(node);
-				map.put(node, layers + 1);
+				map.put(node, new Integer(layers + 1));
 			}
 
 			Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
@@ -382,7 +383,7 @@ public class TrainLine
 		Point diff = new Point((position.y - positionNext.y) / METRO.__baseNetSpacing,
 			(position.x - positionNext.x) / METRO.__baseNetSpacing);
 
-		if(diff.x != 0 && diff.y != 0)
+		if(diff.x != 0 && diff.y != 0) // FIXME offset for diagonal lines does not work right
 		{
 			if(diff.x == 1 && diff.y == 1) diff.x = -1;
 			else if(diff.x == 1 && diff.y == -1) diff.y = 1;

@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.METRO;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 
@@ -112,6 +113,7 @@ public class TrainLineOverseer
 		
 		for(TrainLine line : _listOfTrainLines)
 		{
+			METRO.__debug(map.values().toString());
 			line.draw(offset, sp, map);
 		}
 	}

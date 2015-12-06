@@ -227,7 +227,7 @@ public class LineView extends GameScreen
 					TrainLine line = _lineSelectTool.getTrainLine();
 
 					METRO.__debug("[StartFinishEditLine]");
-					METRO.__debug("Amount of lines: " + METRO.__gameState.getLines().size());
+					METRO.__debug("Amount of lines (pre)  : " + METRO.__gameState.getLines().size());
 
 					if(oldLine != null)
 					{
@@ -252,6 +252,7 @@ public class LineView extends GameScreen
 
 					reset();
 					_lineList.setState(true);
+					METRO.__debug("Amount of lines (after): " + METRO.__gameState.getLines().size());
 				}
 				else
 				{

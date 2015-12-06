@@ -64,7 +64,7 @@ public class LineSelectTool extends GameScreen
 	 * Creates a train line which can never be {@code null}!
 	 * This line might be invalid but all parts of it are sorted.
 	 * 
-	 * @return A sorted train line (can also be {@code null}!).
+	 * @return A sorted train line (can't be {@code null}!).
 	 */
 	public TrainLine getTrainLine()
 	{
