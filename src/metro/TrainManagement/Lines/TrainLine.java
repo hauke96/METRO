@@ -17,8 +17,8 @@ import metro.TrainManagement.Nodes.RailwayNode;
  * Trains can only move on one of this train lines.
  * To create a line, the {@code TrainLineSelectTool} is used to select different nodes, put them into connections and building this line.
  * A train line in immutable which means that the line stays sorted as it is. To change something you have to create a new line.
- * "Sorted" means that there're no jumps in the connections (e.g. (0,1) -> (0,5) -> (0,3)  but   (0,1) -> (0,3) -> (0,5) ).
- * An invalid line (= a line with gaps) is partly sorted, so every part is sorted in itself. The order of these parts must not be sorted.  
+ * "Sorted" means that there're no jumps in the connections (e.g. (0,1) -> (0,5) -> (0,3) but (0,1) -> (0,3) -> (0,5) ).
+ * An invalid line (= a line with gaps) is partly sorted, so every part is sorted in itself. The order of these parts must not be sorted.
  * 
  * @author hauke
  *
@@ -51,14 +51,91 @@ public class TrainLine
 	 */
 	public TrainLine(ArrayList<RailwayNode> connections, String name, Color lineColor)
 	{
-		if(connections != null) _listOfNodes = connections;
-		else _listOfNodes = new ArrayList<RailwayNode>();
+		if(connections != null)
+		{
+			_listOfNodes = sortNodes(connections, getAnyEndNode(connections));
+		}
+		else
+		{
+			_listOfNodes = new ArrayList<RailwayNode>();
+		}
 		_name = name;
 		_lineColor = lineColor;
 		_thickness = 3;
 		METRO.__debug("[CalcTrainLineLength]");
 		_length = calcLength();
 		METRO.__debug("Length: " + _length);
+	}
+
+	/**
+	 * Sorts the given list of nodes by choosing one start node an then the neighbors.
+	 * 
+	 * @param list The list of nodes that should be sorted.
+	 * @param startNode An end node of the line.
+	 * @return A sorted list with all the nodes.
+	 */
+	private ArrayList<RailwayNode> sortNodes(ArrayList<RailwayNode> list, RailwayNode startNode)
+	{
+		if(list.size() <= 1 || startNode == null) return list;
+
+		METRO.__debug("[TrainLineSorting]\n"
+			+ "Start Node: " + startNode.getPosition() + "\n"
+			+ "Line length (amount of nodes): " + list.size());
+
+		ArrayList<RailwayNode> newList = new ArrayList<>();
+		// be sure that an end node is the first element in this list
+		newList.add(startNode);
+		list.remove(startNode);
+
+		// create a dummy node to enter toe first for-loop
+		RailwayNode neighbor = new RailwayNode(null, null);
+		int listLength = list.size();
+
+		for(int i = 0; i < listLength; ++i)
+		{
+			neighbor = null;
+			int k; // the index of the neighbor for the node at index i
+			// search for the left neighbor of node i
+			for(k = 0; k < list.size() && neighbor == null; ++k)
+			{
+				if(newList.get(i).isNeighbor(list.get(k))) neighbor = list.get(k);
+			}
+
+			if(neighbor != null)
+			{
+				METRO.__debug(newList.get(i).getPosition() + "  ==>  " + neighbor.getPosition());
+				newList.add(neighbor);
+				list.remove(neighbor);
+			}
+			else
+			{
+				METRO.__debug("No Neighbor found, try other start node ...");
+				/*
+				 * When there's no neighbor, choose another start node and try to sort this branch.
+				 * This also means that this line is invalid!
+				 */
+				newList.addAll(sortNodes(list, getAnyEndNode(list)));
+			}
+		}
+
+		return newList;
+	}
+
+	/**
+	 * This method determines an end node of the given line.
+	 * It's not specified which node of the two end nodes will be chosen, because the algorithm will take the first in the list of nodes.
+	 * 
+	 * @param list A list with all nodes where the end nodes should be determined.
+	 * @return One of the two end nodes of the given line.
+	 */
+	private RailwayNode getAnyEndNode(ArrayList<RailwayNode> list)
+	{
+		for(RailwayNode node : list)
+		{
+			if(TrainLine.isEndNode(node, list)) return node;
+		}
+
+		return null;
 	}
 
 	/**

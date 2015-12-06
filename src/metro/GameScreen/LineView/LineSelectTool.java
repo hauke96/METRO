@@ -66,82 +66,9 @@ public class LineSelectTool extends GameScreen
 	 * 
 	 * @return A sorted train line (can also be {@code null}!).
 	 */
-	@SuppressWarnings("unchecked") // _listOfNodes.clone can safely be converted into an array list (because listOfNodes is an array list)
 	public TrainLine getTrainLine()
 	{
-		ArrayList<RailwayNode> newList = sortNodes((ArrayList<RailwayNode>)_listOfNodes.clone(), getAnyEndNode(_listOfNodes));// (ArrayList<RailwayNode>)_listOfNodes.clone(), getAnyEndNode(_listOfNodes));
-		return new TrainLine(newList, _lineName, _color);
-	}
-
-	/**
-	 * Sorts the given list of nodes by choosing one start node an then the neighbors.
-	 * 
-	 * @param list The list of nodes that should be sorted.
-	 * @param startNode An end node of the line.
-	 * @return A sorted list with all the nodes.
-	 */
-	private ArrayList<RailwayNode> sortNodes(ArrayList<RailwayNode> list, RailwayNode startNode)
-	{
-		if(list.size() <= 1 || startNode == null) return list;
-
-		METRO.__debug("[TrainLineSorting]\n"
-			+ "Start Node: " + startNode.getPosition() + "\n"
-			+ "Line length (amount of nodes): " + list.size());
-
-		ArrayList<RailwayNode> newList = new ArrayList<>();
-		// be sure that an end node is the first element in this list
-		newList.add(startNode);
-		list.remove(startNode);
-
-		// create a dummy node to enter toe first for-loop
-		RailwayNode neighbor = new RailwayNode(null, null);
-		int listLength = list.size();
-
-		for(int i = 0; i < listLength; ++i)
-		{
-			neighbor = null;
-			int k; // the index of the neighbor for the node at index i
-			// search for the left neighbor of node i 
-			for(k = 0; k < list.size() && neighbor == null; ++k)
-			{
-				if(newList.get(i).isNeighbor(list.get(k))) neighbor = list.get(k);
-			}
-			
-			if(neighbor != null)
-			{
-				METRO.__debug(newList.get(i).getPosition() + "  ==>  " + neighbor.getPosition());
-				newList.add(neighbor);
-				list.remove(neighbor);
-			}
-			else
-			{
-				METRO.__debug("No Neighbor found, try other start node ...");
-				/* 
-				 * When there's no neighbor, choose another start node and try to sort this branch.
-				 * This also means that this line is invalid!
-				 */
-				newList.addAll(sortNodes(list, getAnyEndNode(list)));
-			}
-		}
-
-		return newList;
-	}
-
-	/**
-	 * This method determines an end node of the given line.
-	 * It's not specified which node of the two end nodes will be chosen, because the algorithm will take the first in the list of nodes.
-	 * 
-	 * @param list A list with all nodes where the end nodes should be determined.
-	 * @return One of the two end nodes of the given line.
-	 */
-	private RailwayNode getAnyEndNode(ArrayList<RailwayNode> list)
-	{
-		for(RailwayNode node : list)
-		{
-			if(TrainLine.isEndNode(node, list)) return node;
-		}
-
-		return null;
+		return new TrainLine(_listOfNodes, _lineName, _color);
 	}
 
 	/**
