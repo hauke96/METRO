@@ -23,14 +23,27 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 public class Fill
 {
 	private static ShapeRenderer shapeRenderer = new ShapeRenderer();
+	private static int xOffset, yOffset;
 	private static float r, g, b, a; // current color values
+
+	/**
+	 * Sets the offset for drawing things.
+	 * 
+	 * @param offsetX The offset for the x-coordinates.
+	 * @param offsetY The offset for the y-coordinates.
+	 */
+	public static void setOffset(int offsetX, int offsetY)
+	{
+		xOffset = offsetX;
+		yOffset = offsetY;
+	}
 
 	/**
 	 * Initializes the screen for drawing on it. It also stops the spriteBatch for a transparent background.
 	 */
-	private static void init()
+	private static void init(SpriteBatch spriteBatch)
 	{
-		METRO.__spriteBatch.end();
+		spriteBatch.end();
 		Gdx.gl.glEnable(GL30.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -42,11 +55,11 @@ public class Fill
 	/**
 	 * Resets the screen and the spriteBatch to the default values so that METRO can use it normally. The drawing has finished at this point.
 	 */
-	private static void reset()
+	private static void reset(SpriteBatch spriteBatch)
 	{
 		shapeRenderer.end();
 		Gdx.gl.glDisable(GL30.GL_BLEND);
-		METRO.__spriteBatch.begin();
+		spriteBatch.begin();
 	}
 
 	/**
@@ -71,9 +84,12 @@ public class Fill
 	 */
 	public static void Circle(int x, int y, int diameter)
 	{
-		init();
-		shapeRenderer.circle(x + diameter / 2, y + diameter / 2, diameter / 2, Integer.parseInt(Settings.getOld("amount.segments").toString()));
-		reset();
+		init(METRO.__spriteBatch);
+		shapeRenderer.circle(x + diameter / 2 + xOffset,
+			y + diameter / 2 + yOffset,
+			diameter / 2,
+			Integer.parseInt(Settings.getOld("amount.segments").toString()));
+		reset(METRO.__spriteBatch);
 	}
 
 	/**
@@ -86,9 +102,7 @@ public class Fill
 	 */
 	public static void Rect(int x, int y, int width, int height)
 	{
-		init();
-		shapeRenderer.rect(x, y, width, height);
-		reset();
+		Rect(x, y, width, height, METRO.__spriteBatch);
 	}
 
 	/**
@@ -102,9 +116,9 @@ public class Fill
 	 */
 	public static void Rect(int x, int y, int width, int height, SpriteBatch spriteBatch)
 	{
-		init();
-		shapeRenderer.rect(x, y, width, height);
-		reset();
+		init(spriteBatch);
+		shapeRenderer.rect(x + xOffset, y + yOffset, width, height);
+		reset(spriteBatch);
 	}
 
 	/**
@@ -140,8 +154,8 @@ public class Fill
 	 */
 	public static void Line(int x1, int y1, int x2, int y2, int w, SpriteBatch spriteBatch)
 	{
-		init();
-		shapeRenderer.rectLine(x1, y1, x2, y2, w);
-		reset();
+		init(spriteBatch);
+		shapeRenderer.rectLine(x1 + xOffset, y1 + yOffset, x2 + xOffset, y2 + yOffset, w);
+		reset(spriteBatch);
 	}
 }

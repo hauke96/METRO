@@ -308,6 +308,8 @@ public abstract class GameScreen extends Observable
 			registerControl(label);
 			_segmentList = new List(new Rectangle(360, 200, 90, 150), _window, true);
 			_segmentList.addElement("6");
+			_segmentList.addElement("16");
+			_segmentList.addElement("24");
 			_segmentList.addElement("32");
 			_segmentList.addElement("64");
 			_segmentList.addElement("128");

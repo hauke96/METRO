@@ -373,6 +373,7 @@ public class TrainLine
 		}
 
 		// Draw also a circle for the last node which won't be drawn in the for loop
+		//FIXME IndexOutOfBounds when clicking on cross where no node is
 		Point position = new Point(offset.x + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().x * METRO.__baseNetSpacing,
 			offset.y + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().y * METRO.__baseNetSpacing); // Position with offset etc.
 		Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);

@@ -144,7 +144,8 @@ public class MainView extends GameScreen implements Observer
 			(int)Math.round((int)(METRO.__mousePosition.x - _mapOffset.getX()) / (float)METRO.__baseNetSpacing),
 			(int)Math.round((int)(METRO.__mousePosition.y - _mapOffset.getY()) / (float)METRO.__baseNetSpacing));
 
-		Point offsetMarker = new Point((int)(_mapOffset.getX()) + METRO.__baseNetSpacing * _selectedCross.x,
+		Point offsetMarker = new Point(
+			(int)(_mapOffset.getX()) + METRO.__baseNetSpacing * _selectedCross.x,
 			(int)(_mapOffset.getY()) + METRO.__baseNetSpacing * _selectedCross.y);
 
 		Fill.setColor(Color.darkGray);

@@ -35,12 +35,18 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import javax.management.monitor.Monitor;
+
+import org.lwjgl.opengl.Display;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -54,11 +60,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainMenu;
 import metro.Graphics.Draw;
+import metro.Graphics.Fill;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.ControlActionManager;
@@ -83,6 +92,9 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	private static GameScreen _currentGameScreen;
 	private static ArrayList<Window> _windowList;
 	private static ActionObserver _windowObserver;
+	private static SpriteBatch _gameWindowSpriteBatch;
+	private static int _xOffset,
+		_yOffset;
 
 	public static BitmapFont __stdFont;
 	public static TextureRegion __mainMenu_Buttons,
@@ -173,6 +185,9 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	private void initGdx()
 	{
 		__spriteBatch = new SpriteBatch();
+		_gameWindowSpriteBatch = new SpriteBatch();
+		_xOffset = 1;
+		_yOffset = 20;
 
 		__camera = new OrthographicCamera();
 		__camera.setToOrtho(true, __SCREEN_SIZE.width / 2, __SCREEN_SIZE.height / 2);
@@ -214,7 +229,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		try
 		{
 			Pixmap pixmap = new Pixmap(Gdx.files.internal("textures/Cursor.png")); // has to be a width of 2^x (2, 4, 8, 16, 32, ...)
-			Gdx.input.setCursorImage(pixmap, 16, 13); // sets cursor to correct position
+			Gdx.input.setCursorImage(pixmap, 15, 12); // sets cursor to correct position
 			pixmap.dispose();
 			if(_detected_OS == OSType.WIN) // setCursorImage doesn't work on Windows :(
 			{
@@ -263,12 +278,16 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		__camera.setToOrtho(true, width, height);
 		__spriteBatch.setProjectionMatrix(__camera.combined);
+		_gameWindowSpriteBatch.setProjectionMatrix(__camera.combined);
 	}
 
 	@Override
 	public void render()
 	{
 		calculateMousePosition();
+
+		Fill.setOffset(_xOffset, _yOffset);
+		Draw.setOffset(_xOffset, _yOffset);
 
 		__spriteBatch.begin();
 
@@ -279,6 +298,18 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		renderCursor();
 
 		__spriteBatch.end();
+
+		_gameWindowSpriteBatch.begin();
+
+		Fill.setOffset(0, 0);
+		Draw.setOffset(0, 0);
+
+		// TODO Draw game-window stuff here
+		Fill.setColor(Color.red);
+		Fill.Rect(new Rectangle(0, 0, __SCREEN_SIZE.width, 20), _gameWindowSpriteBatch);
+
+		_gameWindowSpriteBatch.end();
+
 	}
 
 	/**
@@ -288,12 +319,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	private void calculateMousePosition()
 	{
 		__mousePosition = MouseInfo.getPointerInfo().getLocation();
-
-		if(!Boolean.parseBoolean(Settings.getOld("fullscreen.on").toString()))
-		{
-			__mousePosition.translate(-_config.x - 3, -_config.y - 24);
-			// __mousePosition.translate(-3, 1); // correction because the normal cursor is NOT in the center
-		}
+		__mousePosition.translate(-_config.x - _xOffset, -_config.y - _yOffset);
 		__originalMousePosition = (Point)__mousePosition.clone();
 
 		boolean mouseInWindow = false;
@@ -402,6 +428,9 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	 * 1.) Check if the mouse is in a window
 	 * If yes: Forward click to this window and remind it
 	 * If no : Go to next window.
+	 * screenX -= 1;
+	 * screenY -= 20;
+	 * 
 	 * 2.) Forward click to ControlActionManager with the clicked window as parameter
 	 * 3.) Check if the clicked window is null (=there has no window been clicked)
 	 * If yes: Close the window if needed
@@ -410,6 +439,9 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
 		Window clickedWindow = null;
+
+		screenX -= _xOffset;
+		screenY -= _yOffset;
 
 		/*
 		 * Go from the last to first window when no window has been clicked yet.
@@ -450,6 +482,9 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{
+		screenX -= _xOffset;
+		screenY -= _yOffset;
+
 		_currentGameScreen.mouseReleased(button);
 
 		for(Window win : _windowList)
@@ -484,7 +519,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		 */
 		for(int i = _windowList.size() - 1; i >= 0 && !mouseOnWindow; i--)
 		{
-			if(_windowList.get(i).isMouseOnWindow(__mousePosition.x, __mousePosition.y)) // if mouse is on window area but not on a control
+			if(_windowList.get(i).isMouseOnWindow(__mousePosition.x + _xOffset, __mousePosition.y + _yOffset)) // if mouse is on window area but not on a control
 			{
 				_windowList.get(i).mouseScrolled(amount);
 				mouseOnWindow = true;
@@ -584,6 +619,8 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 			_config.useHDPI = Boolean.parseBoolean(Settings.getOld("use.hdpi").toString());
 
 			__application = new LwjglApplication(this, _config);
+
+			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
 		}
 		catch(Exception ex) // if something gone wrong (e.g. "screen.width=19a20"
 		{
@@ -616,6 +653,22 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 				}
 			}
 		}
+	}
+
+	/**
+	 * @return The x-offset of the normal drawing canvas (everything excluding the window border)
+	 */
+	public static int getXOffset()
+	{
+		return _xOffset;
+	}
+
+	/**
+	 * @return The y-offset of the normal drawing canvas (everything excluding the window border)
+	 */
+	public static int getYOffset()
+	{
+		return _yOffset;
 	}
 
 	private enum OSType

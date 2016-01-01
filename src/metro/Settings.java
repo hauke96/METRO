@@ -34,8 +34,8 @@ public class Settings
 		set("fullscreen.on", true);
 		GraphicsEnvironment gEnviroment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		GraphicsDevice[] devices = gEnviroment.getScreenDevices();
-		set("screen.width", devices[0].getDisplayMode().getWidth());
-		set("screen.height", devices[0].getDisplayMode().getHeight());
+		set("screen.width", devices[0].getDisplayMode().getWidth() - 2); // -width of window border
+		set("screen.height", devices[0].getDisplayMode().getHeight() - 21); // -height of window title bar and border
 		set("use.opengl30", true);
 		set("use.hdpi", false);
 		set("use.vsync", true);

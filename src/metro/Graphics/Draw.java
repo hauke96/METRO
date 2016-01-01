@@ -27,7 +27,20 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 public class Draw
 {
 	private static ShapeRenderer shapeRenderer = new ShapeRenderer();
+	private static int xOffset, yOffset;
 	private static float r, g, b, a; // current color values
+
+	/**
+	 * Sets the offset for drawing things.
+	 * 
+	 * @param offsetX The offset for the x-coordinates.
+	 * @param offsetY The offset for the y-coordinates.
+	 */
+	public static void setOffset(int offsetX, int offsetY)
+	{
+		xOffset = offsetX;
+		yOffset = offsetY;
+	}
 
 	/**
 	 * Initializes the screen for drawing on it. It also stops the spriteBatch for a transparent background.
@@ -76,7 +89,10 @@ public class Draw
 	public static void Circle(int x, int y, int diameter)
 	{
 		init();
-		shapeRenderer.circle(x + diameter / 2, y + diameter / 2, diameter / 2, Integer.parseInt(Settings.getOld("amount.segments").toString()));
+		shapeRenderer.circle(x + diameter / 2 + xOffset,
+			y + diameter / 2 + yOffset,
+			diameter / 2,
+			Integer.parseInt(Settings.getOld("amount.segments").toString()));
 		reset();
 	}
 
@@ -104,6 +120,9 @@ public class Draw
 	 */
 	public static void Rect(int x, int y, int width, int height, SpriteBatch spriteBatch)
 	{
+		x += xOffset;
+		y += yOffset;
+
 		spriteBatch.setColor(r, g, b, a);
 		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y, 1, height, 20, 0, 1, 1, false, false); // left
 		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y + height, width + 1, 1, 20, 0, 1, 1, false, false); // bottom
@@ -185,7 +204,6 @@ public class Draw
 	 */
 	public static void Line(int x1, int y1, int x2, int y2, int w, SpriteBatch spriteBatch)
 	{
-		spriteBatch.setColor(r, g, b, a);
 		spriteBatch.end();
 		spriteBatch.begin();
 		if(x1 != x2 && y1 != y2) // -> diagonal line -> shapeRenderer for antialising
@@ -196,6 +214,12 @@ public class Draw
 		else
 		// -> straight line -> texture for non-antialised drawing
 		{
+			x1 += xOffset;
+			x2 += xOffset;
+			y1 += yOffset;
+			y2 += yOffset;
+			
+			spriteBatch.setColor(r, g, b, a);
 			int offset = -w / 2;
 			for(int i = 0; i <= w; i++)
 			{
@@ -240,7 +264,7 @@ public class Draw
 		for(String segment : segments)
 		{
 			font.setColor(r, g, b, a);
-			font.draw(METRO.__spriteBatch, segment, x, y + vOffset);
+			font.draw(METRO.__spriteBatch, segment, x + xOffset, y + vOffset + yOffset);
 
 			vOffset += stringHeight + 8; // y-pos for next line
 		}
@@ -360,7 +384,7 @@ public class Draw
 	 */
 	public static void Image(TextureRegion image, int x, int y)
 	{
-		Image(image, new Rectangle(x, y, image.getRegionWidth(), image.getRegionHeight()));
+		Image(image, new Rectangle(x + xOffset, y + yOffset, image.getRegionWidth(), image.getRegionHeight()));
 	}
 
 	/**
@@ -371,7 +395,7 @@ public class Draw
 	 */
 	public static void Image(TextureRegion image, Rectangle position)
 	{
-		METRO.__spriteBatch.draw(image, position.x, position.y, position.width, position.height);
+		METRO.__spriteBatch.draw(image, position.x + xOffset, position.y + yOffset, position.width, position.height);
 	}
 
 	/**
@@ -383,7 +407,7 @@ public class Draw
 	 */
 	public static void Image(TextureRegion image, Rectangle position, Rectangle areaOnImage)
 	{
-		METRO.__spriteBatch.draw(image.getTexture(), position.x, position.y, position.width, position.height, areaOnImage.x, areaOnImage.y, areaOnImage.width,
+		METRO.__spriteBatch.draw(image.getTexture(), position.x + xOffset, position.y + yOffset, position.width, position.height, areaOnImage.x, areaOnImage.y, areaOnImage.width,
 			areaOnImage.height, false, true);
 	}
 }
