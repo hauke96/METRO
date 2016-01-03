@@ -120,15 +120,28 @@ public class Draw
 	 */
 	public static void Rect(int x, int y, int width, int height, SpriteBatch spriteBatch)
 	{
-		x += xOffset;
-		y += yOffset;
+		Rect(x, y, width, height, 1, spriteBatch);
+	}
 
-		spriteBatch.setColor(r, g, b, a);
-		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y, 1, height, 20, 0, 1, 1, false, false); // left
-		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y + height, width + 1, 1, 20, 0, 1, 1, false, false); // bottom
-		spriteBatch.draw(METRO.__iconSet.getTexture(), x + width, y, 1, height + 1, 20, 0, 1, 1, false, false); // right
-		spriteBatch.draw(METRO.__iconSet.getTexture(), x, y, width, 1, 20, 0, 1, 1, false, false); // top
-		spriteBatch.setColor(1, 1, 1, 1);
+	/**
+	 * Draws a rectangle on a specific sprite batch.
+	 * 
+	 * @param x x-coordinate (left upper corner)
+	 * @param y y-coordinate (left upper corner)
+	 * @param width Width of rectangle.
+	 * @param height Height of rectangle.
+	 * @param w Width of the lines
+	 * @param spriteBatch The sprite batch to draw on.
+	 */
+	public static void Rect(int x, int y, int width, int height, int w, SpriteBatch spriteBatch)
+	{
+		width -= w;
+		height -= w;
+		int wh = w / 2;
+		Line(x + wh, y + wh, x + wh, y + height + wh, w, spriteBatch); // left
+		Line(x, y + height + wh, x + width, y + height + wh, w, spriteBatch); // bottom
+		Line(x + wh + width, y, x + wh + width, y + height + 1, w, spriteBatch); // right
+		Line(x, y + wh, x + width, y + wh, w, spriteBatch); // top
 	}
 
 	/**
@@ -218,7 +231,7 @@ public class Draw
 			x2 += xOffset;
 			y1 += yOffset;
 			y2 += yOffset;
-			
+
 			spriteBatch.setColor(r, g, b, a);
 			int offset = -w / 2;
 			for(int i = 0; i <= w; i++)
@@ -249,6 +262,19 @@ public class Draw
 	}
 
 	/**
+	 * Draws a string with the __stdFont (default font).
+	 * 
+	 * @param text The text you want to draw.
+	 * @param x The x-coordinate.
+	 * @param y The y-coordinate.
+	 * @param spriteBatch The sprite batch to draw on.
+	 */
+	public static void String(String text, int x, int y, SpriteBatch spriteBatch)
+	{
+		String(text, x, y, spriteBatch, METRO.__stdFont);
+	}
+
+	/**
 	 * Draws a text onto the sprite batch.
 	 * 
 	 * @param text The text you want to draw.
@@ -258,13 +284,27 @@ public class Draw
 	 */
 	public static void String(String text, int x, int y, BitmapFont font)
 	{
+		String(text, x, y, METRO.__spriteBatch, font);
+	}
+
+	/**
+	 * Draws a text onto the sprite batch.
+	 * 
+	 * @param text The text you want to draw.
+	 * @param x x-coordinate
+	 * @param y y-coordinate
+	 * @param spriteBatch The sprite batch to draw on
+	 * @param font The font of the text
+	 */
+	public static void String(String text, int x, int y, SpriteBatch spriteBatch, BitmapFont font)
+	{
 		int stringHeight = (int)font.getCache().getBounds().height, vOffset = 0;
 		String[] segments = text.split("\n"); // split by new line
 
 		for(String segment : segments)
 		{
 			font.setColor(r, g, b, a);
-			font.draw(METRO.__spriteBatch, segment, x + xOffset, y + vOffset + yOffset);
+			font.draw(spriteBatch, segment, x + xOffset, y + vOffset + yOffset);
 
 			vOffset += stringHeight + 8; // y-pos for next line
 		}

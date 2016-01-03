@@ -95,6 +95,8 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	private static SpriteBatch _gameWindowSpriteBatch;
 	private static int _xOffset,
 		_yOffset;
+	private static int _titleBarHeight = 26;
+	private static int _titleBarBorderLineWidth = 2;
 
 	public static BitmapFont __stdFont;
 	public static TextureRegion __mainMenu_Buttons,
@@ -299,17 +301,56 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 
 		__spriteBatch.end();
 
-		_gameWindowSpriteBatch.begin();
-
 		Fill.setOffset(0, 0);
 		Draw.setOffset(0, 0);
 
-		// TODO Draw game-window stuff here
-		Fill.setColor(Color.red);
-		Fill.Rect(new Rectangle(0, 0, __SCREEN_SIZE.width, 20), _gameWindowSpriteBatch);
+		_gameWindowSpriteBatch.begin();
+
+		renderWindowTitleBar();
 
 		_gameWindowSpriteBatch.end();
 
+	}
+
+	/**
+	 * Draws the title bar including the close cross and the blue border around the window.
+	 * This method uses the _titleBarHeight and _titleBarBorderLineWidth variables.
+	 */
+	private void renderWindowTitleBar()
+	{
+		// white title bar background
+		Fill.setColor(Color.white);
+		Fill.Rect(new Rectangle(0, 0, __SCREEN_SIZE.width, _titleBarHeight), _gameWindowSpriteBatch);
+
+		// blue title bar background
+		Fill.setColor(__metroBlue);
+		Fill.Rect(
+			new Rectangle(_titleBarBorderLineWidth * 2,
+				_titleBarBorderLineWidth * 2,
+				__SCREEN_SIZE.width - 4 * _titleBarBorderLineWidth - _titleBarHeight + 1,
+				_titleBarHeight - 4 * _titleBarBorderLineWidth),
+			_gameWindowSpriteBatch);
+		
+		// title of title bar
+		Draw.setColor(Color.white);
+		String title = "METRO - Master of Established Transport Railway Operators - ver.: " + __VERSION;
+		Dimension size = Draw.getStringSize(title);
+		Draw.String(title, (__SCREEN_SIZE.width - _titleBarHeight) / 2 - size.width / 2, _titleBarBorderLineWidth + 4, _gameWindowSpriteBatch);
+
+		// border aroung window
+		Draw.setColor(__metroBlue);
+		Draw.Rect(0, 0, __SCREEN_SIZE.width, __SCREEN_SIZE.height, _titleBarBorderLineWidth, _gameWindowSpriteBatch);
+		
+		// border around title bar
+		Draw.Rect(0, 0, __SCREEN_SIZE.width, _titleBarHeight, _titleBarBorderLineWidth, _gameWindowSpriteBatch);
+
+		// vertical line of close-cross
+		Draw.Line(__SCREEN_SIZE.width - _titleBarHeight, 0, __SCREEN_SIZE.width - _titleBarHeight, _titleBarHeight, _titleBarBorderLineWidth, _gameWindowSpriteBatch);
+		
+		// close-cross
+		Draw.setColor(__metroRed);
+		Draw.Line(__SCREEN_SIZE.width - (_titleBarHeight - 6), 6, __SCREEN_SIZE.width - 6, _titleBarHeight - 6, 2, _gameWindowSpriteBatch);
+		Draw.Line(__SCREEN_SIZE.width - (_titleBarHeight - 6), _titleBarHeight - 6, __SCREEN_SIZE.width - 6, 6, 2, _gameWindowSpriteBatch);
 	}
 
 	/**
@@ -439,6 +480,16 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
 		Window clickedWindow = null;
+
+		if(screenY <= _titleBarHeight)
+		{
+			if(screenX >= __SCREEN_SIZE.width - _titleBarHeight)
+			{
+				__application.exit();
+			}
+
+			return false;
+		}
 
 		screenX -= _xOffset;
 		screenY -= _yOffset;

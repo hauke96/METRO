@@ -208,10 +208,7 @@ public class Window extends ActionObservable implements ControlElement
 	public void mousePressed(int screenX, int screenY, int mouseButton)
 	{
 		// Check for drag-mode:
-		if(screenX >= _position.x
-			&& screenX <= _position.x + _size.x - 20
-			&& screenY >= _position.y
-			&& screenY <= _position.y + 20
+		if(isMouseOnWindow(screenX, screenY)
 			&& mouseButton == Buttons.LEFT)
 		{
 			_dragMode = true;
