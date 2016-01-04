@@ -84,7 +84,7 @@ public class LineView extends GameScreen
 		_saveButton.setState(false);
 		registerControl(_saveButton);
 
-		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 30));
+		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 100));
 		_messageLabel.setColor(METRO.__metroRed);
 		registerControl(_messageLabel);
 
@@ -140,12 +140,19 @@ public class LineView extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
+				METRO.__debug("[TrainLineEditButtonClicked]\n"
+					+ "Clicked line (index): " + _lineList.getSelected() + "\n"
+					+ "Clicked line  (name): " + _lineList.getText());
 				if(_lineList.getSelected() == -1) return;
 
 				_oldLineName = _lineList.getText();
 
 				Color color = TrainLineOverseer.getColor(_oldLineName);
 				TrainLine line = TrainLineOverseer.getLine(_oldLineName);
+
+				METRO.__debug("Color: " + color + "\n"
+					+ "Old line: " + _oldLineName + "\n"
+					+ "New Line: " + line);
 
 				if(color == null || line == null)
 				{
@@ -170,7 +177,7 @@ public class LineView extends GameScreen
 
 				_lineList.setState(false);
 
-				METRO.__gameState.getLines().remove(line);
+				METRO.__gameState.getLines().remove(line); // TODO change to something like METRO.__gameState.removeLine(TrainLine)
 			}
 		});
 	}
@@ -446,12 +453,12 @@ public class LineView extends GameScreen
 				}
 			}
 		}
-		//TODO close this screen via the observer pattern
+		// TODO close this screen via the observer pattern
 		// if select tool is not enabled, hide/close the whole line view
-//		if(mouseButton == Buttons.RIGHT)
-//		{
-//			close();
-//		}
+		// if(mouseButton == Buttons.RIGHT)
+		// {
+		// close();
+		// }
 
 		// when the mouse is out of TrainLineView, get the new line from the select tool and add it to the overseer
 		if(screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
@@ -509,16 +516,16 @@ public class LineView extends GameScreen
 
 		_messageLabel.setText("");
 		_lineNameField.setText("");
-		
+
 		_oldLineName = "";
 
 		_lineSelectTool.setState(false);
 	}
-	
+
 	@Override
 	public void close()
 	{
-		TrainLineOverseer.removeLine(_lineSelectTool.getTrainLine());
+//		TrainLineOverseer.removeLine(_lineSelectTool.getTrainLine());
 		super.close();
 	}
 }

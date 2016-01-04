@@ -46,7 +46,7 @@ public class Train
 		_costsFactor = costsFactor;
 		_maxPassengers = passengers;
 		_currPassengers = 0;
-		_relativeOnLine = 0.3f;
+		_relativeOnLine = 0.1f;
 	}
 
 	/**

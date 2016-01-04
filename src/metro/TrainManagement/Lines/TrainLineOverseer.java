@@ -113,7 +113,6 @@ public class TrainLineOverseer
 		
 		for(TrainLine line : _listOfTrainLines)
 		{
-			METRO.__debug(map.values().toString());
 			line.draw(offset, sp, map);
 		}
 	}

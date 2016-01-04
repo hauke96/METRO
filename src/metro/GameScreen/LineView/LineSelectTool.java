@@ -122,9 +122,10 @@ public class LineSelectTool extends GameScreen
 	 */
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
-		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(MainView._selectedCross);
-		if(clickedNode == null) return;
 		METRO.__debug("[ClickOnNode]");
+		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(MainView._selectedCross);
+		METRO.__debug("node is " + clickedNode);
+		if(clickedNode == null) return;
 		if(_listOfNodes.contains(clickedNode))
 		{
 			METRO.__debug("Removed node " + clickedNode.getPosition());

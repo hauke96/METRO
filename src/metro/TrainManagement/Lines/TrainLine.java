@@ -346,6 +346,7 @@ public class TrainLine
 	 */
 	public void draw(Point offset, SpriteBatch sp, HashMap<RailwayNode, Integer> map)
 	{
+		if(_length == 0) return;
 		Draw.setColor(isValid(_listOfNodes) ? _lineColor : METRO.__metroRed);
 		for(int i = 0; i < _listOfNodes.size() - 1; i++)
 		{
@@ -373,7 +374,6 @@ public class TrainLine
 		}
 
 		// Draw also a circle for the last node which won't be drawn in the for loop
-		//FIXME IndexOutOfBounds when clicking on cross where no node is
 		Point position = new Point(offset.x + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().x * METRO.__baseNetSpacing,
 			offset.y + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().y * METRO.__baseNetSpacing); // Position with offset etc.
 		Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
@@ -384,7 +384,7 @@ public class TrainLine
 		Point diff = new Point((position.y - positionNext.y) / METRO.__baseNetSpacing,
 			(position.x - positionNext.x) / METRO.__baseNetSpacing);
 
-		if(diff.x != 0 && diff.y != 0) // FIXME offset for diagonal lines does not work right
+		if(diff.x != 0 && diff.y != 0)
 		{
 			if(diff.x == 1 && diff.y == 1) diff.x = -1;
 			else if(diff.x == 1 && diff.y == -1) diff.y = 1;

@@ -639,7 +639,8 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		if(__debug && message.length() > 0)
 		{
 			message = message.replace("\n", "\n    ");
-			if(message.charAt(0) == '[') message = message.replaceFirst("\\[", "\n\\[");
+			if(message.charAt(0) == '[')
+				message = message.replaceFirst("\\[", "\n\\[");
 			else message = "    " + message;
 			System.out.println(message);
 		}
