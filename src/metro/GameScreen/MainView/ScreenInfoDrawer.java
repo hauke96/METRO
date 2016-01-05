@@ -45,7 +45,7 @@ public class ScreenInfoDrawer extends GameScreen
 		String str = " = " + String.format("%,d", METRO.__gameState.getMoney());
 		str = str.replace(".", ". ");
 		Draw.setColor(METRO.__metroBlue);
-		Draw.String(str, 13, 7);
+		Draw.String(str, 13, 10);
 	}
 
 	@Override

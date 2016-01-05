@@ -167,4 +167,15 @@ public class Train
 		Point2D p = _trainLine.getPositionOfTrain(_relativeOnLine, _trainLine.getNodes().get(0));
 		return p;
 	}
+
+	/**
+	 * Sets the name of this train.
+	 * The convention is <NAME>_<NUMBER> so please be sure that your train has this name.
+	 * 
+	 * @param newName The new name of the train from the format <NAME>_<NUMBER>.
+	 */
+	public void setName(String newName)
+	{
+		_name = newName;
+	}
 }

@@ -159,8 +159,9 @@ public class TrainViewMain extends GameScreen
 	 */
 	private void sellTrainButton_action()
 	{
-		TrainLineOverseer.removeLine(_trainList.getText());
+		METRO.__gameState.removeTrain(_trainList.getText());
 		_trainList.remove(_trainList.getSelected());
+		_trainList.setSelectedEntry(0);
 	}
 
 	/**

@@ -59,9 +59,25 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 				{
 					Train train = new Train(METRO.__gameState.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
 					train.setLine(TrainLineOverseer.getLine(_trainViewMain.getLineList().getText()));
-					METRO.__gameState.getTrains().add(train);
+					METRO.__gameState.addTrain(train);
 					_trainViewBuy.getMessageLabel().setText("");
-					_trainViewMain.getTrainList().addElement(train.getName());
+
+					// find next number for train
+					String trainName = train.getName();
+					int minNumber = 0;
+					for(; minNumber < 1000 && METRO.__gameState.getTrainByName(trainName + " (" + minNumber + ")") != null; minNumber++)
+					{
+					}
+
+					if(minNumber == 1000) // maximum number of trains from a specific type
+					{
+						_trainViewBuy.getMessageLabel().setText("You have to much trains of this type!");
+					}
+					else
+					{
+						train.setName(train.getName() + " (" + minNumber + ")");
+						_trainViewMain.getTrainList().addElement(train.getName());
+					}
 				}
 			}
 		});
@@ -150,7 +166,7 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		//TODO close this screen by right click via the observer pattern
+		// TODO close this screen by right click via the observer pattern
 	}
 
 	@Override

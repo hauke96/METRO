@@ -27,7 +27,7 @@ public class GameState
 
 	private int _money;
 	private ArrayList<TrainStation> _stationList;
-//	private ArrayList<TrainLine> _lineList;
+	// private ArrayList<TrainLine> _lineList;
 	private ArrayList<Train> _trainList;
 	private LinkedHashMap<String, TrainTemplate> _templateTrains;
 
@@ -38,7 +38,7 @@ public class GameState
 	{
 		_money = 500000;
 		_stationList = new ArrayList<>();
-//		_lineList = new ArrayList<>();
+		// _lineList = new ArrayList<>();
 		_trainList = new ArrayList<>();
 		_templateTrains = new LinkedHashMap<>();
 		try
@@ -186,6 +186,30 @@ public class GameState
 	}
 
 	/**
+	 * Adds a train to the list of bought trains. This method does not check for any valid trains (not null, etc.)!
+	 * 
+	 * @param train The new train to add.
+	 */
+	public void addTrain(Train train)
+	{
+		_trainList.add(train);
+	}
+
+	/**
+	 * Removes a train from the list of bought trains. This method does not check for any valid trains (not null, etc.)!
+	 * 
+	 * @param trainName The name of the train that should be removed.
+	 */
+	public void removeTrain(String trainName)
+	{
+		Train train = getTrainByName(trainName);
+		if(train != null)
+		{
+			_trainList.remove(train);
+		}
+	}
+
+	/**
 	 * Gets a train template by giving its model name.
 	 * 
 	 * @param name The model name of the train.
@@ -202,5 +226,23 @@ public class GameState
 	public ArrayList<TrainTemplate> getTemplateTrains()
 	{
 		return new ArrayList<TrainTemplate>(_templateTrains.values());
+	}
+
+	/**
+	 * Searches for a train with the given name. When there's no train with this name, this method will return {@code null}.
+	 * 
+	 * @param trainName The name of the train.
+	 * @return The train or {@code null} when this train doesn't exist.
+	 */
+	public Train getTrainByName(String trainName)
+	{
+		for(Train train : _trainList)
+		{
+			if(train.getName().equals(trainName))
+			{
+				return train;
+			}
+		}
+		return null;
 	}
 }
