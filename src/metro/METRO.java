@@ -40,13 +40,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import javax.management.monitor.Monitor;
-
-import org.lwjgl.opengl.Display;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -60,9 +55,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainMenu;
@@ -94,9 +87,11 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	private static ActionObserver _windowObserver;
 	private static SpriteBatch _gameWindowSpriteBatch;
 	private static int _xOffset,
-		_yOffset;
-	private static int _titleBarHeight = 26;
-	private static int _titleBarBorderLineWidth = 2;
+		_yOffset,
+		_titleBarHeight,
+		_titleBarBorderLineWidth;
+	public static boolean _dragMode,
+		_debug;
 
 	public static BitmapFont __stdFont;
 	public static TextureRegion __mainMenu_Buttons,
@@ -114,7 +109,6 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	public static SpriteBatch __spriteBatch;
 	public static LwjglApplication __application;
 	public static GameState __gameState;
-	public static boolean __debug;
 
 	private Point _oldMousePosition;
 	private LwjglApplicationConfiguration _config;
@@ -141,8 +135,12 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		GameScreen.setActionManager(_controlActionManager);
 
 		__baseNetSpacing = 25;
-		__debug = true;
+		_debug = true;
+
 		_oldMousePosition = new Point(0, 0);
+		_titleBarHeight = 26;
+		_titleBarBorderLineWidth = 2;
+		_dragMode = false;
 
 		detectOS();
 
@@ -330,7 +328,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 				__SCREEN_SIZE.width - 4 * _titleBarBorderLineWidth - _titleBarHeight + 1,
 				_titleBarHeight - 4 * _titleBarBorderLineWidth),
 			_gameWindowSpriteBatch);
-		
+
 		// title of title bar
 		Draw.setColor(Color.white);
 		String title = "METRO - Master of Established Transport Railway Operators - ver.: " + __VERSION;
@@ -340,13 +338,13 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		// border aroung window
 		Draw.setColor(__metroBlue);
 		Draw.Rect(0, 0, __SCREEN_SIZE.width, __SCREEN_SIZE.height, _titleBarBorderLineWidth, _gameWindowSpriteBatch);
-		
+
 		// border around title bar
 		Draw.Rect(0, 0, __SCREEN_SIZE.width, _titleBarHeight, _titleBarBorderLineWidth, _gameWindowSpriteBatch);
 
 		// vertical line of close-cross
 		Draw.Line(__SCREEN_SIZE.width - _titleBarHeight, 0, __SCREEN_SIZE.width - _titleBarHeight, _titleBarHeight, _titleBarBorderLineWidth, _gameWindowSpriteBatch);
-		
+
 		// close-cross
 		Draw.setColor(__metroRed);
 		Draw.Line(__SCREEN_SIZE.width - (_titleBarHeight - 6), 6, __SCREEN_SIZE.width - 6, _titleBarHeight - 6, 2, _gameWindowSpriteBatch);
@@ -487,6 +485,10 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 			{
 				__application.exit();
 			}
+			else
+			{
+				_dragMode = true;
+			}
 
 			return false;
 		}
@@ -535,6 +537,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	{
 		screenX -= _xOffset;
 		screenY -= _yOffset;
+		_dragMode = false;
 
 		_currentGameScreen.mouseReleased(button);
 
@@ -548,6 +551,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer)
 	{
+		System.out.println(__mousePosition + "\n" + (screenX - _xOffset) + " - " + (screenY - _yOffset));
 		return false;
 	}
 
@@ -636,7 +640,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	 */
 	public static void __debug(String message)
 	{
-		if(__debug && message.length() > 0)
+		if(_debug && message.length() > 0)
 		{
 			message = message.replace("\n", "\n    ");
 			if(message.charAt(0) == '[')
