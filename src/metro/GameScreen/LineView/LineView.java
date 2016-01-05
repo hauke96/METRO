@@ -102,7 +102,7 @@ public class LineView extends GameScreen
 	private void fillLineList()
 	{
 		// Fill line list with all lines:
-		for(TrainLine line : METRO.__gameState.getLines())
+		for(TrainLine line : TrainLineOverseer.getLines())
 		{
 			_lineList.addElement(line.getName());
 		}
@@ -177,7 +177,7 @@ public class LineView extends GameScreen
 
 				_lineList.setState(false);
 
-				METRO.__gameState.getLines().remove(line); // TODO change to something like METRO.__gameState.removeLine(TrainLine)
+				TrainLineOverseer.getLines().remove(line); // TODO change to something like METRO.__gameState.removeLine(TrainLine)
 			}
 		});
 	}
@@ -193,10 +193,9 @@ public class LineView extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				if(_lineList.getSelected() < 0 || _lineList.getSelected() >= METRO.__gameState.getLines().size()) return; // out of bounds
+				if(_lineList.getSelected() < 0 || _lineList.getSelected() >= TrainLineOverseer.getLines().size()) return; // out of bounds
 
 				TrainLineOverseer.removeLine(_lineList.getText());
-				METRO.__gameState.getLines().remove(_lineList.getSelected());
 				_lineList.remove(_lineList.getSelected());
 				_lineSelectToolEnabled = false;
 				reset();
@@ -234,12 +233,11 @@ public class LineView extends GameScreen
 					TrainLine line = _lineSelectTool.getTrainLine();
 
 					METRO.__debug("[StartFinishEditLine]");
-					METRO.__debug("Amount of lines (pre)  : " + METRO.__gameState.getLines().size());
+					METRO.__debug("Amount of lines (pre)  : " + TrainLineOverseer.getLines().size());
 
 					if(oldLine != null)
 					{
 						TrainLineOverseer.removeLine(oldLine);
-						METRO.__gameState.getLines().remove(oldLine);
 						_lineList.remove(_lineList.getIndex(_oldLineName));
 
 						ArrayList<Train> oldTrains = getTrainsOfLine(oldLine);
@@ -253,13 +251,12 @@ public class LineView extends GameScreen
 
 					line.setName(_lineNameField.getText());
 					TrainLineOverseer.addLine(line);
-					METRO.__gameState.getLines().add(line); // TODO change to something like METRO.__gameState.addLine(TrainLine)
 					_lineList.addElement(_lineNameField.getText());
 					_lineSelectToolEnabled = false;
 
 					reset();
 					_lineList.setState(true);
-					METRO.__debug("Amount of lines (after): " + METRO.__gameState.getLines().size());
+					METRO.__debug("Amount of lines (after): " + TrainLineOverseer.getLines().size());
 				}
 				else
 				{
@@ -299,8 +296,19 @@ public class LineView extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				String msg = _lineSelectTool.setColor(_colorBar.getClickedColor());
-				if(!msg.equals("")) _messageLabel.setText(msg);
+				_messageLabel.setText("");
+				
+				Color clickedColor = _colorBar.getClickedColor();
+				String msg = _lineSelectTool.setColor(clickedColor);
+
+				if(!msg.equals("")) // some error occurred
+				{
+					_messageLabel.setText(msg);
+				}
+				else if(_editMode)
+				{
+					TrainLineOverseer.getLine(_lineList.getText()).setColor(clickedColor);
+				}
 			}
 		});
 	}
@@ -525,7 +533,7 @@ public class LineView extends GameScreen
 	@Override
 	public void close()
 	{
-//		TrainLineOverseer.removeLine(_lineSelectTool.getTrainLine());
+		// TrainLineOverseer.removeLine(_lineSelectTool.getTrainLine());
 		super.close();
 	}
 }

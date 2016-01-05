@@ -8,7 +8,8 @@ import metro.METRO;
 import metro.Graphics.Draw;
 
 /**
- * A color bar is a stripe of all RGB colors. When the user clicked on this control, the color that has been clicked can be
+ * A color bar is a stripe of all RGB colors.
+ * The {@code clickedOnControl(Object arg)} event gets fired when the selected color of this bar changed in any way.
  * 
  * @author hauke
  *
@@ -92,6 +93,8 @@ public class ColorBar extends ActionObservable implements ControlElement
 	{
 		int hue = getHue(color.getRed(), color.getGreen(), color.getBlue());
 		_clickedColor = Color.getHSBColor(hue / 360f, _saturation, _brightness);
+		_clickedXPosition = getHue(_clickedColor.getRed(), _clickedColor.getGreen(), _clickedColor.getBlue());
+		System.out.println(_position.width + " - " + getHue(_clickedColor.getRed(), _clickedColor.getGreen(), _clickedColor.getBlue()) + " - " + _clickedXPosition);
 	}
 
 	/**
@@ -166,7 +169,7 @@ public class ColorBar extends ActionObservable implements ControlElement
 	public boolean clickOnControlElement()
 	{
 		if(!_enabled) return false;
-		// Point mPos = METRO.__originalMousePosition;
+
 		Point mPos = new Point(METRO.__mousePosition.x - 3, METRO.__mousePosition.y);
 
 		if(_position.contains(mPos))
@@ -226,6 +229,7 @@ public class ColorBar extends ActionObservable implements ControlElement
 			_clickedXPosition += _position.width;
 			_clickedXPosition %= _position.width;
 			_clickedColor = Color.getHSBColor((float)_clickedXPosition / (float)_position.width, _saturation, _brightness);
+			notifyClickOnControl(this);
 		}
 	}
 

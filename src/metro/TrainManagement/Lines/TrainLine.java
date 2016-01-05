@@ -304,6 +304,16 @@ public class TrainLine
 	}
 
 	/**
+	 * Sets the color of the line. This method does not check for any color duplicates in other lines.
+	 * 
+	 * @param newLineColor The new color of the line.
+	 */
+	public void setColor(Color newLineColor)
+	{
+		_lineColor = newLineColor;
+	}
+
+	/**
 	 * Returns the whole list with all nodes of this line.
 	 * 
 	 * @return The list with all nodes.

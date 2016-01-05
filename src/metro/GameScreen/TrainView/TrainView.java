@@ -9,6 +9,7 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
+import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.TrainManagement.Trains.Train;
 import metro.WindowControls.ActionObserver;
 
@@ -57,7 +58,7 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 				else
 				{
 					Train train = new Train(METRO.__gameState.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
-					train.setLine(METRO.__gameState.getLine(_trainViewMain.getLineList().getText()));
+					train.setLine(TrainLineOverseer.getLine(_trainViewMain.getLineList().getText()));
 					METRO.__gameState.getTrains().add(train);
 					_trainViewBuy.getMessageLabel().setText("");
 					_trainViewMain.getTrainList().addElement(train.getName());

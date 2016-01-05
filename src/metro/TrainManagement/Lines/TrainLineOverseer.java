@@ -77,6 +77,17 @@ public class TrainLineOverseer
 		}
 		return null;
 	}
+	
+	/**
+	 * Creates a copy of the list train lines and returns this copy. 
+	 * 
+	 * @return A copy of the list of all lines.
+	 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<TrainLine> getLines()
+	{
+		return (ArrayList<TrainLine>)_listOfTrainLines.clone();
+	}
 
 	/**
 	 * Searches for a special line.

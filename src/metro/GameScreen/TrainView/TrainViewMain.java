@@ -51,7 +51,7 @@ public class TrainViewMain extends GameScreen
 			public void selectionChanged(String entry)
 			{
 				_trainList.clear();
-				TrainLine line = METRO.__gameState.getLine(_lineList.getText());
+				TrainLine line = TrainLineOverseer.getLine(_lineList.getText());
 				for(Train train : METRO.__gameState.getTrains())
 				{
 					if(train.getLine().equals(line)) _trainList.addElement(train.getName());
@@ -80,7 +80,7 @@ public class TrainViewMain extends GameScreen
 	private void fillLineList()
 	{
 		// Fill line list with all lines:
-		ArrayList<TrainLine> lineList = METRO.__gameState.getLines();
+		ArrayList<TrainLine> lineList = TrainLineOverseer.getLines();
 		for(TrainLine line : lineList)
 		{
 			_lineList.addElement(line.getName());

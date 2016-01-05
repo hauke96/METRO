@@ -9,7 +9,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainStation;
 import metro.TrainManagement.Trains.TrainTemplate;
@@ -28,7 +27,7 @@ public class GameState
 
 	private int _money;
 	private ArrayList<TrainStation> _stationList;
-	private ArrayList<TrainLine> _lineList;
+//	private ArrayList<TrainLine> _lineList;
 	private ArrayList<Train> _trainList;
 	private LinkedHashMap<String, TrainTemplate> _templateTrains;
 
@@ -39,7 +38,7 @@ public class GameState
 	{
 		_money = 500000;
 		_stationList = new ArrayList<>();
-		_lineList = new ArrayList<>();
+//		_lineList = new ArrayList<>();
 		_trainList = new ArrayList<>();
 		_templateTrains = new LinkedHashMap<>();
 		try
@@ -179,14 +178,6 @@ public class GameState
 	}
 
 	/**
-	 * @return A list of all train lines.
-	 */
-	public ArrayList<TrainLine> getLines()
-	{
-		return _lineList;
-	}
-
-	/**
 	 * @return A list of all trains.
 	 */
 	public ArrayList<Train> getTrains()
@@ -211,25 +202,5 @@ public class GameState
 	public ArrayList<TrainTemplate> getTemplateTrains()
 	{
 		return new ArrayList<TrainTemplate>(_templateTrains.values());
-	}
-
-	/**
-	 * Gets the train line with the given name. Thats why every line has to have an unique name ;)
-	 * 
-	 * @param name The name of the train line.
-	 * @return The train line with the given name.
-	 */
-	public TrainLine getLine(String name)
-	{
-		TrainLine line = null;
-		for(TrainLine l : _lineList)
-		{
-			if(l.getName().equals(name))
-			{
-				line = l;
-				break;
-			}
-		}
-		return line;
 	}
 }
