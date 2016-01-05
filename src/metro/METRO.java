@@ -32,13 +32,14 @@ package metro;
  */
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import org.lwjgl.opengl.Display;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -72,7 +73,7 @@ import metro.WindowControls.Window;
  * @author Hauke
  * @version 0.1.3_indev
  */
-public class METRO extends Frame implements ApplicationListener, InputProcessor
+public class METRO implements ApplicationListener, InputProcessor
 {
 	private static final long serialVersionUID = 1L;
 
@@ -92,6 +93,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		_titleBarBorderLineWidth;
 	public static boolean _dragMode,
 		_debug;
+	public static Point _dragMode_LastMousePosition;
 
 	public static BitmapFont __stdFont;
 	public static TextureRegion __mainMenu_Buttons,
@@ -488,6 +490,7 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 			else
 			{
 				_dragMode = true;
+				_dragMode_LastMousePosition = new Point(screenX, screenY);
 			}
 
 			return false;
@@ -551,7 +554,11 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer)
 	{
-		System.out.println(__mousePosition + "\n" + (screenX - _xOffset) + " - " + (screenY - _yOffset));
+		if(_dragMode)
+		{
+			Display.setLocation((screenX  - _dragMode_LastMousePosition.x) + Display.getX(),
+				(screenY - _dragMode_LastMousePosition.y) + Display.getY());
+		}
 		return false;
 	}
 
@@ -583,6 +590,11 @@ public class METRO extends Frame implements ApplicationListener, InputProcessor
 		if(!mouseOnWindow) _controlActionManager.mouseScroll(amount);
 
 		return false;
+	}
+	
+	@Override
+	public void dispose()
+	{
 	}
 
 	/**
