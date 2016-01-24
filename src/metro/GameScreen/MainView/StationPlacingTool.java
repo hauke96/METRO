@@ -48,7 +48,7 @@ public class StationPlacingTool extends GameScreen
 		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, MainView._mapOffset);
 		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, MainView._mapOffset);
 	}
-	
+
 	/**
 	 * Places a station on the pointed position (screenX, screenY).
 	 * 
@@ -70,8 +70,14 @@ public class StationPlacingTool extends GameScreen
 
 		if(!positionOccupied) // no doubles
 		{
-			METRO.__gameState.getStations().add(new TrainStation(MainView._selectedCross, 0));
-			METRO.__gameState.addMoney(-TrainStation._PRICE);
+			if(METRO.__gameState.addMoney(-TrainStation.PRICE))
+			{
+				METRO.__gameState.getStations().add(new TrainStation(MainView._selectedCross, 0)); // TODO change to gameState.addStation(...) and add the money there
+			}
+			else
+			{
+				// TODO notification in notification area (s. #40)
+			}
 		}
 	}
 

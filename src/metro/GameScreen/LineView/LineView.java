@@ -16,6 +16,7 @@ import metro.Graphics.Fill;
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.TrainManagement.Trains.Train;
+import metro.TrainManagement.Trains.TrainOverseer;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.ColorBar;
@@ -214,6 +215,12 @@ public class LineView extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
+				if(!METRO.__gameState.addMoney(-5000)) // some administrative costs
+				{
+					_messageLabel.setText("Not enough money. This action costs 5000$!");
+					return;
+				}
+
 				if(!_lineSelectToolEnabled) return;
 
 				// if something went wrong:
@@ -273,7 +280,7 @@ public class LineView extends GameScreen
 			private ArrayList<Train> getTrainsOfLine(TrainLine line)
 			{
 				ArrayList<Train> trains = new ArrayList<>();
-				for(Train train : METRO.__gameState.getTrains())
+				for(Train train : TrainOverseer.getTrains())
 				{
 					if(train.getLine().equals(line))
 					{
@@ -297,7 +304,7 @@ public class LineView extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				_messageLabel.setText("");
-				
+
 				Color clickedColor = _colorBar.getClickedColor();
 				String msg = _lineSelectTool.setColor(clickedColor);
 

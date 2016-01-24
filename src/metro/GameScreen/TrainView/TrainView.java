@@ -9,9 +9,9 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.TrainManagement.Trains.Train;
+import metro.TrainManagement.Trains.TrainOverseer;
 import metro.WindowControls.ActionObserver;
 
 /**
@@ -58,15 +58,15 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 				}
 				else
 				{
-					Train train = new Train(METRO.__gameState.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
+					Train train = new Train(TrainOverseer.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
 					train.setLine(TrainLineOverseer.getLine(_trainViewMain.getLineList().getText()));
-					METRO.__gameState.addTrain(train);
+					TrainOverseer.addTrain(train);
 					_trainViewBuy.getMessageLabel().setText("");
 
 					// find next number for train
 					String trainName = train.getName();
 					int minNumber = 0;
-					while(minNumber < 1000 && METRO.__gameState.getTrainByName(trainName + " (" + minNumber + ")") != null)
+					while(minNumber < 1000 && TrainOverseer.getTrainByName(trainName + " (" + minNumber + ")") != null)
 					{
 						++minNumber;
 					}

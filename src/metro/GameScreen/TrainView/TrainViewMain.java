@@ -12,6 +12,7 @@ import metro.Graphics.Draw;
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.TrainManagement.Trains.Train;
+import metro.TrainManagement.Trains.TrainOverseer;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.List;
@@ -55,15 +56,15 @@ public class TrainViewMain extends GameScreen
 				if(isInMoveMode())
 				{
 					TrainLine selectedLine = TrainLineOverseer.getLine(entry);
-					Train selectedTrain = METRO.__gameState.getTrainByName(_movedTrain);
-					
+					Train selectedTrain = TrainOverseer.getTrainByName(_movedTrain);
+
 					selectedTrain.setLine(selectedLine);
 					stopMoveMode();
 				}
-				
+
 				_trainList.clear();
 				TrainLine line = TrainLineOverseer.getLine(_lineList.getText());
-				for(Train train : METRO.__gameState.getTrains())
+				for(Train train : TrainOverseer.getTrains())
 				{
 					if(train.getLine().equals(line)) _trainList.addElement(train.getName());
 				}
@@ -170,7 +171,7 @@ public class TrainViewMain extends GameScreen
 	 */
 	private void sellTrainButton_action()
 	{
-		METRO.__gameState.removeTrain(_trainList.getText());
+		TrainOverseer.removeTrain(_trainList.getText());
 		_trainList.remove(_trainList.getSelected());
 		_trainList.setSelectedEntry(0);
 	}
@@ -185,10 +186,10 @@ public class TrainViewMain extends GameScreen
 
 		_moveTrainButton.setState(false);
 		_sellTrainButton.setState(false);
-		
+
 		_movedTrain = _trainList.getText();
 	}
-	
+
 	/**
 	 * Sets the move mode to {@code false}, so that no trains can be moved to other lines.
 	 */
@@ -196,7 +197,7 @@ public class TrainViewMain extends GameScreen
 	{
 		_moveTrainButton.setState(false);
 		_sellTrainButton.setState(false);
-		
+
 		_movedTrain = "";
 	}
 
@@ -215,7 +216,7 @@ public class TrainViewMain extends GameScreen
 	{
 		return _lineList;
 	}
-	
+
 	/**
 	 * @return True when the TrainViewMain is in move mode.
 	 */

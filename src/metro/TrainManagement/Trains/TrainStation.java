@@ -24,7 +24,7 @@ public class TrainStation
 	/**
 	 * The price to build one train station.
 	 */
-	public static final int _PRICE = 5000;
+	public static final int PRICE = 5000;
 
 	/**
 	 * Creates a new train station.

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
+import metro.TrainManagement.Trains.TrainOverseer;
 import metro.TrainManagement.Trains.TrainTemplate;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
@@ -52,7 +53,7 @@ public class TrainViewBuy extends GameScreen
 			@Override
 			public void selectionChanged(String entry)
 			{
-				TrainTemplate train = METRO.__gameState.getTemplateTrain(_availableTrains.getText());
+				TrainTemplate train = TrainOverseer.getTemplateTrain(_availableTrains.getText());
 
 				if(train != null)
 				{
@@ -86,7 +87,7 @@ public class TrainViewBuy extends GameScreen
 	 */
 	private void fillTrainList()
 	{
-		for(TrainTemplate train : METRO.__gameState.getTemplateTrains())
+		for(TrainTemplate train : TrainOverseer.getTemplateTrains())
 		{
 			_availableTrains.addElement(train.getName());
 		}

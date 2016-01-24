@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
+import metro.TrainManagement.Trains.TrainOverseer;
 
 /**
  * The TrainLineOverseer knows all train lines and with this overseer you can add, remove and change a train line.
@@ -41,6 +42,7 @@ public class TrainLineOverseer
 	{
 		if(line == null) return;
 		_listOfTrainLines.remove(line);
+		TrainOverseer.removeTrain(line.getName());
 	}
 
 	/**
@@ -77,9 +79,9 @@ public class TrainLineOverseer
 		}
 		return null;
 	}
-	
+
 	/**
-	 * Creates a copy of the list train lines and returns this copy. 
+	 * Creates a copy of the list train lines and returns this copy.
 	 * 
 	 * @return A copy of the list of all lines.
 	 */
@@ -120,7 +122,7 @@ public class TrainLineOverseer
 		{
 			map.put(node, new Integer(0));
 		}
-		
+
 		for(TrainLine line : _listOfTrainLines)
 		{
 			line.draw(offset, sp, map);

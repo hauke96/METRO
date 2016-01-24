@@ -38,7 +38,7 @@ public class TrackPlacingTool extends GameScreen
 		if(_currentRailwayNode != null) // if not null, calc and draw preview of new tracks
 		{
 			Draw.setColor(Color.black);
-			
+
 			int diagonalOffset = 0,
 				B = MainView._selectedCross.x - _currentRailwayNode.getPosition().x, // horizontal distance
 				H = MainView._selectedCross.y - _currentRailwayNode.getPosition().y, // vertical distance
@@ -150,7 +150,7 @@ public class TrackPlacingTool extends GameScreen
 
 			if(_currentRailwayNode == null) // if there's no node, create new one and set it as current node
 			{
-				RailwayNode node = RailwayNodeOverseer.createNode(MainView._selectedCross); 
+				RailwayNode node = RailwayNodeOverseer.createNode(MainView._selectedCross);
 				_currentRailwayNode = node;
 			}
 		}
@@ -206,7 +206,8 @@ public class TrackPlacingTool extends GameScreen
 	 */
 	private RailwayNode createTrack(int offsetB, int offsetH, int start, int end, RailwayNode prevNode)
 	{
-		for(int i = start; i < end; ++i)
+		// TODO instead of stooping when there'y no money, no tracks should be placed at all (and there should be a notification (s. #40)
+		for(int i = start; i < end && METRO.__gameState.addMoney(-RailwayNode.PRICE); ++i)
 		{
 			Point nodePosition = new Point(prevNode.getPosition().x + offsetB, prevNode.getPosition().y + offsetH);
 			RailwayNode node = null;
@@ -217,7 +218,7 @@ public class TrackPlacingTool extends GameScreen
 					prevNode.getPosition().x + offsetB,
 					prevNode.getPosition().y + offsetH),
 					prevNode);
-				METRO.__gameState.addMoney(-RailwayNode.PRICE);
+
 			}
 			else
 			// if there's a node at this position, set it as node instead of new one

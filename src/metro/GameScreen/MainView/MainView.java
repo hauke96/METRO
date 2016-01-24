@@ -19,6 +19,7 @@ import metro.Graphics.Fill;
 import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.TrainManagement.Trains.Train;
+import metro.TrainManagement.Trains.TrainOverseer;
 import metro.TrainManagement.Trains.TrainStation;
 
 /**
@@ -186,8 +187,8 @@ public class MainView extends GameScreen implements Observer
 	private void drawTrains(SpriteBatch sp)
 	{
 		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
-		
-		for(Train train : METRO.__gameState.getTrains())
+
+		for(Train train : TrainOverseer.getTrains())
 		{
 			train.draw(sp, offset);
 		}

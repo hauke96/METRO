@@ -5,11 +5,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import metro.TrainManagement.Trains.Train;
+import metro.TrainManagement.Trains.TrainOverseer;
 import metro.TrainManagement.Trains.TrainStation;
 import metro.TrainManagement.Trains.TrainTemplate;
 
@@ -27,9 +26,6 @@ public class GameState
 
 	private int _money;
 	private ArrayList<TrainStation> _stationList;
-	// private ArrayList<TrainLine> _lineList;
-	private ArrayList<Train> _trainList;
-	private LinkedHashMap<String, TrainTemplate> _templateTrains;
 
 	/**
 	 * Creates a new game state. This can't be done by an external class.
@@ -38,9 +34,6 @@ public class GameState
 	{
 		_money = 500000;
 		_stationList = new ArrayList<>();
-		// _lineList = new ArrayList<>();
-		_trainList = new ArrayList<>();
-		_templateTrains = new LinkedHashMap<>();
 		try
 		{
 			createTrains();
@@ -124,7 +117,7 @@ public class GameState
 						Integer.parseInt(costs) + "\n" +
 						Float.parseFloat(costsfactor) + "\n" +
 						Integer.parseInt(passenger));
-					_templateTrains.put(name, new TrainTemplate(name,
+					TrainOverseer.addTemplateTrain(new TrainTemplate(name,
 						manufacturer,
 						Integer.parseInt(price),
 						Integer.parseInt(costs),
@@ -163,10 +156,20 @@ public class GameState
 	 * Add an specific amount of money to the players account. Giving a negative amount will subtract money from the account.
 	 * 
 	 * @param moreMoney The money to add/subtract.
+	 * @return True when transaction was successful, false when not (e.g. not enough money).
 	 */
-	public void addMoney(int moreMoney)
+	public boolean addMoney(int moreMoney)
 	{
-		_money += moreMoney;
+		if(moreMoney <= 0 && moreMoney * -1 < _money // not enough money
+			|| moreMoney >= 0)
+		{
+			_money += moreMoney;
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -177,72 +180,4 @@ public class GameState
 		return _stationList;
 	}
 
-	/**
-	 * @return A list of all trains.
-	 */
-	public ArrayList<Train> getTrains()
-	{
-		return _trainList;
-	}
-
-	/**
-	 * Adds a train to the list of bought trains. This method does not check for any valid trains (not null, etc.)!
-	 * 
-	 * @param train The new train to add.
-	 */
-	public void addTrain(Train train)
-	{
-		_trainList.add(train);
-	}
-
-	/**
-	 * Removes a train from the list of bought trains. This method does not check for any valid trains (not null, etc.)!
-	 * 
-	 * @param trainName The name of the train that should be removed.
-	 */
-	public void removeTrain(String trainName)
-	{
-		Train train = getTrainByName(trainName);
-		if(train != null)
-		{
-			_trainList.remove(train);
-		}
-	}
-
-	/**
-	 * Gets a train template by giving its model name.
-	 * 
-	 * @param name The model name of the train.
-	 * @return A new train template object.
-	 */
-	public TrainTemplate getTemplateTrain(String name)
-	{
-		return _templateTrains.get(name);
-	}
-
-	/**
-	 * @return A list with all available trains. This does NOT mean that the player already bought them, they are just available for him.
-	 */
-	public ArrayList<TrainTemplate> getTemplateTrains()
-	{
-		return new ArrayList<TrainTemplate>(_templateTrains.values());
-	}
-
-	/**
-	 * Searches for a train with the given name. When there's no train with this name, this method will return {@code null}.
-	 * 
-	 * @param trainName The name of the train.
-	 * @return The train or {@code null} when this train doesn't exist.
-	 */
-	public Train getTrainByName(String trainName)
-	{
-		for(Train train : _trainList)
-		{
-			if(train.getName().equals(trainName))
-			{
-				return train;
-			}
-		}
-		return null;
-	}
 }

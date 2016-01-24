@@ -25,7 +25,7 @@ public class RailwayNode
 	/**
 	 * The price of one node.
 	 */
-	public static final int PRICE = 2000;
+	public static int PRICE = 2000;
 
 	/**
 	 * Creates a new node at the given position with a specific neighbor.
@@ -39,7 +39,7 @@ public class RailwayNode
 		if(neighbor != null) _listOfNeighbors.add(neighbor);
 		if(_position != null) RailwayNodeOverseer.add(this);
 	}
-	
+
 	/**
 	 * Creates a new node at the given position with some specified neighbors.
 	 * 

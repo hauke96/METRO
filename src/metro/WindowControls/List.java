@@ -166,7 +166,14 @@ public class List extends ActionObservable implements ControlElement
 	public void setSelectedEntry(int entryIndex)
 	{
 		_selectedEntry = entryIndex;
-		notifySelectionChanged(_selectedEntry != -1 ? _entries.get(_selectedEntry) : null);
+		if(0 <= _selectedEntry && _selectedEntry < _entries.size())
+		{
+			notifySelectionChanged(_entries.get(_selectedEntry));
+		}
+		else
+		{
+			notifySelectionChanged(null);
+		}
 	}
 
 	/**
@@ -228,7 +235,8 @@ public class List extends ActionObservable implements ControlElement
 
 		// Create scissor to draw only in the area of the list box.
 		com.badlogic.gdx.math.Rectangle scissors = new com.badlogic.gdx.math.Rectangle();
-		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_position.x + METRO.getXOffset(), _position.y + METRO.getYOffset(), _position.width + 1, _position.height + 1);
+		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_position.x + METRO.getXOffset(), _position.y + METRO.getYOffset(), _position.width + 1,
+			_position.height + 1);
 		ScissorStack.calculateScissors((Camera)METRO.__camera, METRO.__spriteBatch.getTransformMatrix(), clipBounds, scissors);
 		ScissorStack.pushScissors(scissors);
 
