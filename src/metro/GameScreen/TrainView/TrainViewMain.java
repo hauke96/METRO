@@ -31,6 +31,7 @@ public class TrainViewMain extends GameScreen
 	private Button _moveTrainButton, // to change a train
 		_sellTrainButton; // to remove a train
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
+	private String _movedTrain;
 
 	/**
 	 * Creates a new main view for the train screen.
@@ -42,6 +43,7 @@ public class TrainViewMain extends GameScreen
 	{
 		_windowWidth = windowWidth;
 		_areaOffset = areaOffset;
+		_movedTrain = "";
 
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 300, 250),
 			null, null, true);
@@ -50,6 +52,15 @@ public class TrainViewMain extends GameScreen
 			@Override
 			public void selectionChanged(String entry)
 			{
+				if(isInMoveMode())
+				{
+					TrainLine selectedLine = TrainLineOverseer.getLine(entry);
+					Train selectedTrain = METRO.__gameState.getTrainByName(_movedTrain);
+					
+					selectedTrain.setLine(selectedLine);
+					stopMoveMode();
+				}
+				
 				_trainList.clear();
 				TrainLine line = TrainLineOverseer.getLine(_lineList.getText());
 				for(Train train : METRO.__gameState.getTrains())
@@ -102,7 +113,7 @@ public class TrainViewMain extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				editTrainButton_action();
+				startMoveMode();
 			}
 		});
 		_sellTrainButton.register(new ActionObserver()
@@ -166,13 +177,27 @@ public class TrainViewMain extends GameScreen
 
 	/**
 	 * Fills controls with information about line so that the player can edit it.
+	 * Also disabled the buttons for editing and selling trains and sets the {@code _movedTrain} variable.
 	 */
-	private void editTrainButton_action()
+	private void startMoveMode()
 	{
 		if(_trainList.getSelected() == -1) return;
 
 		_moveTrainButton.setState(false);
 		_sellTrainButton.setState(false);
+		
+		_movedTrain = _trainList.getText();
+	}
+	
+	/**
+	 * Sets the move mode to {@code false}, so that no trains can be moved to other lines.
+	 */
+	public void stopMoveMode()
+	{
+		_moveTrainButton.setState(false);
+		_sellTrainButton.setState(false);
+		
+		_movedTrain = "";
 	}
 
 	/**
@@ -189,6 +214,14 @@ public class TrainViewMain extends GameScreen
 	public List getLineList()
 	{
 		return _lineList;
+	}
+	
+	/**
+	 * @return True when the TrainViewMain is in move mode.
+	 */
+	public boolean isInMoveMode()
+	{
+		return !_movedTrain.isEmpty();
 	}
 
 	@Override
@@ -221,5 +254,13 @@ public class TrainViewMain extends GameScreen
 	@Override
 	public void keyDown(int keyCode)
 	{
+	}
+
+	/**
+	 * @return The train that should be moved.
+	 */
+	public String getTrainToMove()
+	{
+		return _movedTrain;
 	}
 }

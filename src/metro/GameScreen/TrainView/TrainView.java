@@ -9,6 +9,7 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
+import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.TrainManagement.Trains.Train;
 import metro.WindowControls.ActionObserver;
@@ -88,7 +89,7 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 			@Override
 			public void selectionChanged(String entry)
 			{
-				_trainViewBuy.setTrain(entry);
+				_trainViewBuy.setTrain(entry); // just sets the entry to view the values of the train
 			}
 		});
 	}
