@@ -46,7 +46,7 @@ public class Train
 		_costsFactor = costsFactor;
 		_maxPassengers = passengers;
 		_currPassengers = 0;
-		_relativeOnLine = 0.1f;
+		_relativeOnLine = 0.0f;
 	}
 
 	/**
@@ -154,6 +154,8 @@ public class Train
 			(int)(offset.y + position.getY() * METRO.__baseNetSpacing),
 			10,
 			10);
+		_relativeOnLine += 0.03;
+		if(_relativeOnLine >= _trainLine.getLength()) _relativeOnLine = 0.0f;
 	}
 
 	/**
@@ -163,8 +165,8 @@ public class Train
 	 */
 	private Point2D calcPosition()
 	{
-		// TODO change _trainLine.getNodes().get(0) to real start node
-		Point2D p = _trainLine.getPositionOfTrain(_relativeOnLine, _trainLine.getNodes().get(0));
+		// TODO change 0 to real start node
+		Point2D p = _trainLine.getPositionOfTrain(_relativeOnLine, 0);
 		return p;
 	}
 

@@ -94,7 +94,8 @@ public class ColorBar extends ActionObservable implements ControlElement
 		int hue = getHue(color.getRed(), color.getGreen(), color.getBlue());
 		_clickedColor = Color.getHSBColor(hue / 360f, _saturation, _brightness);
 		_clickedXPosition = getHue(_clickedColor.getRed(), _clickedColor.getGreen(), _clickedColor.getBlue());
-		System.out.println(_position.width + " - " + getHue(_clickedColor.getRed(), _clickedColor.getGreen(), _clickedColor.getBlue()) + " - " + _clickedXPosition);
+		METRO.__debug("[ColorBarValueSet]");
+		METRO.__debug(_position.width + " - " + getHue(_clickedColor.getRed(), _clickedColor.getGreen(), _clickedColor.getBlue()) + " - " + _clickedXPosition);
 	}
 
 	/**

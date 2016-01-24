@@ -176,48 +176,95 @@ public class TrainLine
 
 	/**
 	 * Calculates the position of a train that traveled a specific distance from the start node.
-	 * The idea of searching the position is to find two nodes that are around the distance (E.g. the distance is 5 and one node is at 4.5 and one at 5.5).
+	 * The idea of searching the position is to find two nodes that are around the distance.
+	 * (E.g. the distance is 5 and one node is at 4.5 and one at 5.5). There's a detailed explanation about the calculation in the methods body.
 	 * 
 	 * @param distance The traveled distance of a train.
-	 * @param startNode The node the train started.
+	 * @param startNode The index of the node the train started.
 	 * @return The position of the train.
 	 */
-	public Point2D getPositionOfTrain(double distance, RailwayNode startNode)
+	public Point2D getPositionOfTrain(double distance, int startNode)
 	{
-		// to be able to use one algorithm that starts at the first node, convert the distance in
-		if(_listOfNodes.get(_listOfNodes.size() - 1).equals(startNode)) distance = _length - distance;
-		distance *= _length;
+		// When start node is out of bounds, return the first/last nodes position
+		if(startNode < 0) return _listOfNodes.get(0).getPosition();
+		if(_listOfNodes.size() <= startNode) return _listOfNodes.get(_listOfNodes.size() - 1).getPosition();
 
 		double length = 0.0,
 			lastLength = 0.0;
-		Point nodePre = null,
-			nodeSuc = null;
+
+		Point nodePre = _listOfNodes.get(startNode).getPosition(),
+			nodeSuc = _listOfNodes.get(startNode + 1).getPosition();
+
+		/*
+		 * The small bit of the distance thats between the last to nodes:
+		 * ------ (node x-1) ---------- (node x) ---....... (node x+1) .......
+		 * Where --- is the distance that's left over and ... some distance that irrelevant.
+		 */
+		double distanceLeftOver = distance;
 
 		// iterate over the nodes and calculate the distance until it's over the distance or at the end of the list
-		for(int i = 0; i < _listOfNodes.size() - 1 && nodePre == null; ++i)
+		lastLength = calcPartLength(startNode, startNode + 1);
+
+		// iterate over all nodes to find (x) and (x+1) which are describes below
+		for(int i = startNode + 1; i + 1 < _listOfNodes.size() && nodeSuc != null && length + lastLength < distance; ++i)
 		{
-			lastLength = calcPartLength(i, i + 1);
 			length += lastLength;
-			if(length >= distance)
-			{
-				nodePre = _listOfNodes.get(i).getPosition();
-				nodeSuc = _listOfNodes.get(i + 1).getPosition();
-			}
+			distanceLeftOver -= lastLength;
+
+			nodePre = _listOfNodes.get(i).getPosition();
+			nodeSuc = _listOfNodes.get(i + 1).getPosition();
+			lastLength = calcPartLength(i, i + 1);
 		}
-		// calculate the rest of the distance and some delta values to work with it below
-		distance -= length; // maybe (length - lastLength);
-		int deltaX = nodePre.x - nodeSuc.x;
-		int deltaY = nodePre.y - nodeSuc.y;
+
+		/* @formatter:off
+		*
+		*
+		* 	!!	MORE OR LESS COMPLEX CALCULATION AND IDEA	!!
+		* 	!!	 SO PLEASE READ BEFORE CHANGE SOMETHING		!!
+		* 
+		* 
+		* we have node (x) and (x+1). The distance ended between (x) and (x+1) (as you can see in the comment of the distanceLeftOver variable above).
+		* We have now a triangle:
+		* 
+		*		       c
+		* 		(x)------
+		* 		  \     |
+		* 		   \    | c
+		* 		    \   |
+		* 		   l `  |
+		* 		      ` |
+		* 		       `|
+		* 		      (x+1)
+		*
+		* This triangle is a right triangle, so we can use pythagoras for calculation.
+		* We want to know the distance c because the end position (where the \ line stops and the ` line begins) is the vector
+		* 
+		* 		(x.X + c, x.Y + c)
+		* 
+		* We can calculate the c with
+		* 
+		*		c = (l / 2)
+		* 
+		* Thats what the following calculation does.
+		*
+		* In addition to this basic method explained above, we have to check of there's a diagonal orientation of the nodes at all.
+		* The calculation below will check this via a deltaX/Y value, but more information in the comment of these variables...
+		*
+		* @formatter:on
+		*/
+
+		// calculate delta values of the coordinates.
+		// This will give us an integer between -1 and 1 which gives information about the orientation of the nodes (diagonal vertical, horizontal),
+		// including the direction (left, right, up, down) by 1 and -1.
+		int deltaX = nodeSuc.x - nodePre.x;
+		int deltaY = nodeSuc.y - nodePre.y;
 
 		// calculate the distance between the two nodes
-		double s = Math.sqrt(Math.hypot(deltaX, deltaX));
-		// calculate the ratio of the node distance to the rest of the distance
-		double ratio = distance / s;
-		// determine the smaller value of the two x and y values
-		double x = nodePre.x <= nodeSuc.x ? nodePre.x : nodeSuc.x;
-		double y = nodePre.y <= nodeSuc.y ? nodePre.y : nodeSuc.y;
-		// and finally calculate the position by adding ratio based value to the smallest x and y coordinate
-		return new Point2D.Double(x + ratio * deltaX, y + ratio * deltaY); // nodePre.x, nodePre.y); // <-- works!
+		double cX = lastLength == 0 ? 0 : (distanceLeftOver / lastLength) * deltaX;
+		double cY = lastLength == 0 ? 0 : (distanceLeftOver / lastLength) * deltaY;
+
+		// and finally calculate the position by adding ratio based value to the x and y coordinate
+		return new Point2D.Double(nodePre.x + cX, nodePre.y + cY);
 	}
 
 	/**
@@ -321,6 +368,14 @@ public class TrainLine
 	public ArrayList<RailwayNode> getNodes()
 	{
 		return _listOfNodes;
+	}
+	
+	/**
+	 * @return The length of this train line in field units (not the amount of nodes!).
+	 */
+	public double getLength()
+	{
+		return _length;
 	}
 
 	/**

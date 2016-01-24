@@ -65,8 +65,9 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 					// find next number for train
 					String trainName = train.getName();
 					int minNumber = 0;
-					for(; minNumber < 1000 && METRO.__gameState.getTrainByName(trainName + " (" + minNumber + ")") != null; minNumber++)
+					while(minNumber < 1000 && METRO.__gameState.getTrainByName(trainName + " (" + minNumber + ")") != null)
 					{
+						++minNumber;
 					}
 
 					if(minNumber == 1000) // maximum number of trains from a specific type

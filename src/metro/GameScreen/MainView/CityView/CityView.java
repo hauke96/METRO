@@ -1,4 +1,4 @@
-package metro.GameScreen.CityView;
+package metro.GameScreen.MainView.CityView;
 
 import java.awt.Color;
 import java.awt.Point;

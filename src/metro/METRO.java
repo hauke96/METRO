@@ -136,7 +136,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		_controlActionManager = new ControlActionManager();
 		GameScreen.setActionManager(_controlActionManager);
 
-		__baseNetSpacing = 25;
+		__baseNetSpacing = 50;
 		_debug = true;
 
 		_oldMousePosition = new Point(0, 0);
