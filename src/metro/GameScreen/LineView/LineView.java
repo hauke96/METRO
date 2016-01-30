@@ -197,7 +197,7 @@ public class LineView extends GameScreen
 				if(_lineList.getSelected() < 0 || _lineList.getSelected() >= TrainLineOverseer.getLines().size()) return; // out of bounds
 
 				TrainLineOverseer.removeLine(_lineList.getText());
-				_lineList.remove(_lineList.getSelected());
+				_lineList.removeElement(_lineList.getSelected());
 				_lineSelectToolEnabled = false;
 				reset();
 			}
@@ -245,7 +245,7 @@ public class LineView extends GameScreen
 					if(oldLine != null)
 					{
 						TrainLineOverseer.removeLine(oldLine);
-						_lineList.remove(_lineList.getIndex(_oldLineName));
+						_lineList.removeElement(_lineList.getIndex(_oldLineName));
 
 						ArrayList<Train> oldTrains = getTrainsOfLine(oldLine);
 

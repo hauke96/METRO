@@ -28,7 +28,7 @@ public class List extends ActionObservable implements ControlElement
 		_defaultYSpace, // space between text and border in the normal mode
 		_compactYSpace, // space between text and border in the compact mode
 		_selectedEntry; // the entry, that was clicked
-	private float _maxOffset,
+	private int _maxOffset,
 		_scrollHeight; // height of one scroll step
 	private boolean _compact = false, // less space between text and top/bottom edge
 		_enabled = true;
@@ -89,7 +89,7 @@ public class List extends ActionObservable implements ControlElement
 		_maxOffset = 0;
 		_scrollHeight = 20;
 
-		calcOffset();
+		calcMaxOffset();
 
 		_windowHandle = win;
 		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
@@ -99,7 +99,7 @@ public class List extends ActionObservable implements ControlElement
 	/**
 	 * Calculates the maximum offset for the list to scroll. If there're to less elements for scrolling the maximum offset is 0.
 	 */
-	private void calcOffset()
+	private void calcMaxOffset()
 	{
 		int ySpace = _defaultYSpace;
 		if(_compact) ySpace = _compactYSpace;
@@ -113,6 +113,7 @@ public class List extends ActionObservable implements ControlElement
 				Draw.getStringSize(e).height * amountRows + // rows * height of string
 				(amountRows - 1) * 8; // space between lines
 		}
+		yOffset += ySpace;
 		int magicFactor = (23 / 20) * (ySpace - 10) + 17; // fine-tuning for the maximum offset for scrolling (with this factor, the space between last element and bottom of list are matching automagically)
 		if(yOffset - _scrollHeight - 3 > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight + magicFactor;
 		else _maxOffset = 0;
@@ -126,7 +127,21 @@ public class List extends ActionObservable implements ControlElement
 	public void addElement(String element)
 	{
 		_entries.add(element);
-		calcOffset();
+		calcMaxOffset();
+	}
+
+	/**
+	 * Removes the entry at this position.
+	 * 
+	 * @param entryIndex The position of the entry.
+	 */
+	public void removeElement(int entryIndex)
+	{
+		if(entryIndex < 0 || entryIndex >= _entries.size()) return;
+		_entries.remove(entryIndex);
+		setSelectedEntry(-1);
+		calcMaxOffset();
+		if(-_offset > _maxOffset) _offset = -_maxOffset;
 	}
 
 	@Override
@@ -205,18 +220,6 @@ public class List extends ActionObservable implements ControlElement
 	}
 
 	/**
-	 * Removes the entry at this position.
-	 * 
-	 * @param entryIndex The position of the entry.
-	 */
-	public void remove(int entryIndex)
-	{
-		if(entryIndex < 0 || entryIndex >= _entries.size()) return;
-		_entries.remove(entryIndex);
-		setSelectedEntry(-1);
-	}
-
-	/**
 	 * Checks if the given text is in the list.
 	 * 
 	 * @param text The entry to search.
@@ -240,10 +243,31 @@ public class List extends ActionObservable implements ControlElement
 		ScissorStack.calculateScissors((Camera)METRO.__camera, METRO.__spriteBatch.getTransformMatrix(), clipBounds, scissors);
 		ScissorStack.pushScissors(scissors);
 
-		// Clear Background
+		clearBackground();
+
+		drawEntries();
+
+		drawBorders();
+
+		drawScrollbar();
+
+		ScissorStack.popScissors();
+	}
+	
+	/**
+	 * Makes the background white.
+	 */
+	private void clearBackground()
+	{
 		Fill.setColor(Color.white);
 		Fill.Rect(_position.x, _position.y, _position.width, _position.height);
-
+	}
+	
+	/**
+	 * Draws all list entries.
+	 */
+	private void drawEntries()
+	{
 		int ySpace = _defaultYSpace;
 		if(_compact) ySpace = _compactYSpace;
 		int yOffset = ySpace;
@@ -289,8 +313,14 @@ public class List extends ActionObservable implements ControlElement
 				Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
 				(amountRows - 1) * 8; // space between lines
 		}
-
-		// Fill the little gabs ob the two top and bottom lines
+	}
+	
+	/**
+	 * Draws the borders and some fancy lines around the list.
+	 */
+	private void drawBorders()
+	{
+		// Fill the little gabs of the two top and bottom lines
 		Fill.Rect(_position.x, _position.y, _position.width, 3);
 		Fill.Rect(_position.x, _position.y + _position.height - 2, _position.width, 3);
 
@@ -300,18 +330,21 @@ public class List extends ActionObservable implements ControlElement
 		Draw.Line(_position.x, _position.y + _position.height - 2, _position.x + _position.width - 3, _position.y + _position.height - 2); // bottom 2
 		Draw.Line(_position.x + _position.width - 3, _position.y, _position.x + _position.width - 3, _position.y + _position.height); // right for scroll bar
 		Draw.Line(_position.x, _position.y + 2, _position.x + _position.width - 3, _position.y + 2); // top 2
-
-		// Draw scroll bar
-		int height = _maxOffset == 0 ? _position.height : 20;
-		int yPos = (int)((_position.height - height) * -(_offset / _maxOffset));
+	}
+	
+	/**
+	 * Draws the scrollbar line.
+	 */
+	private void drawScrollbar()
+	{
+		int height = _maxOffset == 0 ? _position.height : (int)((_position.height / (float)(_position.height + _maxOffset)) * _position.height);
+		int yPos = (int)((_position.height - height) * -(_offset / (float)_maxOffset));
 
 		Fill.setColor(METRO.__metroBlue);
 		Fill.Rect(_position.x + _position.width - 3,
 			_position.y + yPos,
 			_position.x + _position.width - 2,
 			height); // right for scroll bar
-
-		ScissorStack.popScissors();
 	}
 
 	/**
