@@ -543,4 +543,10 @@ public class LineView extends GameScreen
 		// TrainLineOverseer.removeLine(_lineSelectTool.getTrainLine());
 		super.close();
 	}
+
+	@Override
+	public boolean isHovered()
+	{
+		return METRO.__mousePosition.x > _areaOffset.x; // don't need to check y-coord. because the whole screen height is used.
+	}
 }

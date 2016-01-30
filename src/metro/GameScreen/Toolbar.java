@@ -160,4 +160,14 @@ public class Toolbar extends GameScreen
 	public void reset()
 	{
 	}
+
+	@Override
+	public boolean isHovered()
+	{
+		Point mPos = METRO.__mousePosition; 
+		return _buildStation.getArea().contains(mPos)
+			|| _buildTracks.getArea().contains(mPos)
+			|| _showTrainList.getArea().contains(mPos)
+			|| _createNewTrain.getArea().contains(mPos);
+	}
 }

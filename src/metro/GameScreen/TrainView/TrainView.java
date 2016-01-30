@@ -194,4 +194,10 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 		_trainViewMain.close();
 		super.close();
 	}
+
+	@Override
+	public boolean isHovered()
+	{
+		return METRO.__mousePosition.x > _areaOffset.x; // we don't need to check y-coord. because we use the full screen height.
+	}
 }

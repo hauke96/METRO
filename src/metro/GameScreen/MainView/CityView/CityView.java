@@ -28,16 +28,21 @@ public class CityView extends GameScreen
 	 */
 	public static Point2D _offset = new Point2D.Float(0, 0);
 
-	private List<CityTravelerSpot> _travelerSpots = new ArrayList<CityTravelerSpot>();
+	private List<CityTravelerSpot> _travelerSpots;
 	private Point _oldMousePos; // Mouse position from last frame
-	private boolean _dragMode = false;
+	private boolean _dragMode;
 	private int _selectedLayerNumber;
+	private boolean _enableMouseSelection; // When false, there'll be no circle highlighting
 
 	/**
 	 * Constructor to load all the important stuff.
 	 */
 	public CityView()
 	{
+		_travelerSpots = new ArrayList<CityTravelerSpot>();
+		_dragMode = false;
+		_enableMouseSelection = true;
+
 		_travelerSpots.add(new CityTravelerSpot(new Point(500, 500), 7));
 		_travelerSpots.add(new CityTravelerSpot(new Point(700, 700), 5));
 		_travelerSpots.add(new CityTravelerSpot(new Point(550, 850), 6));
@@ -71,16 +76,19 @@ public class CityView extends GameScreen
 	private void draw(SpriteBatch sp)
 	{
 		_selectedLayerNumber = -1;
-		// get the selected circle number
-		for(int i = 0; i < 10; ++i) // go through all layers
+		if(_enableMouseSelection)
 		{
-			boolean isLayerSelected = false;
-			for(int k = 0; !isLayerSelected && k < _travelerSpots.size(); ++k) // go through all spots
+			// get the selected circle number
+			for(int i = 0; i < 10; ++i) // go through all layers
 			{
-				isLayerSelected = _travelerSpots.get(k).isMouseInCircle(i); // if mouse is in ANY circle of this layer
-				if(isLayerSelected)
+				boolean isLayerSelected = false;
+				for(int k = 0; !isLayerSelected && k < _travelerSpots.size(); ++k) // go through all spots
 				{
-					_selectedLayerNumber = i;
+					isLayerSelected = _travelerSpots.get(k).isMouseInCircle(i); // if mouse is in ANY circle of this layer
+					if(isLayerSelected)
+					{
+						_selectedLayerNumber = i;
+					}
 				}
 			}
 		}
@@ -137,6 +145,22 @@ public class CityView extends GameScreen
 		}
 	}
 
+	/**
+	 * Enables the highlighting of the city circles when a mouse hovers one.
+	 */
+	public void enableCircleHighlighting()
+	{
+		_enableMouseSelection = true;
+	}
+
+	/**
+	 * Disables the highlighting of the city circles when a mouse hovers one.
+	 */
+	public void disableCircleHighlighting()
+	{
+		_enableMouseSelection = false;
+	}
+
 	@Override
 	public void keyDown(int keyCode)
 	{
@@ -156,5 +180,14 @@ public class CityView extends GameScreen
 	@Override
 	public void reset()
 	{
+	}
+
+	/**
+	 * @return True when a circle is selected. It depends on whether the highlighting (=mouse interaction) is enabled. 
+	 */
+	@Override
+	public boolean isHovered()
+	{
+		return _selectedLayerNumber != -1;
 	}
 }

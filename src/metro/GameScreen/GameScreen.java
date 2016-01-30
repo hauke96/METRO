@@ -189,6 +189,11 @@ public abstract class GameScreen extends Observable
 	 * Resets the game screen to its default values.
 	 */
 	public abstract void reset();
+	
+	/**
+	 * @return True when mouse is in sensible/important area of the game screen.
+	 */
+	public abstract boolean isHovered();
 
 	/**
 	 * Registers a control in the control manager. If the control already is registered, it'll be deleted.

@@ -257,6 +257,13 @@ public class TrainViewMain extends GameScreen
 	{
 	}
 
+	@Override
+	public boolean isHovered()
+	{
+		return METRO.__mousePosition.x > _areaOffset.x
+			&& METRO.__mousePosition.y < 400;
+	}
+
 	/**
 	 * @return The train that should be moved.
 	 */

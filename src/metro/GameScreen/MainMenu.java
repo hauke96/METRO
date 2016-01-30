@@ -151,4 +151,13 @@ public class MainMenu extends GameScreen
 	public void reset()
 	{
 	}
+
+	@Override
+	public boolean isHovered()
+	{
+		Point mPos = METRO.__mousePosition;
+		return _button_exitGame.getArea().contains(mPos)
+			|| _button_settings.getArea().contains(mPos)
+			|| _button_startGame.getArea().contains(mPos);
+	}
 }

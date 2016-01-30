@@ -70,6 +70,9 @@ public class MainView extends GameScreen implements Observer
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
+		if(_activeTool != null && _activeTool.isHovered()) _cityView.disableCircleHighlighting();
+		else _cityView.enableCircleHighlighting();
+
 		if(_cityView != null) _cityView.updateGameScreen(sp);
 
 		if(_dragMode)
@@ -292,5 +295,11 @@ public class MainView extends GameScreen implements Observer
 	@Override
 	public void reset()
 	{
+	}
+
+	@Override
+	public boolean isHovered()
+	{
+		return true;
 	}
 }

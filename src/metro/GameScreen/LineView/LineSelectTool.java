@@ -168,4 +168,10 @@ public class LineSelectTool extends GameScreen
 	public void reset()
 	{
 	}
+
+	@Override
+	public boolean isHovered()
+	{
+		return false;
+	}
 }

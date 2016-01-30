@@ -185,4 +185,11 @@ public class TrainViewBuy extends GameScreen
 	public void reset()
 	{
 	}
+
+	@Override
+	public boolean isHovered()
+	{
+		return METRO.__mousePosition.x > _areaOffset.x
+			&& METRO.__mousePosition.y < _areaOffset.y;
+	}
 }

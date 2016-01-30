@@ -118,4 +118,10 @@ public class StationPlacingTool extends GameScreen
 	public void reset()
 	{
 	}
+
+	@Override
+	public boolean isHovered()
+	{
+		return false;
+	}
 }

@@ -78,4 +78,11 @@ public class ScreenInfoDrawer extends GameScreen
 	public void reset()
 	{
 	}
+
+	@Override
+	public boolean isHovered()
+	{
+		return METRO.__mousePosition.x < 150
+			&& METRO.__mousePosition.y < 26; // TODO create field variable for size and use it here and in drawing routine.
+	}
 }
