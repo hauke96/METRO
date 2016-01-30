@@ -302,6 +302,7 @@ public class TrainLine
 	 * Check if this train line is a valid line. A line is valid when both of the following conditions apply:
 	 * 1.) There're more than 2 nodes in this line.
 	 * 2.) There're exactly 2 end/start nodes in this line. These nodes only have one neighbor.
+	 * 3.) All non-end-nodes have exactly two neighbors (no crossing allowed).
 	 * 
 	 * @param listOfNodes The list of nodes that may be valid.
 	 * @return True when valid.
@@ -309,10 +310,16 @@ public class TrainLine
 	public static boolean isValid(ArrayList<RailwayNode> listOfNodes)
 	{
 		int amountEndNodes = 0;
+		
+		System.out.println(listOfNodes + "\n\n");
 
 		for(RailwayNode node : listOfNodes)
 		{
 			if(isEndNode(node, listOfNodes)) ++amountEndNodes;
+			else if(getNeighborAmount(node, listOfNodes) > 2)
+			{
+				return false;
+			}
 		}
 
 		return listOfNodes.size() >= 2 && amountEndNodes == 2;
@@ -327,6 +334,11 @@ public class TrainLine
 	 */
 	public static boolean isEndNode(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
 	{
+		return getNeighborAmount(node, listOfNodes) == 1;
+	}
+	
+	private static int getNeighborAmount(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
+	{
 		int counter = 0;
 
 		for(RailwayNode neighborNode : node.getNeighbors())
@@ -336,8 +348,8 @@ public class TrainLine
 				if(neighborNode.equals(Node)) ++counter;
 			}
 		}
-
-		return counter == 1;
+		
+		return counter;
 	}
 
 	/**
