@@ -56,6 +56,10 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 				{
 					_trainViewBuy.getMessageLabel().setText("Please select the train model you want to buy.");
 				}
+				else if(METRO.__gameState.getMoney() < TrainOverseer.getTemplateTrain(_trainViewBuy.getTrainList().getText()).getPrice())
+				{
+					_trainViewBuy.getMessageLabel().setText("You have not enough money.");
+				}
 				else
 				{
 					Train train = new Train(TrainOverseer.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
