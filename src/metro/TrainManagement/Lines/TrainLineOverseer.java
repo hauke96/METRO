@@ -52,14 +52,7 @@ public class TrainLineOverseer
 	 */
 	public static void removeLine(String lineName)
 	{
-		for(TrainLine line : _listOfTrainLines)
-		{
-			if(line.getName().equals(lineName))
-			{
-				removeLine(line);
-				break;
-			}
-		}
+		removeLine(getLine(lineName));
 	}
 
 	/**

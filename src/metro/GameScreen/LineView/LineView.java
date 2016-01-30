@@ -195,6 +195,8 @@ public class LineView extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				if(_lineList.getSelected() < 0 || _lineList.getSelected() >= TrainLineOverseer.getLines().size()) return; // out of bounds
+				
+				TrainOverseer.sellTrainFromLine(_lineList.getText());
 
 				TrainLineOverseer.removeLine(_lineList.getText());
 				_lineList.removeElement(_lineList.getSelected());
