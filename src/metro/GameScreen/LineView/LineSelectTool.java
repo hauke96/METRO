@@ -79,7 +79,7 @@ public class LineSelectTool extends GameScreen
 	 */
 	public String setColor(Color newColor)
 	{
-		if(TrainLineOverseer.isColorUsed(newColor))
+		if(TrainLineOverseer.getInstance().isColorUsed(newColor))
 		{
 			return "No duplicate colors allowed!";
 		}

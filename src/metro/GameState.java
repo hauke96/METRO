@@ -117,7 +117,7 @@ public class GameState
 						Integer.parseInt(costs) + "\n" +
 						Float.parseFloat(costsfactor) + "\n" +
 						Integer.parseInt(passenger));
-					TrainOverseer.addTemplateTrain(new TrainTemplate(name,
+					TrainOverseer.getInstance().addTemplateTrain(new TrainTemplate(name,
 						manufacturer,
 						Integer.parseInt(price),
 						Integer.parseInt(costs),

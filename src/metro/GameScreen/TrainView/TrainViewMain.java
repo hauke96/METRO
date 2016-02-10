@@ -33,6 +33,8 @@ public class TrainViewMain extends GameScreen
 		_sellTrainButton; // to remove a train
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private String _movedTrain;
+	private TrainOverseer _trainOverseer;
+	private TrainLineOverseer _trainLineOverseer;
 
 	/**
 	 * Creates a new main view for the train screen.
@@ -46,6 +48,9 @@ public class TrainViewMain extends GameScreen
 		_areaOffset = areaOffset;
 		_movedTrain = "";
 
+		_trainOverseer = TrainOverseer.getInstance();
+		_trainLineOverseer = TrainLineOverseer.getInstance();
+
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 300, 250),
 			null, null, true);
 		_lineList.register(new ActionObserver()
@@ -55,16 +60,16 @@ public class TrainViewMain extends GameScreen
 			{
 				if(isInMoveMode())
 				{
-					TrainLine selectedLine = TrainLineOverseer.getLine(entry);
-					Train selectedTrain = TrainOverseer.getTrainByName(_movedTrain);
+					TrainLine selectedLine = _trainLineOverseer.getLine(entry);
+					Train selectedTrain = _trainOverseer.getTrainByName(_movedTrain);
 
 					selectedTrain.setLine(selectedLine);
 					stopMoveMode();
 				}
 
 				_trainList.clear();
-				TrainLine line = TrainLineOverseer.getLine(_lineList.getText());
-				for(Train train : TrainOverseer.getTrains())
+				TrainLine line = _trainLineOverseer.getLine(_lineList.getText());
+				for(Train train : _trainOverseer.getTrains())
 				{
 					if(train.getLine().equals(line)) _trainList.addElement(train.getName());
 				}
@@ -92,7 +97,7 @@ public class TrainViewMain extends GameScreen
 	private void fillLineList()
 	{
 		// Fill line list with all lines:
-		ArrayList<TrainLine> lineList = TrainLineOverseer.getLines();
+		ArrayList<TrainLine> lineList = _trainLineOverseer.getLines();
 		for(TrainLine line : lineList)
 		{
 			_lineList.addElement(line.getName());
@@ -171,7 +176,7 @@ public class TrainViewMain extends GameScreen
 	 */
 	private void sellTrainButton_action()
 	{
-		TrainOverseer.removeTrain(_trainList.getText());
+		_trainOverseer.removeTrain(_trainList.getText());
 		_trainList.removeElement(_trainList.getSelected());
 		_trainList.setSelectedEntry(0);
 	}

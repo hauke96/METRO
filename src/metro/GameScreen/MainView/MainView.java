@@ -169,7 +169,7 @@ public class MainView extends GameScreen implements Observer
 	{
 		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
 
-		TrainLineOverseer.drawLines(offset, sp);
+		TrainLineOverseer.getInstance().drawLines(offset, sp);
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class MainView extends GameScreen implements Observer
 	{
 		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
 
-		for(Train train : TrainOverseer.getTrains())
+		for(Train train : TrainOverseer.getInstance().getTrains())
 		{
 			train.draw(sp, offset);
 		}

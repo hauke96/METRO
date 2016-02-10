@@ -111,6 +111,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	public static SpriteBatch __spriteBatch;
 	public static LwjglApplication __application;
 	public static GameState __gameState;
+//	public Settings
 
 	private Point _oldMousePosition;
 	private LwjglApplicationConfiguration _config;
@@ -667,24 +668,26 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void setSettings()
 	{
-		Settings.read();
+		Settings settings = Settings.getInstance();
+		
+		settings.read();
 
 		try
 		{
-			__SCREEN_SIZE = new Dimension(Integer.parseInt(Settings.getOld("screen.width").toString()),
-				Integer.parseInt(Settings.getOld("screen.height").toString()));
+			__SCREEN_SIZE = new Dimension(Integer.parseInt(settings.getOld("screen.width").toString()),
+				Integer.parseInt(settings.getOld("screen.height").toString()));
 
 			_config = new LwjglApplicationConfiguration();
 			_config.title = __TITLE + "  " + __VERSION;
-			_config.width = Integer.parseInt(Settings.getOld("screen.width").toString());
-			_config.height = Integer.parseInt(Settings.getOld("screen.height").toString());
-			_config.useGL30 = Boolean.parseBoolean(Settings.getOld("use.opengl30").toString());
+			_config.width = Integer.parseInt(settings.getOld("screen.width").toString());
+			_config.height = Integer.parseInt(settings.getOld("screen.height").toString());
+			_config.useGL30 = Boolean.parseBoolean(settings.getOld("use.opengl30").toString());
 			_config.resizable = false;
-			_config.fullscreen = Boolean.parseBoolean(Settings.getOld("fullscreen.on").toString());
+			_config.fullscreen = Boolean.parseBoolean(settings.getOld("fullscreen.on").toString());
 			// _config.foregroundFPS = -1; // max frames
-			_config.samples = Integer.parseInt(Settings.getOld("amount.samples").toString());
+			_config.samples = Integer.parseInt(settings.getOld("amount.samples").toString());
 			_config.vSyncEnabled = false;// Boolean.parseBoolean(Settings.get("use.vsync").toString());
-			_config.useHDPI = Boolean.parseBoolean(Settings.getOld("use.hdpi").toString());
+			_config.useHDPI = Boolean.parseBoolean(settings.getOld("use.hdpi").toString());
 
 			__application = new LwjglApplication(this, _config);
 

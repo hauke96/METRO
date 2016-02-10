@@ -18,13 +18,26 @@ import metro.TrainManagement.Lines.TrainLineOverseer;
  */
 public class TrainOverseer
 {
-	private static ArrayList<Train> _trainList = new ArrayList<>();
-	private static LinkedHashMap<String, TrainTemplate> _templateTrains = new LinkedHashMap<>();
+	private ArrayList<Train> _trainList = new ArrayList<>();
+	private LinkedHashMap<String, TrainTemplate> _templateTrains = new LinkedHashMap<>();
+	private final static TrainOverseer __INSTANCE = new TrainOverseer();
 
+	private TrainOverseer()
+	{
+	}
+
+	/**
+	 * @return The instance of the train observer. There can only be one instance per game.
+	 */
+	public static TrainOverseer getInstance()
+	{
+		return __INSTANCE;
+	}
+	
 	/**
 	 * @return A list of all trains.
 	 */
-	public static ArrayList<Train> getTrains()
+	public ArrayList<Train> getTrains()
 	{
 		return _trainList;
 	}
@@ -34,7 +47,7 @@ public class TrainOverseer
 	 * 
 	 * @param train The new train to add.
 	 */
-	public static void addTrain(Train train)
+	public void addTrain(Train train)
 	{
 		if(METRO.__gameState.addMoney(-train.getPrice()))
 		{
@@ -52,7 +65,7 @@ public class TrainOverseer
 	 * 
 	 * @param trainName The name of the train that should be removed.
 	 */
-	public static void removeTrain(String trainName)
+	public void removeTrain(String trainName)
 	{
 		Train train = getTrainByName(trainName);
 		if(train != null)
@@ -68,7 +81,7 @@ public class TrainOverseer
 	 * @param name The model name of the train.
 	 * @return A new train template object.
 	 */
-	public static TrainTemplate getTemplateTrain(String name)
+	public TrainTemplate getTemplateTrain(String name)
 	{
 		return _templateTrains.get(name);
 	}
@@ -76,7 +89,7 @@ public class TrainOverseer
 	/**
 	 * @return A list with all available trains. This does NOT mean that the player already bought them, they are just available for him.
 	 */
-	public static ArrayList<TrainTemplate> getTemplateTrains()
+	public ArrayList<TrainTemplate> getTemplateTrains()
 	{
 		return new ArrayList<TrainTemplate>(_templateTrains.values());
 	}
@@ -86,7 +99,7 @@ public class TrainOverseer
 	 * 
 	 * @param train The template train that should be added.
 	 */
-	public static void addTemplateTrain(TrainTemplate train)
+	public void addTemplateTrain(TrainTemplate train)
 	{
 		_templateTrains.put(train.getName(), train);
 	}
@@ -97,7 +110,7 @@ public class TrainOverseer
 	 * @param trainName The name of the train.
 	 * @return The train or {@code null} when this train doesn't exist.
 	 */
-	public static Train getTrainByName(String trainName)
+	public Train getTrainByName(String trainName)
 	{
 		for(Train train : _trainList)
 		{
@@ -114,10 +127,10 @@ public class TrainOverseer
 	 * 
 	 * @param lineName The name of the trains that should be removed from the list.
 	 */
-	public static void sellTrainFromLine(String lineName)
+	public void sellTrainFromLine(String lineName)
 	{
 		LinkedList<Train> trains = new LinkedList<Train>(); // because add() is in O(1)
-		TrainLine line = TrainLineOverseer.getLine(lineName);
+		TrainLine line = TrainLineOverseer.getInstance().getLine(lineName); // FIXME BAAAAAD (circle dependency)
 
 		for(Train train : _trainList)
 		{

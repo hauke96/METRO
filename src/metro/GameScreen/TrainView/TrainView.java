@@ -48,6 +48,7 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 			@Override
 			public void clickedOnControl(Object arg)
 			{
+				TrainOverseer trainOverseer = TrainOverseer.getInstance();
 				if(_trainViewMain.getLineList().getSelected() == -1)
 				{
 					_trainViewBuy.getMessageLabel().setText("Please select the line this train should drive on.");
@@ -56,21 +57,21 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 				{
 					_trainViewBuy.getMessageLabel().setText("Please select the train model you want to buy.");
 				}
-				else if(METRO.__gameState.getMoney() < TrainOverseer.getTemplateTrain(_trainViewBuy.getTrainList().getText()).getPrice())
+				else if(METRO.__gameState.getMoney() < trainOverseer.getTemplateTrain(_trainViewBuy.getTrainList().getText()).getPrice())
 				{
 					_trainViewBuy.getMessageLabel().setText("You have not enough money.");
 				}
 				else
 				{
-					Train train = new Train(TrainOverseer.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
-					train.setLine(TrainLineOverseer.getLine(_trainViewMain.getLineList().getText()));
-					TrainOverseer.addTrain(train);
+					Train train = new Train(trainOverseer.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
+					train.setLine(TrainLineOverseer.getInstance().getLine(_trainViewMain.getLineList().getText()));
+					trainOverseer.addTrain(train);
 					_trainViewBuy.getMessageLabel().setText("");
 
 					// find next number for train
 					String trainName = train.getName();
 					int minNumber = 0;
-					while(minNumber < 1000 && TrainOverseer.getTrainByName(trainName + " (" + minNumber + ")") != null)
+					while(minNumber < 1000 && trainOverseer.getTrainByName(trainName + " (" + minNumber + ")") != null)
 					{
 						++minNumber;
 					}

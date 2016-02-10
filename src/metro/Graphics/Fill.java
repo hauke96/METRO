@@ -88,7 +88,7 @@ public class Fill
 		shapeRenderer.circle(x + diameter / 2 + xOffset,
 			y + diameter / 2 + yOffset,
 			diameter / 2,
-			Integer.parseInt(Settings.getOld("amount.segments").toString()));
+			Integer.parseInt(Settings.getInstance().getOld("amount.segments").toString()));
 		reset(METRO.__spriteBatch);
 	}
 

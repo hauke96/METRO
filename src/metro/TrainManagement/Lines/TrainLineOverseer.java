@@ -20,13 +20,26 @@ import metro.TrainManagement.Trains.TrainOverseer;
 public class TrainLineOverseer
 {
 	private static ArrayList<TrainLine> _listOfTrainLines = new ArrayList<TrainLine>();
+	private final static TrainLineOverseer __INSTANCE = new TrainLineOverseer();
+	
+	private TrainLineOverseer()
+	{
+	}
+
+	/**
+	 * @return The instance of the train line observer. There can only be one instance per game.
+	 */
+	public static TrainLineOverseer getInstance()
+	{
+		return __INSTANCE;
+	}
 
 	/**
 	 * Adds a train line to the list of lines. An older version of this line will be removed.
 	 * 
 	 * @param line The line to add.
 	 */
-	public static void addLine(TrainLine line)
+	public void addLine(TrainLine line)
 	{
 		if(line == null) return;
 		_listOfTrainLines.remove(line); // remove old line, because maybe line.equals(old-line) == true
@@ -38,11 +51,11 @@ public class TrainLineOverseer
 	 * 
 	 * @param line The line to remove.
 	 */
-	public static void removeLine(TrainLine line)
+	public void removeLine(TrainLine line)
 	{
 		if(line == null) return;
 		_listOfTrainLines.remove(line);
-		TrainOverseer.removeTrain(line.getName());
+		TrainOverseer.getInstance().removeTrain(line.getName()); // FIXME BAAAAAD (circle dependency)
 	}
 
 	/**
@@ -50,7 +63,7 @@ public class TrainLineOverseer
 	 * 
 	 * @param lineName The name of the line.
 	 */
-	public static void removeLine(String lineName)
+	public void removeLine(String lineName)
 	{
 		removeLine(getLine(lineName));
 	}
@@ -61,7 +74,7 @@ public class TrainLineOverseer
 	 * @param lineName The name of the line.
 	 * @return The color of the given line. null if line does not exist.
 	 */
-	public static Color getColor(String lineName)
+	public Color getColor(String lineName)
 	{
 		for(TrainLine line : _listOfTrainLines)
 		{
@@ -78,8 +91,8 @@ public class TrainLineOverseer
 	 * 
 	 * @return A copy of the list of all lines.
 	 */
-	@SuppressWarnings("unchecked")
-	public static ArrayList<TrainLine> getLines()
+	@SuppressWarnings("unchecked") // cast will always succeed, because the list only hold TrainLine objects
+	public ArrayList<TrainLine> getLines()
 	{
 		return (ArrayList<TrainLine>)_listOfTrainLines.clone();
 	}
@@ -90,7 +103,7 @@ public class TrainLineOverseer
 	 * @param lineName The name of the line.
 	 * @return The line. null if line does not exist.
 	 */
-	public static TrainLine getLine(String lineName)
+	public TrainLine getLine(String lineName)
 	{
 		for(TrainLine line : _listOfTrainLines)
 		{
@@ -108,7 +121,7 @@ public class TrainLineOverseer
 	 * @param offset The map offset in pixel.
 	 * @param sp The sprite batch to draw on.
 	 */
-	public static void drawLines(Point offset, SpriteBatch sp)
+	public void drawLines(Point offset, SpriteBatch sp)
 	{
 		HashMap<RailwayNode, Integer> map = new HashMap<RailwayNode, Integer>();
 		for(RailwayNode node : RailwayNodeOverseer._nodeMap.values())
@@ -128,7 +141,7 @@ public class TrainLineOverseer
 	 * @param color The color that might be used.
 	 * @return True when color is used, false when color is free.
 	 */
-	public static boolean isColorUsed(Color color)
+	public boolean isColorUsed(Color color)
 	{
 		for(TrainLine line : _listOfTrainLines)
 		{

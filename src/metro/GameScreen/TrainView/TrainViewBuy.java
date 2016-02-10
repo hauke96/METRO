@@ -32,6 +32,7 @@ public class TrainViewBuy extends GameScreen
 	private Label _messageLabel,
 		_informationKeys, // like name=, manufacturer=, ...
 		_informationValues; // like CT-01, 1.03, ...
+	private TrainOverseer _trainOverseer;
 
 	/**
 	 * Creates a new dialog.
@@ -43,6 +44,8 @@ public class TrainViewBuy extends GameScreen
 	{
 		_windowWidth = windowWidth;
 		_areaOffset = areaOffset;
+		
+		_trainOverseer = TrainOverseer.getInstance();
 
 		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, 680, 210, 20), "Buy");
 		registerControl(_buyButton);
@@ -53,7 +56,7 @@ public class TrainViewBuy extends GameScreen
 			@Override
 			public void selectionChanged(String entry)
 			{
-				TrainTemplate train = TrainOverseer.getTemplateTrain(_availableTrains.getText());
+				TrainTemplate train = _trainOverseer.getTemplateTrain(_availableTrains.getText());
 
 				if(train != null)
 				{
@@ -87,7 +90,7 @@ public class TrainViewBuy extends GameScreen
 	 */
 	private void fillTrainList()
 	{
-		for(TrainTemplate train : TrainOverseer.getTemplateTrains())
+		for(TrainTemplate train : _trainOverseer.getTemplateTrains())
 		{
 			_availableTrains.addElement(train.getName());
 		}

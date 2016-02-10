@@ -247,6 +247,7 @@ public abstract class GameScreen extends Observable
 		private List _resolutionList,
 			_sampleList,
 			_segmentList;
+		private Settings _settings = Settings.getInstance();
 
 		/**
 		 * Creates a settings window.
@@ -270,13 +271,13 @@ public abstract class GameScreen extends Observable
 			registerControl(_okButton);
 			addButtonObserver();
 
-			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Boolean.parseBoolean(Settings.get("fullscreen.on").toString()), true, _window);
+			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Boolean.parseBoolean(_settings.get("fullscreen.on").toString()), true, _window);
 			registerControl(_fullscreenOn);
-			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Boolean.parseBoolean(Settings.get("use.opengl30").toString()), true, _window);
+			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Boolean.parseBoolean(_settings.get("use.opengl30").toString()), true, _window);
 			registerControl(_useOpenGL30);
-			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Boolean.parseBoolean(Settings.get("use.vsync").toString()), true, _window);
+			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Boolean.parseBoolean(_settings.get("use.vsync").toString()), true, _window);
 			registerControl(_useVSync);
-			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Boolean.parseBoolean(Settings.get("use.hdpi").toString()), true, _window);
+			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Boolean.parseBoolean(_settings.get("use.hdpi").toString()), true, _window);
 			registerControl(_useHDPI);
 			addCheckboxObserver();
 
@@ -292,8 +293,8 @@ public abstract class GameScreen extends Observable
 			_resolutionList.addElement("1280x768");
 			_resolutionList.addElement("1280x720");
 			_resolutionList.addElement("1024x768");
-			if(Boolean.parseBoolean(Settings.get("fullscreen.on").toString())) _resolutionList.setState(false);
-			int index = _resolutionList.getIndex(Integer.parseInt(Settings.get("screen.width").toString()) + "x" + Integer.parseInt(Settings.get("screen.width").toString())); // get the entry with the current resolution
+			if(Boolean.parseBoolean(_settings.get("fullscreen.on").toString())) _resolutionList.setState(false);
+			int index = _resolutionList.getIndex(Integer.parseInt(_settings.get("screen.width").toString()) + "x" + Integer.parseInt(_settings.get("screen.width").toString())); // get the entry with the current resolution
 			_resolutionList.setSelectedEntry(index);
 			registerControl(_resolutionList);
 
@@ -305,7 +306,7 @@ public abstract class GameScreen extends Observable
 			_sampleList.addElement("4");
 			_sampleList.addElement("8");
 			_sampleList.addElement("16");
-			index = _sampleList.getIndex(Settings.get("amount.samples") + ""); // get the entry with the current resolution
+			index = _sampleList.getIndex(_settings.get("amount.samples") + ""); // get the entry with the current resolution
 			_sampleList.setSelectedEntry(index);
 			registerControl(_sampleList);
 
@@ -319,7 +320,7 @@ public abstract class GameScreen extends Observable
 			_segmentList.addElement("64");
 			_segmentList.addElement("128");
 			_segmentList.addElement("256");
-			index = _segmentList.getIndex(Settings.get("amount.segments") + ""); // get the entry with the current resolution
+			index = _segmentList.getIndex(_settings.get("amount.segments") + ""); // get the entry with the current resolution
 			_segmentList.setSelectedEntry(index);
 			registerControl(_segmentList);
 			addListObserver();
@@ -350,8 +351,8 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void checkStateChanged(boolean newState)
 				{
-					Settings.set("fullscreen.on", _fullscreenOn.isChecked());
-					_resolutionList.setState(!(Boolean.parseBoolean(Settings.get("fullscreen.on").toString())));
+					_settings.set("fullscreen.on", _fullscreenOn.isChecked());
+					_resolutionList.setState(!(Boolean.parseBoolean(_settings.get("fullscreen.on").toString())));
 				}
 			});
 			_useOpenGL30.register(new ActionObserver()
@@ -359,7 +360,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void checkStateChanged(boolean newState)
 				{
-					Settings.set("use.opengl30", _useOpenGL30.isChecked());
+					_settings.set("use.opengl30", _useOpenGL30.isChecked());
 				}
 			});
 			_useOpenGL30.register(new ActionObserver()
@@ -367,7 +368,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void checkStateChanged(boolean newState)
 				{
-					Settings.set("use.vsync", _useVSync.isChecked());
+					_settings.set("use.vsync", _useVSync.isChecked());
 				}
 			});
 			_useOpenGL30.register(new ActionObserver()
@@ -375,7 +376,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void checkStateChanged(boolean newState)
 				{
-					Settings.set("use.hdpi", _useHDPI.isChecked());
+					_settings.set("use.hdpi", _useHDPI.isChecked());
 				}
 			});
 		}
@@ -390,17 +391,17 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void selectionChanged(String entry)
 				{
-					if(entry != null && !Boolean.parseBoolean(Settings.get("fullscreen.on").toString())) // ... and fullscreen-mode is off
+					if(entry != null && !Boolean.parseBoolean(_settings.get("fullscreen.on").toString())) // ... and fullscreen-mode is off
 					{
 						METRO.__debug("[ResolutionChanged]\n" +
-							"Old res.: " + Settings.get("screen.width") + "x" + Settings.get("screen.height")
+							"Old res.: " + _settings.get("screen.width") + "x" + _settings.get("screen.height")
 							+ " -- " +
 							"New res.: " + _resolutionList.getText());
 						String splitted[] = entry.split("x");
 						if(splitted.length == 2)
 						{
-							Settings.set("screen.width", Integer.parseInt(splitted[0]));
-							Settings.set("screen.height", Integer.parseInt(splitted[1]));
+							_settings.set("screen.width", Integer.parseInt(splitted[0]));
+							_settings.set("screen.height", Integer.parseInt(splitted[1]));
 						}
 					}
 				}
@@ -410,7 +411,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void selectionChanged(String entry)
 				{
-					if(entry != null && !entry.equals("")) Settings.set("amount.samples", Integer.parseInt(entry));
+					if(entry != null && !entry.equals("")) _settings.set("amount.samples", Integer.parseInt(entry));
 				}
 			});
 			_segmentList.register(new ActionObserver()
@@ -418,7 +419,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void selectionChanged(String entry)
 				{
-					if(entry != null && !entry.equals("")) Settings.set("amount.segments", Integer.parseInt(entry));
+					if(entry != null && !entry.equals("")) _settings.set("amount.segments", Integer.parseInt(entry));
 				}
 			});
 		}

@@ -19,15 +19,28 @@ import java.util.*;
  */
 public class Settings
 {
-	private static Map<String, Object> _settings,
+	private Map<String, Object> _settings,
 		_newSettings;
 
-	private static String __praeambel = "* comments begin with *\n* Settings: [name]=[value]\n";
+	private String __praeambel = "* comments begin with *\n* Settings: [name]=[value]\n";
+	private static final Settings __INSTANCE = new Settings();
+
+	private Settings()
+	{
+	}
+
+	/**
+	 * @return The instance of the settings. There can only be one instance per game.
+	 */
+	public static Settings getInstance()
+	{
+		return __INSTANCE;
+	}
 
 	/**
 	 * Creates a plain default config file for this system.
 	 */
-	public static void create()
+	public void create()
 	{
 		if(_newSettings == null) _newSettings = new HashMap<String, Object>();
 
@@ -48,7 +61,7 @@ public class Settings
 	/**
 	 * Reads everything from the settings.cfg
 	 */
-	public static void read()
+	public void read()
 	{
 		File file = new File("./settings.cfg");
 		if(!file.exists()) create(); // create default values is no settings file exist
@@ -88,7 +101,7 @@ public class Settings
 	 * @param reader The reader of the file.
 	 * @return The next entry of the file.
 	 */
-	private static String getNextEntry(BufferedReader reader)
+	private String getNextEntry(BufferedReader reader)
 	{
 		String str = null;
 		try
@@ -108,7 +121,7 @@ public class Settings
 	/**
 	 * Saves everything to the settings file. A flag is set, when something changed, so there won't be unnecessary writing.
 	 */
-	public static void save()
+	public void save()
 	{
 		File oldFile = new File("./settings.cfg");
 		if(oldFile.exists()) oldFile.delete();
@@ -147,7 +160,7 @@ public class Settings
 	 * @param settingsKey The key which value you want to have.
 	 * @return The value of the key. "" when key does not exist.
 	 */
-	public static Object getOld(String settingsKey)
+	public Object getOld(String settingsKey)
 	{
 		return _settings.containsKey(settingsKey) ? _settings.get(settingsKey) : "";
 	}
@@ -158,7 +171,7 @@ public class Settings
 	 * @param settingsKey The key which value you want to have.
 	 * @return The value of the key. "" when key does not exist.
 	 */
-	public static Object get(String settingsKey)
+	public Object get(String settingsKey)
 	{
 		return _newSettings.containsKey(settingsKey) ? _newSettings.get(settingsKey) : "";
 	}
@@ -169,7 +182,7 @@ public class Settings
 	 * @param key The the key of the setting.
 	 * @param value The new value of the setting.
 	 */
-	public static void set(String key, Object value)
+	public void set(String key, Object value)
 	{
 		_newSettings.put(key, value);
 		save();
