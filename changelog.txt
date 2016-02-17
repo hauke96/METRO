@@ -1,12 +1,17 @@
 You'll find all changes made in the versions here:
 
-VERSION 0.1.3: (01.12.2015)
-	- Train buy dialog
-		* Player can buy trains
-		* information about trains in list
-		* list of lines with assigned trains
-	- Bug fixes in window management
-	- Bought trains will drive along the line.
+VERSION 0.1.3: (17.02.2016)
+	- Game window with own window-bar
+	- Trains and template Trains
+ 		* Train buy dialog
+		* Moving trains
+	- Bug fixes
+		* Window management
+		* Line system
+		* CityView
+	- Technical stuff
+		* Implemented observer pattern for window controls
+		* Simplified the `METRO` class and the train/line overseer classes
 	
 	REVISIONS:
 		r2: (17.11.2015)

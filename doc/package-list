@@ -5,6 +5,7 @@ metro.GameScreen.MainView
 metro.GameScreen.MainView.CityView
 metro.GameScreen.TrainView
 metro.Graphics
+metro.TrainManagement
 metro.TrainManagement.Lines
 metro.TrainManagement.Nodes
 metro.TrainManagement.Trains

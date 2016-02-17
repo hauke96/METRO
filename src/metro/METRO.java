@@ -90,7 +90,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	private static LwjglApplication _application;
 	
 	public static Dimension __SCREEN_SIZE;
-	public static final String __VERSION = "0.1.3_indev";
+	public static final String __VERSION = "0.1.3";
 	public static boolean _dragMode,
 		_debug;
 	public static Point _dragMode_LastMousePosition;

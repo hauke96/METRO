@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,7 +26,7 @@ public class TrainManagementService
 {
 	private static ArrayList<TrainLine> _listOfTrainLines = new ArrayList<TrainLine>();
 	private ArrayList<Train> _trainList = new ArrayList<>();
-	private LinkedHashMap<String, TrainTemplate> _templateTrains = new LinkedHashMap<>();
+	private HashMap<String, TrainTemplate> _templateTrains = new HashMap<>();
 	private final static TrainManagementService __INSTANCE = new TrainManagementService();
 
 	private TrainManagementService()
