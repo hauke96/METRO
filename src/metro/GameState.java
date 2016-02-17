@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import metro.TrainManagement.Trains.TrainOverseer;
+import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TrainStation;
 import metro.TrainManagement.Trains.TrainTemplate;
 
@@ -117,7 +117,7 @@ public class GameState
 						Integer.parseInt(costs) + "\n" +
 						Float.parseFloat(costsfactor) + "\n" +
 						Integer.parseInt(passenger));
-					TrainOverseer.getInstance().addTemplateTrain(new TrainTemplate(name,
+					TrainManagementService.getInstance().addTemplateTrain(new TrainTemplate(name,
 						manufacturer,
 						Integer.parseInt(price),
 						Integer.parseInt(costs),

@@ -13,10 +13,9 @@ import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainView.MainView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
+import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Lines.TrainLine;
-import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.TrainManagement.Trains.Train;
-import metro.TrainManagement.Trains.TrainOverseer;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.ColorBar;
@@ -48,8 +47,7 @@ public class LineView extends GameScreen
 		_messageLabel;
 	private String _oldLineName; // when the user edits a line name, the old name of it has to be saved to correctly update the line list
 	private ColorBar _colorBar;
-	private TrainOverseer _trainOverseer;
-	private TrainLineOverseer _trainLineOverseer;
+	private TrainManagementService _trainManagementService;
 
 	/**
 	 * Creates a new TrainLineView.
@@ -61,8 +59,7 @@ public class LineView extends GameScreen
 		_windowWidth = 400;
 		_lineSelectTool = new LineSelectTool();
 		
-		_trainOverseer = TrainOverseer.getInstance();
-		_trainLineOverseer = TrainLineOverseer.getInstance();
+		_trainManagementService = TrainManagementService.getInstance();
 
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 40, 300),
@@ -108,7 +105,7 @@ public class LineView extends GameScreen
 	private void fillLineList()
 	{
 		// Fill line list with all lines:
-		for(TrainLine line : _trainLineOverseer.getLines())
+		for(TrainLine line : _trainManagementService.getLines())
 		{
 			_lineList.addElement(line.getName());
 		}
@@ -153,8 +150,8 @@ public class LineView extends GameScreen
 
 				_oldLineName = _lineList.getText();
 
-				Color color = _trainLineOverseer.getColor(_oldLineName);
-				TrainLine line = _trainLineOverseer.getLine(_oldLineName);
+				Color color = _trainManagementService.getLineColor(_oldLineName);
+				TrainLine line = _trainManagementService.getLine(_oldLineName);
 
 				METRO.__debug("Color: " + color + "\n"
 					+ "Old line: " + _oldLineName + "\n"
@@ -183,7 +180,7 @@ public class LineView extends GameScreen
 
 				_lineList.setState(false);
 
-				_trainLineOverseer.getLines().remove(line); // TODO change to something like METRO.__gameState.removeLine(TrainLine)
+				_trainManagementService.getLines().remove(line); // TODO change to something like METRO.__gameState.removeLine(TrainLine)
 			}
 		});
 	}
@@ -199,11 +196,11 @@ public class LineView extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				if(_lineList.getSelected() < 0 || _lineList.getSelected() >= _trainLineOverseer.getLines().size()) return; // out of bounds
+				if(_lineList.getSelected() < 0 || _lineList.getSelected() >= _trainManagementService.getLines().size()) return; // out of bounds
 				
-				_trainOverseer.sellTrainFromLine(_lineList.getText());
+				_trainManagementService.sellTrainsFromLine(_lineList.getText());
 
-				_trainLineOverseer.removeLine(_lineList.getText());
+				_trainManagementService.removeLine(_lineList.getText());
 				_lineList.removeElement(_lineList.getSelected());
 				_lineSelectToolEnabled = false;
 				reset();
@@ -243,15 +240,15 @@ public class LineView extends GameScreen
 				{
 
 					// get old line before the new one gets creates because it could have the same name.
-					TrainLine oldLine = _trainLineOverseer.getLine(_oldLineName);
+					TrainLine oldLine = _trainManagementService.getLine(_oldLineName);
 					TrainLine line = _lineSelectTool.getTrainLine();
 
 					METRO.__debug("[StartFinishEditLine]");
-					METRO.__debug("Amount of lines (pre)  : " + _trainLineOverseer.getLines().size());
+					METRO.__debug("Amount of lines (pre)  : " + _trainManagementService.getLines().size());
 
 					if(oldLine != null)
 					{
-						_trainLineOverseer.removeLine(oldLine);
+						_trainManagementService.removeLine(oldLine);
 						_lineList.removeElement(_lineList.getIndex(_oldLineName));
 
 						ArrayList<Train> oldTrains = getTrainsOfLine(oldLine);
@@ -264,13 +261,13 @@ public class LineView extends GameScreen
 					}
 
 					line.setName(_lineNameField.getText());
-					_trainLineOverseer.addLine(line);
+					_trainManagementService.addLine(line);
 					_lineList.addElement(_lineNameField.getText());
 					_lineSelectToolEnabled = false;
 
 					reset();
 					_lineList.setState(true);
-					METRO.__debug("Amount of lines (after): " + _trainLineOverseer.getLines().size());
+					METRO.__debug("Amount of lines (after): " + _trainManagementService.getLines().size());
 				}
 				else
 				{
@@ -287,7 +284,7 @@ public class LineView extends GameScreen
 			private ArrayList<Train> getTrainsOfLine(TrainLine line)
 			{
 				ArrayList<Train> trains = new ArrayList<>();
-				for(Train train : _trainOverseer.getTrains())
+				for(Train train : _trainManagementService.getTrains())
 				{
 					if(train.getLine().equals(line))
 					{
@@ -321,7 +318,7 @@ public class LineView extends GameScreen
 				}
 				else if(_editMode)
 				{
-					_trainLineOverseer.getLine(_lineList.getText()).setColor(clickedColor);
+					_trainManagementService.getLine(_lineList.getText()).setColor(clickedColor);
 				}
 			}
 		});
@@ -452,7 +449,7 @@ public class LineView extends GameScreen
 		_visible = visible;
 		if(_lineSelectToolEnabled)
 		{
-			_trainLineOverseer.removeLine(_lineSelectTool.getTrainLine());
+			_trainManagementService.removeLine(_lineSelectTool.getTrainLine());
 			_lineSelectToolEnabled = false;
 		}
 		if(!_visible) reset();
@@ -465,7 +462,7 @@ public class LineView extends GameScreen
 		if(_lineSelectToolEnabled)
 		{
 			// something will probably change so remove the old line (new one will be added later)
-			_trainLineOverseer.removeLine(_lineSelectTool.getTrainLine());
+			_trainManagementService.removeLine(_lineSelectTool.getTrainLine());
 			if(mouseButton == Buttons.LEFT)
 			{
 				// if select tool exists and mouse is in the area of the select tool, forward click to tool
@@ -487,7 +484,7 @@ public class LineView extends GameScreen
 		{
 			METRO.__debug("[AddLineToOverseer]");
 			TrainLine line = _lineSelectTool.getTrainLine();
-			_trainLineOverseer.addLine(line); // this will only change something when line is valid
+			_trainManagementService.addLine(line); // this will only change something when line is valid
 		}
 	}
 

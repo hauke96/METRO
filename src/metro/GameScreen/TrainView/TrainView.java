@@ -9,9 +9,8 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.TrainManagement.Lines.TrainLineOverseer;
+import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
-import metro.TrainManagement.Trains.TrainOverseer;
 import metro.WindowControls.ActionObserver;
 
 /**
@@ -48,7 +47,7 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				TrainOverseer trainOverseer = TrainOverseer.getInstance();
+				TrainManagementService trainManagementService= TrainManagementService.getInstance();
 				if(_trainViewMain.getLineList().getSelected() == -1)
 				{
 					_trainViewBuy.getMessageLabel().setText("Please select the line this train should drive on.");
@@ -57,21 +56,21 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 				{
 					_trainViewBuy.getMessageLabel().setText("Please select the train model you want to buy.");
 				}
-				else if(METRO.__gameState.getMoney() < trainOverseer.getTemplateTrain(_trainViewBuy.getTrainList().getText()).getPrice())
+				else if(METRO.__gameState.getMoney() < trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getText()).getPrice())
 				{
 					_trainViewBuy.getMessageLabel().setText("You have not enough money.");
 				}
 				else
 				{
-					Train train = new Train(trainOverseer.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
-					train.setLine(TrainLineOverseer.getInstance().getLine(_trainViewMain.getLineList().getText()));
-					trainOverseer.addTrain(train);
+					Train train = new Train(trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
+					train.setLine(trainManagementService.getLine(_trainViewMain.getLineList().getText()));
+					trainManagementService.addTrain(train);
 					_trainViewBuy.getMessageLabel().setText("");
 
 					// find next number for train
 					String trainName = train.getName();
 					int minNumber = 0;
-					while(minNumber < 1000 && trainOverseer.getTrainByName(trainName + " (" + minNumber + ")") != null)
+					while(minNumber < 1000 && trainManagementService.getTrainByName(trainName + " (" + minNumber + ")") != null)
 					{
 						++minNumber;
 					}

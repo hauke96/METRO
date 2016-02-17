@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainView.MainView;
+import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Lines.TrainLine;
-import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 
@@ -79,7 +79,7 @@ public class LineSelectTool extends GameScreen
 	 */
 	public String setColor(Color newColor)
 	{
-		if(TrainLineOverseer.getInstance().isColorUsed(newColor))
+		if(TrainManagementService.getInstance().isLineColorUsed(newColor))
 		{
 			return "No duplicate colors allowed!";
 		}

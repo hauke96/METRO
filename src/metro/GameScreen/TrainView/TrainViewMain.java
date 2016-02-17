@@ -9,10 +9,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
+import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Lines.TrainLine;
-import metro.TrainManagement.Lines.TrainLineOverseer;
 import metro.TrainManagement.Trains.Train;
-import metro.TrainManagement.Trains.TrainOverseer;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.List;
@@ -33,8 +32,7 @@ public class TrainViewMain extends GameScreen
 		_sellTrainButton; // to remove a train
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private String _movedTrain;
-	private TrainOverseer _trainOverseer;
-	private TrainLineOverseer _trainLineOverseer;
+	private TrainManagementService _trainManagementService;
 
 	/**
 	 * Creates a new main view for the train screen.
@@ -48,8 +46,7 @@ public class TrainViewMain extends GameScreen
 		_areaOffset = areaOffset;
 		_movedTrain = "";
 
-		_trainOverseer = TrainOverseer.getInstance();
-		_trainLineOverseer = TrainLineOverseer.getInstance();
+		_trainManagementService = TrainManagementService.getInstance();
 
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 300, 250),
 			null, null, true);
@@ -60,16 +57,16 @@ public class TrainViewMain extends GameScreen
 			{
 				if(isInMoveMode())
 				{
-					TrainLine selectedLine = _trainLineOverseer.getLine(entry);
-					Train selectedTrain = _trainOverseer.getTrainByName(_movedTrain);
+					TrainLine selectedLine = _trainManagementService.getLine(entry);
+					Train selectedTrain = _trainManagementService.getTrainByName(_movedTrain);
 
 					selectedTrain.setLine(selectedLine);
 					stopMoveMode();
 				}
 
 				_trainList.clear();
-				TrainLine line = _trainLineOverseer.getLine(_lineList.getText());
-				for(Train train : _trainOverseer.getTrains())
+				TrainLine line = _trainManagementService.getLine(_lineList.getText());
+				for(Train train : _trainManagementService.getTrains())
 				{
 					if(train.getLine().equals(line)) _trainList.addElement(train.getName());
 				}
@@ -97,7 +94,7 @@ public class TrainViewMain extends GameScreen
 	private void fillLineList()
 	{
 		// Fill line list with all lines:
-		ArrayList<TrainLine> lineList = _trainLineOverseer.getLines();
+		ArrayList<TrainLine> lineList = _trainManagementService.getLines();
 		for(TrainLine line : lineList)
 		{
 			_lineList.addElement(line.getName());
@@ -176,7 +173,7 @@ public class TrainViewMain extends GameScreen
 	 */
 	private void sellTrainButton_action()
 	{
-		_trainOverseer.removeTrain(_trainList.getText());
+		_trainManagementService.removeTrain(_trainList.getText());
 		_trainList.removeElement(_trainList.getSelected());
 		_trainList.setSelectedEntry(0);
 	}

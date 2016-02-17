@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
-import metro.TrainManagement.Trains.TrainOverseer;
+import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TrainTemplate;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
@@ -32,7 +32,7 @@ public class TrainViewBuy extends GameScreen
 	private Label _messageLabel,
 		_informationKeys, // like name=, manufacturer=, ...
 		_informationValues; // like CT-01, 1.03, ...
-	private TrainOverseer _trainOverseer;
+	private TrainManagementService _trainManagementService;
 
 	/**
 	 * Creates a new dialog.
@@ -45,7 +45,7 @@ public class TrainViewBuy extends GameScreen
 		_windowWidth = windowWidth;
 		_areaOffset = areaOffset;
 		
-		_trainOverseer = TrainOverseer.getInstance();
+		_trainManagementService = TrainManagementService.getInstance();
 
 		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, 680, 210, 20), "Buy");
 		registerControl(_buyButton);
@@ -56,7 +56,7 @@ public class TrainViewBuy extends GameScreen
 			@Override
 			public void selectionChanged(String entry)
 			{
-				TrainTemplate train = _trainOverseer.getTemplateTrain(_availableTrains.getText());
+				TrainTemplate train = _trainManagementService.getTemplateTrain(_availableTrains.getText());
 
 				if(train != null)
 				{
@@ -90,7 +90,7 @@ public class TrainViewBuy extends GameScreen
 	 */
 	private void fillTrainList()
 	{
-		for(TrainTemplate train : _trainOverseer.getTemplateTrains())
+		for(TrainTemplate train : _trainManagementService.getTemplateTrains())
 		{
 			_availableTrains.addElement(train.getName());
 		}

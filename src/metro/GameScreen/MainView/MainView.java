@@ -16,10 +16,9 @@ import metro.GameScreen.MainView.CityView.CityView;
 import metro.GameScreen.TrainView.TrainView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.TrainManagement.Lines.TrainLineOverseer;
+import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.TrainManagement.Trains.Train;
-import metro.TrainManagement.Trains.TrainOverseer;
 import metro.TrainManagement.Trains.TrainStation;
 
 /**
@@ -169,7 +168,7 @@ public class MainView extends GameScreen implements Observer
 	{
 		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
 
-		TrainLineOverseer.getInstance().drawLines(offset, sp);
+		TrainManagementService.getInstance().drawLines(offset, sp);
 	}
 
 	/**
@@ -191,7 +190,7 @@ public class MainView extends GameScreen implements Observer
 	{
 		Point offset = new Point((int)_mapOffset.getX(), (int)_mapOffset.getY());
 
-		for(Train train : TrainOverseer.getInstance().getTrains())
+		for(Train train : TrainManagementService.getInstance().getTrains())
 		{
 			train.draw(sp, offset);
 		}
