@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import metro.METRO;
+import metro.GameState;
 import metro.Graphics.Draw;
 
 /**
@@ -119,8 +119,9 @@ public class RailwayNode
 	public void draw(SpriteBatch sp, Point offset)
 	{
 		Point position, positionNext;
-		position = new Point(offset.x + _position.x * METRO.__baseNetSpacing,
-			offset.y + _position.y * METRO.__baseNetSpacing); // Position with offset etc.
+		GameState gameState = GameState.getInstance();
+		position = new Point(offset.x + _position.x * gameState.getBaseNetSpacing(),
+			offset.y + _position.y * gameState.getBaseNetSpacing()); // Position with offset etc.
 
 		for(RailwayNode node : _listOfNeighbors)
 		{
@@ -129,8 +130,8 @@ public class RailwayNode
 			if(p.y < _position.y ||
 				(p.y == _position.y && p.x < _position.x))
 			{
-				positionNext = new Point(offset.x + p.x * METRO.__baseNetSpacing,
-					offset.y + p.y * METRO.__baseNetSpacing); // Position with offset etc. for second point
+				positionNext = new Point(offset.x + p.x * gameState.getBaseNetSpacing(),
+					offset.y + p.y * gameState.getBaseNetSpacing()); // Position with offset etc. for second point
 
 				// if the track is a straight one (horizontal or vertical but not diagonal), make it longer (because of drawing inaccuracy)
 				if(position.y == positionNext.y) positionNext.x--;

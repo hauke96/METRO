@@ -26,6 +26,7 @@ public class GameState
 
 	private int _money;
 	private ArrayList<TrainStation> _stationList;
+	private int _baseNetSpacing; // amount of pixel between lines of the base net
 
 	/**
 	 * Creates a new game state. This can't be done by an external class.
@@ -34,6 +35,8 @@ public class GameState
 	{
 		_money = 500000;
 		_stationList = new ArrayList<>();
+		_baseNetSpacing = 50;
+		
 		try
 		{
 			createTrains();
@@ -180,4 +183,11 @@ public class GameState
 		return _stationList;
 	}
 
+	/**
+	 * @return Gets the size of the base net spacing.
+	 */
+	public int getBaseNetSpacing()
+	{
+		return _baseNetSpacing;
+	}
 }

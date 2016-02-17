@@ -3,7 +3,10 @@ package metro.GameScreen;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import metro.METRO;
 import metro.GameScreen.MainView.MainView;
@@ -26,54 +29,65 @@ public class MainMenu extends GameScreen
 		_button_settings,
 		_button_exitGame;
 	private Window _welcomeWindow;
+	private static TextureRegion _buttonTextures,
+		_titleImageTexture;
 
 	/**
 	 * Creates a main menu with the welcome-window, and the three buttons "Play", "Settings" and "Exit".
 	 */
 	public MainMenu()
 	{
+		loadVisuals();
+
 		// Create MainMenu buttons:
 		_button_startGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 - 25, 200, 50),
-			new Rectangle(0, 0, 200, 50), METRO.__mainMenu_Buttons);
+			new Rectangle(0, 0, 200, 50), _buttonTextures);
 		registerControl(_button_startGame);
-		
+
 		_button_settings = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 35, 200, 50),
-			new Rectangle(0, 50, 200, 50), METRO.__mainMenu_Buttons);
+			new Rectangle(0, 50, 200, 50), _buttonTextures);
 		registerControl(_button_settings);
-		
+
 		_button_exitGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 95, 200, 50),
-			new Rectangle(0, 100, 200, 50), METRO.__mainMenu_Buttons);
+			new Rectangle(0, 100, 200, 50), _buttonTextures);
 		registerControl(_button_exitGame);
-		
+
 		addActionObservations();
 
 		// Create welcome-window:
 		_welcomeWindow = new Window("Welcome to METRO - ver.:" + METRO.__VERSION,
-			new Point(50, METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 300), // same y-pos as title image
+			new Point(50, METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 300), // same y-pos as title image
 			new Point(500, 360));
 		registerControl(_welcomeWindow);
-		
+
 		Button button = new Button(
-			new Rectangle((500 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2,
-				(260 - (int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f)) / 2,
-				(int)(METRO.__mainMenu_TitleImage.getRegionWidth() * 0.4f),
-				(int)(METRO.__mainMenu_TitleImage.getRegionHeight() * 0.4f)),
+			new Rectangle((500 - (int)(_titleImageTexture.getRegionWidth() * 0.4f)) / 2,
+				(260 - (int)(_titleImageTexture.getRegionWidth() * 0.4f)) / 2,
+				(int)(_titleImageTexture.getRegionWidth() * 0.4f),
+				(int)(_titleImageTexture.getRegionHeight() * 0.4f)),
 			new Rectangle(0,
 				0,
-				METRO.__mainMenu_TitleImage.getRegionWidth(),
-				METRO.__mainMenu_TitleImage.getRegionHeight()),
-			METRO.__mainMenu_TitleImage, _welcomeWindow);
+				_titleImageTexture.getRegionWidth(),
+				_titleImageTexture.getRegionHeight()),
+			_titleImageTexture, _welcomeWindow);
 		registerControl(button);
 
-		Label label = new Label("METRO stands for \"Master of established transport railway operators\" and is a simple Subway/Rapid-Transit and economic simulator."
-			+ "\n\nFor all changes take a look into the 'changelog.txt'"
-			+ "\nNew main-features of ver." + METRO.__VERSION + ":"
-			+ "\n\n   * Dialog for creating a train line"
-			+ "\n   * Create, edit and remove lines"
-			+ "\n   * Lines are drawn within their color"
-			+ "\n\nAnd now: Have fun and earn money ;)",
+		Label label = new Label("METRO stands for \"Master of established transport railway operators\" and is a simple Subway/Rapid-Transit and economic simulator.\n\n"
+			+ "For all changes take a look into the 'changelog.txt'\n"
+			+ "New main-features of ver." + METRO.__VERSION + ":\n\n"
+			+ " -- wowowow, calm down, thís version is still in developement ;) --\n\n"
+			+ "And now: Have fun and earn money ;)",
 			new Point(20, 100), 450, _welcomeWindow);
 		registerControl(label);
+	}
+
+	private void loadVisuals()
+	{
+		_buttonTextures = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
+		_buttonTextures.flip(false, true);
+
+		_titleImageTexture = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_TitleImage.png")));
+		_titleImageTexture.flip(false, true);
 	}
 
 	/**
@@ -86,7 +100,7 @@ public class MainMenu extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				METRO.__application.exit();
+				METRO.__exit();
 			}
 		});
 		_button_settings.register(new ActionObserver()
@@ -115,9 +129,9 @@ public class MainMenu extends GameScreen
 		_button_settings.draw();
 		_button_exitGame.draw();
 
-		Draw.Image(METRO.__mainMenu_TitleImage,
-			METRO.__SCREEN_SIZE.width / 2 - METRO.__mainMenu_TitleImage.getRegionWidth() / 2,
-			METRO.__SCREEN_SIZE.height / 2 - METRO.__mainMenu_TitleImage.getRegionHeight() / 2 - 200);
+		Draw.Image(_titleImageTexture,
+			METRO.__SCREEN_SIZE.width / 2 - _titleImageTexture.getRegionWidth() / 2,
+			METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 200);
 	}
 
 	@Override

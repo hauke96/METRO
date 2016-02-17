@@ -481,7 +481,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void clickedOnControl(Object arg)
 				{
-					METRO.__application.exit();
+					METRO.__exit();
 				}
 			});
 			_settingsButton.register(new ActionObserver()

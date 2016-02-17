@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import metro.METRO;
+import metro.GameState;
 import metro.Graphics.Fill;
 import metro.TrainManagement.Lines.TrainLine;
 
@@ -150,8 +150,8 @@ public class Train
 		Point2D position = calcPosition();
 		Fill.setColor(Color.lightGray);
 		Fill.Rect(
-			(int)(offset.x + position.getX() * METRO.__baseNetSpacing),
-			(int)(offset.y + position.getY() * METRO.__baseNetSpacing),
+			(int)(offset.x + position.getX() * GameState.getInstance().getBaseNetSpacing()),
+			(int)(offset.y + position.getY() * GameState.getInstance().getBaseNetSpacing()),
 			10,
 			10);
 		_relativeOnLine += 0.03;

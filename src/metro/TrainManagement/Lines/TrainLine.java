@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.GameState;
 import metro.METRO;
 import metro.Graphics.Draw;
 import metro.TrainManagement.Nodes.RailwayNode;
@@ -30,6 +31,7 @@ public class TrainLine
 	private String _name;
 	private final double _length;
 	private final int _thickness;
+	private GameState _gameState;
 
 	/**
 	 * Creates an empty new train line with a given title and a color.
@@ -63,8 +65,10 @@ public class TrainLine
 		_name = name;
 		_lineColor = lineColor;
 		_thickness = 3;
-		METRO.__debug("[CalcTrainLineLength]");
+		_gameState = GameState.getInstance();
 		_length = calcLength();
+		
+		METRO.__debug("[CalcTrainLineLength]");
 		METRO.__debug("Length: " + _length);
 	}
 
@@ -310,8 +314,6 @@ public class TrainLine
 	public static boolean isValid(ArrayList<RailwayNode> listOfNodes)
 	{
 		int amountEndNodes = 0;
-		
-		System.out.println(listOfNodes + "\n\n");
 
 		for(RailwayNode node : listOfNodes)
 		{
@@ -424,7 +426,9 @@ public class TrainLine
 	public void draw(Point offset, SpriteBatch sp, HashMap<RailwayNode, Integer> map)
 	{
 		if(_length == 0) return;
+		
 		Draw.setColor(isValid(_listOfNodes) ? _lineColor : METRO.__metroRed);
+		
 		for(int i = 0; i < _listOfNodes.size() - 1; i++)
 		{
 			// the list is sorted so we know that i+1 is the direct neighbor
@@ -432,10 +436,10 @@ public class TrainLine
 			RailwayNode neighbor = _listOfNodes.get(i + 1);
 
 			Point position, positionNext;
-			position = new Point(offset.x + node.getPosition().x * METRO.__baseNetSpacing,
-				offset.y + node.getPosition().y * METRO.__baseNetSpacing); // Position with offset etc.
-			positionNext = new Point(offset.x + neighbor.getPosition().x * METRO.__baseNetSpacing,
-				offset.y + neighbor.getPosition().y * METRO.__baseNetSpacing); // Position with offset etc. for second point
+			position = new Point(offset.x + node.getPosition().x * _gameState.getBaseNetSpacing(),
+				offset.y + node.getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc.
+			positionNext = new Point(offset.x + neighbor.getPosition().x * _gameState.getBaseNetSpacing(),
+				offset.y + neighbor.getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc. for second point
 
 			if(node.isNeighbor(neighbor))
 			{
@@ -451,15 +455,15 @@ public class TrainLine
 		}
 
 		// Draw also a circle for the last node which won't be drawn in the for loop
-		Point position = new Point(offset.x + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().x * METRO.__baseNetSpacing,
-			offset.y + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().y * METRO.__baseNetSpacing); // Position with offset etc.
+		Point position = new Point(offset.x + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().x * _gameState.getBaseNetSpacing(),
+			offset.y + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc.
 		Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
 	}
 
 	private void drawColoredLine(Point offset, Point position, Point positionNext, int layer)
 	{
-		Point diff = new Point((position.y - positionNext.y) / METRO.__baseNetSpacing,
-			(position.x - positionNext.x) / METRO.__baseNetSpacing);
+		Point diff = new Point((position.y - positionNext.y) / _gameState.getBaseNetSpacing(),
+			(position.x - positionNext.x) / _gameState.getBaseNetSpacing());
 
 		if(diff.x != 0 && diff.y != 0)
 		{

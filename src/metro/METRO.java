@@ -63,7 +63,6 @@ import metro.GameScreen.MainMenu;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Button;
 import metro.WindowControls.ControlActionManager;
 import metro.WindowControls.ControlElement;
 import metro.WindowControls.InputField;
@@ -75,11 +74,8 @@ import metro.WindowControls.Window;
  */
 public class METRO implements ApplicationListener, InputProcessor
 {
-	private static final long serialVersionUID = 1L;
-
-	public static Dimension __SCREEN_SIZE;
-	public static final String __TITLE = "METRO",
-		__VERSION = "0.1.3_indev";
+	private Point _oldMousePosition;
+	private LwjglApplicationConfiguration _config;
 
 	private static OSType _detected_OS;
 	private static ControlActionManager _controlActionManager;
@@ -91,30 +87,22 @@ public class METRO implements ApplicationListener, InputProcessor
 		_yOffset,
 		_titleBarHeight,
 		_titleBarBorderLineWidth;
+	private static LwjglApplication _application;
+	
+	public static Dimension __SCREEN_SIZE;
+	public static final String __VERSION = "0.1.3_indev";
 	public static boolean _dragMode,
 		_debug;
 	public static Point _dragMode_LastMousePosition;
-
-	public static BitmapFont __stdFont;
-	public static TextureRegion __mainMenu_Buttons,
-		__mainMenu_TitleImage,
-		__iconSet,
+	public static TextureRegion __iconSet,
 		__mouseCursorImage;
-	public static Button __viewPortButton_City,
-		__viewPortButton_Train;
 	public static Color __metroRed,
 		__metroBlue;
-	public static int __baseNetSpacing; // amount of pixel between lines of the base net
 	public static Point __mousePosition,
 		__originalMousePosition;
 	public static OrthographicCamera __camera;
 	public static SpriteBatch __spriteBatch;
-	public static LwjglApplication __application;
 	public static GameState __gameState;
-//	public Settings
-
-	private Point _oldMousePosition;
-	private LwjglApplicationConfiguration _config;
 
 	/**
 	 * Creates a new METRO Game.
@@ -137,7 +125,6 @@ public class METRO implements ApplicationListener, InputProcessor
 		_controlActionManager = new ControlActionManager();
 		GameScreen.setActionManager(_controlActionManager);
 
-		__baseNetSpacing = 50;
 		_debug = true;
 
 		_oldMousePosition = new Point(0, 0);
@@ -207,17 +194,11 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void loadVisuals()
 	{
-		__mainMenu_Buttons = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
-		__mainMenu_Buttons.flip(false, true);
-
-		__mainMenu_TitleImage = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_TitleImage.png")));
-		__mainMenu_TitleImage.flip(false, true);
-
 		__iconSet = new TextureRegion(new Texture(Gdx.files.internal("textures/IconSet.png")));
 		__iconSet.flip(false, true);
 
 		loadCursorImage();
-		loadFonts();
+		Draw.setFont(loadFonts());
 
 		// Create special colors
 		__metroBlue = new Color(100, 180, 255);
@@ -248,15 +229,17 @@ public class METRO implements ApplicationListener, InputProcessor
 	/**
 	 * Load the font {@code GatsbyFLF-Bold} in size 21.
 	 */
-	private void loadFonts()
+	private BitmapFont loadFonts()
 	{
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/GatsbyFLF-Bold.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.magFilter = TextureFilter.Linear;
 		parameter.size = 21;
 		parameter.flip = true;
-		__stdFont = generator.generateFont(parameter); // font size 20 pixels
+		BitmapFont font = generator.generateFont(parameter); // font size 20 pixels
 		generator.dispose();
+		
+		return font;
 	}
 
 	/**
@@ -486,7 +469,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		{
 			if(screenX >= __SCREEN_SIZE.width - _titleBarHeight)
 			{
-				__application.exit();
+				_application.exit();
 			}
 			else
 			{
@@ -678,7 +661,7 @@ public class METRO implements ApplicationListener, InputProcessor
 				Integer.parseInt(settings.getOld("screen.height").toString()));
 
 			_config = new LwjglApplicationConfiguration();
-			_config.title = __TITLE + "  " + __VERSION;
+			_config.title = "METRO  " + __VERSION;
 			_config.width = Integer.parseInt(settings.getOld("screen.width").toString());
 			_config.height = Integer.parseInt(settings.getOld("screen.height").toString());
 			_config.useGL30 = Boolean.parseBoolean(settings.getOld("use.opengl30").toString());
@@ -689,7 +672,7 @@ public class METRO implements ApplicationListener, InputProcessor
 			_config.vSyncEnabled = false;// Boolean.parseBoolean(Settings.get("use.vsync").toString());
 			_config.useHDPI = Boolean.parseBoolean(settings.getOld("use.hdpi").toString());
 
-			__application = new LwjglApplication(this, _config);
+			_application = new LwjglApplication(this, _config);
 
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
 		}
@@ -729,7 +712,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	/**
 	 * @return The x-offset of the normal drawing canvas (everything excluding the window border)
 	 */
-	public static int getXOffset()
+	public static int __getXOffset()
 	{
 		return _xOffset;
 	}
@@ -737,9 +720,17 @@ public class METRO implements ApplicationListener, InputProcessor
 	/**
 	 * @return The y-offset of the normal drawing canvas (everything excluding the window border)
 	 */
-	public static int getYOffset()
+	public static int __getYOffset()
 	{
 		return _yOffset;
+	}
+	
+	/**
+	 * Closes the game window and exits the application. This method wont ask the user to confirm or anything like that.
+	 */
+	public static void __exit()
+	{
+		_application.exit();
 	}
 
 	private enum OSType

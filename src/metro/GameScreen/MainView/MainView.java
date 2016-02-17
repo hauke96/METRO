@@ -8,6 +8,7 @@ import java.util.Observer;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.GameState;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.Toolbar;
@@ -38,6 +39,7 @@ public class MainView extends GameScreen implements Observer
 	private Toolbar _toolbar;
 	private CityView _cityView;
 	private GameScreen _controlDrawer;
+	private GameState _gameState;
 
 	/**
 	 * The position of the selected cross of the game grid.
@@ -64,6 +66,8 @@ public class MainView extends GameScreen implements Observer
 
 		_cityView = new CityView(); // create extra instance for general purpose actions
 		_controlDrawer = new ScreenInfoDrawer();
+		
+		_gameState = GameState.getInstance();
 	}
 
 	@Override
@@ -126,11 +130,11 @@ public class MainView extends GameScreen implements Observer
 	private void drawBaseNet(SpriteBatch sp, Color color, int offset)
 	{
 		Draw.setColor(color);
-		for(int y = (_mapOffset.y + offset) % METRO.__baseNetSpacing; y < METRO.__SCREEN_SIZE.height; y += METRO.__baseNetSpacing)
+		for(int y = (_mapOffset.y + offset) % _gameState.getBaseNetSpacing(); y < METRO.__SCREEN_SIZE.height; y += _gameState.getBaseNetSpacing())
 		{
 			Draw.Line(offset, y, METRO.__SCREEN_SIZE.width, y);
 		}
-		for(int x = (_mapOffset.x + offset) % METRO.__baseNetSpacing; x < METRO.__SCREEN_SIZE.width; x += METRO.__baseNetSpacing)
+		for(int x = (_mapOffset.x + offset) % _gameState.getBaseNetSpacing(); x < METRO.__SCREEN_SIZE.width; x += _gameState.getBaseNetSpacing())
 		{
 			Draw.Line(x, offset, x, METRO.__SCREEN_SIZE.height);
 		}
@@ -144,12 +148,12 @@ public class MainView extends GameScreen implements Observer
 	private Point drawBaseDot(SpriteBatch sp)
 	{
 		_selectedCross = new Point(
-			(int)Math.round((int)(METRO.__mousePosition.x - _mapOffset.getX()) / (float)METRO.__baseNetSpacing),
-			(int)Math.round((int)(METRO.__mousePosition.y - _mapOffset.getY()) / (float)METRO.__baseNetSpacing));
+			(int)Math.round((int)(METRO.__mousePosition.x - _mapOffset.getX()) / (float)_gameState.getBaseNetSpacing()),
+			(int)Math.round((int)(METRO.__mousePosition.y - _mapOffset.getY()) / (float)_gameState.getBaseNetSpacing()));
 
 		Point offsetMarker = new Point(
-			(int)(_mapOffset.getX()) + METRO.__baseNetSpacing * _selectedCross.x,
-			(int)(_mapOffset.getY()) + METRO.__baseNetSpacing * _selectedCross.y);
+			(int)(_mapOffset.getX()) + _gameState.getBaseNetSpacing() * _selectedCross.x,
+			(int)(_mapOffset.getY()) + _gameState.getBaseNetSpacing() * _selectedCross.y);
 
 		Fill.setColor(Color.darkGray);
 		Fill.Rect(offsetMarker.x - 1,

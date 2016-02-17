@@ -7,6 +7,7 @@ import java.awt.geom.Point2D;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.GameState;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
@@ -59,8 +60,8 @@ public class StationPlacingTool extends GameScreen
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		boolean positionOccupied = false;
-		Point selectPointOnScreen = new Point(MainView._selectedCross.x * METRO.__baseNetSpacing + (int)offset.getX(),
-			MainView._selectedCross.y * METRO.__baseNetSpacing + (int)offset.getY());
+		Point selectPointOnScreen = new Point(MainView._selectedCross.x * GameState.getInstance().getBaseNetSpacing() + (int)offset.getX(),
+			MainView._selectedCross.y * GameState.getInstance().getBaseNetSpacing() + (int)offset.getY());
 
 		Point offsetPoint = new Point((int)offset.getX(), (int)offset.getY());
 		for(TrainStation ts : METRO.__gameState.getStations())

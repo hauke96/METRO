@@ -3,7 +3,7 @@ package metro.TrainManagement.Trains;
 import java.awt.Color;
 import java.awt.Point;
 
-import metro.METRO;
+import metro.GameState;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 
@@ -20,6 +20,7 @@ public class TrainStation
 {
 	private int _waitingPassengers;
 	private Point _position; // Position
+	private GameState _gameState;
 
 	/**
 	 * The price to build one train station.
@@ -46,6 +47,7 @@ public class TrainStation
 	{
 		_waitingPassengers = waitingPassengers;
 		_position = position;
+		_gameState = GameState.getInstance();
 	}
 
 	/**
@@ -56,16 +58,16 @@ public class TrainStation
 	 */
 	public void draw(SpriteBatch sp, Point offset)
 	{
-		Point position = new Point(offset.x + _position.x * METRO.__baseNetSpacing - 4,
-			offset.y + _position.y * METRO.__baseNetSpacing - 7); // Position with offset etc.
+		Point position = new Point(offset.x + _position.x * _gameState.getBaseNetSpacing() - 4,
+			offset.y + _position.y * _gameState.getBaseNetSpacing() - 7); // Position with offset etc.
 		Fill.setColor(Color.white);
 		Fill.Rect(position.x, position.y, 8, 15);
 		Draw.setColor(Color.black);
 		Draw.Rect(position.x, position.y, 8, 15);
 
 		Draw.String("" + _waitingPassengers,
-			offset.x + _position.x * METRO.__baseNetSpacing - Draw.getStringSize("" + _waitingPassengers).width / 2 - 1,
-			offset.y + _position.y * METRO.__baseNetSpacing - 25);
+			offset.x + _position.x * _gameState.getBaseNetSpacing() - Draw.getStringSize("" + _waitingPassengers).width / 2 - 1,
+			offset.y + _position.y * _gameState.getBaseNetSpacing() - 25);
 	}
 
 	/**
@@ -76,7 +78,7 @@ public class TrainStation
 	 */
 	public Point getPositionOnScreen(Point offset)
 	{
-		return new Point(offset.x + _position.x * METRO.__baseNetSpacing,
-			offset.y + _position.y * METRO.__baseNetSpacing); // Position with offset etc.
+		return new Point(offset.x + _position.x * _gameState.getBaseNetSpacing(),
+			offset.y + _position.y * _gameState.getBaseNetSpacing()); // Position with offset etc.
 	}
 }

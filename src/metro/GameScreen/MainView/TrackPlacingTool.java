@@ -6,6 +6,7 @@ import java.awt.Point;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.GameState;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
@@ -35,13 +36,16 @@ public class TrackPlacingTool extends GameScreen
 	public void updateGameScreen(SpriteBatch sp)
 	{
 		Point mapOffset = MainView._mapOffset;
+		int baseNetSpacing = GameState.getInstance().getBaseNetSpacing();
+		
 		if(_currentRailwayNode != null) // if not null, calc and draw preview of new tracks
 		{
+			Point nodePosition = _currentRailwayNode.getPosition();
 			Draw.setColor(Color.black);
 
 			int diagonalOffset = 0,
-				B = MainView._selectedCross.x - _currentRailwayNode.getPosition().x, // horizontal distance
-				H = MainView._selectedCross.y - _currentRailwayNode.getPosition().y, // vertical distance
+				B = MainView._selectedCross.x - nodePosition.x, // horizontal distance
+				H = MainView._selectedCross.y - nodePosition.y, // vertical distance
 				preFactor = 1;
 
 			if(Math.abs(H) > Math.abs(B)) // vertical tracks
@@ -49,48 +53,48 @@ public class TrackPlacingTool extends GameScreen
 				diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f);
 				if(H < 0) preFactor = -1;
 
-				Draw.Line(mapOffset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing,
-					mapOffset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-					mapOffset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing,
-					mapOffset.y + (_currentRailwayNode.getPosition().y + preFactor * diagonalOffset) * METRO.__baseNetSpacing);
+				Draw.Line(mapOffset.x + nodePosition.x * baseNetSpacing,
+					mapOffset.y + nodePosition.y * baseNetSpacing,
+					mapOffset.x + nodePosition.x * baseNetSpacing,
+					mapOffset.y + (nodePosition.y + preFactor * diagonalOffset) * baseNetSpacing);
 
-				Draw.Line(mapOffset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing,
-					mapOffset.y + (_currentRailwayNode.getPosition().y + preFactor * diagonalOffset) * METRO.__baseNetSpacing,
-					mapOffset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing,
-					mapOffset.y + (_currentRailwayNode.getPosition().y + preFactor * (diagonalOffset + Math.abs(B))) * METRO.__baseNetSpacing);
+				Draw.Line(mapOffset.x + nodePosition.x * baseNetSpacing,
+					mapOffset.y + (nodePosition.y + preFactor * diagonalOffset) * baseNetSpacing,
+					mapOffset.x + (nodePosition.x + B) * baseNetSpacing,
+					mapOffset.y + (nodePosition.y + preFactor * (diagonalOffset + Math.abs(B))) * baseNetSpacing);
 
-				Draw.Line(mapOffset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing,
-					mapOffset.y + (_currentRailwayNode.getPosition().y + preFactor * (diagonalOffset + Math.abs(B))) * METRO.__baseNetSpacing,
-					mapOffset.x + (_currentRailwayNode.getPosition().x + B) * METRO.__baseNetSpacing,
+				Draw.Line(mapOffset.x + (nodePosition.x + B) * baseNetSpacing,
+					mapOffset.y + (nodePosition.y + preFactor * (diagonalOffset + Math.abs(B))) * baseNetSpacing,
+					mapOffset.x + (nodePosition.x + B) * baseNetSpacing,
 					mapOffset.y
-						+ (_currentRailwayNode.getPosition().y + preFactor * (2 * diagonalOffset + preFactor * ((H - B) % 2) + Math.abs(B))) * METRO.__baseNetSpacing);
+						+ (nodePosition.y + preFactor * (2 * diagonalOffset + preFactor * ((H - B) % 2) + Math.abs(B))) * baseNetSpacing);
 			}
 			else if(Math.abs(B) > Math.abs(H)) // horizontal tracks
 			{
 				diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
 				if(B < 0) preFactor = -1;
 
-				Draw.Line(mapOffset.x + (_currentRailwayNode.getPosition().x + preFactor * diagonalOffset) * METRO.__baseNetSpacing,
-					mapOffset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-					mapOffset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing,
-					mapOffset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing);
+				Draw.Line(mapOffset.x + (nodePosition.x + preFactor * diagonalOffset) * baseNetSpacing,
+					mapOffset.y + nodePosition.y * baseNetSpacing,
+					mapOffset.x + nodePosition.x * baseNetSpacing,
+					mapOffset.y + nodePosition.y * baseNetSpacing);
 
-				Draw.Line(mapOffset.x + (_currentRailwayNode.getPosition().x + preFactor * diagonalOffset) * METRO.__baseNetSpacing,
-					mapOffset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-					mapOffset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing,
-					mapOffset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing);
+				Draw.Line(mapOffset.x + (nodePosition.x + preFactor * diagonalOffset) * baseNetSpacing,
+					mapOffset.y + nodePosition.y * baseNetSpacing,
+					mapOffset.x + (nodePosition.x + preFactor * (diagonalOffset + Math.abs(H))) * baseNetSpacing,
+					mapOffset.y + (nodePosition.y + H) * baseNetSpacing);
 
-				Draw.Line(mapOffset.x + (_currentRailwayNode.getPosition().x + preFactor * (diagonalOffset + Math.abs(H))) * METRO.__baseNetSpacing,
-					mapOffset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing,
-					mapOffset.x + (_currentRailwayNode.getPosition().x + preFactor * (2 * diagonalOffset + preFactor * ((B - H) % 2) + Math.abs(H))) * METRO.__baseNetSpacing,
-					mapOffset.y + (_currentRailwayNode.getPosition().y + H) * METRO.__baseNetSpacing);
+				Draw.Line(mapOffset.x + (nodePosition.x + preFactor * (diagonalOffset + Math.abs(H))) * baseNetSpacing,
+					mapOffset.y + (nodePosition.y + H) * baseNetSpacing,
+					mapOffset.x + (nodePosition.x + preFactor * (2 * diagonalOffset + preFactor * ((B - H) % 2) + Math.abs(H))) * baseNetSpacing,
+					mapOffset.y + (nodePosition.y + H) * baseNetSpacing);
 			}
 			else if(Math.abs(B) == Math.abs(H)) // diagonal tracks
 			{
-				Draw.Line(mapOffset.x + _currentRailwayNode.getPosition().x * METRO.__baseNetSpacing,
-					mapOffset.y + _currentRailwayNode.getPosition().y * METRO.__baseNetSpacing,
-					mapOffset.x + MainView._selectedCross.x * METRO.__baseNetSpacing,
-					mapOffset.y + MainView._selectedCross.y * METRO.__baseNetSpacing);
+				Draw.Line(mapOffset.x + nodePosition.x * baseNetSpacing,
+					mapOffset.y + nodePosition.y * baseNetSpacing,
+					mapOffset.x + MainView._selectedCross.x * baseNetSpacing,
+					mapOffset.y + MainView._selectedCross.y * baseNetSpacing);
 			}
 		}
 	}
