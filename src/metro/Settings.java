@@ -38,28 +38,26 @@ public class Settings
 	}
 
 	/**
-	 * Creates a plain default config file for this system.
+	 * Creates a plain default config file for this system with quite low settings.
 	 */
 	public void create()
 	{
 		if(_newSettings == null) _newSettings = new HashMap<String, Object>();
 
-		set("fullscreen.on", true);
-		GraphicsEnvironment gEnviroment = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		GraphicsDevice[] devices = gEnviroment.getScreenDevices();
-		set("screen.width", devices[0].getDisplayMode().getWidth() - 2); // -width of window border
-		set("screen.height", devices[0].getDisplayMode().getHeight() - 21); // -height of window title bar and border
+		set("fullscreen.on", false);
+		set("screen.width", 1024);
+		set("screen.height", 768);
 		set("use.opengl30", true);
 		set("use.hdpi", false);
 		set("use.vsync", true);
-		set("amount.samples", 8);
-		set("amount.segments", 64);
+		set("amount.samples", 4);
+		set("amount.segments", 32);
 
 		save();
 	}
 
 	/**
-	 * Reads everything from the settings.cfg
+	 * Reads everything from the settings.cfg.
 	 */
 	public void read()
 	{
