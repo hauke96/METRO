@@ -1,5 +1,10 @@
 You'll find all changes made in the versions here:
 
+VERSION 0.1.4: (23.02.2016)
+	- Trains
+		* Have own speed
+		* Changing direction when reaching the end of a line 
+
 VERSION 0.1.3: (17.02.2016)
 	- Game window with own window-bar
 	- Trains and template Trains

@@ -55,7 +55,7 @@ public class MainMenu extends GameScreen
 		addActionObservations();
 
 		// Create welcome-window:
-		_welcomeWindow = new Window("Welcome to METRO - ver.:" + METRO.__VERSION,
+		_welcomeWindow = new Window("Welcome to METRO - v" + METRO.__VERSION,
 			new Point(50, METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 300), // same y-pos as title image
 			new Point(500, 530));
 		registerControl(_welcomeWindow);
@@ -74,18 +74,10 @@ public class MainMenu extends GameScreen
 
 		Label label = new Label("METRO stands for \"Master of established transport railway operators\" and is a simple Subway/Rapid-Transit and economic simulator.\n\n"
 			+ "For all changes take a look into the 'changelog.txt'\n"
-			+ "New main-features of ver." + METRO.__VERSION + ":\n\n"
-			+ " Game window with own window-bar\n"
-			+ " * Trains and template Trains\n"
-			+ "   - Train buy dialog\n"
-			+ "   - Moving trains\n"
-			+ " * Bug fixes\n"
-			+ "   - Window management\n"
-			+ "   - Line system\n"
-			+ "   - CityView\n"
-			+ " * Technical stuff\n"
-			+ "   - Implemented observer pattern for window controls\n"
-			+ "   - Simplified the METRO class and the train/line overseer classes\n\n"
+			+ "New main-features of v" + METRO.__VERSION + ":\n\n"
+			+ " * Trains\n"
+			+ "     - Have own speed\n"
+			+ "     - Changing direction when reaching the end of a line\n\n" 
 			+ "And now: Have fun and earn money ;)",
 			new Point(20, 100), 450, _welcomeWindow);
 		registerControl(label);

@@ -2,9 +2,15 @@ package metro.TrainManagement;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -31,6 +37,114 @@ public class TrainManagementService
 
 	private TrainManagementService()
 	{
+		try
+		{
+			createTrains();
+		}
+		catch(IOException e)
+		{
+			METRO.__debug("[TrainReadError]\nCan't read train.txt due to an error: " + e.getMessage());
+		}
+		catch(IllegalArgumentException e)
+		{
+			METRO.__debug("[TrainFileSyntaxError]\n" + e.getMessage());
+		}
+	}
+	
+	private void createTrains() throws IOException, IllegalArgumentException
+	{
+		List<String> lines = Files.readAllLines((new File("data/trains.txt")).toPath(), Charset.defaultCharset());
+
+		Pattern comment = Pattern.compile("\\s#\\w"),
+			empty = Pattern.compile("\\s");
+
+		String name = "",
+			manufacturer = "",
+			price = "",
+			costs = "",
+			costsfactor = "",
+			passenger = "",
+			speed = "";
+
+		for(String line : lines)
+		{
+			if(!comment.matcher(line).matches() && !empty.matcher(line).matches())
+			{
+				String[] lineSplit = line.split(":");
+				if(lineSplit.length > 2) throw new IllegalArgumentException("Each property must contain exactly one \":\" symbol!");
+				switch(lineSplit[0])
+				{
+					case "NAME":
+						if(!name.equals("")) throw new IllegalArgumentException(
+							"Each property has to have exactly one key of each. In this case \"NAME\" exists multiple times in the property " + name + "!");
+						name = lineSplit[1];
+						break;
+					case "MANUFACTURER":
+						if(!manufacturer.equals("")) throw new IllegalArgumentException(
+							"Each property has to have exactly one key of each. In this case \"MANUFACTURER\" exists multiple times in the property " + name + "!");
+						manufacturer = lineSplit[1];
+						break;
+					case "PRICE":
+						if(!price.equals("")) throw new IllegalArgumentException(
+							"Each property has to have exactly one key of each. In this case \"PRICE\" exists multiple times in the property " + name + "!");
+						price = lineSplit[1];
+						break;
+					case "COSTS":
+						if(!costs.equals("")) throw new IllegalArgumentException(
+							"Each property has to have exactly one key of each. In this case \"COSTS\" exists multiple times in the property " + name + "!");
+						costs = lineSplit[1];
+						break;
+					case "COSTSFACTOR":
+						if(!costsfactor.equals("")) throw new IllegalArgumentException(
+							"Each property has to have exactly one key of each. In this case \"COSTFACTOR\" exists multiple times in the property " + name + "!");
+						costsfactor = lineSplit[1];
+						break;
+					case "PASSENGER":
+						if(!passenger.equals("")) throw new IllegalArgumentException(
+							"Each property has to have exactly one key of each. In this case \"PASSENGER\" exists multiple times in the property " + name + "!");
+						passenger = lineSplit[1];
+						break;
+					case "SPEED":
+						if(!speed.equals("")) throw new IllegalArgumentException(
+							"Each property has to have exactly one key of each. In this case \"SPEED\" exists multiple times in the property " + name + "!");
+						speed = lineSplit[1];
+						break;
+				}
+
+				// when the read data is complete, create train and put it into the map and then reset all variables
+				if(!name.equals("")
+					&& !manufacturer.equals("")
+					&& !price.equals("")
+					&& !costs.equals("")
+					&& !costsfactor.equals("")
+					&& !passenger.equals("")
+					&& !speed.equals(""))
+				{
+					METRO.__debug("[SuccesfullTrainRead]\n" +
+						name + "\n" +
+						manufacturer + "\n" +
+						Integer.parseInt(price) + "\n" +
+						Integer.parseInt(costs) + "\n" +
+						Float.parseFloat(costsfactor) + "\n" +
+						Integer.parseInt(passenger) + "\n" + 
+						Float.parseFloat(speed));
+					addTemplateTrain(new TrainTemplate(name,
+						manufacturer,
+						Integer.parseInt(price),
+						Integer.parseInt(costs),
+						Float.parseFloat(costsfactor),
+						Integer.parseInt(passenger),
+						Float.parseFloat(speed)));
+					name = "";
+					manufacturer = "";
+					price = "";
+					costs = "";
+					costsfactor = "";
+					passenger = "";
+					speed = "";
+				}
+			}
+		}
 	}
 
 	/**

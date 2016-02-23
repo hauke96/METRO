@@ -19,12 +19,12 @@ import metro.TrainManagement.Lines.TrainLine;
  *
  */
 
-public class Train
+public class Train extends TrainTemplate
 {
-	private String _name, _manufacturer;
-	private int _price, _costs, _maxPassengers, _currPassengers;
-	private float _costsFactor, _relativeOnLine;
-	private TrainLine _trainLine;
+	private float _relativeOnLine;
+	private int _currPassengers, _direction;
+	protected TrainLine _trainLine;
+	private long _lastRenderTime;
 
 	/**
 	 * Creates a new train with the following properties.
@@ -36,17 +36,15 @@ public class Train
 	 * @param costs Costs per month.
 	 * @param costsFactor Monthly increase of the costs.
 	 * @param passengers Maximum amount of passengers per train.
+	 * @param speed The speed in nodes per second.
 	 */
-	public Train(String name, String manufacturer, int price, int costs, float costsFactor, int passengers)
+	public Train(String name, String manufacturer, int price, int costs, float costsFactor, int passengers, float speed)
 	{
-		_name = name;
-		_manufacturer = manufacturer;
-		_price = price;
-		_costs = costs;
-		_costsFactor = costsFactor;
-		_maxPassengers = passengers;
+		super(name, manufacturer, price, costs, costsFactor, passengers, speed);
 		_currPassengers = 0;
 		_relativeOnLine = 0.0f;
+		_direction = 1;
+		_lastRenderTime = System.nanoTime();
 	}
 
 	/**
@@ -62,7 +60,8 @@ public class Train
 			trainTemplate.getPrice(),
 			trainTemplate.getCosts(),
 			trainTemplate.getCostFactor(),
-			trainTemplate.getMaxPassenger());
+			trainTemplate.getMaxPassenger(),
+			trainTemplate.getSpeed());
 	}
 
 	/**
@@ -76,51 +75,14 @@ public class Train
 	}
 
 	/**
-	 * @return The model designation of the train.
+	 * Sets the name of this train.
+	 * The convention is <NAME>_<NUMBER> so please be sure that your train has this name.
+	 * 
+	 * @param newName The new name of the train from the format <NAME>_<NUMBER>.
 	 */
-	public String getName()
+	public void setName(String newName)
 	{
-		return _name;
-	}
-
-	/**
-	 * @return Gets the name of the manufacturer of this train.
-	 */
-	public String getManufacturer()
-	{
-		return _manufacturer;
-	}
-
-	/**
-	 * @return Gets the price this train costs.
-	 */
-	public int getPrice()
-	{
-		return _price;
-	}
-
-	/**
-	 * @return Gets the monthly costs of this train without any consideration of the age.
-	 */
-	public int getCosts()
-	{
-		return _costs;
-	}
-
-	/**
-	 * @return Gets the monthly increase of this train.
-	 */
-	public float getCostFactor()
-	{
-		return _costsFactor;
-	}
-
-	/**
-	 * @return Gets the maximum amount of passengers that can travel with this train.
-	 */
-	public int getMaxPassenger()
-	{
-		return _maxPassengers;
+		_name = newName;
 	}
 
 	/**
@@ -154,8 +116,25 @@ public class Train
 			(int)(offset.y + position.getY() * GameState.getInstance().getBaseNetSpacing()),
 			10,
 			10);
-		_relativeOnLine += 0.03;
-		if(_relativeOnLine >= _trainLine.getLength()) _relativeOnLine = 0.0f;
+
+		moveTrain();
+	}
+
+	private void moveTrain()
+	{
+		_relativeOnLine += _direction * (_speed / (_trainLine.getAmountOfNodes() - 1) * ((System.nanoTime() - _lastRenderTime) / (float)1e9));
+		_lastRenderTime = System.nanoTime();
+		
+		if(_relativeOnLine >= _trainLine.getLength())
+		{
+			_relativeOnLine = (float)_trainLine.getLength();
+			_direction *= -1;
+		}
+		else if(_relativeOnLine <= 0)
+		{
+			_relativeOnLine = 0.0f;
+			_direction *= -1;
+		}
 	}
 
 	/**
@@ -168,16 +147,5 @@ public class Train
 		// TODO change 0 to real start node
 		Point2D p = _trainLine.getPositionOfTrain(_relativeOnLine, 0);
 		return p;
-	}
-
-	/**
-	 * Sets the name of this train.
-	 * The convention is <NAME>_<NUMBER> so please be sure that your train has this name.
-	 * 
-	 * @param newName The new name of the train from the format <NAME>_<NUMBER>.
-	 */
-	public void setName(String newName)
-	{
-		_name = newName;
 	}
 }

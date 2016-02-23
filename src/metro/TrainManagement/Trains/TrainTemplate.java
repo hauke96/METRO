@@ -11,7 +11,9 @@ package metro.TrainManagement.Trains;
 
 public class TrainTemplate
 {
-	private final Train _train;
+	protected String _name, _manufacturer;
+	protected int _price, _costs, _maxPassengers;
+	protected float _costsFactor, _speed;
 
 	/**
 	 * Creates a new train template with the following properties.
@@ -24,19 +26,25 @@ public class TrainTemplate
 	 * @param costs Costs per month.
 	 * @param costsFactor Monthly increase of the costs.
 	 * @param passengers Maximum amount of passengers per train.
+	 * @param speed The speed in nodes per second.
 	 */
-	public TrainTemplate(String name, String manufacturer, int price, int costs, float costsFactor, int passengers)
+	public TrainTemplate(String name, String manufacturer, int price, int costs, float costsFactor, int passengers, float speed)
 	{
-		_train = new Train(name, manufacturer, price, costs, costsFactor, passengers);
+		_name = name;
+		_manufacturer = manufacturer;
+		_price = price;
+		_costs = costs;
+		_costsFactor = costsFactor;
+		_maxPassengers = passengers;
+		_speed = speed;
 	}
-
 
 	/**
 	 * @return The model designation of the train.
 	 */
 	public String getName()
 	{
-		return _train.getName();
+		return _name;
 	}
 
 	/**
@@ -44,7 +52,7 @@ public class TrainTemplate
 	 */
 	public String getManufacturer()
 	{
-		return _train.getManufacturer();
+		return _manufacturer;
 	}
 
 	/**
@@ -52,7 +60,7 @@ public class TrainTemplate
 	 */
 	public int getPrice()
 	{
-		return _train.getPrice();
+		return _price;
 	}
 
 	/**
@@ -60,7 +68,7 @@ public class TrainTemplate
 	 */
 	public int getCosts()
 	{
-		return _train.getCosts();
+		return _costs;
 	}
 
 	/**
@@ -68,7 +76,7 @@ public class TrainTemplate
 	 */
 	public float getCostFactor()
 	{
-		return _train.getCostFactor();
+		return _costsFactor;
 	}
 
 	/**
@@ -76,6 +84,14 @@ public class TrainTemplate
 	 */
 	public int getMaxPassenger()
 	{
-		return _train.getMaxPassenger();
+		return _maxPassengers;
+	}
+
+	/**
+	 * @return Gets the speed in nodes per second.
+	 */
+	public float getSpeed()
+	{
+		return _speed;
 	}
 }

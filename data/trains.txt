@@ -11,6 +11,7 @@
 #     COSTS        - Costs of the train per month
 #     COSTSFACTOR  - Monthly increase of costs per month
 #     PASSENGER    - Amount of passengers this train can carry
+#     SPEED        - The amount of nodes a train can travel in one second
 
 # There mustn't be any separating stuff between the information blocks but an empty line makes the structure clearer ;) 
 
@@ -20,6 +21,7 @@ PRICE:90000
 COSTS:500
 COSTSFACTOR:1.028
 PASSENGER:150
+SPEED:0.45
 
 NAME:CT-2
 MANUFACTURER:Colman
@@ -27,6 +29,7 @@ PRICE:170000
 COSTS:1500
 COSTSFACTOR:1.02
 PASSENGER:400
+SPEED:0.6
 
 NAME:BR 470-104
 MANUFACTURER:Müller & Alström AG
@@ -34,6 +37,7 @@ PRICE:90000
 COSTS:530
 COSTSFACTOR:1.029
 PASSENGER:200
+SPEED:0.7
 
 NAME:BR 472-2
 MANUFACTURER:Müller & Alström AG
@@ -41,3 +45,4 @@ PRICE:250000
 COSTS:1900
 COSTSFACTOR:1.014
 PASSENGER:500
+SPEED:1

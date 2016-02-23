@@ -137,7 +137,7 @@ public class TrainLine
 	{
 		for(RailwayNode node : list)
 		{
-			if(TrainLine.isEndNode(node, list)) return node;
+			if(TrainLine.__isEndNode(node, list)) return node;
 		}
 
 		return null;
@@ -301,6 +301,14 @@ public class TrainLine
 	{
 		_name = newName;
 	}
+	
+	/**
+	 * @return The amount of nodes of this line (not the length or something).
+	 */
+	public int getAmountOfNodes()
+	{
+		return _listOfNodes.size();
+	}
 
 	/**
 	 * Check if this train line is a valid line. A line is valid when both of the following conditions apply:
@@ -317,8 +325,8 @@ public class TrainLine
 
 		for(RailwayNode node : listOfNodes)
 		{
-			if(isEndNode(node, listOfNodes)) ++amountEndNodes;
-			else if(getNeighborAmount(node, listOfNodes) > 2)
+			if(__isEndNode(node, listOfNodes)) ++amountEndNodes;
+			else if(__getNeighborAmount(node, listOfNodes) > 2)
 			{
 				return false;
 			}
@@ -334,12 +342,12 @@ public class TrainLine
 	 * @param listOfNodes The list of all available nodes.
 	 * @return True when the given node is an end node, false if not.
 	 */
-	public static boolean isEndNode(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
+	public static boolean __isEndNode(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
 	{
-		return getNeighborAmount(node, listOfNodes) == 1;
+		return __getNeighborAmount(node, listOfNodes) == 1;
 	}
 	
-	private static int getNeighborAmount(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
+	private static int __getNeighborAmount(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
 	{
 		int counter = 0;
 

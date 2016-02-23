@@ -90,7 +90,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	private static LwjglApplication _application;
 	
 	public static Dimension __SCREEN_SIZE;
-	public static final String __VERSION = "0.1.3";
+	public static final String __VERSION = "0.1.4_indev";
 	public static boolean _dragMode,
 		_debug;
 	public static Point _dragMode_LastMousePosition;
@@ -128,8 +128,8 @@ public class METRO implements ApplicationListener, InputProcessor
 		_debug = true;
 
 		_oldMousePosition = new Point(0, 0);
-		_titleBarHeight = 26;
-		_titleBarBorderLineWidth = 2;
+		_titleBarHeight = 22;
+		_titleBarBorderLineWidth = 1;
 		_dragMode = false;
 
 		detectOS();
@@ -317,7 +317,7 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		// title of title bar
 		Draw.setColor(Color.white);
-		String title = "METRO - Master of Established Transport Railway Operators - ver.: " + __VERSION;
+		String title = "METRO - Master of Established Transport Railway Operators - v" + __VERSION;
 		Dimension size = Draw.getStringSize(title);
 		Draw.String(title, (__SCREEN_SIZE.width - _titleBarHeight) / 2 - size.width / 2, _titleBarBorderLineWidth + 4, _gameWindowSpriteBatch);
 
