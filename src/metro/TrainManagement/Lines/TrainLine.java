@@ -67,7 +67,7 @@ public class TrainLine
 		_thickness = 3;
 		_gameState = GameState.getInstance();
 		_length = calcLength();
-		
+
 		METRO.__debug("[CalcTrainLineLength]");
 		METRO.__debug("Length: " + _length);
 	}
@@ -272,6 +272,41 @@ public class TrainLine
 	}
 
 	/**
+	 * Calculates the two nodes that are around the given distance beginning at the given start node.
+	 * 
+	 * @param distance The distance from the start node that's between two nodes.
+	 * @param startNode The start node from where the distance counts.
+	 * @return An array containing two nodes. This has always the length of 2.
+	 */
+	public Point[] getNodesAround(double distance, int startNode)
+	{
+		double length = 0.0,
+			lastLength = 0.0;
+		Point[] nodes = new Point[2];
+
+		Point nodePre = _listOfNodes.get(startNode).getPosition(),
+			nodeSuc = _listOfNodes.get(startNode + 1).getPosition();
+
+		// iterate over the nodes and calculate the distance until it's over the distance or at the end of the list
+		lastLength = calcPartLength(startNode, startNode + 1);
+
+		// iterate over all nodes to find (x) and (x+1) which are describes below
+		for(int i = startNode + 1; i + 1 < _listOfNodes.size() && nodeSuc != null && length + lastLength < distance; ++i)
+		{
+			length += lastLength;
+
+			nodePre = _listOfNodes.get(i).getPosition();
+			nodeSuc = _listOfNodes.get(i + 1).getPosition();
+			lastLength = calcPartLength(i, i + 1);
+		}
+
+		nodes[0] = nodePre;
+		nodes[1] = nodeSuc;
+
+		return nodes;
+	}
+
+	/**
 	 * Checks if a node is included in this train line.
 	 * 
 	 * @param node The node that's possibly in here.
@@ -301,7 +336,7 @@ public class TrainLine
 	{
 		_name = newName;
 	}
-	
+
 	/**
 	 * @return The amount of nodes of this line (not the length or something).
 	 */
@@ -346,7 +381,7 @@ public class TrainLine
 	{
 		return __getNeighborAmount(node, listOfNodes) == 1;
 	}
-	
+
 	private static int __getNeighborAmount(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
 	{
 		int counter = 0;
@@ -358,7 +393,7 @@ public class TrainLine
 				if(neighborNode.equals(Node)) ++counter;
 			}
 		}
-		
+
 		return counter;
 	}
 
@@ -391,7 +426,7 @@ public class TrainLine
 	{
 		return _listOfNodes;
 	}
-	
+
 	/**
 	 * @return The length of this train line in field units (not the amount of nodes!).
 	 */
@@ -434,9 +469,9 @@ public class TrainLine
 	public void draw(Point offset, SpriteBatch sp, HashMap<RailwayNode, Integer> map)
 	{
 		if(_length == 0) return;
-		
+
 		Draw.setColor(isValid(_listOfNodes) ? _lineColor : METRO.__metroRed);
-		
+
 		for(int i = 0; i < _listOfNodes.size() - 1; i++)
 		{
 			// the list is sorted so we know that i+1 is the direct neighbor

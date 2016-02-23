@@ -50,7 +50,7 @@ public class TrainManagementService
 			METRO.__debug("[TrainFileSyntaxError]\n" + e.getMessage());
 		}
 	}
-	
+
 	private void createTrains() throws IOException, IllegalArgumentException
 	{
 		List<String> lines = Files.readAllLines((new File("data/trains.txt")).toPath(), Charset.defaultCharset());
@@ -126,7 +126,7 @@ public class TrainManagementService
 						Integer.parseInt(price) + "\n" +
 						Integer.parseInt(costs) + "\n" +
 						Float.parseFloat(costsfactor) + "\n" +
-						Integer.parseInt(passenger) + "\n" + 
+						Integer.parseInt(passenger) + "\n" +
 						Float.parseFloat(speed));
 					addTemplateTrain(new TrainTemplate(name,
 						manufacturer,
@@ -286,7 +286,7 @@ public class TrainManagementService
 	{
 		if(line == null) return;
 		_listOfTrainLines.remove(line);
-		removeTrain(line.getName()); 
+		removeTrain(line.getName());
 	}
 
 	/**
@@ -364,6 +364,47 @@ public class TrainManagementService
 		{
 			line.draw(offset, sp, map);
 		}
+	}
+
+	/**
+	 * Draws all trains.
+	 * 
+	 * @param offset The map offset in pixel.
+	 * @param sp The sprite batch to draw on.
+	 */
+	public void drawTrains(Point offset, SpriteBatch sp)
+	{
+		for(Train train : getTrains())
+		{
+			train.draw(sp, offset);
+			train.drive(canMove(train));
+		}
+	}
+
+	/**
+	 * Checks if the train can move by having a specific distance to the train ahead.
+	 * 
+	 * @param train The train which may can move.
+	 * @return True when the train can move, false when not.
+	 */
+	private boolean canMove(Train train)
+	{
+		Point[] nodes = train.getNextNodesAround();
+
+		for(Train t : getTrains())
+		{
+			if(!t.equals(train))
+			{
+				//TODO reduce distance from train ahead to 1*baseNetSPacing instead of 2*baseNetSpacing
+				//FIXME look if directions are equal, otherwise trains won't turn back after reaching the end of their line.
+				Point[] n = t.getNodesAround();
+				if(n[0].equals(nodes[0]) && n[1].equals(nodes[1]) ||
+					n[0].equals(nodes[1]) && n[1].equals(nodes[0]))
+					return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**

@@ -23,7 +23,7 @@ public class Train extends TrainTemplate
 {
 	private float _relativeOnLine;
 	private int _currPassengers, _direction;
-	protected TrainLine _trainLine;
+	private TrainLine _trainLine;
 	private long _lastRenderTime;
 
 	/**
@@ -116,25 +116,31 @@ public class Train extends TrainTemplate
 			(int)(offset.y + position.getY() * GameState.getInstance().getBaseNetSpacing()),
 			10,
 			10);
-
-		moveTrain();
 	}
 
-	private void moveTrain()
+	/**
+	 * Moves the train based on the elapsed time since the last moving and its speed.
+	 * Even if the train should not move, it's a good idea to call this method with a correct parameter in order to keep the time-calculation correct.
+	 * 
+	 * @param move When true the train will move, when false the train wont move and just wait.
+	 */
+	public void drive(boolean move)
 	{
-		_relativeOnLine += _direction * (_speed / (_trainLine.getAmountOfNodes() - 1) * ((System.nanoTime() - _lastRenderTime) / (float)1e9));
+		if(move)
+		{
+			if(_relativeOnLine >= _trainLine.getLength())
+			{
+				_relativeOnLine = (float)_trainLine.getLength();
+				_direction *= -1;
+			}
+			else if(_relativeOnLine <= 0)
+			{
+				_relativeOnLine = 0.0f;
+				_direction *= -1;
+			}
+			_relativeOnLine += _direction * (_speed * ((System.nanoTime() - _lastRenderTime) / (float)1e9));
+		}
 		_lastRenderTime = System.nanoTime();
-		
-		if(_relativeOnLine >= _trainLine.getLength())
-		{
-			_relativeOnLine = (float)_trainLine.getLength();
-			_direction *= -1;
-		}
-		else if(_relativeOnLine <= 0)
-		{
-			_relativeOnLine = 0.0f;
-			_direction *= -1;
-		}
 	}
 
 	/**
@@ -147,5 +153,27 @@ public class Train extends TrainTemplate
 		// TODO change 0 to real start node
 		Point2D p = _trainLine.getPositionOfTrain(_relativeOnLine, 0);
 		return p;
+	}
+
+	/**
+	 * Gets the two nodes that are around this train.
+	 * 
+	 * @return An array of two nodes that are around this train. This array always has the length of 2.
+	 */
+	public Point[] getNodesAround()
+	{
+		// TODO change 0 to real start node
+		return _trainLine.getNodesAround(_relativeOnLine, 0);
+	}
+
+	/**
+	 * Gets the two nodes that are ahead this train.
+	 * 
+	 * @return An array of two nodes that are around this train. This array always has the length of 2.
+	 */
+	public Point[] getNextNodesAround()
+	{
+		// TODO change 0 to real start node
+		return _trainLine.getNodesAround(_relativeOnLine + _direction, 0);
 	}
 }
