@@ -374,10 +374,39 @@ public class TrainManagementService
 	 */
 	public void drawTrains(Point offset, SpriteBatch sp)
 	{
+		lockNodes();
+
 		for(Train train : getTrains())
 		{
 			train.draw(sp, offset);
 			train.drive(canMove(train));
+		}
+
+		unlockNodes();
+
+		System.out.println();
+	}
+
+	/**
+	 * Locks all nodes for the train movement, so that there won't be any errors.
+	 */
+	private void lockNodes()
+	{
+		for(Train train : getTrains())
+		{
+			RailwayNodeOverseer.getNodeByPosition(train.getNextNode()).setFreeForTrain(false);
+		}
+	}
+
+	/**
+	 * Unlocks all nodes, so all nodes are visitable after this.
+	 */
+	private void unlockNodes()
+	{
+		for(Train train : getTrains())
+		{
+			RailwayNodeOverseer.getNodeByPosition(train.getNextNode()).setFreeForTrain(true);
+			RailwayNodeOverseer.getNodeByPosition(train.getCurrentNode()).setFreeForTrain(true);
 		}
 	}
 
@@ -389,21 +418,55 @@ public class TrainManagementService
 	 */
 	private boolean canMove(Train train)
 	{
-		Point[] nodes = train.getNextNodesAround();
-
-		for(Train t : getTrains())
+		boolean free = RailwayNodeOverseer.getNodeByPosition(train.getNextNode()).isFreeForTrain();
+		if(!free)
 		{
-			if(!t.equals(train))
-			{
-				//TODO reduce distance from train ahead to 1*baseNetSPacing instead of 2*baseNetSpacing
-				//FIXME look if directions are equal, otherwise trains won't turn back after reaching the end of their line.
-				Point[] n = t.getNodesAround();
-				if(n[0].equals(nodes[0]) && n[1].equals(nodes[1]) ||
-					n[0].equals(nodes[1]) && n[1].equals(nodes[0]))
-					return false;
-			}
-		}
+			Point nextNode = train.getNextNode();
+			Point currentNode = train.getCurrentNode();
 
+			for(Train t : getTrains())
+			{
+				if(!t.equals(train))
+				{
+					if(nextNode.equals(t.getNextNode()) // driving to same node
+						&& currentNode.equals(t.getCurrentNode()) // same last node. In addition to first condition --> trains driving in same direction
+						&& train.calcPosition().distance(nextNode) >= t.calcPosition().distance(nextNode)) // train behind t --> can't move, t can
+					{
+						return false;
+					}
+				}
+			}
+
+			// alternative implementation (not as good?)
+			// for(Train t : getTrains())
+			// {
+			// Point tCurrentNode = t.getCurrentNode();
+			// Point tNextNode = t.getNextNode();
+			//
+			// if(!t.equals(train))
+			// {
+			// if(nextNode.equals(tNextNode) // driving to same node
+			// && currentNode.equals(tCurrentNode) // same last node. In addition to first condition --> trains driving in same direction
+			// && train.calcPosition().distance(nextNode) >= t.calcPosition().distance(nextNode)) // train behind t --> can't move, t can
+			// {
+			// // RailwayNodeOverseer.getNodeByPosition(currentNode).setFreeForTrain(false);
+			// System.out.println("a");
+			// return false;
+			// }
+			// else if(nextNode.equals(tCurrentNode)
+			// && !currentNode.equals(tNextNode) // not driving towards me (would mean that t and train are driving in different directions)
+			// && !RailwayNodeOverseer.getNodeByPosition(nextNode).isFreeForTrain())
+			// {
+			// // RailwayNodeOverseer.getNodeByPosition(currentNode).setFreeForTrain(false);
+			// System.out.println("b");
+			// return false;
+			// }
+			// }
+			// }
+
+			// RailwayNodeOverseer.getNodeByPosition(currentNode).setFreeForTrain(true);
+			// RailwayNodeOverseer.getNodeByPosition(nextNode).setFreeForTrain(false);
+		}
 		return true;
 	}
 

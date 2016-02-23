@@ -276,34 +276,39 @@ public class TrainLine
 	 * 
 	 * @param distance The distance from the start node that's between two nodes.
 	 * @param startNode The start node from where the distance counts.
-	 * @return An array containing two nodes. This has always the length of 2.
+	 * @param direction The direction of the train.
+	 * @return The node this train is currently assigned to (the last visited node).
 	 */
-	public Point[] getNodesAround(double distance, int startNode)
+	public Point getNode(double distance, int startNode, int direction)
 	{
 		double length = 0.0,
 			lastLength = 0.0;
-		Point[] nodes = new Point[2];
 
-		Point nodePre = _listOfNodes.get(startNode).getPosition(),
-			nodeSuc = _listOfNodes.get(startNode + 1).getPosition();
+		Point node = _listOfNodes.get(startNode).getPosition();
 
-		// iterate over the nodes and calculate the distance until it's over the distance or at the end of the list
-		lastLength = calcPartLength(startNode, startNode + 1);
+		lastLength = calcPartLength(
+			direction > 0 ? startNode : startNode + direction,
+			direction > 0 ? startNode + direction : startNode);
 
 		// iterate over all nodes to find (x) and (x+1) which are describes below
-		for(int i = startNode + 1; i + 1 < _listOfNodes.size() && nodeSuc != null && length + lastLength < distance; ++i)
+		for(int i = startNode + direction; i + direction < _listOfNodes.size()
+			&& i + direction >= 0
+			&& length + lastLength < distance; i += direction)
 		{
 			length += lastLength;
 
-			nodePre = _listOfNodes.get(i).getPosition();
-			nodeSuc = _listOfNodes.get(i + 1).getPosition();
-			lastLength = calcPartLength(i, i + 1);
+			node = _listOfNodes.get(i).getPosition();
+			lastLength = calcPartLength(
+				direction > 0 ? i : i + direction,
+				direction > 0 ? i + direction : i);
+		}
+		
+		if(distance - length > lastLength) // when the last node is not considered
+		{
+			node = _listOfNodes.get(_listOfNodes.size() - startNode - 1).getPosition();
 		}
 
-		nodes[0] = nodePre;
-		nodes[1] = nodeSuc;
-
-		return nodes;
+		return node;
 	}
 
 	/**

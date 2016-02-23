@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.GameState;
+import metro.METRO;
 import metro.Graphics.Draw;
 
 /**
@@ -19,8 +20,9 @@ import metro.Graphics.Draw;
 
 public class RailwayNode
 {
-	private ArrayList<RailwayNode> _listOfNeighbors = new ArrayList<RailwayNode>(); // a list of all nodes this node is connected to
+	private ArrayList<RailwayNode> _listOfNeighbors; // a list of all nodes this node is connected to
 	private Point _position; // not in pixel, cross number/pos
+	private boolean _freeForTrain;
 
 	/**
 	 * The price of one node.
@@ -36,6 +38,8 @@ public class RailwayNode
 	RailwayNode(Point position, RailwayNode neighbor)
 	{
 		_position = position;
+		_listOfNeighbors = new ArrayList<RailwayNode>();
+		_freeForTrain = true;
 		if(neighbor != null) _listOfNeighbors.add(neighbor);
 		if(_position != null) RailwayNodeOverseer.add(this);
 	}
@@ -147,5 +151,33 @@ public class RailwayNode
 	public boolean equals(Object obj)
 	{
 		return (obj instanceof RailwayNode) && (_position.equals(((RailwayNode)obj).getPosition()));
+	}
+
+	/**
+	 * @return True when a train van visit this node, false when not.
+	 */
+	public boolean isFreeForTrain()
+	{
+		return _freeForTrain;
+	}
+
+	/**
+	 * Makes this node able to become visited (true) or not (false).
+	 * 
+	 * @param free True makes this node visitable, false not.
+	 */
+	public void setFreeForTrain(boolean free)
+	{
+		_freeForTrain = free;
+		// TODO remove after testing
+		if(!_freeForTrain)
+		{
+			GameState gameState = GameState.getInstance();
+			Point position = new Point(_position.x * gameState.getBaseNetSpacing(),
+				_position.y * gameState.getBaseNetSpacing()); // Position with offset etc.
+			Draw.setColor(Color.red);
+			position.translate(-3, -3);
+			Draw.Circle(position.x, position.y, 6);
+		}
 	}
 }

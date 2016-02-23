@@ -113,7 +113,7 @@ public class Train extends TrainTemplate
 		Fill.setColor(Color.lightGray);
 		Fill.Rect(
 			(int)(offset.x + position.getX() * GameState.getInstance().getBaseNetSpacing()),
-			(int)(offset.y + position.getY() * GameState.getInstance().getBaseNetSpacing()),
+			(int)(offset.y + position.getY() * GameState.getInstance().getBaseNetSpacing() + ((_direction - 1) * 5)),
 			10,
 			10);
 	}
@@ -148,7 +148,7 @@ public class Train extends TrainTemplate
 	 * 
 	 * @return The coordinates of the train.
 	 */
-	private Point2D calcPosition()
+	public Point2D calcPosition()
 	{
 		// TODO change 0 to real start node
 		Point2D p = _trainLine.getPositionOfTrain(_relativeOnLine, 0);
@@ -158,22 +158,26 @@ public class Train extends TrainTemplate
 	/**
 	 * Gets the two nodes that are around this train.
 	 * 
-	 * @return An array of two nodes that are around this train. This array always has the length of 2.
+	 * @return The node this train is assigned to (the last visited node).
 	 */
-	public Point[] getNodesAround()
+	public Point getCurrentNode()
 	{
 		// TODO change 0 to real start node
-		return _trainLine.getNodesAround(_relativeOnLine, 0);
+		return _trainLine.getNode(_direction > 0 ? _relativeOnLine : _trainLine.getLength() - _relativeOnLine,
+			_direction > 0 ? 0 : _trainLine.getAmountOfNodes() - 1,
+			_direction); // comparison do take the driving direction into account
 	}
 
 	/**
 	 * Gets the two nodes that are ahead this train.
 	 * 
-	 * @return An array of two nodes that are around this train. This array always has the length of 2.
+	 * @return The node the train will visit next.
 	 */
-	public Point[] getNextNodesAround()
+	public Point getNextNode()
 	{
 		// TODO change 0 to real start node
-		return _trainLine.getNodesAround(_relativeOnLine + _direction, 0);
+		return _trainLine.getNode((_direction > 0 ? _relativeOnLine : _trainLine.getLength() - _relativeOnLine) + 1,
+			_direction > 0 ? 0 : _trainLine.getAmountOfNodes() - 1,
+			_direction); // comparison do take the driving direction into account
 	}
 }
