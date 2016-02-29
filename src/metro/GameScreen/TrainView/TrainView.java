@@ -47,7 +47,7 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				TrainManagementService trainManagementService= TrainManagementService.getInstance();
+				TrainManagementService trainManagementService = TrainManagementService.getInstance();
 				if(_trainViewMain.getLineList().getSelected() == -1)
 				{
 					_trainViewBuy.getMessageLabel().setText("Please select the line this train should drive on.");
