@@ -30,13 +30,19 @@ import metro.TrainManagement.Trains.TrainTemplate;
  */
 public class TrainManagementService
 {
-	private static ArrayList<TrainLine> _listOfTrainLines = new ArrayList<TrainLine>();
-	private ArrayList<Train> _trainList = new ArrayList<>();
-	private HashMap<String, TrainTemplate> _templateTrains = new HashMap<>();
+	private static ArrayList<TrainLine> _listOfTrainLines;
+	private ArrayList<Train> _trainList;
+	private HashMap<String, TrainTemplate> _templateTrains;
 	private final static TrainManagementService __INSTANCE = new TrainManagementService();
+	private static float _lastRenderTime;
 
 	private TrainManagementService()
 	{
+		_listOfTrainLines = new ArrayList<TrainLine>();
+		_trainList = new ArrayList<>();
+		_templateTrains = new HashMap<>();
+		_lastRenderTime = System.nanoTime();
+
 		try
 		{
 			createTrains();
@@ -374,17 +380,18 @@ public class TrainManagementService
 	 */
 	public void drawTrains(Point offset, SpriteBatch sp)
 	{
+		float deltaTime = System.nanoTime() - _lastRenderTime;
+		_lastRenderTime = System.nanoTime();
+
 		lockNodes();
 
-		for(Train train : getTrains())
+		for(Train train : _trainList)
 		{
 			train.draw(sp, offset);
-			train.drive(canMove(train));
+			train.drive(canMove(train, deltaTime), deltaTime);
 		}
 
-		unlockNodes();
-
-		System.out.println();
+		RailwayNodeOverseer.unlockAllSignals();
 	}
 
 	/**
@@ -394,19 +401,29 @@ public class TrainManagementService
 	{
 		for(Train train : getTrains())
 		{
-			RailwayNodeOverseer.getNodeByPosition(train.getNextNode()).setFreeForTrain(false);
-		}
-	}
+			Point nextNode = train.getNextNode();
+			Point currentNode = train.getCurrentNode();
 
-	/**
-	 * Unlocks all nodes, so all nodes are visitable after this.
-	 */
-	private void unlockNodes()
-	{
-		for(Train train : getTrains())
-		{
-			RailwayNodeOverseer.getNodeByPosition(train.getNextNode()).setFreeForTrain(true);
-			RailwayNodeOverseer.getNodeByPosition(train.getCurrentNode()).setFreeForTrain(true);
+			// set signal for train
+			RailwayNodeOverseer.getNodeByPosition(currentNode).setSignalValue(
+				RailwayNodeOverseer.getNodeByPosition(nextNode),
+				train);
+
+			// find train thats nearer on the nextNode and set therefore the signal to this node
+			for(Train t : getTrains())
+			{
+				if(!t.equals(train))
+				{
+					if(nextNode.equals(t.getNextNode()) // driving to same node
+						&& currentNode.equals(t.getCurrentNode()) // same last node. In addition to first condition --> trains driving in same direction
+						&& train.calcPosition().distance(nextNode) >= t.calcPosition().distance(nextNode)) // train behind t --> train can't move, t can
+					{
+						RailwayNodeOverseer.getNodeByPosition(currentNode).setSignalValue(
+							RailwayNodeOverseer.getNodeByPosition(nextNode),
+							t);
+					}
+				}
+			}
 		}
 	}
 
@@ -416,58 +433,25 @@ public class TrainManagementService
 	 * @param train The train which may can move.
 	 * @return True when the train can move, false when not.
 	 */
-	private boolean canMove(Train train)
+	private boolean canMove(Train train, float deltaTime)
 	{
-		boolean free = RailwayNodeOverseer.getNodeByPosition(train.getNextNode()).isFreeForTrain();
-		if(!free)
+		Point currentNode = train.getCurrentNode();
+		Point currentNodeAfterMove = train.getCurrentNode(deltaTime);
+		Point nextNodeAfterMove = train.getNextNode(deltaTime);
+
+		if(currentNode.equals(currentNodeAfterMove))
 		{
-			Point nextNode = train.getNextNode();
-			Point currentNode = train.getCurrentNode();
-
-			for(Train t : getTrains())
-			{
-				if(!t.equals(train))
-				{
-					if(nextNode.equals(t.getNextNode()) // driving to same node
-						&& currentNode.equals(t.getCurrentNode()) // same last node. In addition to first condition --> trains driving in same direction
-						&& train.calcPosition().distance(nextNode) >= t.calcPosition().distance(nextNode)) // train behind t --> can't move, t can
-					{
-						return false;
-					}
-				}
-			}
-
-			// alternative implementation (not as good?)
-			// for(Train t : getTrains())
-			// {
-			// Point tCurrentNode = t.getCurrentNode();
-			// Point tNextNode = t.getNextNode();
-			//
-			// if(!t.equals(train))
-			// {
-			// if(nextNode.equals(tNextNode) // driving to same node
-			// && currentNode.equals(tCurrentNode) // same last node. In addition to first condition --> trains driving in same direction
-			// && train.calcPosition().distance(nextNode) >= t.calcPosition().distance(nextNode)) // train behind t --> can't move, t can
-			// {
-			// // RailwayNodeOverseer.getNodeByPosition(currentNode).setFreeForTrain(false);
-			// System.out.println("a");
-			// return false;
-			// }
-			// else if(nextNode.equals(tCurrentNode)
-			// && !currentNode.equals(tNextNode) // not driving towards me (would mean that t and train are driving in different directions)
-			// && !RailwayNodeOverseer.getNodeByPosition(nextNode).isFreeForTrain())
-			// {
-			// // RailwayNodeOverseer.getNodeByPosition(currentNode).setFreeForTrain(false);
-			// System.out.println("b");
-			// return false;
-			// }
-			// }
-			// }
-
-			// RailwayNodeOverseer.getNodeByPosition(currentNode).setFreeForTrain(true);
-			// RailwayNodeOverseer.getNodeByPosition(nextNode).setFreeForTrain(false);
+			return RailwayNodeOverseer.getNodeByPosition(train.getCurrentNode()).getSignalValue(
+				RailwayNodeOverseer.getNodeByPosition(train.getNextNode()),
+				train);
 		}
-		return true;
+
+		// when the train will pass a node/signal, check if any other train is in this area or if this train can move forward.
+		// When there's any other node in the next area, the signal at "currentNode" will change to "green" which is wrong, because
+		// then other train might rush into this train.
+		return RailwayNodeOverseer.getNodeByPosition(currentNodeAfterMove).getSignalValue(
+			RailwayNodeOverseer.getNodeByPosition(nextNodeAfterMove),
+			train);
 	}
 
 	/**

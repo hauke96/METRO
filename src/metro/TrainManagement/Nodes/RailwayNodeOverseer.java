@@ -148,4 +148,15 @@ public class RailwayNodeOverseer
 			node.draw(sp, offset);
 		}
 	}
+
+	/**
+	 * Sets every signal to "green".
+	 **/
+	public static void unlockAllSignals()
+	{
+		for(RailwayNode node : _nodeMap.values())
+		{
+			node.unlockSignals();
+		}
+	}
 }

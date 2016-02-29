@@ -3,12 +3,14 @@ package metro.TrainManagement.Nodes;
 import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.GameState;
-import metro.METRO;
 import metro.Graphics.Draw;
+import metro.TrainManagement.Trains.Train;
 
 /**
  * A railway node is a point that's used by train lines and every node has neighbors (both know each other).
@@ -22,7 +24,7 @@ public class RailwayNode
 {
 	private ArrayList<RailwayNode> _listOfNeighbors; // a list of all nodes this node is connected to
 	private Point _position; // not in pixel, cross number/pos
-	private boolean _freeForTrain;
+	private Map<RailwayNode, Train> _signals;
 
 	/**
 	 * The price of one node.
@@ -39,9 +41,9 @@ public class RailwayNode
 	{
 		_position = position;
 		_listOfNeighbors = new ArrayList<RailwayNode>();
-		_freeForTrain = true;
 		if(neighbor != null) _listOfNeighbors.add(neighbor);
 		if(_position != null) RailwayNodeOverseer.add(this);
+		_signals = new HashMap<>();
 	}
 
 	/**
@@ -154,30 +156,54 @@ public class RailwayNode
 	}
 
 	/**
-	 * @return True when a train van visit this node, false when not.
+	 * Sets the value of a signal for the part between this node and the successor (looking in the successors direction).
+	 * The successor gives the direction of the signal and the value is like a "red" or "green" for the signal.
+	 * 
+	 * @param successor The successor of this node.
+	 * @param train The train that's allowed to drive in the part between this node and the successor.
 	 */
-	public boolean isFreeForTrain()
+	public void setSignalValue(RailwayNode successor, Train train)
 	{
-		return _freeForTrain;
+		if(_listOfNeighbors.contains(successor))
+		{
+			_signals.put(successor, train);
+		}
 	}
 
 	/**
-	 * Makes this node able to become visited (true) or not (false).
+	 * Gets the value of the signal for the part between this node and the successor (looking in the successors direction).
 	 * 
-	 * @param free True makes this node visitable, false not.
+	 * @param successor The successor of the signal to determine the direction of it.
+	 * @param train The train that wants to pass the signal.
+	 * @return The value of the signal for the given train, where true means "green" and false means "red", for the part between this node and the successor.
+	 *         When there's no signal specified by the {@code setSignalValue(RailwayNode, boolean)} method, the value is true.
 	 */
-	public void setFreeForTrain(boolean free)
+	public boolean getSignalValue(RailwayNode successor, Train train)
 	{
-		_freeForTrain = free;
-		// TODO remove after testing
-		if(!_freeForTrain)
+		// when train does not appear in the list, every train can move.
+		if(!_signals.containsKey(successor))
 		{
-			GameState gameState = GameState.getInstance();
-			Point position = new Point(_position.x * gameState.getBaseNetSpacing(),
-				_position.y * gameState.getBaseNetSpacing()); // Position with offset etc.
-			Draw.setColor(Color.red);
-			position.translate(-3, -3);
-			Draw.Circle(position.x, position.y, 6);
+			return true;
 		}
+
+		if(_signals.get(successor).getCurrentNode().equals(getPosition())) // train's in this area, give value. Otherwise remove train.
+		{
+			return _signals.get(successor).getName().equals(train.getName());
+		}
+		else
+		{
+			_signals.remove(successor);
+		}
+
+		// when the train has passed the part from this node to the successor, other trains can move.
+		return true;
+	}
+
+	/**
+	 * Sets every signal to "green".
+	 */
+	public void unlockSignals()
+	{
+		_signals.clear();
 	}
 }

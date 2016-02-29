@@ -24,7 +24,6 @@ public class Train extends TrainTemplate
 	private float _relativeOnLine;
 	private int _currPassengers, _direction;
 	private TrainLine _trainLine;
-	private long _lastRenderTime;
 
 	/**
 	 * Creates a new train with the following properties.
@@ -44,7 +43,6 @@ public class Train extends TrainTemplate
 		_currPassengers = 0;
 		_relativeOnLine = 0.0f;
 		_direction = 1;
-		_lastRenderTime = System.nanoTime();
 	}
 
 	/**
@@ -123,8 +121,9 @@ public class Train extends TrainTemplate
 	 * Even if the train should not move, it's a good idea to call this method with a correct parameter in order to keep the time-calculation correct.
 	 * 
 	 * @param move When true the train will move, when false the train wont move and just wait.
+	 * @param deltaTime The delta time (current time - last time of this method call) to determine the mved distance.
 	 */
-	public void drive(boolean move)
+	public void drive(boolean move, float deltaTime)
 	{
 		if(move)
 		{
@@ -138,9 +137,15 @@ public class Train extends TrainTemplate
 				_relativeOnLine = 0.0f;
 				_direction *= -1;
 			}
-			_relativeOnLine += _direction * (_speed * ((System.nanoTime() - _lastRenderTime) / (float)1e9));
+			// _relativeOnLine += _direction * (_speed * ((System.nanoTime() - _lastRenderTime) / (float)1e9));
+			_relativeOnLine += getMovedDistance(deltaTime);
 		}
-		_lastRenderTime = System.nanoTime();
+		// _lastRenderTime = System.nanoTime();
+	}
+
+	private float getMovedDistance(float deltaTime)
+	{
+		return _direction * (_speed * (deltaTime / (float)1e9));
 	}
 
 	/**
@@ -162,10 +167,7 @@ public class Train extends TrainTemplate
 	 */
 	public Point getCurrentNode()
 	{
-		// TODO change 0 to real start node
-		return _trainLine.getNode(_direction > 0 ? _relativeOnLine : _trainLine.getLength() - _relativeOnLine,
-			_direction > 0 ? 0 : _trainLine.getAmountOfNodes() - 1,
-			_direction); // comparison do take the driving direction into account
+		return getCurrentNode(0f);
 	}
 
 	/**
@@ -175,8 +177,35 @@ public class Train extends TrainTemplate
 	 */
 	public Point getNextNode()
 	{
+		return getNextNode(0f);
+	}
+
+	/**
+	 * Gets the two nodes that are around this train.
+	 * 
+	 * @param deltaTime The elapsed time since last move.
+	 * @return The node this train is assigned to (the last visited node).
+	 */
+	public Point getCurrentNode(float deltaTime)
+	{
+		float relativeOnLine = _relativeOnLine + getMovedDistance(deltaTime);
 		// TODO change 0 to real start node
-		return _trainLine.getNode((_direction > 0 ? _relativeOnLine : _trainLine.getLength() - _relativeOnLine) + 1,
+		return _trainLine.getNode(_direction > 0 ? relativeOnLine : _trainLine.getLength() - relativeOnLine,
+			_direction > 0 ? 0 : _trainLine.getAmountOfNodes() - 1,
+			_direction); // comparison do take the driving direction into account
+	}
+
+	/**
+	 * Gets the two nodes that are ahead this train.
+	 * 
+	 * @param deltaTime The elapsed time since last move.
+	 * @return The node the train will visit next.
+	 */
+	public Point getNextNode(float deltaTime)
+	{
+		float relativeOnLine = _relativeOnLine + getMovedDistance(deltaTime);
+		// TODO change 0 to real start node
+		return _trainLine.getNode((_direction > 0 ? relativeOnLine : _trainLine.getLength() - relativeOnLine) + 1,
 			_direction > 0 ? 0 : _trainLine.getAmountOfNodes() - 1,
 			_direction); // comparison do take the driving direction into account
 	}

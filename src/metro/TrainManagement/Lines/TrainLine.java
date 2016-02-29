@@ -302,7 +302,7 @@ public class TrainLine
 				direction > 0 ? i : i + direction,
 				direction > 0 ? i + direction : i);
 		}
-		
+
 		if(distance - length > lastLength) // when the last node is not considered
 		{
 			node = _listOfNodes.get(_listOfNodes.size() - startNode - 1).getPosition();
