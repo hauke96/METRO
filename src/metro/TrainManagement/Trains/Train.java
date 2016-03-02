@@ -2,11 +2,13 @@ package metro.TrainManagement.Trains;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.GameState;
+import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.Lines.TrainLine;
 
@@ -21,15 +23,16 @@ import metro.TrainManagement.Lines.TrainLine;
 
 public class Train extends TrainTemplate
 {
-	private float _relativeOnLine;
-	private int _currPassengers, _direction;
+	private float _relativeOnLine, _textureRotation;
+	private int _currPassengers, _direction, _textureYOffset;
 	private TrainLine _trainLine;
 
 	/**
 	 * Creates a new train with the following properties.
 	 * Every data for the trains are in the ./data/trains.txt file and will be read & parsed by the GameState class.
 	 * 
-	 * @param name The model name of the train.
+	 * @param name The model name of the train which can be anything but mostly like "CT-1 (3)".
+	 * @param modelName The name of the train model like "CT-1".
 	 * @param manufacturer Manufacturer of the train.
 	 * @param price Price for buying the train.
 	 * @param costs Costs per month.
@@ -37,12 +40,15 @@ public class Train extends TrainTemplate
 	 * @param passengers Maximum amount of passengers per train.
 	 * @param speed The speed in nodes per second.
 	 */
-	public Train(String name, String manufacturer, int price, int costs, float costsFactor, int passengers, float speed)
+	public Train(String name, String modelName, String manufacturer, int price, int costs, float costsFactor, int passengers, float speed)
 	{
-		super(name, manufacturer, price, costs, costsFactor, passengers, speed);
+		super(name, modelName, manufacturer, price, costs, costsFactor, passengers, speed);
 		_currPassengers = 0;
 		_relativeOnLine = 0.0f;
 		_direction = 1;
+
+		_textureYOffset = 0;
+		_textureRotation = 0f;
 	}
 
 	/**
@@ -54,6 +60,7 @@ public class Train extends TrainTemplate
 	public Train(TrainTemplate trainTemplate)
 	{
 		this(trainTemplate.getName(),
+			trainTemplate.getModelName(),
 			trainTemplate.getManufacturer(),
 			trainTemplate.getPrice(),
 			trainTemplate.getCosts(),
@@ -70,6 +77,7 @@ public class Train extends TrainTemplate
 	public void setLine(TrainLine line)
 	{
 		_trainLine = line;
+		adjustTexture();
 	}
 
 	/**
@@ -108,12 +116,34 @@ public class Train extends TrainTemplate
 	public void draw(SpriteBatch sp, Point offset)
 	{
 		Point2D position = calcPosition();
-		Fill.setColor(Color.lightGray);
-		Fill.Rect(
-			(int)(offset.x + position.getX() * GameState.getInstance().getBaseNetSpacing()),
-			(int)(offset.y + position.getY() * GameState.getInstance().getBaseNetSpacing() + ((_direction - 1) * 5)),
-			10,
-			10);
+		int baseNetSpacing = GameState.getInstance().getBaseNetSpacing();
+
+		if(getTexture() == null)
+		{
+			Fill.setColor(Color.lightGray);
+			Fill.Rect(
+				(int)(offset.x + position.getX() * baseNetSpacing),
+				(int)(offset.y + position.getY() * baseNetSpacing + ((_direction - 1) * 5)),
+				10,
+				10);
+		}
+		else
+		{
+			Draw.Image(getTexture(),
+				new Rectangle(
+					(int)(offset.x + position.getX() * baseNetSpacing) + 1 - baseNetSpacing / 2,
+					(int)(offset.y + position.getY() * baseNetSpacing) - 5, // -5 because of some issues in the drawing method of libgdx :/
+					baseNetSpacing,
+					baseNetSpacing),
+				new Rectangle(
+					0,
+					_textureYOffset,
+					64,
+					64),
+				_textureRotationCenter,
+				_textureScale,
+				_textureRotation);
+		}
 	}
 
 	/**
@@ -125,6 +155,8 @@ public class Train extends TrainTemplate
 	 */
 	public void drive(boolean move, float deltaTime)
 	{
+		Point currentNode = getCurrentNode();
+
 		if(move)
 		{
 			if(_relativeOnLine >= _trainLine.getLength())
@@ -137,12 +169,65 @@ public class Train extends TrainTemplate
 				_relativeOnLine = 0.0f;
 				_direction *= -1;
 			}
-			// _relativeOnLine += _direction * (_speed * ((System.nanoTime() - _lastRenderTime) / (float)1e9));
 			_relativeOnLine += getMovedDistance(deltaTime);
 		}
-		// _lastRenderTime = System.nanoTime();
+		if(!currentNode.equals(getCurrentNode())) // train passed a node and the angle might has changed
+		{
+			adjustTexture();
+		}
 	}
 
+	/**
+	 * Calculates the rotation and position of the texture.
+	 */
+	private void adjustTexture()
+	{
+		Point currentNode = getCurrentNode(),
+			nextNode = getNextNode();
+		int directionMagicNumber = (nextNode.x - currentNode.x) + 10 * (nextNode.y - currentNode.y);
+
+		switch(directionMagicNumber)
+		{
+			case 1:
+				_textureYOffset = 64;
+				_textureRotation = 0f;
+				break;
+			case -1:
+				_textureYOffset = 0;
+				_textureRotation = 0f;
+				break;
+			case -9:
+				_textureYOffset = 64;
+				_textureRotation = -45f;
+				break;
+			case 9:
+				_textureYOffset = 0;
+				_textureRotation = -45f;
+				break;
+			case 11:
+				_textureYOffset = 64;
+				_textureRotation = 45f;
+				break;
+			case -11:
+				_textureYOffset = 0;
+				_textureRotation = 45f;
+				break;
+			case -10:
+				_textureYOffset = 128;
+				_textureRotation = 0f;
+				break;
+			case 10:
+				_textureYOffset = 192;
+				_textureRotation = 0f;
+		}
+	}
+
+	/**
+	 * Calculates the distance of this train that it moved in the given time.
+	 * 
+	 * @param deltaTime The time where the train has moved.
+	 * @return The distance in amount of baseNetSpacing units.
+	 */
 	private float getMovedDistance(float deltaTime)
 	{
 		return _direction * (_speed * (deltaTime / (float)1e9));
@@ -191,8 +276,8 @@ public class Train extends TrainTemplate
 		float relativeOnLine = _relativeOnLine + getMovedDistance(deltaTime);
 		// TODO change 0 to real start node
 		return _trainLine.getNode(_direction > 0 ? relativeOnLine : _trainLine.getLength() - relativeOnLine,
-			_direction > 0 ? 0 : _trainLine.getAmountOfNodes() - 1,
-			_direction); // comparison do take the driving direction into account
+			_direction > 0 ? 0 : _trainLine.getAmountOfNodes(),
+			_direction)[0];
 	}
 
 	/**
@@ -204,9 +289,9 @@ public class Train extends TrainTemplate
 	public Point getNextNode(float deltaTime)
 	{
 		float relativeOnLine = _relativeOnLine + getMovedDistance(deltaTime);
-		// TODO change 0 to real start node
-		return _trainLine.getNode((_direction > 0 ? relativeOnLine : _trainLine.getLength() - relativeOnLine) + 1,
-			_direction > 0 ? 0 : _trainLine.getAmountOfNodes() - 1,
-			_direction); // comparison do take the driving direction into account
+		// TODO change 0 to real start
+		return _trainLine.getNode(_direction > 0 ? relativeOnLine : _trainLine.getLength() - relativeOnLine,
+			_direction > 0 ? 0 : _trainLine.getAmountOfNodes(),
+			_direction)[1];
 	}
 }

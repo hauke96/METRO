@@ -64,7 +64,7 @@ public class TrainViewBuy extends GameScreen
 						train.getManufacturer() + "\n= " +
 						train.getPrice() + "$\n= " +
 						train.getCosts() + "$ / month\n= " +
-						(Math.round((train.getCostFactor() - 1) * 10000) / 10) + "%\n= " +
+						(Math.round((train.getCostFactor() - 1) * 1000) / 10f) + "%\n= " +
 						train.getMaxPassenger() + " people / car\n= " +
 						(int)(train.getSpeed() * 80) + "km/h");
 				}

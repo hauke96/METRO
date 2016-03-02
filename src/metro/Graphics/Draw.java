@@ -2,6 +2,7 @@ package metro.Graphics;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 import com.badlogic.gdx.Gdx;
@@ -460,5 +461,59 @@ public class Draw
 	{
 		METRO.__spriteBatch.draw(image.getTexture(), position.x + _xOffset, position.y + _yOffset, position.width, position.height, areaOnImage.x, areaOnImage.y, areaOnImage.width,
 			areaOnImage.height, false, true);
+	}
+	
+	/**
+	 * Draws an image that's rotated.
+	 * 
+	 * @param image The TextureRectangle (i call it "image" ;) ) from which an area should be drawn.
+	 * @param position The position of the image on the screen.
+	 * @param rotationCenter The center of rotation.
+	 * @param scale The scale of the image.
+	 * @param rotation The rotation in clockwise direction.
+	 */
+	public static void Image(TextureRegion image, Rectangle position, Point rotationCenter, Point scale, float rotation)
+	{
+		METRO.__spriteBatch.draw(image,
+			position.x,
+			position.y,
+			rotationCenter.x,
+			rotationCenter.y,
+			position.width,
+			position.height,
+			scale.x,
+			scale.y,
+			rotation,
+			true);
+	}
+
+	/**
+	 * Draws a rotated part of a texture.
+	 * 
+	 * @param image The TextureRectangle (i call it "image" ;) ) from which an area should be drawn.
+	 * @param position The position of the image on the screen.
+	 * @param areaOnImage The area of the image on the given texture.
+	 * @param rotationCenter The center of rotation.
+	 * @param scale The scale of the image.
+	 * @param rotation The rotation in clockwise direction.
+	 */
+	public static void Image(TextureRegion image, Rectangle position, Rectangle areaOnImage, Point rotationCenter, Point scale, float rotation)
+	{
+		METRO.__spriteBatch.draw(image.getTexture(),
+			position.x,
+			position.y,
+			rotationCenter.x,
+			rotationCenter.y,
+			position.width,
+			position.height,
+			scale.x,
+			scale.y,
+			rotation,
+			areaOnImage.x,
+			areaOnImage.y,
+			areaOnImage.width,
+			areaOnImage.height,
+			false,
+			true);
 	}
 }

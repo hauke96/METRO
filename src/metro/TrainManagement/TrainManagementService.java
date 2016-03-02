@@ -135,6 +135,7 @@ public class TrainManagementService
 						Integer.parseInt(passenger) + "\n" +
 						Float.parseFloat(speed));
 					addTemplateTrain(new TrainTemplate(name,
+						name,
 						manufacturer,
 						Integer.parseInt(price),
 						Integer.parseInt(costs),

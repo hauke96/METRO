@@ -32,6 +32,7 @@ public class TrainLine
 	private final double _length;
 	private final int _thickness;
 	private GameState _gameState;
+	private final double[] _nodeDistances;
 
 	/**
 	 * Creates an empty new train line with a given title and a color.
@@ -67,9 +68,23 @@ public class TrainLine
 		_thickness = 3;
 		_gameState = GameState.getInstance();
 		_length = calcLength();
+		_nodeDistances = new double[_listOfNodes.size()];
 
 		METRO.__debug("[CalcTrainLineLength]");
 		METRO.__debug("Length: " + _length);
+
+		preprocessNodeDistances();
+	}
+
+	/**
+	 * Calculates the distance to every node beginning at node 0.
+	 */
+	private void preprocessNodeDistances()
+	{
+		for(int i = 0; i < _listOfNodes.size(); i++)
+		{
+			_nodeDistances[i] = calcPartLength(0, i);
+		}
 	}
 
 	/**
@@ -187,7 +202,7 @@ public class TrainLine
 	 * @param startNode The index of the node the train started.
 	 * @return The position of the train.
 	 */
-	public Point2D getPositionOfTrain(double distance, int startNode)
+	public Point2D getPositionOfTrain(double distance, int startNode) // TODO add direction as well
 	{
 		// When start node is out of bounds, return the first/last nodes position
 		if(startNode < 0) return _listOfNodes.get(0).getPosition();
@@ -277,38 +292,44 @@ public class TrainLine
 	 * @param distance The distance from the start node that's between two nodes.
 	 * @param startNode The start node from where the distance counts.
 	 * @param direction The direction of the train.
-	 * @return The node this train is currently assigned to (the last visited node).
+	 * @return The nodes this train is between. [0] is the current node, [1] the next node, [2].x the distance and [2].y the remaining distance.
 	 */
-	public Point getNode(double distance, int startNode, int direction)
+	public Point[] getNode(double distance, int startNode, int direction)
 	{
+		Point nodes[] = new Point[2];
+
+		// When start node is out of bounds, return the first/last nodes position
+		if(startNode < 0)
+		{
+			nodes[0] = _listOfNodes.get(0).getPosition();
+			nodes[1] = _listOfNodes.get(1).getPosition();
+			return nodes;
+		}
+		if(_listOfNodes.size() < startNode || distance > _length)
+		{
+			nodes[0] = _listOfNodes.get(_listOfNodes.size() - 2).getPosition();
+			nodes[1] = _listOfNodes.get(_listOfNodes.size() - 1).getPosition();
+			return nodes;
+		}
+
 		double length = 0.0,
-			lastLength = 0.0;
+			lastLength = calcPartLength(startNode, startNode + direction);
 
-		Point node = _listOfNodes.get(startNode).getPosition();
-
-		lastLength = calcPartLength(
-			direction > 0 ? startNode : startNode + direction,
-			direction > 0 ? startNode + direction : startNode);
-
-		// iterate over all nodes to find (x) and (x+1) which are describes below
-		for(int i = startNode + direction; i + direction < _listOfNodes.size()
-			&& i + direction >= 0
-			&& length + lastLength < distance; i += direction)
+		// iterate over all pre-processed node distances to find the two nodes that are around the train (given by the parameters of this method).
+		int i;
+		for(i = startNode + direction; 0 <= i && i < _listOfNodes.size() && length + lastLength <= distance; i += direction)
 		{
 			length += lastLength;
-
-			node = _listOfNodes.get(i).getPosition();
 			lastLength = calcPartLength(
 				direction > 0 ? i : i + direction,
 				direction > 0 ? i + direction : i);
 		}
 
-		if(distance - length > lastLength) // when the last node is not considered
-		{
-			node = _listOfNodes.get(_listOfNodes.size() - startNode - 1).getPosition();
-		}
+		// the sucessor with index i was found, the predecessor is therefore i - direction.
+		nodes[0] = _listOfNodes.get(i - direction).getPosition();
+		nodes[1] = _listOfNodes.get(i).getPosition();
 
-		return node;
+		return nodes;
 	}
 
 	/**
@@ -508,6 +529,14 @@ public class TrainLine
 		Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
 	}
 
+	/**
+	 * Draws a colored line from one node to another.
+	 * 
+	 * @param offset The offset of the game screen.
+	 * @param position The position of one node.
+	 * @param positionNext The position of another node.
+	 * @param layer The layer this line is (shifts the line up or down).
+	 */
 	private void drawColoredLine(Point offset, Point position, Point positionNext, int layer)
 	{
 		Point diff = new Point((position.y - positionNext.y) / _gameState.getBaseNetSpacing(),

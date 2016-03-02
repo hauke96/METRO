@@ -1,5 +1,18 @@
 package metro.TrainManagement.Trains;
 
+import java.awt.Point;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+
+import metro.GameState;
+import metro.METRO;
+
 /**
  * A train template is a final train. There are also less available properties e.g. has a train template no line and no current passengers.
  * 
@@ -11,16 +24,20 @@ package metro.TrainManagement.Trains;
 
 public class TrainTemplate
 {
-	protected String _name, _manufacturer;
+	protected String _name, _modelName, _manufacturer;
 	protected int _price, _costs, _maxPassengers;
 	protected float _costsFactor, _speed;
+	protected static Map<String, TextureRegion> _textures = new HashMap<>();
+	protected static Point _textureScale = new Point(1, 1),
+		_textureRotationCenter = new Point(GameState.getInstance().getBaseNetSpacing() / 2, GameState.getInstance().getBaseNetSpacing() / 2);
 
 	/**
 	 * Creates a new train template with the following properties.
 	 * Every data for trains are in the ./data/trains.txt file and will be read & parsed by the GameState class.
 	 * This is not a actual train, for more information about trains look into the {@code train} class.
 	 * 
-	 * @param name The model name of the train.
+	 * @param name The name of this train like "CT-1 (3)". This name can be anything.
+	 * @param modelName The model name of the train.
 	 * @param manufacturer Manufacturer of the train.
 	 * @param price Price for buying the train.
 	 * @param costs Costs per month.
@@ -28,15 +45,42 @@ public class TrainTemplate
 	 * @param passengers Maximum amount of passengers per train.
 	 * @param speed The speed in nodes per second.
 	 */
-	public TrainTemplate(String name, String manufacturer, int price, int costs, float costsFactor, int passengers, float speed)
+	public TrainTemplate(String name, String modelName, String manufacturer, int price, int costs, float costsFactor, int passengers, float speed)
 	{
 		_name = name;
+		_modelName = modelName;
 		_manufacturer = manufacturer;
 		_price = price;
 		_costs = costs;
 		_costsFactor = costsFactor;
 		_maxPassengers = passengers;
 		_speed = speed;
+
+		if(!_textures.containsKey(name))
+		{
+			METRO.__debug("[LoadingTrainImage]");
+			try
+			{
+				TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("textures/Trains_" + modelName + ".png")));
+				texture.flip(false, true);
+				texture.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+				_textures.put(modelName, texture);
+
+				METRO.__debug("Succesfully loaded image for train " + modelName + ".");
+			}
+			catch(GdxRuntimeException ex)
+			{
+				METRO.__debug("ERROR: " + ex.getMessage());
+			}
+		}
+	}
+
+	/**
+	 * @return The texture for this train.
+	 */
+	protected TextureRegion getTexture()
+	{
+		return _textures.get(_modelName);
 	}
 
 	/**
@@ -93,5 +137,13 @@ public class TrainTemplate
 	public float getSpeed()
 	{
 		return _speed;
+	}
+
+	/**
+	 * @return The name of the train model. This is not the real name of the train itself, just the name of the model.
+	 */
+	public String getModelName()
+	{
+		return _modelName;
 	}
 }
