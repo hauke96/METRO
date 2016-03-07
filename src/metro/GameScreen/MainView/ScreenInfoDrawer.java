@@ -17,6 +17,18 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class ScreenInfoDrawer extends GameScreen
 {
+	private int _height;
+	private int _width;
+
+	/**
+	 * Creates a new info drawer with the default width of 150px and the default height of 26px.
+	 */
+	public ScreenInfoDrawer()
+	{
+		_height = 26;
+		_width = 150;
+	}
+
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
@@ -32,11 +44,11 @@ public class ScreenInfoDrawer extends GameScreen
 	{
 		// clear area
 		Fill.setColor(Color.white);
-		Fill.Rect(0, 0, 150, 26);
+		Fill.Rect(0, 0, _width, _height);
 		// Draw a _|
 		Draw.setColor(METRO.__metroBlue);
-		Draw.Line(0, 26, 150, 26);
-		Draw.Line(150, 0, 150, 26);
+		Draw.Line(0, _height, _width, _height);
+		Draw.Line(_width, 0, _width, _height);
 
 		// draw amount of money like 935.258.550 $
 		Draw.setColor(METRO.__metroRed);
@@ -82,7 +94,7 @@ public class ScreenInfoDrawer extends GameScreen
 	@Override
 	public boolean isHovered()
 	{
-		return METRO.__mousePosition.x < 150
-			&& METRO.__mousePosition.y < 26; // TODO create field variable for size and use it here and in drawing routine.
+		return METRO.__mousePosition.x < _width
+			&& METRO.__mousePosition.y < _height;
 	}
 }

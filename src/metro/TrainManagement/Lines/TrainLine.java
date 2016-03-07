@@ -202,7 +202,7 @@ public class TrainLine implements Cloneable
 	 * @param startNode The index of the node the train started.
 	 * @return The position of the train.
 	 */
-	public Point2D getPositionOfTrain(double distance, int startNode) // TODO add direction as well
+	public Point2D getPositionOfTrain(double distance, int startNode)
 	{
 		// When start node is out of bounds, return the first/last nodes position
 		if(startNode < 0) return _listOfNodes.get(0).getPosition();

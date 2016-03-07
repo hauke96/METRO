@@ -177,7 +177,7 @@ public class TrainView extends GameScreen
 		{
 			_isActive = false;
 			setChanged();
-			notifyObservers(); //notify about close
+			notifyObservers(); // notify about close
 		}
 	}
 

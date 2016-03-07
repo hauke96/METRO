@@ -26,7 +26,7 @@ public class GameState
 	 */
 	private GameState()
 	{
-		_money = 10000;// 500000000;
+		_money = 500000000;
 		_stationList = new ArrayList<>();
 		_baseNetSpacing = 50;
 	}

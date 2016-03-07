@@ -185,7 +185,7 @@ public class TrainManagementService
 		}
 		catch(NotEnoughMoneyException e)
 		{
-			// TODO create notification (s. #40)
+			// TODO Create notification (s. #40)
 			METRO.__debug("[AddingTrainFailed]\nThere's not enough money to add a " + train.getModelName() + " train.\n" + e.getMessage());
 		}
 	}

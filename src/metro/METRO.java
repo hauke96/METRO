@@ -225,7 +225,8 @@ public class METRO implements ApplicationListener, InputProcessor
 		}
 		catch(GdxRuntimeException ex)
 		{
-			METRO.__debug("[LoadCursorError]\n" + ex.getMessage()); // TODO: Put into popup-message-box
+			// TODO Create notification (s. #40)
+			METRO.__debug("[LoadCursorError]\n" + ex.getMessage());
 		}
 	}
 
@@ -709,7 +710,7 @@ public class METRO implements ApplicationListener, InputProcessor
 
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
 		}
-		catch(Exception ex) // if something gone wrong (e.g. "screen.width=19a20"
+		catch(Exception ex) // if something has gone wrong (e.g. "screen.width=19a20")
 		{
 			File file = new File("./settings.cfg");
 			if(file.exists()) // try to use default values by deleting config file
@@ -723,7 +724,8 @@ public class METRO implements ApplicationListener, InputProcessor
 				// try to rename settings.cfg
 				if(!file.renameTo(new File("./settings.backup." + formattedDate + ".cfg")))
 				{
-					METRO.__debug("[SettingsSaveError]\nNo backup of settings.cfg has been created.\n"); // TODO: Put into popup-message-box
+					// TODO Create notification (s. #40)
+					METRO.__debug("[SettingsSaveError]\nNo backup of settings.cfg has been created.\n");
 				}
 
 				// no
