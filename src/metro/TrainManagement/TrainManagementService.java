@@ -15,6 +15,7 @@ import java.util.regex.Pattern;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
+import metro.Exceptions.NotEnoughMoneyException;
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
@@ -177,13 +178,15 @@ public class TrainManagementService
 	 */
 	public void addTrain(Train train)
 	{
-		if(METRO.__gameState.addMoney(-train.getPrice()))
+		try
 		{
+			METRO.__gameState.withdrawMoney(train.getPrice());
 			_trainList.add(train);
 		}
-		else
+		catch(NotEnoughMoneyException e)
 		{
-			// TODO add notification (s. #40)
+			// TODO create notification (s. #40)
+			METRO.__debug("[AddingTrainFailed]\nThere's not enough money to add a " + train.getModelName() + " train.\n" + e.getMessage());
 		}
 	}
 

@@ -11,6 +11,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
+import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
@@ -159,7 +160,7 @@ public class LineView extends GameScreen implements Observer
 				catch(CloneNotSupportedException e)
 				{
 					_messageLabel.setText("Can't clone the old line :/");
-					METRO.__debug(e.getStackTrace().toString());
+					METRO.__debug("[TrainLineCloningFailed]\nCan't clone the old line :/");
 					return;
 				}
 
@@ -227,10 +228,14 @@ public class LineView extends GameScreen implements Observer
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				if(!METRO.__gameState.addMoney(-5000)) // some administrative costs
+				try
+				{
+					METRO.__gameState.withdrawMoney(5000);// some administrative costs
+				}
+				catch(NotEnoughMoneyException e)
 				{
 					_messageLabel.setText("Not enough money. This action costs 5000$!");
-					return;
+					METRO.__debug("[ChangeLineFailed]\nThere's not enough money to change the line.\n" + e.getMessage());
 				}
 
 				if(!_lineSelectToolEnabled) return;

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.GameState;
 import metro.METRO;
+import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.TrainManagement.Nodes.RailwayNode;
@@ -36,10 +37,10 @@ public class TrackPlacingTool extends GameScreen
 	public void updateGameScreen(SpriteBatch sp)
 	{
 		if(!_isActive) return;
-		
+
 		Point mapOffset = MainView._mapOffset;
 		int baseNetSpacing = GameState.getInstance().getBaseNetSpacing();
-		
+
 		if(_currentRailwayNode != null) // if not null, calc and draw preview of new tracks
 		{
 			Point nodePosition = _currentRailwayNode.getPosition();
@@ -139,7 +140,7 @@ public class TrackPlacingTool extends GameScreen
 		{
 			_isActive = false;
 			setChanged();
-			notifyObservers(); //notify about close
+			notifyObservers(); // notify about close
 		}
 	}
 
@@ -173,32 +174,44 @@ public class TrackPlacingTool extends GameScreen
 				preFactorB = 1;
 			RailwayNode prevNode = _currentRailwayNode;
 
-			if(Math.abs(H) > Math.abs(B)) // vertical tracks
-			{
-				diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f); // calculate length of one vertical part
-				if(H < 0) preFactorH = -1;
-				if(B < 0) preFactorB = -1;
+			if(H < 0) preFactorH = -1;
+			if(B < 0) preFactorB = -1;
 
-				prevNode = createTrack(0, preFactorH, 0, diagonalOffset, prevNode); // vertical line
-				prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(B), prevNode); // diagonal lines
-				createTrack(0, preFactorH, diagonalOffset + Math.abs(B), Math.abs(H), prevNode); // vertical lines
+			try
+			{
+				if(Math.abs(H) > Math.abs(B)) // vertical tracks
+				{
+					diagonalOffset = (int)((Math.abs(H) - Math.abs(B)) / 2f); // calculate length of one vertical part
+
+					METRO.__gameState.withdrawMoney(RailwayNode.PRICE *
+						(diagonalOffset + Math.abs(B) + (Math.abs(H) - (diagonalOffset + Math.abs(B)))));
+
+					prevNode = createTrack(0, preFactorH, 0, diagonalOffset, prevNode); // vertical line
+					prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(B), prevNode); // diagonal lines
+					createTrack(0, preFactorH, diagonalOffset + Math.abs(B), Math.abs(H), prevNode); // vertical lines
+				}
+				else if(Math.abs(B) > Math.abs(H))
+				{
+					diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
+					
+					METRO.__gameState.withdrawMoney(RailwayNode.PRICE *
+						(diagonalOffset + Math.abs(H) + (Math.abs(B) - (diagonalOffset + Math.abs(H)))));
+
+					prevNode = createTrack(preFactorB, 0, 0, diagonalOffset, prevNode); // vertical lines
+					prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
+					createTrack(preFactorB, 0, diagonalOffset + Math.abs(H), Math.abs(B), prevNode); // vertical lines
+
+				}
+				else if(Math.abs(B) == Math.abs(H))
+				{
+					METRO.__gameState.withdrawMoney(RailwayNode.PRICE * Math.abs(H));
+					
+					createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
+				}
 			}
-			else if(Math.abs(B) > Math.abs(H))
+			catch(NotEnoughMoneyException e)
 			{
-				diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
-				if(H < 0) preFactorH = -1;
-				if(B < 0) preFactorB = -1;
-
-				prevNode = createTrack(preFactorB, 0, 0, diagonalOffset, prevNode); // vertical lines
-				prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
-				createTrack(preFactorB, 0, diagonalOffset + Math.abs(H), Math.abs(B), prevNode); // vertical lines
-			}
-			else if(Math.abs(B) == Math.abs(H))
-			{
-				if(H < 0) preFactorH = -1;
-				if(B < 0) preFactorB = -1;
-
-				createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
+				METRO.__debug("[CreatingTrackFailed]\nThe creation of tracks failes due to too less money on the players account.\n" + e.getMessage());
 			}
 			_currentRailwayNode = null;
 		}
@@ -215,8 +228,7 @@ public class TrackPlacingTool extends GameScreen
 	 */
 	private RailwayNode createTrack(int offsetB, int offsetH, int start, int end, RailwayNode prevNode)
 	{
-		// TODO instead of stooping when there'y no money, no tracks should be placed at all (and there should be a notification (s. #40)
-		for(int i = start; i < end && METRO.__gameState.addMoney(-RailwayNode.PRICE); ++i)
+		for(int i = start; i < end; ++i)
 		{
 			Point nodePosition = new Point(prevNode.getPosition().x + offsetB, prevNode.getPosition().y + offsetH);
 			RailwayNode node = null;

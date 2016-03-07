@@ -2,6 +2,7 @@ package metro;
 
 import java.util.ArrayList;
 
+import metro.Exceptions.NotEnoughMoneyException;
 import metro.TrainManagement.Trains.TrainStation;
 
 /**
@@ -25,7 +26,7 @@ public class GameState
 	 */
 	private GameState()
 	{
-		_money = 500000000;
+		_money = 10000;// 500000000;
 		_stationList = new ArrayList<>();
 		_baseNetSpacing = 50;
 	}
@@ -49,22 +50,40 @@ public class GameState
 	}
 
 	/**
-	 * Add an specific amount of money to the players account. Giving a negative amount will subtract money from the account.
+	 * Add an specific amount of money to the players account. Adding a negative amount of money to the account is not permitted.
+	 * May throw an IllegalArgumentException when the amount of money is less than 0.
 	 * 
-	 * @param moreMoney The money to add/subtract.
-	 * @return True when transaction was successful, false when not (e.g. not enough money).
+	 * @param moreMoney The money to add/subtract. Throw an IllegalArgumentException when the amount of money is less than 0.
 	 */
-	public boolean addMoney(int moreMoney)
+	public void addMoney(int moreMoney)
 	{
-		if(moreMoney <= 0 && moreMoney * -1 < _money // not enough money
-			|| moreMoney >= 0)
+		if(moreMoney < 0)
 		{
-			_money += moreMoney;
-			return true;
+			throw new IllegalArgumentException("The amount of money needs to be greater 0. Use withdrawMoney(int) to remove an amount of money from the bank account.");
+		}
+		_money += moreMoney;
+	}
+
+	/**
+	 * Removes the given amount of money from the bank account of the player.
+	 * Passing a negative amount will add the value of it to the account (e.g. -100 will add 100$ to the account).
+	 * 
+	 * @param moreMoney The amount of money.
+	 * @throws NotEnoughMoneyException An exception describing that there's to less money on the bank account to withdraw the given amount from it.
+	 */
+	public void withdrawMoney(int moreMoney) throws NotEnoughMoneyException
+	{
+		if(moreMoney >= 0 && moreMoney <= _money)
+		{
+			_money -= moreMoney;
+		}
+		else if(moreMoney < 0 && moreMoney * -1 <= _money)
+		{
+			addMoney(-moreMoney);
 		}
 		else
 		{
-			return false;
+			throw new NotEnoughMoneyException(_money, moreMoney);
 		}
 	}
 
@@ -82,5 +101,24 @@ public class GameState
 	public int getBaseNetSpacing()
 	{
 		return _baseNetSpacing;
+	}
+
+	/**
+	 * Adds a station to the list of stations. If this fails, due to a low balance, nothing changes.
+	 * 
+	 * @param trainStation The station to add.
+	 */
+	public void addStation(TrainStation trainStation)
+	{
+		try
+		{
+			withdrawMoney(TrainStation.PRICE);
+			_stationList.add(trainStation);
+		}
+		catch(NotEnoughMoneyException e)
+		{
+			// TODO Create notification (s. #40)
+			METRO.__debug("[StationAddingFailed]\n" + e.getMessage());
+		}
 	}
 }

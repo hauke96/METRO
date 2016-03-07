@@ -71,14 +71,7 @@ public class StationPlacingTool extends GameScreen
 
 		if(!positionOccupied) // no doubles
 		{
-			if(METRO.__gameState.addMoney(-TrainStation.PRICE))
-			{
-				METRO.__gameState.getStations().add(new TrainStation(MainView._selectedCross, 0)); // TODO change to gameState.addStation(...) and add the money there
-			}
-			else
-			{
-				// TODO notification in notification area (s. #40)
-			}
+			METRO.__gameState.addStation(new TrainStation(MainView._selectedCross, 0));
 		}
 	}
 
@@ -93,7 +86,7 @@ public class StationPlacingTool extends GameScreen
 	{
 		_isActive = false;
 		setChanged();
-		notifyObservers(); //notify about close
+		notifyObservers(); // notify about close
 	}
 
 	@Override

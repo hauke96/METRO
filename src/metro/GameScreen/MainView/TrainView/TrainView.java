@@ -173,7 +173,6 @@ public class TrainView extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		// TODO close this screen by right click via the observer pattern
 		if(mouseButton == Buttons.RIGHT)
 		{
 			_isActive = false;
