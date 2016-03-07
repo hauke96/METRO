@@ -35,6 +35,8 @@ public class TrackPlacingTool extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
+		if(!_isActive) return;
+		
 		Point mapOffset = MainView._mapOffset;
 		int baseNetSpacing = GameState.getInstance().getBaseNetSpacing();
 		
@@ -102,6 +104,7 @@ public class TrackPlacingTool extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
+		if(!_isActive) return;
 		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, MainView._mapOffset);
 		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, MainView._mapOffset);
 	}
@@ -135,6 +138,8 @@ public class TrackPlacingTool extends GameScreen
 		else
 		{
 			_isActive = false;
+			setChanged();
+			notifyObservers(); //notify about close
 		}
 	}
 

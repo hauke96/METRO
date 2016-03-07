@@ -1,4 +1,4 @@
-package metro.GameScreen;
+package metro.GameScreen.MainView;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -6,10 +6,9 @@ import java.awt.Rectangle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
-import metro.GameScreen.LineView.LineView;
-import metro.GameScreen.MainView.StationPlacingTool;
-import metro.GameScreen.MainView.TrackPlacingTool;
-import metro.GameScreen.TrainView.TrainView;
+import metro.GameScreen.GameScreen;
+import metro.GameScreen.MainView.LineView.LineView;
+import metro.GameScreen.MainView.TrainView.TrainView;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 
@@ -164,7 +163,7 @@ public class Toolbar extends GameScreen
 	@Override
 	public boolean isHovered()
 	{
-		Point mPos = METRO.__mousePosition; 
+		Point mPos = METRO.__mousePosition;
 		return _buildStation.getArea().contains(mPos)
 			|| _buildTracks.getArea().contains(mPos)
 			|| _showTrainList.getArea().contains(mPos)

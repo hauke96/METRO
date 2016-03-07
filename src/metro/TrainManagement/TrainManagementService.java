@@ -285,6 +285,16 @@ public class TrainManagementService
 	}
 
 	/**
+	 * Adds a train line to the list of lines. An older version of this line will be removed.
+	 * 
+	 * @param lineName The name of the line to add.
+	 */
+	public void addLine(String lineName)
+	{
+		addLine(getLine(lineName));
+	}
+
+	/**
 	 * Removes a line from the list.
 	 * 
 	 * @param line The line to remove.

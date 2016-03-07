@@ -36,7 +36,10 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 import org.lwjgl.opengl.Display;
@@ -88,7 +91,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		_titleBarHeight,
 		_titleBarBorderLineWidth;
 	private static LwjglApplication _application;
-	
+
 	public static Dimension __SCREEN_SIZE;
 	public static final String __VERSION = "0.1.4_indev";
 	public static boolean _dragMode,
@@ -238,7 +241,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		parameter.flip = true;
 		BitmapFont font = generator.generateFont(parameter); // font size 20 pixels
 		generator.dispose();
-		
+
 		return font;
 	}
 
@@ -540,7 +543,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	{
 		if(_dragMode)
 		{
-			Display.setLocation((screenX  - _dragMode_LastMousePosition.x) + Display.getX(),
+			Display.setLocation((screenX - _dragMode_LastMousePosition.x) + Display.getX(),
 				(screenY - _dragMode_LastMousePosition.y) + Display.getY());
 		}
 		return false;
@@ -575,7 +578,7 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		return false;
 	}
-	
+
 	@Override
 	public void dispose()
 	{
@@ -636,13 +639,43 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static void __debug(String message)
 	{
+		__debug(message, 3);
+	}
+
+	/**
+	 * Prints a debug message into the console but only if the debug mode is on.
+	 * 
+	 * @param message The message to print.
+	 * @param stackCounter The counter for the stack trace to print the right line number (and not something like {@code metro.METRO.__debug(METRO.java:650)} :/
+	 */
+	public static void __debug(String message, int stackCounter)
+	{
 		if(_debug && message.length() > 0)
 		{
-			message = message.replace("\n", "\n    ");
-			if(message.charAt(0) == '[')
-				message = message.replaceFirst("\\[", "\n\\[");
-			else message = "    " + message;
-			System.out.println(message);
+			if(message.contains("\n"))
+			{
+				String[] splittedMessage = message.split("\\n");
+				for(String s : splittedMessage)
+				{
+					__debug(s, stackCounter + 1);
+				}
+			}
+			else
+			{
+				if(message.charAt(0) == '[')
+				{
+					DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+					// get current time with Date()
+					Date date = new Date();
+
+					message = "\n" + dateFormat.format(date) + " " + message + "\n         " + Thread.currentThread().getStackTrace()[stackCounter];
+				}
+				else
+				{
+					message = "         " + message;
+				}
+				System.out.println(message);
+			}
 		}
 	}
 
@@ -652,7 +685,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	private void setSettings()
 	{
 		Settings settings = Settings.getInstance();
-		
+
 		settings.read();
 
 		try
@@ -724,7 +757,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	{
 		return _yOffset;
 	}
-	
+
 	/**
 	 * Closes the game window and exits the application. This method wont ask the user to confirm or anything like that.
 	 */

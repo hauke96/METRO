@@ -1,16 +1,17 @@
-package metro.GameScreen.LineView;
+package metro.GameScreen.MainView.LineView;
 
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
-import metro.GameScreen.MainView.MainView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
@@ -29,7 +30,7 @@ import metro.WindowControls.List;
  * @author hauke
  *
  */
-public class LineView extends GameScreen
+public class LineView extends GameScreen implements Observer
 {
 	private int _windowWidth;
 	private List _lineList;
@@ -37,7 +38,7 @@ public class LineView extends GameScreen
 		_editLineButton, // to change railway nodes of train line
 		_removeLineButton, // to remove a train line
 		_saveButton; // to save settings/changes
-	private boolean _visible, // true: TrainLineView will be displayed
+	private boolean _isActive, // true: TrainLineView will be displayed
 		_lineSelectToolEnabled, // if enabled, the user can select nodes
 		_editMode; // true when user edits a line
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
@@ -45,7 +46,7 @@ public class LineView extends GameScreen
 	private InputField _lineNameField;
 	private Label _lineNameFieldLabel,
 		_messageLabel;
-	private String _oldLineName; // when the user edits a line name, the old name of it has to be saved to correctly update the line list
+	private TrainLine _oldLine; // when the user edits a line name, the old name of it has to be saved to correctly update the line list
 	private ColorBar _colorBar;
 	private TrainManagementService _trainManagementService;
 
@@ -54,11 +55,12 @@ public class LineView extends GameScreen
 	 */
 	public LineView()
 	{
-		_visible = true;
+		_isActive = true;
 		_lineSelectToolEnabled = false;
 		_windowWidth = 400;
 		_lineSelectTool = new LineSelectTool();
-		
+		_lineSelectTool.addObserver(this);
+
 		_trainManagementService = TrainManagementService.getInstance();
 
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
@@ -123,10 +125,8 @@ public class LineView extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				if(_lineSelectToolEnabled) return;
-
-				_lineSelectTool = new LineSelectTool(); // create clean select tool
+				createLineSelectTool();
 				if(_colorBar.getClickedColor() != null) _lineSelectTool.setColor(_colorBar.getClickedColor());
-				_lineSelectToolEnabled = true;
 				reset();
 			}
 		});
@@ -148,13 +148,23 @@ public class LineView extends GameScreen
 					+ "Clicked line  (name): " + _lineList.getText());
 				if(_lineList.getSelected() == -1) return;
 
-				_oldLineName = _lineList.getText();
+				TrainLine line = _trainManagementService.getLine(_lineList.getText());
+				Color color = line.getColor();
 
-				Color color = _trainManagementService.getLineColor(_oldLineName);
-				TrainLine line = _trainManagementService.getLine(_oldLineName);
+				// _oldLine = new TrainLine(_oldLine.getNodes(), _oldLine.getName(), _oldLine.getColor());
+				try
+				{
+					_oldLine = (TrainLine)line.clone();
+				}
+				catch(CloneNotSupportedException e)
+				{
+					_messageLabel.setText("Can't clone the old line :/");
+					METRO.__debug(e.getStackTrace().toString());
+					return;
+				}
 
 				METRO.__debug("Color: " + color + "\n"
-					+ "Old line: " + _oldLineName + "\n"
+					+ "Old line: " + _oldLine + "\n"
 					+ "New Line: " + line);
 
 				if(color == null || line == null)
@@ -166,7 +176,7 @@ public class LineView extends GameScreen
 				_editMode = true;
 
 				_lineNameField.setState(true);
-				_lineNameField.setText(_oldLineName);
+				_lineNameField.setText(line.getName());
 				_lineNameFieldLabel.setState(true);
 				_colorBar.setState(true);
 				_colorBar.setValue(color);
@@ -175,12 +185,10 @@ public class LineView extends GameScreen
 				_removeLineButton.setState(true);
 				_saveButton.setState(true);
 
-				_lineSelectTool = new LineSelectTool(line); // create clean select tool
-				_lineSelectToolEnabled = true;
+				createLineSelectTool();
+				_lineSelectTool.setLine(line);
 
 				_lineList.setState(false);
-
-				_trainManagementService.getLines().remove(line); // TODO change to something like METRO.__gameState.removeLine(TrainLine)
 			}
 		});
 	}
@@ -197,7 +205,7 @@ public class LineView extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				if(_lineList.getSelected() < 0 || _lineList.getSelected() >= _trainManagementService.getLines().size()) return; // out of bounds
-				
+
 				_trainManagementService.sellTrainsFromLine(_lineList.getText());
 
 				_trainManagementService.removeLine(_lineList.getText());
@@ -238,22 +246,19 @@ public class LineView extends GameScreen
 				}
 				else if(TrainLine.isValid(_lineSelectTool.getNodeList()))
 				{
-
-					// get old line before the new one gets creates because it could have the same name.
-					TrainLine oldLine = _trainManagementService.getLine(_oldLineName);
 					TrainLine line = _lineSelectTool.getTrainLine();
 
 					METRO.__debug("[StartFinishEditLine]");
 					METRO.__debug("Amount of lines (pre)  : " + _trainManagementService.getLines().size());
 
-					if(oldLine != null)
+					if(_oldLine != null)
 					{
-						_trainManagementService.removeLine(oldLine);
-						_lineList.removeElement(_lineList.getIndex(_oldLineName));
+						_trainManagementService.removeLine(_oldLine);
+						_lineList.removeElement(_lineList.getIndex(_oldLine.getName()));
 
-						ArrayList<Train> oldTrains = getTrainsOfLine(oldLine);
+						ArrayList<Train> oldTrains = getTrainsOfLine(_oldLine);
 
-						// add new line
+						// transfer trains to new line
 						for(Train train : oldTrains)
 						{
 							train.setLine(line);
@@ -339,10 +344,20 @@ public class LineView extends GameScreen
 		});
 	}
 
+	/**
+	 * Creates a clean {@code LineSelectTool}, adds this as observer and sets the {@code _lineSelectToolEnabled} flag.
+	 */
+	private void createLineSelectTool()
+	{
+		_lineSelectTool = new LineSelectTool(); // create clean select tool
+		_lineSelectTool.addObserver(this);
+		_lineSelectToolEnabled = true;
+	}
+
 	@Override
 	public void updateGameScreen(SpriteBatch g)
 	{
-		if(!_visible) return;
+		if(!_isActive) return;
 		drawBackground();
 		drawTitleBox();
 		drawListBox();
@@ -446,38 +461,37 @@ public class LineView extends GameScreen
 	 */
 	public void setVisibility(boolean visible)
 	{
-		_visible = visible;
+		_isActive = visible;
 		if(_lineSelectToolEnabled)
 		{
 			_trainManagementService.removeLine(_lineSelectTool.getTrainLine());
 			_lineSelectToolEnabled = false;
 		}
-		if(!_visible) reset();
+		if(!_isActive) reset();
 	}
 
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(!_visible) return;
+		if(!_isActive) return;
 		if(_lineSelectToolEnabled)
 		{
-			// something will probably change so remove the old line (new one will be added later)
-			_trainManagementService.removeLine(_lineSelectTool.getTrainLine());
-			if(mouseButton == Buttons.LEFT)
+
+			// if select tool exists and mouse is in the area of the select tool, forward click to tool
+			if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
 			{
-				// if select tool exists and mouse is in the area of the select tool, forward click to tool
-				if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
-				{
-					_lineSelectTool.leftClick(screenX, screenY, MainView._mapOffset); // add node to list
-				}
+				// something will probably change so remove the old line (new one will be added later)
+				_trainManagementService.removeLine(_lineSelectTool.getTrainLine());
+				_lineSelectTool.mouseClicked(screenX, screenY, mouseButton); // add/remove node to list
 			}
 		}
-		// TODO close this screen via the observer pattern
-		// if select tool is not enabled, hide/close the whole line view
-		// if(mouseButton == Buttons.RIGHT)
-		// {
-		// close();
-		// }
+		else if(mouseButton == Buttons.RIGHT) // if select tool is not enabled, hide/close the whole line view
+		{
+			_isActive = false;
+			setChanged();
+			notifyObservers(); // notify about close
+			return;
+		}
 
 		// when the mouse is out of TrainLineView, get the new line from the select tool and add it to the overseer
 		if(screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
@@ -503,7 +517,7 @@ public class LineView extends GameScreen
 	@Override
 	public void mouseScrolled(int amount)
 	{
-		if(!_visible) return;
+		if(!_isActive) return;
 		_lineList.mouseScrolled(amount);
 		_colorBar.mouseScrolled(amount);
 		String msg = _lineSelectTool.setColor(_colorBar.getClickedColor());
@@ -513,7 +527,7 @@ public class LineView extends GameScreen
 	@Override
 	public boolean isActive()
 	{
-		return _visible;
+		return _isActive;
 	}
 
 	@Override
@@ -536,7 +550,7 @@ public class LineView extends GameScreen
 		_messageLabel.setText("");
 		_lineNameField.setText("");
 
-		_oldLineName = "";
+		_oldLine = null;
 
 		_lineSelectTool.setState(false);
 	}
@@ -544,7 +558,6 @@ public class LineView extends GameScreen
 	@Override
 	public void close()
 	{
-		// TrainLineOverseer.removeLine(_lineSelectTool.getTrainLine());
 		super.close();
 	}
 
@@ -552,5 +565,22 @@ public class LineView extends GameScreen
 	public boolean isHovered()
 	{
 		return METRO.__mousePosition.x > _areaOffset.x; // don't need to check y-coord. because the whole screen height is used.
+	}
+
+	@Override
+	public void update(Observable o, Object arg)
+	{
+		if(o instanceof LineSelectTool)
+		{
+			_lineSelectToolEnabled = false;
+
+			TrainLine line = ((LineSelectTool)o).getTrainLine();
+			_trainManagementService.removeLine(line);
+
+			_trainManagementService.addLine(_oldLine);
+			_lineList.setText(_oldLine.getName());
+			_lineList.setState(true);
+			reset();
+		}
 	}
 }

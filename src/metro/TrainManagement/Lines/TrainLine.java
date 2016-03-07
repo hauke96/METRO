@@ -24,7 +24,7 @@ import metro.TrainManagement.Nodes.RailwayNode;
  * @author hauke
  *
  */
-public class TrainLine
+public class TrainLine implements Cloneable
 {
 	private final ArrayList<RailwayNode> _listOfNodes;
 	private Color _lineColor;
@@ -554,5 +554,11 @@ public class TrainLine
 			positionNext.x - (layer * 4) * diff.x,
 			positionNext.y - (layer * 4) * diff.y,
 			_thickness);
+	}
+
+	@Override
+	public Object clone() throws CloneNotSupportedException
+	{
+		return super.clone();
 	}
 }

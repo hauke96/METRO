@@ -92,6 +92,8 @@ public class StationPlacingTool extends GameScreen
 	public void rightClick(int screenX, int screenY, Point2D offset)
 	{
 		_isActive = false;
+		setChanged();
+		notifyObservers(); //notify about close
 	}
 
 	@Override
@@ -124,5 +126,11 @@ public class StationPlacingTool extends GameScreen
 	public boolean isHovered()
 	{
 		return false;
+	}
+
+	@Override
+	public void close()
+	{
+		super.close();
 	}
 }

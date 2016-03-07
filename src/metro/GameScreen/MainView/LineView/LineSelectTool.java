@@ -1,9 +1,10 @@
-package metro.GameScreen.LineView;
+package metro.GameScreen.MainView.LineView;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
@@ -40,19 +41,6 @@ public class LineSelectTool extends GameScreen
 	}
 
 	/**
-	 * Creates a new tool to edit the given line.
-	 * 
-	 * @param line A line to edit.
-	 */
-	public LineSelectTool(TrainLine line)
-	{
-		_listOfNodes = line.getNodes();
-		_isActive = true;
-		_color = line.getColor();
-		_lineName = line.getName();
-	}
-
-	/**
 	 * @return The list with all selected nodes.
 	 */
 	public ArrayList<RailwayNode> getNodeList()
@@ -81,6 +69,9 @@ public class LineSelectTool extends GameScreen
 	{
 		if(TrainManagementService.getInstance().isLineColorUsed(newColor))
 		{
+			METRO.__debug("[DuplicateColorFound]");
+			METRO.__debug("Old color is " + _color);
+			METRO.__debug("New color is " + newColor.toString());
 			return "No duplicate colors allowed!";
 		}
 
@@ -108,9 +99,31 @@ public class LineSelectTool extends GameScreen
 		_isActive = enabled;
 	}
 
+	/**
+	 * Sets the current line and allows to make changed on it. Updates the list of nodes, the color and the name.
+	 * 
+	 * @param line The new line of this tool.
+	 */
+	public void setLine(TrainLine line)
+	{
+		_listOfNodes = line.getNodes();
+		_color = line.getColor();
+		_lineName = line.getName();
+	}
+
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
+		if(mouseButton == Buttons.LEFT)
+		{
+			leftClick(screenX, screenY, MainView._mapOffset);
+		}
+		else if(mouseButton == Buttons.RIGHT)
+		{
+			_isActive = false;
+			setChanged();
+			notifyObservers(); // notify about close
+		}
 	}
 
 	/**

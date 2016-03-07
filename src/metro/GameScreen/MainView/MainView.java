@@ -11,10 +11,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.GameState;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
-import metro.GameScreen.Toolbar;
-import metro.GameScreen.LineView.LineView;
 import metro.GameScreen.MainView.CityView.CityView;
-import metro.GameScreen.TrainView.TrainView;
+import metro.GameScreen.MainView.LineView.LineView;
+import metro.GameScreen.MainView.TrainView.TrainView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
@@ -65,7 +64,7 @@ public class MainView extends GameScreen implements Observer
 
 		_cityView = new CityView(); // create extra instance for general purpose actions
 		_controlDrawer = new ScreenInfoDrawer();
-		
+
 		_gameState = GameState.getInstance();
 	}
 
@@ -90,7 +89,7 @@ public class MainView extends GameScreen implements Observer
 		_cityView.drawNumbers(sp, cursorDotPosition);
 
 		RailwayNodeOverseer.drawAllNodes(_mapOffset, sp);
-		
+
 		TrainManagementService trainManagementService = TrainManagementService.getInstance();
 		trainManagementService.drawLines(_mapOffset, sp);
 		drawTrainStations(sp);
@@ -179,16 +178,6 @@ public class MainView extends GameScreen implements Observer
 		}
 	}
 
-	/**
-	 * Sets a new TrainViewTool.
-	 * 
-	 * @param tool The new tool.
-	 */
-	public void setTrainViewTool(GameScreen tool)
-	{
-		_activeTool = tool;
-	}
-
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
@@ -200,16 +189,14 @@ public class MainView extends GameScreen implements Observer
 		}
 		else if(mouseButton == Buttons.LEFT)
 		{
-			update(_toolbar, METRO.__mousePosition); // emulate the observer to update the tools correctly
+			if(_activeTool != null)
+			{
+				_activeTool.mouseClicked(screenX, screenY, mouseButton);
+			}
 		}
 		else if(mouseButton == Buttons.RIGHT && _activeTool != null)
 		{
 			_activeTool.mouseClicked(screenX, screenY, mouseButton);
-			if(!_activeTool.isActive())
-			{
-				_toolbar.resetExclusiveButtonPositions(null);
-				setTrainViewTool(null);
-			}
 		}
 	}
 
@@ -241,31 +228,40 @@ public class MainView extends GameScreen implements Observer
 	{
 		if(arg0.equals(_toolbar))
 		{
-			if(arg1 instanceof Point && _activeTool != null) // there is an active tool, forward click to it
+			if(_activeTool != null) _activeTool.close();
+
+			if(arg1 instanceof StationPlacingTool
+				|| arg1 instanceof TrackPlacingTool
+				|| arg1 instanceof LineView
+				|| arg1 instanceof TrainView)
 			{
-				Point pos = (Point)arg1;
-				_activeTool.mouseClicked(pos.x, pos.y, Buttons.LEFT); // update(...) will only be executed when the left mouse button has been pressed
+				setActiveTool((GameScreen)arg1);
 			}
-			else // there is no active tool -> create new one from argument
+			else
 			{
-				if(_activeTool != null) _activeTool.close();
-
-				if(_activeTool instanceof LineView && !(arg1 instanceof LineView)) ((LineView)_activeTool).setVisibility(false);
-				if(_activeTool instanceof TrainView && !(arg1 instanceof TrainView)) ((TrainView)_activeTool).setVisibility(false);
-
-				if(arg1 instanceof StationPlacingTool) _activeTool = (StationPlacingTool)arg1;
-				else if(arg1 instanceof TrackPlacingTool) _activeTool = (TrackPlacingTool)arg1;
-				else if(arg1 instanceof LineView) _activeTool = (LineView)arg1;// _lineView;
-				else if(arg1 instanceof TrainView) _activeTool = (TrainView)arg1;
-				else _activeTool = null;
-
-				// set visibility of line tool
-				if(_activeTool instanceof LineView) ((LineView)_activeTool).setVisibility(true);
-
-				// set visibility of train tool
-				if(_activeTool instanceof TrainView) ((TrainView)_activeTool).setVisibility(true);
+				_activeTool = null;
 			}
 		}
+		else
+		{
+			if(!_activeTool.isActive())
+			{
+				_toolbar.resetExclusiveButtonPositions(null);
+				_activeTool.close();
+				_activeTool = null;
+			}
+		}
+	}
+
+	/**
+	 * Sets the active tool and adds an observer to this.
+	 * 
+	 * @param newTool The new tool that should be used.
+	 */
+	private void setActiveTool(GameScreen newTool)
+	{
+		_activeTool = newTool;
+		_activeTool.addObserver(this);
 	}
 
 	@Override

@@ -196,7 +196,7 @@ public abstract class GameScreen extends Observable
 	public abstract boolean isHovered();
 
 	/**
-	 * Registers a control in the control manager. If the control already is registered, it'll be deleted.
+	 * Registers a control in the control manager.
 	 * 
 	 * @param control The control to add.
 	 */
@@ -227,6 +227,8 @@ public abstract class GameScreen extends Observable
 		METRO.__debug("[GameScreen]\nClosed game screen " + this);
 		_controlActionManager.remove(_allControls);
 		_allControls.clear();
+		METRO.__debug("Amount observer: " + countObservers());
+		deleteObservers();
 	}
 
 	/**

@@ -1,4 +1,4 @@
-package metro.GameScreen.TrainView;
+package metro.GameScreen.MainView.TrainView;
 
 import java.awt.Point;
 import java.awt.Rectangle;

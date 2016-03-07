@@ -1,8 +1,9 @@
-package metro.GameScreen.TrainView;
+package metro.GameScreen.MainView.TrainView;
 
 import java.awt.Color;
 import java.awt.Point;
 
+import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
@@ -19,10 +20,10 @@ import metro.WindowControls.ActionObserver;
  * @author hauke
  *
  */
-public class TrainView extends GameScreen// implements TrainInteractionTool
+public class TrainView extends GameScreen
 {
 	private int _windowWidth;
-	private boolean _visible;
+	private boolean _isActive;
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private TrainViewMain _trainViewMain;
 	private TrainViewBuy _trainViewBuy;
@@ -151,8 +152,8 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 	 */
 	public void setVisibility(boolean visible)
 	{
-		_visible = visible;
-		if(!_visible)
+		_isActive = visible;
+		if(!_isActive)
 		{
 			_trainViewMain.reset();
 			_trainViewBuy.reset();
@@ -173,6 +174,12 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		// TODO close this screen by right click via the observer pattern
+		if(mouseButton == Buttons.RIGHT)
+		{
+			_isActive = false;
+			setChanged();
+			notifyObservers(); //notify about close
+		}
 	}
 
 	@Override
@@ -183,7 +190,7 @@ public class TrainView extends GameScreen// implements TrainInteractionTool
 	@Override
 	public boolean isActive()
 	{
-		return _visible;
+		return _isActive;
 	}
 
 	@Override
