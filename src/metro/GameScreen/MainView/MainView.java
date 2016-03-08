@@ -36,7 +36,6 @@ public class MainView extends GameScreen implements Observer
 	private GameScreen _activeTool;
 	private Toolbar _toolbar;
 	private CityView _cityView;
-	private GameScreen _controlDrawer;
 	private GameState _gameState;
 
 	/**
@@ -49,21 +48,20 @@ public class MainView extends GameScreen implements Observer
 	public static Point _mapOffset;
 
 	/**
-	 * Creates a new main view with no active subtools.
+	 * Creates a new main view with no active sub tools.
 	 */
 	public MainView()
 	{
 		_selectedCross = new Point(-1, -1);
 		_mapOffset = new Point(0, 0);// METRO.__baseNetSpacing * 3, METRO.__baseNetSpacing * 2 + 12);
 
-		_toolbar = new Toolbar(new Point(0, 100));
+		_toolbar = new Toolbar();
 		_toolbar.addObserver(this);
 
 		_dragMode = false;
 		_activeTool = null;
 
 		_cityView = new CityView(); // create extra instance for general purpose actions
-		_controlDrawer = new ScreenInfoDrawer();
 
 		_gameState = GameState.getInstance();
 	}
@@ -100,7 +98,6 @@ public class MainView extends GameScreen implements Observer
 		_toolbar.updateGameScreen(sp);
 
 		printDebugStuff(sp);
-		_controlDrawer.update(sp);
 	}
 
 	/**

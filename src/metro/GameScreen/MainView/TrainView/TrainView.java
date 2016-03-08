@@ -33,8 +33,8 @@ public class TrainView extends GameScreen
 	 */
 	public TrainView()
 	{
-		_windowWidth = 400;
-		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
+		_windowWidth = 400; // TODO make this visible for all tools
+		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 45);
 		_trainViewMain = new TrainViewMain(_areaOffset, _windowWidth);
 		_trainViewBuy = new TrainViewBuy(_areaOffset, _windowWidth);
 
@@ -125,24 +125,24 @@ public class TrainView extends GameScreen
 	private void drawTitleBox()
 	{
 		int length = Draw.getStringSize("Control Management").width;
-		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 20, 15, _windowWidth - 40, 60);
+		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 20, _areaOffset.y + 15, _windowWidth - 40, 60);
 		Color c = new Color((int)(METRO.__metroBlue.getRed() * 1.8f),
 			(int)(METRO.__metroBlue.getGreen() * 1.3f),
 			255); // lighter metro-blue
 		Draw.setColor(c);
-		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 22, 17, _windowWidth - 44, 56);
+		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 22, _areaOffset.y + 17, _windowWidth - 44, 56);
 
 		// Take "METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2" to center the label
 		length = Draw.getStringSize("METRO trains").width;
 		Draw.setColor(METRO.__metroRed);
-		Draw.String("METRO trains", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, 25);
-		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, 40,
-			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, 40);
+		Draw.String("METRO trains", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, _areaOffset.y + 25);
+		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, _areaOffset.y + 40,
+			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, _areaOffset.y + 40);
 
 		length = Draw.getStringSize("Control Management").width;
-		Draw.String("Control Management", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, 50);
-		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, 65,
-			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, 65);
+		Draw.String("Control Management", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, _areaOffset.y + 50);
+		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, _areaOffset.y + 65,
+			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, _areaOffset.y + 65);
 	}
 
 	/**

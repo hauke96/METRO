@@ -26,6 +26,7 @@ public class Train extends TrainTemplate
 	private float _relativeOnLine, _textureRotation;
 	private int _currPassengers, _direction, _textureYOffset;
 	private TrainLine _trainLine;
+	private Point _currentNode, _nextNode;
 
 	/**
 	 * Creates a new train with the following properties.
@@ -77,6 +78,9 @@ public class Train extends TrainTemplate
 	public void setLine(TrainLine line)
 	{
 		_trainLine = line;
+
+		_currentNode = calcCurrentNode();
+		_nextNode = calcNextNode();
 		adjustTexture();
 	}
 
@@ -155,8 +159,6 @@ public class Train extends TrainTemplate
 	 */
 	public void drive(boolean move, float deltaTime)
 	{
-		Point currentNode = getCurrentNode();
-
 		if(move)
 		{
 			if(_relativeOnLine >= _trainLine.getLength())
@@ -171,8 +173,10 @@ public class Train extends TrainTemplate
 			}
 			_relativeOnLine += getMovedDistance(deltaTime);
 		}
-		if(!currentNode.equals(getCurrentNode())) // train passed a node and the angle might has changed
+		if(!_currentNode.equals(calcCurrentNode())) // train passed a node and the angle might has changed
 		{
+			_currentNode = calcCurrentNode();
+			_nextNode = calcNextNode();
 			adjustTexture();
 		}
 	}
@@ -245,23 +249,43 @@ public class Train extends TrainTemplate
 	}
 
 	/**
-	 * Gets the two nodes that are around this train.
+	 * Calculates the node this train visited at last. This uses the {@code _ralitiveOnLine} value of this train.
 	 * 
 	 * @return The node this train is assigned to (the last visited node).
 	 */
-	public Point getCurrentNode()
+	public Point calcCurrentNode()
 	{
 		return getCurrentNode(0f);
 	}
 
 	/**
-	 * Gets the two nodes that are ahead this train.
+	 * Calculates the node this train will visit next. This uses the {@code _ralitiveOnLine} value of this train.
+	 * 
+	 * @return The node the train will visit next.
+	 */
+	public Point calcNextNode()
+	{
+		return getNextNode(0f);
+	}
+
+	/**
+	 * Gets the last node this train passed. This does not calculate it, please use {@code calcCurrentNode()} to update it.
+	 * 
+	 * @return The node this train is assigned to (the last visited node).
+	 */
+	public Point getCurrentNode()
+	{
+		return _currentNode;
+	}
+
+	/**
+	 * Gets the node this train will visit next. This does not calculate it, please use {@code calcNextNode()} to update it.
 	 * 
 	 * @return The node the train will visit next.
 	 */
 	public Point getNextNode()
 	{
-		return getNextNode(0f);
+		return _nextNode;
 	}
 
 	/**

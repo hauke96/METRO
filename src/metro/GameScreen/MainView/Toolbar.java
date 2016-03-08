@@ -1,5 +1,6 @@
 package metro.GameScreen.MainView;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -9,6 +10,8 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainView.LineView.LineView;
 import metro.GameScreen.MainView.TrainView.TrainView;
+import metro.Graphics.Draw;
+import metro.Graphics.Fill;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 
@@ -24,21 +27,27 @@ public class Toolbar extends GameScreen
 		_buildTracks,
 		_showTrainList,
 		_createNewTrain;
+	private Point _buttonAreaPosition;
+	private int _moneyDisplayWidth,
+	_height;
 
 	/**
 	 * Creates a new toolbar.
-	 * 
-	 * @param position The position of the upper left corner.
 	 */
-	public Toolbar(Point position)
+	public Toolbar()
 	{
-		_buildStation = new Button(new Rectangle(-10 + position.x, position.y, 50, 40), new Rectangle(0, 28, 50, 40), METRO.__iconSet);
+		_moneyDisplayWidth = 250;
+		_height = 40;
+		_buttonAreaPosition = new Point(METRO.__SCREEN_SIZE.width - 400, // TODO make the 400 visible for all tools
+			-9);
+
+		_buildStation = new Button(new Rectangle(_buttonAreaPosition.x + 140, _buttonAreaPosition.y, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
 		registerControl(_buildStation);
-		_buildTracks = new Button(new Rectangle(-10 + position.x, 39 + position.y, 50, 40), new Rectangle(0, 68, 50, 40), METRO.__iconSet);
+		_buildTracks = new Button(new Rectangle(_buttonAreaPosition.x + 180, _buttonAreaPosition.y, 40, 50), new Rectangle(0, 78, 40, 50), METRO.__iconSet);
 		registerControl(_buildTracks);
-		_showTrainList = new Button(new Rectangle(-10 + position.x, 100 + position.y, 50, 40), new Rectangle(0, 108, 50, 40), METRO.__iconSet);
+		_showTrainList = new Button(new Rectangle(_buttonAreaPosition.x + 220, _buttonAreaPosition.y, 40, 50), new Rectangle(0, 128, 40, 50), METRO.__iconSet);
 		registerControl(_showTrainList);
-		_createNewTrain = new Button(new Rectangle(-10 + position.x, 139 + position.y, 50, 40), new Rectangle(0, 148, 50, 40), METRO.__iconSet);
+		_createNewTrain = new Button(new Rectangle(_buttonAreaPosition.x + 260, _buttonAreaPosition.y, 40, 50), new Rectangle(0, 178, 40, 50), METRO.__iconSet);
 		registerControl(_createNewTrain);
 		registerObervations();
 	}
@@ -94,41 +103,49 @@ public class Toolbar extends GameScreen
 	 */
 	public void resetExclusiveButtonPositions(Button exceptThisButton)
 	{
-		_buildTracks.setPosition(new Point(-10, _buildTracks.getPosition().y));
-		_buildStation.setPosition(new Point(-10, _buildStation.getPosition().y));
-		_showTrainList.setPosition(new Point(-10, _showTrainList.getPosition().y));
-		_createNewTrain.setPosition(new Point(-10, _createNewTrain.getPosition().y));
-		// Build Tracks
-		if(exceptThisButton == _buildTracks)
+		_buildTracks.setPosition(new Point(_buildTracks.getPosition().x, _buttonAreaPosition.y));
+		_buildStation.setPosition(new Point(_buildStation.getPosition().x, _buttonAreaPosition.y));
+		_showTrainList.setPosition(new Point(_showTrainList.getPosition().x, _buttonAreaPosition.y));
+		_createNewTrain.setPosition(new Point(_createNewTrain.getPosition().x, _buttonAreaPosition.y));
+
+		// Move the selected button a bit down:
+		if(exceptThisButton != null)
 		{
-			_buildTracks.setPosition(new Point(0, _buildTracks.getPosition().y));
-		}
-		// Create new station
-		if(exceptThisButton == _buildStation)
-		{
-			_buildStation.setPosition(new Point(0, _buildStation.getPosition().y));
-		}
-		// show list of trains
-		if(exceptThisButton == _showTrainList)
-		{
-			_showTrainList.setPosition(new Point(0, _showTrainList.getPosition().y));
-		}
-		// create new train
-		if(exceptThisButton == _createNewTrain)
-		{
-			_createNewTrain.setPosition(new Point(0, _createNewTrain.getPosition().y));
+			exceptThisButton.setPosition(new Point(exceptThisButton.getPosition().x, 0));
 		}
 	}
 
 	@Override
 	public void updateGameScreen(SpriteBatch g)
 	{
+		// draw the background and the red line below it
+		Fill.setColor(Color.white);
+		Fill.Rect(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height));
+		Draw.setColor(METRO.__metroRed);
+		Draw.Line(0,_height,METRO.__SCREEN_SIZE.width, _height);
+
+		// separating line for the money display
+		Draw.setColor(METRO.__metroRed);
+		Draw.Line(_moneyDisplayWidth, 0, _moneyDisplayWidth, _height);
+		
+		// draw amount of money like 935.258.550 $
+		Draw.setColor(METRO.__metroRed);
+		Draw.String("$", 5, 15);
+
+		String str = " = " + String.format("%,d", METRO.__gameState.getMoney());
+		str = str.replace(".", ". ");
+		Draw.setColor(METRO.__metroBlue);
+		Draw.String(str, 13, 15);
+		
+		Draw.setColor(METRO.__metroRed);
+		Draw.Line(_buttonAreaPosition.x, 0, _buttonAreaPosition.x, _height);
+
 		_buildStation.draw();
 		_buildTracks.draw();
 		_showTrainList.draw();
 		_createNewTrain.draw();
 	}
-
+	
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{

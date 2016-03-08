@@ -48,7 +48,7 @@ public class TrainViewMain extends GameScreen
 
 		_trainManagementService = TrainManagementService.getInstance();
 
-		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 300, 250),
+		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 300, 230),
 			null, null, true);
 		_lineList.register(new ActionObserver()
 		{
@@ -74,15 +74,15 @@ public class TrainViewMain extends GameScreen
 		});
 		registerControl(_lineList);
 
-		_trainList = new List(new Rectangle(_areaOffset.x + 121, 130, _windowWidth - 141, 250),
+		_trainList = new List(new Rectangle(_areaOffset.x + 121, _areaOffset.y + 130, _windowWidth - 141, 230),
 			null, null, true);
 		registerControl(_trainList);
 
 		fillLineList();
 
-		_moveTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), 400, (_windowWidth - 40) / 3 - 10, 20), "Move train");
+		_moveTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Move train");
 		registerControl(_moveTrainButton);
-		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, 400, (_windowWidth - 40) / 3 - 10, 20), "Sell train");
+		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Sell train");
 		registerControl(_sellTrainButton);
 
 		addButtonObserver();
@@ -145,15 +145,15 @@ public class TrainViewMain extends GameScreen
 
 		String text = "Your lines:";
 		int length = Draw.getStringSize(text).width;
-		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 25, 110);
-		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 25, 125,
-			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, 125);
+		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 110);
+		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 125,
+			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, _areaOffset.y + 125);
 
 		text = "Your trains:";
-		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 125, 110);
+		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 125, _areaOffset.y + 110);
 		length = Draw.getStringSize(text).width;
-		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 125, 125,
-			METRO.__SCREEN_SIZE.width - _windowWidth + 125 + length, 125);
+		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 125, _areaOffset.y + 125,
+			METRO.__SCREEN_SIZE.width - _windowWidth + 125 + length, _areaOffset.y + 125);
 
 		_trainList.draw();
 		_lineList.draw();

@@ -58,32 +58,32 @@ public class LineView extends GameScreen implements Observer
 	{
 		_isActive = true;
 		_lineSelectToolEnabled = false;
-		_windowWidth = 400;
+		_windowWidth = 400; // TODO make this visible for all tools
 		_lineSelectTool = new LineSelectTool();
 		_lineSelectTool.addObserver(this);
 
 		_trainManagementService = TrainManagementService.getInstance();
 
-		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 0);
-		_lineList = new List(new Rectangle(_areaOffset.x + 20, 130, _windowWidth - 40, 300),
+		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 45);
+		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 40, 300),
 			null, null, true);
 		registerControl(_lineList);
 		fillLineList();
 
-		_createLineButton = new Button(new Rectangle(_areaOffset.x + 20, 450, (_windowWidth - 40) / 3 - 10, 20), "Create line");
+		_createLineButton = new Button(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Create line");
 		registerControl(_createLineButton);
-		_editLineButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), 450, (_windowWidth - 40) / 3 - 10, 20), "Edit line");
+		_editLineButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Edit line");
 		registerControl(_editLineButton);
-		_removeLineButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, 450, (_windowWidth - 40) / 3 - 10, 20), "Remove line");
+		_removeLineButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Remove line");
 		registerControl(_removeLineButton);
 
-		_lineNameField = new InputField(new Rectangle(_areaOffset.x + 95, 490, _windowWidth - 175, 20));
+		_lineNameField = new InputField(new Rectangle(_areaOffset.x + 95, _areaOffset.y + 490, _windowWidth - 175, 20));
 		_lineNameField.setState(false);
 		registerControl(_lineNameField);
-		_lineNameFieldLabel = new Label("Line Name", new Point(_areaOffset.x + 20, 493));
+		_lineNameFieldLabel = new Label("Line Name", new Point(_areaOffset.x + 20, _areaOffset.y + 493));
 		_lineNameFieldLabel.setState(false);
 		registerControl(_lineNameFieldLabel);
-		_colorBar = new ColorBar(new Rectangle(_areaOffset.x + 20, 520, _windowWidth - 70, 20), null, 0.9f, 0.8f);
+		_colorBar = new ColorBar(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 520, _windowWidth - 70, 20), null, 0.9f, 0.8f);
 		_colorBar.setState(false);
 		registerControl(_colorBar);
 		_saveButton = new Button(new Rectangle(_areaOffset.x + (_windowWidth / 2) - 75, METRO.__SCREEN_SIZE.height - _areaOffset.y - 60, 150, 20), "Save");
@@ -390,24 +390,24 @@ public class LineView extends GameScreen implements Observer
 	private void drawTitleBox()
 	{
 		int length = Draw.getStringSize("Control Management").width;
-		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 20, 15, _windowWidth - 40, 60);
+		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 20, _areaOffset.y + 15, _windowWidth - 40, 60);
 		Color c = new Color((int)(METRO.__metroBlue.getRed() * 1.8f),
 			(int)(METRO.__metroBlue.getGreen() * 1.3f),
 			255); // lighter metro-blue
 		Draw.setColor(c);
-		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 22, 17, _windowWidth - 44, 56);
+		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 22, _areaOffset.y + 17, _windowWidth - 44, 56);
 
 		// Take "METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2" to center the label
 		length = Draw.getStringSize("METRO lines").width;
 		Draw.setColor(METRO.__metroRed);
-		Draw.String("METRO lines", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, 25);
-		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, 40,
-			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, 40);
+		Draw.String("METRO lines", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, _areaOffset.y + 25);
+		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, _areaOffset.y + 40,
+			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, _areaOffset.y + 40);
 
 		length = Draw.getStringSize("Control Management").width;
-		Draw.String("Control Management", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, 50);
-		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, 65,
-			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, 65);
+		Draw.String("Control Management", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, _areaOffset.y + 50);
+		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, _areaOffset.y + 65,
+			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, _areaOffset.y + 65);
 	}
 
 	/**
@@ -417,9 +417,9 @@ public class LineView extends GameScreen implements Observer
 	{
 		Draw.setColor(METRO.__metroRed);
 		int length = Draw.getStringSize("List of your lines:").width;
-		Draw.String("List of your lines:", METRO.__SCREEN_SIZE.width - _windowWidth + 20, 110);
-		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 20, 125,
-			METRO.__SCREEN_SIZE.width - _windowWidth + 20 + length, 125);
+		Draw.String("List of your lines:", METRO.__SCREEN_SIZE.width - _windowWidth + 20, _areaOffset.y + 110);
+		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 20, _areaOffset.y + 125,
+			METRO.__SCREEN_SIZE.width - _windowWidth + 20 + length, _areaOffset.y + 125);
 		_lineList.draw();
 	}
 
@@ -453,10 +453,10 @@ public class LineView extends GameScreen implements Observer
 		if(_colorBar.getClickedColor() != null)
 		{
 			Fill.setColor(_colorBar.getClickedColor());
-			Fill.Rect(new Rectangle(_areaOffset.x + _windowWidth - 40, 520, 20, 20));
+			Fill.Rect(new Rectangle(_areaOffset.x + _windowWidth - 40, _areaOffset.y + 520, 20, 20));
 		}
 		Draw.setColor(Color.darkGray);
-		Draw.Rect(new Rectangle(_areaOffset.x + _windowWidth - 40, 520, 20, 20));
+		Draw.Rect(new Rectangle(_areaOffset.x + _windowWidth - 40, _areaOffset.y + 520, 20, 20));
 	}
 
 	/**

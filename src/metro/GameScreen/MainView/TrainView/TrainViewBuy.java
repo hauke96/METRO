@@ -47,10 +47,10 @@ public class TrainViewBuy extends GameScreen
 
 		_trainManagementService = TrainManagementService.getInstance();
 
-		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, 680, 210, 20), "Buy");
+		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, _areaOffset.y + 660, 210, 20), "Buy");
 		registerControl(_buyButton);
 
-		_availableTrains = new List(new Rectangle(_areaOffset.x + 20, 460, 140, 240), null, true);
+		_availableTrains = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 440, 140, 240), null, true);
 		_availableTrains.register(new ActionObserver()
 		{
 			@Override
@@ -72,14 +72,14 @@ public class TrainViewBuy extends GameScreen
 		});
 		registerControl(_availableTrains);
 
-		_messageLabel = new Label("", new Point(_areaOffset.x + 170, 620), 200);
+		_messageLabel = new Label("", new Point(_areaOffset.x + 170, _areaOffset.y + 600), 200);
 		registerControl(_messageLabel);
 
-		_informationKeys = new Label("Name\nProducer\nPrice\nCosts\nCost-factor\nPassenger\nSpeed", new Point(_areaOffset.x + 170, 460));
+		_informationKeys = new Label("Name\nProducer\nPrice\nCosts\nCost-factor\nPassenger\nSpeed", new Point(_areaOffset.x + 170, _areaOffset.y + 440));
 		_informationKeys.setColor(METRO.__metroBlue);
 		registerControl(_informationKeys);
 
-		_informationValues = new Label("=\n=\n=\n=\n=\n=\n=\n", new Point(_areaOffset.x + 235, 460));
+		_informationValues = new Label("=\n=\n=\n=\n=\n=\n=\n", new Point(_areaOffset.x + 235, _areaOffset.y + 440));
 		_informationValues.setColor(METRO.__metroBlue);
 		registerControl(_informationValues);
 
@@ -116,9 +116,9 @@ public class TrainViewBuy extends GameScreen
 
 		String text = "Available train models:";
 		int length = Draw.getStringSize(text).width;
-		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 25, 440);
-		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 25, 455,
-			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, 455);
+		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 420);
+		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 435,
+			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, _areaOffset.y + 435);
 	}
 
 	/**

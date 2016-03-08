@@ -453,9 +453,9 @@ public class TrainManagementService
 		Point currentNodeAfterMove = train.getCurrentNode(deltaTime);
 		Point nextNodeAfterMove = train.getNextNode(deltaTime);
 
-		if(currentNode.equals(currentNodeAfterMove))
+		if(currentNode.equals(currentNodeAfterMove)) // train does not pass a signal
 		{
-			return RailwayNodeOverseer.getNodeByPosition(train.getCurrentNode()).getSignalValue(
+			return RailwayNodeOverseer.getNodeByPosition(currentNode).getSignalValue(
 				RailwayNodeOverseer.getNodeByPosition(train.getNextNode()),
 				train);
 		}
