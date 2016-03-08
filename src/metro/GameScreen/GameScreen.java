@@ -189,7 +189,7 @@ public abstract class GameScreen extends Observable
 	 * Resets the game screen to its default values.
 	 */
 	public abstract void reset();
-	
+
 	/**
 	 * @return True when mouse is in sensible/important area of the game screen.
 	 */

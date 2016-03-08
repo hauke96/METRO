@@ -29,7 +29,7 @@ public class Toolbar extends GameScreen
 		_createNewTrain;
 	private Point _buttonAreaPosition;
 	private int _moneyDisplayWidth,
-	_height;
+		_height;
 
 	/**
 	 * Creates a new toolbar.
@@ -122,12 +122,12 @@ public class Toolbar extends GameScreen
 		Fill.setColor(Color.white);
 		Fill.Rect(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height));
 		Draw.setColor(METRO.__metroRed);
-		Draw.Line(0,_height,METRO.__SCREEN_SIZE.width, _height);
+		Draw.Line(0, _height, METRO.__SCREEN_SIZE.width, _height);
 
 		// separating line for the money display
 		Draw.setColor(METRO.__metroRed);
 		Draw.Line(_moneyDisplayWidth, 0, _moneyDisplayWidth, _height);
-		
+
 		// draw amount of money like 935.258.550 $
 		Draw.setColor(METRO.__metroRed);
 		Draw.String("$", 5, 15);
@@ -136,7 +136,7 @@ public class Toolbar extends GameScreen
 		str = str.replace(".", ". ");
 		Draw.setColor(METRO.__metroBlue);
 		Draw.String(str, 13, 15);
-		
+
 		Draw.setColor(METRO.__metroRed);
 		Draw.Line(_buttonAreaPosition.x, 0, _buttonAreaPosition.x, _height);
 
@@ -145,7 +145,7 @@ public class Toolbar extends GameScreen
 		_showTrainList.draw();
 		_createNewTrain.draw();
 	}
-	
+
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{

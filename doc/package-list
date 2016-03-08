@@ -1,9 +1,10 @@
 metro
+metro.Exceptions
 metro.GameScreen
-metro.GameScreen.LineView
 metro.GameScreen.MainView
 metro.GameScreen.MainView.CityView
-metro.GameScreen.TrainView
+metro.GameScreen.MainView.LineView
+metro.GameScreen.MainView.TrainView
 metro.Graphics
 metro.TrainManagement
 metro.TrainManagement.Lines

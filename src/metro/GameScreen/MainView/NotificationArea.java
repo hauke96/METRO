@@ -1,7 +1,6 @@
 package metro.GameScreen.MainView;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.LinkedList;
 
@@ -11,8 +10,6 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Button;
 
 /**
  * This is a kind of log where game-concerned events pop up and are shown.

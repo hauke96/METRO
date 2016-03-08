@@ -9,6 +9,7 @@ VERSION 0.1.4: (23.02.2016)
 	- Nodes
 		* Act as signal for trains
 	- The toolbar is now at the top as one screen wide bar
+	- Notification area for game consideres events
 
 VERSION 0.1.3: (17.02.2016)
 	- Game window with own window-bar
