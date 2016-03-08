@@ -69,9 +69,9 @@ public abstract class GameScreen extends Observable
 	/**
 	 * Updates the actual game screen.
 	 * 
-	 * @param g SpriteBatch to draw on.
+	 * @param sp SpriteBatch to draw on.
 	 */
-	public abstract void updateGameScreen(SpriteBatch g);
+	public abstract void updateGameScreen(SpriteBatch sp);
 
 	/**
 	 * When mouse has clicked

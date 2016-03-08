@@ -136,7 +136,7 @@ public class RailwayNodeOverseer
 	}
 
 	/**
-	 * Draws all nodes onto the sprite batch.
+	 * Draws all node connections (lines between nodes) onto the screen.
 	 * 
 	 * @param offset The map offset in pixel.
 	 * @param sp The sprite batch.

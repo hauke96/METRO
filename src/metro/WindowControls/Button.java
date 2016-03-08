@@ -127,8 +127,8 @@ public class Button extends ActionObservable implements ControlElement
 			else Draw.setColor(Color.gray);
 			Draw.String(_text, _position.x + (_position.width - Draw.getStringSize(_text).width) / 2,
 				_position.y + (_position.height - Draw.getStringSize(_text).height) / 2);
-			
-			if(_enabled)Draw.setColor(METRO.__metroBlue); 
+
+			if(_enabled) Draw.setColor(METRO.__metroBlue);
 			else Draw.setColor(Color.lightGray);
 			Draw.Rect(_position.x, _position.y, _position.width, _position.height);
 		}
@@ -173,7 +173,7 @@ public class Button extends ActionObservable implements ControlElement
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
@@ -217,6 +217,18 @@ public class Button extends ActionObservable implements ControlElement
 	public void setState(boolean enable)
 	{
 		_enabled = enable;
+	}
+
+	/**
+	 * Sets the texture of this button and the area of it on the raw image.
+	 * 
+	 * @param positionOnImage The area of the texture for this button.
+	 * @param image The raw image where the texture is on.
+	 */
+	public void setImage(Rectangle positionOnImage, TextureRegion image)
+	{
+		_positionOnImage = positionOnImage;
+		_texture = image;
 	}
 
 	@Override

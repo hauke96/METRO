@@ -37,6 +37,7 @@ public class MainView extends GameScreen implements Observer
 	private Toolbar _toolbar;
 	private CityView _cityView;
 	private GameState _gameState;
+	private NotificationArea _notificationArea;
 
 	/**
 	 * The position of the selected cross of the game grid.
@@ -64,6 +65,8 @@ public class MainView extends GameScreen implements Observer
 		_cityView = new CityView(); // create extra instance for general purpose actions
 
 		_gameState = GameState.getInstance();
+
+		_notificationArea = NotificationArea.getInstance();
 	}
 
 	@Override
@@ -92,6 +95,8 @@ public class MainView extends GameScreen implements Observer
 		trainManagementService.drawLines(_mapOffset, sp);
 		drawTrainStations(sp);
 		trainManagementService.drawTrains(_mapOffset, sp);
+
+		_notificationArea.updateGameScreen(sp);
 
 		if(_activeTool != null) _activeTool.updateGameScreen(sp);
 
@@ -179,6 +184,7 @@ public class MainView extends GameScreen implements Observer
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		if(_cityView != null) _cityView.mouseClicked(screenX, screenY, mouseButton);
+		if(_notificationArea != null) _notificationArea.mouseClicked(screenX, screenY, mouseButton);
 
 		if(mouseButton == Buttons.MIDDLE) // for drag-mode
 		{
@@ -236,16 +242,14 @@ public class MainView extends GameScreen implements Observer
 			}
 			else
 			{
-				_activeTool = null;
+				closeActiveTool();
 			}
 		}
 		else
 		{
 			if(!_activeTool.isActive())
 			{
-				_toolbar.resetExclusiveButtonPositions(null);
-				_activeTool.close();
-				_activeTool = null;
+				closeActiveTool();
 			}
 		}
 	}
@@ -259,6 +263,25 @@ public class MainView extends GameScreen implements Observer
 	{
 		_activeTool = newTool;
 		_activeTool.addObserver(this);
+		if(_activeTool instanceof LineView || _activeTool instanceof TrainView) // tools that have own window and influence the notification area
+		{
+			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width - 400); // TODO make the 400 (tool width) available for every tool (and every other screen that needs it)
+		}
+		else
+		{
+			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
+		}
+	}
+
+	/**
+	 * Closes the active tool and resets everything that depends on this.
+	 */
+	private void closeActiveTool()
+	{
+		_toolbar.resetExclusiveButtonPositions(null);
+		_activeTool.close();
+		_activeTool = null;
+		_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
 	}
 
 	@Override

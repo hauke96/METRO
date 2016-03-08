@@ -92,7 +92,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		_titleBarBorderLineWidth;
 	private static LwjglApplication _application;
 
-	public static Dimension __SCREEN_SIZE;
+	public static Dimension __SCREEN_SIZE; // TODO write getter for the real size (especially the height) because the window title bar eats something of the real height.
 	public static final String __VERSION = "0.1.4_indev";
 	public static boolean _dragMode,
 		_debug;
