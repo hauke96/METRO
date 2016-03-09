@@ -2,6 +2,7 @@ package metro.GameScreen.MainView;
 
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,6 +11,7 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
+import metro.WindowControls.List;
 
 /**
  * This is a kind of log where game-concerned events pop up and are shown.
@@ -23,9 +25,8 @@ public class NotificationArea extends GameScreen
 		_isExpanded;
 	private int _height,
 		_width;
-	private LinkedList<String> _times, // the time of an entry
-		_entries; // the entry itself
 	private Color _backGroundColor;
+	private List _entryList;
 
 	private final static NotificationArea __INSTANCE = new NotificationArea();
 
@@ -34,12 +35,24 @@ public class NotificationArea extends GameScreen
 	 */
 	private NotificationArea()
 	{
-		_times = new LinkedList<>();
-		_entries = new LinkedList<>();
-		_backGroundColor = new Color(255, 255, 255, 125);
+		_backGroundColor = new Color(255, 255, 255, 165);
 		_height = 250;
 		_width = METRO.__SCREEN_SIZE.width;
 		_isExpanded = true;
+		_entryList = new List(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + 25, _width - 5, _height - 47), new ArrayList<String>(), null, true);
+		registerControl(_entryList);
+		_entryList.setDecoration(false);
+		_entryList.setTransparency(165);
+		_entryList.addElement("BUY: You baught a train :D");
+		_entryList.addElement("BUY: You baught a train :D");
+		_entryList.addElement("BUY: You baught a train :D");
+		_entryList.addElement("WARNING: There are to many trains on Line 'asdfgh'");
+		_entryList.addElement("BUY: You baught a train :D");
+		_entryList.addElement("BUY: You baught a train :D");
+		_entryList.addElement("BUY: You baught a train :D");
+		_entryList.addElement("BUY: You baught a train :D");
+		_entryList.addElement("WARNING: There are to many trains on Line '565'");
+		_entryList.addElement("EVENT: Someone build a wall in one of the cars entries. This train has to wait until it is repaired.");
 	}
 
 	/**
@@ -53,11 +66,12 @@ public class NotificationArea extends GameScreen
 	/**
 	 * Sets the width of the notification area. It still begins at (0,SCREEN_HEIGHT - height) but may not end at the screens edge.
 	 * 
-	 * @param newWidth The net width in pixel.
+	 * @param newWidth The new width in pixel.
 	 */
 	public void setWidth(int newWidth)
 	{
 		_width = newWidth;
+		_entryList.setSize(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + 25, _width - 5, _height - 47));
 	}
 
 	@Override
@@ -65,6 +79,12 @@ public class NotificationArea extends GameScreen
 	{
 		Fill.setColor(_backGroundColor);
 		Fill.Rect(0, METRO.__SCREEN_SIZE.height - _height, _width, _height);
+		
+		if(_isExpanded)
+		{
+			// TODO draw entries and times
+			_entryList.draw();
+		}
 
 		Draw.setColor(METRO.__metroBlue);
 		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height, _width, METRO.__SCREEN_SIZE.height - _height);
@@ -78,11 +98,6 @@ public class NotificationArea extends GameScreen
 		Draw.Image(METRO.__iconSet,
 			new Rectangle(_width - 25, METRO.__SCREEN_SIZE.height - _height, 25, 25),
 			new Rectangle(0, 228 + (_isExpanded ? 25 : 0), 25, 25));
-
-		// if(_isExpanded)
-		// {
-		// TODO draw entries and times
-		// }
 	}
 
 	@Override
@@ -92,6 +107,7 @@ public class NotificationArea extends GameScreen
 		{
 			_isExpanded ^= true; // flip state of boolean
 			_height = _isExpanded ? 250 : 47; // TODO change 47 to "_height + METRO.__windowTitleHeight()" or something
+			_entryList.setState(_isExpanded);
 		}
 	}
 
@@ -108,7 +124,6 @@ public class NotificationArea extends GameScreen
 	@Override
 	public void mouseScrolled(int amount)
 	{
-		// TODO scroll through entries
 	}
 
 	@Override

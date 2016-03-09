@@ -100,14 +100,17 @@ public class ControlActionManager
 			boolean inputClicked = false;
 			for(ControlElement control : listOfControls)
 			{
-				boolean b = control.mouseClicked(screenX, screenY, button);
-				if(b && control instanceof InputField) // if clicked element is an input field, set this as selected field
+				if(control.getState())
 				{
-					inputClicked = true;
-					METRO.__setSelectedInput((InputField)control);
-				}
+					boolean b = control.mouseClicked(screenX, screenY, button);
+					if(b && control instanceof InputField) // if clicked element is an input field, set this as selected field
+					{
+						inputClicked = true;
+						METRO.__setSelectedInput((InputField)control);
+					}
 
-				controlClicked |= b;
+					controlClicked |= b;
+				}
 			}
 			if(!inputClicked) METRO.__setSelectedInput(null);
 			_currentlyIterating = false;
@@ -128,10 +131,13 @@ public class ControlActionManager
 		for(int i = _controlElements.size() - 1; i > 0; i--)
 		{
 			ControlElement control = _controlElements.get(i);
-			if(control.getArea().contains(mPos))
+			if(control.getState())
 			{
-				control.mouseScrolled(amount);
-				break;
+				if(control.getArea().contains(mPos))
+				{
+					control.mouseScrolled(amount);
+					break;
+				}
 			}
 		}
 	}

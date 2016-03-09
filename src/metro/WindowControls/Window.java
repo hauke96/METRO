@@ -104,7 +104,7 @@ public class Window extends ActionObservable implements ControlElement
 		Draw.setColor(Color.white);
 		Draw.Rect(_position.x + 1,
 			_position.y + 1,
-			_size.x - 21,
+			_size.x - 20,
 			18);
 
 		// Draw Border
@@ -345,5 +345,11 @@ public class Window extends ActionObservable implements ControlElement
 	public Rectangle getArea()
 	{
 		return new Rectangle(_position.x, _position.y, _size.x, _size.y);
+	}
+
+	@Override
+	public boolean getState()
+	{
+		return true;
 	}
 }

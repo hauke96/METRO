@@ -186,4 +186,10 @@ public class Label extends ActionObservable implements ControlElement
 	{
 		return new Rectangle(_position.x, _position.y, Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
 	}
+
+	@Override
+	public boolean getState()
+	{
+		return _enabled;
+	}
 }

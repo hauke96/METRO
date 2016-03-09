@@ -294,4 +294,10 @@ public class InputField extends ActionObservable implements ControlElement
 	{
 		return _position;
 	}
+
+	@Override
+	public boolean getState()
+	{
+		return _enabled;
+	}
 }

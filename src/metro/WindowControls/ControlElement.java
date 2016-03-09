@@ -89,4 +89,11 @@ public interface ControlElement
 	 * @return The area of this control as rectangle.
 	 */
 	public Rectangle getArea();
+
+	/**
+	 * Gets the current state of this control.
+	 * 
+	 * @return True when control is active and the user can interact with it, false if not.
+	 */
+	public boolean getState();
 }

@@ -31,7 +31,10 @@ public class List extends ActionObservable implements ControlElement
 	private int _maxOffset,
 		_scrollHeight; // height of one scroll step
 	private boolean _compact = false, // less space between text and top/bottom edge
-		_enabled = true;
+		_enabled = true,
+		_decorated = true;
+	private Color _backgroundColor,
+		_hoverColor;
 
 	/**
 	 * Creates a new list control element on a window.
@@ -85,10 +88,13 @@ public class List extends ActionObservable implements ControlElement
 		_offset = 0;
 		_defaultYSpace = 30;
 		_compactYSpace = 8;
-		setSelectedEntry(-1);
 		_maxOffset = 0;
 		_scrollHeight = 20;
 
+		_backgroundColor = new Color(255, 255, 255, 255);
+		_hoverColor = new Color(240, 240, 240, 255);
+
+		setSelectedEntry(-1);
 		calcMaxOffset();
 
 		_windowHandle = win;
@@ -238,31 +244,32 @@ public class List extends ActionObservable implements ControlElement
 
 		// Create scissor to draw only in the area of the list box.
 		com.badlogic.gdx.math.Rectangle scissors = new com.badlogic.gdx.math.Rectangle();
-		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_position.x + METRO.__getXOffset(), _position.y + METRO.__getYOffset(), _position.width + 1,
+		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_position.x + METRO.__getXOffset(), _position.y + METRO.__getYOffset(),
+			_position.width + 1,
 			_position.height + 1);
 		ScissorStack.calculateScissors((Camera)METRO.__camera, METRO.__spriteBatch.getTransformMatrix(), clipBounds, scissors);
 		ScissorStack.pushScissors(scissors);
 
-		clearBackground();
+		if(_decorated) clearBackground();
 
 		drawEntries();
 
-		drawBorders();
+		if(_decorated) drawBorders();
 
 		drawScrollbar();
 
 		ScissorStack.popScissors();
 	}
-	
+
 	/**
 	 * Makes the background white.
 	 */
 	private void clearBackground()
 	{
-		Fill.setColor(Color.white);
+		Fill.setColor(_backgroundColor);
 		Fill.Rect(_position.x, _position.y, _position.width, _position.height);
 	}
-	
+
 	/**
 	 * Draws all list entries.
 	 */
@@ -284,26 +291,37 @@ public class List extends ActionObservable implements ControlElement
 				2 * ySpace + // space above and below string
 					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
 					(amountRows - 1) * 8 // space between lines
-					- 3);
+					- 1);
 
-			if(_enabled && entryRect.contains(mPos)) // when mouse is in an entry, make background light-light-gray
+			// Hover effect: when mouse is in an entry, make background light-light-gray
+			if(_enabled && entryRect.contains(mPos))
 			{
-				Fill.setColor(new Color(240, 240, 240));
+				Fill.setColor(_hoverColor);
 				Fill.Rect(entryRect);
 			}
 
-			// Draw border around entry
-			if(_enabled && _selectedEntry == i)
+			// Draw border for selected entry
+			if(_enabled && _decorated)
 			{
-				Draw.setColor(Color.gray);
+				if(_selectedEntry == i)
+				{
+					Draw.setColor(Color.gray);
+				}
+				Draw.Rect(_position.x + 3,
+					_position.y + _offset + (yOffset - ySpace) + 5,
+					_position.width - 9,
+					2 * ySpace + // space above and below string
+						Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
+						(amountRows - 1) * 8 // space between lines
+						- 3); // gap between rects
 			}
-			Draw.Rect(_position.x + 3,
-				_position.y + _offset + (yOffset - ySpace) + 5,
-				_position.width - 9,
-				2 * ySpace + // space above and below string
-					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
-					(amountRows - 1) * 8 // space between lines
-					- 3); // gap between rects
+			else if(_enabled) // enabled but not decoryted --> just a line between entries
+			{
+				Draw.Line(_position.x + 8,
+					_position.y + _offset + (yOffset - ySpace) + 4,
+					_position.x + _position.width - 11,
+					_position.y + _offset + (yOffset - ySpace) + 4);
+			}
 
 			// Draw the string
 			Draw.setColor((_enabled ? Color.black : Color.gray)); // gray when disabled
@@ -314,7 +332,7 @@ public class List extends ActionObservable implements ControlElement
 				(amountRows - 1) * 8; // space between lines
 		}
 	}
-	
+
 	/**
 	 * Draws the borders and some fancy lines around the list.
 	 */
@@ -331,7 +349,7 @@ public class List extends ActionObservable implements ControlElement
 		Draw.Line(_position.x + _position.width - 3, _position.y, _position.x + _position.width - 3, _position.y + _position.height); // right for scroll bar
 		Draw.Line(_position.x, _position.y + 2, _position.x + _position.width - 3, _position.y + 2); // top 2
 	}
-	
+
 	/**
 	 * Draws the scrollbar line.
 	 */
@@ -475,5 +493,43 @@ public class List extends ActionObservable implements ControlElement
 	public Rectangle getArea()
 	{
 		return _position;
+	}
+
+	@Override
+	public boolean getState()
+	{
+		return _enabled;
+	}
+
+	/**
+	 * Sets the style of the list. An undecorated list has no background, no borders, only the entries and the scroll bar.
+	 * 
+	 * @param decorated True to have normal decoration (borders etc.), false to have entries and scroll bar only.
+	 */
+	public void setDecoration(boolean decorated)
+	{
+		_decorated = decorated;
+	}
+
+	/**
+	 * Sets the transparency of the background color and the color of hovered entries. Does not influence line colors (borders etc.) and text colors.
+	 * 
+	 * @param transparency The transparency from 0 (fully transparent) to 255 (not at all).
+	 */
+	public void setTransparency(int transparency)
+	{
+		_backgroundColor = new Color(255, 255, 255, transparency);
+		int c = 240 - (255 - transparency) / 4;
+		_hoverColor = new Color(c, c, c, transparency);
+	}
+
+	/**
+	 * Sets the size of the list.
+	 * 
+	 * @param size The new size.
+	 */
+	public void setSize(Rectangle size)
+	{
+		_position = size;
 	}
 }

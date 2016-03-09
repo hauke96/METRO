@@ -80,7 +80,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	private Point _oldMousePosition;
 	private LwjglApplicationConfiguration _config;
 
-	private static OSType _detected_OS;
+	private static OSType _detectedOS;
 	private static ControlActionManager _controlActionManager;
 	private static GameScreen _currentGameScreen;
 	private static ArrayList<Window> _windowList;
@@ -156,19 +156,19 @@ public class METRO implements ApplicationListener, InputProcessor
 		String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
 		if(os.contains("win"))
 		{
-			_detected_OS = OSType.WIN;
+			_detectedOS = OSType.WIN;
 		}
 		else if(os.contains("nux"))
 		{
-			_detected_OS = OSType.LINUX;
+			_detectedOS = OSType.LINUX;
 		}
 		else if(os.contains("mac") || os.contains("darwin"))
 		{
-			_detected_OS = OSType.MAC;
+			_detectedOS = OSType.MAC;
 		}
 		else
 		{
-			_detected_OS = OSType.UNKNOWN;
+			_detectedOS = OSType.UNKNOWN;
 		}
 	}
 
@@ -218,7 +218,7 @@ public class METRO implements ApplicationListener, InputProcessor
 			Pixmap pixmap = new Pixmap(Gdx.files.internal("textures/Cursor.png")); // has to be a width of 2^x (2, 4, 8, 16, 32, ...)
 			Gdx.input.setCursorImage(pixmap, 15, 12); // sets cursor to correct position
 			pixmap.dispose();
-			if(_detected_OS == OSType.WIN) // setCursorImage doesn't work on Windows :(
+			if(_detectedOS == OSType.WIN) // setCursorImage doesn't work on Windows :(
 			{
 				__mouseCursorImage = new TextureRegion(new Texture(Gdx.files.internal("textures/Cursor.png")));
 			}
@@ -404,7 +404,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void renderCursor()
 	{
-		if(_detected_OS == OSType.WIN) // setCursorImage doesn't work on Windows :(
+		if(_detectedOS == OSType.WIN) // setCursorImage doesn't work on Windows :(
 		{
 			if(__mouseCursorImage != null) Draw.Image(__mouseCursorImage, __originalMousePosition.x - 16, __originalMousePosition.y - 16);
 		}

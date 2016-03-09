@@ -236,4 +236,10 @@ public class Button extends ActionObservable implements ControlElement
 	{
 		return _position;
 	}
+
+	@Override
+	public boolean getState()
+	{
+		return _enabled;
+	}
 }

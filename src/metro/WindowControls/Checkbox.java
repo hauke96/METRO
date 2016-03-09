@@ -236,4 +236,10 @@ public class Checkbox extends ActionObservable implements ControlElement
 	{
 		return new Rectangle(_position.x, _position.y, 25 + _label.getPosition().x, 20);
 	}
+
+	@Override
+	public boolean getState()
+	{
+		return _enabled;
+	}
 }
