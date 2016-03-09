@@ -21,7 +21,7 @@ public class CityTravelerSpot
 	/**
 	 * The difference between two circles in pixel.
 	 */
-	public static int _circleRadiusStep = 25 * 2;
+	public static int __circleRadiusStep = 25 * 2;
 	private Point _position;
 	private int _strength;
 
@@ -48,12 +48,12 @@ public class CityTravelerSpot
 		layerIndex = (int)_strength - layerIndex;
 		if(layerIndex < 0) return false;
 
-		Point position = new Point(_position.x + (int)CityView._offset.getX(), _position.y + (int)CityView._offset.getY());
+		Point position = new Point(_position.x + (int)CityView.__offset.getX(), _position.y + (int)CityView.__offset.getY());
 
 		boolean isInCurrentCircle = Math.pow(METRO.__mousePosition.x - position.x, 2)
-			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(_circleRadiusStep * layerIndex, 2); // true: Mouse cursor is in circle
+			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(__circleRadiusStep * layerIndex, 2); // true: Mouse cursor is in circle
 		boolean isInNextCircle = Math.pow(METRO.__mousePosition.x - position.x, 2)
-			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(_circleRadiusStep * (layerIndex - 1), 2); // true: Mouse cursor is in circle
+			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(__circleRadiusStep * (layerIndex - 1), 2); // true: Mouse cursor is in circle
 
 		return isInCurrentCircle && !isInNextCircle;
 	}
@@ -85,32 +85,32 @@ public class CityTravelerSpot
 		if(layerIndex < -1) return;
 
 		// get the position with offset
-		Point position = new Point(_position.x + (int)CityView._offset.getX() + 1, _position.y + (int)CityView._offset.getY() + 1);
+		Point position = new Point(_position.x + (int)CityView.__offset.getX() + 1, _position.y + (int)CityView.__offset.getY() + 1);
 
 		if(circleSelected)
 		{
 			int gray = (int)(255 - 2 * (_strength - layerIndex + 1) - 8); // gray color based on layer
 			Fill.setColor(new Color(gray, gray, gray));
-			Fill.Circle(position.x - layerIndex * _circleRadiusStep + 1,
-				position.y - layerIndex * _circleRadiusStep + 1,
-				_circleRadiusStep * 2 * layerIndex - 3);
+			Fill.Circle(position.x - layerIndex * __circleRadiusStep + 1,
+				position.y - layerIndex * __circleRadiusStep + 1,
+				__circleRadiusStep * 2 * layerIndex - 3);
 		}
 		else
 		{
 			int gray = 255 - 5 * (_strength - layerIndex + 1); // gray color based on layer
 			gray = 255;
 			Fill.setColor(new Color(gray, gray, gray));
-			Fill.Circle(position.x - layerIndex * _circleRadiusStep + 1,
-				position.y - layerIndex * _circleRadiusStep + 1,
-				_circleRadiusStep * 2 * layerIndex - 3);
+			Fill.Circle(position.x - layerIndex * __circleRadiusStep + 1,
+				position.y - layerIndex * __circleRadiusStep + 1,
+				__circleRadiusStep * 2 * layerIndex - 3);
 		}
 		if(onlyEdges)
 		{
 			int gray = 255 - 9 * (_strength - layerIndex + 1) - 30; // gray color based on layer
 			Draw.setColor(new Color(gray, gray, gray));
-			Draw.Circle(position.x - layerIndex * _circleRadiusStep,
-				position.y - layerIndex * _circleRadiusStep,
-				_circleRadiusStep * 2 * layerIndex - 1);
+			Draw.Circle(position.x - layerIndex * __circleRadiusStep,
+				position.y - layerIndex * __circleRadiusStep,
+				__circleRadiusStep * 2 * layerIndex - 1);
 		}
 	}
 

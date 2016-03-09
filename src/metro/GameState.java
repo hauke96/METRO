@@ -3,6 +3,8 @@ package metro;
 import java.util.ArrayList;
 
 import metro.Exceptions.NotEnoughMoneyException;
+import metro.GameScreen.MainView.NotificationView.NotificationServer;
+import metro.GameScreen.MainView.NotificationView.NotificationType;
 import metro.TrainManagement.Trains.TrainStation;
 
 /**
@@ -112,12 +114,12 @@ public class GameState
 	{
 		try
 		{
-			withdrawMoney(TrainStation.PRICE);
+			withdrawMoney(TrainStation.__price);
 			_stationList.add(trainStation);
 		}
 		catch(NotEnoughMoneyException e)
 		{
-			// TODO Create notification (s. #40)
+			NotificationServer.publishNotification("You have not enough money for a station.", NotificationType.GAME_ERROR);
 			METRO.__debug("[StationAddingFailed]\n" + e.getMessage());
 		}
 	}

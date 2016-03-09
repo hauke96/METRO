@@ -46,8 +46,8 @@ public class StationPlacingTool extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, MainView._mapOffset);
-		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, MainView._mapOffset);
+		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, MainView.__mapOffset);
+		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, MainView.__mapOffset);
 	}
 
 	/**
@@ -60,8 +60,8 @@ public class StationPlacingTool extends GameScreen
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		boolean positionOccupied = false;
-		Point selectPointOnScreen = new Point(MainView._selectedCross.x * GameState.getInstance().getBaseNetSpacing() + (int)offset.getX(),
-			MainView._selectedCross.y * GameState.getInstance().getBaseNetSpacing() + (int)offset.getY());
+		Point selectPointOnScreen = new Point(MainView.__selectedCross.x * GameState.getInstance().getBaseNetSpacing() + (int)offset.getX(),
+			MainView.__selectedCross.y * GameState.getInstance().getBaseNetSpacing() + (int)offset.getY());
 
 		Point offsetPoint = new Point((int)offset.getX(), (int)offset.getY());
 		for(TrainStation ts : METRO.__gameState.getStations())
@@ -71,7 +71,7 @@ public class StationPlacingTool extends GameScreen
 
 		if(!positionOccupied) // no doubles
 		{
-			METRO.__gameState.addStation(new TrainStation(MainView._selectedCross, 0));
+			METRO.__gameState.addStation(new TrainStation(MainView.__selectedCross, 0));
 		}
 	}
 

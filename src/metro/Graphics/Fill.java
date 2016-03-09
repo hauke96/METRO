@@ -22,9 +22,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 public class Fill
 {
-	private static ShapeRenderer shapeRenderer = new ShapeRenderer();
-	private static int xOffset, yOffset;
-	private static float r, g, b, a; // current color values
+	private static ShapeRenderer __shapeRenderer = new ShapeRenderer();
+	private static int __xOffset, __yOffset;
+	private static float __r, __g, __b, __a; // current color values
 
 	/**
 	 * Sets the offset for drawing things.
@@ -34,8 +34,8 @@ public class Fill
 	 */
 	public static void setOffset(int offsetX, int offsetY)
 	{
-		xOffset = offsetX;
-		yOffset = offsetY;
+		__xOffset = offsetX;
+		__yOffset = offsetY;
 	}
 
 	/**
@@ -47,9 +47,9 @@ public class Fill
 		Gdx.gl.glEnable(GL30.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
 
-		shapeRenderer.setProjectionMatrix(METRO.__camera.combined);
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(r, g, b, a);
+		__shapeRenderer.setProjectionMatrix(METRO.__camera.combined);
+		__shapeRenderer.begin(ShapeType.Filled);
+		__shapeRenderer.setColor(__r, __g, __b, __a);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class Fill
 	 */
 	private static void reset(SpriteBatch spriteBatch)
 	{
-		shapeRenderer.end();
+		__shapeRenderer.end();
 		Gdx.gl.glDisable(GL30.GL_BLEND);
 		spriteBatch.begin();
 	}
@@ -69,10 +69,10 @@ public class Fill
 	 */
 	public static void setColor(Color color)
 	{
-		r = color.getRed() / 255f;
-		g = color.getGreen() / 255f;
-		b = color.getBlue() / 255f;
-		a = color.getAlpha() / 255f;
+		__r = color.getRed() / 255f;
+		__g = color.getGreen() / 255f;
+		__b = color.getBlue() / 255f;
+		__a = color.getAlpha() / 255f;
 	}
 
 	/**
@@ -85,8 +85,8 @@ public class Fill
 	public static void Circle(int x, int y, int diameter)
 	{
 		init(METRO.__spriteBatch);
-		shapeRenderer.circle(x + diameter / 2 + xOffset,
-			y + diameter / 2 + yOffset,
+		__shapeRenderer.circle(x + diameter / 2 + __xOffset,
+			y + diameter / 2 + __yOffset,
 			diameter / 2,
 			Integer.parseInt(Settings.getInstance().getOld("amount.segments").toString()));
 		reset(METRO.__spriteBatch);
@@ -117,7 +117,7 @@ public class Fill
 	public static void Rect(int x, int y, int width, int height, SpriteBatch spriteBatch)
 	{
 		init(spriteBatch);
-		shapeRenderer.rect(x + xOffset, y + yOffset, width, height);
+		__shapeRenderer.rect(x + __xOffset, y + __yOffset, width, height);
 		reset(spriteBatch);
 	}
 
@@ -155,7 +155,7 @@ public class Fill
 	public static void Line(int x1, int y1, int x2, int y2, int w, SpriteBatch spriteBatch)
 	{
 		init(spriteBatch);
-		shapeRenderer.rectLine(x1 + xOffset, y1 + yOffset, x2 + xOffset, y2 + yOffset, w);
+		__shapeRenderer.rectLine(x1 + __xOffset, y1 + __yOffset, x2 + __xOffset, y2 + __yOffset, w);
 		reset(spriteBatch);
 	}
 }

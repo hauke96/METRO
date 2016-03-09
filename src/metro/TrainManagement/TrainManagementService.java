@@ -16,6 +16,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Exceptions.NotEnoughMoneyException;
+import metro.GameScreen.MainView.NotificationView.NotificationServer;
+import metro.GameScreen.MainView.NotificationView.NotificationType;
 import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
@@ -31,18 +33,18 @@ import metro.TrainManagement.Trains.TrainTemplate;
  */
 public class TrainManagementService
 {
-	private static ArrayList<TrainLine> _listOfTrainLines;
+	private static ArrayList<TrainLine> __listOfTrainLines;
 	private ArrayList<Train> _trainList;
 	private HashMap<String, TrainTemplate> _templateTrains;
 	private final static TrainManagementService __INSTANCE = new TrainManagementService();
-	private static float _lastRenderTime;
+	private static float __lastRenderTime;
 
 	private TrainManagementService()
 	{
-		_listOfTrainLines = new ArrayList<TrainLine>();
+		__listOfTrainLines = new ArrayList<TrainLine>();
 		_trainList = new ArrayList<>();
 		_templateTrains = new HashMap<>();
-		_lastRenderTime = System.nanoTime();
+		__lastRenderTime = System.nanoTime();
 
 		try
 		{
@@ -185,7 +187,7 @@ public class TrainManagementService
 		}
 		catch(NotEnoughMoneyException e)
 		{
-			// TODO Create notification (s. #40)
+			NotificationServer.publishNotification("You have not enough money to buy a train of " + train.getModelName(), NotificationType.GAME_ERROR);
 			METRO.__debug("[AddingTrainFailed]\nThere's not enough money to add a " + train.getModelName() + " train.\n" + e.getMessage());
 		}
 	}
@@ -283,8 +285,8 @@ public class TrainManagementService
 	public void addLine(TrainLine line)
 	{
 		if(line == null) return;
-		_listOfTrainLines.remove(line); // remove old line, because maybe line.equals(old-line) == true
-		_listOfTrainLines.add(line); // adds the new line to the list
+		__listOfTrainLines.remove(line); // remove old line, because maybe line.equals(old-line) == true
+		__listOfTrainLines.add(line); // adds the new line to the list
 	}
 
 	/**
@@ -305,7 +307,7 @@ public class TrainManagementService
 	public void removeLine(TrainLine line)
 	{
 		if(line == null) return;
-		_listOfTrainLines.remove(line);
+		__listOfTrainLines.remove(line);
 		removeTrain(line.getName());
 	}
 
@@ -327,7 +329,7 @@ public class TrainManagementService
 	 */
 	public Color getLineColor(String lineName)
 	{
-		for(TrainLine line : _listOfTrainLines)
+		for(TrainLine line : __listOfTrainLines)
 		{
 			if(line.getName().equals(lineName))
 			{
@@ -345,7 +347,7 @@ public class TrainManagementService
 	@SuppressWarnings("unchecked") // cast will always succeed, because the list only hold TrainLine objects
 	public ArrayList<TrainLine> getLines()
 	{
-		return (ArrayList<TrainLine>)_listOfTrainLines.clone();
+		return (ArrayList<TrainLine>)__listOfTrainLines.clone();
 	}
 
 	/**
@@ -356,7 +358,7 @@ public class TrainManagementService
 	 */
 	public TrainLine getLine(String lineName)
 	{
-		for(TrainLine line : _listOfTrainLines)
+		for(TrainLine line : __listOfTrainLines)
 		{
 			if(line.getName().equals(lineName))
 			{
@@ -375,12 +377,12 @@ public class TrainManagementService
 	public void drawLines(Point offset, SpriteBatch sp)
 	{
 		HashMap<RailwayNode, Integer> map = new HashMap<RailwayNode, Integer>();
-		for(RailwayNode node : RailwayNodeOverseer._nodeMap.values())
+		for(RailwayNode node : RailwayNodeOverseer.__nodeMap.values())
 		{
 			map.put(node, new Integer(0));
 		}
 
-		for(TrainLine line : _listOfTrainLines)
+		for(TrainLine line : __listOfTrainLines)
 		{
 			line.draw(offset, sp, map);
 		}
@@ -394,8 +396,8 @@ public class TrainManagementService
 	 */
 	public void drawTrains(Point offset, SpriteBatch sp)
 	{
-		float deltaTime = System.nanoTime() - _lastRenderTime;
-		_lastRenderTime = System.nanoTime();
+		float deltaTime = System.nanoTime() - __lastRenderTime;
+		__lastRenderTime = System.nanoTime();
 
 		lockNodes();
 
@@ -476,7 +478,7 @@ public class TrainManagementService
 	 */
 	public boolean isLineColorUsed(Color color)
 	{
-		for(TrainLine line : _listOfTrainLines)
+		for(TrainLine line : __listOfTrainLines)
 		{
 			if(line.getColor().equals(color)) return true;
 		}

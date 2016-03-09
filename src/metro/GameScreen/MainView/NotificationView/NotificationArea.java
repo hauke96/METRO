@@ -1,9 +1,8 @@
-package metro.GameScreen.MainView;
+package metro.GameScreen.MainView.NotificationView;
 
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -19,7 +18,7 @@ import metro.WindowControls.List;
  * @author hauke
  *
  */
-public class NotificationArea extends GameScreen
+public class NotificationArea extends GameScreen implements NotificationSubscriber
 {
 	private boolean _isActive,
 		_isExpanded;
@@ -43,16 +42,9 @@ public class NotificationArea extends GameScreen
 		registerControl(_entryList);
 		_entryList.setDecoration(false);
 		_entryList.setTransparency(165);
-		_entryList.addElement("BUY: You baught a train :D");
-		_entryList.addElement("BUY: You baught a train :D");
-		_entryList.addElement("BUY: You baught a train :D");
-		_entryList.addElement("WARNING: There are to many trains on Line 'asdfgh'");
-		_entryList.addElement("BUY: You baught a train :D");
-		_entryList.addElement("BUY: You baught a train :D");
-		_entryList.addElement("BUY: You baught a train :D");
-		_entryList.addElement("BUY: You baught a train :D");
-		_entryList.addElement("WARNING: There are to many trains on Line '565'");
-		_entryList.addElement("EVENT: Someone build a wall in one of the cars entries. This train has to wait until it is repaired.");
+		_entryList.setStickiness(true);
+		addMessage("Game started", NotificationType.GAME_INFO);
+		NotificationServer.subscribe(this);
 	}
 
 	/**
@@ -75,14 +67,20 @@ public class NotificationArea extends GameScreen
 	}
 
 	@Override
+	public void addMessage(String message, NotificationType type)
+	{
+		// TODO add entry-types to the list control to control e.g. the color and translate NotificationTypes into ListEntryTypes.
+		_entryList.addElement(message);
+	}
+
+	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
 		Fill.setColor(_backGroundColor);
 		Fill.Rect(0, METRO.__SCREEN_SIZE.height - _height, _width, _height);
-		
+
 		if(_isExpanded)
 		{
-			// TODO draw entries and times
 			_entryList.draw();
 		}
 

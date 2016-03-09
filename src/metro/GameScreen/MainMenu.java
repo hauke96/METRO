@@ -29,7 +29,7 @@ public class MainMenu extends GameScreen
 		_button_settings,
 		_button_exitGame;
 	private Window _welcomeWindow;
-	private static TextureRegion _buttonTextures,
+	private static TextureRegion __buttonTextures,
 		_titleImageTexture;
 
 	/**
@@ -41,15 +41,15 @@ public class MainMenu extends GameScreen
 
 		// Create MainMenu buttons:
 		_button_startGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 - 25, 200, 50),
-			new Rectangle(0, 0, 200, 50), _buttonTextures);
+			new Rectangle(0, 0, 200, 50), __buttonTextures);
 		registerControl(_button_startGame);
 
 		_button_settings = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 35, 200, 50),
-			new Rectangle(0, 50, 200, 50), _buttonTextures);
+			new Rectangle(0, 50, 200, 50), __buttonTextures);
 		registerControl(_button_settings);
 
 		_button_exitGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 95, 200, 50),
-			new Rectangle(0, 100, 200, 50), _buttonTextures);
+			new Rectangle(0, 100, 200, 50), __buttonTextures);
 		registerControl(_button_exitGame);
 
 		addActionObservations();
@@ -85,8 +85,8 @@ public class MainMenu extends GameScreen
 
 	private void loadVisuals()
 	{
-		_buttonTextures = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
-		_buttonTextures.flip(false, true);
+		__buttonTextures = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
+		__buttonTextures.flip(false, true);
 
 		_titleImageTexture = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_TitleImage.png")));
 		_titleImageTexture.flip(false, true);

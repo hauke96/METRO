@@ -380,7 +380,7 @@ public class TrainLine implements Cloneable
 	 * @param listOfNodes The list of nodes that may be valid.
 	 * @return True when valid.
 	 */
-	public static boolean isValid(ArrayList<RailwayNode> listOfNodes)
+	public static boolean __isValid(ArrayList<RailwayNode> listOfNodes)
 	{
 		int amountEndNodes = 0;
 
@@ -496,7 +496,7 @@ public class TrainLine implements Cloneable
 	{
 		if(_length == 0) return;
 
-		Draw.setColor(isValid(_listOfNodes) ? _lineColor : METRO.__metroRed);
+		Draw.setColor(__isValid(_listOfNodes) ? _lineColor : METRO.__metroRed);
 
 		for(int i = 0; i < _listOfNodes.size() - 1; i++)
 		{

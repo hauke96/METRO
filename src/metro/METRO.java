@@ -8,9 +8,9 @@ package metro;
  * Code convention:
  * 
  * final: _WITH_BIG_NAME
- * normal instance variables: _variable_someName
- * METRO instance variables: __variable
- * METRO finals: __FINAL
+ * normal instance variables: _someCoolVariable
+ * static instance variables: __evenCoolerVariable
+ * final instance variables: __FINAL_VARIABLE
  * local stuff: chooseAnyName
  * 
  * final and local with small beginning char and capitol for every following word ( e.g.: int myVariableIsCool = 42; ).
@@ -63,6 +63,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainMenu;
+import metro.GameScreen.MainView.NotificationView.NotificationServer;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.WindowControls.ActionObserver;
@@ -80,23 +81,23 @@ public class METRO implements ApplicationListener, InputProcessor
 	private Point _oldMousePosition;
 	private LwjglApplicationConfiguration _config;
 
-	private static OSType _detectedOS;
-	private static ControlActionManager _controlActionManager;
-	private static GameScreen _currentGameScreen;
-	private static ArrayList<Window> _windowList;
-	private static ActionObserver _windowObserver;
-	private static SpriteBatch _gameWindowSpriteBatch;
-	private static int _xOffset,
-		_yOffset,
-		_titleBarHeight,
-		_titleBarBorderLineWidth;
-	private static LwjglApplication _application;
+	private static OSType __detectedOS;
+	private static ControlActionManager __controlActionManager;
+	private static GameScreen __currentGameScreen;
+	private static ArrayList<Window> __windowList;
+	private static ActionObserver __windowObserver;
+	private static SpriteBatch __gameWindowSpriteBatch;
+	private static int __xOffset,
+		__yOffset,
+		__titleBarHeight,
+		__titleBarBorderLineWidth;
+	private static LwjglApplication __application;
 
 	public static Dimension __SCREEN_SIZE; // TODO write getter for the real size (especially the height) because the window title bar eats something of the real height.
 	public static final String __VERSION = "0.1.4_indev";
-	public static boolean _dragMode,
-		_debug;
-	public static Point _dragMode_LastMousePosition;
+	public static boolean __dragMode,
+		__debug;
+	public static Point __dragModeLastMousePosition;
 	public static TextureRegion __iconSet,
 		__mouseCursorImage;
 	public static Color __metroRed,
@@ -125,15 +126,15 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public void create()
 	{
-		_controlActionManager = new ControlActionManager();
-		GameScreen.setActionManager(_controlActionManager);
+		__controlActionManager = new ControlActionManager();
+		GameScreen.setActionManager(__controlActionManager);
 
-		_debug = true;
+		__debug = true;
 
 		_oldMousePosition = new Point(0, 0);
-		_titleBarHeight = 22;
-		_titleBarBorderLineWidth = 1;
-		_dragMode = false;
+		__titleBarHeight = 22;
+		__titleBarBorderLineWidth = 1;
+		__dragMode = false;
 
 		detectOS();
 
@@ -143,7 +144,7 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		initWindowStuff();
 
-		_currentGameScreen = new MainMenu();
+		__currentGameScreen = new MainMenu();
 
 		__gameState = GameState.getInstance();
 	}
@@ -156,19 +157,19 @@ public class METRO implements ApplicationListener, InputProcessor
 		String os = System.getProperty("os.name").toLowerCase(Locale.ENGLISH);
 		if(os.contains("win"))
 		{
-			_detectedOS = OSType.WIN;
+			__detectedOS = OSType.WIN;
 		}
 		else if(os.contains("nux"))
 		{
-			_detectedOS = OSType.LINUX;
+			__detectedOS = OSType.LINUX;
 		}
 		else if(os.contains("mac") || os.contains("darwin"))
 		{
-			_detectedOS = OSType.MAC;
+			__detectedOS = OSType.MAC;
 		}
 		else
 		{
-			_detectedOS = OSType.UNKNOWN;
+			__detectedOS = OSType.UNKNOWN;
 		}
 	}
 
@@ -178,9 +179,9 @@ public class METRO implements ApplicationListener, InputProcessor
 	private void initGdx()
 	{
 		__spriteBatch = new SpriteBatch();
-		_gameWindowSpriteBatch = new SpriteBatch();
-		_xOffset = 1;
-		_yOffset = 20;
+		__gameWindowSpriteBatch = new SpriteBatch();
+		__xOffset = 1;
+		__yOffset = 20;
 
 		__camera = new OrthographicCamera();
 		__camera.setToOrtho(true, __SCREEN_SIZE.width / 2, __SCREEN_SIZE.height / 2);
@@ -218,14 +219,13 @@ public class METRO implements ApplicationListener, InputProcessor
 			Pixmap pixmap = new Pixmap(Gdx.files.internal("textures/Cursor.png")); // has to be a width of 2^x (2, 4, 8, 16, 32, ...)
 			Gdx.input.setCursorImage(pixmap, 15, 12); // sets cursor to correct position
 			pixmap.dispose();
-			if(_detectedOS == OSType.WIN) // setCursorImage doesn't work on Windows :(
+			if(__detectedOS == OSType.WIN) // setCursorImage doesn't work on Windows :(
 			{
 				__mouseCursorImage = new TextureRegion(new Texture(Gdx.files.internal("textures/Cursor.png")));
 			}
 		}
 		catch(GdxRuntimeException ex)
 		{
-			// TODO Create notification (s. #40)
 			METRO.__debug("[LoadCursorError]\n" + ex.getMessage());
 		}
 	}
@@ -252,13 +252,13 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void initWindowStuff()
 	{
-		_windowList = new ArrayList<Window>();
-		_windowObserver = new ActionObserver()
+		__windowList = new ArrayList<Window>();
+		__windowObserver = new ActionObserver()
 		{
 			@Override
 			public void closed(Window window)
 			{
-				_windowList.remove(window);
+				__windowList.remove(window);
 			}
 		};
 	}
@@ -268,7 +268,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	{
 		__camera.setToOrtho(true, width, height);
 		__spriteBatch.setProjectionMatrix(__camera.combined);
-		_gameWindowSpriteBatch.setProjectionMatrix(__camera.combined);
+		__gameWindowSpriteBatch.setProjectionMatrix(__camera.combined);
 	}
 
 	@Override
@@ -276,8 +276,8 @@ public class METRO implements ApplicationListener, InputProcessor
 	{
 		calculateMousePosition();
 
-		Fill.setOffset(_xOffset, _yOffset);
-		Draw.setOffset(_xOffset, _yOffset);
+		Fill.setOffset(__xOffset, __yOffset);
+		Draw.setOffset(__xOffset, __yOffset);
 
 		__spriteBatch.begin();
 
@@ -292,11 +292,11 @@ public class METRO implements ApplicationListener, InputProcessor
 		Fill.setOffset(0, 0);
 		Draw.setOffset(0, 0);
 
-		_gameWindowSpriteBatch.begin();
+		__gameWindowSpriteBatch.begin();
 
 		renderWindowTitleBar();
 
-		_gameWindowSpriteBatch.end();
+		__gameWindowSpriteBatch.end();
 
 	}
 
@@ -308,37 +308,37 @@ public class METRO implements ApplicationListener, InputProcessor
 	{
 		// white title bar background
 		Fill.setColor(Color.white);
-		Fill.Rect(new Rectangle(0, 0, __SCREEN_SIZE.width, _titleBarHeight), _gameWindowSpriteBatch);
+		Fill.Rect(new Rectangle(0, 0, __SCREEN_SIZE.width, __titleBarHeight), __gameWindowSpriteBatch);
 
 		// blue title bar background
 		Fill.setColor(__metroBlue);
 		Fill.Rect(
-			new Rectangle(_titleBarBorderLineWidth * 2,
-				_titleBarBorderLineWidth * 2,
-				__SCREEN_SIZE.width - 4 * _titleBarBorderLineWidth - _titleBarHeight + 1,
-				_titleBarHeight - 4 * _titleBarBorderLineWidth),
-			_gameWindowSpriteBatch);
+			new Rectangle(__titleBarBorderLineWidth * 2,
+				__titleBarBorderLineWidth * 2,
+				__SCREEN_SIZE.width - 4 * __titleBarBorderLineWidth - __titleBarHeight + 1,
+				__titleBarHeight - 4 * __titleBarBorderLineWidth),
+			__gameWindowSpriteBatch);
 
 		// title of title bar
 		Draw.setColor(Color.white);
 		String title = "METRO - Master of Established Transport Railway Operators - v" + __VERSION;
 		Dimension size = Draw.getStringSize(title);
-		Draw.String(title, (__SCREEN_SIZE.width - _titleBarHeight) / 2 - size.width / 2, _titleBarBorderLineWidth + 4, _gameWindowSpriteBatch);
+		Draw.String(title, (__SCREEN_SIZE.width - __titleBarHeight) / 2 - size.width / 2, __titleBarBorderLineWidth + 4, __gameWindowSpriteBatch);
 
 		// border aroung window
 		Draw.setColor(__metroBlue);
-		Draw.Rect(0, 0, __SCREEN_SIZE.width, __SCREEN_SIZE.height, _titleBarBorderLineWidth, _gameWindowSpriteBatch);
+		Draw.Rect(0, 0, __SCREEN_SIZE.width, __SCREEN_SIZE.height, __titleBarBorderLineWidth, __gameWindowSpriteBatch);
 
 		// border around title bar
-		Draw.Rect(0, 0, __SCREEN_SIZE.width, _titleBarHeight, _titleBarBorderLineWidth, _gameWindowSpriteBatch);
+		Draw.Rect(0, 0, __SCREEN_SIZE.width, __titleBarHeight, __titleBarBorderLineWidth, __gameWindowSpriteBatch);
 
 		// vertical line of close-cross
-		Draw.Line(__SCREEN_SIZE.width - _titleBarHeight, 0, __SCREEN_SIZE.width - _titleBarHeight, _titleBarHeight, _titleBarBorderLineWidth, _gameWindowSpriteBatch);
+		Draw.Line(__SCREEN_SIZE.width - __titleBarHeight, 0, __SCREEN_SIZE.width - __titleBarHeight, __titleBarHeight, __titleBarBorderLineWidth, __gameWindowSpriteBatch);
 
 		// close-cross
 		Draw.setColor(__metroRed);
-		Draw.Line(__SCREEN_SIZE.width - (_titleBarHeight - 6), 6, __SCREEN_SIZE.width - 6, _titleBarHeight - 6, 2, _gameWindowSpriteBatch);
-		Draw.Line(__SCREEN_SIZE.width - (_titleBarHeight - 6), _titleBarHeight - 6, __SCREEN_SIZE.width - 6, 6, 2, _gameWindowSpriteBatch);
+		Draw.Line(__SCREEN_SIZE.width - (__titleBarHeight - 6), 6, __SCREEN_SIZE.width - 6, __titleBarHeight - 6, 2, __gameWindowSpriteBatch);
+		Draw.Line(__SCREEN_SIZE.width - (__titleBarHeight - 6), __titleBarHeight - 6, __SCREEN_SIZE.width - 6, 6, 2, __gameWindowSpriteBatch);
 	}
 
 	/**
@@ -348,11 +348,11 @@ public class METRO implements ApplicationListener, InputProcessor
 	private void calculateMousePosition()
 	{
 		__mousePosition = MouseInfo.getPointerInfo().getLocation();
-		__mousePosition.translate(-_config.x - _xOffset, -_config.y - _yOffset);
+		__mousePosition.translate(-_config.x - __xOffset, -_config.y - __yOffset);
 		__originalMousePosition = (Point)__mousePosition.clone();
 
 		boolean mouseInWindow = false;
-		for(Window win : _windowList)
+		for(Window win : __windowList)
 		{
 			mouseInWindow |= win.isMouseOnWindowArea(__mousePosition.x, __mousePosition.y);
 		}
@@ -368,7 +368,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
-		_controlActionManager.updateList();
+		__controlActionManager.updateList();
 	}
 
 	/**
@@ -376,7 +376,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void renderGameScreen()
 	{
-		_currentGameScreen.update(__spriteBatch);
+		__currentGameScreen.update(__spriteBatch);
 	}
 
 	/**
@@ -384,7 +384,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void renderWindows()
 	{
-		for(Window win : _windowList)
+		for(Window win : __windowList)
 		{
 			win.draw(__spriteBatch);
 		}
@@ -404,7 +404,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void renderCursor()
 	{
-		if(_detectedOS == OSType.WIN) // setCursorImage doesn't work on Windows :(
+		if(__detectedOS == OSType.WIN) // setCursorImage doesn't work on Windows :(
 		{
 			if(__mouseCursorImage != null) Draw.Image(__mouseCursorImage, __originalMousePosition.x - 16, __originalMousePosition.y - 16);
 		}
@@ -423,8 +423,8 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyDown(int keyCode)
 	{
-		_currentGameScreen.keyPressed(keyCode);
-		for(Window win : _windowList)
+		__currentGameScreen.keyPressed(keyCode);
+		for(Window win : __windowList)
 		{
 			win.keyPressed(keyCode);
 		}
@@ -434,8 +434,8 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyUp(int keyCode)
 	{
-		_currentGameScreen.keyUp(keyCode);
-		for(Window win : _windowList)
+		__currentGameScreen.keyUp(keyCode);
+		for(Window win : __windowList)
 		{
 			win.keyUp(keyCode);
 		}
@@ -469,39 +469,39 @@ public class METRO implements ApplicationListener, InputProcessor
 	{
 		Window clickedWindow = null;
 
-		if(screenY <= _titleBarHeight)
+		if(screenY <= __titleBarHeight)
 		{
-			if(screenX >= __SCREEN_SIZE.width - _titleBarHeight)
+			if(screenX >= __SCREEN_SIZE.width - __titleBarHeight)
 			{
-				_application.exit();
+				__application.exit();
 			}
 			else
 			{
-				_dragMode = true;
-				_dragMode_LastMousePosition = new Point(screenX, screenY);
+				__dragMode = true;
+				__dragModeLastMousePosition = new Point(screenX, screenY);
 			}
 
 			return false;
 		}
 
-		screenX -= _xOffset;
-		screenY -= _yOffset;
+		screenX -= __xOffset;
+		screenY -= __yOffset;
 
 		/*
 		 * Go from the last to first window when no window has been clicked yet.
 		 * This will consider the "depth-position" of the window (windows are behind/before others).
 		 * Thus only the frontmost window will receive a click, all others don't to prevent weird behaviour.
 		 */
-		for(int i = _windowList.size() - 1; i >= 0 && clickedWindow == null; i--)
+		for(int i = __windowList.size() - 1; i >= 0 && clickedWindow == null; i--)
 		{
-			if(_windowList.get(i).isMouseOnWindowArea(screenX, screenY)) // if mouse is just on the window area
+			if(__windowList.get(i).isMouseOnWindowArea(screenX, screenY)) // if mouse is just on the window area
 			{
-				_windowList.get(i).mousePressed(screenX, screenY, button);
-				clickedWindow = _windowList.get(i);
+				__windowList.get(i).mousePressed(screenX, screenY, button);
+				clickedWindow = __windowList.get(i);
 			}
 		}
 
-		boolean controlHasBeenClicked = !_controlActionManager.mouseClicked(screenX, screenY, button, clickedWindow);
+		boolean controlHasBeenClicked = !__controlActionManager.mouseClicked(screenX, screenY, button, clickedWindow);
 
 		/*
 		 * Decide: Close window (if needed) when clickedWindow is null
@@ -512,12 +512,12 @@ public class METRO implements ApplicationListener, InputProcessor
 		{
 			// close the clicked window after handling the click
 			boolean closed = clickedWindow.closeIfNeeded(screenX, screenY, button) || clickedWindow.isClosed();
-			if(closed) _windowList.remove(clickedWindow);
+			if(closed) __windowList.remove(clickedWindow);
 		}
 		else if(controlHasBeenClicked)
 		{
 			// forward click to game screen
-			_currentGameScreen.mouseClicked(screenX, screenY, button);
+			__currentGameScreen.mouseClicked(screenX, screenY, button);
 		}
 
 		return false;
@@ -526,13 +526,13 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{
-		screenX -= _xOffset;
-		screenY -= _yOffset;
-		_dragMode = false;
+		screenX -= __xOffset;
+		screenY -= __yOffset;
+		__dragMode = false;
 
-		_currentGameScreen.mouseReleased(button);
+		__currentGameScreen.mouseReleased(button);
 
-		for(Window win : _windowList)
+		for(Window win : __windowList)
 		{
 			win.mouseReleased();
 		}
@@ -542,10 +542,10 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer)
 	{
-		if(_dragMode)
+		if(__dragMode)
 		{
-			Display.setLocation((screenX - _dragMode_LastMousePosition.x) + Display.getX(),
-				(screenY - _dragMode_LastMousePosition.y) + Display.getY());
+			Display.setLocation((screenX - __dragModeLastMousePosition.x) + Display.getX(),
+				(screenY - __dragModeLastMousePosition.y) + Display.getY());
 		}
 		return false;
 	}
@@ -559,7 +559,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean scrolled(int amount)
 	{
-		_currentGameScreen.mouseScrolled(amount);
+		__currentGameScreen.mouseScrolled(amount);
 
 		boolean mouseOnWindow = false;
 		/*
@@ -567,15 +567,15 @@ public class METRO implements ApplicationListener, InputProcessor
 		 * This will consider the "depth-position" of the window (windows are behind/before others).
 		 * Thus only the frontmost window will receive a scroll event, all others don't to prevent weird behaviour.
 		 */
-		for(int i = _windowList.size() - 1; i >= 0 && !mouseOnWindow; i--)
+		for(int i = __windowList.size() - 1; i >= 0 && !mouseOnWindow; i--)
 		{
-			if(_windowList.get(i).isMouseOnWindow(__mousePosition.x + _xOffset, __mousePosition.y + _yOffset)) // if mouse is on window area but not on a control
+			if(__windowList.get(i).isMouseOnWindow(__mousePosition.x + __xOffset, __mousePosition.y + __yOffset)) // if mouse is on window area but not on a control
 			{
-				_windowList.get(i).mouseScrolled(amount);
+				__windowList.get(i).mouseScrolled(amount);
 				mouseOnWindow = true;
 			}
 		}
-		if(!mouseOnWindow) _controlActionManager.mouseScroll(amount);
+		if(!mouseOnWindow) __controlActionManager.mouseScroll(amount);
 
 		return false;
 	}
@@ -593,7 +593,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static void __unregisterControl(ControlElement control)
 	{
-		_controlActionManager.remove(control);
+		__controlActionManager.remove(control);
 	}
 
 	/**
@@ -605,10 +605,10 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static void __registerWindow(Window window)
 	{
-		if(!_windowList.contains(window))
+		if(!__windowList.contains(window))
 		{
-			_windowList.add(window);
-			window.register(_windowObserver);
+			__windowList.add(window);
+			window.register(__windowObserver);
 		}
 	}
 
@@ -619,8 +619,8 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static void __changeGameScreen(GameScreen newScreen)
 	{
-		_currentGameScreen.close();
-		_currentGameScreen = newScreen;
+		__currentGameScreen.close();
+		__currentGameScreen = newScreen;
 	}
 
 	/**
@@ -630,7 +630,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static void __setSelectedInput(InputField field)
 	{
-		_currentGameScreen.setSelectedInput(field);
+		__currentGameScreen.setSelectedInput(field);
 	}
 
 	/**
@@ -651,7 +651,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static void __debug(String message, int stackCounter)
 	{
-		if(_debug && message.length() > 0)
+		if(__debug && message.length() > 0)
 		{
 			if(message.contains("\n"))
 			{
@@ -706,7 +706,7 @@ public class METRO implements ApplicationListener, InputProcessor
 			_config.vSyncEnabled = false;// Boolean.parseBoolean(Settings.get("use.vsync").toString());
 			_config.useHDPI = Boolean.parseBoolean(settings.getOld("use.hdpi").toString());
 
-			_application = new LwjglApplication(this, _config);
+			__application = new LwjglApplication(this, _config);
 
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
 		}
@@ -724,7 +724,6 @@ public class METRO implements ApplicationListener, InputProcessor
 				// try to rename settings.cfg
 				if(!file.renameTo(new File("./settings.backup." + formattedDate + ".cfg")))
 				{
-					// TODO Create notification (s. #40)
 					METRO.__debug("[SettingsSaveError]\nNo backup of settings.cfg has been created.\n");
 				}
 
@@ -749,7 +748,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static int __getXOffset()
 	{
-		return _xOffset;
+		return __xOffset;
 	}
 
 	/**
@@ -757,7 +756,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static int __getYOffset()
 	{
-		return _yOffset;
+		return __yOffset;
 	}
 
 	/**
@@ -765,7 +764,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static void __exit()
 	{
-		_application.exit();
+		__application.exit();
 	}
 
 	private enum OSType

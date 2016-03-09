@@ -29,7 +29,7 @@ public class RailwayNode
 	/**
 	 * The price of one node.
 	 */
-	public static int PRICE = 2000;
+	public static int __price = 2000;
 
 	/**
 	 * Creates a new node at the given position with a specific neighbor.

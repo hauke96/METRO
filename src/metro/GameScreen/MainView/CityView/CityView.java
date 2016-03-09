@@ -26,7 +26,7 @@ public class CityView extends GameScreen
 	/**
 	 * The offset of the city view win pixel.
 	 */
-	public static Point2D _offset = new Point2D.Float(0, 0);
+	public static Point2D __offset = new Point2D.Float(0, 0);
 
 	private List<CityTravelerSpot> _travelerSpots;
 	private Point _oldMousePos; // Mouse position from last frame
@@ -60,7 +60,7 @@ public class CityView extends GameScreen
 	{
 		if(_dragMode)
 		{
-			_offset = new Point2D.Float((float)_offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x), (float)_offset.getY()
+			__offset = new Point2D.Float((float)__offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x), (float)__offset.getY()
 				+ (METRO.__mousePosition.y - _oldMousePos.y));
 		}
 		_oldMousePos = METRO.__mousePosition;

@@ -38,8 +38,8 @@ public abstract class GameScreen extends Observable
 	 * Makes it possible to create a ingame-menu-window from every(!) game screen.
 	 */
 	public InGameMenuWindow _inGameMenuWindow;
-	private static InputField _selectedInput = null;
-	private static ControlActionManager _controlActionManager;
+	private static InputField __selectedInput = null;
+	private static ControlActionManager __controlActionManager;
 	/**
 	 * A list of all control. Seems senseless due to the list in the ActionControlManager, but this is a list with control that only belongs to this game screen.
 	 */
@@ -52,7 +52,7 @@ public abstract class GameScreen extends Observable
 	 */
 	public static void setActionManager(ControlActionManager manager)
 	{
-		_controlActionManager = manager;
+		__controlActionManager = manager;
 	}
 
 	/**
@@ -96,7 +96,7 @@ public abstract class GameScreen extends Observable
 	 */
 	public void keyPressed(int keyCode)
 	{
-		if(_selectedInput == null)
+		if(__selectedInput == null)
 		{
 			if(keyCode == Keys.ESCAPE && _inGameMenuWindow == null) // Show in game window if no input control and no other window is focused/open.
 			{
@@ -106,7 +106,7 @@ public abstract class GameScreen extends Observable
 		} // Window-class will do not-null-stuff, and Input-class will check if the input is selected -> nothing to do here
 		else
 		{
-			_selectedInput.keyPressed(keyCode);
+			__selectedInput.keyPressed(keyCode);
 		}
 	}
 
@@ -117,7 +117,7 @@ public abstract class GameScreen extends Observable
 	 */
 	public void keyUp(int keyCode)
 	{
-		if(_selectedInput != null) _selectedInput.keyUp(keyCode);
+		if(__selectedInput != null) __selectedInput.keyUp(keyCode);
 	}
 
 	/**
@@ -158,8 +158,8 @@ public abstract class GameScreen extends Observable
 	public void setSelectedInput(InputField field)
 	{
 		if(field != null) field.select();
-		else if(_selectedInput != null) _selectedInput.disselect();
-		_selectedInput = field;
+		else if(__selectedInput != null) __selectedInput.disselect();
+		__selectedInput = field;
 	}
 
 	/**
@@ -169,7 +169,7 @@ public abstract class GameScreen extends Observable
 	 */
 	public InputField getSelectedInput()
 	{
-		return _selectedInput;
+		return __selectedInput;
 	}
 
 	@Override
@@ -202,7 +202,7 @@ public abstract class GameScreen extends Observable
 	 */
 	public void registerControl(ControlElement control)
 	{
-		_controlActionManager.registerElement(control);
+		__controlActionManager.registerElement(control);
 		_allControls.add(control);
 	}
 
@@ -214,7 +214,7 @@ public abstract class GameScreen extends Observable
 	 */
 	public void unregisterControl(ControlElement control)
 	{
-		_controlActionManager.remove(control);
+		__controlActionManager.remove(control);
 		_allControls.remove(control);
 	}
 
@@ -225,7 +225,7 @@ public abstract class GameScreen extends Observable
 	public void close()
 	{
 		METRO.__debug("[GameScreen]\nClosed game screen " + this);
-		_controlActionManager.remove(_allControls);
+		__controlActionManager.remove(_allControls);
 		_allControls.clear();
 		METRO.__debug("Amount observer: " + countObservers());
 		deleteObservers();

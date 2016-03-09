@@ -19,7 +19,7 @@ public class RailwayNodeOverseer
 	 * This map connects a point on the grid with a possibly existing node.
 	 * An yeah, I know, it sound like "road map" ...
 	 */
-	public static Map<Point, RailwayNode> _nodeMap = new HashMap<Point, RailwayNode>();
+	public static Map<Point, RailwayNode> __nodeMap = new HashMap<Point, RailwayNode>();
 
 	/**
 	 * Creates a new node when there's no node at the given position yet.
@@ -64,7 +64,7 @@ public class RailwayNodeOverseer
 	{
 		if(isNodeAt(position))
 		{
-			return _nodeMap.get(position);
+			return __nodeMap.get(position);
 		}
 		else
 		{
@@ -82,7 +82,7 @@ public class RailwayNodeOverseer
 	 */
 	public static RailwayNode getNodeByPosition(Point position)
 	{
-		return _nodeMap.get(position);
+		return __nodeMap.get(position);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class RailwayNodeOverseer
 	 */
 	public static boolean isNodeAt(Point position)
 	{
-		return _nodeMap.containsKey(position);
+		return __nodeMap.containsKey(position);
 	}
 
 	/**
@@ -104,7 +104,7 @@ public class RailwayNodeOverseer
 	 */
 	public static boolean doesExist(RailwayNode node)
 	{
-		return _nodeMap.containsValue(node);
+		return __nodeMap.containsValue(node);
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class RailwayNodeOverseer
 	 */
 	public static void add(RailwayNode node)
 	{
-		_nodeMap.put(node.getPosition(), node);
+		__nodeMap.put(node.getPosition(), node);
 	}
 
 	/**
@@ -124,14 +124,14 @@ public class RailwayNodeOverseer
 	{
 		ArrayList<RailwayNode> list = new ArrayList<RailwayNode>();
 
-		for(RailwayNode node : _nodeMap.values())
+		for(RailwayNode node : __nodeMap.values())
 		{
 			if(node.getNeighbors().size() == 0) list.add(node);
 		}
 
 		for(RailwayNode node : list)
 		{
-			_nodeMap.remove(node.getPosition());
+			__nodeMap.remove(node.getPosition());
 		}
 	}
 
@@ -143,7 +143,7 @@ public class RailwayNodeOverseer
 	 */
 	public static void drawAllNodes(Point offset, SpriteBatch sp)
 	{
-		for(RailwayNode node : _nodeMap.values())
+		for(RailwayNode node : __nodeMap.values())
 		{
 			node.draw(sp, offset);
 		}
@@ -154,7 +154,7 @@ public class RailwayNodeOverseer
 	 **/
 	public static void unlockAllSignals()
 	{
-		for(RailwayNode node : _nodeMap.values())
+		for(RailwayNode node : __nodeMap.values())
 		{
 			node.unlockSignals();
 		}

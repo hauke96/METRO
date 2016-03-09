@@ -32,7 +32,8 @@ public class List extends ActionObservable implements ControlElement
 		_scrollHeight; // height of one scroll step
 	private boolean _compact = false, // less space between text and top/bottom edge
 		_enabled = true,
-		_decorated = true;
+		_decorated = true,
+		_sticky = false;
 	private Color _backgroundColor,
 		_hoverColor;
 
@@ -133,7 +134,15 @@ public class List extends ActionObservable implements ControlElement
 	public void addElement(String element)
 	{
 		_entries.add(element);
+		int oldOffset = _offset;
+		int oldMaxOffset = _maxOffset;
+
 		calcMaxOffset();
+
+		if(_sticky && oldOffset == -oldMaxOffset)
+		{
+			_offset = -_maxOffset;
+		}
 	}
 
 	/**
@@ -454,6 +463,8 @@ public class List extends ActionObservable implements ControlElement
 	@Override
 	public void mouseScrolled(int amount)
 	{
+		// when the _offset is 0, the scroll bar is at the very top.
+		// when the _offset is -_maxOffset, the scroll bar is at the very bottom.
 		if(_enabled && _position.contains(METRO.__originalMousePosition))
 		{
 			_offset += -1 * amount * _scrollHeight;
@@ -531,5 +542,17 @@ public class List extends ActionObservable implements ControlElement
 	public void setSize(Rectangle size)
 	{
 		_position = size;
+	}
+
+	/**
+	 * Sets the stickiness of the list.
+	 * When the list is sticky, the scroll bar is at the very top/bottom it stays at the top/bottom when a new entry is added to the list.
+	 * When the list is sticky but the scroll bar is somewhere in the middle, the list acts normal.
+	 * 
+	 * @param sticky True to set the list sticky, false to not set it sticky.
+	 */
+	public void setStickiness(boolean sticky)
+	{
+		_sticky = sticky;
 	}
 }

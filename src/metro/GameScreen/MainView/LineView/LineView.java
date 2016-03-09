@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameScreen.GameScreen;
+import metro.GameScreen.MainView.NotificationView.NotificationServer;
+import metro.GameScreen.MainView.NotificationView.NotificationType;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
@@ -234,6 +236,7 @@ public class LineView extends GameScreen implements Observer
 				}
 				catch(NotEnoughMoneyException e)
 				{
+					NotificationServer.publishNotification("You have not enough money to modify the line. It costs 5000$.", NotificationType.GAME_ERROR);
 					_messageLabel.setText("Not enough money. This action costs 5000$!");
 					METRO.__debug("[ChangeLineFailed]\nThere's not enough money to change the line.\n" + e.getMessage());
 				}
@@ -249,7 +252,7 @@ public class LineView extends GameScreen implements Observer
 				{
 					_messageLabel.setText("Please enter a name!");
 				}
-				else if(TrainLine.isValid(_lineSelectTool.getNodeList()))
+				else if(TrainLine.__isValid(_lineSelectTool.getNodeList()))
 				{
 					TrainLine line = _lineSelectTool.getTrainLine();
 

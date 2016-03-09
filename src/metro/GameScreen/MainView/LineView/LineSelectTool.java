@@ -116,7 +116,7 @@ public class LineSelectTool extends GameScreen
 	{
 		if(mouseButton == Buttons.LEFT)
 		{
-			leftClick(screenX, screenY, MainView._mapOffset);
+			leftClick(screenX, screenY, MainView.__mapOffset);
 		}
 		else if(mouseButton == Buttons.RIGHT)
 		{
@@ -136,7 +136,7 @@ public class LineSelectTool extends GameScreen
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		METRO.__debug("[ClickOnNode]");
-		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(MainView._selectedCross);
+		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(MainView.__selectedCross);
 		METRO.__debug("node is " + clickedNode);
 		if(clickedNode == null) return;
 		if(_listOfNodes.contains(clickedNode))
