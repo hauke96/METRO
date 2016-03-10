@@ -89,4 +89,11 @@ public class GameState
 	{
 		return _baseNetSpacing;
 	}
+
+	public void zoom(int amount)
+	{
+		_baseNetSpacing += -5*amount;
+		if(_baseNetSpacing < 20) _baseNetSpacing = 20;
+		else if(_baseNetSpacing > 70) _baseNetSpacing = 70;
+	}
 }

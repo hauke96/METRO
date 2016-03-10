@@ -62,7 +62,6 @@ public class PlayingField extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		if(_cityView != null) _cityView.updateGameScreen(sp);
 
 		if(_dragMode)
 		{
@@ -70,11 +69,11 @@ public class PlayingField extends GameScreen
 				_mapOffset.y + (METRO.__mousePosition.y - _oldMousePos.y));
 		}
 		_oldMousePos = METRO.__mousePosition;
-		Point cursorDotPosition = drawBaseDot(sp);
 
-		_cityView.drawNumbers(sp, cursorDotPosition);
-
+		_cityView.updateGameScreen(sp);
 		drawBaseNet(sp, new Color(220, 220, 220), 0);
+		Point cursorDotPosition = drawBaseDot(sp);
+		_cityView.drawNumbers(sp, cursorDotPosition);
 
 		RailwayNodeOverseer.drawAllNodes(_mapOffset, sp);
 
@@ -157,6 +156,7 @@ public class PlayingField extends GameScreen
 	@Override
 	public void mouseScrolled(int amount)
 	{
+		_gameState.zoom(amount);
 	}
 
 	@Override

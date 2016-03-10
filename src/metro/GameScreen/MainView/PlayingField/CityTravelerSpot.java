@@ -3,6 +3,7 @@ package metro.GameScreen.MainView.PlayingField;
 import java.awt.Color;
 import java.awt.Point;
 
+import metro.GameState;
 import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
@@ -18,12 +19,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class CityTravelerSpot
 {
-	/**
-	 * The difference between two circles in pixel.
-	 */
-	public static int __circleRadiusStep = 25 * 2;
 	private Point _position;
 	private int _strength;
+	private GameState _gameState;
+	
+	private static int __scale = 2;
 
 	/**
 	 * Creates a new traveler spot on a specific position an with a certain strength.
@@ -35,6 +35,7 @@ public class CityTravelerSpot
 	{
 		_position = position;
 		_strength = strength > 10 ? 10 : strength;
+		_gameState = GameState.getInstance();
 	}
 
 	/**
@@ -48,28 +49,16 @@ public class CityTravelerSpot
 		layerIndex = (int)_strength - layerIndex;
 		if(layerIndex < 0) return false;
 
-		Point position = new Point(_position.x + (int)CityView.__offset.getX(), _position.y + (int)CityView.__offset.getY());
+		Point position = new Point(_position.x * _gameState.getBaseNetSpacing() + (int)CityView.__offset.getX(),
+			_position.y * _gameState.getBaseNetSpacing() + (int)CityView.__offset.getY());
 
 		boolean isInCurrentCircle = Math.pow(METRO.__mousePosition.x - position.x, 2)
-			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(__circleRadiusStep * layerIndex, 2); // true: Mouse cursor is in circle
+			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(_gameState.getBaseNetSpacing() * __scale * layerIndex, 2); // true: Mouse cursor is in circle
 		boolean isInNextCircle = Math.pow(METRO.__mousePosition.x - position.x, 2)
-			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(__circleRadiusStep * (layerIndex - 1), 2); // true: Mouse cursor is in circle
+			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(_gameState.getBaseNetSpacing() * __scale * (layerIndex - 1), 2); // true: Mouse cursor is in circle
 
 		return isInCurrentCircle && !isInNextCircle;
 	}
-
-	/**
-	 * Draws the circles of the Hotspot.
-	 * 
-	 * @param g The graphic handle to draw an.
-	 * @param layerIndex Index of the circle to draw
-	 * @param circleSelected If the circle is selected and therefore drawn in a different color.
-	 * @param drawNumbers if numbers should be drawn on circle
-	 */
-	// public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean drawNumbers)
-	// {
-	// draw(sp, layerIndex, circleSelected, drawNumbers, false);
-	// }
 
 	/**
 	 * Draws the circles of the hot-spot.
@@ -81,36 +70,39 @@ public class CityTravelerSpot
 	 */
 	public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean onlyEdges)
 	{
+		int circleRadius = _gameState.getBaseNetSpacing() * __scale;
+		
 		layerIndex = _strength - layerIndex;
 		if(layerIndex < -1) return;
 
 		// get the position with offset
-		Point position = new Point(_position.x + (int)CityView.__offset.getX() + 1, _position.y + (int)CityView.__offset.getY() + 1);
+		Point position = new Point(_position.x * _gameState.getBaseNetSpacing() + (int)CityView.__offset.getX() + 1,
+			_position.y * _gameState.getBaseNetSpacing() + (int)CityView.__offset.getY() + 1);
 
 		if(circleSelected)
 		{
 			int gray = (int)(255 - 2 * (_strength - layerIndex + 1) - 8); // gray color based on layer
 			Fill.setColor(new Color(gray, gray, gray));
-			Fill.Circle(position.x - layerIndex * __circleRadiusStep + 1,
-				position.y - layerIndex * __circleRadiusStep + 1,
-				__circleRadiusStep * 2 * layerIndex - 3);
+			Fill.Circle(position.x - layerIndex * circleRadius + 1,
+				position.y - layerIndex * circleRadius + 1,
+				circleRadius * 2 * layerIndex - 3);
 		}
 		else
 		{
 			int gray = 255 - 5 * (_strength - layerIndex + 1); // gray color based on layer
 			gray = 255;
 			Fill.setColor(new Color(gray, gray, gray));
-			Fill.Circle(position.x - layerIndex * __circleRadiusStep + 1,
-				position.y - layerIndex * __circleRadiusStep + 1,
-				__circleRadiusStep * 2 * layerIndex - 3);
+			Fill.Circle(position.x - layerIndex * circleRadius + 1,
+				position.y - layerIndex * circleRadius + 1,
+				circleRadius * 2 * layerIndex - 3);
 		}
 		if(onlyEdges)
 		{
 			int gray = 255 - 9 * (_strength - layerIndex + 1) - 30; // gray color based on layer
 			Draw.setColor(new Color(gray, gray, gray));
-			Draw.Circle(position.x - layerIndex * __circleRadiusStep,
-				position.y - layerIndex * __circleRadiusStep,
-				__circleRadiusStep * 2 * layerIndex - 1);
+			Draw.Circle(position.x - layerIndex * circleRadius,
+				position.y - layerIndex * circleRadius,
+				circleRadius * 2 * layerIndex - 1);
 		}
 	}
 
