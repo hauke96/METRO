@@ -19,7 +19,6 @@ import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
-import metro.TrainManagement.Trains.TrainStation;
 
 /**
  * The main view is the normal screen the player sees.
@@ -94,7 +93,7 @@ public class MainView extends GameScreen implements Observer
 
 		TrainManagementService trainManagementService = TrainManagementService.getInstance();
 		trainManagementService.drawLines(__mapOffset, sp);
-		drawTrainStations(sp);
+		trainManagementService.drawStations(__mapOffset, sp);
 		trainManagementService.drawTrains(__mapOffset, sp);
 
 		_notificationArea.updateGameScreen(sp);
@@ -164,21 +163,6 @@ public class MainView extends GameScreen implements Observer
 			3, 3);
 		return new Point(offsetMarker.x - 1,
 			offsetMarker.y - 1);
-	}
-
-	/**
-	 * Draws all the train stations with conenctions and labels.
-	 * 
-	 * @param sp The SpriteBatch to draw on
-	 */
-	private void drawTrainStations(SpriteBatch sp)
-	{
-		Point offset = new Point((int)__mapOffset.getX(), (int)__mapOffset.getY());
-
-		for(TrainStation ts : METRO.__gameState.getStations())
-		{
-			ts.draw(sp, offset);
-		}
 	}
 
 	@Override

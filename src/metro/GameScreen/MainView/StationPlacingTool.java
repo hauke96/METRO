@@ -12,6 +12,7 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
+import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TrainStation;
 
 /**
@@ -64,14 +65,14 @@ public class StationPlacingTool extends GameScreen
 			MainView.__selectedCross.y * GameState.getInstance().getBaseNetSpacing() + (int)offset.getY());
 
 		Point offsetPoint = new Point((int)offset.getX(), (int)offset.getY());
-		for(TrainStation ts : METRO.__gameState.getStations())
+		for(TrainStation ts : TrainManagementService.getInstance().getStations())
 		{
 			positionOccupied |= ts.getPositionOnScreen(offsetPoint).equals(selectPointOnScreen); // true if this cross has already a station
 		}
 
 		if(!positionOccupied) // no doubles
 		{
-			METRO.__gameState.addStation(new TrainStation(MainView.__selectedCross, 0));
+			TrainManagementService.getInstance().addStation(new TrainStation(MainView.__selectedCross, 0));
 		}
 	}
 

@@ -81,4 +81,12 @@ public class TrainStation
 		return new Point(offset.x + _position.x * _gameState.getBaseNetSpacing(),
 			offset.y + _position.y * _gameState.getBaseNetSpacing()); // Position with offset etc.
 	}
+
+	/**
+	 * @return The position of this station in baseNetSpacing-units.
+	 */
+	public Point getPosition()
+	{
+		return _position;
+	}
 }

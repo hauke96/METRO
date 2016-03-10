@@ -1,4 +1,4 @@
-package metro.TrainManagement.Lines;
+package metro.TrainManagement.Trains;
 
 import java.awt.Color;
 import java.awt.Point;

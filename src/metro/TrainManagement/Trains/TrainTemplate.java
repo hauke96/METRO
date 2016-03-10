@@ -3,6 +3,7 @@ package metro.TrainManagement.Trains;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,13 +17,13 @@ import metro.METRO;
 /**
  * A train template is a final train. There are also less available properties e.g. has a train template no line and no current passengers.
  * 
- * Info: For more information about lines just look into the {@code line} class ;)
+ * Info: For more information about lines just look into the {@code TrainLine} class ;)
  * 
  * @author hauke
  *
  */
 
-public class TrainTemplate
+public class TrainTemplate extends Observable
 {
 	protected String _name, _modelName, _manufacturer;
 	protected int _price, _costs, _maxPassengers;

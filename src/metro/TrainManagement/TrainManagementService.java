@@ -10,18 +10,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.regex.Pattern;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.GameState;
 import metro.METRO;
 import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameScreen.MainView.NotificationView.NotificationServer;
 import metro.GameScreen.MainView.NotificationView.NotificationType;
-import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.TrainManagement.Trains.Train;
+import metro.TrainManagement.Trains.TrainLine;
+import metro.TrainManagement.Trains.TrainStation;
 import metro.TrainManagement.Trains.TrainTemplate;
 
 /**
@@ -31,20 +35,24 @@ import metro.TrainManagement.Trains.TrainTemplate;
  * 
  * @author hauke
  */
-public class TrainManagementService
+public class TrainManagementService implements Observer
 {
-	private static ArrayList<TrainLine> __listOfTrainLines;
+	private ArrayList<TrainLine> _trainLineList;
 	private ArrayList<Train> _trainList;
+	private ArrayList<TrainStation> _stationList;
 	private HashMap<String, TrainTemplate> _templateTrains;
+	private float _lastRenderTime;
+
 	private final static TrainManagementService __INSTANCE = new TrainManagementService();
-	private static float __lastRenderTime;
 
 	private TrainManagementService()
 	{
-		__listOfTrainLines = new ArrayList<TrainLine>();
+		_trainLineList = new ArrayList<>();
 		_trainList = new ArrayList<>();
+		_stationList = new ArrayList<>();
+
 		_templateTrains = new HashMap<>();
-		__lastRenderTime = System.nanoTime();
+		_lastRenderTime = System.nanoTime();
 
 		try
 		{
@@ -174,7 +182,8 @@ public class TrainManagementService
 	}
 
 	/**
-	 * Adds a train to the list of bought trains. This method does not check for any valid trains (not null, etc.)!
+	 * Adds a train to the list of bought trains and adds the management service as observer.
+	 * This method does not check for any valid trains (not null, etc.)!
 	 * 
 	 * @param train The new train to add.
 	 */
@@ -184,6 +193,7 @@ public class TrainManagementService
 		{
 			METRO.__gameState.withdrawMoney(train.getPrice());
 			_trainList.add(train);
+			train.addObserver(this);
 		}
 		catch(NotEnoughMoneyException e)
 		{
@@ -285,8 +295,8 @@ public class TrainManagementService
 	public void addLine(TrainLine line)
 	{
 		if(line == null) return;
-		__listOfTrainLines.remove(line); // remove old line, because maybe line.equals(old-line) == true
-		__listOfTrainLines.add(line); // adds the new line to the list
+		_trainLineList.remove(line); // remove old line, because maybe line.equals(old-line) == true
+		_trainLineList.add(line); // adds the new line to the list
 	}
 
 	/**
@@ -307,7 +317,7 @@ public class TrainManagementService
 	public void removeLine(TrainLine line)
 	{
 		if(line == null) return;
-		__listOfTrainLines.remove(line);
+		_trainLineList.remove(line);
 		removeTrain(line.getName());
 	}
 
@@ -329,7 +339,7 @@ public class TrainManagementService
 	 */
 	public Color getLineColor(String lineName)
 	{
-		for(TrainLine line : __listOfTrainLines)
+		for(TrainLine line : _trainLineList)
 		{
 			if(line.getName().equals(lineName))
 			{
@@ -347,7 +357,7 @@ public class TrainManagementService
 	@SuppressWarnings("unchecked") // cast will always succeed, because the list only hold TrainLine objects
 	public ArrayList<TrainLine> getLines()
 	{
-		return (ArrayList<TrainLine>)__listOfTrainLines.clone();
+		return (ArrayList<TrainLine>)_trainLineList.clone();
 	}
 
 	/**
@@ -358,7 +368,7 @@ public class TrainManagementService
 	 */
 	public TrainLine getLine(String lineName)
 	{
-		for(TrainLine line : __listOfTrainLines)
+		for(TrainLine line : _trainLineList)
 		{
 			if(line.getName().equals(lineName))
 			{
@@ -366,6 +376,33 @@ public class TrainManagementService
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Adds a station to the list of stations. If this fails, due to a low balance, nothing changes.
+	 * 
+	 * @param trainStation The station to add.
+	 */
+	public void addStation(TrainStation trainStation)
+	{
+		try
+		{
+			GameState.getInstance().withdrawMoney(TrainStation.__price);
+			_stationList.add(trainStation);
+		}
+		catch(NotEnoughMoneyException e)
+		{
+			NotificationServer.publishNotification("You have not enough money for a station.", NotificationType.GAME_ERROR);
+			METRO.__debug("[StationAddingFailed]\n" + e.getMessage());
+		}
+	}
+
+	/**
+	 * @return A list of all train stations.
+	 */
+	public ArrayList<TrainStation> getStations()
+	{
+		return _stationList;
 	}
 
 	/**
@@ -382,9 +419,23 @@ public class TrainManagementService
 			map.put(node, new Integer(0));
 		}
 
-		for(TrainLine line : __listOfTrainLines)
+		for(TrainLine line : _trainLineList)
 		{
 			line.draw(offset, sp, map);
+		}
+	}
+
+	/**
+	 * Draws all stations.
+	 * 
+	 * @param offset The map offset in pixel.
+	 * @param sp The sprite batch to draw on.
+	 */
+	public void drawStations(Point offset, SpriteBatch sp)
+	{
+		for(TrainStation station : _stationList)
+		{
+			station.draw(sp, offset);
 		}
 	}
 
@@ -396,8 +447,8 @@ public class TrainManagementService
 	 */
 	public void drawTrains(Point offset, SpriteBatch sp)
 	{
-		float deltaTime = System.nanoTime() - __lastRenderTime;
-		__lastRenderTime = System.nanoTime();
+		float deltaTime = System.nanoTime() - _lastRenderTime;
+		_lastRenderTime = System.nanoTime();
 
 		lockNodes();
 
@@ -478,10 +529,36 @@ public class TrainManagementService
 	 */
 	public boolean isLineColorUsed(Color color)
 	{
-		for(TrainLine line : __listOfTrainLines)
+		for(TrainLine line : _trainLineList)
 		{
 			if(line.getColor().equals(color)) return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void update(Observable o, Object arg)
+	{
+		if(o instanceof Train)
+		{
+			Train t = (Train)o;
+			Point currNode = t.calcCurrentNode(); // don't use the actual current node, it's outdated!
+			boolean stationFound = false;
+
+			for(TrainStation station : _stationList)
+			{
+				if(station.getPosition().equals(currNode))
+				{
+					t.waitFor(3000);
+					stationFound = true;
+					break;
+				}
+			}
+
+			if(!stationFound) // not on a station --> normally update the position
+			{
+				t.updatePositionNodes();
+			}
+		}
 	}
 }

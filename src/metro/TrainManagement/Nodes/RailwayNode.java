@@ -42,7 +42,6 @@ public class RailwayNode
 		_position = position;
 		_listOfNeighbors = new ArrayList<RailwayNode>();
 		if(neighbor != null) _listOfNeighbors.add(neighbor);
-		if(_position != null) RailwayNodeOverseer.add(this);
 		_signals = new HashMap<>();
 	}
 

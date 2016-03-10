@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.GameState;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.TrainManagement.Lines.TrainLine;
 
 /**
  * A Train can carry passengers, costs a bit to buy and maintain it.
@@ -27,6 +26,7 @@ public class Train extends TrainTemplate
 	private int _currPassengers, _direction, _textureYOffset;
 	private TrainLine _trainLine;
 	private Point _currentNode, _nextNode;
+	private long _waitInStationSince;
 
 	/**
 	 * Creates a new train with the following properties.
@@ -50,6 +50,8 @@ public class Train extends TrainTemplate
 
 		_textureYOffset = 0;
 		_textureRotation = 0f;
+
+		_waitInStationSince = -1;
 	}
 
 	/**
@@ -159,8 +161,14 @@ public class Train extends TrainTemplate
 	 */
 	public void drive(boolean move, float deltaTime)
 	{
-		if(move)
+		if(move && System.nanoTime() >= _waitInStationSince)
 		{
+			if(_waitInStationSince != -1) // end of waiting --> update nodes and reset timer
+			{
+				updatePositionNodes();
+				_waitInStationSince = -1;
+			}
+
 			if(_relativeOnLine >= _trainLine.getLength())
 			{
 				_relativeOnLine = (float)_trainLine.getLength();
@@ -172,13 +180,23 @@ public class Train extends TrainTemplate
 				_direction *= -1;
 			}
 			_relativeOnLine += getMovedDistance(deltaTime);
+
+			if(!_currentNode.equals(calcCurrentNode())) // train passed a node and the angle might has changed
+			{
+				setChanged();
+				notifyObservers();
+			}
 		}
-		if(!_currentNode.equals(calcCurrentNode())) // train passed a node and the angle might has changed
-		{
-			_currentNode = calcCurrentNode();
-			_nextNode = calcNextNode();
-			adjustTexture();
-		}
+	}
+
+	/**
+	 * Calculates new values for the current and next node of this train. It also updates the texture of the train.
+	 */
+	public void updatePositionNodes()
+	{
+		_currentNode = calcCurrentNode();
+		_nextNode = calcNextNode();
+		adjustTexture();
 	}
 
 	/**
@@ -316,5 +334,15 @@ public class Train extends TrainTemplate
 		return _trainLine.getNode(_direction > 0 ? relativeOnLine : _trainLine.getLength() - relativeOnLine,
 			_direction > 0 ? 0 : _trainLine.getAmountOfNodes(),
 			_direction)[1];
+	}
+
+	/**
+	 * Saves the time when the train can move on. This is used in the {@code drive(boolean, float)} method to prevent the train for driving.
+	 * 
+	 * @param duration The duration the train should wait at its position in milliseconds.
+	 */
+	public void waitFor(long duration)
+	{
+		_waitInStationSince = System.nanoTime() + duration * (long)1e6;
 	}
 }

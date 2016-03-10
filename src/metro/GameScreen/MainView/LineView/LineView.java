@@ -18,8 +18,8 @@ import metro.GameScreen.MainView.NotificationView.NotificationType;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
-import metro.TrainManagement.Lines.TrainLine;
 import metro.TrainManagement.Trains.Train;
+import metro.TrainManagement.Trains.TrainLine;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.ColorBar;
@@ -585,8 +585,11 @@ public class LineView extends GameScreen implements Observer
 			TrainLine line = ((LineSelectTool)o).getTrainLine();
 			_trainManagementService.removeLine(line);
 
-			_trainManagementService.addLine(_oldLine);
-			_lineList.setText(_oldLine.getName());
+			if(_oldLine != null) // when creating a new line, _oldLine is null
+			{
+				_trainManagementService.addLine(_oldLine);
+				_lineList.setText(_oldLine.getName());
+			}
 			_lineList.setState(true);
 			reset();
 		}

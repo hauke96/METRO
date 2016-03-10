@@ -1,11 +1,6 @@
 package metro;
 
-import java.util.ArrayList;
-
 import metro.Exceptions.NotEnoughMoneyException;
-import metro.GameScreen.MainView.NotificationView.NotificationServer;
-import metro.GameScreen.MainView.NotificationView.NotificationType;
-import metro.TrainManagement.Trains.TrainStation;
 
 /**
  * A game state is the place where all game relevant information are stored.
@@ -20,7 +15,6 @@ public class GameState
 	private static final GameState __INSTANCE = new GameState();
 
 	private int _money;
-	private ArrayList<TrainStation> _stationList;
 	private int _baseNetSpacing; // amount of pixel between lines of the base net
 
 	/**
@@ -29,7 +23,6 @@ public class GameState
 	private GameState()
 	{
 		_money = 500000000;
-		_stationList = new ArrayList<>();
 		_baseNetSpacing = 50;
 	}
 
@@ -90,37 +83,10 @@ public class GameState
 	}
 
 	/**
-	 * @return A list of all train stations.
-	 */
-	public ArrayList<TrainStation> getStations()
-	{
-		return _stationList;
-	}
-
-	/**
 	 * @return Gets the size of the base net spacing.
 	 */
 	public int getBaseNetSpacing()
 	{
 		return _baseNetSpacing;
-	}
-
-	/**
-	 * Adds a station to the list of stations. If this fails, due to a low balance, nothing changes.
-	 * 
-	 * @param trainStation The station to add.
-	 */
-	public void addStation(TrainStation trainStation)
-	{
-		try
-		{
-			withdrawMoney(TrainStation.__price);
-			_stationList.add(trainStation);
-		}
-		catch(NotEnoughMoneyException e)
-		{
-			NotificationServer.publishNotification("You have not enough money for a station.", NotificationType.GAME_ERROR);
-			METRO.__debug("[StationAddingFailed]\n" + e.getMessage());
-		}
 	}
 }
