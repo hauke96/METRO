@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
-import metro.GameScreen.MainView.MainView;
+import metro.GameScreen.MainView.PlayingField.PlayingField;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
@@ -28,6 +28,7 @@ public class LineSelectTool extends GameScreen
 	private boolean _isActive;
 	private Color _color;
 	private String _lineName;
+	private PlayingField _playingField;
 
 	/**
 	 * Creates a new tool to select the train line.
@@ -38,6 +39,7 @@ public class LineSelectTool extends GameScreen
 		_isActive = true;
 		_color = METRO.__metroBlue;
 		_lineName = "";
+		_playingField = PlayingField.getInstance();
 	}
 
 	/**
@@ -116,7 +118,7 @@ public class LineSelectTool extends GameScreen
 	{
 		if(mouseButton == Buttons.LEFT)
 		{
-			leftClick(screenX, screenY, MainView.__mapOffset);
+			leftClick(screenX, screenY, _playingField.getMapOffset());
 		}
 		else if(mouseButton == Buttons.RIGHT)
 		{
@@ -136,7 +138,7 @@ public class LineSelectTool extends GameScreen
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		METRO.__debug("[ClickOnNode]");
-		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(MainView.__selectedCross);
+		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(_playingField.getSelectedNode());
 		METRO.__debug("node is " + clickedNode);
 		if(clickedNode == null) return;
 		if(_listOfNodes.contains(clickedNode))

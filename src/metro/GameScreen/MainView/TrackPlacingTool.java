@@ -12,6 +12,7 @@ import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainView.NotificationView.NotificationServer;
 import metro.GameScreen.MainView.NotificationView.NotificationType;
+import metro.GameScreen.MainView.PlayingField.PlayingField;
 import metro.Graphics.Draw;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
@@ -26,6 +27,7 @@ public class TrackPlacingTool extends GameScreen
 {
 	private RailwayNode _currentRailwayNode; // click -> set railwaynode -> click -> connect/create
 	private boolean _isActive;
+	private PlayingField _playingField;
 
 	/**
 	 * Creates a new Track placing tool.
@@ -33,6 +35,7 @@ public class TrackPlacingTool extends GameScreen
 	public TrackPlacingTool()
 	{
 		_isActive = true;
+		_playingField = PlayingField.getInstance();
 	}
 
 	@Override
@@ -40,7 +43,7 @@ public class TrackPlacingTool extends GameScreen
 	{
 		if(!_isActive) return;
 
-		Point mapOffset = MainView.__mapOffset;
+		Point mapOffset = _playingField.getMapOffset();
 		int baseNetSpacing = GameState.getInstance().getBaseNetSpacing();
 
 		if(_currentRailwayNode != null) // if not null, calc and draw preview of new tracks
@@ -49,8 +52,8 @@ public class TrackPlacingTool extends GameScreen
 			Draw.setColor(Color.black);
 
 			int diagonalOffset = 0,
-				B = MainView.__selectedCross.x - nodePosition.x, // horizontal distance
-				H = MainView.__selectedCross.y - nodePosition.y, // vertical distance
+				B = _playingField.getSelectedNode().x - nodePosition.x, // horizontal distance
+				H = _playingField.getSelectedNode().y - nodePosition.y, // vertical distance
 				preFactor = 1;
 
 			if(Math.abs(H) > Math.abs(B)) // vertical tracks
@@ -98,8 +101,8 @@ public class TrackPlacingTool extends GameScreen
 			{
 				Draw.Line(mapOffset.x + nodePosition.x * baseNetSpacing,
 					mapOffset.y + nodePosition.y * baseNetSpacing,
-					mapOffset.x + MainView.__selectedCross.x * baseNetSpacing,
-					mapOffset.y + MainView.__selectedCross.y * baseNetSpacing);
+					mapOffset.x + _playingField.getSelectedNode().x * baseNetSpacing,
+					mapOffset.y + _playingField.getSelectedNode().y * baseNetSpacing);
 			}
 		}
 	}
@@ -108,8 +111,8 @@ public class TrackPlacingTool extends GameScreen
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		if(!_isActive) return;
-		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, MainView.__mapOffset);
-		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, MainView.__mapOffset);
+		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, _playingField.getMapOffset());
+		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, _playingField.getMapOffset());
 	}
 
 	/**
@@ -158,11 +161,11 @@ public class TrackPlacingTool extends GameScreen
 	{
 		if(_currentRailwayNode == null) // first click
 		{
-			_currentRailwayNode = RailwayNodeOverseer.getNodeByPosition(MainView.__selectedCross); // implicit check if node exists: null = node doesn't exist
+			_currentRailwayNode = RailwayNodeOverseer.getNodeByPosition(_playingField.getSelectedNode()); // implicit check if node exists: null = node doesn't exist
 
 			if(_currentRailwayNode == null) // if there's no node, create new one and set it as current node
 			{
-				RailwayNode node = RailwayNodeOverseer.createNode(MainView.__selectedCross);
+				RailwayNode node = RailwayNodeOverseer.createNode(_playingField.getSelectedNode());
 				_currentRailwayNode = node;
 			}
 		}
@@ -170,8 +173,8 @@ public class TrackPlacingTool extends GameScreen
 		// second click
 		{
 			int diagonalOffset = 0,
-				B = MainView.__selectedCross.x - _currentRailwayNode.getPosition().x, // horizontal distance
-				H = MainView.__selectedCross.y - _currentRailwayNode.getPosition().y, // vertical distance
+				B = _playingField.getSelectedNode().x - _currentRailwayNode.getPosition().x, // horizontal distance
+				H = _playingField.getSelectedNode().y - _currentRailwayNode.getPosition().y, // vertical distance
 				preFactorH = 1,
 				preFactorB = 1;
 			RailwayNode prevNode = _currentRailwayNode;
@@ -195,7 +198,7 @@ public class TrackPlacingTool extends GameScreen
 				else if(Math.abs(B) > Math.abs(H))
 				{
 					diagonalOffset = (int)((Math.abs(B) - Math.abs(H)) / 2f);
-					
+
 					METRO.__gameState.withdrawMoney(RailwayNode.__price *
 						(diagonalOffset + Math.abs(H) + (Math.abs(B) - (diagonalOffset + Math.abs(H)))));
 
@@ -207,7 +210,7 @@ public class TrackPlacingTool extends GameScreen
 				else if(Math.abs(B) == Math.abs(H))
 				{
 					METRO.__gameState.withdrawMoney(RailwayNode.__price * Math.abs(H));
-					
+
 					createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
 				}
 			}

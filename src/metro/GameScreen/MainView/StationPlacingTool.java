@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.GameState;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
+import metro.GameScreen.MainView.PlayingField.PlayingField;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
@@ -24,6 +25,7 @@ import metro.TrainManagement.Trains.TrainStation;
 public class StationPlacingTool extends GameScreen
 {
 	private boolean _isActive;
+	private PlayingField _playingField;
 
 	/**
 	 * Creates a new station placing tool.
@@ -31,6 +33,7 @@ public class StationPlacingTool extends GameScreen
 	public StationPlacingTool()
 	{
 		_isActive = true;
+		_playingField = PlayingField.getInstance();
 	}
 
 	@Override
@@ -47,8 +50,8 @@ public class StationPlacingTool extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, MainView.__mapOffset);
-		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, MainView.__mapOffset);
+		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, _playingField.getMapOffset());
+		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, _playingField.getMapOffset());
 	}
 
 	/**
@@ -61,8 +64,8 @@ public class StationPlacingTool extends GameScreen
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		boolean positionOccupied = false;
-		Point selectPointOnScreen = new Point(MainView.__selectedCross.x * GameState.getInstance().getBaseNetSpacing() + (int)offset.getX(),
-			MainView.__selectedCross.y * GameState.getInstance().getBaseNetSpacing() + (int)offset.getY());
+		Point selectPointOnScreen = new Point(_playingField.getSelectedNode().x * GameState.getInstance().getBaseNetSpacing() + (int)offset.getX(),
+			_playingField.getSelectedNode().y * GameState.getInstance().getBaseNetSpacing() + (int)offset.getY());
 
 		Point offsetPoint = new Point((int)offset.getX(), (int)offset.getY());
 		for(TrainStation ts : TrainManagementService.getInstance().getStations())
@@ -72,7 +75,7 @@ public class StationPlacingTool extends GameScreen
 
 		if(!positionOccupied) // no doubles
 		{
-			TrainManagementService.getInstance().addStation(new TrainStation(MainView.__selectedCross, 0));
+			TrainManagementService.getInstance().addStation(new TrainStation(_playingField.getSelectedNode(), 0));
 		}
 	}
 
