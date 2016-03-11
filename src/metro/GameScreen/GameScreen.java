@@ -56,17 +56,6 @@ public abstract class GameScreen extends Observable
 	}
 
 	/**
-	 * Will be executed as fast as possible ;)
-	 * This method will actually not directly update the game screen, but fires the {@code updateGameScreen(g)} method to do this.
-	 * 
-	 * @param g SpriteBatch to use.
-	 */
-	public void update(SpriteBatch g)
-	{
-		updateGameScreen(g);
-	}
-
-	/**
 	 * Updates the actual game screen.
 	 * 
 	 * @param sp SpriteBatch to draw on.

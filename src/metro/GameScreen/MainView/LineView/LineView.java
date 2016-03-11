@@ -353,7 +353,7 @@ public class LineView extends GameScreen implements Observer
 	}
 
 	/**
-	 * Creates a clean {@code LineSelectTool}, adds this as observer and sets the {@code _lineSelectToolEnabled} flag.
+	 * Creates a clean {@link metro.GameScreen.MainView#LineSelectTool}, adds this as observer and sets the {@code _lineSelectToolEnabled} flag.
 	 */
 	private void createLineSelectTool()
 	{

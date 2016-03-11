@@ -23,7 +23,7 @@ public class GameState
 	private GameState()
 	{
 		_money = 500000000;
-		_baseNetSpacing = 50;
+		_baseNetSpacing = 20;
 	}
 
 	/**
@@ -90,9 +90,15 @@ public class GameState
 		return _baseNetSpacing;
 	}
 
+	/**
+	 * Zooms in (makes things greater :D ) or out in by in-/decreasing the {@code _baseNetSpacing}.
+	 * The minimal spacing is 20 pixel, the maximum is 70.
+	 * 
+	 * @param amount The amount of steps. Each step in-/decreases the {@code _baseNetSpacing} by 5 pixel.
+	 */
 	public void zoom(int amount)
 	{
-		_baseNetSpacing += -5*amount;
+		_baseNetSpacing += -5 * amount;
 		if(_baseNetSpacing < 20) _baseNetSpacing = 20;
 		else if(_baseNetSpacing > 70) _baseNetSpacing = 70;
 	}

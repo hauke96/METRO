@@ -7,12 +7,12 @@ import java.util.*;
 
 /**
  * Holds all necessary information that are stored in the settings.cfg file.
- * This class can also load and parse this file by calling {@code read()}.
- * By calling {@code set(String, Object)}, the settings will automagically saved into the settings.cfg, so no manual call is necessary.
+ * This class can also load and parse this file by calling {@link #read()}.
+ * By calling {@link #set(String, Object)}, the settings will automagically saved into the settings.cfg, so no manual call is necessary.
  * 
- * This class differes between {@code _settings} and {@code _newSettings}. The {@code _newSettings} fiel holds all settings including the
- * changed ones whereas {@code _settings} holds only the old ones. To get the old settings just call {@code getOld(String)} and to get
- * the new ones call {@code get(String)}.
+ * This class differs between {@code _settings} and {@code _newSettings}. The {@code _newSettings} fiel holds all settings including the
+ * changed ones whereas {@code _settings} holds only the old ones. To get the old settings just call {@link #getOld(String)} and to get
+ * the new ones call {@link #get(String)}.
  * 
  * @author hauke
  *

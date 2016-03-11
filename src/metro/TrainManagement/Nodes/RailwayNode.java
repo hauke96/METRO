@@ -14,7 +14,7 @@ import metro.TrainManagement.Trains.Train;
 
 /**
  * A railway node is a point that's used by train lines and every node has neighbors (both know each other).
- * Train lines are not drawn here even if they're only node connections (they are drawn in the {@code TrainLine} class).
+ * Train lines are not drawn here even if they're only node connections (they are drawn in the {@link metro.TrainManagement.Trains.TrainLine} class).
  * 
  * @author hauke
  *
@@ -175,7 +175,7 @@ public class RailwayNode
 	 * @param successor The successor of the signal to determine the direction of it.
 	 * @param train The train that wants to pass the signal.
 	 * @return The value of the signal for the given train, where true means "green" and false means "red", for the part between this node and the successor.
-	 *         When there's no signal specified by the {@code setSignalValue(RailwayNode, boolean)} method, the value is true.
+	 *         When there's no signal specified by the {@link #setSignalValue(RailwayNode, Train)} method, the value is true.
 	 */
 	public boolean getSignalValue(RailwayNode successor, Train train)
 	{

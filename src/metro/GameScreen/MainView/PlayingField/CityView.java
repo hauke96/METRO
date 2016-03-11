@@ -2,16 +2,15 @@ package metro.GameScreen.MainView.PlayingField;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.List;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
-
-import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import metro.TrainManagement.TrainManagementService;
+import metro.TrainManagement.Trains.TravelerSpot;
 
 /**
  * GameScreen with the city view. It Shows the population density and basic player information.
@@ -23,14 +22,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class CityView extends GameScreen
 {
-	/**
-	 * The offset of the city view win pixel.
-	 */
-	public static Point2D __offset = new Point2D.Float(0, 0);
-
-	private List<CityTravelerSpot> _travelerSpots;
-	private Point _oldMousePos; // Mouse position from last frame
-	private boolean _dragMode;
 	private int _selectedLayerNumber;
 	private boolean _enableMouseSelection; // When false, there'll be no circle highlighting
 
@@ -39,42 +30,26 @@ public class CityView extends GameScreen
 	 */
 	public CityView()
 	{
-		_travelerSpots = new ArrayList<CityTravelerSpot>();
-		_dragMode = false;
 		_enableMouseSelection = true;
-
-		_travelerSpots.add(new CityTravelerSpot(new Point(15, 10), 5));
-		_travelerSpots.add(new CityTravelerSpot(new Point(8, 5), 3));
-		_travelerSpots.add(new CityTravelerSpot(new Point(23, 9), 4));
-		_travelerSpots.add(new CityTravelerSpot(new Point(14, 24), 3));
-		_travelerSpots.add(new CityTravelerSpot(new Point(15, 31), 4));
-
-		_travelerSpots.add(new CityTravelerSpot(new Point(45, 35), 6));
-		_travelerSpots.add(new CityTravelerSpot(new Point(53, 32), 4));
-		_travelerSpots.add(new CityTravelerSpot(new Point(55, 37), 4));
-		_travelerSpots.add(new CityTravelerSpot(new Point(56, 49), 3));
 	}
 
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		if(_dragMode)
-		{
-			__offset = new Point2D.Float((float)__offset.getX() + (METRO.__mousePosition.x - _oldMousePos.x), (float)__offset.getY()
-				+ (METRO.__mousePosition.y - _oldMousePos.y));
-		}
-		_oldMousePos = METRO.__mousePosition;
-
-		draw(sp);
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**
-	 * Draws the traveler-circles.
+	 * Draws the city view. This method does not draw the number of the selected circle over the cursor (s. {@link #drawNumbers(SpriteBatch, Point)}).
 	 * 
-	 * @param sp The SpriteBatch to draw on
+	 * @param sp
+	 * @param offset
 	 */
-	private void draw(SpriteBatch sp)
+	public void updateGameScreen(SpriteBatch sp, Point offset)
 	{
+		ArrayList<TravelerSpot> travelerSpots = TrainManagementService.getInstance().getTravelerSpots();
+
 		_selectedLayerNumber = -1;
 		if(_enableMouseSelection)
 		{
@@ -82,9 +57,9 @@ public class CityView extends GameScreen
 			for(int i = 0; i < 10; ++i) // go through all layers
 			{
 				boolean isLayerSelected = false;
-				for(int k = 0; !isLayerSelected && k < _travelerSpots.size(); ++k) // go through all spots
+				for(int k = 0; !isLayerSelected && k < travelerSpots.size(); ++k) // go through all spots
 				{
-					isLayerSelected = _travelerSpots.get(k).isMouseInCircle(i); // if mouse is in ANY circle of this layer
+					isLayerSelected = travelerSpots.get(k).isMouseInCircle(i, offset); // if mouse is in ANY circle of this layer
 					if(isLayerSelected)
 					{
 						_selectedLayerNumber = i;
@@ -95,15 +70,15 @@ public class CityView extends GameScreen
 		// draw all the circles
 		for(int i = 0; i < 10; ++i)
 		{
-			for(int k = 0; k < _travelerSpots.size(); ++k)
+			for(int k = 0; k < travelerSpots.size(); ++k)
 			{
-				if(_travelerSpots.get(k).getStrength() <= i) continue;
-				_travelerSpots.get(k).draw(sp, i, i == _selectedLayerNumber, true); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+				if(travelerSpots.get(k).getStrength() <= i) continue;
+				travelerSpots.get(k).draw(sp, i, i == _selectedLayerNumber, true, offset); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 			}
-			for(int k = 0; k < _travelerSpots.size(); ++k)
+			for(int k = 0; k < travelerSpots.size(); ++k)
 			{
-				if(_travelerSpots.get(k).getStrength() <= i) continue;
-				_travelerSpots.get(k).draw(sp, i, i == _selectedLayerNumber, false); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+				if(travelerSpots.get(k).getStrength() <= i) continue;
+				travelerSpots.get(k).draw(sp, i, i == _selectedLayerNumber, false, offset); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 			}
 		}
 	}
@@ -130,19 +105,11 @@ public class CityView extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(mouseButton == Buttons.MIDDLE)
-		{
-			_dragMode = true;
-		}
 	}
 
 	@Override
 	public void mouseReleased(int mouseButton)
 	{
-		if(mouseButton == Buttons.MIDDLE)
-		{
-			_dragMode = false;
-		}
 	}
 
 	/**
@@ -183,7 +150,7 @@ public class CityView extends GameScreen
 	}
 
 	/**
-	 * @return True when a circle is selected. It depends on whether the highlighting (=mouse interaction) is enabled. 
+	 * @return True when a circle is selected. It depends on whether the highlighting (=mouse interaction) is enabled.
 	 */
 	@Override
 	public boolean isHovered()

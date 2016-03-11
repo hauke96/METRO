@@ -1,14 +1,14 @@
-package metro.GameScreen.MainView.PlayingField;
+package metro.TrainManagement.Trains;
 
 import java.awt.Color;
 import java.awt.Point;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.GameState;
 import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * A traveler spot is a center where many people/traveler are. This will effect its environment so there are areas around it with a higher amount of traveler.
@@ -17,12 +17,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  *
  */
 
-public class CityTravelerSpot
+public class TravelerSpot
 {
 	private Point _position;
 	private int _strength;
 	private GameState _gameState;
-	
+
 	private static int __scale = 2;
 
 	/**
@@ -31,7 +31,7 @@ public class CityTravelerSpot
 	 * @param position Position of the center of the spot in pixel.
 	 * @param strength The strength (usually from 0 to 10).
 	 */
-	public CityTravelerSpot(Point position, int strength)
+	public TravelerSpot(Point position, int strength)
 	{
 		_position = position;
 		_strength = strength > 10 ? 10 : strength;
@@ -42,15 +42,16 @@ public class CityTravelerSpot
 	 * Checks if mouse is in ONLY this circle or greater circles (but not in smaller/next ones).
 	 * 
 	 * @param layerIndex The circle index.
+	 * @param offset The current map offset.
 	 * @return Boolean if mouse is in circle.
 	 */
-	public boolean isMouseInCircle(int layerIndex)
+	public boolean isMouseInCircle(int layerIndex, Point offset)
 	{
 		layerIndex = (int)_strength - layerIndex;
 		if(layerIndex < 0) return false;
 
-		Point position = new Point(_position.x * _gameState.getBaseNetSpacing() + (int)CityView.__offset.getX(),
-			_position.y * _gameState.getBaseNetSpacing() + (int)CityView.__offset.getY());
+		Point position = new Point(_position.x * _gameState.getBaseNetSpacing() + offset.x,
+			_position.y * _gameState.getBaseNetSpacing() + offset.y);
 
 		boolean isInCurrentCircle = Math.pow(METRO.__mousePosition.x - position.x, 2)
 			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(_gameState.getBaseNetSpacing() * __scale * layerIndex, 2); // true: Mouse cursor is in circle
@@ -67,17 +68,18 @@ public class CityTravelerSpot
 	 * @param layerIndex Index of the circle to draw
 	 * @param circleSelected If the circle is selected and therefore drawn in a different color.
 	 * @param onlyEdges If only edges should be drawn
+	 * @param offset The current map offset.
 	 */
-	public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean onlyEdges)
+	public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean onlyEdges, Point offset)
 	{
 		int circleRadius = _gameState.getBaseNetSpacing() * __scale;
-		
+
 		layerIndex = _strength - layerIndex;
 		if(layerIndex < -1) return;
 
 		// get the position with offset
-		Point position = new Point(_position.x * _gameState.getBaseNetSpacing() + (int)CityView.__offset.getX() + 1,
-			_position.y * _gameState.getBaseNetSpacing() + (int)CityView.__offset.getY() + 1);
+		Point position = new Point(_position.x * _gameState.getBaseNetSpacing() + offset.x + 1,
+			_position.y * _gameState.getBaseNetSpacing() + offset.y + 1);
 
 		if(circleSelected)
 		{

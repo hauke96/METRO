@@ -63,7 +63,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainMenu;
-import metro.GameScreen.MainView.NotificationView.NotificationServer;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.WindowControls.ActionObserver;
@@ -281,8 +280,10 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		__spriteBatch.begin();
 
+		updateActionManagerList();
+		
 		renderInit();
-		renderGameScreen();
+		renderCurrentGameScreen();
 		renderWindows();
 		renderFPSDisplay();
 		renderCursor();
@@ -368,15 +369,19 @@ public class METRO implements ApplicationListener, InputProcessor
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
-		__controlActionManager.updateList();
+	}
+	
+	private void updateActionManagerList()
+	{
+	__controlActionManager.updateList();
 	}
 
 	/**
 	 * Updates the game screen and draws the control drawer.
 	 */
-	private void renderGameScreen()
+	private void renderCurrentGameScreen()
 	{
-		__currentGameScreen.update(__spriteBatch);
+		__currentGameScreen.updateGameScreen(__spriteBatch);
 	}
 
 	/**

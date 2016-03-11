@@ -23,6 +23,7 @@ import metro.GameScreen.MainView.NotificationView.NotificationServer;
 import metro.GameScreen.MainView.NotificationView.NotificationType;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
+import metro.TrainManagement.Trains.TravelerSpot;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
 import metro.TrainManagement.Trains.TrainStation;
@@ -40,6 +41,7 @@ public class TrainManagementService implements Observer
 	private ArrayList<TrainLine> _trainLineList;
 	private ArrayList<Train> _trainList;
 	private ArrayList<TrainStation> _stationList;
+	private ArrayList<TravelerSpot> _travelerSporList;
 	private HashMap<String, TrainTemplate> _templateTrains;
 	private float _lastRenderTime;
 
@@ -50,6 +52,7 @@ public class TrainManagementService implements Observer
 		_trainLineList = new ArrayList<>();
 		_trainList = new ArrayList<>();
 		_stationList = new ArrayList<>();
+		_travelerSporList = new ArrayList<>();
 
 		_templateTrains = new HashMap<>();
 		_lastRenderTime = System.nanoTime();
@@ -66,6 +69,17 @@ public class TrainManagementService implements Observer
 		{
 			METRO.__debug("[TrainFileSyntaxError]\n" + e.getMessage());
 		}
+		
+		_travelerSporList.add(new TravelerSpot(new Point(15, 10), 5));
+		_travelerSporList.add(new TravelerSpot(new Point(8, 5), 3));
+		_travelerSporList.add(new TravelerSpot(new Point(23, 9), 4));
+		_travelerSporList.add(new TravelerSpot(new Point(14, 24), 3));
+		_travelerSporList.add(new TravelerSpot(new Point(15, 31), 4));
+
+		_travelerSporList.add(new TravelerSpot(new Point(45, 35), 6));
+		_travelerSporList.add(new TravelerSpot(new Point(53, 32), 4));
+		_travelerSporList.add(new TravelerSpot(new Point(55, 37), 4));
+		_travelerSporList.add(new TravelerSpot(new Point(56, 49), 3));
 	}
 
 	private void createTrains() throws IOException, IllegalArgumentException
@@ -560,5 +574,13 @@ public class TrainManagementService implements Observer
 				t.updatePositionNodes();
 			}
 		}
+	}
+
+	/**
+	 * @return A list of all traveler spots
+	 */
+	public ArrayList<TravelerSpot> getTravelerSpots()
+	{
+		return _travelerSporList;
 	}
 }

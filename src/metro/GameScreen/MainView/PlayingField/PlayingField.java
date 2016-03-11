@@ -70,7 +70,7 @@ public class PlayingField extends GameScreen
 		}
 		_oldMousePos = METRO.__mousePosition;
 
-		_cityView.updateGameScreen(sp);
+		_cityView.updateGameScreen(sp, _mapOffset);
 		drawBaseNet(sp, new Color(220, 220, 220), 0);
 		Point cursorDotPosition = drawBaseDot(sp);
 		_cityView.drawNumbers(sp, cursorDotPosition);

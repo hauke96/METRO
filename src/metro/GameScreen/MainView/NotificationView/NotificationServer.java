@@ -15,7 +15,7 @@ public class NotificationServer
 
 	/**
 	 * Adds the subscriber to the list of subscribers for notifications.
-	 * Every time a message comes in, the {@code addMessage(String)} method of the subscriber will be called.
+	 * Every time a message comes in, the {@link NotificationSubscriber#addMessage(String, NotificationType)} method of the subscriber will be called.
 	 * 
 	 * @param subscriber
 	 */

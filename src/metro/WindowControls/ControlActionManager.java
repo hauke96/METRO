@@ -64,7 +64,7 @@ public class ControlActionManager
 
 	/**
 	 * Removes a control from the lists of control elements.
-	 * In comparison to the {@code registerElementIntern()} method,
+	 * In comparison to the {@link #registerElementIntern(ControlElement)} method,
 	 * this one won't change the buffer list.
 	 * 
 	 * @param control The control that should be removed.

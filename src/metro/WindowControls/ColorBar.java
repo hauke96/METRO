@@ -9,7 +9,7 @@ import metro.Graphics.Draw;
 
 /**
  * A color bar is a stripe of all RGB colors.
- * The {@code clickedOnControl(Object arg)} event gets fired when the selected color of this bar changed in any way.
+ * The {@link #clickOnControlElement()} event gets fired when the selected color of this bar changed in any way.
  * 
  * @author hauke
  *

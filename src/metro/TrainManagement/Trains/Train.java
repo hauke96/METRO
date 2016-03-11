@@ -137,8 +137,8 @@ public class Train extends TrainTemplate
 		{
 			Draw.Image(getTexture(),
 				new Rectangle(
-					(int)(offset.x + position.getX() * baseNetSpacing) + 1 - baseNetSpacing / 2,
-					(int)(offset.y + position.getY() * baseNetSpacing) - 5, // -5 because of some issues in the drawing method of libgdx :/
+					(int)(offset.x + position.getX() * baseNetSpacing) - baseNetSpacing / 2,
+					(int)(offset.y + position.getY() * baseNetSpacing) - baseNetSpacing / 2,
 					baseNetSpacing,
 					baseNetSpacing),
 				new Rectangle(
@@ -146,8 +146,8 @@ public class Train extends TrainTemplate
 					_textureYOffset,
 					64,
 					64),
-				_textureRotationCenter,
-				_textureScale,
+				baseNetSpacing / 2,
+				baseNetSpacing / 2,
 				_textureRotation);
 		}
 	}
@@ -287,7 +287,7 @@ public class Train extends TrainTemplate
 	}
 
 	/**
-	 * Gets the last node this train passed. This does not calculate it, please use {@code calcCurrentNode()} to update it.
+	 * Gets the last node this train passed. This does not calculate it, please use {@link #calcCurrentNode()} to update it.
 	 * 
 	 * @return The node this train is assigned to (the last visited node).
 	 */
@@ -297,7 +297,7 @@ public class Train extends TrainTemplate
 	}
 
 	/**
-	 * Gets the node this train will visit next. This does not calculate it, please use {@code calcNextNode()} to update it.
+	 * Gets the node this train will visit next. This does not calculate it, please use {@link #calcNextNode()} to update it.
 	 * 
 	 * @return The node the train will visit next.
 	 */
@@ -337,7 +337,7 @@ public class Train extends TrainTemplate
 	}
 
 	/**
-	 * Saves the time when the train can move on. This is used in the {@code drive(boolean, float)} method to prevent the train for driving.
+	 * Saves the time when the train can move on. This is used in the {@link #drive(boolean, float)} method to prevent the train for driving.
 	 * 
 	 * @param duration The duration the train should wait at its position in milliseconds.
 	 */

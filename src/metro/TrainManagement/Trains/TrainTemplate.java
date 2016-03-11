@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import metro.GameState;
 import metro.METRO;
 
 /**
@@ -29,8 +28,7 @@ public class TrainTemplate extends Observable
 	protected int _price, _costs, _maxPassengers;
 	protected float _costsFactor, _speed;
 	protected static Map<String, TextureRegion> _textures = new HashMap<>();
-	protected static Point _textureScale = new Point(1, 1),
-		_textureRotationCenter = new Point(GameState.getInstance().getBaseNetSpacing() / 2, GameState.getInstance().getBaseNetSpacing() / 2);
+	protected static Point _textureScale = new Point(1, 1);
 
 	/**
 	 * Creates a new train template with the following properties.
