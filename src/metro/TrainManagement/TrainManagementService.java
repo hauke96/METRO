@@ -41,7 +41,7 @@ public class TrainManagementService implements Observer
 	private ArrayList<TrainLine> _trainLineList;
 	private ArrayList<Train> _trainList;
 	private ArrayList<TrainStation> _stationList;
-	private ArrayList<TravelerSpot> _travelerSporList;
+	private ArrayList<TravelerSpot> _travelerSpotList;
 	private HashMap<String, TrainTemplate> _templateTrains;
 	private float _lastRenderTime;
 
@@ -52,7 +52,7 @@ public class TrainManagementService implements Observer
 		_trainLineList = new ArrayList<>();
 		_trainList = new ArrayList<>();
 		_stationList = new ArrayList<>();
-		_travelerSporList = new ArrayList<>();
+		_travelerSpotList = new ArrayList<>();
 
 		_templateTrains = new HashMap<>();
 		_lastRenderTime = System.nanoTime();
@@ -69,17 +69,17 @@ public class TrainManagementService implements Observer
 		{
 			METRO.__debug("[TrainFileSyntaxError]\n" + e.getMessage());
 		}
-		
-		_travelerSporList.add(new TravelerSpot(new Point(15, 10), 5));
-		_travelerSporList.add(new TravelerSpot(new Point(8, 5), 3));
-		_travelerSporList.add(new TravelerSpot(new Point(23, 9), 4));
-		_travelerSporList.add(new TravelerSpot(new Point(14, 24), 3));
-		_travelerSporList.add(new TravelerSpot(new Point(15, 31), 4));
 
-		_travelerSporList.add(new TravelerSpot(new Point(45, 35), 6));
-		_travelerSporList.add(new TravelerSpot(new Point(53, 32), 4));
-		_travelerSporList.add(new TravelerSpot(new Point(55, 37), 4));
-		_travelerSporList.add(new TravelerSpot(new Point(56, 49), 3));
+		_travelerSpotList.add(new TravelerSpot(new Point(15, 10), 5));
+		_travelerSpotList.add(new TravelerSpot(new Point(8, 5), 3));
+		_travelerSpotList.add(new TravelerSpot(new Point(23, 9), 4));
+		_travelerSpotList.add(new TravelerSpot(new Point(14, 24), 3));
+		_travelerSpotList.add(new TravelerSpot(new Point(15, 31), 4));
+
+		_travelerSpotList.add(new TravelerSpot(new Point(45, 35), 6));
+		_travelerSpotList.add(new TravelerSpot(new Point(53, 32), 4));
+		_travelerSpotList.add(new TravelerSpot(new Point(55, 37), 4));
+		_travelerSpotList.add(new TravelerSpot(new Point(56, 49), 3));
 	}
 
 	private void createTrains() throws IOException, IllegalArgumentException
@@ -450,7 +450,34 @@ public class TrainManagementService implements Observer
 		for(TrainStation station : _stationList)
 		{
 			station.draw(sp, offset);
+			station.addRandomPassenger(getStrength(station.getPosition()));
+			station.handlePassenger();
 		}
+	}
+
+	/**
+	 * Gets the maximum density of the citizens at the given point.
+	 * 
+	 * @param pos The position to check.
+	 * @return The maximum density at the given position.
+	 */
+	private int getStrength(Point pos)
+	{
+		int maxStrength = 0;
+
+		for(TravelerSpot spot : _travelerSpotList)
+		{
+//			if(spot.contains(pos)) // is given point in circle
+//			{
+				int strength = spot.getStrength(pos);
+				if(strength > maxStrength)
+				{
+					maxStrength = strength;
+				}
+//			}
+		}
+
+		return maxStrength;
 	}
 
 	/**
@@ -556,7 +583,7 @@ public class TrainManagementService implements Observer
 		if(o instanceof Train)
 		{
 			Train t = (Train)o;
-			Point currNode = t.calcCurrentNode(); // don't use the actual current node, it's outdated!
+			Point currNode = t.calcCurrentNode(); // don't use the current node thats buffered in the Train class, it's outdated! Calculate actual current node.
 			boolean stationFound = false;
 
 			for(TrainStation station : _stationList)
@@ -565,6 +592,8 @@ public class TrainManagementService implements Observer
 				{
 					t.waitFor(3000);
 					stationFound = true;
+					TrainStation s = getStation(currNode);
+					s.movePassenger(t.getMaxPassenger() - t.getCurrPassenger(), 3000 * (long)1e6);
 					break;
 				}
 			}
@@ -576,11 +605,24 @@ public class TrainManagementService implements Observer
 		}
 	}
 
+	private TrainStation getStation(Point currNode)
+	{
+		for(TrainStation station : _stationList)
+		{
+			if(station.equals(currNode))
+			{
+				return station;
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * @return A list of all traveler spots
 	 */
 	public ArrayList<TravelerSpot> getTravelerSpots()
 	{
-		return _travelerSporList;
+		return _travelerSpotList;
 	}
 }

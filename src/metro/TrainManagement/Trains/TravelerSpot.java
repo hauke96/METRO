@@ -111,10 +111,46 @@ public class TravelerSpot
 	/**
 	 * Gets the strength of the TravelerSpot
 	 * 
-	 * @return Strength
+	 * @return Strength The strength of this traveler spot.
 	 */
-	public float getStrength()
+	public int getStrength()
 	{
 		return _strength;
+	}
+
+	/**
+	 * Gets the strength of the TravelerSpot
+	 * 
+	 * @param pos The position that strength you want to know. If this point is not in the spot, the result will be 0.
+	 * 
+	 * @return Strength The strength at this point. 0 when the point is not in the circle.
+	 */
+	public int getStrength(Point pos)
+	{
+		for(int i = 0; i < _strength; ++i) // go through all layers
+		{
+			boolean isInCurrentCircle = Math.pow(pos.x - _position.x, 2)
+				+ Math.pow(pos.y - _position.y, 2) < Math.pow(__scale * i, 2);
+
+			boolean isInNextCircle = Math.pow(pos.x - _position.x, 2)
+				+ Math.pow(pos.y - _position.y, 2) < Math.pow(__scale * (i - 1), 2);
+
+			if(isInCurrentCircle && !isInNextCircle)
+			{
+				return _strength - i;
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * Check if the given point is in this circle.
+	 * 
+	 * @param pos The position to check.
+	 * @return True when the given point is in this circle, false if not.
+	 */
+	public boolean contains(Point pos)
+	{
+		return Math.sqrt((pos.x - _position.x) ^ 2 + (pos.y - _position.y) ^ 2) <= __scale * _strength;
 	}
 }

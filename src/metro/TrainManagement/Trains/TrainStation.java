@@ -2,12 +2,13 @@ package metro.TrainManagement.Trains;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.util.Random;
+
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.GameState;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
  * A train station with the amount of waiting passengers and a list of connected stations. This class also manages the drawing stuff.
@@ -18,9 +19,15 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class TrainStation
 {
-	private int _waitingPassengers;
+	private int _waitingPassengers,
+		_movingPassengerWaitingTime,
+		_randomAddPassengerWaitingTime;
 	private Point _position; // Position
 	private GameState _gameState;
+	private int[] _movingPassengersAmount,
+		_movingPassengersDuration;
+	private long _movingPassengerLastCall,
+		_randomAddPassengerLastCall;
 
 	/**
 	 * The price to build one train station.
@@ -48,6 +55,14 @@ public class TrainStation
 		_waitingPassengers = waitingPassengers;
 		_position = position;
 		_gameState = GameState.getInstance();
+
+		_randomAddPassengerWaitingTime = (int)750e6; // 750ms == 750*10^6 ns
+		_randomAddPassengerLastCall = 0;
+
+		_movingPassengerWaitingTime = (int)250e6; // 250ms == 250*10^6 ns
+		_movingPassengersAmount = new int[8]; // there can never be more then 8 trains in one station
+		_movingPassengersDuration = new int[8];
+		_movingPassengerLastCall = 0;
 	}
 
 	/**
@@ -88,5 +103,84 @@ public class TrainStation
 	public Point getPosition()
 	{
 		return _position;
+	}
+
+	/**
+	 * Adds a job for the station to move some passengers. The amount and the amount of time for this job can be specified.
+	 * Moving passengers is handled by the {@link #handlePassenger()} method.
+	 * 
+	 * @param amount The amount of passenger to move.
+	 * @param duration The duration of the job in nanoseconds.
+	 */
+	public void movePassenger(int amount, long duration)
+	{
+		for(int i = 0; i < _movingPassengersAmount.length; ++i)
+		{
+			if(_movingPassengersDuration[i] == 0) // free slot in array
+			{
+				_movingPassengersDuration[i] = (int)(duration / _movingPassengerWaitingTime); // amount of iterations until the job is done.
+				_movingPassengersAmount[i] = amount / (int)_movingPassengersDuration[i];
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Increases/descreases the amount of passenger according to the creates jobs via the {@link #movePassenger(int, long)} method.
+	 */
+	public void handlePassenger()
+	{
+		long thisCall = System.nanoTime();
+		if(System.nanoTime() > _movingPassengerLastCall + _movingPassengerWaitingTime)
+		{
+			for(int i = 0; i < _movingPassengersAmount.length && _waitingPassengers > 0; ++i)
+			{
+				if(_movingPassengersDuration[i] != 0) // valid entry/running job.
+				{
+					if(_waitingPassengers >= _movingPassengersAmount[i])
+					{
+						_waitingPassengers -= _movingPassengersAmount[i];
+					}
+					else
+					{
+						_waitingPassengers = 0;
+					}
+					_movingPassengersDuration[i]--; // automatically becomes 0 --> free array field for new job
+				}
+			}
+			_movingPassengerLastCall = thisCall;
+		}
+	}
+
+	/**
+	 * Adds a random amount of passenger between 0 and 5 * (citizenDensity + 1).
+	 * 
+	 * @param citizenDensity The city density of this station.
+	 */
+	public void addRandomPassenger(int citizenDensity)
+	{
+		citizenDensity++; // there's also the 0-density but there should be some passenger there as well ;)
+		long thisCall = System.nanoTime();
+		if(System.nanoTime() > _randomAddPassengerLastCall + _randomAddPassengerWaitingTime)
+		{
+			_waitingPassengers += new Random().nextInt(5 * citizenDensity);
+			_randomAddPassengerLastCall = thisCall;
+		}
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		Point pos = null;
+		if(obj instanceof Point)
+		{
+			pos = (Point)obj;
+		}
+		else if(obj instanceof TrainStation)
+		{
+			pos = ((TrainStation)obj).getPosition();
+		}
+
+		return _position.equals(pos);
 	}
 }
