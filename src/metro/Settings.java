@@ -2,8 +2,13 @@ package metro;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Holds all necessary information that are stored in the settings.cfg file.

@@ -126,7 +126,7 @@ public class TrainStation
 	}
 
 	/**
-	 * Increases/descreases the amount of passenger according to the creates jobs via the {@link #movePassenger(int, long)} method.
+	 * Increases/decreases the amount of passenger according to the creates jobs via the {@link #movePassenger(int, long)} method.
 	 */
 	public void handlePassenger()
 	{

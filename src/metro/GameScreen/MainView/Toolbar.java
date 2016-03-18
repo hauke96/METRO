@@ -27,9 +27,9 @@ public class Toolbar extends GameScreen
 		_buildTracks,
 		_showTrainList,
 		_createNewTrain;
-	private Point _buttonAreaPosition;
 	private int _moneyDisplayWidth,
-		_height;
+		_height,
+		_buttonAreaXPosition;
 
 	/**
 	 * Creates a new toolbar.
@@ -38,16 +38,15 @@ public class Toolbar extends GameScreen
 	{
 		_moneyDisplayWidth = 250;
 		_height = 40;
-		_buttonAreaPosition = new Point(METRO.__SCREEN_SIZE.width - 400, // TODO make the 400 visible for all tools
-			-9);
+		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - 400; // TODO make the 400 visible for all tools
 
-		_buildStation = new Button(new Rectangle(_buttonAreaPosition.x + 140, _buttonAreaPosition.y, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
+		_buildStation = new Button(new Rectangle(_buttonAreaXPosition + 140, 0, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
 		registerControl(_buildStation);
-		_buildTracks = new Button(new Rectangle(_buttonAreaPosition.x + 180, _buttonAreaPosition.y, 40, 50), new Rectangle(0, 78, 40, 50), METRO.__iconSet);
+		_buildTracks = new Button(new Rectangle(_buttonAreaXPosition + 180, 0, 40, 50), new Rectangle(0, 78, 40, 50), METRO.__iconSet);
 		registerControl(_buildTracks);
-		_showTrainList = new Button(new Rectangle(_buttonAreaPosition.x + 220, _buttonAreaPosition.y, 40, 50), new Rectangle(0, 128, 40, 50), METRO.__iconSet);
+		_showTrainList = new Button(new Rectangle(_buttonAreaXPosition + 220, 0, 40, 50), new Rectangle(0, 128, 40, 50), METRO.__iconSet);
 		registerControl(_showTrainList);
-		_createNewTrain = new Button(new Rectangle(_buttonAreaPosition.x + 260, _buttonAreaPosition.y, 40, 50), new Rectangle(0, 178, 40, 50), METRO.__iconSet);
+		_createNewTrain = new Button(new Rectangle(_buttonAreaXPosition + 260, 0, 40, 50), new Rectangle(0, 178, 40, 50), METRO.__iconSet);
 		registerControl(_createNewTrain);
 		registerObervations();
 	}
@@ -103,10 +102,10 @@ public class Toolbar extends GameScreen
 	 */
 	public void resetExclusiveButtonPositions(Button exceptThisButton)
 	{
-		_buildTracks.setPosition(new Point(_buildTracks.getPosition().x, _buttonAreaPosition.y));
-		_buildStation.setPosition(new Point(_buildStation.getPosition().x, _buttonAreaPosition.y));
-		_showTrainList.setPosition(new Point(_showTrainList.getPosition().x, _buttonAreaPosition.y));
-		_createNewTrain.setPosition(new Point(_createNewTrain.getPosition().x, _buttonAreaPosition.y));
+		_buildTracks.setPosition(new Point(_buildTracks.getPosition().x, 0));
+		_buildStation.setPosition(new Point(_buildStation.getPosition().x, 0));
+		_showTrainList.setPosition(new Point(_showTrainList.getPosition().x, 0));
+		_createNewTrain.setPosition(new Point(_createNewTrain.getPosition().x, 0));
 
 		// Move the selected button a bit down:
 		if(exceptThisButton != null)
@@ -138,7 +137,7 @@ public class Toolbar extends GameScreen
 		Draw.String(str, 13, 15);
 
 		Draw.setColor(METRO.__metroRed);
-		Draw.Line(_buttonAreaPosition.x, 0, _buttonAreaPosition.x, _height);
+		Draw.Line(_buttonAreaXPosition, 0, _buttonAreaXPosition, _height);
 
 		_buildStation.draw();
 		_buildTracks.draw();

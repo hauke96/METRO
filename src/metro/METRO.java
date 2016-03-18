@@ -88,7 +88,6 @@ public class METRO implements ApplicationListener, InputProcessor
 	private static SpriteBatch __gameWindowSpriteBatch;
 	private static int __xOffset,
 		__yOffset,
-		__titleBarHeight,
 		__titleBarBorderLineWidth;
 	private static LwjglApplication __application;
 
@@ -106,6 +105,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	public static OrthographicCamera __camera;
 	public static SpriteBatch __spriteBatch;
 	public static GameState __gameState;
+	public static int __titleBarHeight;
 
 	/**
 	 * Creates a new METRO Game.
@@ -122,6 +122,70 @@ public class METRO implements ApplicationListener, InputProcessor
 		setSettings();
 	}
 
+	/**
+	 * Reads the settings from the settings.cfg and sets them to the variables of METRO.
+	 */
+	private void setSettings()
+	{
+		Settings settings = Settings.getInstance();
+
+		settings.read();
+
+		try
+		{
+			_config = new LwjglApplicationConfiguration();
+			_config.title = "METRO  " + __VERSION;
+			_config.width = Integer.parseInt(settings.getOld("screen.width").toString());
+			_config.height = Integer.parseInt(settings.getOld("screen.height").toString());
+			_config.useGL30 = Boolean.parseBoolean(settings.getOld("use.opengl30").toString());
+			_config.resizable = false;
+			_config.fullscreen = Boolean.parseBoolean(settings.getOld("fullscreen.on").toString());
+			// _config.foregroundFPS = -1; // max frames
+			_config.samples = Integer.parseInt(settings.getOld("amount.samples").toString());
+			_config.vSyncEnabled = false;// Boolean.parseBoolean(Settings.get("use.vsync").toString());
+			_config.useHDPI = Boolean.parseBoolean(settings.getOld("use.hdpi").toString());
+
+			__application = new LwjglApplication(this, _config);
+
+			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+
+			__SCREEN_SIZE = new Dimension(Integer.parseInt(settings.getOld("screen.width").toString()),
+				Integer.parseInt(settings.getOld("screen.height").toString()));
+			__titleBarHeight = _config.fullscreen ? 0 : 22;
+		}
+		catch(Exception ex) // if something has gone wrong (e.g. "screen.width=19a20")
+		{
+			File file = new File("./settings.cfg");
+			if(file.exists()) // try to use default values by deleting config file
+			{
+				// Create date time for backup name
+				java.util.Date date = new java.util.Date();
+				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd.MM.yyyy.h:mm:ss");
+				sdf.setTimeZone(java.util.TimeZone.getTimeZone("CET"));
+				String formattedDate = sdf.format(date);
+
+				// try to rename settings.cfg
+				if(!file.renameTo(new File("./settings.backup." + formattedDate + ".cfg")))
+				{
+					METRO.__debug("[SettingsSaveError]\nNo backup of settings.cfg has been created.\n");
+				}
+
+				// no
+				setSettings();
+			}
+			else
+			{
+				System.err.println("Could NOT create configuration."
+					+ "Using default values by deleting the ./settings.cfg is not working."
+					+ "\nHere some technical information :" + ex.getMessage() + "\n");
+				for(StackTraceElement str : ex.getStackTrace())
+				{
+					System.err.println(str.toString());
+				}
+			}
+		}
+	}
+
 	@Override
 	public void create()
 	{
@@ -131,7 +195,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		__debug = true;
 
 		_oldMousePosition = new Point(0, 0);
-		__titleBarHeight = 22;
+		__SCREEN_SIZE.height -= __titleBarHeight;
 		__titleBarBorderLineWidth = 1;
 		__dragMode = false;
 
@@ -179,8 +243,16 @@ public class METRO implements ApplicationListener, InputProcessor
 	{
 		__spriteBatch = new SpriteBatch();
 		__gameWindowSpriteBatch = new SpriteBatch();
-		__xOffset = 1;
-		__yOffset = 20;
+		if(_config.fullscreen)
+		{
+			__xOffset = 0;
+			__yOffset = 0;
+		}
+		else
+		{
+			__xOffset = 1;
+			__yOffset = 20;
+		}
 
 		__camera = new OrthographicCamera();
 		__camera.setToOrtho(true, __SCREEN_SIZE.width / 2, __SCREEN_SIZE.height / 2);
@@ -281,7 +353,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		__spriteBatch.begin();
 
 		updateActionManagerList();
-		
+
 		renderInit();
 		renderCurrentGameScreen();
 		renderWindows();
@@ -307,6 +379,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void renderWindowTitleBar()
 	{
+		if(_config.fullscreen) return;
 		// white title bar background
 		Fill.setColor(Color.white);
 		Fill.Rect(new Rectangle(0, 0, __SCREEN_SIZE.width, __titleBarHeight), __gameWindowSpriteBatch);
@@ -370,10 +443,10 @@ public class METRO implements ApplicationListener, InputProcessor
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 
 	}
-	
+
 	private void updateActionManagerList()
 	{
-	__controlActionManager.updateList();
+		__controlActionManager.updateList();
 	}
 
 	/**
@@ -681,69 +754,6 @@ public class METRO implements ApplicationListener, InputProcessor
 					message = "         " + message;
 				}
 				System.out.println(message);
-			}
-		}
-	}
-
-	/**
-	 * Reads the settings from the settings.cfg and sets them to the variables of METRO.
-	 */
-	private void setSettings()
-	{
-		Settings settings = Settings.getInstance();
-
-		settings.read();
-
-		try
-		{
-			__SCREEN_SIZE = new Dimension(Integer.parseInt(settings.getOld("screen.width").toString()),
-				Integer.parseInt(settings.getOld("screen.height").toString()));
-
-			_config = new LwjglApplicationConfiguration();
-			_config.title = "METRO  " + __VERSION;
-			_config.width = Integer.parseInt(settings.getOld("screen.width").toString());
-			_config.height = Integer.parseInt(settings.getOld("screen.height").toString());
-			_config.useGL30 = Boolean.parseBoolean(settings.getOld("use.opengl30").toString());
-			_config.resizable = false;
-			_config.fullscreen = Boolean.parseBoolean(settings.getOld("fullscreen.on").toString());
-			// _config.foregroundFPS = -1; // max frames
-			_config.samples = Integer.parseInt(settings.getOld("amount.samples").toString());
-			_config.vSyncEnabled = false;// Boolean.parseBoolean(Settings.get("use.vsync").toString());
-			_config.useHDPI = Boolean.parseBoolean(settings.getOld("use.hdpi").toString());
-
-			__application = new LwjglApplication(this, _config);
-
-			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
-		}
-		catch(Exception ex) // if something has gone wrong (e.g. "screen.width=19a20")
-		{
-			File file = new File("./settings.cfg");
-			if(file.exists()) // try to use default values by deleting config file
-			{
-				// Create date time for backup name
-				java.util.Date date = new java.util.Date();
-				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd.MM.yyyy.h:mm:ss");
-				sdf.setTimeZone(java.util.TimeZone.getTimeZone("CET"));
-				String formattedDate = sdf.format(date);
-
-				// try to rename settings.cfg
-				if(!file.renameTo(new File("./settings.backup." + formattedDate + ".cfg")))
-				{
-					METRO.__debug("[SettingsSaveError]\nNo backup of settings.cfg has been created.\n");
-				}
-
-				// no
-				setSettings();
-			}
-			else
-			{
-				System.err.println("Could NOT create configuration."
-					+ "Using default values by deleting the ./settings.cfg is not working."
-					+ "\nHere some technical information :" + ex.getMessage() + "\n");
-				for(StackTraceElement str : ex.getStackTrace())
-				{
-					System.err.println(str.toString());
-				}
 			}
 		}
 	}

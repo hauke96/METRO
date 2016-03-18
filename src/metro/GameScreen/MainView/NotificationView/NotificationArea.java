@@ -23,7 +23,8 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	private boolean _isActive,
 		_isExpanded;
 	private int _height,
-		_width;
+		_width,
+		_headerHeight;
 	private Color _backGroundColor;
 	private List _entryList;
 
@@ -36,9 +37,11 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	{
 		_backGroundColor = new Color(255, 255, 255, 165);
 		_height = 250;
+		_headerHeight = 25;
 		_width = METRO.__SCREEN_SIZE.width;
 		_isExpanded = true;
-		_entryList = new List(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + 25, _width - 5, _height - 47), new ArrayList<String>(), null, true);
+		_entryList = new List(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight),
+			new ArrayList<String>(), null, true);
 		registerControl(_entryList);
 		_entryList.setDecoration(false);
 		_entryList.setTransparency(165);
@@ -63,7 +66,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	public void setWidth(int newWidth)
 	{
 		_width = newWidth;
-		_entryList.setSize(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + 25, _width - 5, _height - 47));
+		_entryList.setSize(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight));
 	}
 
 	@Override
@@ -86,7 +89,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 
 		Draw.setColor(METRO.__metroBlue);
 		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height, _width, METRO.__SCREEN_SIZE.height - _height);
-		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height + 25, _width, METRO.__SCREEN_SIZE.height - _height + 25);
+		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width, METRO.__SCREEN_SIZE.height - _height + _headerHeight);
 
 		int length = Draw.getStringSize("Notifications:").width;
 		Draw.setColor(METRO.__metroRed);
@@ -94,17 +97,17 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 		Draw.Line(13, METRO.__SCREEN_SIZE.height - _height + 21, 15 + length, METRO.__SCREEN_SIZE.height - _height + 21);
 
 		Draw.Image(METRO.__iconSet,
-			new Rectangle(_width - 25, METRO.__SCREEN_SIZE.height - _height, 25, 25),
-			new Rectangle(0, 228 + (_isExpanded ? 25 : 0), 25, 25));
+			new Rectangle(_width - _headerHeight, METRO.__SCREEN_SIZE.height - _height, _headerHeight, _headerHeight),
+			new Rectangle(0, 228 + (_isExpanded ? _headerHeight : 0), _headerHeight, _headerHeight));
 	}
 
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(METRO.__SCREEN_SIZE.height - _height <= screenY && screenY <= METRO.__SCREEN_SIZE.height - _height + 25)
+		if(METRO.__SCREEN_SIZE.height - _height <= screenY && screenY <= METRO.__SCREEN_SIZE.height - _height + _headerHeight)
 		{
 			_isExpanded ^= true; // flip state of boolean
-			_height = _isExpanded ? 250 : 47; // TODO change 47 to "_height + METRO.__windowTitleHeight()" or something
+			_height = _isExpanded ? 250 : METRO.__titleBarHeight + _headerHeight; // TODO change 47 to "_height + METRO.__windowTitleHeight()" or something
 			_entryList.setState(_isExpanded);
 		}
 	}
