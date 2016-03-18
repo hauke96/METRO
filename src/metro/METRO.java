@@ -195,7 +195,6 @@ public class METRO implements ApplicationListener, InputProcessor
 		__debug = true;
 
 		_oldMousePosition = new Point(0, 0);
-		__SCREEN_SIZE.height -= __titleBarHeight;
 		__titleBarBorderLineWidth = 1;
 		__dragMode = false;
 

@@ -104,7 +104,9 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(METRO.__SCREEN_SIZE.height - _height <= screenY && screenY <= METRO.__SCREEN_SIZE.height - _height + _headerHeight)
+		if(METRO.__SCREEN_SIZE.height - _height <= screenY
+			&& screenY <= METRO.__SCREEN_SIZE.height - _height + _headerHeight
+			&& screenX <= _width)
 		{
 			_isExpanded ^= true; // flip state of boolean
 			_height = _isExpanded ? 250 : METRO.__titleBarHeight + _headerHeight; // TODO change 47 to "_height + METRO.__windowTitleHeight()" or something
