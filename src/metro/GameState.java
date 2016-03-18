@@ -14,8 +14,9 @@ public class GameState
 {
 	private static final GameState __INSTANCE = new GameState();
 
-	private int _money;
-	private int _baseNetSpacing; // amount of pixel between lines of the base net
+	private int _money,
+		_baseNetSpacing, // amount of pixel between lines of the base net
+		_toolViewWidth;
 
 	/**
 	 * Creates a new game state. This can't be done by an external class.
@@ -24,6 +25,7 @@ public class GameState
 	{
 		_money = 500000000;
 		_baseNetSpacing = 20;
+		_toolViewWidth = 400;
 	}
 
 	/**
@@ -88,6 +90,14 @@ public class GameState
 	public int getBaseNetSpacing()
 	{
 		return _baseNetSpacing;
+	}
+
+	/**
+	 * @return The width of tool views (e.g. line- and trainView).
+	 */
+	public int getToolViewWidth()
+	{
+		return _toolViewWidth;
 	}
 
 	/**

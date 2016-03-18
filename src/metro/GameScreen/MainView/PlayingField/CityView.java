@@ -36,8 +36,6 @@ public class CityView extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		// TODO Auto-generated method stub
-		
 	}
 
 	/**

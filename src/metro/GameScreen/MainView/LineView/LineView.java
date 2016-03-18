@@ -10,6 +10,7 @@ import java.util.Observer;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.GameState;
 import metro.METRO;
 import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameScreen.GameScreen;
@@ -60,13 +61,23 @@ public class LineView extends GameScreen implements Observer
 	{
 		_isActive = true;
 		_lineSelectToolEnabled = false;
-		_windowWidth = 400; // TODO make this visible for all tools
+		_windowWidth = GameState.getInstance().getToolViewWidth();
 		_lineSelectTool = new LineSelectTool();
 		_lineSelectTool.addObserver(this);
 
 		_trainManagementService = TrainManagementService.getInstance();
 
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 45);
+
+		createControls();
+		addObserver();
+	}
+
+	/**
+	 * Creates all controls for this view and registers them properly in the game screen.
+	 */
+	private void createControls()
+	{
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 40, 300),
 			null, null, true);
 		registerControl(_lineList);
@@ -95,7 +106,13 @@ public class LineView extends GameScreen implements Observer
 		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 100));
 		_messageLabel.setColor(METRO.__metroRed);
 		registerControl(_messageLabel);
+	}
 
+	/**
+	 * Add the observer for all controls.
+	 */
+	private void addObserver()
+	{
 		addCreateLineButtonObserver();
 		addEditButtonObserver();
 		addRemoveLineButtonObserver();

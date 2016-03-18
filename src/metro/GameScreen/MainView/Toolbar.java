@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.GameState;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainView.LineView.LineView;
@@ -38,7 +39,7 @@ public class Toolbar extends GameScreen
 	{
 		_moneyDisplayWidth = 250;
 		_height = 40;
-		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - 400; // TODO make the 400 visible for all tools
+		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth();
 
 		_buildStation = new Button(new Rectangle(_buttonAreaXPosition + 140, 0, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
 		registerControl(_buildStation);

@@ -109,7 +109,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 			&& screenX <= _width)
 		{
 			_isExpanded ^= true; // flip state of boolean
-			_height = _isExpanded ? 250 : METRO.__titleBarHeight + _headerHeight; // TODO change 47 to "_height + METRO.__windowTitleHeight()" or something
+			_height = _isExpanded ? 250 : METRO.__titleBarHeight + _headerHeight;
 			_entryList.setState(_isExpanded);
 		}
 	}

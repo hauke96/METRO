@@ -6,6 +6,7 @@ import java.awt.Point;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.GameState;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
@@ -33,7 +34,7 @@ public class TrainView extends GameScreen
 	 */
 	public TrainView()
 	{
-		_windowWidth = 400; // TODO make this visible for all tools
+		_windowWidth = GameState.getInstance().getToolViewWidth();
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 45);
 		_trainViewMain = new TrainViewMain(_areaOffset, _windowWidth);
 		_trainViewBuy = new TrainViewBuy(_areaOffset, _windowWidth);

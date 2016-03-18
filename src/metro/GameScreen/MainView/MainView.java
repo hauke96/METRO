@@ -7,6 +7,7 @@ import java.util.Observer;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.GameState;
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainView.LineView.LineView;
@@ -154,7 +155,7 @@ public class MainView extends GameScreen implements Observer
 		_activeTool.addObserver(this);
 		if(_activeTool instanceof LineView || _activeTool instanceof TrainView) // tools that have own window and influence the notification area
 		{
-			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width - 400); // TODO make the 400 (tool width) available for every tool (and every other screen that needs it)
+			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth());
 		}
 		else
 		{
