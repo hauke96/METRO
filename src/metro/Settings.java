@@ -15,7 +15,7 @@ import java.util.Map;
  * This class can also load and parse this file by calling {@link #read()}.
  * By calling {@link #set(String, Object)}, the settings will automagically saved into the settings.cfg, so no manual call is necessary.
  * 
- * This class differs between {@code _settings} and {@code _newSettings}. The {@code _newSettings} fiel holds all settings including the
+ * This class differs between {@code _settings} and {@code _newSettings}. The {@code _newSettings} field holds all settings including the
  * changed ones whereas {@code _settings} holds only the old ones. To get the old settings just call {@link #getOld(String)} and to get
  * the new ones call {@link #get(String)}.
  * 
