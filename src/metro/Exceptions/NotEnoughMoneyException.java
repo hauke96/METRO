@@ -9,7 +9,7 @@ package metro.Exceptions;
 public class NotEnoughMoneyException extends Exception
 {
 	/**
-	 * ID needed for the serializable process.
+	 * ID needed for the serialization process.
 	 */
 	private static final long serialVersionUID = 1L;
 
