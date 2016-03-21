@@ -1,13 +1,16 @@
 package metro.GameScreen.MainView.TrainView;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
+import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TrainTemplate;
 import metro.WindowControls.ActionObserver;
@@ -33,6 +36,7 @@ public class TrainViewBuy extends GameScreen
 		_informationKeys, // like name=, manufacturer=, ...
 		_informationValues; // like CT-01, 1.03, ...
 	private TrainManagementService _trainManagementService;
+	private TextureRegion _titleImage;
 
 	/**
 	 * Creates a new dialog.
@@ -47,10 +51,10 @@ public class TrainViewBuy extends GameScreen
 
 		_trainManagementService = TrainManagementService.getInstance();
 
-		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, _areaOffset.y + 660, 210, 20), "Buy");
+		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, METRO.__SCREEN_SIZE.height - 20 - _areaOffset.y, 210, 20), "Buy");
 		registerControl(_buyButton);
 
-		_availableTrains = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 440, 140, 240), null, true);
+		_availableTrains = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 440, 140, METRO.__SCREEN_SIZE.height - (_areaOffset.y + 440) - _areaOffset.y), null, true);
 		_availableTrains.register(new ActionObserver()
 		{
 			@Override
@@ -67,6 +71,7 @@ public class TrainViewBuy extends GameScreen
 						(Math.round((train.getCostFactor() - 1) * 1000) / 10f) + "%\n= " +
 						train.getMaxPassenger() + " people / car\n= " +
 						(int)(train.getSpeed() * 80) + "km/h");
+					_titleImage = train.getTitleImage();
 				}
 			}
 		});
@@ -104,10 +109,11 @@ public class TrainViewBuy extends GameScreen
 
 		_availableTrains.draw();
 		_messageLabel.draw();
-		Draw.setColor(METRO.__metroBlue);
+		// Draw.setColor(METRO.__metroBlue);
 		_informationKeys.draw();
 		_informationValues.draw();
 		_buyButton.draw();
+		drawTitleImage();
 	}
 
 	private void drawHeader()
@@ -119,6 +125,37 @@ public class TrainViewBuy extends GameScreen
 		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 420);
 		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 435,
 			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, _areaOffset.y + 435);
+	}
+
+	/**
+	 * Draws the title image of the train (a greater rendered image which simply looks nice but has no function).
+	 */
+	private void drawTitleImage()
+	{
+		// when there's an image and the space between buy-button and info label is great enough, draw the image
+		if(_titleImage != null)
+		{
+			int diff = _buyButton.getPosition().y - (_informationValues.getPosition().y + _informationValues.getArea().height);
+			int height = diff >= 220 ? 180 : diff - 40;
+			Rectangle position = new Rectangle(
+				METRO.__SCREEN_SIZE.width - _windowWidth + 170 + ((200 - height) / 2),
+				_areaOffset.y + 460 + _informationKeys.getArea().height,
+				height,
+				height);
+
+			Draw.Image(_titleImage, position);
+
+			// larger image when mouse hovers smaller image
+			if(position.contains(METRO.__mousePosition) && diff < 220)
+			{
+				Fill.setColor(Color.white);
+				Fill.Rect(METRO.__mousePosition.x - 200, METRO.__mousePosition.y - 200, 200, 200);
+
+				Draw.setColor(METRO.__metroBlue);
+				Draw.Rect(METRO.__mousePosition.x - 200, METRO.__mousePosition.y - 200, 200, 200);
+				Draw.Image(_titleImage, new Rectangle(METRO.__mousePosition.x - 200, METRO.__mousePosition.y - 200, 200, 200));
+			}
+		}
 	}
 
 	/**

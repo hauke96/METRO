@@ -27,7 +27,10 @@ public class TrainTemplate extends Observable
 	protected String _name, _modelName, _manufacturer;
 	protected int _price, _costs, _maxPassengers;
 	protected float _costsFactor, _speed;
+
+	// Values that may be used very often:
 	protected static Map<String, TextureRegion> _textures = new HashMap<>();
+	protected static Map<String, TextureRegion> _titleTextures = new HashMap<>();
 	protected static Point _textureScale = new Point(1, 1);
 
 	/**
@@ -55,17 +58,50 @@ public class TrainTemplate extends Observable
 		_maxPassengers = passengers;
 		_speed = speed;
 
-		if(!_textures.containsKey(name))
+		loadTextures();
+		loadTitleTextures();
+	}
+
+	/**
+	 * Load the normal texture for this train. This will be used to display the train one the playing field.
+	 */
+	private void loadTitleTextures()
+	{
+		if(!_textures.containsKey(_name))
 		{
 			METRO.__debug("[LoadingTrainImage]");
 			try
 			{
-				TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("textures/Trains_" + modelName + ".png")));
+				TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("textures/Trains_" + _modelName + ".png")));
 				texture.flip(false, true);
 				texture.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-				_textures.put(modelName, texture);
+				_textures.put(_modelName, texture);
 
-				METRO.__debug("Succesfully loaded image for train " + modelName + ".");
+				METRO.__debug("Succesfully loaded image for train " + _modelName + ".");
+			}
+			catch(GdxRuntimeException ex)
+			{
+				METRO.__debug("ERROR: " + ex.getMessage());
+			}
+		}
+	}
+
+	/**
+	 * Load the title image for this train that'll be displayed by the train buy dialog.
+	 */
+	private void loadTextures()
+	{
+		if(!_textures.containsKey(_name))
+		{
+			METRO.__debug("[LoadingTrainTitleImage]");
+			try
+			{
+				TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("textures/Trains_" + _modelName + "_big.png")));
+				texture.flip(false, true);
+				texture.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+				_titleTextures.put(_modelName, texture);
+
+				METRO.__debug("Succesfully loaded title image for train " + _modelName + ".");
 			}
 			catch(GdxRuntimeException ex)
 			{
@@ -80,6 +116,14 @@ public class TrainTemplate extends Observable
 	protected TextureRegion getTexture()
 	{
 		return _textures.get(_modelName);
+	}
+
+	/**
+	 * @return The title texture for this train.
+	 */
+	protected TextureRegion getTitleTexture()
+	{
+		return _titleTextures.get(_modelName);
 	}
 
 	/**
@@ -144,5 +188,13 @@ public class TrainTemplate extends Observable
 	public String getModelName()
 	{
 		return _modelName;
+	}
+
+	/**
+	 * @return The title image of the train model.
+	 */
+	public TextureRegion getTitleImage()
+	{
+		return _titleTextures.get(_modelName);
 	}
 }

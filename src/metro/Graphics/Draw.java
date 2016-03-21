@@ -27,7 +27,7 @@ import metro.Settings;
 public class Draw
 {
 	private static ShapeRenderer __shapeRenderer = new ShapeRenderer();
-	private static int __xOffset, __yOffset;
+	private static int __xOffset, __yOffset, __lineGap = 8;
 	private static float __r, __g, __b, __a; // current color values
 	private static BitmapFont __stdFont;
 
@@ -310,14 +310,14 @@ public class Draw
 	public static void String(String text, int x, int y, SpriteBatch spriteBatch, BitmapFont font)
 	{
 		int stringHeight = (int)font.getCache().getBounds().height, vOffset = 0;
-		String[] segments = text.split("\n"); // split by new line
+		String[] lines = text.split("\n"); // split by new line
 
-		for(String segment : segments)
+		for(String line : lines)
 		{
 			font.setColor(__r, __g, __b, __a);
-			font.draw(spriteBatch, segment, x + __xOffset, y + vOffset + __yOffset);
+			font.draw(spriteBatch, line, x + __xOffset, y + vOffset + __yOffset);
 
-			vOffset += stringHeight + 8; // y-pos for next line
+			vOffset += stringHeight + __lineGap; // y-pos for next line
 		}
 
 	}
@@ -333,7 +333,7 @@ public class Draw
 	 */
 	public static int String(String text, int x, int y, int width)
 	{
-		int stringHeight = Draw.getStringSize(text).height, vOffset = 0, rowCount = 0;
+		int stringHeight = (int)__stdFont.getCache().getBounds().height, vOffset = 0, rowCount = 0;
 		String[] segments = text.split("\n"); // split by new line
 
 		for(String segment : segments)
@@ -347,7 +347,7 @@ public class Draw
 				if(Draw.getStringSize(line + " " + subSegments[i]).width >= width) // if next addition would be out of area
 				{
 					Draw.String(line, x, y + vOffset);
-					vOffset += stringHeight + 8; // y-pos for next line
+					vOffset += stringHeight + __lineGap; // y-pos for next line
 					line = subSegments[i] + " "; // choose first char for next line
 					++rowCount;
 				}
@@ -358,7 +358,7 @@ public class Draw
 				}
 			}
 			Draw.String(line, x, y + vOffset);
-			vOffset += stringHeight + 8; // y-pos for next line
+			vOffset += stringHeight + __lineGap; // y-pos for next line
 			++rowCount;
 		}
 
@@ -386,7 +386,19 @@ public class Draw
 	public static Dimension getStringSize(String text, BitmapFont font)
 	{
 		TextBounds bounds = font.getBounds(text);
-		return new Dimension((int)bounds.width, (int)bounds.height);
+		return new Dimension((int)bounds.width, ((int)bounds.height + __lineGap) * amountOfLines(text) - __lineGap);
+	}
+
+	/**
+	 * Gets the amount of lines of the given text.
+	 * 
+	 * @param text Some text.
+	 * @return The amount of lines of the given text.
+	 */
+	private static int amountOfLines(String text)
+	{
+		String[] array = text.split("\n");
+		return array.length;
 	}
 
 	/**
