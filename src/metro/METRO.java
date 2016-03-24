@@ -250,7 +250,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		else
 		{
 			__xOffset = 1;
-			__yOffset = 20;
+			__yOffset = __titleBarHeight;
 		}
 
 		__camera = new OrthographicCamera();
@@ -636,9 +636,9 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean scrolled(int amount)
 	{
-		__currentGameScreen.mouseScrolled(amount);
-
 		boolean mouseOnWindow = false;
+		boolean scrolledOnControl = false;
+
 		/*
 		 * Go from the last to first window when no window has been clicked yet.
 		 * This will consider the "depth-position" of the window (windows are behind/before others).
@@ -648,11 +648,14 @@ public class METRO implements ApplicationListener, InputProcessor
 		{
 			if(__windowList.get(i).isMouseOnWindow(__mousePosition.x + __xOffset, __mousePosition.y + __yOffset)) // if mouse is on window area but not on a control
 			{
-				__windowList.get(i).mouseScrolled(amount);
 				mouseOnWindow = true;
+				break;
 			}
 		}
-		if(!mouseOnWindow) __controlActionManager.mouseScroll(amount);
+
+		scrolledOnControl = __controlActionManager.mouseScroll(amount);
+
+		if(!scrolledOnControl && !mouseOnWindow) __currentGameScreen.mouseScrolled(amount);
 
 		return false;
 	}

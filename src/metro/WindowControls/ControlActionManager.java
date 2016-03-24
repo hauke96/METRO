@@ -124,8 +124,9 @@ public class ControlActionManager
 	 * The checking if the mouse hovers an object or not goes from back to front.
 	 * 
 	 * @param amount The amount of scroll steps.
+	 * @return True when a control received the scroll event, false if not.
 	 */
-	public void mouseScroll(int amount)
+	public boolean mouseScroll(int amount)
 	{
 		Point mPos = METRO.__originalMousePosition;
 		for(int i = _controlElements.size() - 1; i > 0; i--)
@@ -136,10 +137,11 @@ public class ControlActionManager
 				if(control.getArea().contains(mPos))
 				{
 					control.mouseScrolled(amount);
-					break;
+					return true;
 				}
 			}
 		}
+		return false;
 	}
 
 	/**

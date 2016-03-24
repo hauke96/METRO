@@ -41,8 +41,8 @@ public class CityView extends GameScreen
 	/**
 	 * Draws the city view. This method does not draw the number of the selected circle over the cursor (s. {@link #drawNumbers(SpriteBatch, Point)}).
 	 * 
-	 * @param sp
-	 * @param offset
+	 * @param sp The sprite batch to draw on.
+	 * @param offset The current map offset.
 	 */
 	public void updateGameScreen(SpriteBatch sp, Point offset)
 	{

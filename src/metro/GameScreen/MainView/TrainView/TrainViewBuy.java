@@ -51,10 +51,11 @@ public class TrainViewBuy extends GameScreen
 
 		_trainManagementService = TrainManagementService.getInstance();
 
-		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, METRO.__SCREEN_SIZE.height - 20 - _areaOffset.y, 210, 20), "Buy");
+		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, METRO.__SCREEN_SIZE.height - METRO.__getYOffset() - _areaOffset.y, 210, 20), "Buy");
 		registerControl(_buyButton);
 
-		_availableTrains = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 440, 140, METRO.__SCREEN_SIZE.height - (_areaOffset.y + 440) - _areaOffset.y), null, true);
+		_availableTrains = new List(
+			new Rectangle(_areaOffset.x + 20, _areaOffset.y + 440, 140, METRO.__SCREEN_SIZE.height - (_areaOffset.y + 420) - _areaOffset.y - METRO.__getYOffset()), null, true);
 		_availableTrains.register(new ActionObserver()
 		{
 			@Override
