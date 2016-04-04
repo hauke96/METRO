@@ -6,8 +6,10 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.GameState;
+import metro.METRO;
+import metro.Graphics.Draw;
 import metro.TrainManagement.Nodes.RailwayNode;
-import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.TrainManagement.Trains.TrainLine;
 
 /**
@@ -19,12 +21,14 @@ import metro.TrainManagement.Trains.TrainLine;
 public class TrainLineDrawingService
 {
 	private HashMap<RailwayNode, TrainLine[]> _sortedLineMap;
+	private GameState _gameState;
 
 	private static TrainLineDrawingService __INSTANCE;// = new TrainLineDrawingService();
 
 	private TrainLineDrawingService()
 	{
 		_sortedLineMap = new HashMap<RailwayNode, TrainLine[]>();
+		_gameState = GameState.getInstance();
 	}
 
 	/**
@@ -56,6 +60,7 @@ public class TrainLineDrawingService
 			for(RailwayNode node : nodeList)
 			{
 				// map does not contain this node --> Add line at position 0
+				System.out.println(node.getPosition());
 				if(!_sortedLineMap.containsKey(node))
 				{
 					TrainLine[] array = new TrainLine[amountLines];
@@ -117,48 +122,52 @@ public class TrainLineDrawingService
 					 * 
 					 * @formatter:on
 					 */
-					RailwayNode linePred = line.getPredecessorOf(node);
-					RailwayNode lineSucc = line.getSuccessorOf(node);
+					RailwayNode pred = line.getPredecessorOf(node);
+					RailwayNode succ = line.getSuccessorOf(node);
+
+					if(pred == null || succ == null) continue;
 
 					TrainLine[] array = _sortedLineMap.get(node);
 
-					for(int i = 0; i < array.length; ++i)
+					for(int i = 0; i < array.length && array[i] != null; ++i)
 					{
 						TrainLine existingLine = array[i];
 
 						RailwayNode existingLinePred = existingLine.getPredecessorOf(node);
 						RailwayNode existingLineSucc = existingLine.getSuccessorOf(node);
+						
+						if(existingLinePred == null || existingLineSucc == null) continue;
 
 						// the following variable names (n1 and n2) are taken over from the documentation above
 						Point n1, n2;
 
 						// find the parallel part and take the other nodes as n1 and n2
-						if(linePred.equals(existingLinePred))
+						if(pred.equals(existingLinePred))
 						{
 							n1 = existingLineSucc.getPosition();
-							n2 = lineSucc.getPosition();
+							n2 = succ.getPosition();
 						}
-						else if(linePred.equals(existingLineSucc))
+						else if(pred.equals(existingLineSucc))
 						{
 							n1 = existingLinePred.getPosition();
-							n2 = lineSucc.getPosition();
+							n2 = succ.getPosition();
 						}
-						else if(lineSucc.equals(existingLinePred))
+						else if(succ.equals(existingLinePred))
 						{
 							n1 = existingLineSucc.getPosition();
-							n2 = linePred.getPosition();
+							n2 = pred.getPosition();
 						}
 						else // if(lineSucc.equals(otherLineSucc))
 						{
 							n1 = existingLinePred.getPosition();
-							n2 = linePred.getPosition();
+							n2 = pred.getPosition();
 						}
 
-						if(n1 != null && n2 != null && // there is a parallel part
-							(n2.y < n1.y || (n2.y == n1.y && n2.x > n1.x))) // "line" is BELOW the "existingLine"
+						if(n1 != null && n2 != null &&
+							(n2.y < n1.y || (n2.y == n1.y && n2.x >= n1.x))) // "line" is BELOW the "existingLine"
 						{
 							TrainLine[] newArray = _sortedLineMap.get(node);
-							insertAt(newArray, line, i);
+							newArray = insertAt(newArray, line, i);
 							_sortedLineMap.put(node, newArray);
 							break;
 						}
@@ -174,14 +183,32 @@ public class TrainLineDrawingService
 	 * @param array The array where the train line should be inserted.
 	 * @param line The line that should be inserted.
 	 * @param index The index where the line should be inserted.
+	 * @return The updated array.
 	 */
-	private void insertAt(TrainLine[] array, TrainLine line, int index)
+	private TrainLine[] insertAt(TrainLine[] array, TrainLine line, int index)
 	{
 		for(int i = array.length - 1; i > index; --i)
 		{
 			array[i] = array[i - 1];
 		}
 		array[index] = line;
+		return array;
+	}
+
+	/**
+	 * Searches for an element in an array of train lines and returns the index of the first occurrence.
+	 * 
+	 * @param array The array of train lines.
+	 * @param element The element which index you want to know.
+	 * @return The index of the first occurrence of the element. If the element is not in the array, -1 will be returned.
+	 */
+	private int indexOf(TrainLine[] array, TrainLine element)
+	{
+		for(int i = 0; i < array.length - 1 && array[i] != null; ++i)
+		{
+			if(array[i].equals(element)) return i;
+		}
+		return -1;
 	}
 
 	/**
@@ -193,17 +220,73 @@ public class TrainLineDrawingService
 	 */
 	public void drawLines(Point offset, SpriteBatch sp, ArrayList<TrainLine> lineList)
 	{
-		HashMap<RailwayNode, Integer> map = new HashMap<RailwayNode, Integer>();
-
-		for(RailwayNode node : RailwayNodeOverseer.__nodeMap.values())
-		{
-			map.put(node, new Integer(0));
-		}
-
 		for(TrainLine line : lineList)
 		{
-			line.draw(offset, sp, map);
+			// line.draw(offset, sp, map);
+
 			// TODO: Implement own drawing algorithm that considers the sorted line list.
+
+			if(line.getLength() == 0) continue;
+
+			ArrayList<RailwayNode> listOfNodes = line.getNodes();
+
+			Draw.setColor(line.isValid() ? line.getColor() : METRO.__metroRed);
+
+			for(int i = 0; i < listOfNodes.size() - 1; ++i)
+			{
+				// the list is sorted so we know that i+1 is the direct neighbor
+				RailwayNode node = listOfNodes.get(i);
+				RailwayNode neighbor = listOfNodes.get(i + 1);
+
+				int nodeIndex = indexOf(_sortedLineMap.get(node), line);
+				int neighborIndex = indexOf(_sortedLineMap.get(neighbor), line);
+				
+				System.out.println("(" + node.getPosition().x + ", " + node.getPosition().y + ") - " + nodeIndex + " - " + neighborIndex + " - " + line.getName());
+				
+				if(nodeIndex == -1) nodeIndex = 0;
+				if(neighborIndex == -1) neighborIndex = 0;
+
+				Point nodePosition = node.getPosition();
+				nodePosition.translate(0, nodeIndex + nodeIndex * 3);
+				Point neighborPosition = neighbor.getPosition();
+				neighborPosition.translate(0, neighborIndex + neighborIndex * 2);
+
+				Point position, positionNext;
+				position = new Point(offset.x + nodePosition.x * _gameState.getBaseNetSpacing(),
+					offset.y + nodePosition.y * _gameState.getBaseNetSpacing()); // Position with offset etc.
+				positionNext = new Point(offset.x + neighborPosition.x * _gameState.getBaseNetSpacing(),
+					offset.y + neighborPosition.y * _gameState.getBaseNetSpacing()); // Position with offset etc. for second point
+
+				drawColoredLine(offset, position, positionNext);
+			}
 		}
+		System.out.println();
+	}
+
+	/**
+	 * Draws a colored line from one node to another.
+	 * 
+	 * @param offset The offset of the game screen.
+	 * @param position The position of one node.
+	 * @param positionNext The position of another node.
+	 * @param layer The layer this line is (shifts the line up or down).
+	 */
+	private void drawColoredLine(Point offset, Point position, Point positionNext)
+	{
+		Point diff = new Point((position.y - positionNext.y) / _gameState.getBaseNetSpacing(),
+			(position.x - positionNext.x) / _gameState.getBaseNetSpacing());
+
+		if(diff.x != 0 && diff.y != 0)
+		{
+			if(diff.x == 1 && diff.y == 1) diff.x = -1;
+			else if(diff.x == 1 && diff.y == -1) diff.y = 1;
+		}
+		// TODO: make more accurate draw algo. This won't work for vertical lines :(
+		// FIXME Layers not working when trainline has been edited :(
+		Draw.Line(position.x,
+			position.y,
+			positionNext.x,
+			positionNext.y,
+			3);
 	}
 }
