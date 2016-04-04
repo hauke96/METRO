@@ -595,4 +595,15 @@ public class TrainLine implements Cloneable
 		}
 		return null;
 	}
+
+	/**
+	 * Checks if this line is valid.
+	 * This method follows more the OOP-paradigm then the static method {@link #__isValid(ArrayList)} when checking the validity of an existing line.
+	 * 
+	 * @return True when this line is valid, false when not.
+	 */
+	public boolean isValid()
+	{
+		return __isValid(_listOfNodes);
+	}
 }

@@ -30,7 +30,8 @@ public class Toolbar extends GameScreen
 		_createNewTrain;
 	private int _moneyDisplayWidth,
 		_height,
-		_buttonAreaXPosition;
+		_buttonAreaXPosition,
+		_buttonYPosition;
 
 	/**
 	 * Creates a new toolbar.
@@ -40,14 +41,15 @@ public class Toolbar extends GameScreen
 		_moneyDisplayWidth = 250;
 		_height = 40;
 		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth();
+		_buttonYPosition = -9;
 
-		_buildStation = new Button(new Rectangle(_buttonAreaXPosition + 140, 0, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
+		_buildStation = new Button(new Rectangle(_buttonAreaXPosition + 140, _buttonYPosition, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
 		registerControl(_buildStation);
-		_buildTracks = new Button(new Rectangle(_buttonAreaXPosition + 180, 0, 40, 50), new Rectangle(0, 78, 40, 50), METRO.__iconSet);
+		_buildTracks = new Button(new Rectangle(_buttonAreaXPosition + 180, _buttonYPosition, 40, 50), new Rectangle(0, 78, 40, 50), METRO.__iconSet);
 		registerControl(_buildTracks);
-		_showTrainList = new Button(new Rectangle(_buttonAreaXPosition + 220, 0, 40, 50), new Rectangle(0, 128, 40, 50), METRO.__iconSet);
+		_showTrainList = new Button(new Rectangle(_buttonAreaXPosition + 220, _buttonYPosition, 40, 50), new Rectangle(0, 128, 40, 50), METRO.__iconSet);
 		registerControl(_showTrainList);
-		_createNewTrain = new Button(new Rectangle(_buttonAreaXPosition + 260, 0, 40, 50), new Rectangle(0, 178, 40, 50), METRO.__iconSet);
+		_createNewTrain = new Button(new Rectangle(_buttonAreaXPosition + 260, _buttonYPosition, 40, 50), new Rectangle(0, 178, 40, 50), METRO.__iconSet);
 		registerControl(_createNewTrain);
 		registerObervations();
 	}
@@ -103,10 +105,10 @@ public class Toolbar extends GameScreen
 	 */
 	public void resetExclusiveButtonPositions(Button exceptThisButton)
 	{
-		_buildTracks.setPosition(new Point(_buildTracks.getPosition().x, 0));
-		_buildStation.setPosition(new Point(_buildStation.getPosition().x, 0));
-		_showTrainList.setPosition(new Point(_showTrainList.getPosition().x, 0));
-		_createNewTrain.setPosition(new Point(_createNewTrain.getPosition().x, 0));
+		_buildTracks.setPosition(new Point(_buildTracks.getPosition().x, _buttonYPosition));
+		_buildStation.setPosition(new Point(_buildStation.getPosition().x, _buttonYPosition));
+		_showTrainList.setPosition(new Point(_showTrainList.getPosition().x, _buttonYPosition));
+		_createNewTrain.setPosition(new Point(_createNewTrain.getPosition().x, _buttonYPosition));
 
 		// Move the selected button a bit down:
 		if(exceptThisButton != null)

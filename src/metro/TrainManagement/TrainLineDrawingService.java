@@ -6,8 +6,10 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.GameState;
+import metro.METRO;
+import metro.Graphics.Draw;
 import metro.TrainManagement.Nodes.RailwayNode;
-import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.TrainManagement.Trains.TrainLine;
 
 /**
@@ -19,12 +21,16 @@ import metro.TrainManagement.Trains.TrainLine;
 public class TrainLineDrawingService
 {
 	private HashMap<RailwayNode, TrainLine[]> _sortedLineMap;
+	private GameState _gameState;
+	private int _lineThickness;
 
 	private static TrainLineDrawingService __INSTANCE;// = new TrainLineDrawingService();
 
 	private TrainLineDrawingService()
 	{
 		_sortedLineMap = new HashMap<RailwayNode, TrainLine[]>();
+		_gameState = GameState.getInstance();
+		_lineThickness = 3;
 	}
 
 	/**
@@ -56,35 +62,32 @@ public class TrainLineDrawingService
 			for(RailwayNode node : line.getNodes())
 			{
 				TrainLine[] array;
-				if(_sortedLineMap.containsKey(node))
-				{
-					array = _sortedLineMap.get(node);
-				}
-				else
-				{
-					array = new TrainLine[amountLines];
-				}
-				
+				if(_sortedLineMap.containsKey(node)) array = _sortedLineMap.get(node);
+				else array = new TrainLine[amountLines];
+
 				array[i] = line;
+				_sortedLineMap.put(node, array);
 			}
 		}
 	}
 
 	/**
-	 * Inserts a train line into the array and pushes the existing lines back.
+	 * Searches for an element in an array of train lines and returns the position of the first occurrence. Empty fields in the array will be ignored.
 	 * 
-	 * @param array The array where the train line should be inserted.
-	 * @param line The line that should be inserted.
-	 * @param index The index where the line should be inserted.
+	 * @param array The array of train lines.
+	 * @param element The element which position you want to know.
+	 * @return The position of the first occurrence of the element. If the element is not in the array, -1 will be returned.
 	 */
-//	private void insertAt(TrainLine[] array, TrainLine line, int index)
-//	{
-//		for(int i = array.length - 1; i > index; --i)
-//		{
-//			array[i] = array[i - 1];
-//		}
-//		array[index] = line;
-//	}
+	private int positionOf(TrainLine[] array, TrainLine element)
+	{
+		int counter = 0;
+		for(int i = 0; i < array.length && array[i] != null; ++i)
+		{
+			if(array[i].equals(element)) return counter;
+			if(array[i] != null) ++counter;
+		}
+		return -1;
+	}
 
 	/**
 	 * Draws all train lines.
@@ -97,8 +100,64 @@ public class TrainLineDrawingService
 	{
 		for(TrainLine line : lineList)
 		{
-//			line.draw(offset, sp);
-			// TODO: Implement own drawing algorithm that considers the sorted line list.
+			if(line.getLength() == 0) continue;
+
+			ArrayList<RailwayNode> listOfNodes = line.getNodes();
+
+			Draw.setColor(line.isValid() ? line.getColor() : METRO.__metroRed);
+
+			for(int i = 0; i < listOfNodes.size() - 1; ++i)
+			{
+				// the list is sorted so we know that i+1 is the direct neighbor
+				RailwayNode node = listOfNodes.get(i);
+				RailwayNode neighbor = listOfNodes.get(i + 1);
+
+				int nodeIndex = positionOf(_sortedLineMap.get(node), line);
+				int neighborIndex = positionOf(_sortedLineMap.get(neighbor), line);
+
+				if(nodeIndex == -1) nodeIndex = 0;
+				if(neighborIndex == -1) neighborIndex = 0;
+
+				Point nodePosition = node.getPosition();
+				Point neighborPosition = neighbor.getPosition();
+
+				Point position, positionNext;
+				// TODO: make more accurate positions. This won't work for vertical and diagonal lines :(
+
+				position = new Point(offset.x + nodePosition.x * _gameState.getBaseNetSpacing(),
+					offset.y + nodePosition.y * _gameState.getBaseNetSpacing() + nodeIndex * _lineThickness + nodeIndex); // Position with offset etc.
+
+				positionNext = new Point(offset.x + neighborPosition.x * _gameState.getBaseNetSpacing(),
+					offset.y + neighborPosition.y * _gameState.getBaseNetSpacing() + neighborIndex * _lineThickness + neighborIndex); // Position with offset etc. for second point
+
+				drawColoredLine(offset, position, positionNext);
+			}
 		}
+	}
+
+	/**
+	 * Draws a colored line from one node to another.
+	 * 
+	 * @param offset The offset of the game screen.
+	 * @param position The position of one node.
+	 * @param positionNext The position of another node.
+	 * @param layer The layer this line is (shifts the line up or down).
+	 */
+	private void drawColoredLine(Point offset, Point position, Point positionNext)
+	{
+		Point diff = new Point((position.y - positionNext.y) / _gameState.getBaseNetSpacing(),
+			(position.x - positionNext.x) / _gameState.getBaseNetSpacing());
+
+		if(diff.x != 0 && diff.y != 0)
+		{
+			if(diff.x == 1 && diff.y == 1) diff.x = -1;
+			else if(diff.x == 1 && diff.y == -1) diff.y = 1;
+		}
+		
+		Draw.Line(position.x,
+			position.y,
+			positionNext.x,
+			positionNext.y,
+			_lineThickness);
 	}
 }
