@@ -561,4 +561,38 @@ public class TrainLine implements Cloneable
 	{
 		return super.clone();
 	}
+
+	/**
+	 * Gets the predecessor of the given node in direction 1.
+	 * 
+	 * @param node The node which predecessor you want to know.
+	 * @return The predecessor of node.
+	 */
+	public RailwayNode getPredecessorOf(RailwayNode node)
+	{
+		int index = _listOfNodes.indexOf(node) - 1;
+
+		if(index >= 0)
+		{
+			return _listOfNodes.get(index);
+		}
+		return null;
+	}
+
+	/**
+	 * Gets the successor of the given node in direction 1.
+	 * 
+	 * @param node The node which successor you want to know.
+	 * @return The successor of node.
+	 **/
+	public RailwayNode getSuccessorOf(RailwayNode node)
+	{
+		int index = _listOfNodes.indexOf(node) + 1;
+
+		if(index < _listOfNodes.size())
+		{
+			return _listOfNodes.get(index);
+		}
+		return null;
+	}
 }

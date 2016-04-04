@@ -21,13 +21,12 @@ import metro.METRO;
 import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameScreen.MainView.NotificationView.NotificationServer;
 import metro.GameScreen.MainView.NotificationView.NotificationType;
-import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
-import metro.TrainManagement.Trains.TravelerSpot;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
 import metro.TrainManagement.Trains.TrainStation;
 import metro.TrainManagement.Trains.TrainTemplate;
+import metro.TrainManagement.Trains.TravelerSpot;
 
 /**
  * The train management service combines the former TrainOverseer and TrainLineOverseer into one class without any circle dependencies anymore.
@@ -44,6 +43,7 @@ public class TrainManagementService implements Observer
 	private ArrayList<TravelerSpot> _travelerSpotList;
 	private HashMap<String, TrainTemplate> _templateTrains;
 	private float _lastRenderTime;
+	private TrainLineDrawingService _trainLineDrawingService;
 
 	private final static TrainManagementService __INSTANCE = new TrainManagementService();
 
@@ -56,6 +56,8 @@ public class TrainManagementService implements Observer
 
 		_templateTrains = new HashMap<>();
 		_lastRenderTime = System.nanoTime();
+
+		_trainLineDrawingService = TrainLineDrawingService.getInstance();
 
 		try
 		{
@@ -311,6 +313,7 @@ public class TrainManagementService implements Observer
 		if(line == null) return;
 		_trainLineList.remove(line); // remove old line, because maybe line.equals(old-line) == true
 		_trainLineList.add(line); // adds the new line to the list
+		_trainLineDrawingService.calcLinePositions(_trainLineList);
 	}
 
 	/**
@@ -427,16 +430,7 @@ public class TrainManagementService implements Observer
 	 */
 	public void drawLines(Point offset, SpriteBatch sp)
 	{
-		HashMap<RailwayNode, Integer> map = new HashMap<RailwayNode, Integer>();
-		for(RailwayNode node : RailwayNodeOverseer.__nodeMap.values())
-		{
-			map.put(node, new Integer(0));
-		}
-
-		for(TrainLine line : _trainLineList)
-		{
-			line.draw(offset, sp, map);
-		}
+		_trainLineDrawingService.drawLines(offset, sp, _trainLineList);
 	}
 
 	/**
@@ -467,14 +461,14 @@ public class TrainManagementService implements Observer
 
 		for(TravelerSpot spot : _travelerSpotList)
 		{
-//			if(spot.contains(pos)) // is given point in circle
-//			{
-				int strength = spot.getStrength(pos);
-				if(strength > maxStrength)
-				{
-					maxStrength = strength;
-				}
-//			}
+			// if(spot.contains(pos)) // is given point in circle
+			// {
+			int strength = spot.getStrength(pos);
+			if(strength > maxStrength)
+			{
+				maxStrength = strength;
+			}
+			// }
 		}
 
 		return maxStrength;
