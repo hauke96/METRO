@@ -105,7 +105,7 @@ public class TrainLineDrawingService
 			ArrayList<RailwayNode> listOfNodes = line.getNodes();
 
 			Draw.setColor(line.isValid() ? line.getColor() : METRO.__metroRed);
-
+			
 			for(int i = 0; i < listOfNodes.size() - 1; ++i)
 			{
 				// the list is sorted so we know that i+1 is the direct neighbor
@@ -121,18 +121,52 @@ public class TrainLineDrawingService
 				Point nodePosition = node.getPosition();
 				Point neighborPosition = neighbor.getPosition();
 
-				Point position, positionNext;
+				Point position, positionNext, directionOffset;
 				// TODO: make more accurate positions. This won't work for vertical and diagonal lines :(
 
-				position = new Point(offset.x + nodePosition.x * _gameState.getBaseNetSpacing(),
-					offset.y + nodePosition.y * _gameState.getBaseNetSpacing() + nodeIndex * _lineThickness + nodeIndex); // Position with offset etc.
+				directionOffset = getDirectionOffset(nodePosition, neighborPosition);
 
-				positionNext = new Point(offset.x + neighborPosition.x * _gameState.getBaseNetSpacing(),
-					offset.y + neighborPosition.y * _gameState.getBaseNetSpacing() + neighborIndex * _lineThickness + neighborIndex); // Position with offset etc. for second point
+				position = new Point(
+					offset.x +
+						nodePosition.x * _gameState.getBaseNetSpacing() +
+						directionOffset.x * (nodeIndex * _lineThickness + nodeIndex),
+					offset.y +
+						nodePosition.y * _gameState.getBaseNetSpacing() +
+						directionOffset.y * (nodeIndex * _lineThickness + nodeIndex));
+
+				positionNext = new Point(
+					offset.x +
+						neighborPosition.x * _gameState.getBaseNetSpacing() +
+						directionOffset.x * (neighborIndex * _lineThickness + neighborIndex),
+					offset.y +
+						neighborPosition.y * _gameState.getBaseNetSpacing() +
+						directionOffset.y * (neighborIndex * _lineThickness + neighborIndex));
 
 				drawColoredLine(offset, position, positionNext);
 			}
 		}
+	}
+
+	/**
+	 * Gets an offset that indicates the direction of the connection between the two nodes (directions are: | - / \ ).
+	 * The offsets are:
+	 * - ( 0,1)
+	 * | ( 1,0)
+	 * / ( 1,1)
+	 * \ (-1,1)
+	 * 
+	 * @param p1 The first node.
+	 * @param p2 The second node.
+	 * @return The offset describing the direction of the connection between {@code p1} and {@code p2}.
+	 */
+	private Point getDirectionOffset(Point p1, Point p2)
+	{
+		if(p1.x == p2.x || p1.y == p2.y) // vertical or horizontal
+		{
+			return new Point(Math.abs(p1.y - p2.y), Math.abs(p1.x - p2.x)); // yes, x and y are switched, but they have to be switched
+		}
+		// else diagonal: The y offset is definitely 1, the x offset describes if the connection is / or \
+		return new Point(p1.y - p2.y, 1);
 	}
 
 	/**
@@ -153,7 +187,7 @@ public class TrainLineDrawingService
 			if(diff.x == 1 && diff.y == 1) diff.x = -1;
 			else if(diff.x == 1 && diff.y == -1) diff.y = 1;
 		}
-		
+
 		Draw.Line(position.x,
 			position.y,
 			positionNext.x,
