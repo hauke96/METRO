@@ -470,6 +470,8 @@ public class TrainLine implements Cloneable
 			{
 				isEqual &= _listOfNodes.contains(node);
 			}
+			
+			isEqual &= getName().equals(line.getName());
 
 			return isEqual;
 		}

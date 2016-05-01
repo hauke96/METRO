@@ -18,29 +18,17 @@ import metro.TrainManagement.Trains.TrainLine;
  * @author hauke
  *
  */
-public class TrainLineDrawingService
+class TrainLineDrawingService
 {
 	private HashMap<RailwayNode, TrainLine[]> _sortedLineMap;
 	private GameState _gameState;
+	private int _lineThickness;
 
-	private static TrainLineDrawingService __INSTANCE;// = new TrainLineDrawingService();
-
-	private TrainLineDrawingService()
+	TrainLineDrawingService()
 	{
 		_sortedLineMap = new HashMap<RailwayNode, TrainLine[]>();
 		_gameState = GameState.getInstance();
-	}
-
-	/**
-	 * @return The instance of the drawing service. If there's no drawing service, it'll be created.
-	 */
-	public static TrainLineDrawingService getInstance()
-	{
-		if(__INSTANCE == null)
-		{
-			__INSTANCE = new TrainLineDrawingService();
-		}
-		return __INSTANCE;
+		_lineThickness = 3;
 	}
 
 	/**
@@ -53,160 +41,39 @@ public class TrainLineDrawingService
 		_sortedLineMap = new HashMap<RailwayNode, TrainLine[]>();
 		int amountLines = lineList.size();
 
-		for(TrainLine line : lineList)
+		for(int i = 0; i < amountLines; ++i)
 		{
-			ArrayList<RailwayNode> nodeList = line.getNodes();
+			TrainLine line = lineList.get(i);
 
-			for(RailwayNode node : nodeList)
+			for(RailwayNode node : line.getNodes())
 			{
-				// map does not contain this node --> Add line at position 0
-				System.out.println(node.getPosition());
-				if(!_sortedLineMap.containsKey(node))
-				{
-					TrainLine[] array = new TrainLine[amountLines];
-					array[0] = line;
-					_sortedLineMap.put(node, array);
-				}
-				else // map contains this node --> add current line to it (at the right position!)
-				{
-					/* @formatter:off
-					 * the loop begins with the top most line
-					 * 
-					 * 0: check if line 1 and line 2 have parallel part
-					 * 		Think of the following situation:
-					 * 
-					 * 		   O     O
-					 * 		(1) \\  / (2)
-					 * 			 \\/
-					 * 			  O==O==O==O=...(1 and 3)
-					 * 			 /
-					 * 			/ (3)
-					 * 		   O
-					 * 
-					 * 		Line 1 and 3 are parallel since they met.
-					 * 		Line 2 goes through the middle node but has no other node with line 3 in common
-					 * 
-					 * 		Only look at "existingLine" when it has a parallel part with line.
-					 * 
-					 * 		Check this via:
-					 * 			if(1.pred == 2.pred ||
-					 * 			   1.pred == 2.succ ||
-					 * 			   1.succ == 2.pred ||
-					 * 			   1.succ == 2.succ)
-					 * 			{
-					 * 				findNodes();
-					 * 			}
-					 * 		Where .succ and .pred are the neighbor nodes concerning our loop variable "node" on the line (1 or 2).
-					 * 		We must check all these cases, because we have no information about the direction of the line (which node comes
-					 * 
-					 *  	The "findNodes()" methods finds the nodes "n1" and "n2", which are important later...
-					 * 		
-					 * 1: iterate over the array until "existingLine" is below "line"
-					 * 
-					 * 		So we have a node "n" where both lines come together
-					 * 		and a node "n1" from the first line and "n2" from the second.
-					 * 		Also is "n1" != "n2".
-					 * 		The first line is already in the map, we have to find out where
-					 * 		the second line belongs (above or below the first). 
-					 * 
-					 * 		1.1: if(n2.y < n1.y)
-					 * 		  or if(n2.y == n1.y && n2.x > n1.x)
-					 * 				-->  Second line is BELOW first.
-					 * 
-					 * 		1.2: if(n2.y == n1.y && n2.x < n1.x)
-					 * 		  or if(n2.y > n1.y)
-					 * 				-->  Second line is ABOVE first. Nothing to do here, we want to find a line that's below.
-					 * 
-					 * 2: move all other lines one step down
-					 * 3: add "line" into the array at the correct position
-					 * 
-					 * @formatter:on
-					 */
-					RailwayNode pred = line.getPredecessorOf(node);
-					RailwayNode succ = line.getSuccessorOf(node);
+				TrainLine[] array;
+				if(_sortedLineMap.containsKey(node)) array = _sortedLineMap.get(node);
+				else array = new TrainLine[amountLines];
 
-					if(pred == null || succ == null) continue;
-
-					TrainLine[] array = _sortedLineMap.get(node);
-
-					for(int i = 0; i < array.length && array[i] != null; ++i)
-					{
-						TrainLine existingLine = array[i];
-
-						RailwayNode existingLinePred = existingLine.getPredecessorOf(node);
-						RailwayNode existingLineSucc = existingLine.getSuccessorOf(node);
-						
-						if(existingLinePred == null || existingLineSucc == null) continue;
-
-						// the following variable names (n1 and n2) are taken over from the documentation above
-						Point n1, n2;
-
-						// find the parallel part and take the other nodes as n1 and n2
-						if(pred.equals(existingLinePred))
-						{
-							n1 = existingLineSucc.getPosition();
-							n2 = succ.getPosition();
-						}
-						else if(pred.equals(existingLineSucc))
-						{
-							n1 = existingLinePred.getPosition();
-							n2 = succ.getPosition();
-						}
-						else if(succ.equals(existingLinePred))
-						{
-							n1 = existingLineSucc.getPosition();
-							n2 = pred.getPosition();
-						}
-						else // if(lineSucc.equals(otherLineSucc))
-						{
-							n1 = existingLinePred.getPosition();
-							n2 = pred.getPosition();
-						}
-
-						if(n1 != null && n2 != null &&
-							(n2.y < n1.y || (n2.y == n1.y && n2.x >= n1.x))) // "line" is BELOW the "existingLine"
-						{
-							TrainLine[] newArray = _sortedLineMap.get(node);
-							newArray = insertAt(newArray, line, i);
-							_sortedLineMap.put(node, newArray);
-							break;
-						}
-					}
-				}
+				array[i] = line;
+				_sortedLineMap.put(node, array);
 			}
 		}
 	}
 
 	/**
-	 * Inserts a train line into the array and pushes the existing lines back.
-	 * 
-	 * @param array The array where the train line should be inserted.
-	 * @param line The line that should be inserted.
-	 * @param index The index where the line should be inserted.
-	 * @return The updated array.
-	 */
-	private TrainLine[] insertAt(TrainLine[] array, TrainLine line, int index)
-	{
-		for(int i = array.length - 1; i > index; --i)
-		{
-			array[i] = array[i - 1];
-		}
-		array[index] = line;
-		return array;
-	}
-
-	/**
-	 * Searches for an element in an array of train lines and returns the index of the first occurrence.
+	 * Searches for an element in an array of train lines and returns the position of the first occurrence. Empty fields in the array will be ignored.
 	 * 
 	 * @param array The array of train lines.
-	 * @param element The element which index you want to know.
-	 * @return The index of the first occurrence of the element. If the element is not in the array, -1 will be returned.
+	 * @param element The element which position you want to know.
+	 * @return The position of the first occurrence of the element. If the element is not in the array, -1 will be returned.
 	 */
 	private int indexOf(TrainLine[] array, TrainLine element)
 	{
-		for(int i = 0; i < array.length - 1 && array[i] != null; ++i)
+		int counter = 0;
+		for(int i = 0; i < array.length; ++i)
 		{
-			if(array[i].equals(element)) return i;
+			if(array[i] != null)
+			{
+				if(array[i].equals(element)) return counter;
+				if(array[i] != null) ++counter;
+			}
 		}
 		return -1;
 	}
@@ -214,53 +81,91 @@ public class TrainLineDrawingService
 	/**
 	 * Draws all train lines.
 	 * 
-	 * @param offset The map offset in pixel.
+	 * @param mapOffset The map offset in pixel.
 	 * @param sp The sprite batch to draw on.
 	 * @param lineList An ArrayList of all existing train lines.
 	 */
-	public void drawLines(Point offset, SpriteBatch sp, ArrayList<TrainLine> lineList)
+	public void drawLines(Point mapOffset, SpriteBatch sp, ArrayList<TrainLine> lineList)
 	{
 		for(TrainLine line : lineList)
 		{
-			// line.draw(offset, sp, map);
-
-			// TODO: Implement own drawing algorithm that considers the sorted line list.
-
 			if(line.getLength() == 0) continue;
 
 			ArrayList<RailwayNode> listOfNodes = line.getNodes();
 
 			Draw.setColor(line.isValid() ? line.getColor() : METRO.__metroRed);
 
+			RailwayNode thisNode = listOfNodes.get(0);
+			int thisNodeIndex = indexOf(_sortedLineMap.get(thisNode), line);
+			if(thisNodeIndex == -1) thisNodeIndex = 0;
+			Point thisNodePosition = thisNode.getPosition();
+			Point thisPosition = null;
+
 			for(int i = 0; i < listOfNodes.size() - 1; ++i)
 			{
-				// the list is sorted so we know that i+1 is the direct neighbor
-				RailwayNode node = listOfNodes.get(i);
-				RailwayNode neighbor = listOfNodes.get(i + 1);
+				// the list is sorted so we know that i+1 is the direct neighbor node of "node", so the next node we want to draw a line to
+				RailwayNode nextNode = listOfNodes.get(i + 1);
 
-				int nodeIndex = indexOf(_sortedLineMap.get(node), line);
-				int neighborIndex = indexOf(_sortedLineMap.get(neighbor), line);
+				int nextNodeIndex = indexOf(_sortedLineMap.get(nextNode), line);
+
+				if(nextNodeIndex == -1) nextNodeIndex = 0;
+
+				Point nextNodePosition = nextNode.getPosition();
+
+				Point nextPosition, directionOffset;
+				// TODO: make more accurate positions. This won't work for vertical and diagonal lines :(
+
+				directionOffset = getDirectionOffset(thisNodePosition, nextNodePosition);
+
+				if(thisPosition == null)
+				{
+					thisPosition = new Point(
+						mapOffset.x +
+							thisNodePosition.x * _gameState.getBaseNetSpacing() +
+							directionOffset.x * (thisNodeIndex * _lineThickness + thisNodeIndex),
+						mapOffset.y +
+							thisNodePosition.y * _gameState.getBaseNetSpacing() +
+							directionOffset.y * (thisNodeIndex * _lineThickness + thisNodeIndex));
+				}
+
+				nextPosition = new Point(
+					mapOffset.x +
+						nextNodePosition.x * _gameState.getBaseNetSpacing() +
+						directionOffset.x * (nextNodeIndex * _lineThickness + nextNodeIndex),
+					mapOffset.y +
+						nextNodePosition.y * _gameState.getBaseNetSpacing() +
+						directionOffset.y * (nextNodeIndex * _lineThickness + nextNodeIndex));
+
+				drawColoredLine(mapOffset, thisPosition, nextPosition);
 				
-				System.out.println("(" + node.getPosition().x + ", " + node.getPosition().y + ") - " + nodeIndex + " - " + neighborIndex + " - " + line.getName());
-				
-				if(nodeIndex == -1) nodeIndex = 0;
-				if(neighborIndex == -1) neighborIndex = 0;
-
-				Point nodePosition = node.getPosition();
-				nodePosition.translate(0, nodeIndex + nodeIndex * 3);
-				Point neighborPosition = neighbor.getPosition();
-				neighborPosition.translate(0, neighborIndex + neighborIndex * 2);
-
-				Point position, positionNext;
-				position = new Point(offset.x + nodePosition.x * _gameState.getBaseNetSpacing(),
-					offset.y + nodePosition.y * _gameState.getBaseNetSpacing()); // Position with offset etc.
-				positionNext = new Point(offset.x + neighborPosition.x * _gameState.getBaseNetSpacing(),
-					offset.y + neighborPosition.y * _gameState.getBaseNetSpacing()); // Position with offset etc. for second point
-
-				drawColoredLine(offset, position, positionNext);
+				thisNode = nextNode;
+				thisNodeIndex = nextNodeIndex;
+				thisNodePosition = nextNodePosition;
+				thisPosition = (Point)nextPosition.clone();
 			}
 		}
-		System.out.println();
+	}
+
+	/**
+	 * Gets an offset that indicates the direction of the connection between the two nodes (directions are: | - / \ ).
+	 * The offsets are:<br>
+	 * - (0,1)<br>
+	 * | (1,0)<br>
+	 * / (1,1)<br>
+	 * \ (-1,1)
+	 * 
+	 * @param p1 The first node.
+	 * @param p2 The second node.
+	 * @return The offset describing the direction of the connection between {@code p1} and {@code p2}.
+	 */
+	private Point getDirectionOffset(Point p1, Point p2)
+	{
+		if(p1.x == p2.x || p1.y == p2.y) // vertical or horizontal
+		{
+			return new Point(Math.abs(p1.y - p2.y), Math.abs(p1.x - p2.x)); // yes, x and y are switched, but they have to be switched
+		}
+		// else diagonal: The y offset is definitely 1, the x offset describes if the connection is / or \
+		return new Point(p1.y - p2.y, 1);
 	}
 
 	/**
@@ -280,13 +185,11 @@ public class TrainLineDrawingService
 		{
 			if(diff.x == 1 && diff.y == 1) diff.x = -1;
 			else if(diff.x == 1 && diff.y == -1) diff.y = 1;
-		}
-		// TODO: make more accurate draw algo. This won't work for vertical lines :(
-		// FIXME Layers not working when trainline has been edited :(
 		Draw.Line(position.x,
 			position.y,
 			positionNext.x,
 			positionNext.y,
-			3);
+			_lineThickness);
+		}
 	}
 }

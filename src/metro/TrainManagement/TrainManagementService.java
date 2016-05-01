@@ -57,7 +57,7 @@ public class TrainManagementService implements Observer
 		_templateTrains = new HashMap<>();
 		_lastRenderTime = System.nanoTime();
 
-		_trainLineDrawingService = TrainLineDrawingService.getInstance();
+		_trainLineDrawingService = new TrainLineDrawingService();
 
 		try
 		{
