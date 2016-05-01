@@ -78,7 +78,7 @@ public class TrainLineDrawingService
 	 * @param element The element which position you want to know.
 	 * @return The position of the first occurrence of the element. If the element is not in the array, -1 will be returned.
 	 */
-	private int positionOf(TrainLine[] array, TrainLine element)
+	private int indexOf(TrainLine[] array, TrainLine element)
 	{
 		int counter = 0;
 		for(int i = 0; i < array.length && array[i] != null; ++i)
@@ -92,11 +92,11 @@ public class TrainLineDrawingService
 	/**
 	 * Draws all train lines.
 	 * 
-	 * @param offset The map offset in pixel.
+	 * @param mapOffset The map offset in pixel.
 	 * @param sp The sprite batch to draw on.
 	 * @param lineList An ArrayList of all existing train lines.
 	 */
-	public void drawLines(Point offset, SpriteBatch sp, ArrayList<TrainLine> lineList)
+	public void drawLines(Point mapOffset, SpriteBatch sp, ArrayList<TrainLine> lineList)
 	{
 		for(TrainLine line : lineList)
 		{
@@ -105,54 +105,62 @@ public class TrainLineDrawingService
 			ArrayList<RailwayNode> listOfNodes = line.getNodes();
 
 			Draw.setColor(line.isValid() ? line.getColor() : METRO.__metroRed);
-			
+
 			for(int i = 0; i < listOfNodes.size() - 1; ++i)
 			{
-				// the list is sorted so we know that i+1 is the direct neighbor
-				RailwayNode node = listOfNodes.get(i);
-				RailwayNode neighbor = listOfNodes.get(i + 1);
+				// the list is sorted so we know that i+1 is the direct neighbor node of "node", so the next node we want to draw a line to
+				RailwayNode thisNode = listOfNodes.get(i);
+				RailwayNode nextNode = listOfNodes.get(i + 1);
 
-				int nodeIndex = positionOf(_sortedLineMap.get(node), line);
-				int neighborIndex = positionOf(_sortedLineMap.get(neighbor), line);
+				int thisNodeIndex = indexOf(_sortedLineMap.get(thisNode), line);
+				int nextNodeIndex = indexOf(_sortedLineMap.get(nextNode), line);
 
-				if(nodeIndex == -1) nodeIndex = 0;
-				if(neighborIndex == -1) neighborIndex = 0;
+				// TODO remove when finished. this is just a debug output:
+				if(line.getName().equals("a") && thisNode.getPosition().equals(new Point(0, 0)))
+				{
+					System.out.println(thisNodeIndex);
+				}
 
-				Point nodePosition = node.getPosition();
-				Point neighborPosition = neighbor.getPosition();
+				if(thisNodeIndex == -1) thisNodeIndex = 0;
+				if(nextNodeIndex == -1) nextNodeIndex = 0;
 
-				Point position, positionNext, directionOffset;
+				thisNodeIndex = thisNodeIndex < nextNodeIndex ? thisNodeIndex : nextNodeIndex;
+
+				Point thisNodePosition = thisNode.getPosition();
+				Point nextNodePosition = nextNode.getPosition();
+
+				Point thisPosition, nextPosition, directionOffset;
 				// TODO: make more accurate positions. This won't work for vertical and diagonal lines :(
 
-				directionOffset = getDirectionOffset(nodePosition, neighborPosition);
+				directionOffset = getDirectionOffset(thisNodePosition, nextNodePosition);
 
-				position = new Point(
-					offset.x +
-						nodePosition.x * _gameState.getBaseNetSpacing() +
-						directionOffset.x * (nodeIndex * _lineThickness + nodeIndex),
-					offset.y +
-						nodePosition.y * _gameState.getBaseNetSpacing() +
-						directionOffset.y * (nodeIndex * _lineThickness + nodeIndex));
+				thisPosition = new Point(
+					mapOffset.x +
+						thisNodePosition.x * _gameState.getBaseNetSpacing() +
+						directionOffset.x * (thisNodeIndex * _lineThickness + thisNodeIndex),
+					mapOffset.y +
+						thisNodePosition.y * _gameState.getBaseNetSpacing() +
+						directionOffset.y * (thisNodeIndex * _lineThickness + thisNodeIndex));
 
-				positionNext = new Point(
-					offset.x +
-						neighborPosition.x * _gameState.getBaseNetSpacing() +
-						directionOffset.x * (neighborIndex * _lineThickness + neighborIndex),
-					offset.y +
-						neighborPosition.y * _gameState.getBaseNetSpacing() +
-						directionOffset.y * (neighborIndex * _lineThickness + neighborIndex));
+				nextPosition = new Point(
+					mapOffset.x +
+						nextNodePosition.x * _gameState.getBaseNetSpacing() +
+						directionOffset.x * (thisNodeIndex * _lineThickness + thisNodeIndex),
+					mapOffset.y +
+						nextNodePosition.y * _gameState.getBaseNetSpacing() +
+						directionOffset.y * (thisNodeIndex * _lineThickness + thisNodeIndex));
 
-				drawColoredLine(offset, position, positionNext);
+				drawColoredLine(mapOffset, thisPosition, nextPosition);
 			}
 		}
 	}
 
 	/**
 	 * Gets an offset that indicates the direction of the connection between the two nodes (directions are: | - / \ ).
-	 * The offsets are:
-	 * - ( 0,1)
-	 * | ( 1,0)
-	 * / ( 1,1)
+	 * The offsets are:<br>
+	 * - (0,1)<br>
+	 * | (1,0)<br>
+	 * / (1,1)<br>
 	 * \ (-1,1)
 	 * 
 	 * @param p1 The first node.
