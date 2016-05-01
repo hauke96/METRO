@@ -18,31 +18,17 @@ import metro.TrainManagement.Trains.TrainLine;
  * @author hauke
  *
  */
-public class TrainLineDrawingService
+class TrainLineDrawingService
 {
 	private HashMap<RailwayNode, TrainLine[]> _sortedLineMap;
 	private GameState _gameState;
 	private int _lineThickness;
 
-	private static TrainLineDrawingService __INSTANCE;// = new TrainLineDrawingService();
-
-	private TrainLineDrawingService()
+	TrainLineDrawingService()
 	{
 		_sortedLineMap = new HashMap<RailwayNode, TrainLine[]>();
 		_gameState = GameState.getInstance();
 		_lineThickness = 3;
-	}
-
-	/**
-	 * @return The instance of the drawing service. If there's no drawing service, it'll be created.
-	 */
-	public static TrainLineDrawingService getInstance()
-	{
-		if(__INSTANCE == null)
-		{
-			__INSTANCE = new TrainLineDrawingService();
-		}
-		return __INSTANCE;
 	}
 
 	/**
@@ -81,10 +67,13 @@ public class TrainLineDrawingService
 	private int indexOf(TrainLine[] array, TrainLine element)
 	{
 		int counter = 0;
-		for(int i = 0; i < array.length && array[i] != null; ++i)
+		for(int i = 0; i < array.length; ++i)
 		{
-			if(array[i].equals(element)) return counter;
-			if(array[i] != null) ++counter;
+			if(array[i] != null)
+			{
+				if(array[i].equals(element)) return counter;
+				if(array[i] != null) ++counter;
+			}
 		}
 		return -1;
 	}
@@ -114,12 +103,6 @@ public class TrainLineDrawingService
 
 				int thisNodeIndex = indexOf(_sortedLineMap.get(thisNode), line);
 				int nextNodeIndex = indexOf(_sortedLineMap.get(nextNode), line);
-
-				// TODO remove when finished. this is just a debug output:
-				if(line.getName().equals("a") && thisNode.getPosition().equals(new Point(0, 0)))
-				{
-					System.out.println(thisNodeIndex);
-				}
 
 				if(thisNodeIndex == -1) thisNodeIndex = 0;
 				if(nextNodeIndex == -1) nextNodeIndex = 0;

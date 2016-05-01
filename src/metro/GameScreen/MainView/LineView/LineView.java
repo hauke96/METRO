@@ -290,8 +290,8 @@ public class LineView extends GameScreen implements Observer
 						}
 					}
 
-					line.setName(_lineNameField.getText());
 					_trainManagementService.addLine(line);
+					line.setName(_lineNameField.getText());
 					_lineList.addElement(_lineNameField.getText());
 					_lineSelectToolEnabled = false;
 
