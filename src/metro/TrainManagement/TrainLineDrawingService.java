@@ -95,45 +95,53 @@ class TrainLineDrawingService
 
 			Draw.setColor(line.isValid() ? line.getColor() : METRO.__metroRed);
 
+			RailwayNode thisNode = listOfNodes.get(0);
+			int thisNodeIndex = indexOf(_sortedLineMap.get(thisNode), line);
+			if(thisNodeIndex == -1) thisNodeIndex = 0;
+			Point thisNodePosition = thisNode.getPosition();
+			Point thisPosition = null;
+
 			for(int i = 0; i < listOfNodes.size() - 1; ++i)
 			{
 				// the list is sorted so we know that i+1 is the direct neighbor node of "node", so the next node we want to draw a line to
-				RailwayNode thisNode = listOfNodes.get(i);
 				RailwayNode nextNode = listOfNodes.get(i + 1);
 
-				int thisNodeIndex = indexOf(_sortedLineMap.get(thisNode), line);
 				int nextNodeIndex = indexOf(_sortedLineMap.get(nextNode), line);
 
-				if(thisNodeIndex == -1) thisNodeIndex = 0;
 				if(nextNodeIndex == -1) nextNodeIndex = 0;
 
-				thisNodeIndex = thisNodeIndex < nextNodeIndex ? thisNodeIndex : nextNodeIndex;
-
-				Point thisNodePosition = thisNode.getPosition();
 				Point nextNodePosition = nextNode.getPosition();
 
-				Point thisPosition, nextPosition, directionOffset;
+				Point nextPosition, directionOffset;
 				// TODO: make more accurate positions. This won't work for vertical and diagonal lines :(
 
 				directionOffset = getDirectionOffset(thisNodePosition, nextNodePosition);
 
-				thisPosition = new Point(
-					mapOffset.x +
-						thisNodePosition.x * _gameState.getBaseNetSpacing() +
-						directionOffset.x * (thisNodeIndex * _lineThickness + thisNodeIndex),
-					mapOffset.y +
-						thisNodePosition.y * _gameState.getBaseNetSpacing() +
-						directionOffset.y * (thisNodeIndex * _lineThickness + thisNodeIndex));
+				if(thisPosition == null)
+				{
+					thisPosition = new Point(
+						mapOffset.x +
+							thisNodePosition.x * _gameState.getBaseNetSpacing() +
+							directionOffset.x * (thisNodeIndex * _lineThickness + thisNodeIndex),
+						mapOffset.y +
+							thisNodePosition.y * _gameState.getBaseNetSpacing() +
+							directionOffset.y * (thisNodeIndex * _lineThickness + thisNodeIndex));
+				}
 
 				nextPosition = new Point(
 					mapOffset.x +
 						nextNodePosition.x * _gameState.getBaseNetSpacing() +
-						directionOffset.x * (thisNodeIndex * _lineThickness + thisNodeIndex),
+						directionOffset.x * (nextNodeIndex * _lineThickness + nextNodeIndex),
 					mapOffset.y +
 						nextNodePosition.y * _gameState.getBaseNetSpacing() +
-						directionOffset.y * (thisNodeIndex * _lineThickness + thisNodeIndex));
+						directionOffset.y * (nextNodeIndex * _lineThickness + nextNodeIndex));
 
 				drawColoredLine(mapOffset, thisPosition, nextPosition);
+				
+				thisNode = nextNode;
+				thisNodeIndex = nextNodeIndex;
+				thisNodePosition = nextNodePosition;
+				thisPosition = (Point)nextPosition.clone();
 			}
 		}
 	}
