@@ -13,7 +13,9 @@ package metro;
  * final instance variables: __FINAL_VARIABLE
  * local stuff: chooseAnyName
  * 
- * final and local with small beginning char and capitol for every following word ( e.g.: int myVariableIsCool = 42; ).
+ * Variable are written in camel-case, meaning they begin with lower case and having upper case letter for every sub-word
+ * ( e.g.: int myVariableIsCool = 42; ).
+ * final variables (due to their upper-case-only convention) are separated into words with an underscore.
  * 
  * Method names has to be clear ( not a(){...} but createCharacter(){...} )
  * 
