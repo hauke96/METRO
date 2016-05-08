@@ -47,10 +47,21 @@ public class GameState
 	}
 
 	/**
+	 * Sets the amount of money. This will overwrite the old amount ({@link #addMoney(int)} does not).
+	 * 
+	 * @param money The new amount of money.
+	 */
+	public void setMoney(int money)
+	{
+		_money = money;
+	}
+
+	/**
 	 * Add an specific amount of money to the players account. Adding a negative amount of money to the account is not permitted.
 	 * May throw an IllegalArgumentException when the amount of money is less than 0.
 	 * 
 	 * @param moreMoney The money to add/subtract. Throw an IllegalArgumentException when the amount of money is less than 0.
+	 * @throws IllegalArgumentException 
 	 */
 	public void addMoney(int moreMoney)
 	{
@@ -74,7 +85,8 @@ public class GameState
 		{
 			_money -= moreMoney;
 		}
-		else if(moreMoney < 0 && moreMoney * -1 <= _money)
+		//TODO remove this (it's inconsistent)! you also can't withdraw in the add method :/
+		else if(moreMoney < 0 && -moreMoney <= _money)
 		{
 			addMoney(-moreMoney);
 		}
@@ -93,6 +105,16 @@ public class GameState
 	}
 
 	/**
+	 * Overwrites the old base net spacing. This will update no UI or something!
+	 * 
+	 * @param spacing The new spacing.
+	 */
+	public void setBaseNetSpacing(int spacing)
+	{
+		_baseNetSpacing = spacing;
+	}
+
+	/**
 	 * @return The width of tool views (e.g. line- and trainView).
 	 */
 	public int getToolViewWidth()
@@ -101,8 +123,20 @@ public class GameState
 	}
 
 	/**
+	 * Overwrites the width of tools. This will not update any UIs.
+	 * 
+	 * @param width The new width.
+	 */
+	public void setToolViewWidth(int width)
+	{
+		_toolViewWidth = width;
+	}
+
+	/**
 	 * Zooms in (makes things greater :D ) or out in by in-/decreasing the {@code _baseNetSpacing}.
 	 * The minimal spacing is 20 pixel, the maximum is 70.
+	 * 
+	 * Passing a positive amount of steps will decrease the {@code _baseNetSpacing} (zooming out), a negative amount will increase.
 	 * 
 	 * @param amount The amount of steps. Each step in-/decreases the {@code _baseNetSpacing} by 5 pixel.
 	 */

@@ -37,4 +37,12 @@ public class NotificationServer
 			sub.addMessage(message, type);
 		}
 	}
+	
+	/**
+	 * @return The list with all subscribers.
+	 */
+	public static ArrayList<NotificationSubscriber> getSubscriber()
+	{
+		return __listOfSubscribers;
+	}
 }
