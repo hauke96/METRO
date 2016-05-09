@@ -191,8 +191,11 @@ public abstract class GameScreen extends Observable
 	 */
 	public void registerControl(ControlElement control)
 	{
-		__controlActionManager.registerElement(control);
-		_allControls.add(control);
+		if(__controlActionManager != null && _allControls != null)
+		{
+			__controlActionManager.registerElement(control);
+			_allControls.add(control);
+		}
 	}
 
 	/**

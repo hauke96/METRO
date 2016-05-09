@@ -36,8 +36,8 @@ public class TrainView extends GameScreen
 	{
 		_windowWidth = GameState.getInstance().getToolViewWidth();
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 45);
-		_trainViewMain = new TrainViewMain(_areaOffset, _windowWidth);
-		_trainViewBuy = new TrainViewBuy(_areaOffset, _windowWidth);
+		_trainViewMain = new TrainViewMain(getAreaOffset(), _windowWidth);
+		_trainViewBuy = new TrainViewBuy(getAreaOffset(), _windowWidth);
 
 		registerObserver();
 	}
@@ -126,24 +126,24 @@ public class TrainView extends GameScreen
 	private void drawTitleBox()
 	{
 		int length = Draw.getStringSize("Control Management").width;
-		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 20, _areaOffset.y + 15, _windowWidth - 40, 60);
+		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 20, getAreaOffset().y + 15, _windowWidth - 40, 60);
 		Color c = new Color((int)(METRO.__metroBlue.getRed() * 1.8f),
 			(int)(METRO.__metroBlue.getGreen() * 1.3f),
 			255); // lighter metro-blue
 		Draw.setColor(c);
-		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 22, _areaOffset.y + 17, _windowWidth - 44, 56);
+		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 22, getAreaOffset().y + 17, _windowWidth - 44, 56);
 
 		// Take "METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2" to center the label
 		length = Draw.getStringSize("METRO trains").width;
 		Draw.setColor(METRO.__metroRed);
-		Draw.String("METRO trains", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, _areaOffset.y + 25);
-		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, _areaOffset.y + 40,
-			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, _areaOffset.y + 40);
+		Draw.String("METRO trains", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, getAreaOffset().y + 25);
+		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, getAreaOffset().y + 40,
+			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, getAreaOffset().y + 40);
 
 		length = Draw.getStringSize("Control Management").width;
-		Draw.String("Control Management", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, _areaOffset.y + 50);
-		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, _areaOffset.y + 65,
-			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, _areaOffset.y + 65);
+		Draw.String("Control Management", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, getAreaOffset().y + 50);
+		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, getAreaOffset().y + 65,
+			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, getAreaOffset().y + 65);
 	}
 
 	/**
@@ -209,6 +209,14 @@ public class TrainView extends GameScreen
 	@Override
 	public boolean isHovered()
 	{
-		return METRO.__mousePosition.x > _areaOffset.x; // we don't need to check y-coord. because we use the full screen height.
+		return METRO.__mousePosition.x > getAreaOffset().x; // we don't need to check y-coord. because we use the full screen height.
+	}
+
+	/**
+	 * @return Gets the area offset.
+	 */
+	public Point getAreaOffset()
+	{
+		return _areaOffset;
 	}
 }

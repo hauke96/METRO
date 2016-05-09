@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Observable;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -59,7 +60,15 @@ public class TrainTemplate extends Observable
 		_speed = speed;
 
 		loadTextures();
-		loadTitleTextures();
+	}
+
+	private void loadTextures()
+	{
+		if(!_textures.containsKey(_name) && Gdx.files != null)
+		{
+			loadModelTextures();
+			loadTitleTextures();
+		}
 	}
 
 	/**
@@ -67,46 +76,42 @@ public class TrainTemplate extends Observable
 	 */
 	private void loadTitleTextures()
 	{
-		if(!_textures.containsKey(_name))
+		METRO.__debug("[LoadingTrainImage]");
+		try
 		{
-			METRO.__debug("[LoadingTrainImage]");
-			try
-			{
-				TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("textures/Trains_" + _modelName + ".png")));
-				texture.flip(false, true);
-				texture.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-				_textures.put(_modelName, texture);
+			TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("textures/Trains_" + _modelName + ".png")));
+			texture.flip(false, true);
+			texture.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			_textures.put(_modelName, texture);
 
-				METRO.__debug("Succesfully loaded image for train " + _modelName + ".");
-			}
-			catch(GdxRuntimeException ex)
-			{
-				METRO.__debug("ERROR: " + ex.getMessage());
-			}
+			METRO.__debug("Succesfully loaded image for train " + _modelName + ".");
+		}
+		catch(GdxRuntimeException ex)
+		{
+			METRO.__debug("ERROR: " + ex.getMessage());
 		}
 	}
 
 	/**
 	 * Load the title image for this train that'll be displayed by the train buy dialog.
 	 */
-	private void loadTextures()
+	private void loadModelTextures()
 	{
-		if(!_textures.containsKey(_name))
+		METRO.__debug("[LoadingTrainTitleImage]");
+		try
 		{
-			METRO.__debug("[LoadingTrainTitleImage]");
-			try
-			{
-				TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("textures/Trains_" + _modelName + "_big.png")));
-				texture.flip(false, true);
-				texture.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-				_titleTextures.put(_modelName, texture);
+			FileHandle handle = Gdx.files.internal("textures/Trains_" + _modelName + "_big.png");
+			Texture texture = new Texture(handle);
+			TextureRegion textureRegion = new TextureRegion(texture);
+			textureRegion.flip(false, true);
+			textureRegion.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			_titleTextures.put(_modelName, textureRegion);
 
-				METRO.__debug("Succesfully loaded title image for train " + _modelName + ".");
-			}
-			catch(GdxRuntimeException ex)
-			{
-				METRO.__debug("ERROR: " + ex.getMessage());
-			}
+			METRO.__debug("Succesfully loaded title image for train " + _modelName + ".");
+		}
+		catch(GdxRuntimeException ex)
+		{
+			METRO.__debug("ERROR: " + ex.getMessage());
 		}
 	}
 

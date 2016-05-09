@@ -372,7 +372,7 @@ public class LineView extends GameScreen implements Observer
 	/**
 	 * Creates a clean {@link metro.GameScreen.MainView#LineSelectTool}, adds this as observer and sets the {@code _lineSelectToolEnabled} flag.
 	 */
-	private void createLineSelectTool()
+	void createLineSelectTool()
 	{
 		_lineSelectTool = new LineSelectTool(); // create clean select tool
 		_lineSelectTool.addObserver(this);
@@ -610,5 +610,29 @@ public class LineView extends GameScreen implements Observer
 			_lineList.setState(true);
 			reset();
 		}
+	}
+
+	/**
+	 * @return Gets the area offset.
+	 */
+	public Point getAreaOffset()
+	{
+		return _areaOffset;
+	}
+
+	/**
+	 * @return The current line select tool.
+	 */
+	public LineSelectTool getLineSelectTool()
+	{
+		return _lineSelectTool;
+	}
+
+	/**
+	 * @return The value of the {@code _lineSelectToolEnabled} flag.
+	 */
+	public boolean isLineSelectToolEnabled()
+	{
+		return _lineSelectToolEnabled;
 	}
 }

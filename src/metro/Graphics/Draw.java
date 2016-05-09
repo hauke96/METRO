@@ -26,7 +26,7 @@ import metro.Settings;
 
 public class Draw
 {
-	private static ShapeRenderer __shapeRenderer = new ShapeRenderer();
+	private static ShapeRenderer __shapeRenderer;
 	private static int __xOffset, __yOffset, __lineGap = 8;
 	private static float __r, __g, __b, __a; // current color values
 	private static BitmapFont __stdFont;
@@ -62,6 +62,10 @@ public class Draw
 		Gdx.gl.glEnable(GL30.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
 
+		if(__shapeRenderer == null)
+		{
+			__shapeRenderer = new ShapeRenderer();
+		}
 		__shapeRenderer.setProjectionMatrix(METRO.__camera.combined);
 		__shapeRenderer.begin(ShapeType.Line);
 		__shapeRenderer.setColor(__r, __g, __b, __a);
@@ -385,6 +389,7 @@ public class Draw
 	 */
 	public static Dimension getStringSize(String text, BitmapFont font)
 	{
+		if(font == null) return new Dimension();
 		TextBounds bounds = font.getBounds(text);
 		return new Dimension((int)bounds.width, ((int)bounds.height + __lineGap) * amountOfLines(text) - __lineGap);
 	}
