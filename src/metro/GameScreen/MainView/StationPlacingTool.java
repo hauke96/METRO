@@ -61,7 +61,7 @@ public class StationPlacingTool extends GameScreen
 	 * @param screenY The y-coordinate of the click.
 	 * @param offset The current map offset.
 	 */
-	public void leftClick(int screenX, int screenY, Point2D offset)
+	private void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		boolean positionOccupied = false;
 		Point selectPointOnScreen = new Point(_playingField.getSelectedNode().x * GameState.getInstance().getBaseNetSpacing() + (int)offset.getX(),
@@ -86,7 +86,7 @@ public class StationPlacingTool extends GameScreen
 	 * @param screenY The y-coordinate of the click.
 	 * @param offset The current map offset.
 	 */
-	public void rightClick(int screenX, int screenY, Point2D offset)
+	private void rightClick(int screenX, int screenY, Point2D offset)
 	{
 		_isActive = false;
 		setChanged();

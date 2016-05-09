@@ -501,7 +501,6 @@ public class LineView extends GameScreen implements Observer
 		if(!_isActive) return;
 		if(_lineSelectToolEnabled)
 		{
-
 			// if select tool exists and mouse is in the area of the select tool, forward click to tool
 			if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
 			{
