@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/hauke96/METRO.svg?branch=master)](https://travis-ci.org/hauke96/METRO)
 # METRO
 
 `METRO` is a small and simple rapid transit simulator. You can build tracks and stations, buy trains and realize a massive transport system by creating an efficient railway network.
