@@ -52,7 +52,7 @@ public class Settings
 		set("fullscreen.on", false);
 		set("screen.width", 1024);
 		set("screen.height", 768);
-		set("use.opengl30", true);
+		set("use.opengl30", false);
 		set("use.hdpi", false);
 		set("use.vsync", true);
 		set("amount.samples", 4);
