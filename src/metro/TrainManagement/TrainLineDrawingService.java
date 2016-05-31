@@ -137,7 +137,7 @@ class TrainLineDrawingService
 						directionOffset.y * (nextNodeIndex * _lineThickness + nextNodeIndex));
 
 				drawColoredLine(mapOffset, thisPosition, nextPosition);
-				
+
 				thisNode = nextNode;
 				thisNodeIndex = nextNodeIndex;
 				thisNodePosition = nextNodePosition;
@@ -181,15 +181,12 @@ class TrainLineDrawingService
 		Point diff = new Point((position.y - positionNext.y) / _gameState.getBaseNetSpacing(),
 			(position.x - positionNext.x) / _gameState.getBaseNetSpacing());
 
-		if(diff.x != 0 && diff.y != 0)
-		{
-			if(diff.x == 1 && diff.y == 1) diff.x = -1;
-			else if(diff.x == 1 && diff.y == -1) diff.y = 1;
+		if(diff.x == 1 && diff.y == 1) diff.x = -1;
+		else if(diff.x == 1 && diff.y == -1) diff.y = 1;
 		Draw.Line(position.x,
 			position.y,
 			positionNext.x,
 			positionNext.y,
 			_lineThickness);
-		}
 	}
 }
