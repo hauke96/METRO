@@ -14,7 +14,7 @@ import metro.Graphics.Draw;
  * @author hauke
  *
  */
-public class ColorBar extends ActionObservable implements ControlElement
+public class ColorBar extends ControlElement
 {
 	private Rectangle _position;
 	private float _saturation, _brightness;
@@ -182,29 +182,6 @@ public class ColorBar extends ActionObservable implements ControlElement
 	}
 
 	@Override
-	public void setPosition(Point pos)
-	{
-		_position.setLocation(pos);
-	}
-
-	@Override
-	public void setText(String text)
-	{
-	}
-
-	@Override
-	public void setState(boolean enable)
-	{
-		_enabled = enable;
-	}
-
-	@Override
-	public Point getPosition()
-	{
-		return _position.getLocation();
-	}
-
-	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
@@ -242,17 +219,5 @@ public class ColorBar extends ActionObservable implements ControlElement
 	@Override
 	public void keyUp(int keyCode)
 	{
-	}
-
-	@Override
-	public Rectangle getArea()
-	{
-		return _position;
-	}
-
-	@Override
-	public boolean getState()
-	{
-		return _enabled;
 	}
 }

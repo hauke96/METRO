@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author hauke
  * 
  */
-public class Window extends ActionObservable implements ControlElement
+public class Window extends ControlElement
 {
 	private Point _position,
 		_size,
@@ -251,16 +251,6 @@ public class Window extends ActionObservable implements ControlElement
 	}
 
 	/**
-	 * Returns the position of the window.
-	 * 
-	 * @return Position.
-	 */
-	public Point getPosition()
-	{
-		return _position;
-	}
-
-	/**
 	 * Marks this window as closed to let the METRO class know, that this instance/window can be removed.
 	 */
 	public void close()
@@ -308,21 +298,6 @@ public class Window extends ActionObservable implements ControlElement
 	}
 
 	@Override
-	public void setPosition(Point pos)
-	{
-	}
-
-	@Override
-	public void setText(String text)
-	{
-	}
-
-	@Override
-	public void setState(boolean enable)
-	{
-	}
-
-	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		return false;
@@ -339,17 +314,5 @@ public class Window extends ActionObservable implements ControlElement
 	public ArrayList<ControlElement> getElements()
 	{
 		return _elementList;
-	}
-
-	@Override
-	public Rectangle getArea()
-	{
-		return new Rectangle(_position.x, _position.y, _size.x, _size.y);
-	}
-
-	@Override
-	public boolean getState()
-	{
-		return true;
 	}
 }

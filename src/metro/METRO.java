@@ -69,7 +69,6 @@ import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.ControlActionManager;
-import metro.WindowControls.ControlElement;
 import metro.WindowControls.InputField;
 import metro.WindowControls.Window;
 
@@ -665,17 +664,6 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public void dispose()
 	{
-	}
-
-	/**
-	 * Removes a control from the control action manager to disable user interactions with it.
-	 * Notice: Don't use this from a game screen there's the method "unregisterControl(ControlElement control)" in the GameScreen class!
-	 * 
-	 * @param control The control to remove.
-	 */
-	public static void __unregisterControl(ControlElement control)
-	{
-		__controlActionManager.remove(control);
 	}
 
 	/**

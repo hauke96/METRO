@@ -19,7 +19,7 @@ import metro.Graphics.Draw;
  *
  */
 
-public class Button extends ActionObservable implements ControlElement
+public class Button extends ControlElement
 {
 	private TextureRegion _texture;
 	private Rectangle _position,
@@ -119,7 +119,7 @@ public class Button extends ActionObservable implements ControlElement
 	/**
 	 * Draws the button with its text/texture.
 	 */
-	public void draw()
+	void draw()
 	{
 		if(!_text.equals(""))
 		{
@@ -136,24 +136,6 @@ public class Button extends ActionObservable implements ControlElement
 		{
 			Draw.Image(_texture, _position, _positionOnImage);
 		}
-	}
-
-	/**
-	 * Sets the position of the button.
-	 * 
-	 * @param newPosition The new position. It's NOT an offset!
-	 */
-	public void setPosition(Point newPosition)
-	{
-		_position = new Rectangle(newPosition.x, newPosition.y, _position.width, _position.height);
-	}
-
-	/**
-	 * Returns the position of the button as point.
-	 */
-	public Point getPosition()
-	{
-		return new Point(_position.x, _position.y);
 	}
 
 	/**
@@ -207,18 +189,6 @@ public class Button extends ActionObservable implements ControlElement
 	{
 	}
 
-	@Override
-	public void setText(String text)
-	{
-		_text = text;
-	}
-
-	@Override
-	public void setState(boolean enable)
-	{
-		_enabled = enable;
-	}
-
 	/**
 	 * Sets the texture of this button and the area of it on the raw image.
 	 * 
@@ -229,17 +199,5 @@ public class Button extends ActionObservable implements ControlElement
 	{
 		_positionOnImage = positionOnImage;
 		_texture = image;
-	}
-
-	@Override
-	public Rectangle getArea()
-	{
-		return _position;
-	}
-
-	@Override
-	public boolean getState()
-	{
-		return _enabled;
 	}
 }

@@ -13,7 +13,7 @@ import metro.Graphics.Draw;
  * @author hauke
  *
  */
-public class Checkbox extends ActionObservable implements ControlElement
+public class Checkbox extends ControlElement
 {
 	private boolean _checked,
 		_enabled, // other name: isCheckable (true - box can be used; false - box can't be used)
@@ -175,18 +175,6 @@ public class Checkbox extends ActionObservable implements ControlElement
 	}
 
 	@Override
-	public void setPosition(Point pos)
-	{
-		_position = pos;
-	}
-
-	@Override
-	public Point getPosition()
-	{
-		return _position;
-	}
-
-	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
@@ -226,20 +214,8 @@ public class Checkbox extends ActionObservable implements ControlElement
 	}
 
 	@Override
-	public void setState(boolean enable)
-	{
-		_enabled = enable;
-	}
-
-	@Override
 	public Rectangle getArea()
 	{
 		return new Rectangle(_position.x, _position.y, 25 + _label.getPosition().x, 20);
-	}
-
-	@Override
-	public boolean getState()
-	{
-		return _enabled;
 	}
 }

@@ -19,7 +19,7 @@ import metro.Graphics.Fill;
  *
  */
 
-public class List extends ActionObservable implements ControlElement
+public class List extends ControlElement
 {
 	private ArrayList<String> _entries = new ArrayList<String>();
 	private Rectangle _position;
@@ -157,12 +157,6 @@ public class List extends ActionObservable implements ControlElement
 		setSelectedEntry(-1);
 		calcMaxOffset();
 		if(-_offset > _maxOffset) _offset = -_maxOffset;
-	}
-
-	@Override
-	public void setState(boolean enableState)
-	{
-		_enabled = enableState;
 	}
 
 	/**
@@ -431,18 +425,6 @@ public class List extends ActionObservable implements ControlElement
 	}
 
 	@Override
-	public void setPosition(Point pos)
-	{
-		_position = new Rectangle(pos.x, pos.y, _position.width, _position.height);
-	}
-
-	@Override
-	public Point getPosition()
-	{
-		return new Point(_position.x, _position.y);
-	}
-
-	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
@@ -498,18 +480,6 @@ public class List extends ActionObservable implements ControlElement
 				setSelectedEntry(_selectedEntry);
 			}
 		}
-	}
-
-	@Override
-	public Rectangle getArea()
-	{
-		return _position;
-	}
-
-	@Override
-	public boolean getState()
-	{
-		return _enabled;
 	}
 
 	/**

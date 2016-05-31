@@ -17,7 +17,7 @@ import metro.Graphics.Draw;
  *
  */
 
-public class Label extends ActionObservable implements ControlElement
+public class Label extends ControlElement
 {
 	private String _text = "";
 	private Point _position;
@@ -94,7 +94,7 @@ public class Label extends ActionObservable implements ControlElement
 	 * Draws the label onto the screen. The Color of the Graphics-handle will be restores after drawing.
 	 */
 	@Override
-	public void draw()
+	void draw()
 	{
 		if(_enabled) Draw.setColor(_color);
 		else Draw.setColor(Color.gray);
@@ -122,18 +122,6 @@ public class Label extends ActionObservable implements ControlElement
 		Rectangle pos = new Rectangle(_position.x, _position.y, Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
 
 		return pos.contains(mPos);
-	}
-
-	@Override
-	public void setPosition(Point pos)
-	{
-		_position = pos;
-	}
-
-	@Override
-	public Point getPosition()
-	{
-		return _position;
 	}
 	
 	@Override
@@ -170,26 +158,8 @@ public class Label extends ActionObservable implements ControlElement
 	}
 
 	@Override
-	public void setText(String text)
-	{
-		_text = text;
-	}
-
-	@Override
-	public void setState(boolean enable)
-	{
-		_enabled = enable;
-	}
-
-	@Override
 	public Rectangle getArea()
 	{
 		return new Rectangle(_position.x, _position.y, Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
-	}
-
-	@Override
-	public boolean getState()
-	{
-		return _enabled;
 	}
 }

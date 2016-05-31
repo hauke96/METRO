@@ -19,7 +19,7 @@ import metro.Graphics.Fill;
  * @author hauke
  *
  */
-public class InputField extends ActionObservable implements ControlElement
+public class InputField extends ControlElement
 {
 	private String _text;
 	private Rectangle _position;
@@ -120,18 +120,6 @@ public class InputField extends ActionObservable implements ControlElement
 		else disselect();
 
 		return clickedOnControl;
-	}
-
-	@Override
-	public void setPosition(Point pos)
-	{
-		_position = new Rectangle(pos.x, pos.y, _position.width, _position.height);
-	}
-
-	@Override
-	public Point getPosition()
-	{
-		return _position.getLocation();
 	}
 
 	@Override
@@ -267,12 +255,6 @@ public class InputField extends ActionObservable implements ControlElement
 		_curserPos = _text.length();
 	}
 
-	@Override
-	public void setState(boolean enable)
-	{
-		_enabled = enable;
-	}
-
 	/**
 	 * Sets this input as selected which enables inputs.
 	 */
@@ -287,17 +269,5 @@ public class InputField extends ActionObservable implements ControlElement
 	public void disselect()
 	{
 		_selected = false;
-	}
-
-	@Override
-	public Rectangle getArea()
-	{
-		return _position;
-	}
-
-	@Override
-	public boolean getState()
-	{
-		return _enabled;
 	}
 }
