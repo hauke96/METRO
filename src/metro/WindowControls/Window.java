@@ -18,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author hauke
  * 
  */
+//TODO implement the window with a panel
 public class Window extends ControlElement
 {
 	private Point _oldMousePos;
