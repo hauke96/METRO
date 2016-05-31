@@ -4,6 +4,7 @@
 package metro.WindowControls;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -19,12 +20,8 @@ import metro.Graphics.Draw;
 
 public class Label extends ControlElement
 {
-	private String _text = "";
-	private Point _position;
 	private int _areaWidth = 0;
-	private Window _windowHandle;
 	private Color _color;
-	private boolean _enabled;
 
 	/**
 	 * Creates a new label.
@@ -49,12 +46,10 @@ public class Label extends ControlElement
 	public Label(String text, Point position, int areaWidth, Window window)
 	{
 		_text = text;
-		_position = position;
-		_windowHandle = window;
+		Dimension size = calcSize();
+		_area = new Rectangle(position.x, position.y, size.width, size.height);
 		_areaWidth = areaWidth;
-		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 		_color = Color.black;
-		_enabled = true;
 	}
 
 	/**
@@ -96,16 +91,16 @@ public class Label extends ControlElement
 	@Override
 	void draw()
 	{
-		if(_enabled) Draw.setColor(_color);
+		if(_state) Draw.setColor(_color);
 		else Draw.setColor(Color.gray);
 
 		if(_areaWidth == 0)
 		{
-			Draw.String(_text, _position.x, _position.y);
+			Draw.String(_text, _area.x, _area.y);
 		}
 		else
 		{
-			Draw.String(_text, _position.x, _position.y, _areaWidth);
+			Draw.String(_text, _area.x, _area.y, _areaWidth);
 		}
 	}
 
@@ -116,16 +111,16 @@ public class Label extends ControlElement
 	 */
 	public boolean clickOnControlElement()
 	{
-		if(!_enabled) return false;
+		if(!_state) return false;
 		Point mPos = METRO.__originalMousePosition;
-		
-		Rectangle pos = new Rectangle(_position.x, _position.y, Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
+
+		Rectangle pos = new Rectangle(_area.x, _area.y, Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
 
 		return pos.contains(mPos);
 	}
-	
+
 	@Override
-	public boolean mouseClicked(int screenX, int screenY, int button)
+	boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{
@@ -136,30 +131,36 @@ public class Label extends ControlElement
 	}
 
 	@Override
-	public void moveElement(Point offset)
+	void moveElement(Point offset)
 	{
-		_position.x += offset.x;
-		_position.y += offset.y;
+		_area.x += offset.x;
+		_area.y += offset.y;
 	}
 
 	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	@Override
-	public void keyPressed(int key)
+	void mouseScrolled(int amount)
 	{
 	}
 
 	@Override
-	public void keyUp(int keyCode)
+	void keyPressed(int key)
+	{
+	}
+
+	@Override
+	void keyUp(int keyCode)
 	{
 	}
 
 	@Override
 	public Rectangle getArea()
 	{
-		return new Rectangle(_position.x, _position.y, Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
+		Dimension size = calcSize();
+		return new Rectangle(_area.x, _area.y, size.width, size.height);
+	}
+
+	private Dimension calcSize()
+	{
+		return new Dimension(Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
 	}
 }

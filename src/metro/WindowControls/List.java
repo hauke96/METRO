@@ -22,8 +22,6 @@ import metro.Graphics.Fill;
 public class List extends ControlElement
 {
 	private ArrayList<String> _entries = new ArrayList<String>();
-	private Rectangle _position;
-	private Window _windowHandle;
 	private int _offset,
 		_defaultYSpace, // space between text and border in the normal mode
 		_compactYSpace, // space between text and border in the compact mode
@@ -31,7 +29,6 @@ public class List extends ControlElement
 	private int _maxOffset,
 		_scrollHeight; // height of one scroll step
 	private boolean _compact = false, // less space between text and top/bottom edge
-		_enabled = true,
 		_decorated = true,
 		_sticky = false;
 	private Color _backgroundColor,
@@ -41,23 +38,21 @@ public class List extends ControlElement
 	 * Creates a new list control element on a window.
 	 * 
 	 * @param position The position on the window.
-	 * @param win The window with which this list of connected.
 	 */
-	public List(Rectangle position, Window win)
+	public List(Rectangle position)
 	{
-		this(position, null, win, false);
+		this(position, null, false);
 	}
 
 	/**
 	 * Creates a new list control element on a window.
 	 * 
 	 * @param position The position on the window.
-	 * @param win The window with which this list of connected.
 	 * @param compact Set to true if list should be a compact list (entries are not that high)
 	 */
-	public List(Rectangle position, Window win, boolean compact)
+	public List(Rectangle position, boolean compact)
 	{
-		this(position, null, win, compact);
+		this(position, null, compact);
 	}
 
 	/**
@@ -65,11 +60,10 @@ public class List extends ControlElement
 	 * 
 	 * @param position The position on the window.
 	 * @param entries The entries that are in the list after creating it.
-	 * @param win The window with which this list of connected.
 	 */
-	public List(Rectangle position, ArrayList<String> entries, Window win)
+	public List(Rectangle position, ArrayList<String> entries)
 	{
-		this(position, entries, win, false);
+		this(position, entries, false);
 	}
 
 	/**
@@ -77,14 +71,13 @@ public class List extends ControlElement
 	 * 
 	 * @param position The position on the window.
 	 * @param entries The entries that are in the list after creating it.
-	 * @param win The window with which this list of connected.
 	 * @param compact Set to true if list should be a compact list (entries are not that high)
 	 */
-	public List(Rectangle position, ArrayList<String> entries, Window win, boolean compact)
+	public List(Rectangle position, ArrayList<String> entries, boolean compact)
 	{
 		if(entries != null) _entries = entries;
 
-		_position = position;
+		_area = position;
 		_compact = compact;
 		_offset = 0;
 		_defaultYSpace = 30;
@@ -97,9 +90,6 @@ public class List extends ControlElement
 
 		setSelectedEntry(-1);
 		calcMaxOffset();
-
-		_windowHandle = win;
-		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
 
 	}
 
@@ -114,7 +104,7 @@ public class List extends ControlElement
 
 		for(String e : _entries)
 		{
-			int amountRows = Draw.getStringLines(e, _position.width - 6);
+			int amountRows = Draw.getStringLines(e, _area.width - 6);
 
 			yOffset += 2 * ySpace + // space above and below string
 				Draw.getStringSize(e).height * amountRows + // rows * height of string
@@ -122,7 +112,7 @@ public class List extends ControlElement
 		}
 		yOffset += ySpace;
 		int magicFactor = (23 / 20) * (ySpace - 10) + 17; // fine-tuning for the maximum offset for scrolling (with this factor, the space between last element and bottom of list are matching automagically)
-		if(yOffset - _scrollHeight - 3 > _position.height) _maxOffset = yOffset - _position.height - _scrollHeight + magicFactor;
+		if(yOffset - _scrollHeight - 3 > _area.height) _maxOffset = yOffset - _area.height - _scrollHeight + magicFactor;
 		else _maxOffset = 0;
 	}
 
@@ -240,16 +230,16 @@ public class List extends ControlElement
 	}
 
 	@Override
-	public void draw()
+	void draw()
 	{
 		METRO.__spriteBatch.end();
 		METRO.__spriteBatch.begin();
 
 		// Create scissor to draw only in the area of the list box.
 		com.badlogic.gdx.math.Rectangle scissors = new com.badlogic.gdx.math.Rectangle();
-		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_position.x + METRO.__getXOffset(), _position.y + METRO.__getYOffset(),
-			_position.width + 1,
-			_position.height + 1);
+		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_area.x + METRO.__getXOffset(), _area.y + METRO.__getYOffset(),
+			_area.width + 1,
+			_area.height + 1);
 		ScissorStack.calculateScissors((Camera)METRO.__camera, METRO.__spriteBatch.getTransformMatrix(), clipBounds, scissors);
 		ScissorStack.pushScissors(scissors);
 
@@ -270,7 +260,7 @@ public class List extends ControlElement
 	private void clearBackground()
 	{
 		Fill.setColor(_backgroundColor);
-		Fill.Rect(_position.x, _position.y, _position.width, _position.height);
+		Fill.Rect(_area.x, _area.y, _area.width, _area.height);
 	}
 
 	/**
@@ -284,51 +274,51 @@ public class List extends ControlElement
 		Point mPos = METRO.__originalMousePosition;
 		for(int i = 0; i < _entries.size(); ++i)
 		{
-			int amountRows = Draw.getStringLines(_entries.get(i), _position.width - 6);
+			int amountRows = Draw.getStringLines(_entries.get(i), _area.width - 6);
 			Draw.setColor(Color.lightGray);
 
 			// Calculate rect for the border = rect of entry
-			Rectangle entryRect = new Rectangle(_position.x + 3,
-				_position.y + _offset + (yOffset - ySpace) + 5,
-				_position.width - 9,
+			Rectangle entryRect = new Rectangle(_area.x + 3,
+				_area.y + _offset + (yOffset - ySpace) + 5,
+				_area.width - 9,
 				2 * ySpace + // space above and below string
 					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
 					(amountRows - 1) * 8 // space between lines
 					- 1);
 
 			// Hover effect: when mouse is in an entry, make background light-light-gray
-			if(_enabled && entryRect.contains(mPos))
+			if(_state && entryRect.contains(mPos))
 			{
 				Fill.setColor(_hoverColor);
 				Fill.Rect(entryRect);
 			}
 
 			// Draw border for selected entry
-			if(_enabled && _decorated)
+			if(_state && _decorated)
 			{
 				if(_selectedEntry == i)
 				{
 					Draw.setColor(Color.gray);
 				}
-				Draw.Rect(_position.x + 3,
-					_position.y + _offset + (yOffset - ySpace) + 5,
-					_position.width - 9,
+				Draw.Rect(_area.x + 3,
+					_area.y + _offset + (yOffset - ySpace) + 5,
+					_area.width - 9,
 					2 * ySpace + // space above and below string
 						Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
 						(amountRows - 1) * 8 // space between lines
 						- 3); // gap between rects
 			}
-			else if(_enabled) // enabled but not decoryted --> just a line between entries
+			else if(_state) // enabled but not decoryted --> just a line between entries
 			{
-				Draw.Line(_position.x + 8,
-					_position.y + _offset + (yOffset - ySpace) + 4,
-					_position.x + _position.width - 11,
-					_position.y + _offset + (yOffset - ySpace) + 4);
+				Draw.Line(_area.x + 8,
+					_area.y + _offset + (yOffset - ySpace) + 4,
+					_area.x + _area.width - 11,
+					_area.y + _offset + (yOffset - ySpace) + 4);
 			}
 
 			// Draw the string
-			Draw.setColor((_enabled ? Color.black : Color.gray)); // gray when disabled
-			Draw.String(_entries.get(i), _position.x + 20, _position.y + _offset + yOffset + 4, _position.width - 40);
+			Draw.setColor((_state ? Color.black : Color.gray)); // gray when disabled
+			Draw.String(_entries.get(i), _area.x + 20, _area.y + _offset + yOffset + 4, _area.width - 40);
 
 			yOffset += 2 * ySpace + // 2 * 30px space above and below string
 				Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
@@ -342,15 +332,15 @@ public class List extends ControlElement
 	private void drawBorders()
 	{
 		// Fill the little gabs of the two top and bottom lines
-		Fill.Rect(_position.x, _position.y, _position.width, 3);
-		Fill.Rect(_position.x, _position.y + _position.height - 2, _position.width, 3);
+		Fill.Rect(_area.x, _area.y, _area.width, 3);
+		Fill.Rect(_area.x, _area.y + _area.height - 2, _area.width, 3);
 
 		// Draw all the border lines. The two top and bottom lines are just looking cool ;)
 		Draw.setColor(METRO.__metroBlue);
-		Draw.Rect(_position);
-		Draw.Line(_position.x, _position.y + _position.height - 2, _position.x + _position.width - 3, _position.y + _position.height - 2); // bottom 2
-		Draw.Line(_position.x + _position.width - 3, _position.y, _position.x + _position.width - 3, _position.y + _position.height); // right for scroll bar
-		Draw.Line(_position.x, _position.y + 2, _position.x + _position.width - 3, _position.y + 2); // top 2
+		Draw.Rect(_area);
+		Draw.Line(_area.x, _area.y + _area.height - 2, _area.x + _area.width - 3, _area.y + _area.height - 2); // bottom 2
+		Draw.Line(_area.x + _area.width - 3, _area.y, _area.x + _area.width - 3, _area.y + _area.height); // right for scroll bar
+		Draw.Line(_area.x, _area.y + 2, _area.x + _area.width - 3, _area.y + 2); // top 2
 	}
 
 	/**
@@ -358,13 +348,13 @@ public class List extends ControlElement
 	 */
 	private void drawScrollbar()
 	{
-		int height = _maxOffset == 0 ? _position.height : (int)((_position.height / (float)(_position.height + _maxOffset)) * _position.height);
-		int yPos = (int)((_position.height - height) * -(_offset / (float)_maxOffset));
+		int height = _maxOffset == 0 ? _area.height : (int)((_area.height / (float)(_area.height + _maxOffset)) * _area.height);
+		int yPos = (int)((_area.height - height) * -(_offset / (float)_maxOffset));
 
 		Fill.setColor(METRO.__metroBlue);
-		Fill.Rect(_position.x + _position.width - 3,
-			_position.y + yPos,
-			_position.x + _position.width - 2,
+		Fill.Rect(_area.x + _area.width - 3,
+			_area.y + yPos,
+			_area.x + _area.width - 2,
 			height); // right for scroll bar
 	}
 
@@ -376,7 +366,7 @@ public class List extends ControlElement
 	public boolean clickOnControlElement()
 	{
 		Point mPos = METRO.__originalMousePosition;
-		if(!_position.contains(mPos)) return false;
+		if(!_area.contains(mPos)) return false;
 
 		int ySpace = _defaultYSpace;
 		if(_compact) ySpace = _compactYSpace;
@@ -384,19 +374,19 @@ public class List extends ControlElement
 
 		for(int i = 0; i < _entries.size(); ++i)
 		{
-			int amountRows = Draw.getStringLines(_entries.get(i), _position.width - 6);
+			int amountRows = Draw.getStringLines(_entries.get(i), _area.width - 6);
 			Draw.setColor(Color.lightGray);
 
 			// Calculate rect for the border = rect of entry
-			Rectangle entryRect = new Rectangle(_position.x + 3,
-				_position.y + _offset + (yOffset - ySpace) + 5,
-				_position.width - 9,
+			Rectangle entryRect = new Rectangle(_area.x + 3,
+				_area.y + _offset + (yOffset - ySpace) + 5,
+				_area.width - 9,
 				2 * ySpace + // space above and below string
 					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
 					(amountRows - 1) * 8 // space between lines
 					- 3);
 
-			if(_enabled && entryRect.contains(mPos)) // when mouse is in an entry, make background light-light-gray
+			if(_state && entryRect.contains(mPos)) // when mouse is in an entry, make background light-light-gray
 			{
 				setSelectedEntry(i);
 				return true;
@@ -407,7 +397,7 @@ public class List extends ControlElement
 				(amountRows - 1) * 8; // space between lines
 		}
 
-		return _position.contains(mPos);
+		return _area.contains(mPos);
 	}
 
 	/**
@@ -425,7 +415,7 @@ public class List extends ControlElement
 	}
 
 	@Override
-	public boolean mouseClicked(int screenX, int screenY, int button)
+	boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{
@@ -436,18 +426,18 @@ public class List extends ControlElement
 	}
 
 	@Override
-	public void moveElement(Point offset)
+	void moveElement(Point offset)
 	{
-		_position.x += offset.x;
-		_position.y += offset.y;
+		_area.x += offset.x;
+		_area.y += offset.y;
 	}
 
 	@Override
-	public void mouseScrolled(int amount)
+	void mouseScrolled(int amount)
 	{
 		// when the _offset is 0, the scroll bar is at the very top.
 		// when the _offset is -_maxOffset, the scroll bar is at the very bottom.
-		if(_enabled && _position.contains(METRO.__originalMousePosition))
+		if(_state && _area.contains(METRO.__originalMousePosition))
 		{
 			_offset += -1 * amount * _scrollHeight;
 			if(_offset > 0) _offset = 0;
@@ -456,12 +446,12 @@ public class List extends ControlElement
 	}
 
 	@Override
-	public void keyPressed(int key)
+	void keyPressed(int key)
 	{
 	}
 
 	@Override
-	public void keyUp(int keyCode)
+	void keyUp(int keyCode)
 	{
 	}
 
@@ -502,16 +492,6 @@ public class List extends ControlElement
 		_backgroundColor = new Color(255, 255, 255, transparency);
 		int c = 240 - (255 - transparency) / 4;
 		_hoverColor = new Color(c, c, c, transparency);
-	}
-
-	/**
-	 * Sets the size of the list.
-	 * 
-	 * @param size The new size.
-	 */
-	public void setSize(Rectangle size)
-	{
-		_position = size;
 	}
 
 	/**

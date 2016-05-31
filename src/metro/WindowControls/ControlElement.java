@@ -25,7 +25,7 @@ abstract class ControlElement extends ActionObservable
 	/**
 	 * Draws the control.
 	 */
-	abstract void draw();
+	final abstract void draw();
 
 	/**
 	 * Is called when mouse clicked with its left button.
@@ -35,42 +35,42 @@ abstract class ControlElement extends ActionObservable
 	 * @param button The button related to Buttons.xy.
 	 * @return True when mouse clicked on control, false when not.
 	 */
-	abstract boolean mouseClicked(int screenX, int screenY, int button);
+	final abstract boolean mouseClicked(int screenX, int screenY, int button);
 
 	/**
 	 * Moves the element.
 	 * 
 	 * @param offset The amount of pixel to move. This is NOT the new position, only an offset!
 	 */
-	public abstract void moveElement(Point offset);
+	public final abstract void moveElement(Point offset);
 
 	/**
 	 * Fires when users scrolls.
 	 * 
 	 * @param amount Positive or negative amount of steps since last frame.
 	 */
-	abstract void mouseScrolled(int amount);
+	final abstract void mouseScrolled(int amount);
 
 	/**
 	 * Fires, when a key has been pressed.
 	 * 
 	 * @param keyCode The code of the key as int.
 	 */
-	abstract void keyPressed(int keyCode);
+	final abstract void keyPressed(int keyCode);
 
 	/**
 	 * Fires when a key has been released.
 	 * 
 	 * @param keyCode The code of the key from Input.Keys
 	 */
-	abstract void keyUp(int keyCode);
+	final abstract void keyUp(int keyCode);
 
 	/**
 	 * Gets an rectangle which covers the whole area of this control.
 	 * 
 	 * @return The area of this control as rectangle.
 	 */
-	public final Rectangle getArea()
+	public Rectangle getArea()
 	{
 		return (Rectangle)_area.clone();
 	}
@@ -80,7 +80,7 @@ abstract class ControlElement extends ActionObservable
 	 * 
 	 * @param newArea The new area of the control.
 	 */
-	public final void setArea(Rectangle newArea)
+	public void setArea(Rectangle newArea)
 	{
 		_area = newArea;
 	}
@@ -90,7 +90,7 @@ abstract class ControlElement extends ActionObservable
 	 * 
 	 * @param pos New position as Point.
 	 */
-	public final void setPosition(Point pos)
+	public void setPosition(Point pos)
 	{
 		_area.setLocation(pos);
 	}
@@ -100,7 +100,7 @@ abstract class ControlElement extends ActionObservable
 	 * 
 	 * @return Position as Point.
 	 */
-	public final Point getPosition()
+	public Point getPosition()
 	{
 		return (Point)_area.getLocation().clone();
 	}
@@ -110,7 +110,7 @@ abstract class ControlElement extends ActionObservable
 	 * 
 	 * @param text The new text.
 	 */
-	public final void setText(String text)
+	public void setText(String text)
 	{
 		_text = text;
 	}
@@ -128,7 +128,7 @@ abstract class ControlElement extends ActionObservable
 	 * 
 	 * @param newState The new state of the control.
 	 */
-	public final void setState(boolean newState)
+	public void setState(boolean newState)
 	{
 		_state = newState;
 	}
@@ -138,7 +138,7 @@ abstract class ControlElement extends ActionObservable
 	 * 
 	 * @return True when control is active and the user can interact with it, false if not.
 	 */
-	public final boolean getState()
+	public boolean getState()
 	{
 		return _state;
 	}

@@ -22,69 +22,36 @@ import metro.Graphics.Draw;
 public class Button extends ControlElement
 {
 	private TextureRegion _texture;
-	private Rectangle _position,
-		_positionOnImage;
-	private Window _windowHandle;
-	private boolean _hasBeenClicked = false, // true if control has been clicked since last check
-		_enabled;
-	private String _text = "";
+	private Rectangle _areaOnImage;
+	private boolean _hasBeenClicked = false; // true if control has been clicked since last check
 
 	/**
 	 * Creates a new Button.
 	 * 
-	 * @param position The position on the screen/window (absolute).
-	 * @param positionOnImage The position of the button texture on an image (absolute).
+	 * @param area The position on the screen/window (absolute).
+	 * @param areaOnImage The position of the button texture on an image (absolute).
 	 * @param texture The button texture.
 	 */
-	public Button(Rectangle position, Rectangle positionOnImage, TextureRegion texture)
-	{
-		this(position, positionOnImage, texture, null);
-	}
-
-	/**
-	 * Creates a new Button.
-	 * 
-	 * @param position The position on the screen/window (absolute).
-	 * @param positionOnImage The position of the button texture on an image (absolute).
-	 * @param texture The button texture.
-	 * @param window The window it should be on.
-	 */
-	public Button(Rectangle position, Rectangle positionOnImage, TextureRegion texture, Window window)
+	public Button(Rectangle area, Rectangle areaOnImage, TextureRegion texture)
 	{
 		_texture = texture;
-		_position = position;
-		_positionOnImage = positionOnImage;
-		_windowHandle = window;
-		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		_enabled = true;
+		_area = area;
+		_areaOnImage = areaOnImage;
+		_state = true;
 	}
 
 	/**
 	 * Creates a new button.
 	 * 
-	 * @param position The position on the screen/window (absolute).
+	 * @param area The position on the screen/window (absolute).
 	 * @param text The text of the button.
-	 * @param window The window it should be on.
 	 */
-	public Button(Rectangle position, String text, Window window)
+	public Button(Rectangle area, String text)
 	{
 		_text = text;
-		_position = position;
-		_positionOnImage = new Rectangle(0, 0, _position.width, _position.height);
-		_windowHandle = window;
-		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		_enabled = true;
-	}
-
-	/**
-	 * Creates a new button.
-	 * 
-	 * @param position The position on screen (absolute).
-	 * @param text The text of the button.
-	 */
-	public Button(Rectangle position, String text)
-	{
-		this(position, text, null);
+		_area = area;
+		_areaOnImage = new Rectangle(0, 0, _area.width, _area.height);
+		_state = true;
 	}
 
 	/**
@@ -96,7 +63,7 @@ public class Button extends ControlElement
 	 */
 	public boolean isPressed(int x, int y)
 	{
-		if(_enabled && (_position.contains(x, y) || _hasBeenClicked))
+		if(_state && (_area.contains(x, y) || _hasBeenClicked))
 		{
 			_hasBeenClicked = false;
 			return true;
@@ -113,7 +80,7 @@ public class Button extends ControlElement
 	{
 		boolean temp = _hasBeenClicked;
 		_hasBeenClicked = false;
-		return _enabled ? temp : false;
+		return _state ? temp : false;
 	}
 
 	/**
@@ -123,18 +90,18 @@ public class Button extends ControlElement
 	{
 		if(!_text.equals(""))
 		{
-			if(_enabled) Draw.setColor(METRO.__metroRed);
+			if(_state) Draw.setColor(METRO.__metroRed);
 			else Draw.setColor(Color.gray);
-			Draw.String(_text, _position.x + (_position.width - Draw.getStringSize(_text).width) / 2,
-				_position.y + (_position.height - Draw.getStringSize(_text).height) / 2);
+			Draw.String(_text, _area.x + (_area.width - Draw.getStringSize(_text).width) / 2,
+				_area.y + (_area.height - Draw.getStringSize(_text).height) / 2);
 
-			if(_enabled) Draw.setColor(METRO.__metroBlue);
+			if(_state) Draw.setColor(METRO.__metroBlue);
 			else Draw.setColor(Color.lightGray);
-			Draw.Rect(_position.x, _position.y, _position.width, _position.height);
+			Draw.Rect(_area.x, _area.y, _area.width, _area.height);
 		}
 		else
 		{
-			Draw.Image(_texture, _position, _positionOnImage);
+			Draw.Image(_texture, _area, _areaOnImage);
 		}
 	}
 
@@ -145,10 +112,10 @@ public class Button extends ControlElement
 	 */
 	public boolean clickOnControlElement()
 	{
-		if(!_enabled) return false;
+		if(!_state) return false;
 		Point mPos = METRO.__originalMousePosition;
 
-		if(_position.contains(mPos))
+		if(_area.contains(mPos))
 		{
 			_hasBeenClicked = true;
 			return true;
@@ -157,7 +124,7 @@ public class Button extends ControlElement
 	}
 
 	@Override
-	public boolean mouseClicked(int screenX, int screenY, int button)
+	boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{
@@ -168,24 +135,23 @@ public class Button extends ControlElement
 	}
 
 	@Override
-	public void moveElement(Point offset)
+	void moveElement(Point offset)
 	{
-		_position.x += offset.x;
-		_position.y += offset.y;
+		_area.translate(offset.x, offset.y);
 	}
 
 	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	@Override
-	public void keyPressed(int key)
+	void mouseScrolled(int amount)
 	{
 	}
 
 	@Override
-	public void keyUp(int keyCode)
+	void keyPressed(int key)
+	{
+	}
+
+	@Override
+	void keyUp(int keyCode)
 	{
 	}
 
@@ -197,7 +163,7 @@ public class Button extends ControlElement
 	 */
 	public void setImage(Rectangle positionOnImage, TextureRegion image)
 	{
-		_positionOnImage = positionOnImage;
+		_areaOnImage = positionOnImage;
 		_texture = image;
 	}
 }

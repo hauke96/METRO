@@ -20,10 +20,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 public class Window extends ControlElement
 {
-	private Point _position,
-		_size,
-		_oldMousePos;
-	private String _title = "";
+	private Point _oldMousePos;
 	private ArrayList<ControlElement> _elementList;
 	private boolean _dragMode, // to drag the window
 		_closed; // even if window has been deleted from the window list, that does not mean, that this object doesn't exist anymore, to this indicates that this window has been deleted
@@ -33,37 +30,34 @@ public class Window extends ControlElement
 	 * Creates a new window.
 	 * 
 	 * @param title The title of the Window, is shown in the top area.
-	 * @param position The position on the Screen (absolute)
+	 * @param area The position on the Screen (absolute)
 	 * @param size The size in pixel (absolute)
 	 */
-	public Window(String title, Point position, Point size)
+	public Window(String title, Rectangle area, Point size)
 	{
-		this(title, position, size, METRO.__metroBlue);
+		this(title, area, METRO.__metroBlue);
 	}
 
 	/**
 	 * Creates a new window.
 	 * 
 	 * @param title The title of the Window, is shown in the top area.
-	 * @param position The position on the Screen (absolute)
-	 * @param size The size in pixel (absolute)
+	 * @param area The size of the area of the window in pixel.
 	 * @param color The color of the border
 	 */
-	public Window(String title, Point position, Point size, Color color)
+	public Window(String title, Rectangle area, Color color)
 	{
-		_title = title;
-		_position = position;
-		_position.y += 20;
-		_position.x += 1;
-		_size = size;
-		_size.y += 20; // for title
+		_text = title;
+		_area = area;
+		_area.translate(20, 1);
+		_area.setSize(_area.width, _area.height+20);
 		_color = color;
 
 		_closed = false;
 		_dragMode = false;
 		_elementList = new ArrayList<ControlElement>();
 
-		METRO.__registerWindow(this);
+		METRO.__registerWindow(this); //TODO create window and panel manager
 	}
 
 	/**
@@ -90,37 +84,37 @@ public class Window extends ControlElement
 	{
 		// Clear background
 		Fill.setColor(Color.white);
-		Fill.Rect(_position.x,
-			_position.y,
-			_size.x + 1,
-			_size.y + 1);
+		Fill.Rect(_area.x,
+			_area.y,
+			_area.width + 1,
+			_area.height + 1);
 
 		// Draw head bar of window
 		Fill.setColor(_color);
-		Fill.Rect(_position.x,
-			_position.y,
-			_size.x - 20,
+		Fill.Rect(_area.x,
+			_area.y,
+			_area.width - 20,
 			20);
 		Draw.setColor(Color.white);
-		Draw.Rect(_position.x + 1,
-			_position.y + 1,
-			_size.x - 20,
+		Draw.Rect(_area.x + 1,
+			_area.y + 1,
+			_area.width - 20,
 			18);
 
 		// Draw Border
 		Draw.setColor(_color);
-		Draw.Rect(_position.x, _position.y, _size.x + 1, _size.y + 1);
-		Draw.Rect(_position.x, _position.y, _size.x + 1, 20);
-		Draw.Rect(_position.x + _size.x - 19, _position.y, 20, 20); // close box
+		Draw.Rect(_area.x, _area.y, _area.width + 1, _area.height + 1);
+		Draw.Rect(_area.x, _area.y, _area.width + 1, 20);
+		Draw.Rect(_area.x + _area.width - 19, _area.y, 20, 20); // close box
 
 		// Draw Window title
 		Draw.setColor(Color.white);
-		Draw.String(_title, _position.x + (_size.x - 20) / 2 - Draw.getStringSize(_title).width / 2,
-			_position.y + Draw.getStringSize(_title).height - 9);
+		Draw.String(_text, _area.x + (_area.width - 20) / 2 - Draw.getStringSize(_text).width / 2,
+			_area.y + Draw.getStringSize(_text).height - 9);
 
 		// Close cross
 		Draw.Image(METRO.__iconSet,
-			new Rectangle(_position.x + _size.x - 19, _position.y + 1, 19, 19),
+			new Rectangle(_area.x + _area.width - 19, _area.y + 1, 19, 19),
 			new Rectangle(0, 0, 19, 19));
 	}
 
@@ -143,8 +137,8 @@ public class Window extends ControlElement
 				cElement.moveElement(positionDiff);
 			}
 
-			_position.x += positionDiff.x;
-			_position.y += positionDiff.y;
+			_area.x += positionDiff.x;
+			_area.y += positionDiff.y;
 			_oldMousePos = METRO.__originalMousePosition;
 		}
 	}
@@ -159,7 +153,7 @@ public class Window extends ControlElement
 		if(!_elementList.contains(cElement))
 		{
 			Point pos = cElement.getPosition();
-			cElement.setPosition(new Point(pos.x + _position.x, pos.y + _position.y + 20));
+			cElement.setPosition(new Point(pos.x + _area.x, pos.y + _area.y + 20));
 			_elementList.add(cElement); // there wont be doubles ;)
 		}
 	}
@@ -192,10 +186,10 @@ public class Window extends ControlElement
 	 */
 	public boolean isMouseOnWindowArea(int screenX, int screenY)
 	{
-		return screenX >= _position.x
-			&& screenX <= _position.x + _size.x
-			&& screenY >= _position.y
-			&& screenY <= _position.y + _size.y;
+		return screenX >= _area.x
+			&& screenX <= _area.x + _area.width
+			&& screenY >= _area.y
+			&& screenY <= _area.y + _area.height;
 	}
 
 	/**
@@ -205,7 +199,7 @@ public class Window extends ControlElement
 	 * @param screenY The y-coordinate of the click
 	 * @param mouseButton The mouse button (using gdx.Input.Buttons)
 	 */
-	public void mousePressed(int screenX, int screenY, int mouseButton)
+	void mousePressed(int screenX, int screenY, int mouseButton)
 	{
 		// Check for drag-mode:
 		if(isMouseOnWindow(screenX, screenY)
@@ -219,13 +213,13 @@ public class Window extends ControlElement
 	/**
 	 * Makes things when mouse is released (important for drag-mode of the window).
 	 */
-	public void mouseReleased()
+	void mouseReleased()
 	{
 		_dragMode = false;
 	}
 
 	@Override
-	public void mouseScrolled(int amount)
+	void mouseScrolled(int amount)
 	{
 	}
 
@@ -239,10 +233,10 @@ public class Window extends ControlElement
 	 */
 	public boolean closeIfNeeded(int screenX, int screenY, int mouseButton)
 	{
-		if(screenX >= _position.x + _size.x - 20
-			&& screenX <= _position.x + _size.x
-			&& screenY >= _position.y
-			&& screenY <= _position.y + 20)
+		if(screenX >= _area.x + _area.width - 20
+			&& screenX <= _area.x + _area.width
+			&& screenY >= _area.y
+			&& screenY <= _area.y + 20)
 		{
 			close(); // mark whis window as "closed" to tell the METRO class to remove it
 			return true;
@@ -275,7 +269,7 @@ public class Window extends ControlElement
 	}
 
 	@Override
-	public void keyPressed(int keyCode)
+	void keyPressed(int keyCode)
 	{
 		for(ControlElement cElement : _elementList)
 		{
@@ -284,7 +278,7 @@ public class Window extends ControlElement
 	}
 
 	@Override
-	public void keyUp(int keyCode)
+	void keyUp(int keyCode)
 	{
 		for(ControlElement cElement : _elementList)
 		{
@@ -293,12 +287,12 @@ public class Window extends ControlElement
 	}
 
 	@Override
-	public void draw()
+	void draw()
 	{
 	}
 
 	@Override
-	public boolean mouseClicked(int screenX, int screenY, int button)
+	boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		return false;
 	}
