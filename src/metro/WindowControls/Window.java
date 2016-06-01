@@ -31,9 +31,8 @@ public class Window extends Container
 	 * 
 	 * @param title The title of the Window, is shown in the top area.
 	 * @param area The position on the Screen (absolute)
-	 * @param size The size in pixel (absolute)
 	 */
-	public Window(String title, Rectangle area, Point size)
+	public Window(String title, Rectangle area)
 	{
 		this(title, area, METRO.__metroBlue);
 	}

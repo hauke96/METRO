@@ -55,6 +55,7 @@ public class ContainerRenderer implements CloseObserver
 	
 	private void generalNotifying(Notifier notifyFunction)
 	{
+		//TODO determine on which control the focus is  
 		for(Container container : _listOfRenderables)
 		{
 			notifyFunction.notifyRenderable(container);

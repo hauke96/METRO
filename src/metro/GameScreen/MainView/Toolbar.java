@@ -42,16 +42,16 @@ public class Toolbar extends GameScreen
 		_height = 40;
 		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth();
 		_buttonYPosition = -9;
+		
+		//TODO create a panel for controls
 
 		_buildStation = new Button(new Rectangle(_buttonAreaXPosition + 140, _buttonYPosition, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
-		registerControl(_buildStation);
 		_buildTracks = new Button(new Rectangle(_buttonAreaXPosition + 180, _buttonYPosition, 40, 50), new Rectangle(0, 78, 40, 50), METRO.__iconSet);
-		registerControl(_buildTracks);
 		_showTrainList = new Button(new Rectangle(_buttonAreaXPosition + 220, _buttonYPosition, 40, 50), new Rectangle(0, 128, 40, 50), METRO.__iconSet);
-		registerControl(_showTrainList);
 		_createNewTrain = new Button(new Rectangle(_buttonAreaXPosition + 260, _buttonYPosition, 40, 50), new Rectangle(0, 178, 40, 50), METRO.__iconSet);
-		registerControl(_createNewTrain);
 		registerObervations();
+		
+		//TODO add controls to panel
 	}
 
 	private void registerObervations()
@@ -141,11 +141,6 @@ public class Toolbar extends GameScreen
 
 		Draw.setColor(METRO.__metroRed);
 		Draw.Line(_buttonAreaXPosition, 0, _buttonAreaXPosition, _height);
-
-		_buildStation.draw();
-		_buildTracks.draw();
-		_showTrainList.draw();
-		_createNewTrain.draw();
 	}
 
 	@Override

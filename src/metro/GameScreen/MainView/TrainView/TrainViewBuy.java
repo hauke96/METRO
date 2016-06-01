@@ -51,9 +51,10 @@ public class TrainViewBuy extends GameScreen
 
 		_trainManagementService = TrainManagementService.getInstance();
 
+		//TODO create panel for controls
+		
 		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, METRO.__SCREEN_SIZE.height - METRO.__getYOffset() - _areaOffset.y, 210, 20), "Buy");
-		registerControl(_buyButton);
-
+		
 		_availableTrains = new List(
 			new Rectangle(_areaOffset.x + 20, _areaOffset.y + 440, 140, METRO.__SCREEN_SIZE.height - (_areaOffset.y + 420) - _areaOffset.y - METRO.__getYOffset()), null, true);
 		_availableTrains.register(new ActionObserver()
@@ -76,20 +77,18 @@ public class TrainViewBuy extends GameScreen
 				}
 			}
 		});
-		registerControl(_availableTrains);
 
 		_messageLabel = new Label("", new Point(_areaOffset.x + 170, _areaOffset.y + 600), 200);
-		registerControl(_messageLabel);
 
 		_informationKeys = new Label("Name\nProducer\nPrice\nCosts\nCost-factor\nPassenger\nSpeed", new Point(_areaOffset.x + 170, _areaOffset.y + 440));
 		_informationKeys.setColor(METRO.__metroBlue);
-		registerControl(_informationKeys);
 
 		_informationValues = new Label("=\n=\n=\n=\n=\n=\n=\n", new Point(_areaOffset.x + 235, _areaOffset.y + 440));
 		_informationValues.setColor(METRO.__metroBlue);
-		registerControl(_informationValues);
 
 		fillTrainList();
+		
+		//TODO add controls to panel
 	}
 
 	/**
@@ -107,13 +106,6 @@ public class TrainViewBuy extends GameScreen
 	public void updateGameScreen(SpriteBatch g)
 	{
 		drawHeader();
-
-		_availableTrains.draw();
-		_messageLabel.draw();
-		// Draw.setColor(METRO.__metroBlue);
-		_informationKeys.draw();
-		_informationValues.draw();
-		_buyButton.draw();
 		drawTitleImage();
 	}
 

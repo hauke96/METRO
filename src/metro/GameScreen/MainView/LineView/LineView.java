@@ -78,34 +78,31 @@ public class LineView extends GameScreen implements Observer
 	 */
 	private void createControls()
 	{
-		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 40, 300),
-			null, null, true);
-		registerControl(_lineList);
+		//TODO create panel for controls
+		
+		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 40, 300), true);
 		fillLineList();
 
 		_createLineButton = new Button(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Create line");
-		registerControl(_createLineButton);
 		_editLineButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Edit line");
-		registerControl(_editLineButton);
 		_removeLineButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Remove line");
-		registerControl(_removeLineButton);
 
 		_lineNameField = new InputField(new Rectangle(_areaOffset.x + 95, _areaOffset.y + 490, _windowWidth - 175, 20));
 		_lineNameField.setState(false);
-		registerControl(_lineNameField);
+		
 		_lineNameFieldLabel = new Label("Line Name", new Point(_areaOffset.x + 20, _areaOffset.y + 493));
 		_lineNameFieldLabel.setState(false);
-		registerControl(_lineNameFieldLabel);
-		_colorBar = new ColorBar(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 520, _windowWidth - 70, 20), null, 0.9f, 0.8f);
+		
+		_colorBar = new ColorBar(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 520, _windowWidth - 70, 20), 0.9f, 0.8f);
 		_colorBar.setState(false);
-		registerControl(_colorBar);
+		
 		_saveButton = new Button(new Rectangle(_areaOffset.x + (_windowWidth / 2) - 75, METRO.__SCREEN_SIZE.height - _areaOffset.y - 60, 150, 20), "Save");
 		_saveButton.setState(false);
-		registerControl(_saveButton);
 
 		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 100));
 		_messageLabel.setColor(METRO.__metroRed);
-		registerControl(_messageLabel);
+		
+		//TODO add controls to panel
 	}
 
 	/**
@@ -386,11 +383,7 @@ public class LineView extends GameScreen implements Observer
 		drawBackground();
 		drawTitleBox();
 		drawListBox();
-		drawButtons();
-		drawInputFields();
 		drawColorBar();
-
-		_messageLabel.draw();
 	}
 
 	/**
@@ -440,27 +433,6 @@ public class LineView extends GameScreen implements Observer
 		Draw.String("List of your lines:", METRO.__SCREEN_SIZE.width - _windowWidth + 20, _areaOffset.y + 110);
 		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 20, _areaOffset.y + 125,
 			METRO.__SCREEN_SIZE.width - _windowWidth + 20 + length, _areaOffset.y + 125);
-		_lineList.draw();
-	}
-
-	/**
-	 * Draws all buttons.
-	 */
-	private void drawButtons()
-	{
-		_createLineButton.draw();
-		_editLineButton.draw();
-		_removeLineButton.draw();
-	}
-
-	/**
-	 * Draws all input fields
-	 */
-	private void drawInputFields()
-	{
-		_lineNameFieldLabel.draw();
-		_lineNameField.draw();
-		_saveButton.draw();
 	}
 
 	/**
@@ -468,8 +440,6 @@ public class LineView extends GameScreen implements Observer
 	 */
 	private void drawColorBar()
 	{
-		_colorBar.draw();
-
 		if(_colorBar.getClickedColor() != null)
 		{
 			Fill.setColor(_colorBar.getClickedColor());
@@ -542,8 +512,6 @@ public class LineView extends GameScreen implements Observer
 	public void mouseScrolled(int amount)
 	{
 		if(!_isActive) return;
-		_lineList.mouseScrolled(amount);
-		_colorBar.mouseScrolled(amount);
 		String msg = _lineSelectTool.setColor(_colorBar.getClickedColor());
 		if(!msg.equals("")) _messageLabel.setText(msg);
 	}

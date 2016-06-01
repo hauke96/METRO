@@ -22,36 +22,7 @@ public class Label extends ControlElement
 {
 	private int _areaWidth = 0;
 	private Color _color;
-
-	/**
-	 * Creates a new label.
-	 * 
-	 * @param text The text that should be displayed.
-	 * @param position The position on the screen/window (absolute)
-	 * @param window The window it's on.
-	 */
-	public Label(String text, Point position, Window window)
-	{
-		this(text, position, 0, window);
-	}
-
-	/**
-	 * Creates a new label.
-	 * 
-	 * @param text The text that should be displayed.
-	 * @param position The position on the screen/window (absolute)
-	 * @param areaWidth Maximum width of label for automatic line breaks.
-	 * @param window The window it's on.
-	 */
-	public Label(String text, Point position, int areaWidth, Window window)
-	{
-		_text = text;
-		Dimension size = calcSize();
-		_area = new Rectangle(position.x, position.y, size.width, size.height);
-		_areaWidth = areaWidth;
-		_color = Color.black;
-	}
-
+	
 	/**
 	 * Creates a new label.
 	 * 
@@ -60,7 +31,7 @@ public class Label extends ControlElement
 	 */
 	public Label(String text, Point position)
 	{
-		this(text, position, 0, null);
+		this(text, position, 0);
 	}
 
 	/**
@@ -68,11 +39,15 @@ public class Label extends ControlElement
 	 * 
 	 * @param text The text that should be displayed.
 	 * @param position The position on the screen/window (absolute)
-	 * @param areaWidth The maximum width of the label. This will enable automatic line breaks.
+	 * @param areaWidth Maximum width of label for automatic line breaks.
 	 */
 	public Label(String text, Point position, int areaWidth)
 	{
-		this(text, position, areaWidth, null);
+		_text = text;
+		Dimension size = calcSize();
+		_area = new Rectangle(position.x, position.y, size.width, size.height);
+		_areaWidth = areaWidth;
+		_color = Color.black;
 	}
 
 	/**

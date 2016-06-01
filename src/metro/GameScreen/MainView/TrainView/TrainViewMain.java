@@ -47,9 +47,10 @@ public class TrainViewMain extends GameScreen
 		_movedTrain = "";
 
 		_trainManagementService = TrainManagementService.getInstance();
+		
+		//TODO create panel for controls
 
-		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 300, 230),
-			null, null, true);
+		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 300, 230), true);
 		_lineList.register(new ActionObserver()
 		{
 			@Override
@@ -72,20 +73,17 @@ public class TrainViewMain extends GameScreen
 				}
 			}
 		});
-		registerControl(_lineList);
 
-		_trainList = new List(new Rectangle(_areaOffset.x + 121, _areaOffset.y + 130, _windowWidth - 141, 230),
-			null, null, true);
-		registerControl(_trainList);
+		_trainList = new List(new Rectangle(_areaOffset.x + 121, _areaOffset.y + 130, _windowWidth - 141, 230), true);
 
 		fillLineList();
 
 		_moveTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Move train");
-		registerControl(_moveTrainButton);
 		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Sell train");
-		registerControl(_sellTrainButton);
 
 		addButtonObserver();
+		
+		//TODO add controls to window
 	}
 
 	/**
@@ -133,7 +131,6 @@ public class TrainViewMain extends GameScreen
 	public void updateGameScreen(SpriteBatch g)
 	{
 		drawListBox();
-		drawButtons();
 	}
 
 	/**
@@ -142,6 +139,8 @@ public class TrainViewMain extends GameScreen
 	private void drawListBox()
 	{
 		Draw.setColor(METRO.__metroRed);
+		
+		//TODO make this into labels to draw them in the correct way
 
 		String text = "Your lines:";
 		int length = Draw.getStringSize(text).width;
@@ -154,18 +153,6 @@ public class TrainViewMain extends GameScreen
 		length = Draw.getStringSize(text).width;
 		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 125, _areaOffset.y + 125,
 			METRO.__SCREEN_SIZE.width - _windowWidth + 125 + length, _areaOffset.y + 125);
-
-		_trainList.draw();
-		_lineList.draw();
-	}
-
-	/**
-	 * Draws all buttons.
-	 */
-	private void drawButtons()
-	{
-		_moveTrainButton.draw();
-		_sellTrainButton.draw();
 	}
 
 	/**
@@ -240,7 +227,6 @@ public class TrainViewMain extends GameScreen
 	@Override
 	public void mouseScrolled(int amount)
 	{
-		_trainList.mouseScrolled(amount);
 	}
 
 	@Override

@@ -40,14 +40,22 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 		_headerHeight = 25;
 		_width = METRO.__SCREEN_SIZE.width;
 		_isExpanded = true;
-		_entryList = new List(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight),
-			new ArrayList<String>(), null, true);
-		registerControl(_entryList);
+		
+		//TODO create panel for controls
+		
+		_entryList = new List(new Rectangle(0,
+			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
+			_width - 5,
+			_height - METRO.__titleBarHeight + _headerHeight),
+			new ArrayList<String>(), true);
+		
 		_entryList.setDecoration(false);
 		_entryList.setTransparency(165);
 		_entryList.setStickiness(true);
 		addMessage("Game started", NotificationType.GAME_INFO);
 		NotificationServer.subscribe(this);
+		
+		//TODO add controls to panel
 	}
 
 	/**
@@ -66,7 +74,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	public void setWidth(int newWidth)
 	{
 		_width = newWidth;
-		_entryList.setSize(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight));
+		_entryList.setArea(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight));
 	}
 
 	@Override
@@ -81,11 +89,6 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	{
 		Fill.setColor(_backGroundColor);
 		Fill.Rect(0, METRO.__SCREEN_SIZE.height - _height, _width, _height);
-
-		if(_isExpanded)
-		{
-			_entryList.draw();
-		}
 
 		Draw.setColor(METRO.__metroBlue);
 		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height, _width, METRO.__SCREEN_SIZE.height - _height);

@@ -42,23 +42,21 @@ public class MainMenu extends GameScreen
 		// Create MainMenu buttons:
 		_button_startGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 - 25, 200, 50),
 			new Rectangle(0, 0, 200, 50), __buttonTextures);
-		registerControl(_button_startGame);
 
 		_button_settings = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 35, 200, 50),
 			new Rectangle(0, 50, 200, 50), __buttonTextures);
-		registerControl(_button_settings);
 
 		_button_exitGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 95, 200, 50),
 			new Rectangle(0, 100, 200, 50), __buttonTextures);
-		registerControl(_button_exitGame);
 
 		addActionObservations();
 
 		// Create welcome-window:
 		_welcomeWindow = new Window("Welcome to METRO - v" + METRO.__VERSION,
-			new Point(50, METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 300), // same y-pos as title image
-			new Point(500, 530));
-		registerControl(_welcomeWindow);
+			new Rectangle(50,
+				METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 300, // same y-pos as title image
+				500,
+				530));
 
 		Button button = new Button(
 			new Rectangle((500 - (int)(_titleImageTexture.getRegionWidth() * 0.4f)) / 2,
@@ -69,18 +67,18 @@ public class MainMenu extends GameScreen
 				0,
 				_titleImageTexture.getRegionWidth(),
 				_titleImageTexture.getRegionHeight()),
-			_titleImageTexture, _welcomeWindow);
-		registerControl(button);
+			_titleImageTexture);
 
 		Label label = new Label("METRO stands for \"Master of established transport railway operators\" and is a simple Subway/Rapid-Transit and economic simulator.\n\n"
 			+ "For all changes take a look into the 'changelog.txt'\n"
 			+ "New main-features of v" + METRO.__VERSION + ":\n\n"
 			+ " * Trains\n"
 			+ "     - Have own speed\n"
-			+ "     - Changing direction when reaching the end of a line\n\n" 
+			+ "     - Changing direction when reaching the end of a line\n\n"
 			+ "And now: Have fun and earn money ;)",
-			new Point(20, 100), 450, _welcomeWindow);
-		registerControl(label);
+			new Point(20, 100), 450);
+		
+		//TODO add controls to window
 	}
 
 	private void loadVisuals()
@@ -127,10 +125,6 @@ public class MainMenu extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		_button_startGame.draw();
-		_button_settings.draw();
-		_button_exitGame.draw();
-
 		Draw.Image(_titleImageTexture,
 			METRO.__SCREEN_SIZE.width / 2 - _titleImageTexture.getRegionWidth() / 2,
 			METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 200);

@@ -45,6 +45,19 @@ public class Checkbox extends ControlElement
 	}
 
 	/**
+	 * Creates a new checbox with a certain text and a start-state.
+	 * 
+	 * @param position The position of the checkbox.
+	 * @param text The text of the checkbox
+	 * @param checked The start state of the checkbox.
+	 * @param enabled The enable-flag.
+	 */
+	public Checkbox(Point position, String text, boolean checked, boolean enabled)
+	{
+		this(position, text, 0, checked, enabled);
+	}
+
+	/**
 	 * Creates a new checkbox with a certain text, a start-state and an enable flag.
 	 * 
 	 * @param position The position of the checkbox.

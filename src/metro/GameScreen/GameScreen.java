@@ -2,7 +2,6 @@ package metro.GameScreen;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 import java.util.Observable;
 
 import com.badlogic.gdx.Input.Keys;
@@ -14,8 +13,6 @@ import metro.Graphics.Draw;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.Checkbox;
-import metro.WindowControls.ControlActionManager;
-import metro.WindowControls.ControlElement;
 import metro.WindowControls.InputField;
 import metro.WindowControls.Label;
 import metro.WindowControls.List;
@@ -39,21 +36,6 @@ public abstract class GameScreen extends Observable
 	 */
 	public InGameMenuWindow _inGameMenuWindow;
 	private static InputField __selectedInput = null;
-	private static ControlActionManager __controlActionManager;
-	/**
-	 * A list of all control. Seems senseless due to the list in the ActionControlManager, but this is a list with control that only belongs to this game screen.
-	 */
-	private ArrayList<ControlElement> _allControls = new ArrayList<>();
-
-	/**
-	 * Sets the new control action manager.
-	 * 
-	 * @param manager An instance of the ControlActionManager.
-	 */
-	public static void setActionManager(ControlActionManager manager)
-	{
-		__controlActionManager = manager;
-	}
 
 	/**
 	 * Updates the actual game screen.
@@ -185,40 +167,12 @@ public abstract class GameScreen extends Observable
 	public abstract boolean isHovered();
 
 	/**
-	 * Registers a control in the control manager.
-	 * 
-	 * @param control The control to add.
-	 */
-	public void registerControl(ControlElement control)
-	{
-		if(__controlActionManager != null && _allControls != null)
-		{
-			__controlActionManager.registerElement(control);
-			_allControls.add(control);
-		}
-	}
-
-	/**
-	 * Unregistered an control element from the control manager to disable user interactions with it.
-	 * Use this method from a game screen and NOT the METRO.__unregisterControl(ControlElement) method!
-	 * 
-	 * @param control The control to remove.
-	 */
-	public void unregisterControl(ControlElement control)
-	{
-		__controlActionManager.remove(control);
-		_allControls.remove(control);
-	}
-
-	/**
 	 * Closes the game screen by removing all controls from the game screen.
 	 * Normally this method is called via METRO.closeGameScreen(GameScreen) to use the correct control manager.
 	 */
 	public void close()
 	{
 		METRO.__debug("[GameScreen]\nClosed game screen " + this);
-		__controlActionManager.remove(_allControls);
-		_allControls.clear();
 		METRO.__debug("Amount observer: " + countObservers());
 		deleteObservers();
 	}
@@ -249,35 +203,26 @@ public abstract class GameScreen extends Observable
 		public SettingsWindow()
 		{
 			_window = new Window("METRO settings",
-				new Point(METRO.__SCREEN_SIZE.width / 2 - 250, METRO.__SCREEN_SIZE.height / 2 - 225),
-				new Point(500, 450),
+				new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 250, METRO.__SCREEN_SIZE.height / 2 - 225, 500, 450),
 				METRO.__metroBlue);
 
 			Label label = new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.",
 				new Point(20, 20),
 				460,
 				_window);
-			registerControl(label);
 
 			_okButton = new Button(new Rectangle(200, 420, 100, 20),
-				"OK",
-				_window);
-			registerControl(_okButton);
+				"OK");
 			addButtonObserver();
 
-			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Boolean.parseBoolean(_settings.get("fullscreen.on").toString()), true, _window);
-			registerControl(_fullscreenOn);
-			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Boolean.parseBoolean(_settings.get("use.opengl30").toString()), true, _window);
-			registerControl(_useOpenGL30);
-			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Boolean.parseBoolean(_settings.get("use.vsync").toString()), true, _window);
-			registerControl(_useVSync);
-			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Boolean.parseBoolean(_settings.get("use.hdpi").toString()), true, _window);
-			registerControl(_useHDPI);
+			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Boolean.parseBoolean(_settings.get("fullscreen.on").toString()), true);
+			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Boolean.parseBoolean(_settings.get("use.opengl30").toString()), true);
+			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Boolean.parseBoolean(_settings.get("use.vsync").toString()), true);
+			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Boolean.parseBoolean(_settings.get("use.hdpi").toString()), true);
 			addCheckboxObserver();
 
-			label = new Label("Screen Resolution:", new Point(20, 180), _window);
-			registerControl(label);
-			_resolutionList = new List(new Rectangle(20, 200, 190, 150), _window, true);
+			label = new Label("Screen Resolution:", new Point(20, 180));
+			_resolutionList = new List(new Rectangle(20, 200, 190, 150), true);
 			_resolutionList.addElement("1920x1200");
 			_resolutionList.addElement("1920x1080");
 			_resolutionList.addElement("1600x900");
@@ -290,11 +235,9 @@ public abstract class GameScreen extends Observable
 			if(Boolean.parseBoolean(_settings.get("fullscreen.on").toString())) _resolutionList.setState(false);
 			int index = _resolutionList.getIndex(Integer.parseInt(_settings.get("screen.width").toString()) + "x" + Integer.parseInt(_settings.get("screen.width").toString())); // get the entry with the current resolution
 			_resolutionList.setSelectedEntry(index);
-			registerControl(_resolutionList);
 
-			label = new Label("Amount Samples:", new Point(240, 180), _window);
-			registerControl(label);
-			_sampleList = new List(new Rectangle(240, 200, 90, 150), _window, true);
+			label = new Label("Amount Samples:", new Point(240, 180));
+			_sampleList = new List(new Rectangle(240, 200, 90, 150), true);
 			_sampleList.addElement("0");
 			_sampleList.addElement("2");
 			_sampleList.addElement("4");
@@ -302,11 +245,9 @@ public abstract class GameScreen extends Observable
 			_sampleList.addElement("16");
 			index = _sampleList.getIndex(_settings.get("amount.samples") + ""); // get the entry with the current resolution
 			_sampleList.setSelectedEntry(index);
-			registerControl(_sampleList);
 
-			label = new Label("Amount Segments:", new Point(360, 180), _window);
-			registerControl(label);
-			_segmentList = new List(new Rectangle(360, 200, 90, 150), _window, true);
+			label = new Label("Amount Segments:", new Point(360, 180));
+			_segmentList = new List(new Rectangle(360, 200, 90, 150), true);
 			_segmentList.addElement("6");
 			_segmentList.addElement("16");
 			_segmentList.addElement("24");
@@ -316,8 +257,9 @@ public abstract class GameScreen extends Observable
 			_segmentList.addElement("256");
 			index = _segmentList.getIndex(_settings.get("amount.segments") + ""); // get the entry with the current resolution
 			_segmentList.setSelectedEntry(index);
-			registerControl(_segmentList);
 			addListObserver();
+			
+			//TODO add controls to window
 		}
 
 		/**
@@ -449,20 +391,22 @@ public abstract class GameScreen extends Observable
 		 */
 		public InGameMenuWindow()
 		{
-			_window = new Window("Really quit?", new Point(METRO.__SCREEN_SIZE.width / 2 - 200,
-				METRO.__SCREEN_SIZE.height / 2 - 50), new Point(400, 100), METRO.__metroRed);
+			_window = new Window("Really quit?",
+				new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 200,
+					METRO.__SCREEN_SIZE.height / 2 - 50,
+					400,
+					100),
+				METRO.__metroRed);
 
-			_yesButton = new Button(new Rectangle(10, 70, 120, 20), "Yes", _window);
-			registerControl(_yesButton);
-			_settingsButton = new Button(new Rectangle(140, 70, 120, 20), "Settings", _window);
-			registerControl(_settingsButton);
-			_noButton = new Button(new Rectangle(270, 70, 120, 20), "No", _window);
-			registerControl(_noButton);
+			_yesButton = new Button(new Rectangle(10, 70, 120, 20), "Yes");
+			_settingsButton = new Button(new Rectangle(140, 70, 120, 20), "Settings");
+			_noButton = new Button(new Rectangle(270, 70, 120, 20), "No");
 			addButtonObserver();
+			
+			//TODO add controls to window
 
 			Label label = new Label("Really quit METRO? Or go into settings?",
-				new Point(200 - (Draw.getStringSize("Really quit METRO? Or go into settings?").width) / 2, 25), _window);
-			registerControl(label);
+				new Point(200 - (Draw.getStringSize("Really quit METRO? Or go into settings?").width) / 2, 25));
 		}
 
 		/**
