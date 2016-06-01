@@ -135,7 +135,7 @@ public class Button extends ControlElement
 	}
 
 	@Override
-	void moveElement(Point offset)
+	public void moveElement(Point offset)
 	{
 		_area.translate(offset.x, offset.y);
 	}

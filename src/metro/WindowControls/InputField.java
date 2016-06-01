@@ -116,7 +116,7 @@ public class InputField extends ControlElement
 	}
 
 	@Override
-	void moveElement(Point offset)
+	public void moveElement(Point offset)
 	{
 		_area.x += offset.x;
 		_area.y += offset.y;

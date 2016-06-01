@@ -185,7 +185,7 @@ public class ColorBar extends ControlElement
 	}
 
 	@Override
-	void moveElement(Point offset)
+	public void moveElement(Point offset)
 	{
 		_area.add(offset);
 	}

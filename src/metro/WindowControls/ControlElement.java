@@ -25,7 +25,7 @@ abstract class ControlElement extends ActionObservable
 	/**
 	 * Draws the control.
 	 */
-	final abstract void draw();
+	abstract void draw();
 
 	/**
 	 * Is called when mouse clicked with its left button.
@@ -35,35 +35,35 @@ abstract class ControlElement extends ActionObservable
 	 * @param button The button related to Buttons.xy.
 	 * @return True when mouse clicked on control, false when not.
 	 */
-	final abstract boolean mouseClicked(int screenX, int screenY, int button);
+	abstract boolean mouseClicked(int screenX, int screenY, int button);
 
 	/**
 	 * Moves the element.
 	 * 
 	 * @param offset The amount of pixel to move. This is NOT the new position, only an offset!
 	 */
-	public final abstract void moveElement(Point offset);
+	public abstract void moveElement(Point offset);
 
 	/**
 	 * Fires when users scrolls.
 	 * 
 	 * @param amount Positive or negative amount of steps since last frame.
 	 */
-	final abstract void mouseScrolled(int amount);
+	abstract void mouseScrolled(int amount);
 
 	/**
 	 * Fires, when a key has been pressed.
 	 * 
 	 * @param keyCode The code of the key as int.
 	 */
-	final abstract void keyPressed(int keyCode);
+	abstract void keyPressed(int keyCode);
 
 	/**
 	 * Fires when a key has been released.
 	 * 
 	 * @param keyCode The code of the key from Input.Keys
 	 */
-	final abstract void keyUp(int keyCode);
+	abstract void keyUp(int keyCode);
 
 	/**
 	 * Gets an rectangle which covers the whole area of this control.

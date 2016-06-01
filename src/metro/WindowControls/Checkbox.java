@@ -154,7 +154,7 @@ public class Checkbox extends ControlElement
 	}
 
 	@Override
-	void moveElement(Point offset)
+	public void moveElement(Point offset)
 	{
 		_area.setLocation(_area.x + offset.x, _area.y + offset.y);
 	}
@@ -175,7 +175,7 @@ public class Checkbox extends ControlElement
 	}
 
 	@Override
-	void setText(String text)
+	public void setText(String text)
 	{
 		_text = text;
 		_label.setText(text);
