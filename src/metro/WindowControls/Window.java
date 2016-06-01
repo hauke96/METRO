@@ -19,10 +19,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * 
  */
 //TODO implement the window with a panel
-public class Window extends ControlElement
+public class Window extends Container
 {
 	private Point _oldMousePos;
-	private ArrayList<ControlElement> _elementList;
 	private boolean _dragMode, // to drag the window
 		_closed; // even if window has been deleted from the window list, that does not mean, that this object doesn't exist anymore, to this indicates that this window has been deleted
 	private Color _color; // color of borders
@@ -56,7 +55,6 @@ public class Window extends ControlElement
 
 		_closed = false;
 		_dragMode = false;
-		_elementList = new ArrayList<ControlElement>();
 
 		METRO.__registerWindow(this); //TODO create window and panel manager
 	}
@@ -66,13 +64,14 @@ public class Window extends ControlElement
 	 * 
 	 * @param g The graphic handle.
 	 */
-	public void draw(SpriteBatch g)
+	@Override
+	void draw()
 	{
 		update();
 
 		drawWindow();
 
-		for(ControlElement cElement : _elementList)
+		for(ControlElement cElement : _listOfControlElements)
 		{
 			cElement.draw();
 		}
@@ -133,7 +132,7 @@ public class Window extends ControlElement
 			Point positionDiff = new Point(METRO.__originalMousePosition.x - _oldMousePos.x,
 				METRO.__originalMousePosition.y - _oldMousePos.y);
 
-			for(ControlElement cElement : _elementList)
+			for(ControlElement cElement : _listOfControlElements)
 			{
 				cElement.moveElement(positionDiff);
 			}
@@ -151,11 +150,11 @@ public class Window extends ControlElement
 	 */
 	public void addControlElement(ControlElement cElement)
 	{
-		if(!_elementList.contains(cElement))
+		if(!_listOfControlElements.contains(cElement))
 		{
 			Point pos = cElement.getPosition();
 			cElement.setPosition(new Point(pos.x + _area.x, pos.y + _area.y + 20));
-			_elementList.add(cElement); // there wont be doubles ;)
+			_listOfControlElements.add(cElement); // there wont be doubles ;)
 		}
 	}
 
@@ -170,7 +169,7 @@ public class Window extends ControlElement
 	{
 		boolean mouseOnControl = false;
 		Point mPos = new Point(screenX, screenY);
-		for(ControlElement control : _elementList)
+		for(ControlElement control : _listOfControlElements)
 		{
 			mouseOnControl |= control.getArea().contains(mPos);
 		}
@@ -250,12 +249,12 @@ public class Window extends ControlElement
 	 */
 	public void close()
 	{
-		notifyClosed(this);
 		// Removes all controls from the action manager via second registering
-		for(ControlElement cElement : _elementList)
-		{
-			METRO.__unregisterControl(cElement);
-		}
+//		for(ControlElement cElement : _listOfControlElements)
+//		{
+//			METRO.__unregisterControl(cElement);
+//		}
+		notifyAboutClose();
 		_closed = true;
 	}
 
@@ -272,7 +271,7 @@ public class Window extends ControlElement
 	@Override
 	void keyPressed(int keyCode)
 	{
-		for(ControlElement cElement : _elementList)
+		for(ControlElement cElement : _listOfControlElements)
 		{
 			cElement.keyPressed(keyCode);
 		}
@@ -281,15 +280,10 @@ public class Window extends ControlElement
 	@Override
 	void keyUp(int keyCode)
 	{
-		for(ControlElement cElement : _elementList)
+		for(ControlElement cElement : _listOfControlElements)
 		{
 			cElement.keyUp(keyCode);
 		}
-	}
-
-	@Override
-	void draw()
-	{
 	}
 
 	@Override
@@ -306,8 +300,8 @@ public class Window extends ControlElement
 	/**
 	 * @return A list of all controls attached to this window excluding itself.
 	 */
-	public ArrayList<ControlElement> getElements()
-	{
-		return _elementList;
-	}
+//	public ArrayList<ControlElement> getElements()
+//	{
+//		return _listOfControlElements;
+//	}
 }

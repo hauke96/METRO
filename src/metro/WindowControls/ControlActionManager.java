@@ -14,7 +14,7 @@ import metro.METRO;
  * @author hauke
  *
  */
-public class ControlActionManager
+public class ControlActionManagerOld
 {
 	private ArrayList<ControlElement> _controlElements,
 		_bufferedControlElements,
@@ -24,7 +24,7 @@ public class ControlActionManager
 	/**
 	 * Creates a new action manager by initializing all lists.
 	 */
-	public ControlActionManager()
+	public ControlActionManagerOld()
 	{
 		_controlElements = new ArrayList<ControlElement>();
 		_bufferedControlElements = new ArrayList<ControlElement>();

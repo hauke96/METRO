@@ -82,12 +82,4 @@ public class ActionObservable
 			observer.selectionChanged(entry);
 		}
 	}
-
-	protected void notifyClosed(Window window)
-	{
-		for(ActionObserver observer : _listOfObserver)
-		{
-			observer.closed(window);
-		}
-	}
 }

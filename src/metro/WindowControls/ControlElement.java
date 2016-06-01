@@ -3,6 +3,8 @@ package metro.WindowControls;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 /**
  * The interface with all the important methods every control element should have.
  * 
