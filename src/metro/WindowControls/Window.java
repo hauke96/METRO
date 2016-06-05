@@ -54,8 +54,6 @@ public class Window extends Container
 
 		_closed = false;
 		_dragMode = false;
-
-		METRO.__registerWindow(this); //TODO create window and panel manager
 	}
 
 	/**

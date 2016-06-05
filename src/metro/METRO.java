@@ -84,7 +84,6 @@ public class METRO implements ApplicationListener, InputProcessor
 	private static OSType __detectedOS;
 	private static ContainerRenderer __containerRenderer;
 	private static GameScreen __currentGameScreen;
-	private static ArrayList<Window> __windowList;
 	private static ActionObserver __windowObserver;
 	private static SpriteBatch __gameWindowSpriteBatch;
 	private static int __xOffset,
@@ -204,8 +203,6 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		loadVisuals();
 
-		initWindowStuff();
-
 		__currentGameScreen = new MainMenu();
 
 		__gameState = GameState.getInstance();
@@ -316,23 +313,6 @@ public class METRO implements ApplicationListener, InputProcessor
 		return font;
 	}
 
-	/**
-	 * Creates the list of all windows and the default observer ({@code _windowObserver}) that removes a closed window from this list.
-	 * The default observer is an anonymous class, because of java 7 I don't use a lambda in this case.
-	 */
-	private void initWindowStuff()
-	{
-		__windowList = new ArrayList<Window>();
-		__windowObserver = new ActionObserver()
-		{
-			@Override
-			public void closed(Window window)
-			{
-				__windowList.remove(window);
-			}
-		};
-	}
-
 	@Override
 	public void resize(int width, int height)
 	{
@@ -422,10 +402,9 @@ public class METRO implements ApplicationListener, InputProcessor
 		__originalMousePosition = (Point)__mousePosition.clone();
 
 		boolean mouseInWindow = false;
-		for(Window win : __windowList)
-		{
-			mouseInWindow |= win.isMouseOnWindowArea(__mousePosition.x, __mousePosition.y);
-		}
+		
+		//TODO check if mouse is in window
+		
 		if(mouseInWindow) __mousePosition = _oldMousePosition;
 		else _oldMousePosition = __mousePosition;
 	}
@@ -570,25 +549,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean scrolled(int amount)
 	{
-		boolean mouseOnWindow = false;
-		boolean scrolledOnControl = false;
-
-		/*
-		 * Go from the last to first window when no window has been clicked yet.
-		 * This will consider the "depth-position" of the window (windows are behind/before others).
-		 * Thus only the frontmost window will receive a scroll event, all others don't to prevent weird behaviour.
-		 */
-		for(int i = __windowList.size() - 1; i >= 0 && !mouseOnWindow; i--)
-		{
-			if(__windowList.get(i).isMouseOnWindow(__mousePosition.x + __xOffset, __mousePosition.y + __yOffset)) // if mouse is on window area but not on a control
-			{
-				mouseOnWindow = true;
-				break;
-			}
-		}
-
 		__containerRenderer.notifyMouseScrolled(amount);
-
 		return false;
 	}
 
@@ -598,28 +559,13 @@ public class METRO implements ApplicationListener, InputProcessor
 	}
 
 	/**
-	 * Adds the window to the list of all windows so that it'll get click- or scroll-events.
-	 * This method also adds the {@code _windowObserver} to the window so that it'll be closed correctly.
-	 * There are no doubles allowed in this list, so a second call with the same window won#t add it.
-	 * 
-	 * @param window The window that should be added to the list of all windows.
-	 */
-	public static void __registerWindow(Window window)
-	{
-		if(!__windowList.contains(window))
-		{
-			__windowList.add(window);
-			window.register(__windowObserver);
-		}
-	}
-
-	/**
 	 * Closes the current game screen and makes the given screen to the new one.
 	 * 
 	 * @param newScreen The new game screen.
 	 */
 	public static void __changeGameScreen(GameScreen newScreen)
 	{
+		// FIXME solve the switching without calling a method in this class
 		__currentGameScreen.close();
 		__currentGameScreen = newScreen;
 	}
