@@ -190,34 +190,9 @@ public class TrainViewBuy extends GameScreen
 	}
 
 	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
-	{
-	}
-
-	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
-	public void keyDown(int keyCode)
-	{
-	}
-
-	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	@Override
 	public boolean isActive()
 	{
 		return false;
-	}
-
-	@Override
-	public void reset()
-	{
 	}
 
 	@Override

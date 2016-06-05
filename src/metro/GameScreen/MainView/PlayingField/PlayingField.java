@@ -149,11 +149,6 @@ public class PlayingField extends GameScreen
 	}
 
 	@Override
-	public void keyDown(int keyCode)
-	{
-	}
-
-	@Override
 	public void mouseScrolled(int amount)
 	{
 		_gameState.zoom(amount);
@@ -163,11 +158,6 @@ public class PlayingField extends GameScreen
 	public boolean isActive()
 	{
 		return false;
-	}
-
-	@Override
-	public void reset()
-	{
 	}
 
 	@Override

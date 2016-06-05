@@ -131,35 +131,9 @@ public class MainMenu extends GameScreen
 	}
 
 	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
-	{
-	}
-
-	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
-	public void keyDown(int keyCode)
-	{
-		if(_welcomeWindow != null) _welcomeWindow.keyPressed(keyCode);
-	}
-
-	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	@Override
 	public boolean isActive()
 	{
 		return true;
-	}
-
-	@Override
-	public void reset()
-	{
 	}
 
 	@Override

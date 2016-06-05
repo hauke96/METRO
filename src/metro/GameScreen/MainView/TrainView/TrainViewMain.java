@@ -215,34 +215,9 @@ public class TrainViewMain extends GameScreen
 	}
 
 	@Override
-	public void reset()
-	{
-	}
-
-	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
-	{
-	}
-
-	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	@Override
 	public boolean isActive()
 	{
 		return true;
-	}
-
-	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
-	public void keyDown(int keyCode)
-	{
 	}
 
 	@Override

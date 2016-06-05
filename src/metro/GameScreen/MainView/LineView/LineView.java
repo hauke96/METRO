@@ -497,14 +497,8 @@ public class LineView extends GameScreen implements Observer
 	}
 
 	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
 	public void keyDown(int keyCode)
 	{
-		_lineNameField.keyPressed(keyCode);
 		_lineSelectTool.setName(_lineNameField.getText());
 	}
 

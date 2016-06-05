@@ -154,21 +154,6 @@ public class TrainView extends GameScreen
 	public void setVisibility(boolean visible)
 	{
 		_isActive = visible;
-		if(!_isActive)
-		{
-			_trainViewMain.reset();
-			_trainViewBuy.reset();
-		}
-	}
-
-	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
-	public void keyDown(int keyCode)
-	{
 	}
 
 	@Override
@@ -183,19 +168,9 @@ public class TrainView extends GameScreen
 	}
 
 	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	@Override
 	public boolean isActive()
 	{
 		return _isActive;
-	}
-
-	@Override
-	public void reset()
-	{
 	}
 
 	@Override

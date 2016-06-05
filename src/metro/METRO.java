@@ -460,6 +460,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyDown(int keyCode)
 	{
+		//TODO check if the gamescreen is allowed to handle input now (if an input field has focus, no other control is allowed to)
 		__currentGameScreen.keyPressed(keyCode);
 		return false;
 	}

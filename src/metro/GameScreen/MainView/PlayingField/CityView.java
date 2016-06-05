@@ -100,16 +100,6 @@ public class CityView extends GameScreen
 		}
 	}
 
-	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
-	{
-	}
-
-	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
 	/**
 	 * Enables the highlighting of the city circles when a mouse hovers one.
 	 */
@@ -127,24 +117,9 @@ public class CityView extends GameScreen
 	}
 
 	@Override
-	public void keyDown(int keyCode)
-	{
-	}
-
-	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	@Override
 	public boolean isActive()
 	{
 		return true;
-	}
-
-	@Override
-	public void reset()
-	{
 	}
 
 	/**

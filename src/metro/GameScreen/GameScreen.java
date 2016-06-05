@@ -51,14 +51,18 @@ public abstract class GameScreen extends Observable
 	 * @param screenY The y-position on the screen
 	 * @param mouseButton The number of the button like Buttons.LEFT
 	 */
-	public abstract void mouseClicked(int screenX, int screenY, int mouseButton);
+	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	{
+	}
 
 	/**
 	 * When mouse has been released.
 	 * 
 	 * @param mouseButton The number of the button like Buttons.LEFT
 	 */
-	public abstract void mouseReleased(int mouseButton);
+	public void mouseReleased(int mouseButton)
+	{
+	}
 
 	/**
 	 * When a key was pressed.
@@ -67,18 +71,11 @@ public abstract class GameScreen extends Observable
 	 */
 	public void keyPressed(int keyCode)
 	{
-		if(__selectedInput == null)
+		if(keyCode == Keys.ESCAPE && _inGameMenuWindow == null) // Show in game window if no input control and no other window is focused/open.
 		{
-			if(keyCode == Keys.ESCAPE && _inGameMenuWindow == null) // Show in game window if no input control and no other window is focused/open.
-			{
-				createMenuWindow();
-			}
-			keyDown(keyCode);
-		} // Window-class will do not-null-stuff, and Input-class will check if the input is selected -> nothing to do here
-		else
-		{
-			__selectedInput.keyPressed(keyCode);
+			createMenuWindow();
 		}
+		keyDown(keyCode);
 	}
 
 	/**
@@ -88,7 +85,6 @@ public abstract class GameScreen extends Observable
 	 */
 	public void keyUp(int keyCode)
 	{
-		if(__selectedInput != null) __selectedInput.keyUp(keyCode);
 	}
 
 	/**
@@ -96,14 +92,25 @@ public abstract class GameScreen extends Observable
 	 * 
 	 * @param keyCode Key number from Gdx.Input
 	 */
-	public abstract void keyDown(int keyCode);
+	public void keyDown(int keyCode)
+	{
+	}
 
 	/**
 	 * Fires when user scrolls.
 	 * 
 	 * @param amount Positive or negative amount of steps since last frame.
 	 */
-	public abstract void mouseScrolled(int amount);
+	public void mouseScrolled(int amount)
+	{
+	}
+
+	/**
+	 * Resets the game screen to its default values.
+	 */
+	public void reset()
+	{
+	}
 
 	/**
 	 * Creates the in-game menu window with the yes/no option for exiting the game but provides a settings button as well.
@@ -133,16 +140,6 @@ public abstract class GameScreen extends Observable
 		__selectedInput = field;
 	}
 
-	/**
-	 * Gets the current/selected input field. Can be null -> no input selected.
-	 * 
-	 * @return Selected input field.
-	 */
-	public InputField getSelectedInput()
-	{
-		return __selectedInput;
-	}
-
 	@Override
 	public boolean equals(Object obj)
 	{
@@ -155,11 +152,6 @@ public abstract class GameScreen extends Observable
 	 * @return True when active and usable, false when inactive, closed, ...
 	 */
 	public abstract boolean isActive();
-
-	/**
-	 * Resets the game screen to its default values.
-	 */
-	public abstract void reset();
 
 	/**
 	 * @return True when mouse is in sensible/important area of the game screen.
@@ -208,8 +200,7 @@ public abstract class GameScreen extends Observable
 
 			Label label = new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.",
 				new Point(20, 20),
-				460,
-				_window);
+				460);
 
 			_okButton = new Button(new Rectangle(200, 420, 100, 20),
 				"OK");
@@ -258,8 +249,8 @@ public abstract class GameScreen extends Observable
 			index = _segmentList.getIndex(_settings.get("amount.segments") + ""); // get the entry with the current resolution
 			_segmentList.setSelectedEntry(index);
 			addListObserver();
-			
-			//TODO add controls to window
+
+			// TODO add controls to window
 		}
 
 		/**
@@ -402,8 +393,8 @@ public abstract class GameScreen extends Observable
 			_settingsButton = new Button(new Rectangle(140, 70, 120, 20), "Settings");
 			_noButton = new Button(new Rectangle(270, 70, 120, 20), "No");
 			addButtonObserver();
-			
-			//TODO add controls to window
+
+			// TODO add controls to window
 
 			Label label = new Label("Really quit METRO? Or go into settings?",
 				new Point(200 - (Draw.getStringSize("Really quit METRO? Or go into settings?").width) / 2, 25));

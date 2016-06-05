@@ -118,29 +118,9 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	}
 
 	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
-	public void keyDown(int keyCode)
-	{
-	}
-
-	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	@Override
 	public boolean isActive()
 	{
 		return _isActive;
-	}
-
-	@Override
-	public void reset()
-	{
 	}
 
 	@Override
