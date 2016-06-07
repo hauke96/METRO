@@ -68,7 +68,7 @@ import metro.GameScreen.MainMenu;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.WindowControls.ActionObserver;
-import metro.WindowControls.ContainerRenderer;
+import metro.WindowControls.BasicContainerRenderer;
 import metro.WindowControls.InputField;
 import metro.WindowControls.Window;
 
@@ -82,7 +82,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	private LwjglApplicationConfiguration _config;
 
 	private static OSType __detectedOS;
-	private static ContainerRenderer __containerRenderer;
+	private static BasicContainerRenderer __containerRenderer;
 	private static GameScreen __currentGameScreen;
 	private static ActionObserver __windowObserver;
 	private static SpriteBatch __gameWindowSpriteBatch;
@@ -189,7 +189,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public void create()
 	{
-		__containerRenderer = new ContainerRenderer();
+		__containerRenderer = new BasicContainerRenderer();
 
 		__debug = true;
 

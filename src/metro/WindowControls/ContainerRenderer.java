@@ -1,75 +1,52 @@
 package metro.WindowControls;
 
-import java.awt.Point;
-import java.util.LinkedList;
-import java.util.List;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
-public class ContainerRenderer implements CloseObserver
+/**
+ * A {@link ContainerRenderer} is able to render container and controls.
+ * 
+ * @author hauke
+ *
+ */
+public interface ContainerRenderer
 {
-	interface Notifier
-	{
-		void notifyRenderable(Container container);
-	}
+	/**
+	 * Registers a new renderable class.
+	 * 
+	 * @param containerRenderable The {@link ContainerRenderable} that should be rendered.
+	 */
+	void registerRenderable(ContainerRenderable containerRenderable);
 
-	private List<Window> _listOfWindows;
-	private List<Container> _listOfRenderables;
-	
-	public ContainerRenderer()
-	{
-		_listOfRenderables = new LinkedList<Container>();
-		_listOfWindows = new LinkedList<Window>();
-	}
-	
-	public void registerRenderer(Container renderer)
-	{
-		_listOfRenderables.add(renderer);
-	}
+	/**
+	 * Notifies all registered renderables about a draw call.
+	 */
+	public void notifyDraw();
 
-	
-	public void notifyDraw()
-	{
-		generalNotifying((Container container) -> container.onDraw());
-	}
-	
-	public void notifyMouseClick(int screenX, int screenY, int button)
-	{
-		generalNotifying((Container container) -> container.onMouseClick(screenX, screenY, button));
-	}
-	
-	public void notifyMouseScrolled(int amount)
-	{
-		generalNotifying((Container container) -> container.onMouseScrolled(amount));
-	}
-	
-	public void notifyKeyPressed(int keyCode)
-	{
-		generalNotifying((Container container) -> container.onKeyPressed(keyCode));
-	}
-	
-	public void notifyKeyUp(int keyCode)
-	{
-		generalNotifying((Container container) -> container.onKeyUp(keyCode));
-	}
-	
-	private void generalNotifying(Notifier notifyFunction)
-	{
-		//TODO determine on which control the focus is  
-		for(Container container : _listOfRenderables)
-		{
-			notifyFunction.notifyRenderable(container);
-		}
-		
-		for(Window window:_listOfWindows)
-		{
-			notifyFunction.notifyRenderable(window);
-		}
-	}
+	/**
+	 * Notifies all registered renderables about a mouse click.
+	 * 
+	 * @param screenX The x-coordinate.
+	 * @param screenY The y-coordinate.
+	 * @param button The pressed button.
+	 */
+	public void notifyMouseClick(int screenX, int screenY, int button);
 
-	@Override
-	public void closed(Container container)
-	{
-		_listOfRenderables.remove(container);
-	}
+	/**
+	 * Notifies all registered renderables about a mouse scroll event.
+	 *
+	 * @param amount The amount of scrolled steps.
+	 */
+	public void notifyMouseScrolled(int amount);
+
+	/**
+	 * Notifies all registered renderables about a pressed key.
+	 * 
+	 * @param keyCode The key that's pressed.
+	 */
+	public void notifyKeyPressed(int keyCode);
+
+	/**
+	 * Notifies all registered renderables about a released key.
+	 * 
+	 * @param keyCode The key that's released.
+	 */
+	public void notifyKeyUp(int keyCode);
 }

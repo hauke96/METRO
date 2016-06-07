@@ -3,7 +3,7 @@ package metro.WindowControls;
 import java.util.LinkedList;
 import java.util.List;
 
-abstract class Container extends ControlElement implements Closeable
+abstract class Container extends ContainerRenderable implements Closeable
 {
 	interface Notifier
 	{
@@ -19,32 +19,32 @@ abstract class Container extends ControlElement implements Closeable
 	}
 	
 	@Override
-	public void draw()
+	void draw()
 	{
 		generalNotifying((ControlElement control)->control.draw());
 	}
 	
 	@Override
-	public boolean mouseClicked(int screenX, int screenY, int button)
+	boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		generalNotifying((ControlElement control)->control.mouseClicked(screenX, screenY, button));
 		return false;
 	}
 
 	@Override
-	public void mouseScrolled(int amount)
+	void mouseScrolled(int amount)
 	{
 		generalNotifying((ControlElement control)->control.mouseScrolled(amount));
 	}
 
 	@Override
-	public void keyPressed(int keyCode)
+	void keyPressed(int keyCode)
 	{
 		generalNotifying((ControlElement control)->control.keyPressed(keyCode));
 	}
 
 	@Override
-	public void keyUp(int keyCode)
+	void keyUp(int keyCode)
 	{
 		generalNotifying((ControlElement control)->control.keyUp(keyCode));
 	}
@@ -65,22 +65,22 @@ abstract class Container extends ControlElement implements Closeable
 		}
 	}
 	
-	public void add(ControlElement control)
+	void add(ControlElement control)
 	{
 		_listOfControlElements.add(control);
 	}
 	
-	public void remove(ControlElement control)
+	void remove(ControlElement control)
 	{
 		_listOfControlElements.remove(control);
 	}
 	
-	public void registerCloseObserver(CloseObserver observer)
+	void registerCloseObserver(CloseObserver observer)
 	{
 		_listOfCloseObserver.add(observer);
 	}
 	
-	public void removeCloseObserver(CloseObserver observer)
+	void removeCloseObserver(CloseObserver observer)
 	{
 		_listOfCloseObserver.remove(observer);
 	}
