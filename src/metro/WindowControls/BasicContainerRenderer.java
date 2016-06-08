@@ -26,6 +26,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	{
 		_listOfRenderables = new LinkedList<ContainerRenderable>();
 		_listOfWindows = new LinkedList<Window>();
+		ContainerRenderable.setRenderer(this);
 	}
 
 	@Override

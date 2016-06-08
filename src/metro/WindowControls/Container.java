@@ -16,6 +16,7 @@ abstract class Container extends ContainerRenderable implements Closeable
 	public Container()
 	{
 		_listOfControlElements= new LinkedList<ControlElement>();
+		register(this);
 	}
 	
 	@Override
@@ -65,12 +66,12 @@ abstract class Container extends ContainerRenderable implements Closeable
 		}
 	}
 	
-	void add(ControlElement control)
+	public void add(ControlElement control)
 	{
 		_listOfControlElements.add(control);
 	}
 	
-	void remove(ControlElement control)
+	public void remove(ControlElement control)
 	{
 		_listOfControlElements.remove(control);
 	}

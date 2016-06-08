@@ -14,6 +14,7 @@ import metro.Graphics.Draw;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.Label;
+import metro.WindowControls.Panel;
 import metro.WindowControls.Window;
 
 /**
@@ -78,6 +79,10 @@ public class MainMenu extends GameScreen
 			+ "And now: Have fun and earn money ;)",
 			new Point(20, 100), 450);
 		
+		Panel panel = new Panel();
+		panel.add(_button_startGame);
+		panel.add(_button_settings);
+		panel.add(_button_exitGame);
 		//TODO add controls to window
 	}
 

@@ -10,6 +10,11 @@ import metro.Exceptions.UninitiatedClassException;
 public abstract class ContainerRenderable extends ControlElement
 {
 	private static ContainerRenderer renderer = null;
+	
+	public static void setRenderer(ContainerRenderer newRenderer)
+	{
+		renderer = newRenderer;
+	}
 
 	/**
 	 * Registers a {@link ContainerRenderable} in the current renderer.
