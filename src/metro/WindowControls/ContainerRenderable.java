@@ -29,4 +29,18 @@ public abstract class ContainerRenderable extends ControlElement
 		}
 		renderer.registerRenderable(renderable);
 	}
+
+	/**
+	 * Registers a {@link ContainerRenderable} in the current renderer.
+	 * 
+	 * @param renderable A floating container renderable class.
+	 */
+	protected void registerFloatingContainer(FloatingContainer renderable)
+	{
+		if(renderer == null)
+		{
+			throw new UninitiatedClassException("The container renderable is not initiated!");
+		}
+		renderer.registerFloatingRenderable(renderable);
+	}
 }

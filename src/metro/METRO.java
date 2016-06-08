@@ -331,9 +331,9 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		__spriteBatch.begin();
 
-		__containerRenderer.notifyDraw();
 		renderInit();
 		renderCurrentGameScreen();
+		__containerRenderer.notifyDraw();
 		renderFPSDisplay();
 		renderCursor();
 

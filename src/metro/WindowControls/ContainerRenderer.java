@@ -15,6 +15,8 @@ public interface ContainerRenderer
 	 */
 	void registerRenderable(ContainerRenderable containerRenderable);
 
+	void registerFloatingRenderable(FloatingContainer renderer);
+
 	/**
 	 * Notifies all registered renderables about a draw call.
 	 */

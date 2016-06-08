@@ -19,7 +19,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * 
  */
 //TODO implement the window with a panel
-public class Window extends Container
+public class Window extends FloatingContainer
 {
 	private Point _oldMousePos;
 	private boolean _dragMode, // to drag the window
@@ -55,7 +55,7 @@ public class Window extends Container
 		_closed = false;
 		_dragMode = false;
 		
-		register(this);
+		registerFloatingContainer(this);
 	}
 
 	/**

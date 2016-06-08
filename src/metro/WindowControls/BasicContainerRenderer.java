@@ -3,6 +3,8 @@ package metro.WindowControls;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.sound.sampled.FloatControl;
+
 /**
  * The {@link BasicContainerRenderer} is a renderer with no special features, it just forwards every call to all {@link ContainerRenderable} classes.
  * 
@@ -16,7 +18,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		void notifyRenderable(ContainerRenderable container);
 	}
 
-	private List<Window> _listOfWindows;
+	private List<FloatingContainer> _listOfFloatingContainer;
 	private List<ContainerRenderable> _listOfRenderables;
 
 	/**
@@ -25,7 +27,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	public BasicContainerRenderer()
 	{
 		_listOfRenderables = new LinkedList<ContainerRenderable>();
-		_listOfWindows = new LinkedList<Window>();
+		_listOfFloatingContainer = new LinkedList<FloatingContainer>();
 		ContainerRenderable.setRenderer(this);
 	}
 
@@ -33,6 +35,12 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	public void registerRenderable(ContainerRenderable renderer)
 	{
 		_listOfRenderables.add(renderer);
+	}
+
+	@Override
+	public void registerFloatingRenderable(FloatingContainer renderer)
+	{
+		_listOfFloatingContainer.add(renderer);
 	}
 
 	@Override
@@ -73,7 +81,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 			notifyFunction.notifyRenderable(container);
 		}
 
-		for(Window window : _listOfWindows)
+		for(FloatingContainer window : _listOfFloatingContainer)
 		{
 			notifyFunction.notifyRenderable(window);
 		}
