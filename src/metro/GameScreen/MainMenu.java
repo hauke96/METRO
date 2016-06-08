@@ -79,6 +79,9 @@ public class MainMenu extends GameScreen
 			+ "And now: Have fun and earn money ;)",
 			new Point(20, 100), 450);
 		
+		_welcomeWindow.add(button);
+		_welcomeWindow.add(label);
+		
 		Panel panel = new Panel();
 		panel.add(_button_startGame);
 		panel.add(_button_settings);

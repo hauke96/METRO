@@ -54,6 +54,8 @@ public class Window extends Container
 
 		_closed = false;
 		_dragMode = false;
+		
+		register(this);
 	}
 
 	/**
@@ -65,13 +67,8 @@ public class Window extends Container
 	void draw()
 	{
 		update();
-
 		drawWindow();
-
-		for(ControlElement cElement : _listOfControlElements)
-		{
-			cElement.draw();
-		}
+		super.draw();
 	}
 
 	/**
@@ -140,12 +137,8 @@ public class Window extends Container
 		}
 	}
 
-	/**
-	 * Adds a new control to the window control list. If the new Control is already in the list, it won't be added again, so there are no doubles in this list.
-	 * 
-	 * @param cElement The WindowControl element thta should be added.
-	 */
-	public void addControlElement(ControlElement cElement)
+	@Override
+	public void add(ControlElement cElement)
 	{
 		if(!_listOfControlElements.contains(cElement))
 		{
@@ -196,6 +189,7 @@ public class Window extends Container
 	 * @param screenY The y-coordinate of the click
 	 * @param mouseButton The mouse button (using gdx.Input.Buttons)
 	 */
+	//TODO make shure that this works
 	void mousePressed(int screenX, int screenY, int mouseButton)
 	{
 		// Check for drag-mode:
@@ -213,11 +207,6 @@ public class Window extends Container
 	void mouseReleased()
 	{
 		_dragMode = false;
-	}
-
-	@Override
-	void mouseScrolled(int amount)
-	{
 	}
 
 	/**
@@ -266,39 +255,7 @@ public class Window extends Container
 	}
 
 	@Override
-	void keyPressed(int keyCode)
-	{
-		for(ControlElement cElement : _listOfControlElements)
-		{
-			cElement.keyPressed(keyCode);
-		}
-	}
-
-	@Override
-	void keyUp(int keyCode)
-	{
-		for(ControlElement cElement : _listOfControlElements)
-		{
-			cElement.keyUp(keyCode);
-		}
-	}
-
-	@Override
-	boolean mouseClicked(int screenX, int screenY, int button)
-	{
-		return false;
-	}
-
-	@Override
 	public void moveElement(Point offset)
 	{
 	}
-
-	/**
-	 * @return A list of all controls attached to this window excluding itself.
-	 */
-//	public ArrayList<ControlElement> getElements()
-//	{
-//		return _listOfControlElements;
-//	}
 }
