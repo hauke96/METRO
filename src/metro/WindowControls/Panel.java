@@ -3,7 +3,7 @@ package metro.WindowControls;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-public class Panel extends Container
+public class Panel extends StaticContainer
 {
 
 	@Override

@@ -201,6 +201,7 @@ public abstract class GameScreen extends Observable
 			Label label = new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.",
 				new Point(20, 20),
 				460);
+			_window.add(label);
 
 			_okButton = new Button(new Rectangle(200, 420, 100, 20),
 				"OK");
@@ -218,6 +219,7 @@ public abstract class GameScreen extends Observable
 			addCheckboxObserver();
 
 			label = new Label("Screen Resolution:", new Point(20, 180));
+			_window.add(label);
 			_resolutionList = new List(new Rectangle(20, 200, 190, 150), true);
 			_resolutionList.addElement("1920x1200");
 			_resolutionList.addElement("1920x1080");

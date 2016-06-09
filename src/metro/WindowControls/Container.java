@@ -17,8 +17,10 @@ abstract class Container extends ContainerRenderable
 	{
 		_listOfControlElements= new LinkedList<ControlElement>();
 		_listOfCloseObserver = new LinkedList<CloseObserver>();
-		register(this);
+		registerContainerInRenderer();
 	}
+	
+	protected abstract void registerContainerInRenderer();
 	
 	@Override
 	void draw()

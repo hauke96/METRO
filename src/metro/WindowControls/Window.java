@@ -54,8 +54,6 @@ public class Window extends FloatingContainer
 
 		_closed = false;
 		_dragMode = false;
-		
-		registerFloatingContainer(this);
 	}
 
 	/**
@@ -190,15 +188,21 @@ public class Window extends FloatingContainer
 	 * @param mouseButton The mouse button (using gdx.Input.Buttons)
 	 */
 	//TODO make shure that this works
-	void mousePressed(int screenX, int screenY, int mouseButton)
+	@Override
+	boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		// Check for drag-mode:
 		if(isMouseOnWindow(screenX, screenY)
 			&& mouseButton == Buttons.LEFT)
 		{
-			_dragMode = true;
-			_oldMousePos = new Point(screenX, screenY);
+			// TODO implement drag mode correctly
+//			_dragMode = true;
+//			_oldMousePos = new Point(screenX, screenY);
+			
+			closeIfNeeded(screenX, screenY, mouseButton);
+			return true;
 		}
+		return false;
 	}
 
 	/**
