@@ -204,12 +204,17 @@ public abstract class GameScreen extends Observable
 
 			_okButton = new Button(new Rectangle(200, 420, 100, 20),
 				"OK");
+			_window.add(_okButton);
 			addButtonObserver();
 
 			_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Boolean.parseBoolean(_settings.get("fullscreen.on").toString()), true);
 			_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Boolean.parseBoolean(_settings.get("use.opengl30").toString()), true);
 			_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Boolean.parseBoolean(_settings.get("use.vsync").toString()), true);
 			_useHDPI = new Checkbox(new Point(20, 130), "Enable HDPI", Boolean.parseBoolean(_settings.get("use.hdpi").toString()), true);
+			_window.add(_fullscreenOn);
+			_window.add(_useOpenGL30);
+			_window.add(_useVSync);
+			_window.add(_useHDPI);
 			addCheckboxObserver();
 
 			label = new Label("Screen Resolution:", new Point(20, 180));
@@ -226,8 +231,10 @@ public abstract class GameScreen extends Observable
 			if(Boolean.parseBoolean(_settings.get("fullscreen.on").toString())) _resolutionList.setState(false);
 			int index = _resolutionList.getIndex(Integer.parseInt(_settings.get("screen.width").toString()) + "x" + Integer.parseInt(_settings.get("screen.width").toString())); // get the entry with the current resolution
 			_resolutionList.setSelectedEntry(index);
+			_window.add(_resolutionList);
 
 			label = new Label("Amount Samples:", new Point(240, 180));
+			_window.add(label);
 			_sampleList = new List(new Rectangle(240, 200, 90, 150), true);
 			_sampleList.addElement("0");
 			_sampleList.addElement("2");
@@ -236,8 +243,10 @@ public abstract class GameScreen extends Observable
 			_sampleList.addElement("16");
 			index = _sampleList.getIndex(_settings.get("amount.samples") + ""); // get the entry with the current resolution
 			_sampleList.setSelectedEntry(index);
+			_window.add(_sampleList);
 
 			label = new Label("Amount Segments:", new Point(360, 180));
+			_window.add(label);
 			_segmentList = new List(new Rectangle(360, 200, 90, 150), true);
 			_segmentList.addElement("6");
 			_segmentList.addElement("16");
@@ -248,16 +257,9 @@ public abstract class GameScreen extends Observable
 			_segmentList.addElement("256");
 			index = _segmentList.getIndex(_settings.get("amount.segments") + ""); // get the entry with the current resolution
 			_segmentList.setSelectedEntry(index);
-			addListObserver();
-
-			_window.add(_okButton);
-			_window.add(_fullscreenOn);
-			_window.add(_useOpenGL30);
-			_window.add(_useHDPI);
-			_window.add(_useVSync);
-			_window.add(_resolutionList);
-			_window.add(_sampleList);
 			_window.add(_segmentList);
+			
+			addListObserver();
 		}
 
 		/**

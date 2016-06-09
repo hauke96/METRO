@@ -71,7 +71,7 @@ public class Checkbox extends ControlElement
 		_text = text;
 		_textWidth = textWidth;
 		_label = new Label(_text, new Point(position.x + 25, position.y), _textWidth);
-		Dimension size = calcSize();
+		Dimension size = calcSize(position.x + 25);
 		_area = new Rectangle(position.x, position.y, size.width, size.height);
 		_checked = checked;
 		_oldState = _checked;
@@ -123,9 +123,6 @@ public class Checkbox extends ControlElement
 		Draw.setColor(_state
 			? METRO.__metroBlue
 			: new Color(METRO.__metroBlue.getRed(), METRO.__metroBlue.getGreen(), METRO.__metroBlue.getBlue(), 125));
-		_label.setColor(_state
-			? Color.black
-			: Color.lightGray);
 
 		Draw.Rect(_area.x, _area.y, 15, 15);
 		if(_checked) // draw cross if checked
@@ -133,6 +130,11 @@ public class Checkbox extends ControlElement
 			Draw.Line(_area.x + 3, _area.y + 3, _area.x + 13, _area.y + 13);
 			Draw.Line(_area.x + 3, _area.y + 13, _area.x + 13, _area.y + 3);
 		}
+
+		_label.setColor(_state
+			? Color.black
+			: Color.lightGray);
+		_label.draw();
 	}
 
 	/**
@@ -193,16 +195,24 @@ public class Checkbox extends ControlElement
 		_text = text;
 		_label.setText(text);
 	}
+	
+	@Override
+	public void setPosition(Point newPosition)
+	{
+		super.setPosition(newPosition);
+		newPosition.translate(25, 0);
+		_label.setPosition(newPosition);
+	}
 
 	@Override
 	public Rectangle getArea()
 	{
-		Dimension size = calcSize();
+		Dimension size = calcSize(_label.getPosition().x);
 		return new Rectangle(_area.x, _area.y, size.width, size.height);
 	}
 
-	private Dimension calcSize()
+	private Dimension calcSize(int labelXPosition)
 	{
-		return new Dimension(25 + _label.getPosition().x, 20);
+		return new Dimension(25 + labelXPosition, 20);
 	}
 }
