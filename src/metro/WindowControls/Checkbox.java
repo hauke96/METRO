@@ -68,11 +68,11 @@ public class Checkbox extends ControlElement
 	 */
 	public Checkbox(Point position, String text, int textWidth, boolean checked, boolean enabled)
 	{
-		Dimension size = calcSize();
-		_area = new Rectangle(position.x, position.y, size.width, size.height);
 		_text = text;
 		_textWidth = textWidth;
-		_label = new Label(_text, new Point(_area.x + 25, _area.y), _textWidth);
+		_label = new Label(_text, new Point(position.x + 25, position.y), _textWidth);
+		Dimension size = calcSize();
+		_area = new Rectangle(position.x, position.y, size.width, size.height);
 		_checked = checked;
 		_oldState = _checked;
 		_state = enabled;

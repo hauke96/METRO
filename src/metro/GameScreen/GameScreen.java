@@ -250,7 +250,14 @@ public abstract class GameScreen extends Observable
 			_segmentList.setSelectedEntry(index);
 			addListObserver();
 
-			// TODO add controls to window
+			_window.add(_okButton);
+			_window.add(_fullscreenOn);
+			_window.add(_useOpenGL30);
+			_window.add(_useHDPI);
+			_window.add(_useVSync);
+			_window.add(_resolutionList);
+			_window.add(_sampleList);
+			_window.add(_segmentList);
 		}
 
 		/**

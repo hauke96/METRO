@@ -1,9 +1,7 @@
 package metro.WindowControls;
 
-import java.util.LinkedList;
 import java.util.List;
-
-import javax.sound.sampled.FloatControl;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * The {@link BasicContainerRenderer} is a renderer with no special features, it just forwards every call to all {@link ContainerRenderable} classes.
@@ -26,8 +24,8 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	 */
 	public BasicContainerRenderer()
 	{
-		_listOfRenderables = new LinkedList<ContainerRenderable>();
-		_listOfFloatingContainer = new LinkedList<FloatingContainer>();
+		_listOfRenderables = new CopyOnWriteArrayList<ContainerRenderable>();
+		_listOfFloatingContainer = new CopyOnWriteArrayList<FloatingContainer>();
 		ContainerRenderable.setRenderer(this);
 	}
 
