@@ -32,6 +32,7 @@ public class MainMenu extends GameScreen
 	private Window _welcomeWindow;
 	private static TextureRegion __buttonTextures,
 		_titleImageTexture;
+	private Panel _panel;
 
 	/**
 	 * Creates a main menu with the welcome-window, and the three buttons "Play", "Settings" and "Exit".
@@ -82,10 +83,10 @@ public class MainMenu extends GameScreen
 		_welcomeWindow.add(button);
 		_welcomeWindow.add(label);
 		
-		Panel panel = new Panel();
-		panel.add(_button_startGame);
-		panel.add(_button_settings);
-		panel.add(_button_exitGame);
+		_panel = new Panel();
+		_panel.add(_button_startGame);
+		_panel.add(_button_settings);
+		_panel.add(_button_exitGame);
 		//TODO add controls to window
 	}
 
@@ -124,7 +125,8 @@ public class MainMenu extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				_welcomeWindow.close();
+				_panel.notifyAboutClose();
+				_welcomeWindow.notifyAboutClose();
 				METRO.__changeGameScreen(new MainView());
 			}
 		});

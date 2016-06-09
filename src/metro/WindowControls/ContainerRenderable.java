@@ -7,7 +7,7 @@ import metro.Exceptions.UninitiatedClassException;
  * 
  * @author hauke
  */
-public abstract class ContainerRenderable extends ControlElement
+public abstract class ContainerRenderable extends Closeable
 {
 	private static ContainerRenderer renderer = null;
 	

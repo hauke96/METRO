@@ -32,15 +32,17 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	}
 
 	@Override
-	public void registerRenderable(ContainerRenderable renderer)
+	public void registerRenderable(ContainerRenderable renderable)
 	{
-		_listOfRenderables.add(renderer);
+		_listOfRenderables.add(renderable);
+		renderable.registerCloseObserver(this);
 	}
 
 	@Override
-	public void registerFloatingRenderable(FloatingContainer renderer)
+	public void registerFloatingRenderable(FloatingContainer renderable)
 	{
-		_listOfFloatingContainer.add(renderer);
+		_listOfFloatingContainer.add(renderable);
+		renderable.registerCloseObserver(this);
 	}
 
 	@Override
@@ -91,5 +93,6 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	public void closed(Container container)
 	{
 		_listOfRenderables.remove(container);
+		_listOfFloatingContainer.remove(container);
 	}
 }

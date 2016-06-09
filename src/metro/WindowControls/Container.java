@@ -3,7 +3,7 @@ package metro.WindowControls;
 import java.util.LinkedList;
 import java.util.List;
 
-abstract class Container extends ContainerRenderable implements Closeable
+abstract class Container extends ContainerRenderable
 {
 	interface Notifier
 	{
@@ -16,6 +16,7 @@ abstract class Container extends ContainerRenderable implements Closeable
 	public Container()
 	{
 		_listOfControlElements= new LinkedList<ControlElement>();
+		_listOfCloseObserver = new LinkedList<CloseObserver>();
 		register(this);
 	}
 	

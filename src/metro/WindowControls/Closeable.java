@@ -1,6 +1,10 @@
 package metro.WindowControls;
 
-public interface Closeable
+abstract class Closeable extends ControlElement
 {
-	public void notifyAboutClose();
+	public abstract void notifyAboutClose();
+	
+	abstract void registerCloseObserver(CloseObserver observer);
+	
+	abstract void removeCloseObserver(CloseObserver observer);
 }
