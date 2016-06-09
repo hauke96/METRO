@@ -11,7 +11,7 @@ public interface ContainerRenderer
 	/**
 	 * Registers a new renderable class.
 	 * 
-	 * @param containerRenderable The {@link ContainerRenderable} that should be rendered.
+	 * @param containerRenderable The {@link ContainerRegistrationService} that should be rendered.
 	 */
 	void registerRenderable(StaticContainer containerRenderable);
 

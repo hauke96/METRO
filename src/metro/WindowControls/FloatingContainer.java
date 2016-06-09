@@ -4,12 +4,11 @@ public abstract class FloatingContainer extends Container
 {
 	public FloatingContainer()
 	{
-		registerFloatingContainer(this);
 	}
 	
 	@Override
-	protected void registerContainerInRenderer()
+	protected void registerContainerInRenderer(ContainerRegistrationService registrationService)
 	{
-		registerFloatingContainer(this);
+		registrationService.registerFloatingContainer(this);
 	}
 }

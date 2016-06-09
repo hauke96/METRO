@@ -142,8 +142,8 @@ public class Window extends FloatingContainer
 		{
 			Point pos = cElement.getPosition();
 			cElement.setPosition(new Point(pos.x + _area.x, pos.y + _area.y + 20));
-			_listOfControlElements.add(cElement); // there wont be doubles ;)
 		}
+		super.add(cElement);
 	}
 
 	/**
@@ -191,6 +191,7 @@ public class Window extends FloatingContainer
 	@Override
 	boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{
+		super.mouseClicked(screenX, screenY, mouseButton);
 		// Check for drag-mode:
 		if(isMouseOnWindow(screenX, screenY)
 			&& mouseButton == Buttons.LEFT)
@@ -237,6 +238,7 @@ public class Window extends FloatingContainer
 	/**
 	 * Marks this window as closed to let the METRO class know, that this instance/window can be removed.
 	 */
+	@Override
 	public void close()
 	{
 		// Removes all controls from the action manager via second registering

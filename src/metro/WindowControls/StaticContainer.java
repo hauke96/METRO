@@ -4,12 +4,11 @@ public abstract class StaticContainer extends Container
 {
 	public StaticContainer()
 	{
-		register(this);
 	}
 	
 	@Override
-	protected void registerContainerInRenderer()
+	protected void registerContainerInRenderer(ContainerRegistrationService registrationService)
 	{
-		register(this);
+		registrationService.register(this);
 	}
 }

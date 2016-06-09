@@ -3,24 +3,36 @@ package metro.WindowControls;
 import java.util.LinkedList;
 import java.util.List;
 
-abstract class Container extends ContainerRenderable
+import metro.Exceptions.UninitiatedClassException;
+
+abstract class Container extends CloseObservable
 {
+	private static ContainerRegistrationService _containerRegistrationService;
+	
 	interface Notifier
 	{
 		void notifyControlElements(ControlElement control);
 	}
 	
 	protected List<ControlElement> _listOfControlElements;
-	private List<CloseObserver> _listOfCloseObserver;
 
 	public Container()
 	{
+		if(_containerRegistrationService == null)
+		{
+			throw new UninitiatedClassException("There's no container registration service available. Set it before creating a container.");
+		}
+		
 		_listOfControlElements= new LinkedList<ControlElement>();
-		_listOfCloseObserver = new LinkedList<CloseObserver>();
-		registerContainerInRenderer();
+		registerContainerInRenderer(_containerRegistrationService);
 	}
 	
-	protected abstract void registerContainerInRenderer();
+	public static void setContainerRegistrationService(ContainerRegistrationService newContainerRegistrationService)
+	{
+		_containerRegistrationService = newContainerRegistrationService;
+	}
+	
+	protected abstract void registerContainerInRenderer(ContainerRegistrationService registrationService);
 	
 	@Override
 	void draw()
@@ -61,14 +73,6 @@ abstract class Container extends ContainerRenderable
 		}
 	}
 	
-	public void notifyAboutClose()
-	{
-		for(CloseObserver closeObserver:_listOfCloseObserver)
-		{
-			closeObserver.closed(this);
-		}
-	}
-	
 	public void add(ControlElement control)
 	{
 		_listOfControlElements.add(control);
@@ -77,15 +81,5 @@ abstract class Container extends ContainerRenderable
 	public void remove(ControlElement control)
 	{
 		_listOfControlElements.remove(control);
-	}
-	
-	void registerCloseObserver(CloseObserver observer)
-	{
-		_listOfCloseObserver.add(observer);
-	}
-	
-	void removeCloseObserver(CloseObserver observer)
-	{
-		_listOfCloseObserver.remove(observer);
 	}
 }

@@ -9,8 +9,11 @@ public class Panel extends StaticContainer
 	@Override
 	public void moveElement(Point offset)
 	{
-		// TODO Auto-generated method stub
-		
 	}
-
+	
+	@Override
+	public void close()
+	{
+		notifyAboutClose();
+	}
 }

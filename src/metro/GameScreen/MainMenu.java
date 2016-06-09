@@ -125,8 +125,8 @@ public class MainMenu extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				_panel.notifyAboutClose();
-				_welcomeWindow.notifyAboutClose();
+				_panel.close();
+				_welcomeWindow.close();
 				METRO.__changeGameScreen(new MainView());
 			}
 		});

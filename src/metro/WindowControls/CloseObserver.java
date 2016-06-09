@@ -2,5 +2,5 @@ package metro.WindowControls;
 
 public interface CloseObserver
 {
-	public void closed(Closeable container);
+	public void reactToClosedControlElement(CloseObservable container);
 }

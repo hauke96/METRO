@@ -3,25 +3,25 @@ package metro.WindowControls;
 import metro.Exceptions.UninitiatedClassException;
 
 /**
- * A {@link ContainerRenderable} is a class that can be used by the {@link ContainerRenderer} to render container and controls.
+ * A {@link ContainerRegistrationService} is a class that can be used by the {@link ContainerRenderer} to render container and controls.
  * 
  * @author hauke
  */
-public abstract class ContainerRenderable extends Closeable
+public class ContainerRegistrationService
 {
-	private static ContainerRenderer renderer = null;
+	private ContainerRenderer renderer = null;
 	
-	public static void setRenderer(ContainerRenderer newRenderer)
+	public void setRenderer(ContainerRenderer newRenderer)
 	{
 		renderer = newRenderer;
 	}
 
 	/**
-	 * Registers a {@link ContainerRenderable} in the current renderer.
+	 * Registers a {@link ContainerRegistrationService} in the current renderer.
 	 * 
 	 * @param renderable A container renderable class.
 	 */
-	protected void register(StaticContainer renderable)
+	void register(StaticContainer renderable)
 	{
 		if(renderer == null)
 		{
@@ -31,11 +31,11 @@ public abstract class ContainerRenderable extends Closeable
 	}
 
 	/**
-	 * Registers a {@link ContainerRenderable} in the current renderer.
+	 * Registers a {@link ContainerRegistrationService} in the current renderer.
 	 * 
 	 * @param renderable A floating container renderable class.
 	 */
-	protected void registerFloatingContainer(FloatingContainer renderable)
+	void registerFloatingContainer(FloatingContainer renderable)
 	{
 		if(renderer == null)
 		{

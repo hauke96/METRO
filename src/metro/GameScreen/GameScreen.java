@@ -195,7 +195,7 @@ public abstract class GameScreen extends Observable
 		public SettingsWindow()
 		{
 			_window = new Window("METRO settings",
-				new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 250, METRO.__SCREEN_SIZE.height / 2 - 225, 500, 450),
+				new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 50, METRO.__SCREEN_SIZE.height / 2 - 225, 500, 450),
 				METRO.__metroBlue);
 
 			Label label = new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.",
