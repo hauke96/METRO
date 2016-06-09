@@ -21,7 +21,7 @@ public abstract class ContainerRenderable extends Closeable
 	 * 
 	 * @param renderable A container renderable class.
 	 */
-	protected void register(ContainerRenderable renderable)
+	protected void register(StaticContainer renderable)
 	{
 		if(renderer == null)
 		{

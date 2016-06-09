@@ -13,7 +13,7 @@ public interface ContainerRenderer
 	 * 
 	 * @param containerRenderable The {@link ContainerRenderable} that should be rendered.
 	 */
-	void registerRenderable(ContainerRenderable containerRenderable);
+	void registerRenderable(StaticContainer containerRenderable);
 
 	void registerFloatingRenderable(FloatingContainer renderer);
 

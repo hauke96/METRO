@@ -17,20 +17,20 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	}
 
 	private List<FloatingContainer> _listOfFloatingContainer;
-	private List<ContainerRenderable> _listOfRenderables;
+	private List<StaticContainer> _listOfRenderables;
 
 	/**
 	 * Creates a basic renderer with empty fields.
 	 */
 	public BasicContainerRenderer()
 	{
-		_listOfRenderables = new CopyOnWriteArrayList<ContainerRenderable>();
+		_listOfRenderables = new CopyOnWriteArrayList<StaticContainer>();
 		_listOfFloatingContainer = new CopyOnWriteArrayList<FloatingContainer>();
 		ContainerRenderable.setRenderer(this);
 	}
 
 	@Override
-	public void registerRenderable(ContainerRenderable renderable)
+	public void registerRenderable(StaticContainer renderable)
 	{
 		_listOfRenderables.add(renderable);
 		renderable.registerCloseObserver(this);
@@ -88,7 +88,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	}
 
 	@Override
-	public void closed(Container container)
+	public void closed(Closeable container)
 	{
 		_listOfRenderables.remove(container);
 		_listOfFloatingContainer.remove(container);
