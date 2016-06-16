@@ -11,23 +11,32 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 {
+	interface ContainerCollectionNotifier
+	{
+		void notifyAllContainer(List<? extends Container> listOfContainer);
+	}
+	
+	interface ContainerNotifier
+	{
+		void notifyContainer(Container container);
+	}
+
 	interface Notifier
 	{
-		void notifyRenderable(Container container);
+		void executeFunctions();
 	}
 
 	private List<FloatingContainer> _listOfFloatingContainer;
-	private List<StaticContainer> _listOfRenderables;
+	private List<StaticContainer> _listOfStaticContainer;
 
 	/**
 	 * Creates a basic renderer with empty fields.
 	 */
 	public BasicContainerRenderer()
 	{
-		_listOfRenderables = new CopyOnWriteArrayList<StaticContainer>();
+		_listOfStaticContainer = new CopyOnWriteArrayList<StaticContainer>();
 		_listOfFloatingContainer = new CopyOnWriteArrayList<FloatingContainer>();
-		
-		
+
 		ContainerRegistrationService registrationService = new ContainerRegistrationService();
 		registrationService.setRenderer(this);
 		Container.setContainerRegistrationService(registrationService);
@@ -36,7 +45,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	@Override
 	public void registerRenderable(StaticContainer renderable)
 	{
-		_listOfRenderables.add(renderable);
+		_listOfStaticContainer.add(renderable);
 		renderable.registerCloseObserver(this);
 	}
 
@@ -50,51 +59,82 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	@Override
 	public void notifyDraw()
 	{
-		generalNotifying((Container container) -> container.draw());
+		normalNotifying((Container container) -> container.draw());
 	}
 
 	@Override
 	public void notifyMouseClick(int screenX, int screenY, int button)
 	{
-		generalNotifying((Container container) -> container.mouseClicked(screenX, screenY, button));
+		// generalNotifying((Container container) -> container.mouseClicked(screenX, screenY, button));
+		// TODO determine on which control the focus is
+		
+		Notifier notifier = () ->
+		{
+			ContainerCollectionNotifier containerNotifier = (List<? extends Container> l) ->
+			{
+				Container currentContainer;
+				for(int i = l.size() - 1; i >= 0; i--)
+				{
+					currentContainer = l.get(i);
+					if(currentContainer.isInArea(screenX, screenY))
+					{
+						currentContainer.mouseClicked(screenX, screenY, button);
+						break;
+					}
+				}
+			};
+
+			containerNotifier.notifyAllContainer(_listOfStaticContainer);
+			containerNotifier.notifyAllContainer(_listOfFloatingContainer);
+		};
+		
+		generalNotifying(notifier);
 	}
 
 	@Override
 	public void notifyMouseScrolled(int amount)
 	{
-		generalNotifying((Container container) -> container.mouseScrolled(amount));
+		normalNotifying((Container container) -> container.mouseScrolled(amount));
 	}
 
 	@Override
 	public void notifyKeyPressed(int keyCode)
 	{
-		generalNotifying((Container container) -> container.keyPressed(keyCode));
+		normalNotifying((Container container) -> container.keyPressed(keyCode));
 	}
 
 	@Override
 	public void notifyKeyUp(int keyCode)
 	{
-		generalNotifying((Container container) -> container.keyUp(keyCode));
+		normalNotifying((Container container) -> container.keyUp(keyCode));
 	}
 
-	private void generalNotifying(Notifier notifyFunction)
+	private void normalNotifying(ContainerNotifier notifyFunction)
 	{
 		// TODO determine on which control the focus is
-		for(StaticContainer container : _listOfRenderables)
-		{
-			notifyFunction.notifyRenderable(container);
-		}
+		Notifier notifier = () -> {
+			for(StaticContainer container : _listOfStaticContainer)
+			{
+				notifyFunction.notifyContainer(container);
+			}
 
-		for(FloatingContainer window : _listOfFloatingContainer)
-		{
-			notifyFunction.notifyRenderable(window);
-		}
+			for(FloatingContainer window : _listOfFloatingContainer)
+			{
+				notifyFunction.notifyContainer(window);
+			}
+		};
+		generalNotifying(notifier);
+	}
+
+	private void generalNotifying(Notifier notifier)
+	{
+		notifier.executeFunctions();
 	}
 
 	@Override
 	public void reactToClosedControlElement(CloseObservable container)
 	{
-		_listOfRenderables.remove(container);
+		_listOfStaticContainer.remove(container);
 		_listOfFloatingContainer.remove(container);
 	}
 }
