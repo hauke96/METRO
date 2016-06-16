@@ -83,7 +83,7 @@ public class MainMenu extends GameScreen
 		_welcomeWindow.add(button);
 		_welcomeWindow.add(label);
 		
-		_panel = new Panel();
+		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 - 25, 200, 170));
 		_panel.add(_button_startGame);
 		_panel.add(_button_settings);
 		_panel.add(_button_exitGame);

@@ -88,6 +88,18 @@ abstract class ControlElement extends ActionObservable
 	}
 
 	/**
+	 * Checks if the given coordinates are in the area of this control.
+	 * 
+	 * @param x The x-coordinate.
+	 * @param y The y-coordinate.
+	 * @return True when the coordinates are in the controls area, false if not.
+	 */
+	public boolean isInArea(int x, int y)
+	{
+		return _area.contains(x, y);
+	}
+
+	/**
 	 * Sets a new position
 	 * 
 	 * @param pos New position as Point.

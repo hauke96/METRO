@@ -195,7 +195,7 @@ public class Checkbox extends ControlElement
 		_text = text;
 		_label.setText(text);
 	}
-	
+
 	@Override
 	public void setPosition(Point newPosition)
 	{
