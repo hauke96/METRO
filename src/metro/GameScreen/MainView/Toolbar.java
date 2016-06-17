@@ -15,6 +15,7 @@ import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
+import metro.WindowControls.Panel;
 
 /**
  * This is the bar on the side with the "build station", "build tracks", "show line view" and "create train" buttons.
@@ -43,7 +44,7 @@ public class Toolbar extends GameScreen
 		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth();
 		_buttonYPosition = -9;
 		
-		//TODO create a panel for controls
+		Panel panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height));
 
 		_buildStation = new Button(new Rectangle(_buttonAreaXPosition + 140, _buttonYPosition, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
 		_buildTracks = new Button(new Rectangle(_buttonAreaXPosition + 180, _buttonYPosition, 40, 50), new Rectangle(0, 78, 40, 50), METRO.__iconSet);
@@ -51,7 +52,10 @@ public class Toolbar extends GameScreen
 		_createNewTrain = new Button(new Rectangle(_buttonAreaXPosition + 260, _buttonYPosition, 40, 50), new Rectangle(0, 178, 40, 50), METRO.__iconSet);
 		registerObervations();
 		
-		//TODO add controls to panel
+		panel.add(_buildStation);
+		panel.add(_buildTracks);
+		panel.add(_showTrainList);
+		panel.add(_createNewTrain);
 	}
 
 	private void registerObervations()
@@ -61,6 +65,7 @@ public class Toolbar extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
+				System.out.println("OK");
 				resetExclusiveButtonPositions(_buildStation);
 				setChanged();
 				notifyObservers(new StationPlacingTool());
@@ -120,6 +125,8 @@ public class Toolbar extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch g)
 	{
+		//TODO move all this into the panel
+		
 		// draw the background and the red line below it
 		Fill.setColor(Color.white);
 		Fill.Rect(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height));

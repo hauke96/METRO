@@ -5,6 +5,8 @@ import java.awt.Rectangle;
 
 public class Panel extends StaticContainer
 {
+	//TODO draw panel with background color (which is transparent at default)
+	
 	/**
 	 * Creates an empty transparent panel.
 	 * 
