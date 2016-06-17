@@ -28,8 +28,9 @@ public interface ContainerRenderer
 	 * @param screenX The x-coordinate.
 	 * @param screenY The y-coordinate.
 	 * @param button The pressed button.
+	 * @return True when a control in a container got the click event.
 	 */
-	public void notifyMouseClick(int screenX, int screenY, int button);
+	public boolean notifyMouseClick(int screenX, int screenY, int button);
 
 	/**
 	 * Notifies all registered renderables about a mouse scroll event.

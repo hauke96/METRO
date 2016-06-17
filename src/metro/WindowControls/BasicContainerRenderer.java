@@ -15,7 +15,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	{
 		void notifyAllContainer(List<? extends Container> listOfContainer);
 	}
-	
+
 	interface ContainerNotifier
 	{
 		void notifyContainer(Container container);
@@ -63,15 +63,18 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	}
 
 	@Override
-	public void notifyMouseClick(int screenX, int screenY, int button)
+	public boolean notifyMouseClick(int screenX, int screenY, int button)
 	{
-		// generalNotifying((Container container) -> container.mouseClicked(screenX, screenY, button));
-		// TODO determine on which control the focus is
-		
-		Notifier notifier = () ->
+		// TODO create observer for the click on a not-focused window and bring it to the front
+
+		class ModifiableBoolean
 		{
-			ContainerCollectionNotifier containerNotifier = (List<? extends Container> l) ->
-			{
+			private boolean value = false;
+		}
+		ModifiableBoolean isClickedValue = new ModifiableBoolean();
+
+		Notifier notifier = () -> {
+			ContainerCollectionNotifier containerNotifier = (List<? extends Container> l) -> {
 				Container currentContainer;
 				for(int i = l.size() - 1; i >= 0; i--)
 				{
@@ -79,16 +82,20 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 					if(currentContainer.isInArea(screenX, screenY))
 					{
 						currentContainer.mouseClicked(screenX, screenY, button);
+						isClickedValue.value = true;
 						break;
 					}
 				}
 			};
 
-			containerNotifier.notifyAllContainer(_listOfStaticContainer);
+			containerNotifier.notifyAllContainer(_listOfStaticContainer);// TODO determine on which control the focus is
+
 			containerNotifier.notifyAllContainer(_listOfFloatingContainer);
 		};
-		
+
 		generalNotifying(notifier);
+
+		return isClickedValue.value;
 	}
 
 	@Override

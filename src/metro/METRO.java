@@ -516,7 +516,12 @@ public class METRO implements ApplicationListener, InputProcessor
 		screenX -= __xOffset;
 		screenY -= __yOffset;
 
-		__containerRenderer.notifyMouseClick(screenX, screenY, button);
+		boolean controlGotClickEvent = __containerRenderer.notifyMouseClick(screenX, screenY, button);
+		
+		if(!controlGotClickEvent)
+		{
+			__currentGameScreen.mouseClicked(screenX, screenY, button);
+		}
 
 		return false;
 	}

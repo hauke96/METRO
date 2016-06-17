@@ -65,7 +65,6 @@ public class Toolbar extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				System.out.println("OK");
 				resetExclusiveButtonPositions(_buildStation);
 				setChanged();
 				notifyObservers(new StationPlacingTool());
