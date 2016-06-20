@@ -1,6 +1,7 @@
 package metro.GameScreen.MainView.NotificationView;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.WindowControls.List;
+import metro.WindowControls.Panel;
 
 /**
  * This is a kind of log where game-concerned events pop up and are shown.
@@ -27,6 +29,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 		_headerHeight;
 	private Color _backGroundColor;
 	private List _entryList;
+	private Panel _panel;
 
 	private final static NotificationArea __INSTANCE = new NotificationArea();
 
@@ -41,7 +44,10 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 		_width = METRO.__SCREEN_SIZE.width;
 		_isExpanded = true;
 		
-		//TODO create panel for controls
+		_panel = new Panel(new Rectangle(0,
+			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
+			_width - 5,
+			_height - METRO.__titleBarHeight + _headerHeight));
 		
 		_entryList = new List(new Rectangle(0,
 			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
@@ -55,7 +61,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 		addMessage("Game started", NotificationType.GAME_INFO);
 		NotificationServer.subscribe(this);
 		
-		//TODO add controls to panel
+		_panel.add(_entryList);
 	}
 
 	/**
@@ -107,13 +113,14 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(METRO.__SCREEN_SIZE.height - _height <= screenY
+		if(screenY >= METRO.__SCREEN_SIZE.height - _height
 			&& screenY <= METRO.__SCREEN_SIZE.height - _height + _headerHeight
 			&& screenX <= _width)
 		{
 			_isExpanded ^= true; // flip state of boolean
 			_height = _isExpanded ? 250 : METRO.__titleBarHeight + _headerHeight;
 			_entryList.setState(_isExpanded);
+			_panel.setPosition(new Point(_entryList.getPosition().x, METRO.__SCREEN_SIZE.height-_height+_headerHeight));
 		}
 	}
 
