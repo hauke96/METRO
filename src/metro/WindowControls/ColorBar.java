@@ -125,7 +125,7 @@ public class ColorBar extends ControlElement
 	}
 
 	@Override
-	void draw()
+	protected void draw()
 	{
 		Color color;
 

@@ -17,17 +17,27 @@ abstract class ControlElement extends ActionObservable
 	protected boolean _state;
 	protected String _text;
 	protected Rectangle _area;
+	private boolean _visible;
 
 	public ControlElement()
 	{
+		_visible = true;
 		_state = true;
 		_text = "";
+	}
+
+	public void drawControl()
+	{
+		if(_visible)
+		{
+			draw();
+		}
 	}
 
 	/**
 	 * Draws the control.
 	 */
-	abstract void draw();
+	protected abstract void draw();
 
 	/**
 	 * Is called when mouse clicked with its left button.
@@ -155,5 +165,37 @@ abstract class ControlElement extends ActionObservable
 	public boolean getState()
 	{
 		return _state;
+	}
+
+	/**
+	 * Sets the visibility of the control. If it's set to {@code false} also the state of the control is set to {@code false}.
+	 * Don't forget to set the state to true as well or use the {@link #enable()} method.
+	 * 
+	 * @param visibility The new visibility of the control.
+	 */
+	public void setVisibility(boolean visibility)
+	{
+		_visible = visibility;
+		if(!_visible)
+		{
+			setState(false);
+		}
+	}
+
+	/**
+	 * Sets the visibility AND the state of the control to true, so it's visible and able to receive interaction events.
+	 */
+	public void enable()
+	{
+		setVisibility(true);
+		setState(true);
+	}
+
+	/**
+	 * @return The visibility status of the control. This has nothing directly to do with the {@link #getState()} method and the state property.
+	 */
+	public boolean isVisible()
+	{
+		return _visible;
 	}
 }

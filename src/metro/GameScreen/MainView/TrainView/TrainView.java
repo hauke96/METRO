@@ -2,6 +2,7 @@ package metro.GameScreen.MainView.TrainView;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,6 +15,7 @@ import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.WindowControls.ActionObserver;
+import metro.WindowControls.Panel;
 
 /**
  * The dialog to buy, sell and manage trains.
@@ -28,6 +30,7 @@ public class TrainView extends GameScreen
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private TrainViewMain _trainViewMain;
 	private TrainViewBuy _trainViewBuy;
+	private Panel _panel;
 
 	/**
 	 * Creates a new TrainLineView.
@@ -38,6 +41,10 @@ public class TrainView extends GameScreen
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 45);
 		_trainViewMain = new TrainViewMain(getAreaOffset(), _windowWidth);
 		_trainViewBuy = new TrainViewBuy(getAreaOffset(), _windowWidth);
+		
+		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width - _windowWidth, 0, _windowWidth, METRO.__SCREEN_SIZE.height));
+		_panel.add(_trainViewMain.getPanel());
+		_panel.add(_trainViewBuy.getPanel());
 
 		registerObserver();
 	}
@@ -178,6 +185,7 @@ public class TrainView extends GameScreen
 	{
 		_trainViewBuy.close();
 		_trainViewMain.close();
+		_panel.close();
 		super.close();
 	}
 

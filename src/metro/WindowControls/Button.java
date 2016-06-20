@@ -86,7 +86,7 @@ public class Button extends ControlElement
 	/**
 	 * Draws the button with its text/texture.
 	 */
-	void draw()
+	protected void draw()
 	{
 		if(!_text.equals(""))
 		{

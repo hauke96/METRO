@@ -64,7 +64,7 @@ public class Label extends ControlElement
 	 * Draws the label onto the screen. The Color of the Graphics-handle will be restores after drawing.
 	 */
 	@Override
-	void draw()
+	protected void draw()
 	{
 		if(_state) Draw.setColor(_color);
 		else Draw.setColor(Color.gray);

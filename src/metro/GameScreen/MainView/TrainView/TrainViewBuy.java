@@ -17,6 +17,7 @@ import metro.WindowControls.ActionObserver;
 import metro.WindowControls.Button;
 import metro.WindowControls.Label;
 import metro.WindowControls.List;
+import metro.WindowControls.Panel;
 
 /**
  * A part of the TrainView where the user can buy new trains.
@@ -37,6 +38,7 @@ public class TrainViewBuy extends GameScreen
 		_informationValues; // like CT-01, 1.03, ...
 	private TrainManagementService _trainManagementService;
 	private TextureRegion _titleImage;
+	private Panel _panel;
 
 	/**
 	 * Creates a new dialog.
@@ -51,7 +53,7 @@ public class TrainViewBuy extends GameScreen
 
 		_trainManagementService = TrainManagementService.getInstance();
 
-		//TODO create panel for controls
+		_panel = new Panel(new Rectangle());
 		
 		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, METRO.__SCREEN_SIZE.height - METRO.__getYOffset() - _areaOffset.y, 210, 20), "Buy");
 		
@@ -88,7 +90,11 @@ public class TrainViewBuy extends GameScreen
 
 		fillTrainList();
 		
-		//TODO add controls to panel
+		_panel.add(_buyButton);
+		_panel.add(_availableTrains);
+		_panel.add(_messageLabel);
+		_panel.add(_informationKeys);
+		_panel.add(_informationValues);
 	}
 
 	/**
@@ -157,7 +163,7 @@ public class TrainViewBuy extends GameScreen
 	 * 
 	 * @param modelName The model name of the selection.
 	 */
-	public void setTrain(String modelName)
+	void setTrain(String modelName)
 	{
 		if(_availableTrains.contains(modelName))
 		{
@@ -168,7 +174,7 @@ public class TrainViewBuy extends GameScreen
 	/**
 	 * @return The buy train button.
 	 */
-	public Button getBuyButton()
+	Button getBuyButton()
 	{
 		return _buyButton;
 	}
@@ -176,7 +182,7 @@ public class TrainViewBuy extends GameScreen
 	/**
 	 * @return The message label that shows error messages.
 	 */
-	public Label getMessageLabel()
+	Label getMessageLabel()
 	{
 		return _messageLabel;
 	}
@@ -184,9 +190,17 @@ public class TrainViewBuy extends GameScreen
 	/**
 	 * @return The list of all available train models
 	 */
-	public List getTrainList()
+	List getTrainList()
 	{
 		return _availableTrains;
+	}
+	
+	/**
+	 * @return Gets the main panel of this screen.
+	 */
+	Panel getPanel()
+	{
+		return _panel;
 	}
 
 	@Override

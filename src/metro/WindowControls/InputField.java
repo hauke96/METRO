@@ -49,7 +49,7 @@ public class InputField extends ControlElement
 	}
 
 	@Override
-	void draw()
+	protected void draw()
 	{
 		METRO.__spriteBatch.end();
 		METRO.__spriteBatch.begin();

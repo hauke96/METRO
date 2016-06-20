@@ -62,7 +62,7 @@ public class Window extends FloatingContainer
 	 * @param g The graphic handle.
 	 */
 	@Override
-	void draw()
+	protected void draw()
 	{
 		update();
 		drawWindow();

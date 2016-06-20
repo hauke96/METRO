@@ -117,7 +117,7 @@ public class Checkbox extends ControlElement
 	}
 
 	@Override
-	void draw()
+	protected void draw()
 	{
 		// set the color depending on _enabled
 		Draw.setColor(_state

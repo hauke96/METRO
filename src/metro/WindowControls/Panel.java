@@ -25,6 +25,14 @@ public class Panel extends StaticContainer
 	@Override
 	public void close()
 	{
+		for(ControlElement element : _listOfControlElements)
+		{
+			if(element instanceof Closable)
+			{
+				((Closable)element).close();
+			}
+		}
+		_listOfControlElements.clear();
 		notifyAboutClose();
 	}
 }

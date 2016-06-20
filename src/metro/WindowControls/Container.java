@@ -36,7 +36,7 @@ abstract class Container extends CloseObservable
 	protected abstract void registerContainerInRenderer(ContainerRegistrationService registrationService);
 
 	@Override
-	void draw()
+	protected void draw()
 	{
 		generalNotifying((ControlElement control) -> control.draw());
 	}

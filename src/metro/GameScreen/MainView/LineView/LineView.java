@@ -27,6 +27,7 @@ import metro.WindowControls.ColorBar;
 import metro.WindowControls.InputField;
 import metro.WindowControls.Label;
 import metro.WindowControls.List;
+import metro.WindowControls.Panel;
 
 /**
  * The LineView is a dialog to manage the train lines in METRO. It allows the user to create, modify and remove lines.
@@ -53,6 +54,7 @@ public class LineView extends GameScreen implements Observer
 	private TrainLine _oldLine; // when the user edits a line name, the old name of it has to be saved to correctly update the line list
 	private ColorBar _colorBar;
 	private TrainManagementService _trainManagementService;
+	private Panel _panel;
 
 	/**
 	 * Creates a new TrainLineView.
@@ -78,7 +80,7 @@ public class LineView extends GameScreen implements Observer
 	 */
 	private void createControls()
 	{
-		//TODO create panel for controls
+		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width - _windowWidth, 0, _windowWidth, METRO.__SCREEN_SIZE.height));
 		
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 40, 300), true);
 		fillLineList();
@@ -102,7 +104,15 @@ public class LineView extends GameScreen implements Observer
 		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 100));
 		_messageLabel.setColor(METRO.__metroRed);
 		
-		//TODO add controls to panel
+		_panel.add(_lineList);
+		_panel.add(_createLineButton);
+		_panel.add(_editLineButton);
+		_panel.add(_removeLineButton);
+		_panel.add(_lineNameField);
+		_panel.add(_lineNameFieldLabel);
+		_panel.add(_colorBar);
+		_panel.add(_saveButton);
+		_panel.add(_messageLabel);
 	}
 
 	/**
@@ -450,7 +460,7 @@ public class LineView extends GameScreen implements Observer
 	}
 
 	/**
-	 * Sets the visibility of the TrainLineView. The visibility will also effect the usability (e.g. mouse click).
+	 * Sets the visibility of the LineView. The visibility will also effect the usability (e.g. mouse click).
 	 * 
 	 * @param visible True will make this visible, false will make it invisible.
 	 */
@@ -544,6 +554,7 @@ public class LineView extends GameScreen implements Observer
 	@Override
 	public void close()
 	{
+		_panel.close();
 		super.close();
 	}
 
