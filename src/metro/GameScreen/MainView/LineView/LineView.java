@@ -80,7 +80,7 @@ public class LineView extends GameScreen implements Observer
 	 */
 	private void createControls()
 	{
-		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width - _windowWidth, 0, _windowWidth, METRO.__SCREEN_SIZE.height));
+		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
 		
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 40, 300), true);
 		fillLineList();
