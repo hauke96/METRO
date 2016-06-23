@@ -87,7 +87,6 @@ public class MainMenu extends GameScreen
 		_panel.add(_button_startGame);
 		_panel.add(_button_settings);
 		_panel.add(_button_exitGame);
-		//TODO add controls to window
 	}
 
 	private void loadVisuals()

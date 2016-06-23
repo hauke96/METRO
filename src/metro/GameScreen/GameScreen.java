@@ -405,8 +405,6 @@ public abstract class GameScreen extends Observable
 			_noButton = new Button(new Rectangle(270, 70, 120, 20), "No");
 			addButtonObserver();
 
-			// TODO add controls to window
-
 			Label label = new Label("Really quit METRO? Or go into settings?",
 				new Point(200 - (Draw.getStringSize("Really quit METRO? Or go into settings?").width) / 2, 25));
 			
