@@ -461,6 +461,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyDown(int keyCode)
 	{
+		__containerRenderer.notifyKeyPressed(keyCode);
 		//TODO check if the gamescreen is allowed to handle input now (if an input field has focus, no other control is allowed to)
 		__currentGameScreen.keyPressed(keyCode);
 		return false;
@@ -469,6 +470,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyUp(int keyCode)
 	{
+		__containerRenderer.notifyKeyUp(keyCode);
 		__currentGameScreen.keyUp(keyCode);
 		return false;
 	}
@@ -557,6 +559,8 @@ public class METRO implements ApplicationListener, InputProcessor
 	public boolean scrolled(int amount)
 	{
 		__containerRenderer.notifyMouseScrolled(amount);
+		// TODO check if game screen is allowed to get the scroll event or if other controls get this before
+		__currentGameScreen.mouseScrolled(amount);
 		return false;
 	}
 
