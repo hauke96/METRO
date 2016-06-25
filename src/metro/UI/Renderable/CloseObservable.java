@@ -1,9 +1,11 @@
-package metro.WindowControls;
+package metro.UI.Renderable;
 
 import java.util.LinkedList;
 import java.util.List;
 
-abstract class CloseObservable extends ControlElement implements Closable
+import metro.UI.Renderer.CloseObserver;
+
+public abstract class CloseObservable extends ControlElement implements Closable
 {
 	private List<CloseObserver> _listOfCloseObserver;
 	
@@ -20,12 +22,12 @@ abstract class CloseObservable extends ControlElement implements Closable
 		}
 	}
 	
-	void registerCloseObserver(CloseObserver observer)
+	public void registerCloseObserver(CloseObserver observer)
 	{
 		_listOfCloseObserver.add(observer);
 	}
 	
-	void removeCloseObserver(CloseObserver observer)
+	public void removeCloseObserver(CloseObserver observer)
 	{
 		_listOfCloseObserver.remove(observer);
 	}

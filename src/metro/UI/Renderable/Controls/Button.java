@@ -1,7 +1,7 @@
 /**
  * Provides a Button with basic functions.
  */
-package metro.WindowControls;
+package metro.UI.Renderable.Controls;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import metro.METRO;
 import metro.Graphics.Draw;
+import metro.UI.Renderable.ControlElement;
 
 /**
  * A button with text ot an image attached to a window. It also manages the click-event.
@@ -124,7 +125,7 @@ public class Button extends ControlElement
 	}
 
 	@Override
-	boolean mouseClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{
@@ -135,7 +136,7 @@ public class Button extends ControlElement
 	}
 
 	@Override
-	void mouseReleased(int screenX, int screenY, int button)
+	public void mouseReleased(int screenX, int screenY, int button)
 	{
 	}
 
@@ -146,17 +147,17 @@ public class Button extends ControlElement
 	}
 
 	@Override
-	void mouseScrolled(int amount)
+	public void mouseScrolled(int amount)
 	{
 	}
 
 	@Override
-	void keyPressed(int key)
+	public void keyPressed(int key)
 	{
 	}
 
 	@Override
-	void keyUp(int keyCode)
+	public void keyUp(int keyCode)
 	{
 	}
 

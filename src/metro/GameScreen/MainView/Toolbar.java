@@ -13,9 +13,9 @@ import metro.GameScreen.MainView.LineView.LineView;
 import metro.GameScreen.MainView.TrainView.TrainView;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Button;
-import metro.WindowControls.Panel;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Button;
 
 /**
  * This is the bar on the side with the "build station", "build tracks", "show line view" and "create train" buttons.

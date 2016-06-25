@@ -1,16 +1,15 @@
-package metro.WindowControls;
+package metro.UI.Renderable.Container;
 
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
+
+import com.badlogic.gdx.Input.Buttons;
 
 import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-
-import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import metro.UI.Renderable.ControlElement;
 
 /**
  * Creates a simple but fancy window with some extra functions like Control-management (managing buttons, labels, etc.).
@@ -180,7 +179,7 @@ public class Window extends FloatingContainer
 	}
 
 	@Override
-	boolean mouseClicked(int screenX, int screenY, int mouseButton)
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		super.mouseClicked(screenX, screenY, mouseButton);
 		// Check for drag-mode:
@@ -197,7 +196,7 @@ public class Window extends FloatingContainer
 	}
 
 	@Override
-	void mouseReleased(int screenX, int screenY, int button)
+	public void mouseReleased(int screenX, int screenY, int button)
 	{
 		_dragMode = false;
 	}

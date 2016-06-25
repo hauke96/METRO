@@ -40,7 +40,6 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -67,10 +66,9 @@ import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainMenu;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.BasicContainerRenderer;
-import metro.WindowControls.InputField;
-import metro.WindowControls.Window;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Controls.InputField;
+import metro.UI.Renderer.BasicContainerRenderer;
 
 /**
  * @author Hauke

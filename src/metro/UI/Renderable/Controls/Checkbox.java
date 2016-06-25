@@ -1,4 +1,4 @@
-package metro.WindowControls;
+package metro.UI.Renderable.Controls;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 
 import metro.METRO;
 import metro.Graphics.Draw;
+import metro.UI.Renderable.ControlElement;
 
 /**
  * A checkbox is a simple control to (de)activate things. This class provides lots of features to do this and draws the control.
@@ -158,7 +159,7 @@ public class Checkbox extends ControlElement
 	}
 
 	@Override
-	boolean mouseClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{
@@ -169,7 +170,7 @@ public class Checkbox extends ControlElement
 	}
 
 	@Override
-	void mouseReleased(int screenX, int screenY, int button)
+	public void mouseReleased(int screenX, int screenY, int button)
 	{
 	}
 
@@ -180,17 +181,17 @@ public class Checkbox extends ControlElement
 	}
 
 	@Override
-	void mouseScrolled(int amount)
+	public void mouseScrolled(int amount)
 	{
 	}
 
 	@Override
-	void keyPressed(int key)
+	public void keyPressed(int key)
 	{
 	}
 
 	@Override
-	void keyUp(int keyCode)
+	public void keyUp(int keyCode)
 	{
 	}
 

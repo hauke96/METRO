@@ -1,7 +1,10 @@
-package metro.WindowControls;
+package metro.UI.Renderable.Container;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+
+import metro.UI.Renderable.Closable;
+import metro.UI.Renderable.ControlElement;
 
 public class Panel extends StaticContainer
 {

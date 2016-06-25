@@ -1,4 +1,4 @@
-package metro.WindowControls;
+package metro.UI.Renderable.Controls;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
+import metro.UI.Renderable.ControlElement;
 
 /**
  * Creates a list control element that can have some entries in it. An entry is highlighted when the mouse is over it.
@@ -415,7 +416,7 @@ public class List extends ControlElement
 	}
 
 	@Override
-	boolean mouseClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{
@@ -426,7 +427,7 @@ public class List extends ControlElement
 	}
 
 	@Override
-	void mouseReleased(int screenX, int screenY, int button)
+	public void mouseReleased(int screenX, int screenY, int button)
 	{
 	}
 
@@ -438,7 +439,7 @@ public class List extends ControlElement
 	}
 
 	@Override
-	void mouseScrolled(int amount)
+	public void mouseScrolled(int amount)
 	{
 		// when the _offset is 0, the scroll bar is at the very top.
 		// when the _offset is -_maxOffset, the scroll bar is at the very bottom.
@@ -451,12 +452,12 @@ public class List extends ControlElement
 	}
 
 	@Override
-	void keyPressed(int key)
+	public void keyPressed(int key)
 	{
 	}
 
 	@Override
-	void keyUp(int keyCode)
+	public void keyUp(int keyCode)
 	{
 	}
 

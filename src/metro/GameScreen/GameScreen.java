@@ -10,13 +10,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.Settings;
 import metro.Graphics.Draw;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Button;
-import metro.WindowControls.Checkbox;
-import metro.WindowControls.InputField;
-import metro.WindowControls.Label;
-import metro.WindowControls.List;
-import metro.WindowControls.Window;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.Window;
+import metro.UI.Renderable.Controls.Button;
+import metro.UI.Renderable.Controls.Checkbox;
+import metro.UI.Renderable.Controls.InputField;
+import metro.UI.Renderable.Controls.Label;
+import metro.UI.Renderable.Controls.List;
 
 /**
  * Every Menu or Game Sreen has to implement this interface for start() and update(). This will make the creation process more easy.

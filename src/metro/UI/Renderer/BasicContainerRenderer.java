@@ -1,7 +1,13 @@
-package metro.WindowControls;
+package metro.UI.Renderer;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import metro.UI.ContainerRegistrationService;
+import metro.UI.Renderable.CloseObservable;
+import metro.UI.Renderable.Container.AbstractContainer;
+import metro.UI.Renderable.Container.FloatingContainer;
+import metro.UI.Renderable.Container.StaticContainer;
 
 /**
  * The {@link BasicContainerRenderer} is a renderer with no special features, it just forwards every call to all {@link ContainerRegistrationService} classes.
@@ -13,12 +19,12 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 {
 	interface ContainerCollectionNotifier
 	{
-		void notifyAllContainer(List<? extends Container> listOfContainer);
+		void notifyAllContainer(List<? extends AbstractContainer> listOfContainer);
 	}
 
 	interface ContainerNotifier
 	{
-		void notifyContainer(Container container);
+		void notifyContainer(AbstractContainer container);
 	}
 
 	interface Notifier
@@ -39,7 +45,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 
 		ContainerRegistrationService registrationService = new ContainerRegistrationService();
 		registrationService.setRenderer(this);
-		Container.setContainerRegistrationService(registrationService);
+		AbstractContainer.setContainerRegistrationService(registrationService);
 	}
 
 	@Override
@@ -59,7 +65,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	@Override
 	public void notifyDraw()
 	{
-		normalNotifying((Container container) -> container.draw());
+		normalNotifying((AbstractContainer container) -> container.drawControl());
 	}
 
 	@Override
@@ -74,8 +80,8 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		ModifiableBoolean isClickedValue = new ModifiableBoolean();
 
 		Notifier notifier = () -> {
-			ContainerCollectionNotifier containerNotifier = (List<? extends Container> l) -> {
-				Container currentContainer;
+			ContainerCollectionNotifier containerNotifier = (List<? extends AbstractContainer> l) -> {
+				AbstractContainer currentContainer;
 				for(int i = l.size() - 1; i >= 0; i--)
 				{
 					currentContainer = l.get(i);
@@ -101,25 +107,25 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	@Override
 	public void notifyMouseReleased(int screenX, int screenY, int button)
 	{
-		normalNotifying((Container container) -> container.mouseReleased(screenX, screenY, button));
+		normalNotifying((AbstractContainer container) -> container.mouseReleased(screenX, screenY, button));
 	}
 
 	@Override
 	public void notifyMouseScrolled(int amount)
 	{
-		normalNotifying((Container container) -> container.mouseScrolled(amount));
+		normalNotifying((AbstractContainer container) -> container.mouseScrolled(amount));
 	}
 
 	@Override
 	public void notifyKeyPressed(int keyCode)
 	{
-		normalNotifying((Container container) -> container.keyPressed(keyCode));
+		normalNotifying((AbstractContainer container) -> container.keyPressed(keyCode));
 	}
 
 	@Override
 	public void notifyKeyUp(int keyCode)
 	{
-		normalNotifying((Container container) -> container.keyUp(keyCode));
+		normalNotifying((AbstractContainer container) -> container.keyUp(keyCode));
 	}
 
 	private void normalNotifying(ContainerNotifier notifyFunction)

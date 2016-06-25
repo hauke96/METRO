@@ -12,10 +12,10 @@ import metro.Graphics.Draw;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Button;
-import metro.WindowControls.List;
-import metro.WindowControls.Panel;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Button;
+import metro.UI.Renderable.Controls.List;
 
 /**
  * This dialog part shows the lines and the trains attached to them.

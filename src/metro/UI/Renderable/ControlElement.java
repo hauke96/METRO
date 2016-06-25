@@ -1,4 +1,4 @@
-package metro.WindowControls;
+package metro.UI.Renderable;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  *
  */
 
-abstract class ControlElement extends ActionObservable
+public abstract class ControlElement extends ActionObservable
 {
 	protected boolean _state;
 	protected String _text;
@@ -47,7 +47,7 @@ abstract class ControlElement extends ActionObservable
 	 * @param button The button related to Buttons.xy.
 	 * @return True when mouse clicked on control, false when not.
 	 */
-	abstract boolean mouseClicked(int screenX, int screenY, int button);
+	public abstract boolean mouseClicked(int screenX, int screenY, int button);
 
 	/**
 	 * Is called when the mouse is released.
@@ -56,7 +56,7 @@ abstract class ControlElement extends ActionObservable
 	 * @param screenY The y coordinate of the click.
 	 * @param button The button that had been clicke but has been released now.
 	 */
-	abstract void mouseReleased(int screenX, int screenY, int button);
+	public abstract void mouseReleased(int screenX, int screenY, int button);
 
 	/**
 	 * Moves the element.
@@ -70,21 +70,21 @@ abstract class ControlElement extends ActionObservable
 	 * 
 	 * @param amount Positive or negative amount of steps since last frame.
 	 */
-	abstract void mouseScrolled(int amount);
+	public abstract void mouseScrolled(int amount);
 
 	/**
 	 * Fires, when a key has been pressed.
 	 * 
 	 * @param keyCode The code of the key as int.
 	 */
-	abstract void keyPressed(int keyCode);
+	public abstract void keyPressed(int keyCode);
 
 	/**
 	 * Fires when a key has been released.
 	 * 
 	 * @param keyCode The code of the key from Input.Keys
 	 */
-	abstract void keyUp(int keyCode);
+	public abstract void keyUp(int keyCode);
 
 	/**
 	 * Gets an rectangle which covers the whole area of this control.

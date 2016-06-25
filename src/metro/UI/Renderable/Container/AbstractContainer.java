@@ -1,12 +1,15 @@
-package metro.WindowControls;
+package metro.UI.Renderable.Container;
 
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
 
 import metro.Exceptions.UninitiatedClassException;
+import metro.UI.ContainerRegistrationService;
+import metro.UI.Renderable.CloseObservable;
+import metro.UI.Renderable.ControlElement;
 
-abstract class Container extends CloseObservable
+public abstract class AbstractContainer extends CloseObservable
 {
 	private static ContainerRegistrationService _containerRegistrationService;
 
@@ -17,7 +20,7 @@ abstract class Container extends CloseObservable
 
 	protected List<ControlElement> _listOfControlElements;
 
-	public Container()
+	public AbstractContainer()
 	{
 		if(_containerRegistrationService == null)
 		{
@@ -38,36 +41,36 @@ abstract class Container extends CloseObservable
 	@Override
 	protected void draw()
 	{
-		generalNotifying((ControlElement control) -> control.draw());
+		generalNotifying((ControlElement control) -> control.drawControl());
 	}
 
 	@Override
-	boolean mouseClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		generalNotifying((ControlElement control) -> control.mouseClicked(screenX, screenY, button));
 		return false;
 	}
 
 	@Override
-	void mouseReleased(int screenX, int screenY, int button)
+	public void mouseReleased(int screenX, int screenY, int button)
 	{
 		generalNotifying((ControlElement control) -> control.mouseReleased(screenX, screenY, button));
 	}
 
 	@Override
-	void mouseScrolled(int amount)
+	public void mouseScrolled(int amount)
 	{
 		generalNotifying((ControlElement control) -> control.mouseScrolled(amount));
 	}
 
 	@Override
-	void keyPressed(int keyCode)
+	public void keyPressed(int keyCode)
 	{
 		generalNotifying((ControlElement control) -> control.keyPressed(keyCode));
 	}
 
 	@Override
-	void keyUp(int keyCode)
+	public void keyUp(int keyCode)
 	{
 		generalNotifying((ControlElement control) -> control.keyUp(keyCode));
 	}

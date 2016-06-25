@@ -1,4 +1,4 @@
-package metro.WindowControls;
+package metro.UI.Renderable.Controls;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import metro.METRO;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
+import metro.UI.Renderable.ControlElement;
 
 /**
  * Provides an input field control to make user inputs (in form of a string) possible.
@@ -105,7 +106,7 @@ public class InputField extends ControlElement
 	}
 
 	@Override
-	boolean mouseClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{
@@ -116,7 +117,7 @@ public class InputField extends ControlElement
 	}
 
 	@Override
-	void mouseReleased(int screenX, int screenY, int button)
+	public void mouseReleased(int screenX, int screenY, int button)
 	{
 	}
 
@@ -128,12 +129,12 @@ public class InputField extends ControlElement
 	}
 
 	@Override
-	void mouseScrolled(int amount)
+	public void mouseScrolled(int amount)
 	{
 	}
 
 	@Override
-	void keyPressed(int key)
+	public void keyPressed(int key)
 	{
 		// if this input box is NOT selected, just do nothing
 		if(!_selected || !_state) return;
@@ -211,7 +212,7 @@ public class InputField extends ControlElement
 	}
 
 	@Override
-	void keyUp(int key)
+	public void keyUp(int key)
 	{
 		if(!_state) return;
 

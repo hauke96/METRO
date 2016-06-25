@@ -1,4 +1,4 @@
-package metro.WindowControls;
+package metro.UI.Renderable.Controls;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import metro.METRO;
 import metro.Graphics.Draw;
+import metro.UI.Renderable.ControlElement;
 
 /**
  * A color bar is a stripe of all RGB colors.
@@ -174,7 +175,7 @@ public class ColorBar extends ControlElement
 	}
 
 	@Override
-	boolean mouseClicked(int screenX, int screenY, int button)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
 		if(clickOnControlElement())
 		{
@@ -185,7 +186,7 @@ public class ColorBar extends ControlElement
 	}
 
 	@Override
-	void mouseReleased(int screenX, int screenY, int button)
+	public void mouseReleased(int screenX, int screenY, int button)
 	{
 	}
 
@@ -196,7 +197,7 @@ public class ColorBar extends ControlElement
 	}
 
 	@Override
-	void mouseScrolled(int amount)
+	public void mouseScrolled(int amount)
 	{
 		if(_area.contains(METRO.__mousePosition))
 		{
@@ -209,12 +210,12 @@ public class ColorBar extends ControlElement
 	}
 
 	@Override
-	void keyPressed(int keyCode)
+	public void keyPressed(int keyCode)
 	{
 	}
 
 	@Override
-	void keyUp(int keyCode)
+	public void keyUp(int keyCode)
 	{
 	}
 }

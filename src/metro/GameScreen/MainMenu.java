@@ -11,11 +11,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import metro.METRO;
 import metro.GameScreen.MainView.MainView;
 import metro.Graphics.Draw;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Button;
-import metro.WindowControls.Label;
-import metro.WindowControls.Panel;
-import metro.WindowControls.Window;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Container.Window;
+import metro.UI.Renderable.Controls.Button;
+import metro.UI.Renderable.Controls.Label;
 
 /**
  * The main menu is the first menu you'll see after starting the game. It provides some basic options like start, exit and settings.

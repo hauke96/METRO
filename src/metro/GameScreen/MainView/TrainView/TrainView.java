@@ -14,8 +14,8 @@ import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Panel;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.Panel;
 
 /**
  * The dialog to buy, sell and manage trains.

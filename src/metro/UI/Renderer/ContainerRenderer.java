@@ -1,4 +1,7 @@
-package metro.WindowControls;
+package metro.UI.Renderer;
+
+import metro.UI.Renderable.Container.FloatingContainer;
+import metro.UI.Renderable.Container.StaticContainer;
 
 /**
  * A {@link ContainerRenderer} is able to render container and controls.
@@ -13,14 +16,14 @@ public interface ContainerRenderer
 	 * 
 	 * @param newStaticContainer The new static container that should be rendered.
 	 */
-	void registerStaticContainer(StaticContainer newStaticContainer);
+	public void registerStaticContainer(StaticContainer newStaticContainer);
 
 	/**
 	 * Registers a new floating container.
 	 * 
 	 * @param newFloatingContainer The new floating container that should be rendered.
 	 */
-	void registerFloatingContainer(FloatingContainer newFloatingContainer);
+	public void registerFloatingContainer(FloatingContainer newFloatingContainer);
 
 	/**
 	 * Notifies all registered renderables about a draw call.

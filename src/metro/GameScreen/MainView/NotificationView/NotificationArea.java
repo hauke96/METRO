@@ -11,8 +11,8 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.WindowControls.List;
-import metro.WindowControls.Panel;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.List;
 
 /**
  * This is a kind of log where game-concerned events pop up and are shown.

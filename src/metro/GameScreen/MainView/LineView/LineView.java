@@ -21,13 +21,13 @@ import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Button;
-import metro.WindowControls.ColorBar;
-import metro.WindowControls.InputField;
-import metro.WindowControls.Label;
-import metro.WindowControls.List;
-import metro.WindowControls.Panel;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Button;
+import metro.UI.Renderable.Controls.ColorBar;
+import metro.UI.Renderable.Controls.InputField;
+import metro.UI.Renderable.Controls.Label;
+import metro.UI.Renderable.Controls.List;
 
 /**
  * The LineView is a dialog to manage the train lines in METRO. It allows the user to create, modify and remove lines.

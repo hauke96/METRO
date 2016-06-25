@@ -1,6 +1,9 @@
-package metro.WindowControls;
+package metro.UI;
 
 import metro.Exceptions.UninitiatedClassException;
+import metro.UI.Renderable.Container.FloatingContainer;
+import metro.UI.Renderable.Container.StaticContainer;
+import metro.UI.Renderer.ContainerRenderer;
 
 /**
  * A {@link ContainerRegistrationService} is a class that can be used by the {@link ContainerRenderer} to render container and controls.
@@ -19,28 +22,28 @@ public class ContainerRegistrationService
 	/**
 	 * Registers a {@link ContainerRegistrationService} in the current renderer.
 	 * 
-	 * @param renderable A container renderable class.
+	 * @param container A container renderable class.
 	 */
-	void register(StaticContainer renderable)
+	public void register(StaticContainer container)
 	{
 		if(renderer == null)
 		{
 			throw new UninitiatedClassException("The container renderable is not initiated!");
 		}
-		renderer.registerStaticContainer(renderable);
+		renderer.registerStaticContainer(container);
 	}
 
 	/**
 	 * Registers a {@link ContainerRegistrationService} in the current renderer.
 	 * 
-	 * @param renderable A floating container renderable class.
+	 * @param container A floating container renderable class.
 	 */
-	void registerFloatingContainer(FloatingContainer renderable)
+	public void register(FloatingContainer container)
 	{
 		if(renderer == null)
 		{
 			throw new UninitiatedClassException("The container renderable is not initiated!");
 		}
-		renderer.registerFloatingContainer(renderable);
+		renderer.registerFloatingContainer(container);
 	}
 }

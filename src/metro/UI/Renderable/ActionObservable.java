@@ -1,4 +1,4 @@
-package metro.WindowControls;
+package metro.UI.Renderable;
 
 import java.util.ArrayList;
 

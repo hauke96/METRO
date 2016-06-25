@@ -13,11 +13,11 @@ import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TrainTemplate;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Button;
-import metro.WindowControls.Label;
-import metro.WindowControls.List;
-import metro.WindowControls.Panel;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Button;
+import metro.UI.Renderable.Controls.Label;
+import metro.UI.Renderable.Controls.List;
 
 /**
  * A part of the TrainView where the user can buy new trains.

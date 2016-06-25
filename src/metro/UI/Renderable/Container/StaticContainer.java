@@ -1,6 +1,8 @@
-package metro.WindowControls;
+package metro.UI.Renderable.Container;
 
-public abstract class StaticContainer extends Container
+import metro.UI.ContainerRegistrationService;
+
+public abstract class StaticContainer extends AbstractContainer
 {
 	public StaticContainer()
 	{
