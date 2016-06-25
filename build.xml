@@ -7,8 +7,8 @@
     <property environment="env"/>
     <property name="junit.output.dir" value="junit"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.7"/>
-    <property name="source" value="1.7"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
     <path id="JUnit 4.libraryclasspath">
         <pathelement location="libs/junit.jar"/>
         <pathelement location="libs/org.hamcrest.core_1.3.0.v201303031735.jar"/>
@@ -51,6 +51,33 @@
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="METRO (1)">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="metro.GameScreen.MainView.LineView.LineViewTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameScreen.MainView.NotificationView.NotificationServerTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameScreen.MainView.PlayingField.PlayingFieldTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameScreen.MainView.StationPlacingToolTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameScreen.MainView.TrackPlacingToolTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameScreen.MainView.TrainView.TrainViewTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameStateTest" todir="${junit.output.dir}"/>
+            <classpath refid="METRO.classpath"/>
+        </junit>
+    </target>
     <target name="tests">
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
