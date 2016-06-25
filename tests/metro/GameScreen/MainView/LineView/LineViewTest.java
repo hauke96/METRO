@@ -11,6 +11,9 @@ import org.junit.Test;
 
 import metro.GameState;
 import metro.METRO;
+import metro.UI.ContainerRegistrationService;
+import metro.UI.Renderable.Container.AbstractContainer;
+import metro.UI.Renderer.BasicContainerRenderer;
 
 /**
  * @author hauke
@@ -24,6 +27,7 @@ public class LineViewTest
 	 */
 	public LineViewTest()
 	{
+		new BasicContainerRenderer();
 		METRO.__SCREEN_SIZE = new Dimension(1920, 1080);
 		view = new LineView();
 	}
