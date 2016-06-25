@@ -169,6 +169,11 @@ public class Checkbox extends ControlElement
 	}
 
 	@Override
+	void mouseReleased(int screenX, int screenY, int button)
+	{
+	}
+
+	@Override
 	public void moveElement(Point offset)
 	{
 		_area.setLocation(_area.x + offset.x, _area.y + offset.y);

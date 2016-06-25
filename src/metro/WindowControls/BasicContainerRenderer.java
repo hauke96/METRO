@@ -43,14 +43,14 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	}
 
 	@Override
-	public void registerRenderable(StaticContainer renderable)
+	public void registerStaticContainer(StaticContainer renderable)
 	{
 		_listOfStaticContainer.add(renderable);
 		renderable.registerCloseObserver(this);
 	}
 
 	@Override
-	public void registerFloatingRenderable(FloatingContainer renderable)
+	public void registerFloatingContainer(FloatingContainer renderable)
 	{
 		_listOfFloatingContainer.add(renderable);
 		renderable.registerCloseObserver(this);
@@ -96,6 +96,12 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		generalNotifying(notifier);
 
 		return isClickedValue.value;
+	}
+
+	@Override
+	public void notifyMouseReleased(int screenX, int screenY, int button)
+	{
+		normalNotifying((Container container) -> container.mouseReleased(screenX, screenY, button));
 	}
 
 	@Override

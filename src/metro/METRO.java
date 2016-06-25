@@ -403,9 +403,9 @@ public class METRO implements ApplicationListener, InputProcessor
 		__originalMousePosition = (Point)__mousePosition.clone();
 
 		boolean mouseInWindow = false;
-		
-		//TODO check if mouse is in window
-		
+
+		// TODO check if mouse is in window
+
 		if(mouseInWindow) __mousePosition = _oldMousePosition;
 		else _oldMousePosition = __mousePosition;
 	}
@@ -462,7 +462,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	public boolean keyDown(int keyCode)
 	{
 		__containerRenderer.notifyKeyPressed(keyCode);
-		//TODO check if the gamescreen is allowed to handle input now (if an input field has focus, no other control is allowed to)
+		// TODO check if the gamescreen is allowed to handle input now (if an input field has focus, no other control is allowed to)
 		__currentGameScreen.keyPressed(keyCode);
 		return false;
 	}
@@ -519,7 +519,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		screenY -= __yOffset;
 
 		boolean controlGotClickEvent = __containerRenderer.notifyMouseClick(screenX, screenY, button);
-		
+
 		if(!controlGotClickEvent)
 		{
 			__currentGameScreen.mouseClicked(screenX, screenY, button);
@@ -534,6 +534,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		screenX -= __xOffset;
 		screenY -= __yOffset;
 		__dragMode = false;
+		__containerRenderer.notifyMouseReleased(screenX, screenY, button);
 		__currentGameScreen.mouseReleased(button);
 		return false;
 	}

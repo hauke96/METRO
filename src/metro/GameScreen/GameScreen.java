@@ -260,7 +260,7 @@ public abstract class GameScreen extends Observable
 			index = _segmentList.getIndex(_settings.get("amount.segments") + ""); // get the entry with the current resolution
 			_segmentList.setSelectedEntry(index);
 			_window.add(_segmentList);
-			
+
 			addListObserver();
 		}
 
@@ -407,7 +407,7 @@ public abstract class GameScreen extends Observable
 
 			Label label = new Label("Really quit METRO? Or go into settings?",
 				new Point(200 - (Draw.getStringSize("Really quit METRO? Or go into settings?").width) / 2, 25));
-			
+
 			_window.add(label);
 			_window.add(_yesButton);
 			_window.add(_settingsButton);
@@ -433,7 +433,7 @@ public abstract class GameScreen extends Observable
 				public void clickedOnControl(Object arg)
 				{
 					_settingsWindow = new SettingsWindow();
-//					close();
+					// close();
 				}
 			});
 			_noButton.register(new ActionObserver()

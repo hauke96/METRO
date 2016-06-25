@@ -116,6 +116,11 @@ public class InputField extends ControlElement
 	}
 
 	@Override
+	void mouseReleased(int screenX, int screenY, int button)
+	{
+	}
+
+	@Override
 	public void moveElement(Point offset)
 	{
 		_area.x += offset.x;

@@ -18,7 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author hauke
  * 
  */
-//TODO implement the window with a panel
+// TODO implement the window with a panel
 public class Window extends FloatingContainer
 {
 	private Point _oldMousePos;
@@ -49,7 +49,7 @@ public class Window extends FloatingContainer
 		_text = title;
 		_area = area;
 		_area.translate(20, 1);
-		_area.setSize(_area.width, _area.height+20);
+		_area.setSize(_area.width, _area.height + 20);
 		_color = color;
 
 		_closed = false;
@@ -180,14 +180,6 @@ public class Window extends FloatingContainer
 			&& screenY <= _area.y + _area.height;
 	}
 
-	/**
-	 * Makes things when mouse is pressed.
-	 * 
-	 * @param screenX The x-coordinate of the click
-	 * @param screenY The y-coordinate of the click
-	 * @param mouseButton The mouse button (using gdx.Input.Buttons)
-	 */
-	//TODO make shure that this works
 	@Override
 	boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{
@@ -197,19 +189,17 @@ public class Window extends FloatingContainer
 			&& mouseButton == Buttons.LEFT)
 		{
 			// TODO implement drag mode correctly
-//			_dragMode = true;
-//			_oldMousePos = new Point(screenX, screenY);
-			
+			_dragMode = true;
+			_oldMousePos = new Point(screenX, screenY);
+
 			closeIfNeeded(screenX, screenY, mouseButton);
 			return true;
 		}
 		return false;
 	}
 
-	/**
-	 * Makes things when mouse is released (important for drag-mode of the window).
-	 */
-	void mouseReleased()
+	@Override
+	void mouseReleased(int screenX, int screenY, int button)
 	{
 		_dragMode = false;
 	}
@@ -236,16 +226,11 @@ public class Window extends FloatingContainer
 	}
 
 	/**
-	 * Marks this window as closed to let the METRO class know, that this instance/window can be removed.
+	 * Marks this window as closed and notifies its observers about the close event.
 	 */
 	@Override
 	public void close()
 	{
-		// Removes all controls from the action manager via second registering
-//		for(ControlElement cElement : _listOfControlElements)
-//		{
-//			METRO.__unregisterControl(cElement);
-//		}
 		notifyAboutClose();
 		_closed = true;
 	}

@@ -9,13 +9,18 @@ package metro.WindowControls;
 public interface ContainerRenderer
 {
 	/**
-	 * Registers a new renderable class.
+	 * Registers a new static container.
 	 * 
-	 * @param containerRenderable The {@link ContainerRegistrationService} that should be rendered.
+	 * @param newStaticContainer The new static container that should be rendered.
 	 */
-	void registerRenderable(StaticContainer containerRenderable);
+	void registerStaticContainer(StaticContainer newStaticContainer);
 
-	void registerFloatingRenderable(FloatingContainer renderer);
+	/**
+	 * Registers a new floating container.
+	 * 
+	 * @param newFloatingContainer The new floating container that should be rendered.
+	 */
+	void registerFloatingContainer(FloatingContainer newFloatingContainer);
 
 	/**
 	 * Notifies all registered renderables about a draw call.
@@ -31,6 +36,15 @@ public interface ContainerRenderer
 	 * @return True when a control in a container got the click event.
 	 */
 	public boolean notifyMouseClick(int screenX, int screenY, int button);
+
+	/**
+	 * Notifies all registered renderables about a released mouse button.
+	 * 
+	 * @param screenX The x-coordinate.
+	 * @param screenY The y-coordinate.
+	 * @param button The released button.
+	 */
+	public void notifyMouseReleased(int screenX, int screenY, int button);
 
 	/**
 	 * Notifies all registered renderables about a mouse scroll event.

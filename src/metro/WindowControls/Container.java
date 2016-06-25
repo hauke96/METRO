@@ -49,6 +49,12 @@ abstract class Container extends CloseObservable
 	}
 
 	@Override
+	void mouseReleased(int screenX, int screenY, int button)
+	{
+		generalNotifying((ControlElement control) -> control.mouseReleased(screenX, screenY, button));
+	}
+
+	@Override
 	void mouseScrolled(int amount)
 	{
 		generalNotifying((ControlElement control) -> control.mouseScrolled(amount));

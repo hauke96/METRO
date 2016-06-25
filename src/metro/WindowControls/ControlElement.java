@@ -50,6 +50,15 @@ abstract class ControlElement extends ActionObservable
 	abstract boolean mouseClicked(int screenX, int screenY, int button);
 
 	/**
+	 * Is called when the mouse is released.
+	 * 
+	 * @param screenX The x coordinate of the click.
+	 * @param screenY The y coordinate of the click.
+	 * @param button The button that had been clicke but has been released now.
+	 */
+	abstract void mouseReleased(int screenX, int screenY, int button);
+
+	/**
 	 * Moves the element.
 	 * 
 	 * @param offset The amount of pixel to move. This is NOT the new position, only an offset!

@@ -27,7 +27,7 @@ public class ContainerRegistrationService
 		{
 			throw new UninitiatedClassException("The container renderable is not initiated!");
 		}
-		renderer.registerRenderable(renderable);
+		renderer.registerStaticContainer(renderable);
 	}
 
 	/**
@@ -41,6 +41,6 @@ public class ContainerRegistrationService
 		{
 			throw new UninitiatedClassException("The container renderable is not initiated!");
 		}
-		renderer.registerFloatingRenderable(renderable);
+		renderer.registerFloatingContainer(renderable);
 	}
 }
