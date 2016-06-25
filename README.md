@@ -6,8 +6,8 @@ In addition to this page, there's also a [wiki](https://github.com/hauke96/METRO
 
 ## For developer
 
-* The documentation as website: http://hauke-stieler.de/public/METRO/doc/
-* The diagrams as HTML version: http://hauke-stieler.de/public/METRO/digrams
+* The documentation as website: https://hauke-stieler.de/public/METRO/doc/
+* The diagrams as HTML version: https://hauke-stieler.de/public/METRO/digrams
  
 #### Contribute
 There's currently only one thing you can contribute: Report bugs, errors and feature wishes.
