@@ -56,8 +56,6 @@ public class Window extends FloatingContainer
 
 	/**
 	 * Draws the window and all controls on it.
-	 * 
-	 * @param g The graphic handle.
 	 */
 	@Override
 	protected void draw()

@@ -174,7 +174,6 @@ class TrainLineDrawingService
 	 * @param offset The offset of the game screen.
 	 * @param position The position of one node.
 	 * @param positionNext The position of another node.
-	 * @param layer The layer this line is (shifts the line up or down).
 	 */
 	private void drawColoredLine(Point offset, Point position, Point positionNext)
 	{

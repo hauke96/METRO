@@ -13,3 +13,7 @@ hs_err_pid*
 
 # blender backup files
 *.blend*[1-9]
+
+# javadoc
+doc/*
+
