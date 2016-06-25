@@ -75,7 +75,7 @@ import metro.WindowControls.Window;
 
 /**
  * @author Hauke
- * @version 0.1.3_indev
+ * @version 0.1.4_indev
  */
 public class METRO implements ApplicationListener, InputProcessor
 {
