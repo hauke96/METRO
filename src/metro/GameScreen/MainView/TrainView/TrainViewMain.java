@@ -12,9 +12,10 @@ import metro.Graphics.Draw;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Button;
-import metro.WindowControls.List;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Button;
+import metro.UI.Renderable.Controls.List;
 
 /**
  * This dialog part shows the lines and the trains attached to them.
@@ -33,6 +34,7 @@ public class TrainViewMain extends GameScreen
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private String _movedTrain;
 	private TrainManagementService _trainManagementService;
+	private Panel _panel;
 
 	/**
 	 * Creates a new main view for the train screen.
@@ -48,8 +50,9 @@ public class TrainViewMain extends GameScreen
 
 		_trainManagementService = TrainManagementService.getInstance();
 
-		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 300, 230),
-			null, null, true);
+		_panel = new Panel(new Rectangle());
+
+		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 300, 230), true);
 		_lineList.register(new ActionObserver()
 		{
 			@Override
@@ -72,20 +75,20 @@ public class TrainViewMain extends GameScreen
 				}
 			}
 		});
-		registerControl(_lineList);
 
-		_trainList = new List(new Rectangle(_areaOffset.x + 121, _areaOffset.y + 130, _windowWidth - 141, 230),
-			null, null, true);
-		registerControl(_trainList);
+		_trainList = new List(new Rectangle(_areaOffset.x + 121, _areaOffset.y + 130, _windowWidth - 141, 230), true);
 
 		fillLineList();
 
 		_moveTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Move train");
-		registerControl(_moveTrainButton);
 		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Sell train");
-		registerControl(_sellTrainButton);
 
 		addButtonObserver();
+
+		_panel.add(_lineList);
+		_panel.add(_trainList);
+		_panel.add(_moveTrainButton);
+		_panel.add(_sellTrainButton);
 	}
 
 	/**
@@ -133,7 +136,6 @@ public class TrainViewMain extends GameScreen
 	public void updateGameScreen(SpriteBatch g)
 	{
 		drawListBox();
-		drawButtons();
 	}
 
 	/**
@@ -142,6 +144,8 @@ public class TrainViewMain extends GameScreen
 	private void drawListBox()
 	{
 		Draw.setColor(METRO.__metroRed);
+
+		// TODO make this into labels to draw them in the correct way
 
 		String text = "Your lines:";
 		int length = Draw.getStringSize(text).width;
@@ -154,18 +158,6 @@ public class TrainViewMain extends GameScreen
 		length = Draw.getStringSize(text).width;
 		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 125, _areaOffset.y + 125,
 			METRO.__SCREEN_SIZE.width - _windowWidth + 125 + length, _areaOffset.y + 125);
-
-		_trainList.draw();
-		_lineList.draw();
-	}
-
-	/**
-	 * Draws all buttons.
-	 */
-	private void drawButtons()
-	{
-		_moveTrainButton.draw();
-		_sellTrainButton.draw();
 	}
 
 	/**
@@ -182,7 +174,7 @@ public class TrainViewMain extends GameScreen
 	 * Fills controls with information about line so that the player can edit it.
 	 * Also disabled the buttons for editing and selling trains and sets the {@code _movedTrain} variable.
 	 */
-	private void startMoveMode()
+	void startMoveMode()
 	{
 		if(_trainList.getSelected() == -1) return;
 
@@ -195,7 +187,7 @@ public class TrainViewMain extends GameScreen
 	/**
 	 * Sets the move mode to {@code false}, so that no trains can be moved to other lines.
 	 */
-	public void stopMoveMode()
+	void stopMoveMode()
 	{
 		_moveTrainButton.setState(false);
 		_sellTrainButton.setState(false);
@@ -206,7 +198,7 @@ public class TrainViewMain extends GameScreen
 	/**
 	 * @return The list with all trains of the selected line.
 	 */
-	public List getTrainList()
+	List getTrainList()
 	{
 		return _trainList;
 	}
@@ -214,9 +206,17 @@ public class TrainViewMain extends GameScreen
 	/**
 	 * @return The list with all lines.
 	 */
-	public List getLineList()
+	List getLineList()
 	{
 		return _lineList;
+	}
+	
+	/**
+	 * @return Gets the panel of this screen.
+	 */
+	Panel getPanel()
+	{
+		return _panel;
 	}
 
 	/**
@@ -228,35 +228,9 @@ public class TrainViewMain extends GameScreen
 	}
 
 	@Override
-	public void reset()
-	{
-	}
-
-	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
-	{
-	}
-
-	@Override
-	public void mouseScrolled(int amount)
-	{
-		_trainList.mouseScrolled(amount);
-	}
-
-	@Override
 	public boolean isActive()
 	{
 		return true;
-	}
-
-	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
-	public void keyDown(int keyCode)
-	{
 	}
 
 	@Override

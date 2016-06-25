@@ -2,6 +2,7 @@ package metro.GameScreen.MainView.TrainView;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,7 +14,8 @@ import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
-import metro.WindowControls.ActionObserver;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.Panel;
 
 /**
  * The dialog to buy, sell and manage trains.
@@ -28,6 +30,7 @@ public class TrainView extends GameScreen
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private TrainViewMain _trainViewMain;
 	private TrainViewBuy _trainViewBuy;
+	private Panel _panel;
 
 	/**
 	 * Creates a new TrainLineView.
@@ -38,6 +41,10 @@ public class TrainView extends GameScreen
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 45);
 		_trainViewMain = new TrainViewMain(getAreaOffset(), _windowWidth);
 		_trainViewBuy = new TrainViewBuy(getAreaOffset(), _windowWidth);
+		
+		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
+		_panel.add(_trainViewMain.getPanel());
+		_panel.add(_trainViewBuy.getPanel());
 
 		registerObserver();
 	}
@@ -154,21 +161,6 @@ public class TrainView extends GameScreen
 	public void setVisibility(boolean visible)
 	{
 		_isActive = visible;
-		if(!_isActive)
-		{
-			_trainViewMain.reset();
-			_trainViewBuy.reset();
-		}
-	}
-
-	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
-	public void keyDown(int keyCode)
-	{
 	}
 
 	@Override
@@ -183,19 +175,9 @@ public class TrainView extends GameScreen
 	}
 
 	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	@Override
 	public boolean isActive()
 	{
 		return _isActive;
-	}
-
-	@Override
-	public void reset()
-	{
 	}
 
 	@Override
@@ -203,6 +185,7 @@ public class TrainView extends GameScreen
 	{
 		_trainViewBuy.close();
 		_trainViewMain.close();
+		_panel.close();
 		super.close();
 	}
 

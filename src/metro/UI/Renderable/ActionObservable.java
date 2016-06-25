@@ -1,4 +1,4 @@
-package metro.WindowControls;
+package metro.UI.Renderable;
 
 import java.util.ArrayList;
 
@@ -80,14 +80,6 @@ public class ActionObservable
 		for(ActionObserver observer : _listOfObserver)
 		{
 			observer.selectionChanged(entry);
-		}
-	}
-
-	protected void notifyClosed(Window window)
-	{
-		for(ActionObserver observer : _listOfObserver)
-		{
-			observer.closed(window);
 		}
 	}
 }

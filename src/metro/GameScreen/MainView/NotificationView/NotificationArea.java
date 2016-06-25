@@ -1,6 +1,7 @@
 package metro.GameScreen.MainView.NotificationView;
 
 import java.awt.Color;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
@@ -10,7 +11,8 @@ import metro.METRO;
 import metro.GameScreen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.WindowControls.List;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.List;
 
 /**
  * This is a kind of log where game-concerned events pop up and are shown.
@@ -27,6 +29,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 		_headerHeight;
 	private Color _backGroundColor;
 	private List _entryList;
+	private Panel _panel;
 
 	private final static NotificationArea __INSTANCE = new NotificationArea();
 
@@ -40,14 +43,25 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 		_headerHeight = 25;
 		_width = METRO.__SCREEN_SIZE.width;
 		_isExpanded = true;
-		_entryList = new List(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight),
-			new ArrayList<String>(), null, true);
-		registerControl(_entryList);
+		
+		_panel = new Panel(new Rectangle(0,
+			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
+			_width - 5,
+			_height - METRO.__titleBarHeight + _headerHeight));
+		
+		_entryList = new List(new Rectangle(0,
+			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
+			_width - 5,
+			_height - METRO.__titleBarHeight + _headerHeight),
+			new ArrayList<String>(), true);
+		
 		_entryList.setDecoration(false);
 		_entryList.setTransparency(165);
 		_entryList.setStickiness(true);
 		addMessage("Game started", NotificationType.GAME_INFO);
 		NotificationServer.subscribe(this);
+		
+		_panel.add(_entryList);
 	}
 
 	/**
@@ -66,7 +80,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	public void setWidth(int newWidth)
 	{
 		_width = newWidth;
-		_entryList.setSize(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight));
+		_entryList.setArea(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight));
 	}
 
 	@Override
@@ -81,11 +95,6 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	{
 		Fill.setColor(_backGroundColor);
 		Fill.Rect(0, METRO.__SCREEN_SIZE.height - _height, _width, _height);
-
-		if(_isExpanded)
-		{
-			_entryList.draw();
-		}
 
 		Draw.setColor(METRO.__metroBlue);
 		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height, _width, METRO.__SCREEN_SIZE.height - _height);
@@ -104,40 +113,21 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(METRO.__SCREEN_SIZE.height - _height <= screenY
+		if(screenY >= METRO.__SCREEN_SIZE.height - _height
 			&& screenY <= METRO.__SCREEN_SIZE.height - _height + _headerHeight
 			&& screenX <= _width)
 		{
 			_isExpanded ^= true; // flip state of boolean
 			_height = _isExpanded ? 250 : METRO.__titleBarHeight + _headerHeight;
 			_entryList.setState(_isExpanded);
+			_panel.setPosition(new Point(_entryList.getPosition().x, METRO.__SCREEN_SIZE.height-_height+_headerHeight));
 		}
-	}
-
-	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
-	public void keyDown(int keyCode)
-	{
-	}
-
-	@Override
-	public void mouseScrolled(int amount)
-	{
 	}
 
 	@Override
 	public boolean isActive()
 	{
 		return _isActive;
-	}
-
-	@Override
-	public void reset()
-	{
 	}
 
 	@Override

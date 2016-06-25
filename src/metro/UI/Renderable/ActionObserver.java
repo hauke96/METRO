@@ -1,4 +1,6 @@
-package metro.WindowControls;
+package metro.UI.Renderable;
+
+import metro.UI.Renderable.Container.Window;
 
 /**
  * Who ever wants to be able to get information about state changed, button clicks, etc. of window controls,

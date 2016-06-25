@@ -13,10 +13,11 @@ import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TrainTemplate;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Button;
-import metro.WindowControls.Label;
-import metro.WindowControls.List;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Button;
+import metro.UI.Renderable.Controls.Label;
+import metro.UI.Renderable.Controls.List;
 
 /**
  * A part of the TrainView where the user can buy new trains.
@@ -37,6 +38,7 @@ public class TrainViewBuy extends GameScreen
 		_informationValues; // like CT-01, 1.03, ...
 	private TrainManagementService _trainManagementService;
 	private TextureRegion _titleImage;
+	private Panel _panel;
 
 	/**
 	 * Creates a new dialog.
@@ -51,9 +53,10 @@ public class TrainViewBuy extends GameScreen
 
 		_trainManagementService = TrainManagementService.getInstance();
 
+		_panel = new Panel(new Rectangle());
+		
 		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, METRO.__SCREEN_SIZE.height - METRO.__getYOffset() - _areaOffset.y, 210, 20), "Buy");
-		registerControl(_buyButton);
-
+		
 		_availableTrains = new List(
 			new Rectangle(_areaOffset.x + 20, _areaOffset.y + 440, 140, METRO.__SCREEN_SIZE.height - (_areaOffset.y + 420) - _areaOffset.y - METRO.__getYOffset()), null, true);
 		_availableTrains.register(new ActionObserver()
@@ -76,20 +79,22 @@ public class TrainViewBuy extends GameScreen
 				}
 			}
 		});
-		registerControl(_availableTrains);
 
 		_messageLabel = new Label("", new Point(_areaOffset.x + 170, _areaOffset.y + 600), 200);
-		registerControl(_messageLabel);
 
 		_informationKeys = new Label("Name\nProducer\nPrice\nCosts\nCost-factor\nPassenger\nSpeed", new Point(_areaOffset.x + 170, _areaOffset.y + 440));
 		_informationKeys.setColor(METRO.__metroBlue);
-		registerControl(_informationKeys);
 
 		_informationValues = new Label("=\n=\n=\n=\n=\n=\n=\n", new Point(_areaOffset.x + 235, _areaOffset.y + 440));
 		_informationValues.setColor(METRO.__metroBlue);
-		registerControl(_informationValues);
 
 		fillTrainList();
+		
+		_panel.add(_buyButton);
+		_panel.add(_availableTrains);
+		_panel.add(_messageLabel);
+		_panel.add(_informationKeys);
+		_panel.add(_informationValues);
 	}
 
 	/**
@@ -107,13 +112,6 @@ public class TrainViewBuy extends GameScreen
 	public void updateGameScreen(SpriteBatch g)
 	{
 		drawHeader();
-
-		_availableTrains.draw();
-		_messageLabel.draw();
-		// Draw.setColor(METRO.__metroBlue);
-		_informationKeys.draw();
-		_informationValues.draw();
-		_buyButton.draw();
 		drawTitleImage();
 	}
 
@@ -165,7 +163,7 @@ public class TrainViewBuy extends GameScreen
 	 * 
 	 * @param modelName The model name of the selection.
 	 */
-	public void setTrain(String modelName)
+	void setTrain(String modelName)
 	{
 		if(_availableTrains.contains(modelName))
 		{
@@ -176,7 +174,7 @@ public class TrainViewBuy extends GameScreen
 	/**
 	 * @return The buy train button.
 	 */
-	public Button getBuyButton()
+	Button getBuyButton()
 	{
 		return _buyButton;
 	}
@@ -184,7 +182,7 @@ public class TrainViewBuy extends GameScreen
 	/**
 	 * @return The message label that shows error messages.
 	 */
-	public Label getMessageLabel()
+	Label getMessageLabel()
 	{
 		return _messageLabel;
 	}
@@ -192,40 +190,23 @@ public class TrainViewBuy extends GameScreen
 	/**
 	 * @return The list of all available train models
 	 */
-	public List getTrainList()
+	List getTrainList()
 	{
 		return _availableTrains;
 	}
-
-	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	
+	/**
+	 * @return Gets the main panel of this screen.
+	 */
+	Panel getPanel()
 	{
-	}
-
-	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
-	public void keyDown(int keyCode)
-	{
-	}
-
-	@Override
-	public void mouseScrolled(int amount)
-	{
+		return _panel;
 	}
 
 	@Override
 	public boolean isActive()
 	{
 		return false;
-	}
-
-	@Override
-	public void reset()
-	{
 	}
 
 	@Override

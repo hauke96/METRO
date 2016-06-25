@@ -40,7 +40,6 @@ import java.awt.Rectangle;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -67,11 +66,9 @@ import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainMenu;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.ControlActionManager;
-import metro.WindowControls.ControlElement;
-import metro.WindowControls.InputField;
-import metro.WindowControls.Window;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Controls.InputField;
+import metro.UI.Renderer.BasicContainerRenderer;
 
 /**
  * @author Hauke
@@ -83,9 +80,8 @@ public class METRO implements ApplicationListener, InputProcessor
 	private LwjglApplicationConfiguration _config;
 
 	private static OSType __detectedOS;
-	private static ControlActionManager __controlActionManager;
+	private static BasicContainerRenderer __containerRenderer;
 	private static GameScreen __currentGameScreen;
-	private static ArrayList<Window> __windowList;
 	private static ActionObserver __windowObserver;
 	private static SpriteBatch __gameWindowSpriteBatch;
 	private static int __xOffset,
@@ -191,8 +187,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public void create()
 	{
-		__controlActionManager = new ControlActionManager();
-		GameScreen.setActionManager(__controlActionManager);
+		__containerRenderer = new BasicContainerRenderer();
 
 		__debug = true;
 
@@ -205,8 +200,6 @@ public class METRO implements ApplicationListener, InputProcessor
 		initGdx();
 
 		loadVisuals();
-
-		initWindowStuff();
 
 		__currentGameScreen = new MainMenu();
 
@@ -318,23 +311,6 @@ public class METRO implements ApplicationListener, InputProcessor
 		return font;
 	}
 
-	/**
-	 * Creates the list of all windows and the default observer ({@code _windowObserver}) that removes a closed window from this list.
-	 * The default observer is an anonymous class, because of java 7 I don't use a lambda in this case.
-	 */
-	private void initWindowStuff()
-	{
-		__windowList = new ArrayList<Window>();
-		__windowObserver = new ActionObserver()
-		{
-			@Override
-			public void closed(Window window)
-			{
-				__windowList.remove(window);
-			}
-		};
-	}
-
 	@Override
 	public void resize(int width, int height)
 	{
@@ -353,11 +329,9 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		__spriteBatch.begin();
 
-		updateActionManagerList();
-
 		renderInit();
 		renderCurrentGameScreen();
-		renderWindows();
+		__containerRenderer.notifyDraw();
 		renderFPSDisplay();
 		renderCursor();
 
@@ -427,10 +401,9 @@ public class METRO implements ApplicationListener, InputProcessor
 		__originalMousePosition = (Point)__mousePosition.clone();
 
 		boolean mouseInWindow = false;
-		for(Window win : __windowList)
-		{
-			mouseInWindow |= win.isMouseOnWindowArea(__mousePosition.x, __mousePosition.y);
-		}
+
+		// TODO check if mouse is in window
+
 		if(mouseInWindow) __mousePosition = _oldMousePosition;
 		else _oldMousePosition = __mousePosition;
 	}
@@ -445,28 +418,12 @@ public class METRO implements ApplicationListener, InputProcessor
 
 	}
 
-	private void updateActionManagerList()
-	{
-		__controlActionManager.updateList();
-	}
-
 	/**
 	 * Updates the game screen and draws the control drawer.
 	 */
 	private void renderCurrentGameScreen()
 	{
 		__currentGameScreen.updateGameScreen(__spriteBatch);
-	}
-
-	/**
-	 * Draws all windows that are in the __windowList.
-	 */
-	private void renderWindows()
-	{
-		for(Window win : __windowList)
-		{
-			win.draw(__spriteBatch);
-		}
 	}
 
 	/**
@@ -502,22 +459,17 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyDown(int keyCode)
 	{
+		__containerRenderer.notifyKeyPressed(keyCode);
+		// TODO check if the gamescreen is allowed to handle input now (if an input field has focus, no other control is allowed to)
 		__currentGameScreen.keyPressed(keyCode);
-		for(Window win : __windowList)
-		{
-			win.keyPressed(keyCode);
-		}
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keyCode)
 	{
+		__containerRenderer.notifyKeyUp(keyCode);
 		__currentGameScreen.keyUp(keyCode);
-		for(Window win : __windowList)
-		{
-			win.keyUp(keyCode);
-		}
 		return false;
 	}
 
@@ -546,8 +498,6 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
-		Window clickedWindow = null;
-
 		if(screenY <= __titleBarHeight)
 		{
 			if(screenX >= __SCREEN_SIZE.width - __titleBarHeight)
@@ -566,36 +516,10 @@ public class METRO implements ApplicationListener, InputProcessor
 		screenX -= __xOffset;
 		screenY -= __yOffset;
 
-		/*
-		 * Go from the last to first window when no window has been clicked yet.
-		 * This will consider the "depth-position" of the window (windows are behind/before others).
-		 * Thus only the frontmost window will receive a click, all others don't to prevent weird behaviour.
-		 */
-		for(int i = __windowList.size() - 1; i >= 0 && clickedWindow == null; i--)
-		{
-			if(__windowList.get(i).isMouseOnWindowArea(screenX, screenY)) // if mouse is just on the window area
-			{
-				__windowList.get(i).mousePressed(screenX, screenY, button);
-				clickedWindow = __windowList.get(i);
-			}
-		}
+		boolean controlGotClickEvent = __containerRenderer.notifyMouseClick(screenX, screenY, button);
 
-		boolean controlHasBeenClicked = !__controlActionManager.mouseClicked(screenX, screenY, button, clickedWindow);
-
-		/*
-		 * Decide: Close window (if needed) when clickedWindow is null
-		 * XOR
-		 * forward click to game screen when no control has been clicked AND the clicked window is null
-		 */
-		if(clickedWindow != null)
+		if(!controlGotClickEvent)
 		{
-			// close the clicked window after handling the click
-			boolean closed = clickedWindow.closeIfNeeded(screenX, screenY, button) || clickedWindow.isClosed();
-			if(closed) __windowList.remove(clickedWindow);
-		}
-		else if(controlHasBeenClicked)
-		{
-			// forward click to game screen
 			__currentGameScreen.mouseClicked(screenX, screenY, button);
 		}
 
@@ -608,13 +532,8 @@ public class METRO implements ApplicationListener, InputProcessor
 		screenX -= __xOffset;
 		screenY -= __yOffset;
 		__dragMode = false;
-
+		__containerRenderer.notifyMouseReleased(screenX, screenY, button);
 		__currentGameScreen.mouseReleased(button);
-
-		for(Window win : __windowList)
-		{
-			win.mouseReleased();
-		}
 		return false;
 	}
 
@@ -638,27 +557,9 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean scrolled(int amount)
 	{
-		boolean mouseOnWindow = false;
-		boolean scrolledOnControl = false;
-
-		/*
-		 * Go from the last to first window when no window has been clicked yet.
-		 * This will consider the "depth-position" of the window (windows are behind/before others).
-		 * Thus only the frontmost window will receive a scroll event, all others don't to prevent weird behaviour.
-		 */
-		for(int i = __windowList.size() - 1; i >= 0 && !mouseOnWindow; i--)
-		{
-			if(__windowList.get(i).isMouseOnWindow(__mousePosition.x + __xOffset, __mousePosition.y + __yOffset)) // if mouse is on window area but not on a control
-			{
-				mouseOnWindow = true;
-				break;
-			}
-		}
-
-		scrolledOnControl = __controlActionManager.mouseScroll(amount);
-
-		if(!scrolledOnControl && !mouseOnWindow) __currentGameScreen.mouseScrolled(amount);
-
+		__containerRenderer.notifyMouseScrolled(amount);
+		// TODO check if game screen is allowed to get the scroll event or if other controls get this before
+		__currentGameScreen.mouseScrolled(amount);
 		return false;
 	}
 
@@ -668,39 +569,13 @@ public class METRO implements ApplicationListener, InputProcessor
 	}
 
 	/**
-	 * Removes a control from the control action manager to disable user interactions with it.
-	 * Notice: Don't use this from a game screen there's the method "unregisterControl(ControlElement control)" in the GameScreen class!
-	 * 
-	 * @param control The control to remove.
-	 */
-	public static void __unregisterControl(ControlElement control)
-	{
-		__controlActionManager.remove(control);
-	}
-
-	/**
-	 * Adds the window to the list of all windows so that it'll get click- or scroll-events.
-	 * This method also adds the {@code _windowObserver} to the window so that it'll be closed correctly.
-	 * There are no doubles allowed in this list, so a second call with the same window won#t add it.
-	 * 
-	 * @param window The window that should be added to the list of all windows.
-	 */
-	public static void __registerWindow(Window window)
-	{
-		if(!__windowList.contains(window))
-		{
-			__windowList.add(window);
-			window.register(__windowObserver);
-		}
-	}
-
-	/**
 	 * Closes the current game screen and makes the given screen to the new one.
 	 * 
 	 * @param newScreen The new game screen.
 	 */
 	public static void __changeGameScreen(GameScreen newScreen)
 	{
+		// FIXME solve the switching without calling a method in this class
 		__currentGameScreen.close();
 		__currentGameScreen = newScreen;
 	}

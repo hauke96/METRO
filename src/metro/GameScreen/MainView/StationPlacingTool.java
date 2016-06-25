@@ -100,26 +100,6 @@ public class StationPlacingTool extends GameScreen
 	}
 
 	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
-	public void keyDown(int keyCode)
-	{
-	}
-
-	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	@Override
-	public void reset()
-	{
-	}
-
-	@Override
 	public boolean isHovered()
 	{
 		return false;

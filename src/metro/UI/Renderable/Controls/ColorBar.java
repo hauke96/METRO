@@ -1,4 +1,4 @@
-package metro.WindowControls;
+package metro.UI.Renderable.Controls;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import metro.METRO;
 import metro.Graphics.Draw;
+import metro.UI.Renderable.ControlElement;
 
 /**
  * A color bar is a stripe of all RGB colors.
@@ -14,43 +15,35 @@ import metro.Graphics.Draw;
  * @author hauke
  *
  */
-public class ColorBar extends ActionObservable implements ControlElement
+public class ColorBar extends ControlElement
 {
-	private Rectangle _position;
 	private float _saturation, _brightness;
-	private boolean _enabled,
-		_drawBorder;
-	private Window _windowHandle;
+	private boolean _drawBorder;
 	private Color _clickedColor;
 	private int _clickedXPosition;
 
 	/**
 	 * Creates a new color bar.
 	 * 
-	 * @param position The position of the bar.
-	 * @param window The window it's attached to.
+	 * @param area The position of the bar.
 	 */
-	public ColorBar(Rectangle position, Window window)
+	public ColorBar(Rectangle area)
 	{
-		this(position, window, 1f, 1f);
+		this(area, 1f, 1f);
 	}
 
 	/**
 	 * Creates a new color bar.
 	 * 
-	 * @param position The position of the bar.
-	 * @param window The window it's attached to.
+	 * @param area The position of the bar.
 	 * @param saturation The saturation of its color.
 	 * @param brithness The brightness of its color.
 	 */
-	public ColorBar(Rectangle position, Window window, float saturation, float brithness)
+	public ColorBar(Rectangle area, float saturation, float brithness)
 	{
-		_position = position;
+		_area = area;
 		_saturation = saturation;
 		_brightness = brithness;
-		_windowHandle = window;
-		if(_windowHandle != null) _windowHandle.addControlElement(this); // there won't be any doubles, don't worry ;)
-		_enabled = true;
 		_drawBorder = true;
 		_clickedXPosition = -1;
 	}
@@ -95,7 +88,7 @@ public class ColorBar extends ActionObservable implements ControlElement
 		_clickedColor = Color.getHSBColor(hue / 360f, _saturation, _brightness);
 		_clickedXPosition = getHue(_clickedColor.getRed(), _clickedColor.getGreen(), _clickedColor.getBlue());
 		METRO.__debug("[ColorBarValueSet]");
-		METRO.__debug(_position.width + " - " + getHue(_clickedColor.getRed(), _clickedColor.getGreen(), _clickedColor.getBlue()) + " - " + _clickedXPosition);
+		METRO.__debug(_area.width + " - " + getHue(_clickedColor.getRed(), _clickedColor.getGreen(), _clickedColor.getBlue()) + " - " + _clickedXPosition);
 	}
 
 	/**
@@ -133,31 +126,31 @@ public class ColorBar extends ActionObservable implements ControlElement
 	}
 
 	@Override
-	public void draw()
+	protected void draw()
 	{
 		Color color;
 
-		for(int i = 0; i < _position.width; ++i)
+		for(int i = 0; i < _area.width; ++i)
 		{
-			color = Color.getHSBColor((float)i / (float)_position.width, _saturation, _brightness);
-			if(!_enabled) // calculate grayscale color
+			color = Color.getHSBColor((float)i / (float)_area.width, _saturation, _brightness);
+			if(!_state) // calculate grayscale color
 			{
 				int avg = (color.getRed() + color.getGreen() + color.getBlue()) / 3;
 				color = new Color(avg, avg, avg);
 			}
 			Draw.setColor(color);
-			Draw.Line(_position.x + i, _position.y, _position.x + i, _position.y + _position.height);
+			Draw.Line(_area.x + i, _area.y, _area.x + i, _area.y + _area.height);
 		}
 
 		if(_drawBorder)
 		{
 			Draw.setColor(Color.darkGray);
-			Draw.Rect(new Rectangle(_position.x, _position.y, _position.width, _position.height));
+			Draw.Rect(new Rectangle(_area.x, _area.y, _area.width, _area.height));
 			// draw also the selection:
 			if(_clickedXPosition != -1)
 			{
-				Draw.Line(_position.x + _clickedXPosition - 1, _position.y, _position.x + _clickedXPosition - 1, _position.y + _position.height);
-				Draw.Line(_position.x + _clickedXPosition + 1, _position.y, _position.x + _clickedXPosition + 1, _position.y + _position.height);
+				Draw.Line(_area.x + _clickedXPosition - 1, _area.y, _area.x + _clickedXPosition - 1, _area.y + _area.height);
+				Draw.Line(_area.x + _clickedXPosition + 1, _area.y, _area.x + _clickedXPosition + 1, _area.y + _area.height);
 			}
 		}
 	}
@@ -169,39 +162,16 @@ public class ColorBar extends ActionObservable implements ControlElement
 	 */
 	public boolean clickOnControlElement()
 	{
-		if(!_enabled) return false;
+		if(!_state) return false;
 
 		Point mPos = new Point(METRO.__mousePosition.x - 3, METRO.__mousePosition.y);
 
-		if(_position.contains(mPos))
+		if(_area.contains(mPos))
 		{
-			_clickedXPosition = mPos.x - _position.x;
-			_clickedColor = Color.getHSBColor((float)_clickedXPosition / (float)_position.width, _saturation, _brightness);
+			_clickedXPosition = mPos.x - _area.x;
+			_clickedColor = Color.getHSBColor((float)_clickedXPosition / (float)_area.width, _saturation, _brightness);
 		}
-		return _position.contains(mPos);
-	}
-
-	@Override
-	public void setPosition(Point pos)
-	{
-		_position.setLocation(pos);
-	}
-
-	@Override
-	public void setText(String text)
-	{
-	}
-
-	@Override
-	public void setState(boolean enable)
-	{
-		_enabled = enable;
-	}
-
-	@Override
-	public Point getPosition()
-	{
-		return _position.getLocation();
+		return _area.contains(mPos);
 	}
 
 	@Override
@@ -216,20 +186,25 @@ public class ColorBar extends ActionObservable implements ControlElement
 	}
 
 	@Override
+	public void mouseReleased(int screenX, int screenY, int button)
+	{
+	}
+
+	@Override
 	public void moveElement(Point offset)
 	{
-		_position.add(offset);
+		_area.add(offset);
 	}
 
 	@Override
 	public void mouseScrolled(int amount)
 	{
-		if(_position.contains(METRO.__mousePosition))
+		if(_area.contains(METRO.__mousePosition))
 		{
 			_clickedXPosition += 5 * amount;
-			_clickedXPosition += _position.width;
-			_clickedXPosition %= _position.width;
-			_clickedColor = Color.getHSBColor((float)_clickedXPosition / (float)_position.width, _saturation, _brightness);
+			_clickedXPosition += _area.width;
+			_clickedXPosition %= _area.width;
+			_clickedColor = Color.getHSBColor((float)_clickedXPosition / (float)_area.width, _saturation, _brightness);
 			notifyClickOnControl(this);
 		}
 	}
@@ -242,17 +217,5 @@ public class ColorBar extends ActionObservable implements ControlElement
 	@Override
 	public void keyUp(int keyCode)
 	{
-	}
-
-	@Override
-	public Rectangle getArea()
-	{
-		return _position;
-	}
-
-	@Override
-	public boolean getState()
-	{
-		return _enabled;
 	}
 }

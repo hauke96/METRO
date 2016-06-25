@@ -21,12 +21,13 @@ import metro.Graphics.Fill;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
-import metro.WindowControls.ActionObserver;
-import metro.WindowControls.Button;
-import metro.WindowControls.ColorBar;
-import metro.WindowControls.InputField;
-import metro.WindowControls.Label;
-import metro.WindowControls.List;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Button;
+import metro.UI.Renderable.Controls.ColorBar;
+import metro.UI.Renderable.Controls.InputField;
+import metro.UI.Renderable.Controls.Label;
+import metro.UI.Renderable.Controls.List;
 
 /**
  * The LineView is a dialog to manage the train lines in METRO. It allows the user to create, modify and remove lines.
@@ -53,6 +54,7 @@ public class LineView extends GameScreen implements Observer
 	private TrainLine _oldLine; // when the user edits a line name, the old name of it has to be saved to correctly update the line list
 	private ColorBar _colorBar;
 	private TrainManagementService _trainManagementService;
+	private Panel _panel;
 
 	/**
 	 * Creates a new TrainLineView.
@@ -78,34 +80,39 @@ public class LineView extends GameScreen implements Observer
 	 */
 	private void createControls()
 	{
-		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 40, 300),
-			null, null, true);
-		registerControl(_lineList);
+		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
+		
+		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 40, 300), true);
 		fillLineList();
 
 		_createLineButton = new Button(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Create line");
-		registerControl(_createLineButton);
 		_editLineButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Edit line");
-		registerControl(_editLineButton);
 		_removeLineButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Remove line");
-		registerControl(_removeLineButton);
 
 		_lineNameField = new InputField(new Rectangle(_areaOffset.x + 95, _areaOffset.y + 490, _windowWidth - 175, 20));
 		_lineNameField.setState(false);
-		registerControl(_lineNameField);
+		
 		_lineNameFieldLabel = new Label("Line Name", new Point(_areaOffset.x + 20, _areaOffset.y + 493));
 		_lineNameFieldLabel.setState(false);
-		registerControl(_lineNameFieldLabel);
-		_colorBar = new ColorBar(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 520, _windowWidth - 70, 20), null, 0.9f, 0.8f);
+		
+		_colorBar = new ColorBar(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 520, _windowWidth - 70, 20), 0.9f, 0.8f);
 		_colorBar.setState(false);
-		registerControl(_colorBar);
+		
 		_saveButton = new Button(new Rectangle(_areaOffset.x + (_windowWidth / 2) - 75, METRO.__SCREEN_SIZE.height - _areaOffset.y - 60, 150, 20), "Save");
 		_saveButton.setState(false);
-		registerControl(_saveButton);
 
 		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 100));
 		_messageLabel.setColor(METRO.__metroRed);
-		registerControl(_messageLabel);
+		
+		_panel.add(_lineList);
+		_panel.add(_createLineButton);
+		_panel.add(_editLineButton);
+		_panel.add(_removeLineButton);
+		_panel.add(_lineNameField);
+		_panel.add(_lineNameFieldLabel);
+		_panel.add(_colorBar);
+		_panel.add(_saveButton);
+		_panel.add(_messageLabel);
 	}
 
 	/**
@@ -386,11 +393,7 @@ public class LineView extends GameScreen implements Observer
 		drawBackground();
 		drawTitleBox();
 		drawListBox();
-		drawButtons();
-		drawInputFields();
 		drawColorBar();
-
-		_messageLabel.draw();
 	}
 
 	/**
@@ -440,27 +443,6 @@ public class LineView extends GameScreen implements Observer
 		Draw.String("List of your lines:", METRO.__SCREEN_SIZE.width - _windowWidth + 20, _areaOffset.y + 110);
 		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 20, _areaOffset.y + 125,
 			METRO.__SCREEN_SIZE.width - _windowWidth + 20 + length, _areaOffset.y + 125);
-		_lineList.draw();
-	}
-
-	/**
-	 * Draws all buttons.
-	 */
-	private void drawButtons()
-	{
-		_createLineButton.draw();
-		_editLineButton.draw();
-		_removeLineButton.draw();
-	}
-
-	/**
-	 * Draws all input fields
-	 */
-	private void drawInputFields()
-	{
-		_lineNameFieldLabel.draw();
-		_lineNameField.draw();
-		_saveButton.draw();
 	}
 
 	/**
@@ -468,8 +450,6 @@ public class LineView extends GameScreen implements Observer
 	 */
 	private void drawColorBar()
 	{
-		_colorBar.draw();
-
 		if(_colorBar.getClickedColor() != null)
 		{
 			Fill.setColor(_colorBar.getClickedColor());
@@ -480,7 +460,7 @@ public class LineView extends GameScreen implements Observer
 	}
 
 	/**
-	 * Sets the visibility of the TrainLineView. The visibility will also effect the usability (e.g. mouse click).
+	 * Sets the visibility of the LineView. The visibility will also effect the usability (e.g. mouse click).
 	 * 
 	 * @param visible True will make this visible, false will make it invisible.
 	 */
@@ -527,14 +507,8 @@ public class LineView extends GameScreen implements Observer
 	}
 
 	@Override
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
-	@Override
 	public void keyDown(int keyCode)
 	{
-		_lineNameField.keyPressed(keyCode);
 		_lineSelectTool.setName(_lineNameField.getText());
 	}
 
@@ -542,8 +516,6 @@ public class LineView extends GameScreen implements Observer
 	public void mouseScrolled(int amount)
 	{
 		if(!_isActive) return;
-		_lineList.mouseScrolled(amount);
-		_colorBar.mouseScrolled(amount);
 		String msg = _lineSelectTool.setColor(_colorBar.getClickedColor());
 		if(!msg.equals("")) _messageLabel.setText(msg);
 	}
@@ -582,6 +554,7 @@ public class LineView extends GameScreen implements Observer
 	@Override
 	public void close()
 	{
+		_panel.close();
 		super.close();
 	}
 
