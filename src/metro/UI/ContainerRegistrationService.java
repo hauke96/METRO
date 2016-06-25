@@ -13,7 +13,13 @@ import metro.UI.Renderer.ContainerRenderer;
 public class ContainerRegistrationService
 {
 	private ContainerRenderer renderer = null;
-	
+
+	/**
+	 * Sets the renderer of all controls. This will remove the old renderer.
+	 * If no renderer is set at the beginning, a {@code UninitiatedClassException} will be thrown later.
+	 * 
+	 * @param newRenderer The new renderer for controls.
+	 */
 	public void setRenderer(ContainerRenderer newRenderer)
 	{
 		renderer = newRenderer;

@@ -9,6 +9,14 @@ import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.CloseObservable;
 import metro.UI.Renderable.ControlElement;
 
+/**
+ * A AbstractContainer is a closable and close observable control element which can itself store control elements.
+ * This control has to draw the controls at its own and also pass input event to them.
+ * To be able to react to events which are suitable for this kind of container, the {@code AbstractContainer} works closely together with the {@code ContainerRegistrationService}.
+ * 
+ * @author hauke
+ *
+ */
 public abstract class AbstractContainer extends CloseObservable
 {
 	private static ContainerRegistrationService _containerRegistrationService;
@@ -20,6 +28,9 @@ public abstract class AbstractContainer extends CloseObservable
 
 	protected List<ControlElement> _listOfControlElements;
 
+	/**
+	 * Creates a new container. Will throw an {@code UninitiatedClassException} when the registration service is not initiated via {@link #setContainerRegistrationService(ContainerRegistrationService)}.
+	 */
 	public AbstractContainer()
 	{
 		if(_containerRegistrationService == null)
@@ -31,11 +42,22 @@ public abstract class AbstractContainer extends CloseObservable
 		registerContainerInRenderer(_containerRegistrationService);
 	}
 
+	/**
+	 * Initiates the {@code #_containerRegistrationService} of this {@code AbstractContainer}.
+	 * 
+	 * @param newContainerRegistrationService The new {@link #_containerRegistrationService} for this container.
+	 */
+	@SuppressWarnings("javadoc")
 	public static void setContainerRegistrationService(ContainerRegistrationService newContainerRegistrationService)
 	{
 		_containerRegistrationService = newContainerRegistrationService;
 	}
 
+	/**
+	 * Registers the container in the renderer so that the renderer knows that kind of container this is. This is very important for the correct rendering and input processing of container.
+	 * 
+	 * @param registrationService The registration service which is able to register container in the renderer.
+	 */
 	protected abstract void registerContainerInRenderer(ContainerRegistrationService registrationService);
 
 	@Override
@@ -83,11 +105,21 @@ public abstract class AbstractContainer extends CloseObservable
 		}
 	}
 
+	/**
+	 * Adds a control to the container which will display it and process input events.
+	 * 
+	 * @param control The new control to add.
+	 */
 	public void add(ControlElement control)
 	{
 		_listOfControlElements.add(control);
 	}
 
+	/**
+	 * Will remove a control from the container. The control will not be visible after this and will not get any input anymore.
+	 * 
+	 * @param control The control that should be removed.
+	 */
 	public void remove(ControlElement control)
 	{
 		_listOfControlElements.remove(control);

@@ -6,10 +6,16 @@ import java.awt.Rectangle;
 import metro.UI.Renderable.Closable;
 import metro.UI.Renderable.ControlElement;
 
+/**
+ * A panel is a static container which position is fixed and can only be changed programmatically.
+ * 
+ * @author hauke
+ *
+ */
 public class Panel extends StaticContainer
 {
-	//TODO draw panel with background color (which is transparent at default)
-	
+	// TODO draw panel with background color (which is transparent at default)
+
 	/**
 	 * Creates an empty transparent panel.
 	 * 

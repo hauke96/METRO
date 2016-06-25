@@ -3,10 +3,9 @@ package metro.UI.Renderable;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 /**
- * The interface with all the important methods every control element should have.
+ * The abstract class with all the important methods every control element should have.
+ * Every control element has got a state (enables/disabled), a visible flag (visible/invisible), a text and an are the control is in.
  * 
  * @author hauke
  *
@@ -19,13 +18,21 @@ public abstract class ControlElement extends ActionObservable
 	protected Rectangle _area;
 	private boolean _visible;
 
-	public ControlElement()
+	/**
+	 * Initiates the fields of the control element with default values.
+	 * A new control is visible, enables and has no text. The area has to be set separately.
+	 */
+	protected ControlElement()
 	{
 		_visible = true;
 		_state = true;
 		_text = "";
 	}
 
+	/**
+	 * Calls the {@link #draw()} method when the control is visible.
+	 */
+	@SuppressWarnings("javadoc")
 	public void drawControl()
 	{
 		if(_visible)
@@ -35,7 +42,7 @@ public abstract class ControlElement extends ActionObservable
 	}
 
 	/**
-	 * Draws the control.
+	 * Draws the control. This method is only called when the control is visible.
 	 */
 	protected abstract void draw();
 
