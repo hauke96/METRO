@@ -18,7 +18,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author hauke
  * 
  */
-// TODO implement the window with a panel
 public class Window extends FloatingContainer
 {
 	private Point _oldMousePos;
@@ -188,7 +187,6 @@ public class Window extends FloatingContainer
 		if(isMouseOnWindow(screenX, screenY)
 			&& mouseButton == Buttons.LEFT)
 		{
-			// TODO implement drag mode correctly
 			_dragMode = true;
 			_oldMousePos = new Point(screenX, screenY);
 

@@ -262,7 +262,7 @@ public class Train extends TrainTemplate
 	 */
 	public Point2D calcPosition()
 	{
-		// TODO change 0 to real start node
+		// TODO change 0 to real start node of the train
 		return _trainLine.getPositionOfTrain(_relativeOnLine, 0);
 	}
 
@@ -315,7 +315,7 @@ public class Train extends TrainTemplate
 	public Point getCurrentNode(float deltaTime)
 	{
 		float relativeOnLine = _relativeOnLine + getMovedDistance(deltaTime);
-		// TODO change 0 to real start node
+		// TODO change 0 to real start node of the train
 		return _trainLine.getNode(_direction > 0 ? relativeOnLine : _trainLine.getLength() - relativeOnLine,
 			_direction > 0 ? 0 : _trainLine.getAmountOfNodes(),
 			_direction)[0];
@@ -330,7 +330,7 @@ public class Train extends TrainTemplate
 	public Point getNextNode(float deltaTime)
 	{
 		float relativeOnLine = _relativeOnLine + getMovedDistance(deltaTime);
-		// TODO change 0 to real start node
+		// TODO change 0 to real start node of the train
 		return _trainLine.getNode(_direction > 0 ? relativeOnLine : _trainLine.getLength() - relativeOnLine,
 			_direction > 0 ? 0 : _trainLine.getAmountOfNodes(),
 			_direction)[1];

@@ -61,7 +61,7 @@ public class GameState
 	 * May throw an IllegalArgumentException when the amount of money is less than 0.
 	 * 
 	 * @param moreMoney The money to add/subtract. Throw an IllegalArgumentException when the amount of money is less than 0.
-	 * @throws IllegalArgumentException 
+	 * @throws IllegalArgumentException
 	 */
 	public void addMoney(int moreMoney)
 	{
@@ -76,23 +76,22 @@ public class GameState
 	 * Removes the given amount of money from the bank account of the player.
 	 * Passing a negative amount will add the value of it to the account (e.g. -100 will add 100$ to the account).
 	 * 
-	 * @param moreMoney The amount of money.
+	 * @param moneyToWithdraw The amount of money.
 	 * @throws NotEnoughMoneyException An exception describing that there's to less money on the bank account to withdraw the given amount from it.
 	 */
-	public void withdrawMoney(int moreMoney) throws NotEnoughMoneyException
+	public void withdrawMoney(int moneyToWithdraw) throws NotEnoughMoneyException
 	{
-		if(moreMoney >= 0 && moreMoney <= _money)
+		if(moneyToWithdraw >= 0 && moneyToWithdraw <= _money)
 		{
-			_money -= moreMoney;
+			_money -= moneyToWithdraw;
 		}
-		//TODO remove this (it's inconsistent)! you also can't withdraw in the add method :/
-		else if(moreMoney < 0 && -moreMoney <= _money)
+		else if(moneyToWithdraw < 0)
 		{
-			addMoney(-moreMoney);
+			throw new IllegalArgumentException("The amount of money needs to be greater 0. Use addMoney(int) to add an amount of money to the bank account.");
 		}
-		else
+		else if(moneyToWithdraw > _money)
 		{
-			throw new NotEnoughMoneyException(_money, moreMoney);
+			throw new NotEnoughMoneyException(_money, moneyToWithdraw);
 		}
 	}
 
