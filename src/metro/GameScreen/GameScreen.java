@@ -11,12 +11,14 @@ import metro.METRO;
 import metro.Settings;
 import metro.Graphics.Draw;
 import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.CloseObservable;
 import metro.UI.Renderable.Container.Window;
 import metro.UI.Renderable.Controls.Button;
 import metro.UI.Renderable.Controls.Checkbox;
 import metro.UI.Renderable.Controls.InputField;
 import metro.UI.Renderable.Controls.Label;
 import metro.UI.Renderable.Controls.List;
+import metro.UI.Renderer.CloseObserver;
 
 /**
  * Every Menu or Game Sreen has to implement this interface for start() and update(). This will make the creation process more easy.
@@ -197,6 +199,7 @@ public abstract class GameScreen extends Observable
 			_window = new Window("METRO settings",
 				new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 50, METRO.__SCREEN_SIZE.height / 2 - 225, 500, 450),
 				METRO.__metroBlue);
+			registerWindowCloseObserver();
 
 			Label label = new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.",
 				new Point(20, 20),
@@ -274,7 +277,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void clickedOnControl(Object arg)
 				{
-					close();
+					registerWindowCloseObserver();
 				}
 			});
 		}
@@ -365,10 +368,16 @@ public abstract class GameScreen extends Observable
 		/**
 		 * Just closes the window and sets the _settingsWindow to null.
 		 */
-		private void close()
+		private void registerWindowCloseObserver()
 		{
-			_window.close();
-			_settingsWindow = null;
+			_window.registerCloseObserver(new CloseObserver()
+			{
+				@Override
+				public void reactToClosedControlElement(CloseObservable container)
+				{
+					_settingsWindow = null;
+				}
+			});
 		}
 	}
 
