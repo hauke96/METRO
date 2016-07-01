@@ -8,13 +8,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.GameScreen.GameScreen;
-import metro.Graphics.Draw;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.Button;
+import metro.UI.Renderable.Controls.Label;
 import metro.UI.Renderable.Controls.List;
 
 /**
@@ -35,6 +35,8 @@ public class TrainViewMain extends GameScreen
 	private String _movedTrain;
 	private TrainManagementService _trainManagementService;
 	private Panel _panel;
+	private Label _yourLinesLabel,
+	_yourTrainsLabel;
 
 	/**
 	 * Creates a new main view for the train screen.
@@ -79,6 +81,13 @@ public class TrainViewMain extends GameScreen
 		_trainList = new List(new Rectangle(_areaOffset.x + 121, _areaOffset.y + 130, _windowWidth - 141, 230), true);
 
 		fillLineList();
+		
+		_yourLinesLabel = new Label("Your Lines:", new Point(METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 110));
+		_yourLinesLabel.setColor(METRO.__metroRed);
+		_yourLinesLabel.underlined(true);
+		_yourTrainsLabel = new Label("Your Trains:", new Point(METRO.__SCREEN_SIZE.width - _windowWidth + 125, _areaOffset.y + 110));
+		_yourTrainsLabel.setColor(METRO.__metroRed);
+		_yourTrainsLabel.underlined(true);
 
 		_moveTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Move train");
 		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Sell train");
@@ -89,6 +98,8 @@ public class TrainViewMain extends GameScreen
 		_panel.add(_trainList);
 		_panel.add(_moveTrainButton);
 		_panel.add(_sellTrainButton);
+		_panel.add(_yourLinesLabel);
+		_panel.add(_yourTrainsLabel);
 	}
 
 	/**
@@ -135,29 +146,6 @@ public class TrainViewMain extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch g)
 	{
-		drawListBox();
-	}
-
-	/**
-	 * Draws the list box with the label above it.
-	 */
-	private void drawListBox()
-	{
-		Draw.setColor(METRO.__metroRed);
-
-		// TODO make this into labels to draw them in the correct way
-
-		String text = "Your lines:";
-		int length = Draw.getStringSize(text).width;
-		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 110);
-		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 125,
-			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, _areaOffset.y + 125);
-
-		text = "Your trains:";
-		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 125, _areaOffset.y + 110);
-		length = Draw.getStringSize(text).width;
-		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 125, _areaOffset.y + 125,
-			METRO.__SCREEN_SIZE.width - _windowWidth + 125 + length, _areaOffset.y + 125);
 	}
 
 	/**

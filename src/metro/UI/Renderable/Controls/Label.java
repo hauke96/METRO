@@ -23,7 +23,8 @@ public class Label extends ControlElement
 {
 	private int _areaWidth = 0;
 	private Color _color;
-	
+	private boolean _underlined;
+
 	/**
 	 * Creates a new label.
 	 * 
@@ -77,6 +78,12 @@ public class Label extends ControlElement
 		else
 		{
 			Draw.String(_text, _area.x, _area.y, _areaWidth);
+		}
+
+		if(_underlined)
+		{
+			Dimension textArea = Draw.getStringSize(_text);
+			Draw.Line(_area.x, _area.y + textArea.height + 2, _area.x + textArea.width, _area.y + textArea.height + 2);
 		}
 	}
 
@@ -143,5 +150,15 @@ public class Label extends ControlElement
 	private Dimension calcSize()
 	{
 		return new Dimension(Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
+	}
+
+	/**
+	 * Let the text be underlined or not.
+	 * 
+	 * @param underlined True to underline the text, false to not do that.
+	 */
+	public void underlined(boolean underlined)
+	{
+		_underlined = underlined;
 	}
 }
