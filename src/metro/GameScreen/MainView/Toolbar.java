@@ -124,8 +124,6 @@ public class Toolbar extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch g)
 	{
-		//TODO move all this into the panel
-		
 		// draw the background and the red line below it
 		Fill.setColor(Color.white);
 		Fill.Rect(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height));
@@ -135,6 +133,8 @@ public class Toolbar extends GameScreen
 		// separating line for the money display
 		Draw.setColor(METRO.__metroRed);
 		Draw.Line(_moneyDisplayWidth, 0, _moneyDisplayWidth, _height);
+		
+		//TODO implement the string with a ColorFormattedLabel
 
 		// draw amount of money like 935.258.550 $
 		Draw.setColor(METRO.__metroRed);
