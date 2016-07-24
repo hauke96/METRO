@@ -92,7 +92,7 @@ public class Label extends ControlElement
 	 * 
 	 * @return True when user clicked on control, false if not.
 	 */
-	public boolean clickOnControlElement()
+	private boolean mouseOnControlElement()
 	{
 		if(!_state) return false;
 		Point mPos = METRO.__originalMousePosition;
@@ -105,7 +105,7 @@ public class Label extends ControlElement
 	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
-		if(clickOnControlElement())
+		if(mouseOnControlElement())
 		{
 			notifyClickOnControl(this);
 			return true;

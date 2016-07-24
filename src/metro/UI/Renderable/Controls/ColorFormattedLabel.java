@@ -1,69 +1,89 @@
 package metro.UI.Renderable.Controls;
 
+import java.awt.Color;
 import java.awt.Point;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
-import metro.UI.Renderable.ControlElement;
+import metro.Graphics.Draw;
 
 /**
  * A {@code ColorFormattedLabel} is a label which can display text with multiple colors specified by a color string.
  * Note that there're no line breaks for a color formatted label.
  * The color strings are colored by %c where c is a color letter:
- * 	- %k - black
- * 	- %r - metro red
- * 	- %b - metro blue
- * 	- %w - white
- *  
+ * - %k - black (default)
+ * - %r - metro red
+ * - %b - metro blue
+ * - %w - white
+ * 
  * @author hauke
  *
  */
-public class ColorFormattedLabel extends ControlElement
+public class ColorFormattedLabel extends Label
 {
-	Set<Label> _setOfLabels;
-	
-	public ColorFormattedLabel(String text)
+	private Set<Label> _setOfLabels;
+	private Point _position;
+	private String _text;
+
+	private static Map<String, Color> _colorMap = new HashMap<String, Color>();
+
+	private ColorFormattedLabel(String text, Point position)
 	{
+		super(text, position);
 		_setOfLabels = new HashSet<Label>();
-		
-		//TODO parse input text
+
+		parseInput();
+	}
+
+	/**
+	 * Creates a new color formatted label. The color-codes can be found in the class doc.
+	 * 
+	 * @param text The text the the label.
+	 * @param position The position of the label.
+	 * @return A new color formatted label.
+	 */
+	public ColorFormattedLabel newLabel(String text, Point position)
+	{
+		// TODO Contract text != null
+		return new ColorFormattedLabel(text, position);
+	}
+
+	/**
+	 * Parses the input string and creates all the labels.
+	 */
+	private void parseInput()
+	{
+		_text.replace("%", "\0%");
+		String[] splittedText = _text.split("\0%[krbw]");
+		Point position = (Point)_position.clone();
+
+		for(String subText : splittedText)
+		{
+			Color color = Color.black;
+
+			// Check if this block really begins with a color definition
+			if(subText.charAt(0) == '%')
+			{
+				subText = subText.substring(2); // remove %[color-code] delimiter
+				color = _colorMap.get(subText.charAt(0));
+			}
+
+			Label label = new Label(subText, position);
+			label.setColor(color);
+
+			int width = Draw.getStringSize(subText).width;
+			position.translate(width, 0);
+		}
 	}
 
 	@Override
 	protected void draw()
 	{
-		//TODO draw labels
-	}
-
-	@Override
-	public boolean mouseClicked(int screenX, int screenY, int button)
-	{
-		return false;
-	}
-
-	@Override
-	public void mouseReleased(int screenX, int screenY, int button)
-	{
-	}
-
-	@Override
-	public void moveElement(Point offset)
-	{
-		//TODO move all elements
-	}
-
-	@Override
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	@Override
-	public void keyPressed(int keyCode)
-	{
-	}
-
-	@Override
-	public void keyUp(int keyCode)
-	{
+		for(Label label : _setOfLabels)
+		{
+			label.draw();
+		}
 	}
 }
