@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import metro.METRO;
 import metro.Graphics.Draw;
 
 /**
@@ -24,10 +25,19 @@ import metro.Graphics.Draw;
 public class ColorFormattedLabel extends Label
 {
 	private Set<Label> _setOfLabels;
-	private Point _position;
-	private String _text;
 
-	private static Map<String, Color> _colorMap = new HashMap<String, Color>();
+	private static Map<String, Color> _colorMap;
+
+	static
+	{
+		_colorMap = new HashMap<String, Color>();
+
+		// Fill with values listed in the class doc
+		_colorMap.put("k", Color.black);
+		_colorMap.put("r", METRO.__metroRed);
+		_colorMap.put("b", METRO.__metroBlue);
+		_colorMap.put("w", Color.white);
+	}
 
 	private ColorFormattedLabel(String text, Point position)
 	{
@@ -44,7 +54,7 @@ public class ColorFormattedLabel extends Label
 	 * @param position The position of the label.
 	 * @return A new color formatted label.
 	 */
-	public ColorFormattedLabel newLabel(String text, Point position)
+	public static ColorFormattedLabel newLabel(String text, Point position)
 	{
 		// TODO Contract text != null
 		return new ColorFormattedLabel(text, position);
@@ -55,26 +65,30 @@ public class ColorFormattedLabel extends Label
 	 */
 	private void parseInput()
 	{
-		_text.replace("%", "\0%");
-		String[] splittedText = _text.split("\0%[krbw]");
-		Point position = (Point)_position.clone();
+		// Only get the % without \ at the beginning but leave spaces and other character at the end of a splitted word.
+		String[] splittedText = _text.split("(?<=[^\\\\])(?=%[krbw])");
+
+		Point position = (Point)_area.getLocation().clone();
 
 		for(String subText : splittedText)
 		{
 			Color color = Color.black;
 
 			// Check if this block really begins with a color definition
-			if(subText.charAt(0) == '%')
+			if(subText.startsWith("%"))
 			{
+				color = _colorMap.get("" + subText.charAt(1));
 				subText = subText.substring(2); // remove %[color-code] delimiter
-				color = _colorMap.get(subText.charAt(0));
 			}
 
 			Label label = new Label(subText, position);
 			label.setColor(color);
 
+			// Translate to place the next label right to this one
 			int width = Draw.getStringSize(subText).width;
 			position.translate(width, 0);
+
+			_setOfLabels.add(label);
 		}
 	}
 
