@@ -99,6 +99,8 @@ public class MainMenu extends GameScreen
 		Label l = new Label("This %ris %ba %kte\\%rst %wlol%k.",
 			new Point(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 205));
 		_panel.add(l);
+		
+		colorLabel.underlined(true);
 	}
 
 	private void loadVisuals()

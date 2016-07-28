@@ -83,6 +83,7 @@ public class ColorFormattedLabel extends Label
 
 			Label label = new Label(subText, position);
 			label.setColor(color);
+			label.underlined(_underlined);
 
 			// Translate to place the next label right to this one
 			int width = Draw.getStringSize(subText).width;
@@ -93,11 +94,21 @@ public class ColorFormattedLabel extends Label
 	}
 
 	@Override
-	protected void draw()
+	public void draw()
 	{
 		for(Label label : _setOfLabels)
 		{
 			label.draw();
+		}
+	}
+	
+	@Override
+	public void underlined(boolean underlined)
+	{
+		_underlined = underlined;
+		for(Label label : _setOfLabels)
+		{
+			label.underlined(_underlined);
 		}
 	}
 }

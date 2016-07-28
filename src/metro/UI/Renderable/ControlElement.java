@@ -16,7 +16,7 @@ public abstract class ControlElement extends ActionObservable
 	protected boolean _state;
 	protected String _text;
 	protected Rectangle _area;
-	private boolean _visible;
+	protected boolean _visible;
 
 	/**
 	 * Initiates the fields of the control element with default values.

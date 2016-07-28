@@ -23,7 +23,7 @@ public class Label extends ControlElement
 {
 	private int _areaWidth = 0;
 	private Color _color;
-	private boolean _underlined;
+	protected boolean _underlined;
 
 	/**
 	 * Creates a new label.
