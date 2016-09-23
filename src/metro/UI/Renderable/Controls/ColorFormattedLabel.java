@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import metro.METRO;
+import metro.Common.Technical.Contract;
 import metro.Graphics.Draw;
 
 /**
@@ -56,8 +57,8 @@ public class ColorFormattedLabel extends Label
 	 */
 	public static ColorFormattedLabel newLabel(String text, Point position)
 	{
-		// TODO Contract text != null
-		// TODO Contract position != null
+		Contract.RequireNotNull(text);
+		Contract.RequireNotNull(position);
 		return new ColorFormattedLabel(text, position);
 	}
 
