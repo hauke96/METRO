@@ -3,7 +3,8 @@ package metro;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import metro.GameState;
+
+import metro.Common.Game.GameState;
 import metro.Exceptions.NotEnoughMoneyException;
 
 /**

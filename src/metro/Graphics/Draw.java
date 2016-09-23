@@ -14,7 +14,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import metro.METRO;
-import metro.Settings;
+import metro.Common.Game.Settings;
 
 /**
  * Provides lots of methods to draw lines, rects, circles, ... onto the screen

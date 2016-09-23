@@ -8,8 +8,8 @@ import java.util.Observer;
 
 import org.junit.Test;
 
-import metro.GameState;
 import metro.METRO;
+import metro.Common.Game.GameState;
 
 public class TrackPlacingToolTest
 {

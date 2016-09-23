@@ -8,7 +8,7 @@ import java.util.Map;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import metro.GameState;
+import metro.Common.Game.GameState;
 import metro.Graphics.Draw;
 import metro.TrainManagement.Trains.Train;
 

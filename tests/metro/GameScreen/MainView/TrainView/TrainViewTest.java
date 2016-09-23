@@ -11,8 +11,8 @@ import org.junit.Test;
 
 import com.badlogic.gdx.Input.Buttons;
 
-import metro.GameState;
 import metro.METRO;
+import metro.Common.Game.GameState;
 
 /**
  * @author hauke

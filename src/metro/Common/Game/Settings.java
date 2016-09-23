@@ -1,4 +1,4 @@
-package metro;
+package metro.Common.Game;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;

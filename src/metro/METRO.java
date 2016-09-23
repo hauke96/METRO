@@ -62,6 +62,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
+import metro.Common.Game.GameState;
+import metro.Common.Game.Settings;
 import metro.GameScreen.GameScreen;
 import metro.GameScreen.MainMenu;
 import metro.Graphics.Draw;

@@ -16,8 +16,8 @@ import java.util.regex.Pattern;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import metro.GameState;
 import metro.METRO;
+import metro.Common.Game.GameState;
 import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameScreen.MainView.NotificationView.NotificationServer;
 import metro.GameScreen.MainView.NotificationView.NotificationType;

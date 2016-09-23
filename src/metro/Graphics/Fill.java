@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 
 import metro.METRO;
-import metro.Settings;
+import metro.Common.Game.Settings;
 
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

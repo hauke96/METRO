@@ -6,8 +6,8 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import metro.GameState;
 import metro.METRO;
+import metro.Common.Game.GameState;
 import metro.Graphics.Draw;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Trains.TrainLine;

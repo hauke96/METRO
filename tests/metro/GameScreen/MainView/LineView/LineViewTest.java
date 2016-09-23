@@ -9,8 +9,8 @@ import java.awt.Point;
 
 import org.junit.Test;
 
-import metro.GameState;
 import metro.METRO;
+import metro.Common.Game.GameState;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderer.BasicContainerRenderer;
