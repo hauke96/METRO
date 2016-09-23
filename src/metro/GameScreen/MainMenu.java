@@ -85,24 +85,10 @@ public class MainMenu extends GameScreen
 		_welcomeWindow.add(button);
 		_welcomeWindow.add(label);
 
-		//TODO undo after testing the color formatted label:
-//		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 - 25, 200, 170));
-		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 - 25, 200, 270));
+		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 - 25, 200, 170));
 		_panel.add(_button_startGame);
 		_panel.add(_button_settings);
 		_panel.add(_button_exitGame);
-		
-		//TODO remove after testing the color formatted label:
-		ColorFormattedLabel colorLabel = ColorFormattedLabel.newLabel("This %ris %ba %kte\\%rst %wlol%k.",
-			new Point(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 185));
-		_panel.add(colorLabel);
-		
-		Label l = new Label("This %ris %ba %kte\\%rst %wlol%k.",
-			new Point(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 205));
-		_panel.add(l);
-		
-		colorLabel.underlined(true);
-		colorLabel.setUnderlineColor(Color.red);
 	}
 
 	private void loadVisuals()
