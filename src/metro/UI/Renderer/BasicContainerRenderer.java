@@ -19,7 +19,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 {
 	interface ContainerCollectionNotifier
 	{
-		void notifyAllContainer(List<? extends AbstractContainer> listOfContainer);
+		void notifyAllContainer(List<AbstractContainer> listOfContainer);
 	}
 
 	interface ContainerNotifier
@@ -32,16 +32,16 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		void executeFunctions();
 	}
 
-	private List<FloatingContainer> _listOfFloatingContainer;
-	private List<StaticContainer> _listOfStaticContainer;
+	private List<AbstractContainer> _listOfFloatingContainer;
+	private List<AbstractContainer> _listOfStaticContainer;
 
 	/**
 	 * Creates a basic renderer with empty fields.
 	 */
 	public BasicContainerRenderer()
 	{
-		_listOfStaticContainer = new CopyOnWriteArrayList<StaticContainer>();
-		_listOfFloatingContainer = new CopyOnWriteArrayList<FloatingContainer>();
+		_listOfStaticContainer = new CopyOnWriteArrayList<AbstractContainer>();
+		_listOfFloatingContainer = new CopyOnWriteArrayList<AbstractContainer>();
 
 		ContainerRegistrationService registrationService = new ContainerRegistrationService();
 		registrationService.setRenderer(this);
@@ -71,8 +71,6 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	@Override
 	public boolean notifyMouseClick(int screenX, int screenY, int button)
 	{
-		// TODO create observer for the click on a not-focused window and bring it to the front
-
 		class ModifiableBoolean
 		{
 			private boolean value = false;
@@ -80,17 +78,25 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		ModifiableBoolean isClickedValue = new ModifiableBoolean();
 
 		Notifier notifier = () -> {
-			ContainerCollectionNotifier containerNotifier = (List<? extends AbstractContainer> l) -> {
-				AbstractContainer currentContainer;
+			ContainerCollectionNotifier containerNotifier = (List<AbstractContainer> l) -> {
+				AbstractContainer clickedContainer = null;
+
 				for(int i = l.size() - 1; i >= 0; i--)
 				{
-					currentContainer = l.get(i);
-					if(currentContainer.isInArea(screenX, screenY))
+					clickedContainer = l.get(i);
+					if(clickedContainer.isInArea(screenX, screenY))
 					{
-						currentContainer.mouseClicked(screenX, screenY, button);
+						clickedContainer.mouseClicked(screenX, screenY, button);
 						isClickedValue.value = true;
 						break;
 					}
+				}
+
+				// Move window to the top if no control on this window has been clicked
+				if(clickedContainer != null)
+				{
+					l.remove(clickedContainer);
+					l.add(clickedContainer);
 				}
 			};
 
@@ -132,12 +138,12 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	{
 		// TODO determine on which control the focus is
 		Notifier notifier = () -> {
-			for(StaticContainer container : _listOfStaticContainer)
+			for(AbstractContainer container : _listOfStaticContainer)
 			{
 				notifyFunction.notifyContainer(container);
 			}
 
-			for(FloatingContainer window : _listOfFloatingContainer)
+			for(AbstractContainer window : _listOfFloatingContainer)
 			{
 				notifyFunction.notifyContainer(window);
 			}
