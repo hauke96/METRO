@@ -1,8 +1,11 @@
 package metro.UI.Renderable.Container;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import metro.Graphics.Draw;
+import metro.Graphics.Fill;
 import metro.UI.Renderable.Closable;
 import metro.UI.Renderable.ControlElement;
 
@@ -14,7 +17,7 @@ import metro.UI.Renderable.ControlElement;
  */
 public class Panel extends StaticContainer
 {
-	// TODO draw panel with background color (which is transparent at default)
+	private Color _backgroundColor;
 
 	/**
 	 * Creates an empty transparent panel.
@@ -24,6 +27,25 @@ public class Panel extends StaticContainer
 	public Panel(Rectangle area)
 	{
 		_area = area;
+		_backgroundColor = Color.white;
+	}
+
+	/**
+	 * Sets the background color of this panel.
+	 * 
+	 * @param newBackgroundColor The new background Color.
+	 */
+	public void setBackgroundColor(Color newBackgroundColor)
+	{
+		_backgroundColor = newBackgroundColor;
+	}
+
+	@Override
+	protected void draw()
+	{
+		Fill.setColor(_backgroundColor);
+		Fill.Rect(getArea());
+		super.draw();
 	}
 
 	@Override
