@@ -170,8 +170,8 @@ public class METRO implements ApplicationListener, InputProcessor
 					METRO.__debug("[SettingsSaveError]\nNo backup of settings.cfg has been created.\n");
 				}
 
-				// no
-				setSettings();
+				System.err
+					.println("Something went wrong by reading the settings.\nThey have been renamed to \"settings.backup.{date}\".\nHere some more information:\n" + ex.getMessage());
 			}
 			else
 			{
