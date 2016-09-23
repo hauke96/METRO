@@ -24,7 +24,7 @@ import metro.Graphics.Draw;
  */
 public class ColorFormattedLabel extends Label
 {
-	private Set<Label> _setOfLabels;
+	private Set<Label> _allLabels;
 
 	private static Map<String, Color> _colorMap;
 
@@ -42,7 +42,7 @@ public class ColorFormattedLabel extends Label
 	private ColorFormattedLabel(String text, Point position)
 	{
 		super(text, position);
-		_setOfLabels = new HashSet<Label>();
+		_allLabels = new HashSet<Label>();
 
 		parseInput();
 	}
@@ -57,6 +57,7 @@ public class ColorFormattedLabel extends Label
 	public static ColorFormattedLabel newLabel(String text, Point position)
 	{
 		// TODO Contract text != null
+		// TODO Contract position != null
 		return new ColorFormattedLabel(text, position);
 	}
 
@@ -89,14 +90,14 @@ public class ColorFormattedLabel extends Label
 			int width = Draw.getStringSize(subText).width;
 			position.translate(width, 0);
 
-			_setOfLabels.add(label);
+			_allLabels.add(label);
 		}
 	}
 
 	@Override
 	public void draw()
 	{
-		for(Label label : _setOfLabels)
+		for(Label label : _allLabels)
 		{
 			label.draw();
 		}
@@ -106,9 +107,18 @@ public class ColorFormattedLabel extends Label
 	public void underlined(boolean underlined)
 	{
 		_underlined = underlined;
-		for(Label label : _setOfLabels)
+		for(Label label : _allLabels)
 		{
 			label.underlined(_underlined);
+		}
+	}
+	
+	@Override
+	public void setUnderlineColor(Color color)
+	{
+		for(Label label : _allLabels)
+		{
+			label.setUnderlineColor(color);
 		}
 	}
 }

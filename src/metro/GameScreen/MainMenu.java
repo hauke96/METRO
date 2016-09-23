@@ -1,5 +1,6 @@
 package metro.GameScreen;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -101,6 +102,7 @@ public class MainMenu extends GameScreen
 		_panel.add(l);
 		
 		colorLabel.underlined(true);
+		colorLabel.setUnderlineColor(Color.red);
 	}
 
 	private void loadVisuals()

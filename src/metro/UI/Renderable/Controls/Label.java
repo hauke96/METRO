@@ -23,6 +23,7 @@ public class Label extends ControlElement
 {
 	private int _areaWidth = 0;
 	private Color _color;
+	private Color _underlineColor;
 	protected boolean _underlined;
 
 	/**
@@ -50,6 +51,7 @@ public class Label extends ControlElement
 		_area = new Rectangle(position.x, position.y, size.width, size.height);
 		_areaWidth = areaWidth;
 		_color = Color.black;
+		_underlineColor = _color;
 	}
 
 	/**
@@ -83,6 +85,7 @@ public class Label extends ControlElement
 		if(_underlined)
 		{
 			Dimension textArea = Draw.getStringSize(_text);
+			Draw.setColor(_underlineColor);
 			Draw.Line(_area.x, _area.y + textArea.height + 2, _area.x + textArea.width, _area.y + textArea.height + 2);
 		}
 	}
@@ -160,5 +163,15 @@ public class Label extends ControlElement
 	public void underlined(boolean underlined)
 	{
 		_underlined = underlined;
+	}
+
+	/**
+	 * Colors the underline line into the given color.
+	 * 
+	 * @param color The color of the underline line.
+	 */
+	public void setUnderlineColor(Color color)
+	{
+		_underlineColor = color;
 	}
 }
