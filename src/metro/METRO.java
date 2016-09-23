@@ -171,7 +171,8 @@ public class METRO implements ApplicationListener, InputProcessor
 				}
 
 				System.err
-					.println("Something went wrong by reading the settings.\nThey have been renamed to \"settings.backup.{date}\".\nHere some more information:\n" + ex.getMessage());
+					.println(
+						"Something went wrong by reading the settings.\nThey have been renamed to \"settings.backup.{date}\".\nHere some more information:\n" + ex.getMessage());
 			}
 			else
 			{

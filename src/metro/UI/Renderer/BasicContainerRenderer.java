@@ -86,23 +86,25 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 					clickedContainer = l.get(i);
 					if(clickedContainer.isInArea(screenX, screenY))
 					{
-						clickedContainer.mouseClicked(screenX, screenY, button);
-						isClickedValue.value = true;
 						break;
 					}
 				}
 
-				// Move window to the top if no control on this window has been clicked
+				// // Move window to the top if no control on this window has been clicked
 				if(clickedContainer != null)
 				{
 					l.remove(clickedContainer);
 					l.add(clickedContainer);
+					
+					isClickedValue.value = clickedContainer.mouseClicked(screenX, screenY, button);
 				}
 			};
 
-			containerNotifier.notifyAllContainer(_listOfStaticContainer);// TODO determine on which control the focus is
-
 			containerNotifier.notifyAllContainer(_listOfFloatingContainer);
+			if(!isClickedValue.value)
+			{
+				containerNotifier.notifyAllContainer(_listOfStaticContainer);// TODO determine on which control the focus is
+			}
 		};
 
 		generalNotifying(notifier);

@@ -277,7 +277,7 @@ public abstract class GameScreen extends Observable
 				@Override
 				public void clickedOnControl(Object arg)
 				{
-					registerWindowCloseObserver();
+					_window.close();
 				}
 			});
 		}
