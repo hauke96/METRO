@@ -43,24 +43,24 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 		_headerHeight = 25;
 		_width = METRO.__SCREEN_SIZE.width;
 		_isExpanded = true;
-		
+
 		_panel = new Panel(new Rectangle(0,
 			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
 			_width - 5,
 			_height - METRO.__titleBarHeight + _headerHeight));
-		
+
 		_entryList = new List(new Rectangle(0,
 			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
 			_width - 5,
 			_height - METRO.__titleBarHeight + _headerHeight),
 			new ArrayList<String>(), true);
-		
+
 		_entryList.setDecoration(false);
 		_entryList.setTransparency(165);
 		_entryList.setStickiness(true);
 		addMessage("Game started", NotificationType.GAME_INFO);
 		NotificationServer.subscribe(this);
-		
+
 		_panel.add(_entryList);
 	}
 
@@ -80,6 +80,11 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 	public void setWidth(int newWidth)
 	{
 		_width = newWidth;
+
+		Rectangle oldPanelArea = (Rectangle)_panel.getArea().clone();
+		oldPanelArea.setSize(oldPanelArea.height, _width - 5);
+		_panel.setArea(oldPanelArea);
+		
 		_entryList.setArea(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight));
 	}
 
@@ -120,7 +125,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 			_isExpanded ^= true; // flip state of boolean
 			_height = _isExpanded ? 250 : METRO.__titleBarHeight + _headerHeight;
 			_entryList.setState(_isExpanded);
-			_panel.setPosition(new Point(_entryList.getPosition().x, METRO.__SCREEN_SIZE.height-_height+_headerHeight));
+			_panel.setPosition(new Point(_entryList.getPosition().x, METRO.__SCREEN_SIZE.height - _height + _headerHeight));
 		}
 	}
 
