@@ -66,7 +66,6 @@ import metro.Common.Game.GameState;
 import metro.Common.Game.Settings;
 import metro.GameUI.MainMenu.MainMenu;
 import metro.GameUI.Screen.CurrentGameScreenManager;
-import metro.GameUI.Screen.GameScreen;
 import metro.Graphics.Draw;
 import metro.Graphics.Fill;
 import metro.UI.Renderable.ActionObserver;

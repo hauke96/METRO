@@ -57,34 +57,7 @@ public class MainMenu extends GameScreen
 		addActionObservations();
 
 		// Create welcome-window:
-		_welcomeWindow = new Window("Welcome to METRO - v" + METRO.__VERSION,
-			new Rectangle(50,
-				METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 300, // same y-pos as title image
-				500,
-				530));
-
-		Button button = new Button(
-			new Rectangle((500 - (int)(_titleImageTexture.getRegionWidth() * 0.4f)) / 2,
-				(260 - (int)(_titleImageTexture.getRegionWidth() * 0.4f)) / 2,
-				(int)(_titleImageTexture.getRegionWidth() * 0.4f),
-				(int)(_titleImageTexture.getRegionHeight() * 0.4f)),
-			new Rectangle(0,
-				0,
-				_titleImageTexture.getRegionWidth(),
-				_titleImageTexture.getRegionHeight()),
-			_titleImageTexture);
-
-		Label label = new Label("METRO stands for \"Master of established transport railway operators\" and is a simple Subway/Rapid-Transit and economic simulator.\n\n"
-			+ "For all changes take a look into the 'changelog.txt'\n"
-			+ "New main-features of v" + METRO.__VERSION + ":\n\n"
-			+ " * Trains\n"
-			+ "     - Have own speed\n"
-			+ "     - Changing direction when reaching the end of a line\n\n"
-			+ "And now: Have fun and earn money ;)",
-			new Point(20, 100), 450);
-		
-		_welcomeWindow.add(button);
-		_welcomeWindow.add(label);
+		new WelcomeWindow(_titleImageTexture);
 
 		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 - 25, 200, 170));
 		_panel.add(_button_startGame);
