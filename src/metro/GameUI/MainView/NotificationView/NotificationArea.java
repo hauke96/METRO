@@ -48,6 +48,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
 			_width - 5,
 			_height - METRO.__titleBarHeight + _headerHeight));
+		_panel.setDrawBorder(true, METRO.__metroBlue);
 
 		_entryList = new List(new Rectangle(0,
 			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
@@ -82,7 +83,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 		_width = newWidth;
 
 		Rectangle oldPanelArea = (Rectangle)_panel.getArea().clone();
-		oldPanelArea.setSize(oldPanelArea.height, _width - 5);
+		oldPanelArea.setSize(_width - 5, oldPanelArea.height);
 		_panel.setArea(oldPanelArea);
 		
 		_entryList.setArea(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight));
@@ -103,7 +104,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 
 		Draw.setColor(METRO.__metroBlue);
 		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height, _width, METRO.__SCREEN_SIZE.height - _height);
-		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width, METRO.__SCREEN_SIZE.height - _height + _headerHeight);
+//		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width, METRO.__SCREEN_SIZE.height - _height + _headerHeight);
 
 		int length = Draw.getStringSize("Notifications:").width;
 		Draw.setColor(METRO.__metroRed);
