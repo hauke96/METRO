@@ -151,7 +151,7 @@ public abstract class GameScreen extends GameScreenSwitchedObservable
 	 */
 	public void close()
 	{
-		METRO.__debug("[GameScreen]\nClosed game screen " + this);
+		METRO.__debug("Closed game screen " + this);
 		METRO.__debug("Amount observer: " + countObservers());
 		deleteObservers();
 	}
@@ -329,7 +329,7 @@ public abstract class GameScreen extends GameScreenSwitchedObservable
 				{
 					if(entry != null && !Boolean.parseBoolean(_settings.get("fullscreen.on").toString())) // ... and fullscreen-mode is off
 					{
-						METRO.__debug("[ResolutionChanged]\n" +
+						METRO.__debug("" +
 							"Old res.: " + _settings.get("screen.width") + "x" + _settings.get("screen.height")
 							+ " -- " +
 							"New res.: " + _resolutionList.getText());

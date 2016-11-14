@@ -76,7 +76,6 @@ public class TrainTemplate extends Observable
 	 */
 	private void loadTitleTextures()
 	{
-		METRO.__debug("[LoadingTrainImage]");
 		try
 		{
 			TextureRegion texture = new TextureRegion(new Texture(Gdx.files.internal("textures/Trains_" + _modelName + ".png")));
@@ -97,7 +96,7 @@ public class TrainTemplate extends Observable
 	 */
 	private void loadModelTextures()
 	{
-		METRO.__debug("[LoadingTrainTitleImage]");
+		METRO.__debug("Loading train title image");
 		try
 		{
 			FileHandle handle = Gdx.files.internal("textures/Trains_" + _modelName + "_big.png");

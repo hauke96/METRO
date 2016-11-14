@@ -109,7 +109,10 @@ public class MainMenu extends GameScreen
 	protected void exitGameScreen(MainView mainView)
 	{
 		_panel.close();
-		_welcomeWindow.close();
+		if(_welcomeWindow != null)
+		{
+			_welcomeWindow.close();
+		}
 		switchToGameScreen(mainView);
 	}
 

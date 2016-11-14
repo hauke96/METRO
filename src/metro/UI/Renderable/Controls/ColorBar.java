@@ -87,8 +87,10 @@ public class ColorBar extends ControlElement
 		int hue = getHue(color.getRed(), color.getGreen(), color.getBlue());
 		_clickedColor = Color.getHSBColor(hue / 360f, _saturation, _brightness);
 		_clickedXPosition = getHue(_clickedColor.getRed(), _clickedColor.getGreen(), _clickedColor.getBlue());
-		METRO.__debug("[ColorBarValueSet]");
-		METRO.__debug(_area.width + " - " + getHue(_clickedColor.getRed(), _clickedColor.getGreen(), _clickedColor.getBlue()) + " - " + _clickedXPosition);
+		METRO.__debug("Set color bar value:\n"
+			+ _area.width + " - "
+			+ getHue(_clickedColor.getRed(), _clickedColor.getGreen(), _clickedColor.getBlue()) + " - "
+			+ _clickedXPosition);
 	}
 
 	/**

@@ -71,9 +71,8 @@ public class LineSelectTool extends GameScreen
 	{
 		if(TrainManagementService.getInstance().isLineColorUsed(newColor))
 		{
-			METRO.__debug("[DuplicateColorFound]");
-			METRO.__debug("Old color is " + _color);
-			METRO.__debug("New color is " + newColor.toString());
+			METRO.__debug("Old color is " + _color+"\n"
+				+ "New color is " + newColor.toString());
 			return "No duplicate colors allowed!";
 		}
 
@@ -137,7 +136,6 @@ public class LineSelectTool extends GameScreen
 	 */
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
-		METRO.__debug("[ClickOnNode]");
 		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(_playingField.getSelectedNode());
 		METRO.__debug("node is " + clickedNode);
 		if(clickedNode == null) return;

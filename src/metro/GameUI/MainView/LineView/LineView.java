@@ -171,7 +171,7 @@ public class LineView extends GameScreen implements Observer
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				METRO.__debug("[TrainLineEditButtonClicked]\n"
+				METRO.__debug(""
 					+ "Clicked line (index): " + _lineList.getSelected() + "\n"
 					+ "Clicked line  (name): " + _lineList.getText());
 				if(_lineList.getSelected() == -1) return;
@@ -187,7 +187,7 @@ public class LineView extends GameScreen implements Observer
 				catch(CloneNotSupportedException e)
 				{
 					_messageLabel.setText("Can't clone the old line :/");
-					METRO.__debug("[TrainLineCloningFailed]\nCan't clone the old line :/");
+					METRO.__debug("Can't clone the old line :/");
 					return;
 				}
 
@@ -263,7 +263,7 @@ public class LineView extends GameScreen implements Observer
 				{
 					NotificationServer.publishNotification("You have not enough money to modify the line. It costs 5000$.", NotificationType.GAME_ERROR);
 					_messageLabel.setText("Not enough money. This action costs 5000$!");
-					METRO.__debug("[ChangeLineFailed]\nThere's not enough money to change the line.\n" + e.getMessage());
+					METRO.__debug("There's not enough money to change the line.\n" + e.getMessage());
 				}
 
 				if(!_lineSelectToolEnabled) return;
@@ -281,7 +281,6 @@ public class LineView extends GameScreen implements Observer
 				{
 					TrainLine line = _lineSelectTool.getTrainLine();
 
-					METRO.__debug("[StartFinishEditLine]");
 					METRO.__debug("Amount of lines (pre)  : " + _trainManagementService.getLines().size());
 
 					if(_oldLine != null)
@@ -501,7 +500,7 @@ public class LineView extends GameScreen implements Observer
 		// when the mouse is out of TrainLineView, get the new line from the select tool and add it to the overseer
 		if(screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
 		{
-			METRO.__debug("[AddLineToOverseer]");
+			METRO.__debug("Add line to observer");
 			TrainLine line = _lineSelectTool.getTrainLine();
 			_trainManagementService.addLine(line); // this will only change something when line is valid
 		}

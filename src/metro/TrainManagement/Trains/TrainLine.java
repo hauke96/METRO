@@ -61,8 +61,7 @@ public class TrainLine implements Cloneable
 		_length = calcLength();
 		_nodeDistances = new double[_listOfNodes.size()];
 
-		METRO.__debug("[CalcTrainLineLength]");
-		METRO.__debug("Length: " + _length);
+		METRO.__debug("Calculate line length: " + _length);
 
 		preprocessNodeDistances();
 	}
@@ -89,7 +88,7 @@ public class TrainLine implements Cloneable
 	{
 		if(list.size() <= 1 || startNode == null) return list;
 
-		METRO.__debug("[TrainLineSorting]\n"
+		METRO.__debug(""
 			+ "Start Node: " + startNode.getPosition() + "\n"
 			+ "Line length (amount of nodes): " + list.size());
 

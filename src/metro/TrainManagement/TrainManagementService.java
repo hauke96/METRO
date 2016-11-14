@@ -65,11 +65,11 @@ public class TrainManagementService implements Observer
 		}
 		catch(IOException e)
 		{
-			METRO.__debug("[TrainReadError]\nCan't read train.txt due to an error: " + e.getMessage());
+			METRO.__debug("Can't read train.txt due to an error: " + e.getMessage());
 		}
 		catch(IllegalArgumentException e)
 		{
-			METRO.__debug("[TrainFileSyntaxError]\n" + e.getMessage());
+			METRO.__debug("" + e.getMessage());
 		}
 
 		_travelerSpotList.add(new TravelerSpot(new Point(15, 10), 5));
@@ -153,7 +153,7 @@ public class TrainManagementService implements Observer
 					&& !passenger.equals("")
 					&& !speed.equals(""))
 				{
-					METRO.__debug("[SuccesfullTrainRead]\n" +
+					METRO.__debug("" +
 						name + "\n" +
 						manufacturer + "\n" +
 						Integer.parseInt(price) + "\n" +
@@ -214,7 +214,7 @@ public class TrainManagementService implements Observer
 		catch(NotEnoughMoneyException e)
 		{
 			NotificationServer.publishNotification("You have not enough money to buy a train of " + train.getModelName(), NotificationType.GAME_ERROR);
-			METRO.__debug("[AddingTrainFailed]\nThere's not enough money to add a " + train.getModelName() + " train.\n" + e.getMessage());
+			METRO.__debug("There's not enough money to add a " + train.getModelName() + " train.\n" + e.getMessage());
 		}
 	}
 
@@ -410,7 +410,7 @@ public class TrainManagementService implements Observer
 		catch(NotEnoughMoneyException e)
 		{
 			NotificationServer.publishNotification("You have not enough money for a station.", NotificationType.GAME_ERROR);
-			METRO.__debug("[StationAddingFailed]\n" + e.getMessage());
+			METRO.__debug("" + e.getMessage());
 		}
 	}
 
