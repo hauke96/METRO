@@ -9,7 +9,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import metro.METRO;
-import metro.Graphics.Draw;
+import metro.Common.Graphics.Draw;
 import metro.UI.Renderable.ControlElement;
 
 /**

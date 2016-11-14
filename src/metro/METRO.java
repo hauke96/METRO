@@ -64,10 +64,10 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import metro.Common.Game.GameState;
 import metro.Common.Game.Settings;
+import metro.Common.Graphics.Draw;
+import metro.Common.Graphics.Fill;
 import metro.GameUI.MainMenu.MainMenu;
 import metro.GameUI.Screen.CurrentGameScreenManager;
-import metro.Graphics.Draw;
-import metro.Graphics.Fill;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Controls.InputField;
 import metro.UI.Renderer.BasicContainerRenderer;

@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
-import metro.Graphics.Draw;
-import metro.Graphics.Fill;
+import metro.Common.Graphics.Draw;
+import metro.Common.Graphics.Fill;
 
 /**
  * A traveler spot is a center where many people/traveler are. This will effect its environment so there are areas around it with a higher amount of traveler.

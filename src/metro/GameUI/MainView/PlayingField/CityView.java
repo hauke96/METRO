@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
+import metro.Common.Graphics.Draw;
 import metro.GameUI.Screen.GameScreen;
-import metro.Graphics.Draw;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TravelerSpot;
 

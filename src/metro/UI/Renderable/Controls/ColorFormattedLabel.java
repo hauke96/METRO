@@ -8,8 +8,8 @@ import java.util.Map;
 import java.util.Set;
 
 import metro.METRO;
+import metro.Common.Graphics.Draw;
 import metro.Common.Technical.Contract;
-import metro.Graphics.Draw;
 
 /**
  * A {@code ColorFormattedLabel} is a label which can display text with multiple colors specified by a color string.

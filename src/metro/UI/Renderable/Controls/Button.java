@@ -10,7 +10,7 @@ import java.awt.Rectangle;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import metro.METRO;
-import metro.Graphics.Draw;
+import metro.Common.Graphics.Draw;
 import metro.UI.Renderable.ControlElement;
 
 /**

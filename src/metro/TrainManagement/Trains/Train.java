@@ -8,8 +8,8 @@ import java.awt.geom.Point2D;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.Common.Game.GameState;
-import metro.Graphics.Draw;
-import metro.Graphics.Fill;
+import metro.Common.Graphics.Draw;
+import metro.Common.Graphics.Fill;
 
 /**
  * A Train can carry passengers, costs a bit to buy and maintain it.

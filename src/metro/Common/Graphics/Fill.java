@@ -1,4 +1,4 @@
-package metro.Graphics;
+package metro.Common.Graphics;
 
 import com.badlogic.gdx.Gdx;
 import java.awt.Color;

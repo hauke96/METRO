@@ -8,11 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
+import metro.Common.Graphics.Draw;
+import metro.Common.Graphics.Fill;
 import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.TrainView.TrainView;
 import metro.GameUI.Screen.GameScreen;
-import metro.Graphics.Draw;
-import metro.Graphics.Fill;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.Button;

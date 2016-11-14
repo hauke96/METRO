@@ -8,12 +8,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
+import metro.Common.Graphics.Draw;
 import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameUI.MainView.NotificationView.NotificationServer;
 import metro.GameUI.MainView.NotificationView.NotificationType;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.Screen.GameScreen;
-import metro.Graphics.Draw;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 

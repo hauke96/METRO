@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
+import metro.Common.Graphics.Draw;
+import metro.Common.Graphics.Fill;
 import metro.GameUI.Screen.GameScreen;
-import metro.Graphics.Draw;
-import metro.Graphics.Fill;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.List;
 

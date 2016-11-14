@@ -7,8 +7,8 @@ import java.awt.Rectangle;
 import com.badlogic.gdx.Input.Buttons;
 
 import metro.METRO;
-import metro.Graphics.Draw;
-import metro.Graphics.Fill;
+import metro.Common.Graphics.Draw;
+import metro.Common.Graphics.Fill;
 import metro.UI.Renderable.ControlElement;
 
 /**

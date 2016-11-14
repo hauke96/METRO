@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Game.Settings;
-import metro.Graphics.Draw;
+import metro.Common.Graphics.Draw;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.CloseObservable;
 import metro.UI.Renderable.Container.Window;

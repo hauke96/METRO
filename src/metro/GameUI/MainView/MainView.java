@@ -9,12 +9,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
+import metro.Common.Graphics.Draw;
 import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.MainView.TrainView.TrainView;
 import metro.GameUI.Screen.GameScreen;
-import metro.Graphics.Draw;
 
 /**
  * The main view is the normal screen the player sees.

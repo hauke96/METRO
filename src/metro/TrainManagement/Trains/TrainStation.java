@@ -7,8 +7,8 @@ import java.util.Random;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.Common.Game.GameState;
-import metro.Graphics.Draw;
-import metro.Graphics.Fill;
+import metro.Common.Graphics.Draw;
+import metro.Common.Graphics.Fill;
 
 /**
  * A train station with the amount of waiting passengers and a list of connected stations. This class also manages the drawing stuff.

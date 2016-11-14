@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import metro.METRO;
+import metro.Common.Graphics.Draw;
 import metro.GameUI.MainView.MainView;
 import metro.GameUI.Screen.GameScreen;
-import metro.Graphics.Draw;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Container.Window;

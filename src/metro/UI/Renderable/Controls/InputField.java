@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 
 import metro.METRO;
-import metro.Graphics.Draw;
-import metro.Graphics.Fill;
+import metro.Common.Graphics.Draw;
+import metro.Common.Graphics.Fill;
 import metro.UI.Renderable.ControlElement;
 
 /**
