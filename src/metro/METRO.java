@@ -66,6 +66,7 @@ import metro.Common.Game.GameState;
 import metro.Common.Game.Settings;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
+import metro.Common.Technical.Logger;
 import metro.GameUI.MainMenu.MainMenu;
 import metro.GameUI.Screen.CurrentGameScreenManager;
 import metro.UI.Renderable.ActionObserver;
@@ -167,7 +168,7 @@ public class METRO implements ApplicationListener, InputProcessor
 				// try to rename settings.cfg
 				if(!file.renameTo(new File("./settings.backup." + formattedDate + ".cfg")))
 				{
-					METRO.__debug("No backup of settings.cfg has been created.\n");
+					Logger.__debug("No backup of settings.cfg has been created.\n");
 				}
 
 				System.err
@@ -295,7 +296,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		}
 		catch(GdxRuntimeException ex)
 		{
-			METRO.__debug("" + ex.getMessage());
+			Logger.__debug("" + ex.getMessage());
 		}
 	}
 
@@ -572,55 +573,6 @@ public class METRO implements ApplicationListener, InputProcessor
 	public static void __setSelectedInput(InputField field)
 	{
 		__currentGameScreenManager.setSelectedInput(field);
-	}
-
-	/**
-	 * Prints a debug message into the console but only if the debug mode is on.
-	 * 
-	 * @param message The message to print.
-	 */
-	public static void __debug(String message)
-	{
-		__debug(message, 3);
-	}
-
-	/**
-	 * Prints a debug message into the console but only if the debug mode is on.
-	 * 
-	 * @param message The message to print.
-	 * @param stackCounter The counter for the stack trace to print the right line number (and not something like {@code metro.METRO.__debug(METRO.java:650)} :/
-	 */
-	public static void __debug(String wholeMessage, int stackCounter)
-	{
-		if(__debug && wholeMessage.length() > 0)
-		{
-//			if(message.contains("\n"))
-//			{
-				String[] splittedMessages = wholeMessage.split("\\n");
-				
-				DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-				// get current time with Date()
-				Date date = new Date();
-
-				System.out.println("\n" + dateFormat.format(date) + " " + Thread.currentThread().getStackTrace()[stackCounter]);
-				
-				for(String message : splittedMessages)
-				{
-//					__debug(s, stackCounter + 1);
-//				}
-//			}
-//			else
-//			{
-//				if(message.charAt(0) == '[')
-//				{
-//				}
-//				else
-//				{
-					message = "         " + message;
-//				}
-				System.out.println(message);
-			}
-		}
 	}
 
 	/**

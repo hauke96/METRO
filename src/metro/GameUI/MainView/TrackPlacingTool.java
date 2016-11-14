@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
+import metro.Common.Technical.Logger;
 import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameUI.MainView.NotificationView.NotificationServer;
 import metro.GameUI.MainView.NotificationView.NotificationType;
@@ -217,7 +218,7 @@ public class TrackPlacingTool extends GameScreen
 			catch(NotEnoughMoneyException e)
 			{
 				NotificationServer.publishNotification("You have not enough money to build these tracks.", NotificationType.GAME_ERROR);
-				METRO.__debug("The creation of tracks failes due to too less money on the players account.\n" + e.getMessage());
+				Logger.__debug("The creation of tracks failes due to too less money on the players account.\n" + e.getMessage());
 			}
 			_currentRailwayNode = null;
 		}

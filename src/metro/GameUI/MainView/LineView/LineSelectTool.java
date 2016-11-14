@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
+import metro.Common.Technical.Logger;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.Screen.GameScreen;
 import metro.TrainManagement.TrainManagementService;
@@ -71,7 +72,7 @@ public class LineSelectTool extends GameScreen
 	{
 		if(TrainManagementService.getInstance().isLineColorUsed(newColor))
 		{
-			METRO.__debug("Old color is " + _color+"\n"
+			Logger.__debug("Old color is " + _color+"\n"
 				+ "New color is " + newColor.toString());
 			return "No duplicate colors allowed!";
 		}
@@ -137,16 +138,16 @@ public class LineSelectTool extends GameScreen
 	public void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(_playingField.getSelectedNode());
-		METRO.__debug("node is " + clickedNode);
+		Logger.__debug("node is " + clickedNode);
 		if(clickedNode == null) return;
 		if(_listOfNodes.contains(clickedNode))
 		{
-			METRO.__debug("Removed node " + clickedNode.getPosition());
+			Logger.__debug("Removed node " + clickedNode.getPosition());
 			_listOfNodes.remove(clickedNode);
 		}
 		else
 		{
-			METRO.__debug("Added node " + clickedNode.getPosition());
+			Logger.__debug("Added node " + clickedNode.getPosition());
 			_listOfNodes.add(clickedNode);
 		}
 	}

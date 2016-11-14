@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import metro.METRO;
+import metro.Common.Technical.Logger;
 
 /**
  * A train template is a final train. There are also less available properties e.g. has a train template no line and no current passengers.
@@ -83,11 +83,11 @@ public class TrainTemplate extends Observable
 			texture.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			_textures.put(_modelName, texture);
 
-			METRO.__debug("Succesfully loaded image for train " + _modelName + ".");
+			Logger.__debug("Succesfully loaded image for train " + _modelName + ".");
 		}
 		catch(GdxRuntimeException ex)
 		{
-			METRO.__debug("ERROR: " + ex.getMessage());
+			Logger.__debug("ERROR: " + ex.getMessage());
 		}
 	}
 
@@ -96,7 +96,7 @@ public class TrainTemplate extends Observable
 	 */
 	private void loadModelTextures()
 	{
-		METRO.__debug("Loading train title image");
+		Logger.__debug("Loading train title image");
 		try
 		{
 			FileHandle handle = Gdx.files.internal("textures/Trains_" + _modelName + "_big.png");
@@ -106,11 +106,11 @@ public class TrainTemplate extends Observable
 			textureRegion.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			_titleTextures.put(_modelName, textureRegion);
 
-			METRO.__debug("Succesfully loaded title image for train " + _modelName + ".");
+			Logger.__debug("Succesfully loaded title image for train " + _modelName + ".");
 		}
 		catch(GdxRuntimeException ex)
 		{
-			METRO.__debug("ERROR: " + ex.getMessage());
+			Logger.__debug("ERROR: " + ex.getMessage());
 		}
 	}
 

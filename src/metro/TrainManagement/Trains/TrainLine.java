@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import metro.METRO;
+import metro.Common.Technical.Logger;
 import metro.TrainManagement.Nodes.RailwayNode;
 
 /**
@@ -61,7 +61,7 @@ public class TrainLine implements Cloneable
 		_length = calcLength();
 		_nodeDistances = new double[_listOfNodes.size()];
 
-		METRO.__debug("Calculate line length: " + _length);
+		Logger.__debug("Calculate line length: " + _length);
 
 		preprocessNodeDistances();
 	}
@@ -88,7 +88,7 @@ public class TrainLine implements Cloneable
 	{
 		if(list.size() <= 1 || startNode == null) return list;
 
-		METRO.__debug(""
+		Logger.__debug(""
 			+ "Start Node: " + startNode.getPosition() + "\n"
 			+ "Line length (amount of nodes): " + list.size());
 
@@ -113,13 +113,13 @@ public class TrainLine implements Cloneable
 
 			if(neighbor != null)
 			{
-				METRO.__debug(newList.get(i).getPosition() + "  ==>  " + neighbor.getPosition());
+				Logger.__debug(newList.get(i).getPosition() + "  ==>  " + neighbor.getPosition());
 				newList.add(neighbor);
 				list.remove(neighbor);
 			}
 			else
 			{
-				METRO.__debug("No Neighbor found, try other start node ...");
+				Logger.__debug("No Neighbor found, try other start node ...");
 				/*
 				 * When there's no neighbor, choose another start node and try to sort this branch.
 				 * This also means that this line is invalid!
