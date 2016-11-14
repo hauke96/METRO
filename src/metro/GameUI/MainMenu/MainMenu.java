@@ -1,6 +1,5 @@
 package metro.GameUI.MainMenu;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -17,8 +16,6 @@ import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Container.Window;
 import metro.UI.Renderable.Controls.Button;
-import metro.UI.Renderable.Controls.ColorFormattedLabel;
-import metro.UI.Renderable.Controls.Label;
 
 /**
  * The main menu is the first menu you'll see after starting the game. It provides some basic options like start, exit and settings.
@@ -32,7 +29,7 @@ public class MainMenu extends GameScreen
 	private Button _button_startGame,
 		_button_settings,
 		_button_exitGame;
-	private Window _welcomeWindow; // TODO extract window into seperate class
+	private Window _welcomeWindow;
 	private static TextureRegion __buttonTextures,
 		_titleImageTexture;
 	private Panel _panel;
@@ -57,7 +54,7 @@ public class MainMenu extends GameScreen
 		addActionObservations();
 
 		// Create welcome-window:
-		new WelcomeWindow(_titleImageTexture);
+		_welcomeWindow = new WelcomeWindow(_titleImageTexture);
 
 		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 - 25, 200, 170));
 		_panel.add(_button_startGame);
@@ -101,7 +98,7 @@ public class MainMenu extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				exitGameScreen(new MainView());
-//				METRO.__changeGameScreen(new MainView());
+				// METRO.__changeGameScreen(new MainView());
 			}
 		});
 	}

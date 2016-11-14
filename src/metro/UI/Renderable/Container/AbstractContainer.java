@@ -47,7 +47,6 @@ public abstract class AbstractContainer extends CloseObservable
 	 * 
 	 * @param newContainerRegistrationService The new {@link #_containerRegistrationService} for this container.
 	 */
-	@SuppressWarnings("javadoc")
 	public static void setContainerRegistrationService(ContainerRegistrationService newContainerRegistrationService)
 	{
 		_containerRegistrationService = newContainerRegistrationService;

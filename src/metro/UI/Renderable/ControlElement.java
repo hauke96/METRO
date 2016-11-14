@@ -32,7 +32,6 @@ public abstract class ControlElement extends ActionObservable
 	/**
 	 * Calls the {@link #draw()} method when the control is visible.
 	 */
-	@SuppressWarnings("javadoc")
 	public void drawControl()
 	{
 		if(_visible)

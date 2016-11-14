@@ -76,7 +76,7 @@ public class Panel extends StaticContainer
 
 		if(_drawBorder)
 		{
-			Draw.setColor(METRO.__metroBlue);
+			Draw.setColor(_borderColor);
 			Draw.Rect(_area.x, _area.y, _area.width + 1, _area.height + 1);
 		}
 
