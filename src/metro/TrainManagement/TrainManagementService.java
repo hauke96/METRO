@@ -66,11 +66,11 @@ public class TrainManagementService implements Observer
 		}
 		catch(IOException e)
 		{
-			Logger.__debug("Can't read train.txt due to an error: " + e.getMessage());
+			Logger.__fatal("Can't read train.txt due to an error: ", e);
 		}
 		catch(IllegalArgumentException e)
 		{
-			Logger.__debug("" + e.getMessage());
+			Logger.__fatal("", e);
 		}
 
 		_travelerSpotList.add(new TravelerSpot(new Point(15, 10), 5));
@@ -106,6 +106,7 @@ public class TrainManagementService implements Observer
 			{
 				String[] lineSplit = line.split(":");
 				if(lineSplit.length > 2) throw new IllegalArgumentException("Each property must contain exactly one \":\" symbol!");
+				//TODO simplify this whole method!
 				switch(lineSplit[0])
 				{
 					case "NAME":
@@ -154,14 +155,14 @@ public class TrainManagementService implements Observer
 					&& !passenger.equals("")
 					&& !speed.equals(""))
 				{
-					Logger.__debug("" +
-						name + "\n" +
-						manufacturer + "\n" +
-						Integer.parseInt(price) + "\n" +
-						Integer.parseInt(costs) + "\n" +
-						Float.parseFloat(costsfactor) + "\n" +
-						Integer.parseInt(passenger) + "\n" +
-						Float.parseFloat(speed));
+					Logger.__debug(
+						"Name: " + name + "\n" +
+						"Manufacturer: " + manufacturer + "\n" +
+						"Price: " + Integer.parseInt(price) + "\n" +
+						"Costs: " + Integer.parseInt(costs) + "\n" +
+						"CostFactor: " + Float.parseFloat(costsfactor) + "\n" +
+						"Passenger: " + Integer.parseInt(passenger) + "\n" +
+						"Speed: " + Float.parseFloat(speed));
 					addTemplateTrain(new TrainTemplate(name,
 						name,
 						manufacturer,
@@ -215,7 +216,7 @@ public class TrainManagementService implements Observer
 		catch(NotEnoughMoneyException e)
 		{
 			NotificationServer.publishNotification("You have not enough money to buy a train of " + train.getModelName(), NotificationType.GAME_ERROR);
-			Logger.__debug("There's not enough money to add a " + train.getModelName() + " train.\n" + e.getMessage());
+			Logger.__info("There's not enough money to add a " + train.getModelName() + " train.\n" + e.getMessage());
 		}
 	}
 
@@ -411,7 +412,7 @@ public class TrainManagementService implements Observer
 		catch(NotEnoughMoneyException e)
 		{
 			NotificationServer.publishNotification("You have not enough money for a station.", NotificationType.GAME_ERROR);
-			Logger.__debug("" + e.getMessage());
+			Logger.__info("Not enough Money to buy station.\n" + e.getMessage());
 		}
 	}
 

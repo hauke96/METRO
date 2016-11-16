@@ -218,7 +218,7 @@ public class TrackPlacingTool extends GameScreen
 			catch(NotEnoughMoneyException e)
 			{
 				NotificationServer.publishNotification("You have not enough money to build these tracks.", NotificationType.GAME_ERROR);
-				Logger.__debug("The creation of tracks failes due to too less money on the players account.\n" + e.getMessage());
+				Logger.__info("The creation of tracks failes due to too less money on the players account.\n" + e.getMessage());
 			}
 			_currentRailwayNode = null;
 		}

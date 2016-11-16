@@ -180,7 +180,6 @@ public class LineView extends GameScreen implements Observer
 				TrainLine line = _trainManagementService.getLine(_lineList.getText());
 				Color color = line.getColor();
 
-				// _oldLine = new TrainLine(_oldLine.getNodes(), _oldLine.getName(), _oldLine.getColor());
 				try
 				{
 					_oldLine = (TrainLine)line.clone();
@@ -188,7 +187,7 @@ public class LineView extends GameScreen implements Observer
 				catch(CloneNotSupportedException e)
 				{
 					_messageLabel.setText("Can't clone the old line :/");
-					Logger.__debug("Can't clone the old line :/");
+					Logger.__fatal("Can't clone the old line :/", e);
 					return;
 				}
 
@@ -264,7 +263,7 @@ public class LineView extends GameScreen implements Observer
 				{
 					NotificationServer.publishNotification("You have not enough money to modify the line. It costs 5000$.", NotificationType.GAME_ERROR);
 					_messageLabel.setText("Not enough money. This action costs 5000$!");
-					Logger.__debug("There's not enough money to change the line.\n" + e.getMessage());
+					Logger.__info("There's not enough money to change the line.\n" + e.getMessage());
 				}
 
 				if(!_lineSelectToolEnabled) return;

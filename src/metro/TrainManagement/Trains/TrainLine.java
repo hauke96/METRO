@@ -88,9 +88,9 @@ public class TrainLine implements Cloneable
 	{
 		if(list.size() <= 1 || startNode == null) return list;
 
-		Logger.__debug(""
-			+ "Start Node: " + startNode.getPosition() + "\n"
-			+ "Line length (amount of nodes): " + list.size());
+		Logger.__debug(
+			"Start Node: " + startNode.getPosition() + "\n"+
+			"Line length (amount of nodes): " + list.size());
 
 		ArrayList<RailwayNode> newList = new ArrayList<>();
 		// be sure that an end node is the first element in this list

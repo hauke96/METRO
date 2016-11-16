@@ -2,6 +2,7 @@ package metro.GameUI.Screen;
 
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.text.MessageFormat;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -330,10 +331,11 @@ public abstract class GameScreen extends GameScreenSwitchedObservable
 				{
 					if(entry != null && !Boolean.parseBoolean(_settings.get("fullscreen.on").toString())) // ... and fullscreen-mode is off
 					{
-						Logger.__debug("" +
-							"Old res.: " + _settings.get("screen.width") + "x" + _settings.get("screen.height")
-							+ " -- " +
-							"New res.: " + _resolutionList.getText());
+						Logger.__debug(MessageFormat.format("Old res.: {0}x{1} -- New res.: {2}",
+							_settings.get("screen.width"),
+							_settings.get("screen.height"),
+							_resolutionList.getText()));
+
 						String splitted[] = entry.split("x");
 						if(splitted.length == 2)
 						{

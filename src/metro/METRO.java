@@ -9,8 +9,8 @@ package metro;
  * 
  * final: _WITH_BIG_NAME
  * normal instance variables: _someCoolVariable
- * static instance variables: __evenCoolerVariable
- * final instance variables: __FINAL_VARIABLE
+ * static variables: __evenCoolerVariable
+ * final (instance) variables: __FINAL_VARIABLE
  * local stuff: chooseAnyName
  * 
  * Variable are written in camel-case, meaning they begin with lower case and having upper case letter for every sub-word
@@ -125,6 +125,8 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void setSettings()
 	{
+		Logger.__separatingEmptyLine = true;
+
 		Settings settings = Settings.getInstance();
 
 		settings.read();
@@ -165,7 +167,7 @@ public class METRO implements ApplicationListener, InputProcessor
 				// try to rename settings.cfg
 				if(!file.renameTo(new File("./settings.backup." + formattedDate + ".cfg")))
 				{
-					Logger.__debug("No backup of settings.cfg has been created.\n");
+					Logger.__error("No backup of settings.cfg has been created.");
 				}
 
 				System.err
@@ -293,7 +295,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		}
 		catch(GdxRuntimeException ex)
 		{
-			Logger.__debug("" + ex.getMessage());
+			Logger.__fatal("", ex);
 		}
 	}
 

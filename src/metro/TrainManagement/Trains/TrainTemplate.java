@@ -83,11 +83,11 @@ public class TrainTemplate extends Observable
 			texture.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			_textures.put(_modelName, texture);
 
-			Logger.__debug("Succesfully loaded image for train " + _modelName + ".");
+			Logger.__info("Succesfully loaded image for train " + _modelName + ".");
 		}
 		catch(GdxRuntimeException ex)
 		{
-			Logger.__debug("ERROR: " + ex.getMessage());
+			Logger.__error("Error while loading trains title image!", ex);
 		}
 	}
 
@@ -96,7 +96,7 @@ public class TrainTemplate extends Observable
 	 */
 	private void loadModelTextures()
 	{
-		Logger.__debug("Loading train title image");
+		Logger.__info("Loading train title image");
 		try
 		{
 			FileHandle handle = Gdx.files.internal("textures/Trains_" + _modelName + "_big.png");
@@ -106,11 +106,11 @@ public class TrainTemplate extends Observable
 			textureRegion.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			_titleTextures.put(_modelName, textureRegion);
 
-			Logger.__debug("Succesfully loaded title image for train " + _modelName + ".");
+			Logger.__info("Succesfully loaded title image for train " + _modelName + ".");
 		}
 		catch(GdxRuntimeException ex)
 		{
-			Logger.__debug("ERROR: " + ex.getMessage());
+			Logger.__error("Error while loading title image!", ex);
 		}
 	}
 
