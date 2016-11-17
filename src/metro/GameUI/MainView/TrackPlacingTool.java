@@ -35,7 +35,6 @@ public class TrackPlacingTool extends GameScreen
 	 */
 	public TrackPlacingTool()
 	{
-		_isActive = true;
 		_playingField = PlayingField.getInstance();
 	}
 

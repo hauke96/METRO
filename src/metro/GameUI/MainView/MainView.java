@@ -49,7 +49,7 @@ public class MainView extends GameScreen implements Observer
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		_playingField.setCityCircleHighlighting(_activeTool == null || !_activeTool.isHovered());
+		_playingField.setCityCircleHighlighting(_activeTool != null && _activeTool.isHovered());
 		_playingField.updateGameScreen(sp);
 
 		_notificationArea.updateGameScreen(sp);
@@ -84,16 +84,16 @@ public class MainView extends GameScreen implements Observer
 		_playingField.mouseClicked(screenX, screenY, mouseButton);
 		_notificationArea.mouseClicked(screenX, screenY, mouseButton);
 
-		if(mouseButton == Buttons.LEFT)
+		if(_activeTool != null)
 		{
-			if(_activeTool != null)
+			if(mouseButton == Buttons.LEFT)
 			{
 				_activeTool.mouseClicked(screenX, screenY, mouseButton);
 			}
-		}
-		else if(mouseButton == Buttons.RIGHT && _activeTool != null)
-		{
-			_activeTool.mouseClicked(screenX, screenY, mouseButton);
+			else if(mouseButton == Buttons.RIGHT)
+			{
+				_activeTool.mouseClicked(screenX, screenY, mouseButton);
+			}
 		}
 	}
 
@@ -119,6 +119,7 @@ public class MainView extends GameScreen implements Observer
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
+		// TODO refactor this into own anonymous classes
 		if(arg0.equals(_toolbar))
 		{
 			if(_activeTool != null) _activeTool.close();
@@ -151,6 +152,13 @@ public class MainView extends GameScreen implements Observer
 	 */
 	private void setActiveTool(GameScreen newTool)
 	{
+		// remove old observer
+		if(_activeTool != null)
+		{
+			_activeTool.deleteObservers();
+		}
+
+		// set new tool and add new observer
 		_activeTool = newTool;
 		_activeTool.addObserver(this);
 		if(_activeTool instanceof LineView || _activeTool instanceof TrainView) // tools that have own window and influence the notification area

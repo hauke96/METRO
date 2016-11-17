@@ -32,7 +32,6 @@ public class StationPlacingTool extends GameScreen
 	 */
 	public StationPlacingTool()
 	{
-		_isActive = true;
 		_playingField = PlayingField.getInstance();
 	}
 
@@ -64,6 +63,8 @@ public class StationPlacingTool extends GameScreen
 	private void leftClick(int screenX, int screenY, Point2D offset)
 	{
 		boolean positionOccupied = false;
+
+		// TODO maybe get the position from the playing field?
 		Point selectPointOnScreen = new Point(_playingField.getSelectedNode().x * GameState.getInstance().getBaseNetSpacing() + (int)offset.getX(),
 			_playingField.getSelectedNode().y * GameState.getInstance().getBaseNetSpacing() + (int)offset.getY());
 
