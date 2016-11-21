@@ -1,7 +1,6 @@
 package metro.UI.Renderable.Container;
 
 import java.awt.Point;
-import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observer;
@@ -21,7 +20,7 @@ import metro.UI.Renderable.ControlElement;
  * @author hauke
  *
  */
-public abstract class AbstractContainer extends CloseObservable implements Comparator<AbstractContainer>
+public abstract class AbstractContainer extends CloseObservable
 {
 	private static ContainerRegistrationService _containerRegistrationService;
 
@@ -58,13 +57,6 @@ public abstract class AbstractContainer extends CloseObservable implements Compa
 	{
 		_containerRegistrationService = newContainerRegistrationService;
 	}
-
-	/**
-	 * Registers the container in the renderer so that the renderer knows that kind of container this is. This is very important for the correct rendering and input processing of container.
-	 * 
-	 * @param registrationService The registration service which is able to register container in the renderer.
-	 */
-	protected abstract void registerContainerInRenderer(ContainerRegistrationService registrationService);
 
 	@Override
 	protected void draw()
@@ -103,14 +95,6 @@ public abstract class AbstractContainer extends CloseObservable implements Compa
 		generalNotifying((ControlElement control) -> control.keyUp(keyCode));
 	}
 
-	private void generalNotifying(Notifier notifyFunction)
-	{
-		for(ControlElement control : _listOfControlElements)
-		{
-			notifyFunction.notifyControlElements(control);
-		}
-	}
-
 	/**
 	 * Adds a control to the container which will display it and process input events.
 	 * 
@@ -143,31 +127,6 @@ public abstract class AbstractContainer extends CloseObservable implements Compa
 	}
 
 	/**
-	 * Adds an observer for the event that the "above of" property changed.
-	 * The observer will be notices when this happens.
-	 * 
-	 * @param observer The new observer.
-	 */
-	public void registerAboveChangedObserver(Observer observer)
-	{
-		Contract.RequireNotNull(_listOfAboveChangedObserver);
-
-		_listOfAboveChangedObserver.add(observer);
-	}
-
-	/**
-	 * Removes an observer for the "above of" property.
-	 * 
-	 * @param observer The observer to remove.
-	 */
-	public void removeAboveChangedObserver(Observer observer)
-	{
-		Contract.RequireNotNull(_listOfAboveChangedObserver);
-
-		_listOfAboveChangedObserver.remove(observer);
-	}
-
-	/**
 	 * Moves this control above the given one.
 	 * 
 	 * @param aboveContainer The container this is above of. When {@code null} is being passed, the current order will be removed.
@@ -180,9 +139,9 @@ public abstract class AbstractContainer extends CloseObservable implements Compa
 		{
 			throw new ContainerPositioningConflict();
 		}
-
+	
 		_aboveContainer = aboveContainer;
-
+	
 		notifyAboveOfChangedObserver();
 	}
 
@@ -203,6 +162,46 @@ public abstract class AbstractContainer extends CloseObservable implements Compa
 	public AbstractContainer getContainerBelow()
 	{
 		return _aboveContainer;
+	}
+
+	/**
+	 * Registers the container in the renderer so that the renderer knows that kind of container this is. This is very important for the correct rendering and input processing of container.
+	 * 
+	 * @param registrationService The registration service which is able to register container in the renderer.
+	 */
+	protected abstract void registerContainerInRenderer(ContainerRegistrationService registrationService);
+
+	/**
+	 * Adds an observer for the event that the "above of" property changed.
+	 * The observer will be notices when this happens.
+	 * 
+	 * @param observer The new observer.
+	 */
+	public void registerAboveChangedObserver(Observer observer)
+	{
+		Contract.RequireNotNull(_listOfAboveChangedObserver);
+	
+		_listOfAboveChangedObserver.add(observer);
+	}
+
+	/**
+	 * Removes an observer for the "above of" property.
+	 * 
+	 * @param observer The observer to remove.
+	 */
+	public void removeAboveChangedObserver(Observer observer)
+	{
+		Contract.RequireNotNull(_listOfAboveChangedObserver);
+	
+		_listOfAboveChangedObserver.remove(observer);
+	}
+
+	private void generalNotifying(Notifier notifyFunction)
+	{
+		for(ControlElement control : _listOfControlElements)
+		{
+			notifyFunction.notifyControlElements(control);
+		}
 	}
 
 	/**

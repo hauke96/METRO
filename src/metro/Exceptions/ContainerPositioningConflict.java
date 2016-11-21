@@ -1,5 +1,12 @@
 package metro.Exceptions;
 
+/**
+ * This exception indicates, that two container have a conflict in there "is below of" relation.
+ * That means that two containers are probably below each other which can't be.
+ * 
+ * @author hauke
+ *
+ */
 public class ContainerPositioningConflict extends RuntimeException
 {
 	/**
