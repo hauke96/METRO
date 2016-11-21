@@ -1,6 +1,6 @@
 package metro.Exceptions;
 
-public class ContainerPositioningConflict extends Exception
+public class ContainerPositioningConflict extends RuntimeException
 {
 	/**
 	 * ID needed for the serialization process.

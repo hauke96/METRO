@@ -173,7 +173,7 @@ public abstract class AbstractContainer extends CloseObservable implements Compa
 	 * @param aboveContainer The container this is above of. When {@code null} is being passed, the current order will be removed.
 	 * @throws ContainerPositioningConflict When the below-relation is in conflict with the one of another container (e.g. two container are below each other)
 	 */
-	public void setAboveOf(AbstractContainer aboveContainer) throws ContainerPositioningConflict
+	public void setAboveOf(AbstractContainer aboveContainer)
 	{
 		// error-case: Both container are below each other -> exception
 		if(aboveContainer != null && aboveContainer.isBelow(this) && isBelow(aboveContainer))
@@ -225,7 +225,7 @@ public abstract class AbstractContainer extends CloseObservable implements Compa
 	 * @return 1 when this is above, 0 if there's no relation between them and -1 when this is below the given container
 	 * @throws ContainerPositioningConflict
 	 */
-	public int compareTo(AbstractContainer container2) throws ContainerPositioningConflict
+	public int compareTo(AbstractContainer container2)
 	{
 		Contract.RequireNotNull(container2);
 
