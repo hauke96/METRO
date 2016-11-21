@@ -3,7 +3,9 @@ package metro.UI.Renderable.Container;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Observer;
 
+import metro.Common.Technical.Contract;
 import metro.Exceptions.UninitiatedClassException;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.CloseObservable;
@@ -27,6 +29,8 @@ public abstract class AbstractContainer extends CloseObservable
 	}
 
 	protected List<ControlElement> _listOfControlElements;
+	private List<Observer> _listOfAboveChangedObserver;
+	private AbstractContainer _aboveContainer;
 
 	/**
 	 * Creates a new container. Will throw an {@code UninitiatedClassException} when the registration service is not initiated via {@link #setContainerRegistrationService(ContainerRegistrationService)}.
@@ -39,6 +43,7 @@ public abstract class AbstractContainer extends CloseObservable
 		}
 
 		_listOfControlElements = new LinkedList<ControlElement>();
+		_listOfAboveChangedObserver = new LinkedList<>();
 		registerContainerInRenderer(_containerRegistrationService);
 	}
 
@@ -133,5 +138,54 @@ public abstract class AbstractContainer extends CloseObservable
 			element.moveElement(offset);
 		}
 		super.setPosition(pos);
+	}
+
+	/**
+	 * Adds an observer for the event that the "above of" property changed.
+	 * The observer will be notices when this happens.
+	 * 
+	 * @param observer The new observer.
+	 */
+	public void registerAboveChangedObserver(Observer observer)
+	{
+		Contract.RequireNotNull(_listOfAboveChangedObserver);
+
+		_listOfAboveChangedObserver.add(observer);
+	}
+
+	/**
+	 * Removes an observer for the "above of" property.
+	 * 
+	 * @param observer The observer to remove.
+	 */
+	public void removeAboveChangedObserver(Observer observer)
+	{
+		Contract.RequireNotNull(_listOfAboveChangedObserver);
+
+		_listOfAboveChangedObserver.remove(observer);
+	}
+
+	/**
+	 * Moves this control above the given one.
+	 * 
+	 * @param aboveContainer The container this is above of.
+	 */
+	public void setAboveOf(AbstractContainer aboveContainer)
+	{
+		_aboveContainer = aboveContainer;
+		notifyAboveOfChangedObserver();
+	}
+
+	/**
+	 * Notifies the registeres observers about the "above of" property changed.
+	 */
+	private void notifyAboveOfChangedObserver()
+	{
+		Contract.RequireNotNull(_listOfAboveChangedObserver);
+
+		for(Observer o : _listOfAboveChangedObserver)
+		{
+			o.notify();
+		}
 	}
 }
