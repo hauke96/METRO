@@ -1,5 +1,6 @@
 package metro.UI.Renderer;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -31,6 +32,8 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	{
 		void executeFunctions();
 	}
+	
+	private Comparator<AbstractContainer> _controlsOverComparator;
 
 	private List<AbstractContainer> _listOfFloatingContainer;
 	private List<AbstractContainer> _listOfStaticContainer;
@@ -42,6 +45,17 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	{
 		_listOfStaticContainer = new CopyOnWriteArrayList<AbstractContainer>();
 		_listOfFloatingContainer = new CopyOnWriteArrayList<AbstractContainer>();
+		
+		_controlsOverComparator = new Comparator<AbstractContainer>()
+		{
+
+			@Override
+			public int compare(AbstractContainer o1, AbstractContainer o2)
+			{
+				
+				return 0;
+			}
+		};
 
 		ContainerRegistrationService registrationService = new ContainerRegistrationService();
 		registrationService.setRenderer(this);

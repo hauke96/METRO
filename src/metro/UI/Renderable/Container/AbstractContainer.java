@@ -177,6 +177,14 @@ public abstract class AbstractContainer extends CloseObservable
 	}
 
 	/**
+	 * @return The container below this one.
+	 */
+	public AbstractContainer getContainerBelow()
+	{
+		return _aboveContainer;
+	}
+
+	/**
 	 * Notifies the registeres observers about the "above of" property changed.
 	 */
 	private void notifyAboveOfChangedObserver()
