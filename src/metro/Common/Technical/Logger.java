@@ -39,7 +39,7 @@ public class Logger
 	 */
 	public static void __debug(String debugMessage)
 	{
-		if(!__showDebug)return;
+		if(!__showDebug) return;
 		// The 3 will print the path to the line of code that calls __debug(String)
 		__printOutput(debugMessage, DEBUG, System.out, 3);
 	}
@@ -147,7 +147,7 @@ public class Logger
 					stream.println(line);
 				}
 			}
-			
+
 			if(__separatingEmptyLine)
 			{
 				System.out.println();

@@ -1,11 +1,13 @@
 package metro.UI.Renderable.Container;
 
 import java.awt.Point;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observer;
 
 import metro.Common.Technical.Contract;
+import metro.Exceptions.ContainerPositioningConflict;
 import metro.Exceptions.UninitiatedClassException;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.CloseObservable;
@@ -19,7 +21,7 @@ import metro.UI.Renderable.ControlElement;
  * @author hauke
  *
  */
-public abstract class AbstractContainer extends CloseObservable
+public abstract class AbstractContainer extends CloseObservable implements Comparator<AbstractContainer>
 {
 	private static ContainerRegistrationService _containerRegistrationService;
 
@@ -168,12 +170,31 @@ public abstract class AbstractContainer extends CloseObservable
 	/**
 	 * Moves this control above the given one.
 	 * 
-	 * @param aboveContainer The container this is above of.
+	 * @param aboveContainer The container this is above of. When {@code null} is being passed, the current order will be removed.
+	 * @throws ContainerPositioningConflict When the below-relation is in conflict with the one of another container (e.g. two container are below each other)
 	 */
-	public void setAboveOf(AbstractContainer aboveContainer)
+	public void setAboveOf(AbstractContainer aboveContainer) throws ContainerPositioningConflict
 	{
+		// error-case: Both container are below each other -> exception
+		if(aboveContainer != null && aboveContainer.isBelow(this) && isBelow(aboveContainer))
+		{
+			throw new ContainerPositioningConflict();
+		}
+
 		_aboveContainer = aboveContainer;
+
 		notifyAboveOfChangedObserver();
+	}
+
+	/**
+	 * Checks if the given container is below this one.
+	 * 
+	 * @param container A container to check.
+	 * @return True when the given container is below this one.
+	 */
+	public boolean isBelow(AbstractContainer container)
+	{
+		return _aboveContainer != null && _aboveContainer.equals(container);
 	}
 
 	/**
@@ -185,7 +206,7 @@ public abstract class AbstractContainer extends CloseObservable
 	}
 
 	/**
-	 * Notifies the registeres observers about the "above of" property changed.
+	 * Notifies the registers observers about the "above of" property changed.
 	 */
 	private void notifyAboveOfChangedObserver()
 	{
@@ -195,5 +216,69 @@ public abstract class AbstractContainer extends CloseObservable
 		{
 			o.notify();
 		}
+	}
+
+	/**
+	 * Checks if this container is above the given one.
+	 * 
+	 * @param container2 The container to compare to.
+	 * @return 1 when this is above, 0 if there's no relation between them and -1 when this is below the given container
+	 * @throws ContainerPositioningConflict
+	 */
+	public int compareTo(AbstractContainer container2) throws ContainerPositioningConflict
+	{
+		Contract.RequireNotNull(container2);
+
+		// TODO write test for this
+
+		// Just for better readings
+		AbstractContainer container1 = this;
+
+		AbstractContainer belowContainer1 = container1.getContainerBelow();
+		AbstractContainer belowContainer2 = container2.getContainerBelow();
+		/*
+		@formatter:off
+		
+		    Question: Container1 above Container2?
+		    
+			1 is never null, because 1 is "this"
+			
+			return 0:
+			    (1) 2 not under 1
+			
+			return 1: (1 over 2)
+			    (2) 2 under 1
+			
+			return -1: (2 over 1)
+			    (3) 1 under 2
+			    
+			1 is below 2 and 2 is below 1 -> exception
+			
+		@formatter:on
+		*/
+
+		// error-case: Both container are below each other
+		if(belowContainer1 != null &&
+			belowContainer2 != null &&
+			equals(belowContainer2) &&
+			container2.equals(belowContainer1))
+		{
+			throw new ContainerPositioningConflict();
+		}
+
+		// rule (1): This container (container1) has a container below it and it is container2
+		if(belowContainer1 != null && container2.equals(belowContainer1))
+		{
+			return 1;
+		}
+
+		// rulse (2): The container2 has a container below and it is "this" (container1)
+		if(belowContainer2 != null && equals(belowContainer2))
+		{
+			return -1;
+		}
+
+		// rule (0): This is not the container below 2
+		return 0;
 	}
 }
