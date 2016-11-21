@@ -70,7 +70,7 @@ public class LineView extends GameScreen implements Observer
 
 		_trainManagementService = TrainManagementService.getInstance();
 
-		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 45);
+		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 40);
 
 		createControls();
 		addObserver();
@@ -83,7 +83,7 @@ public class LineView extends GameScreen implements Observer
 	{
 		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
 		_panel.setDrawBorder(true, METRO.__metroBlue);
-		
+
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 40, 300), true);
 		fillLineList();
 
@@ -93,19 +93,19 @@ public class LineView extends GameScreen implements Observer
 
 		_lineNameField = new InputField(new Rectangle(_areaOffset.x + 95, _areaOffset.y + 490, _windowWidth - 175, 20));
 		_lineNameField.setState(false);
-		
+
 		_lineNameFieldLabel = new Label("Line Name", new Point(_areaOffset.x + 20, _areaOffset.y + 493));
 		_lineNameFieldLabel.setState(false);
-		
+
 		_colorBar = new ColorBar(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 520, _windowWidth - 70, 20), 0.9f, 0.8f);
 		_colorBar.setState(false);
-		
+
 		_saveButton = new Button(new Rectangle(_areaOffset.x + (_windowWidth / 2) - 75, METRO.__SCREEN_SIZE.height - _areaOffset.y - 60, 150, 20), "Save");
 		_saveButton.setState(false);
 
 		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 100));
 		_messageLabel.setColor(METRO.__metroRed);
-		
+
 		_panel.add(_lineList);
 		_panel.add(_createLineButton);
 		_panel.add(_editLineButton);
@@ -390,21 +390,9 @@ public class LineView extends GameScreen implements Observer
 	public void updateGameScreen(SpriteBatch g)
 	{
 		if(!_isActive) return;
-		drawBackground();
 		drawTitleBox();
 		drawListBox();
 		drawColorBar();
-	}
-
-	/**
-	 * Draws the white background and the blue line at the left.
-	 */
-	private void drawBackground()
-	{
-		Fill.setColor(Color.white);
-		Fill.Rect(METRO.__SCREEN_SIZE.width - _windowWidth, 0, _windowWidth, METRO.__SCREEN_SIZE.height);
-		Draw.setColor(METRO.__metroBlue);
-		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth, 0, METRO.__SCREEN_SIZE.width - _windowWidth, METRO.__SCREEN_SIZE.height);
 	}
 
 	/**

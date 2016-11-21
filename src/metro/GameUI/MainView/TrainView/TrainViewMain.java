@@ -53,6 +53,7 @@ public class TrainViewMain extends GameScreen
 		_trainManagementService = TrainManagementService.getInstance();
 
 		_panel = new Panel(new Rectangle());
+		_panel.setDrawBorder(false);
 
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 300, 230), true);
 		_lineList.register(new ActionObserver()

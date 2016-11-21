@@ -62,7 +62,6 @@ public class PlayingField extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-
 		if(_dragMode)
 		{
 			_mapOffset = new Point(_mapOffset.x + (METRO.__mousePosition.x - _oldMousePos.x),

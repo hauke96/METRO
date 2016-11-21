@@ -57,6 +57,16 @@ public class Panel extends StaticContainer
 	}
 
 	/**
+	 * Sets the drawing state of the border.
+	 * 
+	 * @param drawBorder True to draw the border, false to don't draw the border.
+	 */
+	public void setDrawBorder(boolean drawBorder)
+	{
+		_drawBorder = drawBorder;
+	}
+
+	/**
 	 * Sets the state to draw the border or don't draw the border.
 	 * 
 	 * @param drawBorder True to draw the border, false to don't draw the border.

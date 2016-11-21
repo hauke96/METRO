@@ -36,6 +36,7 @@ public class TrackPlacingTool extends GameScreen
 	public TrackPlacingTool()
 	{
 		_playingField = PlayingField.getInstance();
+		_isActive=true;
 	}
 
 	@Override
@@ -124,6 +125,7 @@ public class TrackPlacingTool extends GameScreen
 	 */
 	public void leftClick(int screenX, int screenY, Point offset)
 	{
+		Logger.__debug("Linksklick!");
 		placeTracks(screenX, screenY, Buttons.LEFT, offset);
 	}
 

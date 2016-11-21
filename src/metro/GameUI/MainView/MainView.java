@@ -49,7 +49,7 @@ public class MainView extends GameScreen implements Observer
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		_playingField.setCityCircleHighlighting(_activeTool != null && _activeTool.isHovered());
+		_playingField.setCityCircleHighlighting(_activeTool == null || !_activeTool.isHovered());
 		_playingField.updateGameScreen(sp);
 
 		_notificationArea.updateGameScreen(sp);
@@ -122,7 +122,12 @@ public class MainView extends GameScreen implements Observer
 		// TODO refactor this into own anonymous classes
 		if(arg0.equals(_toolbar))
 		{
-			if(_activeTool != null) _activeTool.close();
+			closeActiveTool();
+			
+			if(arg1 == null)
+			{
+				_toolbar.resetExclusiveButtonPositions(null);
+			}
 
 			if(arg1 instanceof StationPlacingTool
 				|| arg1 instanceof TrackPlacingTool
@@ -130,10 +135,6 @@ public class MainView extends GameScreen implements Observer
 				|| arg1 instanceof TrainView)
 			{
 				setActiveTool((GameScreen)arg1);
-			}
-			else
-			{
-				closeActiveTool();
 			}
 		}
 		else
@@ -152,12 +153,6 @@ public class MainView extends GameScreen implements Observer
 	 */
 	private void setActiveTool(GameScreen newTool)
 	{
-		// remove old observer
-		if(_activeTool != null)
-		{
-			_activeTool.deleteObservers();
-		}
-
 		// set new tool and add new observer
 		_activeTool = newTool;
 		_activeTool.addObserver(this);
@@ -176,10 +171,12 @@ public class MainView extends GameScreen implements Observer
 	 */
 	private void closeActiveTool()
 	{
-		_toolbar.resetExclusiveButtonPositions(null);
-		_activeTool.close();
-		_activeTool = null;
-		_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
+		if(_activeTool != null)
+		{
+			_activeTool.close();
+			_activeTool = null;
+			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
+		}
 	}
 
 	@Override

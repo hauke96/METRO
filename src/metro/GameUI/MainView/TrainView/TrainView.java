@@ -41,9 +41,9 @@ public class TrainView extends GameScreen
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 45);
 		_trainViewMain = new TrainViewMain(getAreaOffset(), _windowWidth);
 		_trainViewBuy = new TrainViewBuy(getAreaOffset(), _windowWidth);
-		
+
 		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
-		_panel.setDrawBorder(true, METRO.__metroBlue);
+		_panel.setDrawBorder(false);
 		_panel.add(_trainViewMain.getPanel());
 		_panel.add(_trainViewBuy.getPanel());
 
@@ -111,21 +111,9 @@ public class TrainView extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch g)
 	{
-		drawBackground();
 		drawTitleBox();
 		_trainViewMain.updateGameScreen(g);
 		_trainViewBuy.updateGameScreen(g);
-	}
-
-	/**
-	 * Draws the white background and the blue line at the left.
-	 */
-	private void drawBackground()
-	{
-		Fill.setColor(Color.white);
-		Fill.Rect(METRO.__SCREEN_SIZE.width - _windowWidth, 0, _windowWidth, METRO.__SCREEN_SIZE.height);
-		Draw.setColor(METRO.__metroBlue);
-		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth, 0, METRO.__SCREEN_SIZE.width - _windowWidth, METRO.__SCREEN_SIZE.height);
 	}
 
 	/**

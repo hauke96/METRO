@@ -45,6 +45,7 @@ public class Toolbar extends GameScreen
 		_buttonYPosition = -9;
 		
 		Panel panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height));
+		panel.setDrawBorder(false);
 
 		_buildStation = new Button(new Rectangle(_buttonAreaXPosition + 140, _buttonYPosition, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
 		_buildTracks = new Button(new Rectangle(_buttonAreaXPosition + 180, _buttonYPosition, 40, 50), new Rectangle(0, 78, 40, 50), METRO.__iconSet);
