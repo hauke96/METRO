@@ -2,6 +2,8 @@ package metro.UI.Renderer;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import metro.UI.ContainerRegistrationService;
@@ -33,7 +35,10 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		void executeFunctions();
 	}
 
-	private Comparator<AbstractContainer> _controlsOverComparator;
+	private Comparator<AbstractContainer> _controlsAboveComparator;
+
+	private Observer _staticContainerAboveChangedObserver;
+	private Observer _floatingContainerAboveChangedObserver;
 
 	private List<AbstractContainer> _listOfFloatingContainer;
 	private List<AbstractContainer> _listOfStaticContainer;
@@ -46,7 +51,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		_listOfStaticContainer = new CopyOnWriteArrayList<AbstractContainer>();
 		_listOfFloatingContainer = new CopyOnWriteArrayList<AbstractContainer>();
 
-		_controlsOverComparator = new Comparator<AbstractContainer>()
+		_controlsAboveComparator = new Comparator<AbstractContainer>()
 		{
 			@Override
 			public int compare(AbstractContainer container1, AbstractContainer container2)
@@ -54,6 +59,9 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 				return container1.compareTo(container2);
 			}
 		};
+
+		_staticContainerAboveChangedObserver = (o, arg) -> _listOfStaticContainer.sort(_controlsAboveComparator);
+		_floatingContainerAboveChangedObserver = (o, arg) -> _listOfFloatingContainer.sort(_controlsAboveComparator);
 
 		ContainerRegistrationService registrationService = new ContainerRegistrationService();
 		registrationService.setRenderer(this);
@@ -65,6 +73,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	{
 		_listOfStaticContainer.add(renderable);
 		renderable.registerCloseObserver(this);
+		renderable.registerAboveChangedObserver(_staticContainerAboveChangedObserver);
 	}
 
 	@Override
@@ -72,6 +81,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	{
 		_listOfFloatingContainer.add(renderable);
 		renderable.registerCloseObserver(this);
+		renderable.registerAboveChangedObserver(_floatingContainerAboveChangedObserver);
 	}
 
 	@Override
@@ -175,5 +185,12 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	{
 		_listOfStaticContainer.remove(container);
 		_listOfFloatingContainer.remove(container);
+
+		if(container instanceof AbstractContainer)
+		{
+			AbstractContainer abstractContainer = (AbstractContainer)container;
+			abstractContainer.removeAboveChangedObserver(_staticContainerAboveChangedObserver);
+			abstractContainer.removeAboveChangedObserver(_floatingContainerAboveChangedObserver);
+		}
 	}
 }
