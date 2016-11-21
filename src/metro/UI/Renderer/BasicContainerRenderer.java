@@ -32,7 +32,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	{
 		void executeFunctions();
 	}
-	
+
 	private Comparator<AbstractContainer> _controlsOverComparator;
 
 	private List<AbstractContainer> _listOfFloatingContainer;
@@ -45,14 +45,50 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	{
 		_listOfStaticContainer = new CopyOnWriteArrayList<AbstractContainer>();
 		_listOfFloatingContainer = new CopyOnWriteArrayList<AbstractContainer>();
-		
+
 		_controlsOverComparator = new Comparator<AbstractContainer>()
 		{
 
 			@Override
-			public int compare(AbstractContainer o1, AbstractContainer o2)
+			public int compare(AbstractContainer container1, AbstractContainer container2)
 			{
-				
+				// TODO write test for this
+
+				AbstractContainer belowContainer1 = container1.getContainerBelow();
+				AbstractContainer belowContainer2 = container2.getContainerBelow();
+				/*
+				@formatter:off
+				Question: Container1 above Container2?
+
+					Container1  Container2  Result
+
+					null        null        0
+					null        something   0
+					null        above       -1              (ok)
+					something   null        0
+					something   something   0
+					something   above       -1              (ok)
+					above       null        1
+					above       something   1
+					above       above       throw Exception (ok)
+					@formatter:on
+				*/
+
+				// container2 above container1
+				if(belowContainer2.equals(container1))
+				{
+					// container1 above container2 => invalid
+					if(belowContainer1.equals(container2))
+					{
+						// throw new ContainerPositioningConflict();
+					}
+					return -1;
+				}
+				if(belowContainer1 == null)
+				{
+					return 0;
+				}
+
 				return 0;
 			}
 		};
@@ -109,7 +145,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 				{
 					l.remove(clickedContainer);
 					l.add(clickedContainer);
-					
+
 					isClickedValue.value = clickedContainer.mouseClicked(screenX, screenY, button);
 				}
 			};
