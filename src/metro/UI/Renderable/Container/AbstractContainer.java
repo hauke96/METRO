@@ -30,8 +30,9 @@ public abstract class AbstractContainer extends CloseObservable
 	}
 
 	protected List<ControlElement> _listOfControlElements;
+
 	private List<Observer> _listOfAboveChangedObserver;
-	private AbstractContainer _aboveContainer;
+	private AbstractContainer _theContainerBelow;
 
 	/**
 	 * Creates a new container. Will throw an {@code UninitiatedClassException} when the registration service is not initiated via {@link #setContainerRegistrationService(ContainerRegistrationService)}.
@@ -139,9 +140,9 @@ public abstract class AbstractContainer extends CloseObservable
 		{
 			throw new ContainerPositioningConflict();
 		}
-	
-		_aboveContainer = aboveContainer;
-	
+
+		_theContainerBelow = aboveContainer;
+
 		notifyAboveOfChangedObserver();
 	}
 
@@ -153,7 +154,7 @@ public abstract class AbstractContainer extends CloseObservable
 	 */
 	public boolean isBelow(AbstractContainer container)
 	{
-		return _aboveContainer != null && _aboveContainer.equals(container);
+		return _theContainerBelow != null && _theContainerBelow.equals(container);
 	}
 
 	/**
@@ -161,7 +162,7 @@ public abstract class AbstractContainer extends CloseObservable
 	 */
 	public AbstractContainer getContainerBelow()
 	{
-		return _aboveContainer;
+		return _theContainerBelow;
 	}
 
 	/**
@@ -180,8 +181,16 @@ public abstract class AbstractContainer extends CloseObservable
 	public void registerAboveChangedObserver(Observer observer)
 	{
 		Contract.RequireNotNull(_listOfAboveChangedObserver);
-	
+
 		_listOfAboveChangedObserver.add(observer);
+	}
+
+	/**
+	 * Removes all above-changed observer from this control.
+	 */
+	public void removeAboveChangedObserver()
+	{
+		_listOfAboveChangedObserver.clear();
 	}
 
 	/**
@@ -192,7 +201,7 @@ public abstract class AbstractContainer extends CloseObservable
 	public void removeAboveChangedObserver(Observer observer)
 	{
 		Contract.RequireNotNull(_listOfAboveChangedObserver);
-	
+
 		_listOfAboveChangedObserver.remove(observer);
 	}
 
@@ -213,7 +222,7 @@ public abstract class AbstractContainer extends CloseObservable
 
 		for(Observer o : _listOfAboveChangedObserver)
 		{
-			o.notify();
+			o.update(null, null);
 		}
 	}
 

@@ -156,6 +156,7 @@ public class MainView extends GameScreen implements Observer
 		// set new tool and add new observer
 		_activeTool = newTool;
 		_activeTool.addObserver(this);
+		
 		if(_activeTool instanceof LineView || _activeTool instanceof TrainView) // tools that have own window and influence the notification area
 		{
 			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth());

@@ -14,6 +14,7 @@ import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.TrainView.TrainView;
 import metro.GameUI.Screen.GameScreen;
 import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.Button;
 
@@ -33,6 +34,7 @@ public class Toolbar extends GameScreen
 		_height,
 		_buttonAreaXPosition,
 		_buttonYPosition;
+	private Panel _panel;
 
 	/**
 	 * Creates a new toolbar.
@@ -43,20 +45,20 @@ public class Toolbar extends GameScreen
 		_height = 40;
 		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth();
 		_buttonYPosition = -9;
-		
-		Panel panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height));
-		panel.setDrawBorder(false);
+
+		_panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height), false);
+		_panel.setDrawBorder(false);
 
 		_buildStation = new Button(new Rectangle(_buttonAreaXPosition + 140, _buttonYPosition, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
 		_buildTracks = new Button(new Rectangle(_buttonAreaXPosition + 180, _buttonYPosition, 40, 50), new Rectangle(0, 78, 40, 50), METRO.__iconSet);
 		_showTrainList = new Button(new Rectangle(_buttonAreaXPosition + 220, _buttonYPosition, 40, 50), new Rectangle(0, 128, 40, 50), METRO.__iconSet);
 		_createNewTrain = new Button(new Rectangle(_buttonAreaXPosition + 260, _buttonYPosition, 40, 50), new Rectangle(0, 178, 40, 50), METRO.__iconSet);
 		registerObervations();
-		
-		panel.add(_buildStation);
-		panel.add(_buildTracks);
-		panel.add(_showTrainList);
-		panel.add(_createNewTrain);
+
+		_panel.add(_buildStation);
+		_panel.add(_buildTracks);
+		_panel.add(_showTrainList);
+		_panel.add(_createNewTrain);
 	}
 
 	private void registerObervations()
@@ -87,8 +89,13 @@ public class Toolbar extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				resetExclusiveButtonPositions(_showTrainList);
+				
+				LineView lineView = new LineView();
+				Panel panel = lineView.getBackgroundPanel();
+				setButtonsAboveOf(panel);
+				
 				setChanged();
-				notifyObservers(new LineView());
+				notifyObservers(lineView);
 			}
 		});
 		_createNewTrain.register(new ActionObserver()
@@ -97,8 +104,13 @@ public class Toolbar extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				resetExclusiveButtonPositions(_createNewTrain);
+				
+				TrainView trainView = new TrainView();
+				Panel panel = trainView.getBackgroundPanel();
+				setButtonsAboveOf(panel);
+				
 				setChanged();
-				notifyObservers(new TrainView());
+				notifyObservers(trainView);
 			}
 		});
 	}
@@ -110,11 +122,13 @@ public class Toolbar extends GameScreen
 	 */
 	public void resetExclusiveButtonPositions(Button exceptThisButton)
 	{
+		_panel.removeAboveChangedObserver();
+		
 		_buildTracks.setPosition(new Point(_buildTracks.getPosition().x, _buttonYPosition));
 		_buildStation.setPosition(new Point(_buildStation.getPosition().x, _buttonYPosition));
 		_showTrainList.setPosition(new Point(_showTrainList.getPosition().x, _buttonYPosition));
 		_createNewTrain.setPosition(new Point(_createNewTrain.getPosition().x, _buttonYPosition));
-		
+
 		// Move the selected button a bit down:
 		if(exceptThisButton != null)
 		{
@@ -134,8 +148,8 @@ public class Toolbar extends GameScreen
 		// separating line for the money display
 		Draw.setColor(METRO.__metroRed);
 		Draw.Line(_moneyDisplayWidth, 0, _moneyDisplayWidth, _height);
-		
-		//TODO implement the string with a ColorFormattedLabel
+
+		// TODO implement the string with a ColorFormattedLabel
 
 		// draw amount of money like 935.258.550 $
 		Draw.setColor(METRO.__metroRed);
@@ -148,6 +162,16 @@ public class Toolbar extends GameScreen
 
 		Draw.setColor(METRO.__metroRed);
 		Draw.Line(_buttonAreaXPosition, 0, _buttonAreaXPosition, _height);
+	}
+
+	/**
+	 * Moves the toolbar above the given control.
+	 * 
+	 * @param container The control the toolbar should be above of.
+	 */
+	private void setButtonsAboveOf(AbstractContainer container)
+	{
+		_panel.setAboveOf(container);
 	}
 
 	@Override

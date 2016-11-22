@@ -38,12 +38,12 @@ public class TrainView extends GameScreen
 	public TrainView()
 	{
 		_windowWidth = GameState.getInstance().getToolViewWidth();
-		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 45);
+		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 40);
 		_trainViewMain = new TrainViewMain(getAreaOffset(), _windowWidth);
 		_trainViewBuy = new TrainViewBuy(getAreaOffset(), _windowWidth);
 
 		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
-		_panel.setDrawBorder(false);
+		_panel.setDrawBorder(true);
 		_panel.add(_trainViewMain.getPanel());
 		_panel.add(_trainViewBuy.getPanel());
 
@@ -190,5 +190,13 @@ public class TrainView extends GameScreen
 	public Point getAreaOffset()
 	{
 		return _areaOffset;
+	}
+
+	/**
+	 * @return The background panel all controls are on.
+	 */
+	public Panel getBackgroundPanel()
+	{
+		return _panel;
 	}
 }

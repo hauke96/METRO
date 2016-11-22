@@ -60,6 +60,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 			}
 		};
 
+		// FIXME sorting does not work :(
 		_staticContainerAboveChangedObserver = (o, arg) -> _listOfStaticContainer.sort(_controlsAboveComparator);
 		_floatingContainerAboveChangedObserver = (o, arg) -> _listOfFloatingContainer.sort(_controlsAboveComparator);
 
@@ -74,6 +75,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		_listOfStaticContainer.add(renderable);
 		renderable.registerCloseObserver(this);
 		renderable.registerAboveChangedObserver(_staticContainerAboveChangedObserver);
+		_staticContainerAboveChangedObserver.update(null, null);
 	}
 
 	@Override
@@ -82,6 +84,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		_listOfFloatingContainer.add(renderable);
 		renderable.registerCloseObserver(this);
 		renderable.registerAboveChangedObserver(_floatingContainerAboveChangedObserver);
+		_floatingContainerAboveChangedObserver.update(null, null);
 	}
 
 	@Override
@@ -185,6 +188,9 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	{
 		_listOfStaticContainer.remove(container);
 		_listOfFloatingContainer.remove(container);
+
+		_staticContainerAboveChangedObserver.update(null, null);
+		_floatingContainerAboveChangedObserver.update(null, null);
 
 		if(container instanceof AbstractContainer)
 		{

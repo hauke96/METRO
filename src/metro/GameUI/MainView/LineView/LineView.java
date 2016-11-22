@@ -38,24 +38,27 @@ import metro.UI.Renderable.Controls.List;
  */
 public class LineView extends GameScreen implements Observer
 {
-	private int _windowWidth;
+	private Panel _panel;
 	private List _lineList;
 	private Button _createLineButton, // to create a new train line
 		_editLineButton, // to change railway nodes of train line
 		_removeLineButton, // to remove a train line
 		_saveButton; // to save settings/changes
+	private ColorBar _colorBar;
+	private Label _lineNameFieldLabel,
+		_messageLabel;
+	private InputField _lineNameField;
+
+	private int _windowWidth;
 	private boolean _isActive, // true: TrainLineView will be displayed
 		_lineSelectToolEnabled, // if enabled, the user can select nodes
 		_editMode; // true when user edits a line
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
-	private LineSelectTool _lineSelectTool;
-	private InputField _lineNameField;
-	private Label _lineNameFieldLabel,
-		_messageLabel;
 	private TrainLine _oldLine; // when the user edits a line name, the old name of it has to be saved to correctly update the line list
-	private ColorBar _colorBar;
+
 	private TrainManagementService _trainManagementService;
-	private Panel _panel;
+
+	private LineSelectTool _lineSelectTool;
 
 	/**
 	 * Creates a new TrainLineView.
@@ -586,6 +589,14 @@ public class LineView extends GameScreen implements Observer
 	public LineSelectTool getLineSelectTool()
 	{
 		return _lineSelectTool;
+	}
+
+	/**
+	 * @return The panel where all controls are on.
+	 */
+	public Panel getBackgroundPanel()
+	{
+		return _panel;
 	}
 
 	/**
