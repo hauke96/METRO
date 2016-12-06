@@ -2,10 +2,10 @@ package metro.UI.Renderer;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import metro.Common.Technical.Contract;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.CloseObservable;
 import metro.UI.Renderable.Container.AbstractContainer;
@@ -198,5 +198,15 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 			abstractContainer.removeAboveChangedObserver(_staticContainerAboveChangedObserver);
 			abstractContainer.removeAboveChangedObserver(_floatingContainerAboveChangedObserver);
 		}
+	}
+	
+	/**
+	 * @return The comparator this class uses to compare controls by their "above-of" property.
+	 */
+	public Comparator<AbstractContainer> getAboveOfComparator()
+	{
+		Contract.RequireNotNull(_controlsAboveComparator);
+		
+		return _controlsAboveComparator;
 	}
 }

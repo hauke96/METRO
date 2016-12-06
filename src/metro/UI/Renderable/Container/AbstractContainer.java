@@ -1,6 +1,7 @@
 package metro.UI.Renderable.Container;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Observer;
@@ -32,7 +33,7 @@ public abstract class AbstractContainer extends CloseObservable
 	protected List<ControlElement> _listOfControlElements;
 
 	private List<Observer> _listOfAboveChangedObserver;
-	private AbstractContainer _theContainerBelow;
+	private List<AbstractContainer> _theContainerBelow;
 
 	/**
 	 * Creates a new container. Will throw an {@code UninitiatedClassException} when the registration service is not initiated via {@link #setContainerRegistrationService(ContainerRegistrationService)}.
@@ -44,8 +45,11 @@ public abstract class AbstractContainer extends CloseObservable
 			throw new UninitiatedClassException("There's no container registration service available. Set it before creating a container.");
 		}
 
+		// TODO use array list
 		_listOfControlElements = new LinkedList<ControlElement>();
 		_listOfAboveChangedObserver = new LinkedList<>();
+		_theContainerBelow = new ArrayList<>();
+
 		registerContainerInRenderer(_containerRegistrationService);
 	}
 
@@ -135,33 +139,39 @@ public abstract class AbstractContainer extends CloseObservable
 	 */
 	public void setAboveOf(AbstractContainer aboveContainer)
 	{
-		// error-case: Both container are below each other -> exception
-		if(aboveContainer != null && aboveContainer.isBelow(this) && isBelow(aboveContainer))
+		if(!getContainerBelow().contains(aboveContainer))
 		{
-			throw new ContainerPositioningConflict();
+			// error-case: Both container are below each other -> exception
+			if(aboveContainer != null && aboveContainer.isAbove(this) && isAbove(aboveContainer))
+			{
+				throw new ContainerPositioningConflict();
+			}
+			
+			getContainerBelow().add(aboveContainer);
+
+			notifyAboveOfChangedObserver();
 		}
-
-		_theContainerBelow = aboveContainer;
-
-		notifyAboveOfChangedObserver();
 	}
 
 	/**
-	 * Checks if the given container is below this one.
+	 * Checks if the given container is above this one.
 	 * 
 	 * @param container A container to check.
-	 * @return True when the given container is below this one.
+	 * @return True when the given container is above this one.
 	 */
-	public boolean isBelow(AbstractContainer container)
+	public boolean isAbove(AbstractContainer container)
 	{
-		return _theContainerBelow != null && _theContainerBelow.equals(container);
+		Contract.RequireNotNull(_theContainerBelow);
+		
+		return container != null && compareTo(container) == 1;
 	}
 
 	/**
-	 * @return The container below this one.
+	 * @return All the container below this one.
 	 */
-	public AbstractContainer getContainerBelow()
+	public List<AbstractContainer> getContainerBelow()
 	{
+		Contract.EnsureNotNull(_theContainerBelow);
 		return _theContainerBelow;
 	}
 
@@ -229,64 +239,37 @@ public abstract class AbstractContainer extends CloseObservable
 	/**
 	 * Checks if this container is above the given one.
 	 * 
-	 * @param container2 The container to compare to.
+	 * @param otherContainer The container to compare to.
 	 * @return 1 when this is above, 0 if there's no relation between them and -1 when this is below the given container
 	 * @throws ContainerPositioningConflict
 	 */
-	public int compareTo(AbstractContainer container2)
+	public int compareTo(AbstractContainer otherContainer)
 	{
-		Contract.RequireNotNull(container2);
+		Contract.RequireNotNull(otherContainer);
 
-		// TODO write test for this
+		// use this. just for better readings
+		List<AbstractContainer> allContainerBelowThis = this.getContainerBelow();
+		List<AbstractContainer> allContainerBelowOther = otherContainer.getContainerBelow();
 
-		// Just for better readings
-		AbstractContainer container1 = this;
+		boolean otherIsBelowThis = allContainerBelowThis.contains(otherContainer);
+		boolean thisIsBelowOther = allContainerBelowOther.contains(this);
 
-		AbstractContainer belowContainer1 = container1.getContainerBelow();
-		AbstractContainer belowContainer2 = container2.getContainerBelow();
-		/*
-		@formatter:off
-		
-		    Question: Container1 above Container2?
-		    
-			1 is never null, because 1 is "this"
-			
-			return 0:
-			    (1) 2 not under 1
-			
-			return 1: (1 over 2)
-			    (2) 2 under 1
-			
-			return -1: (2 over 1)
-			    (3) 1 under 2
-			    
-			1 is below 2 and 2 is below 1 -> exception
-			
-		@formatter:on
-		*/
-
-		// error-case: Both container are below each other
-		if(belowContainer1 != null &&
-			belowContainer2 != null &&
-			equals(belowContainer2) &&
-			container2.equals(belowContainer1))
+		if(thisIsBelowOther && otherIsBelowThis)
 		{
+			// Both are above each other -> conflict
 			throw new ContainerPositioningConflict();
 		}
 
-		// rule (1): This container (container1) has a container below it and it is container2
-		if(belowContainer1 != null && container2.equals(belowContainer1))
+		if(!thisIsBelowOther && !otherIsBelowThis)
 		{
-			return 1;
+			return 0;
 		}
 
-		// rulse (2): The container2 has a container below and it is "this" (container1)
-		if(belowContainer2 != null && equals(belowContainer2))
+		if(thisIsBelowOther)
 		{
 			return -1;
 		}
 
-		// rule (0): This is not the container below 2
-		return 0;
+		return 1;
 	}
 }
