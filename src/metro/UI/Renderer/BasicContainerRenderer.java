@@ -199,14 +199,14 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 			abstractContainer.removeAboveChangedObserver(_floatingContainerAboveChangedObserver);
 		}
 	}
-	
+
 	/**
 	 * @return The comparator this class uses to compare controls by their "above-of" property.
 	 */
 	public Comparator<AbstractContainer> getAboveOfComparator()
 	{
 		Contract.RequireNotNull(_controlsAboveComparator);
-		
+
 		return _controlsAboveComparator;
 	}
 }

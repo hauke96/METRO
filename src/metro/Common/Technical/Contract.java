@@ -1,8 +1,8 @@
 package metro.Common.Technical;
 
-import metro.Exceptions.Contact.PostconditionNotNullFailed;
-import metro.Exceptions.Contact.PreconditionNotEmptyFailed;
-import metro.Exceptions.Contact.PreconditionNotNullFailed;
+import metro.Exceptions.Contract.PostconditionNotNullFailed;
+import metro.Exceptions.Contract.PreconditionNotEmptyFailed;
+import metro.Exceptions.Contract.PreconditionNotNullFailed;
 
 /**
  * This class offers many contact methods to ensure pre- and postconditions.

@@ -2,8 +2,8 @@ package metro.Common.Technical;
 
 import org.junit.Test;
 
-import metro.Exceptions.Contact.PreconditionNotEmptyFailed;
-import metro.Exceptions.Contact.PreconditionNotNullFailed;
+import metro.Exceptions.Contract.PreconditionNotEmptyFailed;
+import metro.Exceptions.Contract.PreconditionNotNullFailed;
 
 public class ContactTest
 {

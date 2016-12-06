@@ -146,7 +146,7 @@ public abstract class AbstractContainer extends CloseObservable
 			{
 				throw new ContainerPositioningConflict();
 			}
-			
+
 			getContainerBelow().add(aboveContainer);
 
 			notifyAboveOfChangedObserver();
@@ -162,7 +162,7 @@ public abstract class AbstractContainer extends CloseObservable
 	public boolean isAbove(AbstractContainer container)
 	{
 		Contract.RequireNotNull(_theContainerBelow);
-		
+
 		return container != null && compareTo(container) == 1;
 	}
 
@@ -241,7 +241,6 @@ public abstract class AbstractContainer extends CloseObservable
 	 * 
 	 * @param otherContainer The container to compare to.
 	 * @return 1 when this is above, 0 if there's no relation between them and -1 when this is below the given container
-	 * @throws ContainerPositioningConflict
 	 */
 	public int compareTo(AbstractContainer otherContainer)
 	{
