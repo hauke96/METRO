@@ -31,6 +31,8 @@ public abstract class GameScreenSwitchedObservable extends Observable
 	 */
 	public void registerSwitchedObserver(GameScreenSwitchedObserver observer)
 	{
+		Contract.RequireNotNull(observer);
+		
 		_observerList.add(observer);
 	}
 
@@ -41,6 +43,8 @@ public abstract class GameScreenSwitchedObservable extends Observable
 	 */
 	public void unregisterSwitchedObserver(GameScreenSwitchedObserver observer)
 	{
+		Contract.RequireNotNull(observer);
+		
 		_observerList.remove(observer);
 	}
 

@@ -257,6 +257,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		__camera.update();
 
 		// Set up the input event handling
+		// TODO pass the game screen here and not "this"
 		Gdx.input.setInputProcessor(this);
 	}
 
@@ -335,6 +336,7 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		renderInit();
 		__currentGameScreenManager.renderCurrentGameScreen(__spriteBatch);
+		// TODO replace this by calling the "currentGameScreenContainerManager"
 		__containerRenderer.notifyDraw();
 		renderFPSDisplay();
 		renderCursor();

@@ -53,7 +53,6 @@ public class Toolbar extends GameScreen
 		_panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height), false);
 		_panel.setDrawBorder(false);
 
-		// TODO does not work
 		Canvas c = new Canvas(new Point(0, 0));
 		c.setPainter(() -> draw());
 
