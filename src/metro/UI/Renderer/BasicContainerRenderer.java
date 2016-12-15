@@ -60,7 +60,6 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 			}
 		};
 
-		// FIXME sorting does not work :(
 		_staticContainerAboveChangedObserver = (o, arg) -> _listOfStaticContainer.sort(_controlsAboveComparator);
 		_floatingContainerAboveChangedObserver = (o, arg) -> _listOfFloatingContainer.sort(_controlsAboveComparator);
 

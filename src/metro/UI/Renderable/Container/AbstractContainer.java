@@ -12,6 +12,7 @@ import metro.Exceptions.UninitiatedClassException;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.CloseObservable;
 import metro.UI.Renderable.ControlElement;
+import metro.UI.Renderer.CloseObserver;
 
 /**
  * A AbstractContainer is a closable and close observable control element which can itself store control elements.
@@ -33,7 +34,7 @@ public abstract class AbstractContainer extends CloseObservable
 	protected List<ControlElement> _listOfControlElements;
 
 	private List<Observer> _listOfAboveChangedObserver;
-	private List<AbstractContainer> _theContainerBelow;
+	private List<AbstractContainer> _listOfContainerBelow;
 
 	/**
 	 * Creates a new container. Will throw an {@code UninitiatedClassException} when the registration service is not initiated via {@link #setContainerRegistrationService(ContainerRegistrationService)}.
@@ -48,7 +49,7 @@ public abstract class AbstractContainer extends CloseObservable
 		// TODO use array list
 		_listOfControlElements = new LinkedList<ControlElement>();
 		_listOfAboveChangedObserver = new LinkedList<>();
-		_theContainerBelow = new ArrayList<>();
+		_listOfContainerBelow = new ArrayList<>();
 
 		registerContainerInRenderer(_containerRegistrationService);
 	}
@@ -139,6 +140,8 @@ public abstract class AbstractContainer extends CloseObservable
 	 */
 	public void setAboveOf(AbstractContainer aboveContainer)
 	{
+		Contract.RequireNotNull(aboveContainer);
+		
 		if(!getContainerBelow().contains(aboveContainer))
 		{
 			// error-case: Both container are below each other -> exception
@@ -146,6 +149,19 @@ public abstract class AbstractContainer extends CloseObservable
 			{
 				throw new ContainerPositioningConflict();
 			}
+			
+			aboveContainer.registerCloseObserver(new CloseObserver()
+			{
+				@Override
+				public void reactToClosedControlElement(CloseObservable container)
+				{
+					Contract.RequireNotNull(container);
+					
+					_listOfContainerBelow.remove(container);
+					
+					notifyAboveOfChangedObserver();
+				}
+			});
 
 			getContainerBelow().add(aboveContainer);
 
@@ -161,7 +177,7 @@ public abstract class AbstractContainer extends CloseObservable
 	 */
 	public boolean isAbove(AbstractContainer container)
 	{
-		Contract.RequireNotNull(_theContainerBelow);
+		Contract.RequireNotNull(_listOfContainerBelow);
 
 		return container != null && compareTo(container) == 1;
 	}
@@ -171,8 +187,8 @@ public abstract class AbstractContainer extends CloseObservable
 	 */
 	public List<AbstractContainer> getContainerBelow()
 	{
-		Contract.EnsureNotNull(_theContainerBelow);
-		return _theContainerBelow;
+		Contract.EnsureNotNull(_listOfContainerBelow);
+		return _listOfContainerBelow;
 	}
 
 	/**

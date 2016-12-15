@@ -11,6 +11,7 @@ import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
+import metro.Common.Technical.Contract;
 import metro.GameUI.Screen.GameScreen;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
@@ -197,6 +198,7 @@ public class TrainView extends GameScreen
 	 */
 	public Panel getBackgroundPanel()
 	{
+		Contract.EnsureNotNull(_panel);
 		return _panel;
 	}
 }

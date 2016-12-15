@@ -24,6 +24,9 @@ import metro.UI.Renderable.Controls.Button;
  * @author hauke
  *
  */
+
+//TODO separate UI and logic code
+
 public class Toolbar extends GameScreen
 {
 	private Button _buildStation,

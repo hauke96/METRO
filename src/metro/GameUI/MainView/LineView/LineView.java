@@ -14,6 +14,7 @@ import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
+import metro.Common.Technical.Contract;
 import metro.Common.Technical.Logger;
 import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameUI.MainView.NotificationView.NotificationServer;
@@ -545,6 +546,7 @@ public class LineView extends GameScreen implements Observer
 	@Override
 	public void close()
 	{
+		_lineSelectTool.close();
 		_panel.close();
 		super.close();
 	}
@@ -596,6 +598,7 @@ public class LineView extends GameScreen implements Observer
 	 */
 	public Panel getBackgroundPanel()
 	{
+		Contract.EnsureNotNull(_panel);
 		return _panel;
 	}
 
