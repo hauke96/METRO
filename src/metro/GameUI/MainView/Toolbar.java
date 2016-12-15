@@ -26,7 +26,7 @@ import metro.UI.Renderable.Controls.Canvas;
  *
  */
 
-//TODO separate UI and logic code
+// TODO separate UI and logic code
 
 public class Toolbar extends GameScreen
 {
@@ -52,9 +52,9 @@ public class Toolbar extends GameScreen
 
 		_panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height), false);
 		_panel.setDrawBorder(false);
-		
-		//TODO does not work
-		Canvas c = new Canvas(new Point(0,  0));
+
+		// TODO does not work
+		Canvas c = new Canvas(new Point(0, 0));
 		c.setPainter(() -> draw());
 
 		_buildStation = new Button(new Rectangle(_buttonAreaXPosition + 140, _buttonYPosition, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
@@ -98,11 +98,11 @@ public class Toolbar extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				resetExclusiveButtonPositions(_showTrainList);
-				
+
 				LineView lineView = new LineView();
 				Panel panel = lineView.getBackgroundPanel();
 				setButtonsAboveOf(panel);
-				
+
 				setChanged();
 				notifyObservers(lineView);
 			}
@@ -113,11 +113,11 @@ public class Toolbar extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				resetExclusiveButtonPositions(_createNewTrain);
-				
+
 				TrainView trainView = new TrainView();
 				Panel panel = trainView.getBackgroundPanel();
 				setButtonsAboveOf(panel);
-				
+
 				setChanged();
 				notifyObservers(trainView);
 			}
@@ -131,8 +131,6 @@ public class Toolbar extends GameScreen
 	 */
 	public void resetExclusiveButtonPositions(Button exceptThisButton)
 	{
-		_panel.removeAboveChangedObserver();
-		
 		_buildTracks.setPosition(new Point(_buildTracks.getPosition().x, _buttonYPosition));
 		_buildStation.setPosition(new Point(_buildStation.getPosition().x, _buttonYPosition));
 		_showTrainList.setPosition(new Point(_showTrainList.getPosition().x, _buttonYPosition));
@@ -149,7 +147,7 @@ public class Toolbar extends GameScreen
 	public void updateGameScreen(SpriteBatch g)
 	{
 	}
-	
+
 	private void draw()
 	{
 		// draw the background and the red line below it

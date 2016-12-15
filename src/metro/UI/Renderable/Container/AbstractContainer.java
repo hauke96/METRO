@@ -141,29 +141,42 @@ public abstract class AbstractContainer extends CloseObservable
 	public void setAboveOf(AbstractContainer aboveContainer)
 	{
 		Contract.RequireNotNull(aboveContainer);
-		
-		if(!getContainerBelow().contains(aboveContainer))
+
+		if(!_listOfContainerBelow.contains(aboveContainer))
 		{
+			_listOfContainerBelow.add(aboveContainer);
+
 			// error-case: Both container are below each other -> exception
 			if(aboveContainer != null && aboveContainer.isAbove(this) && isAbove(aboveContainer))
 			{
 				throw new ContainerPositioningConflict();
 			}
-			
+
 			aboveContainer.registerCloseObserver(new CloseObserver()
 			{
 				@Override
 				public void reactToClosedControlElement(CloseObservable container)
 				{
 					Contract.RequireNotNull(container);
-					
-					_listOfContainerBelow.remove(container);
-					
+
+					while(_listOfContainerBelow.contains(container))
+					{
+						_listOfContainerBelow.remove(container);
+					}
+
 					notifyAboveOfChangedObserver();
 				}
 			});
 
-			getContainerBelow().add(aboveContainer);
+			// recursively set above state to all controls
+			for(ControlElement control : aboveContainer._listOfControlElements)
+			{
+				if(control instanceof AbstractContainer)
+				{
+					AbstractContainer container = (AbstractContainer)control;
+					setAboveOf(container);
+				}
+			}
 
 			notifyAboveOfChangedObserver();
 		}

@@ -40,8 +40,9 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	private Observer _staticContainerAboveChangedObserver;
 	private Observer _floatingContainerAboveChangedObserver;
 
-	private List<AbstractContainer> _listOfFloatingContainer;
-	private List<AbstractContainer> _listOfStaticContainer;
+	// make these protected for the tests
+	protected List<AbstractContainer> _listOfFloatingContainer;
+	protected List<AbstractContainer> _listOfStaticContainer;
 
 	/**
 	 * Creates a basic renderer with empty fields.
