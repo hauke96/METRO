@@ -1,0 +1,10 @@
+# Ideen
+
+* GameScreen enthält ein Panel
+* Es gibt ein neues Control "Canvas" auf dem man zeichnen kann
+
+# Todos
+
+1. Alternativen GameScreen als Control (container) erstellen
+2. Alle bisherigen GameScreens ersetzen
+3. Alle Zeichen-Befehle auf Canvas packen
