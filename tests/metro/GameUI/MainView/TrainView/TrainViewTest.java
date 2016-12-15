@@ -50,7 +50,7 @@ public class TrainViewTest
 	public void testGetAreaOffset()
 	{
 		assertEquals(
-			new Point(METRO.__SCREEN_SIZE.width-GameState.getInstance().getToolViewWidth(), 45), 
+			new Point(METRO.__SCREEN_SIZE.width-GameState.getInstance().getToolViewWidth(), 40), 
 			view.getAreaOffset());
 	}
 

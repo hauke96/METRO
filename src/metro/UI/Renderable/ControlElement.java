@@ -27,6 +27,7 @@ public abstract class ControlElement extends ActionObservable
 		_visible = true;
 		_state = true;
 		_text = "";
+		_area = new Rectangle();
 	}
 
 	/**

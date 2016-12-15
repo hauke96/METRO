@@ -43,7 +43,7 @@ public class StationPlacingToolTest
 	@Test
 	public void testIsActive()
 	{
-		assertTrue(_tool.isActive());
+		assertFalse(_tool.isActive());
 	}
 	
 	/**

@@ -17,6 +17,7 @@ import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.Button;
+import metro.UI.Renderable.Controls.Canvas;
 
 /**
  * This is the bar on the side with the "build station", "build tracks", "show line view" and "create train" buttons.
@@ -51,6 +52,10 @@ public class Toolbar extends GameScreen
 
 		_panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height), false);
 		_panel.setDrawBorder(false);
+		
+		//TODO does not work
+		Canvas c = new Canvas(new Point(0,  0));
+		c.setPainter(() -> draw());
 
 		_buildStation = new Button(new Rectangle(_buttonAreaXPosition + 140, _buttonYPosition, 40, 50), new Rectangle(0, 28, 40, 50), METRO.__iconSet);
 		_buildTracks = new Button(new Rectangle(_buttonAreaXPosition + 180, _buttonYPosition, 40, 50), new Rectangle(0, 78, 40, 50), METRO.__iconSet);
@@ -58,6 +63,7 @@ public class Toolbar extends GameScreen
 		_createNewTrain = new Button(new Rectangle(_buttonAreaXPosition + 260, _buttonYPosition, 40, 50), new Rectangle(0, 178, 40, 50), METRO.__iconSet);
 		registerObervations();
 
+		_panel.add(c);
 		_panel.add(_buildStation);
 		_panel.add(_buildTracks);
 		_panel.add(_showTrainList);
@@ -141,6 +147,10 @@ public class Toolbar extends GameScreen
 
 	@Override
 	public void updateGameScreen(SpriteBatch g)
+	{
+	}
+	
+	private void draw()
 	{
 		// draw the background and the red line below it
 		Fill.setColor(Color.white);
