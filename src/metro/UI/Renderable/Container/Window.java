@@ -155,7 +155,7 @@ public class Window extends FloatingContainer
 		Point mPos = new Point(screenX, screenY);
 		for(ControlElement control : _listOfControlElements)
 		{
-			mouseOnControl |= control.getArea().contains(mPos);
+			mouseOnControl |= control.isInArea(mPos.x - _area.x, mPos.y + _area.y);
 		}
 
 		return !mouseOnControl && isMouseOnWindowArea(screenX, screenY);

@@ -118,7 +118,7 @@ public class MainMenu extends GameScreenContainer
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				exitGameScreen(new MainView());
+				exitGameScreen(null);//new MainView());
 				// METRO.__changeGameScreen(new MainView());
 			}
 		});
@@ -132,7 +132,7 @@ public class MainMenu extends GameScreenContainer
 			_welcomeWindow.close();
 		}
 		
-		notifyAllAboutSwitch(null);
+//		notifyAllAboutSwitch(null);
 	}
 
 	@Override
