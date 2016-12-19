@@ -11,11 +11,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.GameUI.MainView.MainView;
-import metro.GameUI.Screen.GameScreen;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Container.Window;
+import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Controls.Button;
+import metro.UI.Renderable.Controls.Canvas;
+import metro.UI.Renderable.Controls.Canvas.CanvasPainter;
+import metro.UI.Renderer.ContainerRenderer;
 
 /**
  * The main menu is the first menu you'll see after starting the game. It provides some basic options like start, exit and settings.
@@ -24,7 +27,7 @@ import metro.UI.Renderable.Controls.Button;
  * 
  */
 
-public class MainMenu extends GameScreen
+public class MainMenu extends GameScreenContainer
 {
 	private Button _button_startGame,
 		_button_settings,
@@ -33,12 +36,17 @@ public class MainMenu extends GameScreen
 	private static TextureRegion __buttonTextures,
 		_titleImageTexture;
 	private Panel _panel;
+	private Canvas _titleImageCanvas;
 
 	/**
 	 * Creates a main menu with the welcome-window, and the three buttons "Play", "Settings" and "Exit".
+	 * 
+	 * @param renderer The renderer for controls in this game screen. 
 	 */
-	public MainMenu()
+	public MainMenu(ContainerRenderer renderer)
 	{
+		super(renderer);
+		
 		loadVisuals();
 
 		// Create MainMenu buttons:
@@ -50,7 +58,19 @@ public class MainMenu extends GameScreen
 
 		_button_exitGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 95, 200, 50),
 			new Rectangle(0, 100, 200, 50), __buttonTextures);
-
+		
+		_titleImageCanvas = new Canvas(new Point(
+			METRO.__SCREEN_SIZE.width / 2 - _titleImageTexture.getRegionWidth() / 2,
+			METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 200));
+		_titleImageCanvas.setPainter(new CanvasPainter()
+		{
+			@Override
+			public void paint()
+			{
+				Draw.Image(_titleImageTexture,0,0);
+			}
+		});
+		
 		addActionObservations();
 
 		// Create welcome-window:
@@ -89,7 +109,8 @@ public class MainMenu extends GameScreen
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				createSettingsWindow();
+				//TODO extract settings window from normal game screen and call it here
+//				createSettingsWindow();
 			}
 		});
 		_button_startGame.register(new ActionObserver()
@@ -110,29 +131,14 @@ public class MainMenu extends GameScreen
 		{
 			_welcomeWindow.close();
 		}
-		switchToGameScreen(mainView);
+		
+		notifyAllAboutSwitch(null);
 	}
 
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		Draw.Image(_titleImageTexture,
-			METRO.__SCREEN_SIZE.width / 2 - _titleImageTexture.getRegionWidth() / 2,
-			METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 200);
-	}
-
-	@Override
-	public boolean isActive()
-	{
-		return true;
-	}
-
-	@Override
-	public boolean isHovered()
-	{
-		Point mPos = METRO.__mousePosition;
-		return _button_exitGame.getArea().contains(mPos)
-			|| _button_settings.getArea().contains(mPos)
-			|| _button_startGame.getArea().contains(mPos);
+		// TODO Auto-generated method stub
+		
 	}
 }

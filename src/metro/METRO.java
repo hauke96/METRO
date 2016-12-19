@@ -67,8 +67,10 @@ import metro.Common.Technical.Logger;
 import metro.GameUI.MainMenu.MainMenu;
 import metro.GameUI.Screen.CurrentGameScreenManager;
 import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Controls.InputField;
 import metro.UI.Renderer.BasicContainerRenderer;
+import metro.UI.Renderer.BasicGameScreenRenderer;
 
 /**
  * @author Hauke
@@ -78,6 +80,7 @@ public class METRO implements ApplicationListener, InputProcessor
 {
 	private Point _oldMousePosition;
 	private LwjglApplicationConfiguration _config;
+	private BasicGameScreenRenderer __currentGameScreenContainerManager;
 
 	private static OSType __detectedOS;
 	private static BasicContainerRenderer __containerRenderer;
@@ -204,8 +207,11 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		loadVisuals();
 
-		__currentGameScreenManager = new CurrentGameScreenManager();
-		__currentGameScreenManager.switchToGameScreen(new MainMenu());
+//		__currentGameScreenManager = new CurrentGameScreenManager();
+//		__currentGameScreenManager.switchToGameScreen(new MainMenu());
+		__currentGameScreenContainerManager = new BasicGameScreenRenderer();
+		GameScreenContainer startScreen = new MainMenu(__containerRenderer);
+		__currentGameScreenContainerManager.switchGameScreen(startScreen);
 
 		__gameState = GameState.getInstance();
 	}
@@ -335,9 +341,11 @@ public class METRO implements ApplicationListener, InputProcessor
 		__spriteBatch.begin();
 
 		renderInit();
-		__currentGameScreenManager.renderCurrentGameScreen(__spriteBatch);
+//		__currentGameScreenManager.renderCurrentGameScreen(__spriteBatch);
+		__currentGameScreenContainerManager.updateGameScreen(__spriteBatch);
+		__currentGameScreenContainerManager.renderUI();
 		// TODO replace this by calling the "currentGameScreenContainerManager"
-		__containerRenderer.notifyDraw();
+//		__containerRenderer.notifyDraw();
 		renderFPSDisplay();
 		renderCursor();
 
@@ -457,17 +465,19 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyDown(int keyCode)
 	{
-		__containerRenderer.notifyKeyPressed(keyCode);
+//		__containerRenderer.notifyKeyPressed(keyCode);
 		// TODO check if the gamescreen is allowed to handle input now (if an input field has focus, no other control is allowed to)
-		__currentGameScreenManager.keyDown(keyCode);
+//		__currentGameScreenManager.keyDown(keyCode);
+		__currentGameScreenContainerManager.keyDown(keyCode);
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keyCode)
 	{
-		__containerRenderer.notifyKeyUp(keyCode);
-		__currentGameScreenManager.keyUp(keyCode);
+//		__containerRenderer.notifyKeyUp(keyCode);
+//		__currentGameScreenManager.keyUp(keyCode);
+		__currentGameScreenContainerManager.keyUp(keyCode);
 		return false;
 	}
 
@@ -514,12 +524,13 @@ public class METRO implements ApplicationListener, InputProcessor
 		screenX -= __xOffset;
 		screenY -= __yOffset;
 
-		boolean controlGotClickEvent = __containerRenderer.notifyMouseClick(screenX, screenY, mouseButton);
+//		boolean controlGotClickEvent = __containerRenderer.notifyMouseClick(screenX, screenY, mouseButton);
 
-		if(!controlGotClickEvent)
-		{
-			__currentGameScreenManager.touchDown(screenX, screenY, pointer, mouseButton);
-		}
+//		if(!controlGotClickEvent)
+//		{
+//			__currentGameScreenManager.touchDown(screenX, screenY, pointer, mouseButton);
+//		}
+		__currentGameScreenContainerManager.touchDown(screenX, screenY, pointer, mouseButton);
 
 		return false;
 	}
@@ -531,7 +542,8 @@ public class METRO implements ApplicationListener, InputProcessor
 		screenY -= __yOffset;
 		__dragMode = false;
 		__containerRenderer.notifyMouseReleased(screenX, screenY, mouseButton);
-		__currentGameScreenManager.touchUp(screenX, screenY, pointer, mouseButton);
+//		__currentGameScreenManager.touchUp(screenX, screenY, pointer, mouseButton);
+		__currentGameScreenContainerManager.touchUp(screenX, screenY, pointer, mouseButton);
 		return false;
 	}
 
@@ -555,9 +567,10 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean scrolled(int amount)
 	{
-		__containerRenderer.notifyMouseScrolled(amount);
+//		__containerRenderer.notifyMouseScrolled(amount);
 		// TODO check if game screen is allowed to get the scroll event or if other controls get this before
-		__currentGameScreenManager.scrolled(amount);
+//		__currentGameScreenManager.scrolled(amount);
+		__currentGameScreenContainerManager.scrolled(amount);
 		return false;
 	}
 
@@ -573,7 +586,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static void __setSelectedInput(InputField field)
 	{
-		__currentGameScreenManager.setSelectedInput(field);
+//		__currentGameScreenManager.setSelectedInput(field);
 	}
 
 	/**

@@ -3,8 +3,8 @@ package metro.UI.Renderer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import metro.GameUI.Screen.GameScreen;
-import metro.GameUI.Screen.GameScreenSwitchedObserver;
+import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
+import metro.UI.Renderable.Container.GameScreen.GameScreenSwitchedObserver;
 
 /**
  * @author hauke
@@ -25,5 +25,10 @@ public interface GameScreenRenderer extends InputProcessor, GameScreenSwitchedOb
 	 * 
 	 * @param gameScreen
 	 */
-	void switchGameScreen(GameScreen gameScreen);
+	void switchGameScreen(GameScreenContainer gameScreen);
+	
+	/**
+	 * Renderes the controls specified by the renderer passed to the game screen.
+	 */
+	void renderUI();
 }

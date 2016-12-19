@@ -3,7 +3,7 @@ package metro.UI.Renderer;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.Common.Technical.Contract;
-import metro.GameUI.Screen.GameScreen;
+import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 
 /**
  * @author hauke
@@ -12,10 +12,10 @@ import metro.GameUI.Screen.GameScreen;
  */
 public class BasicGameScreenRenderer implements GameScreenRenderer
 {
-	private GameScreen _currentGameScreen;
+	private GameScreenContainer _currentGameScreen;
 	
 	@Override
-	public void switchGameScreen(GameScreen gameScreen)
+	public void switchGameScreen(GameScreenContainer gameScreen)
 	{
 		Contract.RequireNotNull(gameScreen);
 		_currentGameScreen = gameScreen;
@@ -29,7 +29,13 @@ public class BasicGameScreenRenderer implements GameScreenRenderer
 	}
 
 	@Override
-	public void reactToGameScreenSwitch(GameScreen newGameScreen)
+	public void renderUI()
+	{
+		_currentGameScreen.renderUI();
+	}
+
+	@Override
+	public void reactToGameScreenSwitch(GameScreenContainer newGameScreen)
 	{
 		Contract.RequireNotNull(newGameScreen);
 		_currentGameScreen = newGameScreen;
@@ -39,35 +45,35 @@ public class BasicGameScreenRenderer implements GameScreenRenderer
 	@Override
 	public boolean keyDown(int keycode)
 	{
-		_currentGameScreen.keyDown(keycode);
+		_currentGameScreen.keyDownEvent(keycode);
 		return true;
 	}
 
 	@Override
 	public boolean keyUp(int keycode)
 	{
-		_currentGameScreen.keyUp(keycode);
+		_currentGameScreen.keyUpEvent(keycode);
 		return true;
 	}
 
 	@Override
 	public boolean keyTyped(char character)
 	{
-		_currentGameScreen.keyPressed(character);
+		_currentGameScreen.keyTypedEvent(character);
 		return true;
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
-		_currentGameScreen.mouseClicked(screenX, screenY, button);
+		_currentGameScreen.touchDownEvent(screenX, screenY, pointer, button);
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{
-		_currentGameScreen.mouseReleased(button);
+		_currentGameScreen.touchUpEvent(screenX, screenY, pointer, button);
 		return true;
 	}
 
@@ -86,7 +92,7 @@ public class BasicGameScreenRenderer implements GameScreenRenderer
 	@Override
 	public boolean scrolled(int amount)
 	{
-		_currentGameScreen.mouseScrolled(amount);
+		_currentGameScreen.scrolledEvent(amount);
 		return true;
 	}
 }
