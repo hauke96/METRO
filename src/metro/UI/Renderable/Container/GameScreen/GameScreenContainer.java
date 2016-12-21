@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Technical.Contract;
+import metro.GameUI.Common.InGameMenuWindow;
 import metro.UI.Renderer.ContainerRenderer;
 
 /**
@@ -80,10 +82,17 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 
 	public boolean keyDownEvent(int keycode)
 	{
-		_containerRenderer.notifyKeyPressed(keycode);
-		if(_gameScreenInputProcessor != null)
+		if(keycode == Keys.ESCAPE) // Show in game window if no input control and no other window is focused/open.
 		{
-			_gameScreenInputProcessor.keyDown(keycode);
+			InGameMenuWindow.show();
+		}
+		else
+		{
+			_containerRenderer.notifyKeyPressed(keycode);
+			if(_gameScreenInputProcessor != null)
+			{
+				_gameScreenInputProcessor.keyDown(keycode);
+			}
 		}
 		return true;
 	}

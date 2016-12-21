@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import metro.METRO;
 import metro.Common.Graphics.Draw;
+import metro.GameUI.Common.SettingsWindow;
 import metro.GameUI.MainView.MainView;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.Panel;
@@ -111,6 +112,7 @@ public class MainMenu extends GameScreenContainer
 			{
 				//TODO extract settings window from normal game screen and call it here
 //				createSettingsWindow();
+				SettingsWindow.show();
 			}
 		});
 		_button_startGame.register(new ActionObserver()
