@@ -2,33 +2,33 @@ package metro;
 
 /**
  * METRO - Master of established transport railway operators
- * 
- * 
- * 
+ *
+ *
+ *
  * Code convention:
- * 
+ *
  * final: _WITH_BIG_NAME
  * normal instance variables: _someCoolVariable
  * static variables: __evenCoolerVariable
  * final (instance) variables: __FINAL_VARIABLE
  * local stuff: chooseAnyName
- * 
+ *
  * Variable are written in camel-case, meaning they begin with lower case and having upper case letter for every sub-word
  * ( e.g.: int myVariableIsCool = 42; ).
  * final variables (due to their upper-case-only convention) are separated into words with an underscore.
- * 
+ *
  * Method names has to be clear ( not a(){...} but createCharacter(){...} )
- * 
- * 
- * 
+ *
+ *
+ *
  * Debug convention:
- * 
+ *
  * When you want to print something for debug on the console and you want to commit that, please be shure that you have the following output syntax:
- * 
+ *
  * [UniqueNameTag]
  * After 4 characters intention comes the message
  * with other correct intended information.
- * 
+ *
  * [AnotherTag]
  * Between to tags should be a blank line.
  */
@@ -110,7 +110,7 @@ public class METRO implements ApplicationListener, InputProcessor
 
 	/**
 	 * Creates a new METRO Game.
-	 * 
+	 *
 	 * @param args The console arguments that have no function here.
 	 */
 	public static void main(String[] args)
@@ -193,8 +193,6 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public void create()
 	{
-		__containerRenderer = new BasicContainerRenderer();
-
 		__debug = true;
 
 		_oldMousePosition = new Point(0, 0);
@@ -207,10 +205,13 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		loadVisuals();
 
-//		__currentGameScreenManager = new CurrentGameScreenManager();
-//		__currentGameScreenManager.switchToGameScreen(new MainMenu());
+		__containerRenderer = new BasicContainerRenderer();
+		
 		__currentGameScreenContainerManager = new BasicGameScreenRenderer();
-		GameScreenContainer startScreen = new MainMenu(__containerRenderer);
+		
+		GameScreenContainer startScreen = new MainMenu();
+		startScreen.init(__containerRenderer);
+		
 		__currentGameScreenContainerManager.switchGameScreen(startScreen);
 
 		__gameState = GameState.getInstance();
@@ -491,14 +492,14 @@ public class METRO implements ApplicationListener, InputProcessor
 	 * Is executed when the user clicks with the mouse.
 	 * This method will forward the click event to the right control, window or game screen.
 	 * The exact hierarchy is shown below.
-	 * 
+	 *
 	 * The click-hierarchy:
 	 * 1.) Check if the mouse is in a window
 	 * If yes: Forward click to this window and remind it
 	 * If no : Go to next window.
 	 * screenX -= 1;
 	 * screenY -= 20;
-	 * 
+	 *
 	 * 2.) Forward click to ControlActionManager with the clicked window as parameter
 	 * 3.) Check if the clicked window is null (=there has no window been clicked)
 	 * If yes: Close the window if needed
@@ -581,7 +582,7 @@ public class METRO implements ApplicationListener, InputProcessor
 
 	/**
 	 * Sets the selected input of the current game screen. This enables to change the focus of the input fields.
-	 * 
+	 *
 	 * @param field The input field that should get the focus.
 	 */
 	public static void __setSelectedInput(InputField field)

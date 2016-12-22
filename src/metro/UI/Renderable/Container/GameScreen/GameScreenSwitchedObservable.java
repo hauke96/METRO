@@ -1,8 +1,8 @@
 package metro.UI.Renderable.Container.GameScreen;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import metro.Common.Technical.Contract;
 
@@ -21,7 +21,7 @@ public abstract class GameScreenSwitchedObservable extends Observable
 	 */
 	public GameScreenSwitchedObservable()
 	{
-		_observerList = new ArrayList<GameScreenSwitchedObserver>();
+		_observerList = new CopyOnWriteArrayList<GameScreenSwitchedObserver>();
 	}
 
 	/**
@@ -32,20 +32,18 @@ public abstract class GameScreenSwitchedObservable extends Observable
 	public void registerSwitchedObserver(GameScreenSwitchedObserver observer)
 	{
 		Contract.RequireNotNull(observer);
-		
+
 		_observerList.add(observer);
 	}
 
 	/**
-	 * Removes the given observer from the list. It won't get any switched calles any more.
-	 * 
-	 * @param observer The observer to remove.
+	 * Removes all observer from the list. They won't get any switched calles any more.
 	 */
-	public void unregisterSwitchedObserver(GameScreenSwitchedObserver observer)
+	public void unregisterSwitchedObserver()
 	{
-		Contract.RequireNotNull(observer);
-		
-		_observerList.remove(observer);
+		Contract.RequireNotNull(_observerList);
+
+		_observerList.clear();
 	}
 
 	/**

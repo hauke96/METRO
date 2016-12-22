@@ -1,7 +1,6 @@
 package metro.UI.Renderable.Container.GameScreen;
 
 import java.awt.Rectangle;
-import java.util.ArrayList;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
@@ -22,26 +21,36 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 {
 	private ContainerRenderer _containerRenderer;
 	private Rectangle _area;
-	private ArrayList<GameScreenSwitchedObservable> _observerList;
 	private InputProcessor _gameScreenInputProcessor;
 	// TODO setter for input processor where a gameScreenContainer can register itself (or a controller)
 
 	/**
 	 * Creates a new GameScreenPanel which is fullscreen and always on top
-	 * 
-	 * @param renderer The renderer for the controls
 	 */
-	public GameScreenContainer(ContainerRenderer renderer)
+	public GameScreenContainer()
+	{
+		_area = new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height);
+
+		Contract.EnsureNotNull(_area);
+	}
+
+	/**
+	 * Initializes this class with the container renderer.
+	 * 
+	 * @param renderer The container renderer.
+	 */
+	public void init(ContainerRenderer renderer)
 	{
 		Contract.RequireNotNull(renderer);
 
-		_area = new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height);
-		_observerList = new ArrayList<>();
 		_containerRenderer = renderer;
 
-		Contract.EnsureNotNull(_area);
-		Contract.EnsureNotNull(_observerList);
 		Contract.EnsureNotNull(_containerRenderer);
+	}
+
+	public void setInputProcessor(InputProcessor processor)
+	{
+		_gameScreenInputProcessor = processor;
 	}
 
 	/**
@@ -49,27 +58,12 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 	 */
 	public void renderUI()
 	{
+		Contract.RequireNotNull(_containerRenderer);
+
 		_containerRenderer.notifyDraw();
 	}
 
 	public abstract void updateGameScreen(SpriteBatch sp);
-
-	public void close()
-	{
-		throw new UnsupportedOperationException("close() in GameScreenContainer Not Implemented!");
-	}
-
-	/**
-	 * Adds the given observer to the list. It will be notified when a game screen will be switched.
-	 * 
-	 * @param observer The observer to add.
-	 */
-	public void registerSwitchedObserver(GameScreenSwitchedObservable observer)
-	{
-		Contract.RequireNotNull(observer);
-
-		_observerList.add(observer);
-	}
 
 	@Override
 	public void reactToGameScreenSwitch(GameScreenContainer newGameScreen)

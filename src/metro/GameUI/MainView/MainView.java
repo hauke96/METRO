@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -15,6 +16,7 @@ import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.MainView.TrainView.TrainView;
 import metro.GameUI.Screen.GameScreen;
+import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 
 /**
  * The main view is the normal screen the player sees.
@@ -22,10 +24,9 @@ import metro.GameUI.Screen.GameScreen;
  * Furthermore it shows all player information and draws the whole map with its trains, stations and tracks.
  * 
  * @author Hauke
- *
  */
-
-public class MainView extends GameScreen implements Observer
+// TODO break this class into MVC-structure
+public class MainView extends GameScreenContainer implements Observer, InputProcessor
 {
 	private GameScreen _activeTool;
 	private Toolbar _toolbar;
@@ -44,6 +45,9 @@ public class MainView extends GameScreen implements Observer
 
 		_playingField = PlayingField.getInstance();
 		_notificationArea = NotificationArea.getInstance();
+		
+		// TODO add here new Controller-class
+		setInputProcessor(this);
 	}
 
 	@Override
@@ -79,7 +83,7 @@ public class MainView extends GameScreen implements Observer
 	}
 
 	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	public boolean touchDown(int screenX, int screenY, int pointer, int mouseButton)
 	{
 		_playingField.mouseClicked(screenX, screenY, mouseButton);
 		_notificationArea.mouseClicked(screenX, screenY, mouseButton);
@@ -94,26 +98,38 @@ public class MainView extends GameScreen implements Observer
 			{
 				_activeTool.mouseClicked(screenX, screenY, mouseButton);
 			}
+			return true;
 		}
+return false;		
 	}
 
 	@Override
-	public void mouseReleased(int mouseButton)
+	public boolean touchUp(int screenX, int screenY, int pointer, int mouseButton)
 	{
+//		_playingField.touchUp(screenX, screenY, pointer, mouseButton);
 		_playingField.mouseReleased(mouseButton);
+		
+		return true;
 	}
 
 	@Override
-	public void mouseScrolled(int amount)
+	public boolean scrolled(int amount)
 	{
 		if(_activeTool instanceof LineView) ((LineView)_activeTool).mouseScrolled(amount);
 		_playingField.mouseScrolled(amount);
+		
+		return true;
 	}
 
 	@Override
-	public void keyDown(int keyCode)
+	public boolean keyDown(int keyCode)
 	{
-		if(_activeTool instanceof LineView) ((LineView)_activeTool).keyDown(keyCode);
+		if(_activeTool instanceof LineView)
+		{
+			((LineView)_activeTool).keyDown(keyCode);
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -181,19 +197,26 @@ public class MainView extends GameScreen implements Observer
 	}
 
 	@Override
-	public boolean isActive()
+	public boolean keyUp(int keycode)
 	{
-		return true;
+		return false;
 	}
 
 	@Override
-	public void reset()
+	public boolean keyTyped(char character)
 	{
+		return false;
 	}
 
 	@Override
-	public boolean isHovered()
+	public boolean touchDragged(int screenX, int screenY, int pointer)
 	{
-		return true;
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY)
+	{
+		return false;
 	}
 }

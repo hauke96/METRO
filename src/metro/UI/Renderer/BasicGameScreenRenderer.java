@@ -4,21 +4,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.Common.Technical.Contract;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
+import metro.UI.Renderable.Container.GameScreen.GameScreenSwitchedObserver;
 
 /**
  * @author hauke
  * 
- * A Basic 
+ *         A Basic
  */
-public class BasicGameScreenRenderer implements GameScreenRenderer
+public class BasicGameScreenRenderer implements GameScreenRenderer, GameScreenSwitchedObserver
 {
 	private GameScreenContainer _currentGameScreen;
-	
+
 	@Override
 	public void switchGameScreen(GameScreenContainer gameScreen)
 	{
 		Contract.RequireNotNull(gameScreen);
 		_currentGameScreen = gameScreen;
+		_currentGameScreen.registerSwitchedObserver(this);
 		Contract.EnsureNotNull(_currentGameScreen);
 	}
 
@@ -38,8 +40,16 @@ public class BasicGameScreenRenderer implements GameScreenRenderer
 	public void reactToGameScreenSwitch(GameScreenContainer newGameScreen)
 	{
 		Contract.RequireNotNull(newGameScreen);
+
+		// old game screen
+		_currentGameScreen.unregisterSwitchedObserver();
+
+		// new gamescreen
 		_currentGameScreen = newGameScreen;
-		Contract.EnsureNotNull(_currentGameScreen);
+		_currentGameScreen.registerSwitchedObserver(this);
+		_currentGameScreen.init(new BasicContainerRenderer());
+
+		Contract.EnsureNotNull(newGameScreen);
 	}
 
 	@Override

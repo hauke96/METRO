@@ -19,7 +19,6 @@ import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Controls.Button;
 import metro.UI.Renderable.Controls.Canvas;
 import metro.UI.Renderable.Controls.Canvas.CanvasPainter;
-import metro.UI.Renderer.ContainerRenderer;
 
 /**
  * The main menu is the first menu you'll see after starting the game. It provides some basic options like start, exit and settings.
@@ -41,13 +40,9 @@ public class MainMenu extends GameScreenContainer
 
 	/**
 	 * Creates a main menu with the welcome-window, and the three buttons "Play", "Settings" and "Exit".
-	 * 
-	 * @param renderer The renderer for controls in this game screen. 
 	 */
-	public MainMenu(ContainerRenderer renderer)
+	public MainMenu()
 	{
-		super(renderer);
-		
 		loadVisuals();
 
 		// Create MainMenu buttons:
@@ -120,13 +115,13 @@ public class MainMenu extends GameScreenContainer
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				exitGameScreen(null);//new MainView());
-				// METRO.__changeGameScreen(new MainView());
+				exitGameScreen(new MainView());
+//				 METRO.__changeGameScreen(new MainView());
 			}
 		});
 	}
 
-	protected void exitGameScreen(MainView mainView)
+	protected void exitGameScreen(GameScreenContainer newContainer)
 	{
 		_panel.close();
 		if(_welcomeWindow != null)
@@ -134,13 +129,11 @@ public class MainMenu extends GameScreenContainer
 			_welcomeWindow.close();
 		}
 		
-//		notifyAllAboutSwitch(null);
+		notifyAllAboutSwitch(newContainer);
 	}
 
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		// TODO Auto-generated method stub
-		
 	}
 }
