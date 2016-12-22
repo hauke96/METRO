@@ -10,12 +10,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
-import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Contract;
 import metro.GameUI.Screen.GameScreen;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.Panel;
 
 /**
@@ -196,9 +196,10 @@ public class TrainView extends GameScreen
 	/**
 	 * @return The background panel all controls are on.
 	 */
-	public Panel getBackgroundPanel()
+	public AbstractContainer getBackgroundPanel()
 	{
 		Contract.EnsureNotNull(_panel);
+		
 		return _panel;
 	}
 }

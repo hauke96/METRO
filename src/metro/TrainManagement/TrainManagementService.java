@@ -14,8 +14,6 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.regex.Pattern;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Technical.Logger;
@@ -428,24 +426,22 @@ public class TrainManagementService implements Observer
 	 * Draws all train lines.
 	 * 
 	 * @param offset The map offset in pixel.
-	 * @param sp The sprite batch to draw on.
 	 */
-	public void drawLines(Point offset, SpriteBatch sp)
+	public void drawLines(Point offset)
 	{
-		_trainLineDrawingService.drawLines(offset, sp, _trainLineList);
+		_trainLineDrawingService.drawLines(offset, _trainLineList);
 	}
 
 	/**
 	 * Draws all stations.
 	 * 
 	 * @param offset The map offset in pixel.
-	 * @param sp The sprite batch to draw on.
 	 */
-	public void drawStations(Point offset, SpriteBatch sp)
+	public void drawStations(Point offset)
 	{
 		for(TrainStation station : _stationList)
 		{
-			station.draw(sp, offset);
+			station.draw(offset);
 			station.addRandomPassenger(getStrength(station.getPosition()));
 			station.handlePassenger();
 		}
@@ -480,9 +476,8 @@ public class TrainManagementService implements Observer
 	 * Draws all trains.
 	 * 
 	 * @param offset The map offset in pixel.
-	 * @param sp The sprite batch to draw on.
 	 */
-	public void drawTrains(Point offset, SpriteBatch sp)
+	public void drawTrains(Point offset)
 	{
 		float deltaTime = System.nanoTime() - _lastRenderTime;
 		_lastRenderTime = System.nanoTime();
@@ -491,7 +486,7 @@ public class TrainManagementService implements Observer
 
 		for(Train train : _trainList)
 		{
-			train.draw(sp, offset);
+			train.draw(offset);
 			train.drive(canMove(train, deltaTime), deltaTime);
 		}
 

@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.Random;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
@@ -67,11 +65,9 @@ public class TrainStation
 
 	/**
 	 * Draws the station with passenger amount.
-	 * 
-	 * @param sp The SpriteBatch to draw on
 	 * @param offset The offset of the current game screen.
 	 */
-	public void draw(SpriteBatch sp, Point offset)
+	public void draw(Point offset)
 	{
 		Point position = new Point(offset.x + _position.x * _gameState.getBaseNetSpacing() - 4,
 			offset.y + _position.y * _gameState.getBaseNetSpacing() - 7); // Position with offset etc.

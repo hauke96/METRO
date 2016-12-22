@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 /**
  * This class manages the RailwayNodes, offers some functions in adding, removing and clearing the map of nodes.
  * 
@@ -139,13 +137,12 @@ public class RailwayNodeOverseer
 	 * Draws all node connections (lines between nodes) onto the screen.
 	 * 
 	 * @param offset The map offset in pixel.
-	 * @param sp The sprite batch.
 	 */
-	public static void drawAllNodes(Point offset, SpriteBatch sp)
+	public static void drawAllNodes(Point offset)
 	{
 		for(RailwayNode node : __nodeMap.values())
 		{
-			node.draw(sp, offset);
+			node.draw(offset);
 		}
 	}
 

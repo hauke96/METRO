@@ -44,9 +44,16 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		Contract.RequireNotNull(renderer);
 
 		_containerRenderer = renderer;
-
+		
 		Contract.EnsureNotNull(_containerRenderer);
+		
+		initializeUi();
 	}
+	
+	/**
+	 * This method will create the UI of the game screen. Creating the UI in the constructor won't work (renderer not set there).
+	 */
+	protected abstract void initializeUi();
 
 	public void setInputProcessor(InputProcessor processor)
 	{

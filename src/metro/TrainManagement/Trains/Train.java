@@ -5,8 +5,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
@@ -115,11 +113,9 @@ public class Train extends TrainTemplate
 
 	/**
 	 * Draws the train on its train line.
-	 * 
-	 * @param sp The sprite Batch to draw on.
 	 * @param offset The offset of the map.
 	 */
-	public void draw(SpriteBatch sp, Point offset)
+	public void draw(Point offset)
 	{
 		Point2D position = calcPosition();
 		int baseNetSpacing = GameState.getInstance().getBaseNetSpacing();

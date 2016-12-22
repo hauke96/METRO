@@ -1,25 +1,11 @@
 package metro.GameUI.Screen;
 
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.text.MessageFormat;
-
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import metro.METRO;
-import metro.Common.Game.Settings;
 import metro.Common.Technical.Logger;
 import metro.GameUI.Common.InGameMenuWindow;
 import metro.GameUI.Common.SettingsWindow;
-import metro.UI.Renderable.ActionObserver;
-import metro.UI.Renderable.CloseObservable;
-import metro.UI.Renderable.Container.Window;
-import metro.UI.Renderable.Controls.Button;
-import metro.UI.Renderable.Controls.Checkbox;
-import metro.UI.Renderable.Controls.Label;
-import metro.UI.Renderable.Controls.List;
-import metro.UI.Renderer.CloseObserver;
 
 /**
  * Every Menu or Game Sreen has to implement this interface for start() and update(). This will make the creation process more easy.

@@ -2,17 +2,20 @@ package metro.GameUI.MainView.PlayingField;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.InputProcessor;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
-import metro.GameUI.Screen.GameScreen;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
+import metro.UI.Renderable.Container.AbstractContainer;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Canvas;
 
 /**
  * The playing field is the area where trains are driving, the stations are placed and the nodes live peaceful together with the tracks and train lines.
@@ -20,16 +23,18 @@ import metro.TrainManagement.Nodes.RailwayNodeOverseer;
  * @author hauke
  *
  */
-public class PlayingField extends GameScreen
+public class PlayingField implements InputProcessor
 {
+	private static PlayingField __INSTANCE;
+	
 	private CityView _cityView;
 	private boolean _dragMode;
 	private Point _oldMousePos, // Mouse position from last frame
 		_mapOffset,
 		_selectedNode;
 	private GameState _gameState;
-
-	private static final PlayingField __INSTANCE = new PlayingField();
+	
+	private Panel _panel;
 
 	private PlayingField()
 	{
@@ -38,6 +43,13 @@ public class PlayingField extends GameScreen
 		_mapOffset = new Point();
 		_selectedNode = new Point(-1, -1);
 		_gameState = GameState.getInstance();
+		
+		_panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height), false);
+		
+		Canvas canvas = new Canvas(new Point(0, 0));
+		canvas.setPainter(() -> updateGameScreen());
+		
+		_panel.add(canvas);
 	}
 
 	/**
@@ -45,6 +57,11 @@ public class PlayingField extends GameScreen
 	 */
 	public static PlayingField getInstance()
 	{
+		if(__INSTANCE == null)
+		{
+			__INSTANCE = new PlayingField();
+		}
+		
 		return __INSTANCE;
 	}
 
@@ -59,8 +76,7 @@ public class PlayingField extends GameScreen
 		else _cityView.disableCircleHighlighting();
 	}
 
-	@Override
-	public void updateGameScreen(SpriteBatch sp)
+	public void updateGameScreen()
 	{
 		if(_dragMode)
 		{
@@ -69,27 +85,26 @@ public class PlayingField extends GameScreen
 		}
 		_oldMousePos = METRO.__mousePosition;
 
-		_cityView.updateGameScreen(sp, _mapOffset);
-		drawBaseNet(sp, new Color(220, 220, 220), 0);
-		Point cursorDotPosition = drawBaseDot(sp);
-		_cityView.drawNumbers(sp, cursorDotPosition);
+		_cityView.updateGameScreen(_mapOffset);
+		drawBaseNet(new Color(220, 220, 220), 0);
+		Point cursorDotPosition = drawBaseDot();
+		_cityView.drawNumbers(cursorDotPosition);
 
-		RailwayNodeOverseer.drawAllNodes(_mapOffset, sp);
+		RailwayNodeOverseer.drawAllNodes(_mapOffset);
 
 		TrainManagementService trainManagementService = TrainManagementService.getInstance();
-		trainManagementService.drawLines(_mapOffset, sp);
-		trainManagementService.drawStations(_mapOffset, sp);
-		trainManagementService.drawTrains(_mapOffset, sp);
+		trainManagementService.drawLines(_mapOffset);
+		trainManagementService.drawStations(_mapOffset);
+		trainManagementService.drawTrains(_mapOffset);
 	}
 
 	/**
 	 * Draws the basic gray net for kind of orientation.
 	 * 
-	 * @param sp The SpriteBatch to draw on
 	 * @param color The color of the net
 	 * @param offset An user made offset
 	 */
-	private void drawBaseNet(SpriteBatch sp, Color color, int offset)
+	private void drawBaseNet(Color color, int offset)
 	{
 		Draw.setColor(color);
 		for(int y = (_mapOffset.y + offset) % _gameState.getBaseNetSpacing(); y < METRO.__SCREEN_SIZE.height; y += _gameState.getBaseNetSpacing())
@@ -104,10 +119,8 @@ public class PlayingField extends GameScreen
 
 	/**
 	 * Calculates the position and draws the dot near the cursor.
-	 * 
-	 * @param sp The SpriteBatch to draw on
 	 */
-	private Point drawBaseDot(SpriteBatch sp)
+	private Point drawBaseDot()
 	{
 		_selectedNode = new Point(
 			(int)Math.round((int)(METRO.__mousePosition.x - _mapOffset.x) / (float)_gameState.getBaseNetSpacing()),
@@ -126,43 +139,51 @@ public class PlayingField extends GameScreen
 	}
 
 	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
-		if(_cityView != null) _cityView.mouseClicked(screenX, screenY, mouseButton);
+		boolean processed = false;
 
-		if(mouseButton == Buttons.MIDDLE) // for drag-mode
+		if(_cityView != null)
+		{
+			_cityView.mouseClicked(screenX, screenY, button);
+			processed = true;
+		}
+
+		if(button == Buttons.MIDDLE) // for drag-mode
 		{
 			_dragMode = true;
+			processed = true;
 		}
+
+		return processed;
 	}
 
 	@Override
-	public void mouseReleased(int mouseButton)
+	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{
-		if(_cityView != null) _cityView.mouseReleased(mouseButton);
+		boolean processed = false;
 
-		if(mouseButton == Buttons.MIDDLE)
+		if(_cityView != null)
+		{
+			_cityView.mouseReleased(button);
+			processed = true;
+		}
+
+		if(button == Buttons.MIDDLE) // for drag-mode
 		{
 			_dragMode = false;
+			processed = true;
 		}
+
+		return processed;
 	}
 
 	@Override
-	public void mouseScrolled(int amount)
+	public boolean scrolled(int amount)
 	{
 		_gameState.zoom(amount);
-	}
 
-	@Override
-	public boolean isActive()
-	{
-		return false;
-	}
-
-	@Override
-	public boolean isHovered()
-	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -179,5 +200,40 @@ public class PlayingField extends GameScreen
 	public Point getSelectedNode()
 	{
 		return _selectedNode;
+	}
+
+	@Override
+	public boolean keyDown(int keycode)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean keyUp(int keycode)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean keyTyped(char character)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean touchDragged(int screenX, int screenY, int pointer)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean mouseMoved(int screenX, int screenY)
+	{
+		return false;
+	}
+
+	public AbstractContainer getBackgroundPanel()
+	{
+		return _panel;
 	}
 }

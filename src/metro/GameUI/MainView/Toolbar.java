@@ -3,16 +3,13 @@ package metro.GameUI.MainView;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import java.util.Observable;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
-import metro.GameUI.MainView.LineView.LineView;
-import metro.GameUI.MainView.TrainView.TrainView;
-import metro.GameUI.Screen.GameScreen;
+import metro.Common.Technical.Contract;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.Panel;
@@ -25,10 +22,8 @@ import metro.UI.Renderable.Controls.Canvas;
  * @author hauke
  *
  */
-
 // TODO separate UI and logic code
-
-public class Toolbar extends GameScreen
+public class Toolbar extends Observable
 {
 	private Button _buildStation,
 		_buildTracks,
@@ -77,8 +72,6 @@ public class Toolbar extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				resetExclusiveButtonPositions(_buildStation);
-				setChanged();
-				notifyObservers(new StationPlacingTool());
 			}
 		});
 		_buildTracks.register(new ActionObserver()
@@ -87,8 +80,6 @@ public class Toolbar extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				resetExclusiveButtonPositions(_buildTracks);
-				setChanged();
-				notifyObservers(new TrackPlacingTool());
 			}
 		});
 		_showTrainList.register(new ActionObserver()
@@ -97,13 +88,6 @@ public class Toolbar extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				resetExclusiveButtonPositions(_showTrainList);
-
-				LineView lineView = new LineView();
-				Panel panel = lineView.getBackgroundPanel();
-				setButtonsAboveOf(panel);
-
-				setChanged();
-				notifyObservers(lineView);
 			}
 		});
 		_createNewTrain.register(new ActionObserver()
@@ -112,13 +96,6 @@ public class Toolbar extends GameScreen
 			public void clickedOnControl(Object arg)
 			{
 				resetExclusiveButtonPositions(_createNewTrain);
-
-				TrainView trainView = new TrainView();
-				Panel panel = trainView.getBackgroundPanel();
-				setButtonsAboveOf(panel);
-
-				setChanged();
-				notifyObservers(trainView);
 			}
 		});
 	}
@@ -140,11 +117,6 @@ public class Toolbar extends GameScreen
 		{
 			exceptThisButton.setPosition(new Point(exceptThisButton.getPosition().x, 0));
 		}
-	}
-
-	@Override
-	public void updateGameScreen(SpriteBatch g)
-	{
 	}
 
 	private void draw()
@@ -184,13 +156,6 @@ public class Toolbar extends GameScreen
 		_panel.setAboveOf(container);
 	}
 
-	@Override
-	public boolean isActive()
-	{
-		return true;
-	}
-
-	@Override
 	public boolean isHovered()
 	{
 		Point mPos = METRO.__mousePosition;
@@ -198,5 +163,40 @@ public class Toolbar extends GameScreen
 			|| _buildTracks.getArea().contains(mPos)
 			|| _showTrainList.getArea().contains(mPos)
 			|| _createNewTrain.getArea().contains(mPos);
+	}
+
+	public Button getBuildStationButton()
+	{
+		Contract.EnsureNotNull(_buildStation);
+
+		return _buildStation;
+	}
+
+	public Button getBuildTracksButton()
+	{
+		Contract.EnsureNotNull(_buildTracks);
+
+		return _buildTracks;
+	}
+
+	public Button getShowTrainListButton()
+	{
+		Contract.EnsureNotNull(_showTrainList);
+
+		return _showTrainList;
+	}
+
+	public Button getCreateNewTrainButton()
+	{
+		Contract.EnsureNotNull(_createNewTrain);
+
+		return _createNewTrain;
+	}
+
+	public AbstractContainer getBackgroundPanel()
+	{
+		Contract.EnsureNotNull(_panel);
+
+		return _panel;
 	}
 }

@@ -16,7 +16,11 @@ import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.MainView.TrainView.TrainView;
 import metro.GameUI.Screen.GameScreen;
+import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.AbstractContainer;
+import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
+import metro.UI.Renderable.Controls.Button;
 
 /**
  * The main view is the normal screen the player sees.
@@ -38,29 +42,76 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	 */
 	public MainView()
 	{
+		_activeTool = null;
+
+		// TODO add here new Controller-class
+		setInputProcessor(this);
+	}
+
+	@Override
+	protected void initializeUi()
+	{
 		_toolbar = new Toolbar();
 		_toolbar.addObserver(this);
 
-		_activeTool = null;
+		_toolbar.getBuildStationButton().register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				setActiveTool(new StationPlacingTool());
+			}
+		});
+		_toolbar.getBuildTracksButton().register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				setActiveTool(new TrackPlacingTool());
+			}
+		});
+		_toolbar.getShowTrainListButton().register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				LineView lineView = new LineView();
+				AbstractContainer lineViewPanel = lineView.getBackgroundPanel();
+				_toolbar.getBackgroundPanel().setAboveOf(lineViewPanel);
+
+				setActiveTool(lineView);
+			}
+		});
+		_toolbar.getCreateNewTrainButton().register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				TrainView trainView = new TrainView();
+				AbstractContainer trainViewPanel = trainView.getBackgroundPanel();
+				_toolbar.getBackgroundPanel().setAboveOf(trainViewPanel);
+
+				setActiveTool(trainView);
+			}
+		});
+		;
 
 		_playingField = PlayingField.getInstance();
 		_notificationArea = NotificationArea.getInstance();
-		
-		// TODO add here new Controller-class
-		setInputProcessor(this);
+
+		AbstractContainer playingFieldBackground = _playingField.getBackgroundPanel();
+		_toolbar.getBackgroundPanel().setAboveOf(playingFieldBackground);
 	}
 
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
 		_playingField.setCityCircleHighlighting(_activeTool == null || !_activeTool.isHovered());
-		_playingField.updateGameScreen(sp);
+		// _playingField.updateGameScreen();
 
 		_notificationArea.updateGameScreen(sp);
 
 		if(_activeTool != null) _activeTool.updateGameScreen(sp);
-
-		_toolbar.updateGameScreen(sp);
 
 		printDebugStuff(sp);
 	}
@@ -83,32 +134,32 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	}
 
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int mouseButton)
+	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
-		_playingField.mouseClicked(screenX, screenY, mouseButton);
-		_notificationArea.mouseClicked(screenX, screenY, mouseButton);
+		_playingField.touchDown(screenX, screenY, pointer, button);
+
+		_notificationArea.mouseClicked(screenX, screenY, button);
 
 		if(_activeTool != null)
 		{
-			if(mouseButton == Buttons.LEFT)
+			if(button == Buttons.LEFT)
 			{
-				_activeTool.mouseClicked(screenX, screenY, mouseButton);
+				_activeTool.mouseClicked(screenX, screenY, button);
 			}
-			else if(mouseButton == Buttons.RIGHT)
+			else if(button == Buttons.RIGHT)
 			{
-				_activeTool.mouseClicked(screenX, screenY, mouseButton);
+				_activeTool.mouseClicked(screenX, screenY, button);
 			}
 			return true;
 		}
-return false;		
+		return false;
 	}
 
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int mouseButton)
+	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{
-//		_playingField.touchUp(screenX, screenY, pointer, mouseButton);
-		_playingField.mouseReleased(mouseButton);
-		
+		_playingField.touchUp(screenX, screenY, pointer, button);
+
 		return true;
 	}
 
@@ -116,8 +167,8 @@ return false;
 	public boolean scrolled(int amount)
 	{
 		if(_activeTool instanceof LineView) ((LineView)_activeTool).mouseScrolled(amount);
-		_playingField.mouseScrolled(amount);
-		
+		_playingField.scrolled(amount);
+
 		return true;
 	}
 
@@ -139,7 +190,7 @@ return false;
 		if(arg0.equals(_toolbar))
 		{
 			closeActiveTool();
-			
+
 			if(arg1 == null)
 			{
 				_toolbar.resetExclusiveButtonPositions(null);
@@ -172,7 +223,7 @@ return false;
 		// set new tool and add new observer
 		_activeTool = newTool;
 		_activeTool.addObserver(this);
-		
+
 		if(_activeTool instanceof LineView || _activeTool instanceof TrainView) // tools that have own window and influence the notification area
 		{
 			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth());

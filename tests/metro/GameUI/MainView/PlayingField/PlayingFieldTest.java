@@ -24,16 +24,6 @@ public class PlayingFieldTest
 	}
 
 	/**
-	 * Checks the active and hovered values.
-	 */
-	@Test
-	public void testActiveAndHovered()
-	{
-		assertFalse(field.isActive());
-		assertFalse(field.isHovered());
-	}
-
-	/**
 	 * Tests the initial state of the map offset.
 	 */
 	@Test

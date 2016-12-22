@@ -3,8 +3,6 @@ package metro.TrainManagement.Trains;
 import java.awt.Color;
 import java.awt.Point;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
@@ -63,14 +61,12 @@ public class TravelerSpot
 
 	/**
 	 * Draws the circles of the hot-spot.
-	 * 
-	 * @param sp The SpriteBatch to draw on.
 	 * @param layerIndex Index of the circle to draw
 	 * @param circleSelected If the circle is selected and therefore drawn in a different color.
 	 * @param onlyEdges If only edges should be drawn
 	 * @param offset The current map offset.
 	 */
-	public void draw(SpriteBatch sp, int layerIndex, boolean circleSelected, boolean onlyEdges, Point offset)
+	public void draw(int layerIndex, boolean circleSelected, boolean onlyEdges, Point offset)
 	{
 		int circleRadius = _gameState.getBaseNetSpacing() * __scale;
 

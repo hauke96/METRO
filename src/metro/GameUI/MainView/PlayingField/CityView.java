@@ -39,12 +39,10 @@ public class CityView extends GameScreen
 	}
 
 	/**
-	 * Draws the city view. This method does not draw the number of the selected circle over the cursor (s. {@link #drawNumbers(SpriteBatch, Point)}).
-	 * 
-	 * @param sp The sprite batch to draw on.
+	 * Draws the city view. This method does not draw the number of the selected circle over the cursor (s. {@link #drawNumbers(Point)}).
 	 * @param offset The current map offset.
 	 */
-	public void updateGameScreen(SpriteBatch sp, Point offset)
+	public void updateGameScreen(Point offset)
 	{
 		ArrayList<TravelerSpot> travelerSpots = TrainManagementService.getInstance().getTravelerSpots();
 
@@ -71,23 +69,21 @@ public class CityView extends GameScreen
 			for(int k = 0; k < travelerSpots.size(); ++k)
 			{
 				if(travelerSpots.get(k).getStrength() <= i) continue;
-				travelerSpots.get(k).draw(sp, i, i == _selectedLayerNumber, true, offset); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+				travelerSpots.get(k).draw(i, i == _selectedLayerNumber, true, offset); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 			}
 			for(int k = 0; k < travelerSpots.size(); ++k)
 			{
 				if(travelerSpots.get(k).getStrength() <= i) continue;
-				travelerSpots.get(k).draw(sp, i, i == _selectedLayerNumber, false, offset); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+				travelerSpots.get(k).draw(i, i == _selectedLayerNumber, false, offset); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 			}
 		}
 	}
 
 	/**
 	 * Draws the number of the selected Traveler Spot above the mouse.
-	 * 
-	 * @param sp The spriteBatch
 	 * @param cursorDotPosition The position of the cursor dot from the Grid.
 	 */
-	public void drawNumbers(SpriteBatch sp, Point cursorDotPosition)
+	public void drawNumbers(Point cursorDotPosition)
 	{
 		Point p = new Point(cursorDotPosition.x - METRO.__mousePosition.x,
 			cursorDotPosition.y - METRO.__mousePosition.y);

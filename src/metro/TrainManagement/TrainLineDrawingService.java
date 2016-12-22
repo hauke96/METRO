@@ -4,8 +4,6 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
@@ -82,10 +80,9 @@ class TrainLineDrawingService
 	 * Draws all train lines.
 	 * 
 	 * @param mapOffset The map offset in pixel.
-	 * @param sp The sprite batch to draw on.
 	 * @param lineList An ArrayList of all existing train lines.
 	 */
-	public void drawLines(Point mapOffset, SpriteBatch sp, ArrayList<TrainLine> lineList)
+	public void drawLines(Point mapOffset, ArrayList<TrainLine> lineList)
 	{
 		for(TrainLine line : lineList)
 		{

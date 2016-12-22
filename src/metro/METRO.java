@@ -65,7 +65,6 @@ import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Logger;
 import metro.GameUI.MainMenu.MainMenu;
-import metro.GameUI.Screen.CurrentGameScreenManager;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Controls.InputField;
@@ -84,7 +83,6 @@ public class METRO implements ApplicationListener, InputProcessor
 
 	private static OSType __detectedOS;
 	private static BasicContainerRenderer __containerRenderer;
-	private static CurrentGameScreenManager __currentGameScreenManager;
 	private static ActionObserver __windowObserver;
 	private static SpriteBatch __gameWindowSpriteBatch;
 	private static int __xOffset,

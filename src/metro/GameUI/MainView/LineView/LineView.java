@@ -24,6 +24,7 @@ import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
 import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.Button;
 import metro.UI.Renderable.Controls.ColorBar;
@@ -596,9 +597,10 @@ public class LineView extends GameScreen implements Observer
 	/**
 	 * @return The panel where all controls are on.
 	 */
-	public Panel getBackgroundPanel()
+	public AbstractContainer getBackgroundPanel()
 	{
 		Contract.EnsureNotNull(_panel);
+		
 		return _panel;
 	}
 

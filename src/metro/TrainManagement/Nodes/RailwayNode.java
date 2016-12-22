@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.TrainManagement.Trains.Train;
@@ -117,11 +115,9 @@ public class RailwayNode
 
 	/**
 	 * Draws a railway node and its neighbors. An algorithm takes care of NOT drawing nodes twice.
-	 * 
-	 * @param sp The sprite batch.
 	 * @param offset An map offset in pixel.
 	 */
-	public void draw(SpriteBatch sp, Point offset)
+	public void draw(Point offset)
 	{
 		Point position, positionNext;
 		GameState gameState = GameState.getInstance();
