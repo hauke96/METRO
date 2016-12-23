@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
+import metro.Common.Technical.Contract;
 import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
@@ -18,9 +19,7 @@ import metro.GameUI.MainView.TrainView.TrainView;
 import metro.GameUI.Screen.GameScreen;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.AbstractContainer;
-import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
-import metro.UI.Renderable.Controls.Button;
 
 /**
  * The main view is the normal screen the player sees.
@@ -220,6 +219,13 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	 */
 	private void setActiveTool(GameScreen newTool)
 	{
+		Contract.RequireNotNull(newTool);
+
+		if(_activeTool != null)
+		{
+			_activeTool.close();
+		}
+
 		// set new tool and add new observer
 		_activeTool = newTool;
 		_activeTool.addObserver(this);
