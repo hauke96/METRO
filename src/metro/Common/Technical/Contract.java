@@ -1,6 +1,7 @@
 package metro.Common.Technical;
 
 import metro.Exceptions.Contract.PostconditionNotNullFailed;
+import metro.Exceptions.Contract.PreconditionFailedException;
 import metro.Exceptions.Contract.PreconditionNotEmptyFailed;
 import metro.Exceptions.Contract.PreconditionNotNullFailed;
 
@@ -12,6 +13,19 @@ import metro.Exceptions.Contract.PreconditionNotNullFailed;
  */
 public class Contract
 {
+	/**
+	 * Checks if the given value is {@code true}. When it's not, it'll throw a {@link PreconditionFailedException}.
+	 * 
+	 * @param expression An expression (or just a boolean) to check.
+	 */
+	public static void Require(boolean expression)
+	{
+		if(!expression)
+		{
+			throw new PreconditionFailedException();
+		}
+	}
+
 	/**
 	 * Checks if the given variable is not null. If so, an exception will be thrown.
 	 *

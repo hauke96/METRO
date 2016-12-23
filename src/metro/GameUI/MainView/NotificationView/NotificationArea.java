@@ -5,11 +5,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
+import metro.Common.Technical.Contract;
 import metro.GameUI.Screen.GameScreen;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.List;
@@ -20,7 +19,7 @@ import metro.UI.Renderable.Controls.List;
  * @author hauke
  *
  */
-public class NotificationArea extends GameScreen implements NotificationSubscriber
+public class NotificationArea implements NotificationSubscriber
 {
 	private boolean _isActive,
 		_isExpanded;
@@ -85,7 +84,7 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 		Rectangle oldPanelArea = (Rectangle)_panel.getArea().clone();
 		oldPanelArea.setSize(_width - 5, oldPanelArea.height);
 		_panel.setArea(oldPanelArea);
-		
+
 		_entryList.setArea(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight));
 	}
 
@@ -96,15 +95,17 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 		_entryList.addElement(message);
 	}
 
-	@Override
-	public void updateGameScreen(SpriteBatch sp)
+	/**
+	 * Draws the control.
+	 */
+	public void draw()
 	{
 		Fill.setColor(_backGroundColor);
 		Fill.Rect(0, METRO.__SCREEN_SIZE.height - _height, _width, _height);
 
 		Draw.setColor(METRO.__metroBlue);
 		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height, _width, METRO.__SCREEN_SIZE.height - _height);
-//		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width, METRO.__SCREEN_SIZE.height - _height + _headerHeight);
+		// Draw.Line(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width, METRO.__SCREEN_SIZE.height - _height + _headerHeight);
 
 		int length = Draw.getStringSize("Notifications:").width;
 		Draw.setColor(METRO.__metroRed);
@@ -116,29 +117,35 @@ public class NotificationArea extends GameScreen implements NotificationSubscrib
 			new Rectangle(0, 228 + (_isExpanded ? _headerHeight : 0), _headerHeight, _headerHeight));
 	}
 
-	@Override
+	/**
+	 * Reacts to a mouse click with the given position and button.
+	 * It'll only have an effect when the click in inside the control.
+	 * 
+	 * @param screenX The x-coordinate of the click.
+	 * @param screenY The y-coordinate of the click.
+	 * @param mouseButton The mouse button.
+	 */
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(screenY >= METRO.__SCREEN_SIZE.height - _height
-			&& screenY <= METRO.__SCREEN_SIZE.height - _height + _headerHeight
-			&& screenX <= _width)
-		{
-			_isExpanded ^= true; // flip state of boolean
-			_height = _isExpanded ? 250 : METRO.__titleBarHeight + _headerHeight;
-			_entryList.setState(_isExpanded);
-			_panel.setPosition(new Point(_entryList.getPosition().x, METRO.__SCREEN_SIZE.height - _height + _headerHeight));
-		}
+		Contract.Require(isInArea(screenX, screenY));
+
+		_isExpanded ^= true; // flip state of boolean
+		_height = _isExpanded ? 250 : METRO.__titleBarHeight + _headerHeight;
+		_entryList.setState(_isExpanded);
+		_panel.setPosition(new Point(_entryList.getPosition().x, METRO.__SCREEN_SIZE.height - _height + _headerHeight));
 	}
 
-	@Override
-	public boolean isActive()
+	/**
+	 * Checks if the given coordinates are inside this control.
+	 * 
+	 * @param x The x-coordinate.
+	 * @param y The y-coordinate.
+	 * @return True when point is inside, false otherwise.
+	 */
+	public boolean isInArea(int x, int y)
 	{
-		return _isActive;
-	}
-
-	@Override
-	public boolean isHovered()
-	{
-		return false;
+		return y >= METRO.__SCREEN_SIZE.height - _height
+			&& y <= METRO.__SCREEN_SIZE.height - _height + _headerHeight
+			&& x <= _width;
 	}
 }
