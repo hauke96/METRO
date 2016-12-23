@@ -48,13 +48,13 @@ public class NotificationArea implements NotificationSubscriber
 
 		_panel = new Panel(new Rectangle(0,
 			METRO.__SCREEN_SIZE.height - _height,
-			_width - 5,
+			_width - METRO.__getXOffset(),
 			_height - METRO.__titleBarHeight));
 		_panel.setDrawBorder(true, METRO.__metroBlue);
 
 		_entryList = new List(new Rectangle(0,
 			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
-			_width - 5,
+			_width - METRO.__getXOffset() - 4,
 			_height - _headerHeight - METRO.__titleBarHeight),
 			new ArrayList<String>(), true);
 
@@ -99,10 +99,10 @@ public class NotificationArea implements NotificationSubscriber
 		_width = newWidth;
 
 		Rectangle oldPanelArea = (Rectangle)_panel.getArea().clone();
-		oldPanelArea.setSize(_width - 5, oldPanelArea.height);
+		oldPanelArea.setSize(_width - METRO.__getXOffset(), oldPanelArea.height);
 		_panel.setArea(oldPanelArea);
 
-		_entryList.setArea(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - 5, _height - METRO.__titleBarHeight + _headerHeight));
+		_entryList.setArea(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - METRO.__getXOffset() - 4, _height - METRO.__titleBarHeight + _headerHeight));
 	}
 
 	@Override
