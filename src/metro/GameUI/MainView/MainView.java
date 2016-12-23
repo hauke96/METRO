@@ -98,6 +98,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 		_notificationArea = NotificationArea.getInstance();
 
 		AbstractContainer playingFieldBackground = _playingField.getBackgroundPanel();
+		playingFieldBackground.setState(false);
 		_toolbar.getBackgroundPanel().setAboveOf(playingFieldBackground);
 	}
 

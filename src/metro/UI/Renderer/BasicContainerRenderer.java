@@ -114,8 +114,14 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 						break;
 					}
 				}
+				
+				// When disabled, remove the container. Don't allow an alternative (e.g. container below)!
+				if(clickedContainer != null && !clickedContainer.getState())
+				{
+					clickedContainer = null;
+				}
 
-				// // Move window to the top if no control on this window has been clicked
+				// Move window to the top if no control on this window has been clicked
 				if(clickedContainer != null)
 				{
 					l.remove(clickedContainer);
