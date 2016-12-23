@@ -119,7 +119,7 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 	public boolean touchDownEvent(int screenX, int screenY, int pointer, int button)
 	{
 		boolean clickProcessed = _containerRenderer.notifyMouseClick(screenX, screenY, button);
-		if(clickProcessed && _gameScreenInputProcessor != null)
+		if(!clickProcessed && _gameScreenInputProcessor != null)
 		{
 			_gameScreenInputProcessor.touchDown(screenX, screenY, pointer, button);
 		}

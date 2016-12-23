@@ -88,6 +88,7 @@ public class LineView extends GameScreen implements Observer
 	{
 		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
 		_panel.setDrawBorder(true, METRO.__metroBlue);
+		_panel.setState(false);
 
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 40, 300), true);
 		fillLineList();
@@ -482,11 +483,11 @@ public class LineView extends GameScreen implements Observer
 				_lineSelectTool.mouseClicked(screenX, screenY, mouseButton); // add/remove node to list
 			}
 		}
-		else if(mouseButton == Buttons.RIGHT) // if select tool is not enabled, hide/close the whole line view
+		else if(!isHovered())//if(mouseButton == Buttons.RIGHT) // if select tool is not enabled, hide/close the whole line view
 		{
-			_isActive = false;
 			setChanged();
 			notifyObservers(); // notify about close
+			_isActive = false;
 			return;
 		}
 

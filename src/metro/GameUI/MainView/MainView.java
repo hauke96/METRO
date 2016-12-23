@@ -137,14 +137,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 
 		if(_activeTool != null)
 		{
-			if(button == Buttons.LEFT)
-			{
-				_activeTool.mouseClicked(screenX, screenY, button);
-			}
-			else if(button == Buttons.RIGHT)
-			{
-				_activeTool.mouseClicked(screenX, screenY, button);
-			}
+			_activeTool.mouseClicked(screenX, screenY, button);
 			return true;
 		}
 		return false;
@@ -181,7 +174,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
-		if(!_activeTool.isActive())
+		if(_activeTool != null && _activeTool.isActive())
 		{
 			closeActiveTool();
 		}
@@ -224,7 +217,10 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 
 		_activeTool.close();
 		_activeTool = null;
+		
 		_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
+		
+		_toolbar.resetExclusiveButtonPositions(null);
 	}
 
 	@Override
