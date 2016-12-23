@@ -45,6 +45,8 @@ public class TrainView extends GameScreen
 
 		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
 		_panel.setDrawBorder(true);
+		_panel.setState(false);
+		
 		_panel.add(_trainViewMain.getPanel());
 		_panel.add(_trainViewBuy.getPanel());
 

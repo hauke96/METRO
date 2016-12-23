@@ -181,6 +181,17 @@ public abstract class AbstractContainer extends CloseObservable
 			notifyAboveOfChangedObserver();
 		}
 	}
+	
+	@Override
+	public void setState(boolean newState)
+	{
+		for(AbstractContainer control : _listOfContainerBelow)
+		{
+			control.setState(newState);
+		}
+		
+		super.setState(newState);
+	};
 
 	/**
 	 * Checks if the given container is above this one.
