@@ -66,7 +66,6 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 
 		ContainerRegistrationService registrationService = new ContainerRegistrationService();
 		registrationService.setRenderer(this);
-		
 		AbstractContainer.setContainerRegistrationService(registrationService);
 	}
 

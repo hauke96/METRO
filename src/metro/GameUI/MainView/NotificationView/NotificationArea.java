@@ -4,13 +4,14 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.prefs.BackingStoreException;
+
+import com.badlogic.gdx.Input.Buttons;
 
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Contract;
-import metro.GameUI.Screen.GameScreen;
+import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.Canvas;
 import metro.UI.Renderable.Controls.List;
@@ -23,8 +24,7 @@ import metro.UI.Renderable.Controls.List;
  */
 public class NotificationArea implements NotificationSubscriber
 {
-	private boolean _isActive,
-		_isExpanded;
+	private boolean _isExpanded;
 	private int _height,
 		_width,
 		_headerHeight;
@@ -61,13 +61,22 @@ public class NotificationArea implements NotificationSubscriber
 		_entryList.setDecoration(false);
 		_entryList.setTransparency(165);
 		_entryList.setStickiness(true);
-		
+
 		_canvas = new Canvas(new Point(0, METRO.__SCREEN_SIZE.height - _height));
 		_canvas.setPainter(() -> draw());
+		_canvas.register(new ActionObserver()
+		{
+			public void clickedOnControl(Object arg)
+			{
+				Contract.Require(arg instanceof Integer);
+
+				mouseClicked(METRO.__mousePosition.x, METRO.__mousePosition.y, (int)arg);
+			};
+		});
 
 		_panel.add(_entryList);
 		_panel.add(_canvas);
-		
+
 		addMessage("Game started", NotificationType.GAME_INFO);
 		NotificationServer.subscribe(this);
 	}
@@ -114,7 +123,7 @@ public class NotificationArea implements NotificationSubscriber
 		Draw.setColor(METRO.__metroBlue);
 		Draw.Line(0, 0, _width, 0);
 
-		//TODO replace this by a label
+		// TODO replace this by a label
 		int length = Draw.getStringSize("Notifications:").width;
 		Draw.setColor(METRO.__metroRed);
 		Draw.String("Notifications:", 15, 5);
@@ -137,10 +146,14 @@ public class NotificationArea implements NotificationSubscriber
 	{
 		Contract.Require(isInArea(screenX, screenY));
 
-		_isExpanded ^= true; // flip state of boolean
-		_height = _isExpanded ? 250 : METRO.__titleBarHeight + _headerHeight;
-		_entryList.setState(_isExpanded);
-		_panel.setPosition(new Point(_entryList.getPosition().x, METRO.__SCREEN_SIZE.height - _height + _headerHeight));
+		if(mouseButton == Buttons.LEFT)
+		{
+			_isExpanded ^= true; // flip state of boolean
+			_height = _isExpanded ? 250 : METRO.__titleBarHeight + _headerHeight + 5;
+			_entryList.setState(_isExpanded);
+			_entryList.setVisibility(_isExpanded);
+			_panel.setPosition(new Point(0, METRO.__SCREEN_SIZE.height - _height));
+		}
 	}
 
 	/**

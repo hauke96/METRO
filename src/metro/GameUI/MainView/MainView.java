@@ -106,7 +106,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	{
 		_playingField.setCityCircleHighlighting(_activeTool == null || !_activeTool.isHovered());
 		// _playingField.updateGameScreen();
-		
+
 		if(_activeTool != null) _activeTool.updateGameScreen(sp);
 
 		printDebugStuff(sp);
@@ -133,11 +133,6 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
 		_playingField.touchDown(screenX, screenY, pointer, button);
-
-		if(_notificationArea.isInArea(screenX, screenY))
-		{
-			_notificationArea.mouseClicked(screenX, screenY, button);
-		}
 
 		if(_activeTool != null)
 		{
