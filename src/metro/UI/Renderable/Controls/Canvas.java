@@ -42,6 +42,8 @@ public class Canvas extends ControlElement
 		Draw.setOffset(_area.x, _area.y);
 		Fill.setOffset(_area.x, _area.y);
 		_painter.paint();
+		Draw.setOffset(METRO.__getXOffset(), METRO.__getYOffset());
+		Fill.setOffset(METRO.__getXOffset(), METRO.__getYOffset());
 	}
 
 	@Override

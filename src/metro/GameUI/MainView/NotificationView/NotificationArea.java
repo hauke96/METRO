@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.prefs.BackingStoreException;
 
 import metro.METRO;
 import metro.Common.Graphics.Draw;
@@ -11,6 +12,7 @@ import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Contract;
 import metro.GameUI.Screen.GameScreen;
 import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Canvas;
 import metro.UI.Renderable.Controls.List;
 
 /**
@@ -28,6 +30,7 @@ public class NotificationArea implements NotificationSubscriber
 		_headerHeight;
 	private Color _backGroundColor;
 	private List _entryList;
+	private Canvas _canvas;
 	private Panel _panel;
 
 	private final static NotificationArea __INSTANCE = new NotificationArea();
@@ -44,24 +47,29 @@ public class NotificationArea implements NotificationSubscriber
 		_isExpanded = true;
 
 		_panel = new Panel(new Rectangle(0,
-			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
+			METRO.__SCREEN_SIZE.height - _height,
 			_width - 5,
-			_height - METRO.__titleBarHeight + _headerHeight));
+			_height - METRO.__titleBarHeight));
 		_panel.setDrawBorder(true, METRO.__metroBlue);
 
 		_entryList = new List(new Rectangle(0,
 			METRO.__SCREEN_SIZE.height - _height + _headerHeight,
 			_width - 5,
-			_height - METRO.__titleBarHeight + _headerHeight),
+			_height - _headerHeight - METRO.__titleBarHeight),
 			new ArrayList<String>(), true);
 
 		_entryList.setDecoration(false);
 		_entryList.setTransparency(165);
 		_entryList.setStickiness(true);
-		addMessage("Game started", NotificationType.GAME_INFO);
-		NotificationServer.subscribe(this);
+		
+		_canvas = new Canvas(new Point(0, METRO.__SCREEN_SIZE.height - _height));
+		_canvas.setPainter(() -> draw());
 
 		_panel.add(_entryList);
+		_panel.add(_canvas);
+		
+		addMessage("Game started", NotificationType.GAME_INFO);
+		NotificationServer.subscribe(this);
 	}
 
 	/**
@@ -101,19 +109,19 @@ public class NotificationArea implements NotificationSubscriber
 	public void draw()
 	{
 		Fill.setColor(_backGroundColor);
-		Fill.Rect(0, METRO.__SCREEN_SIZE.height - _height, _width, _height);
+		Fill.Rect(0, 0, _width, _headerHeight);
 
 		Draw.setColor(METRO.__metroBlue);
-		Draw.Line(0, METRO.__SCREEN_SIZE.height - _height, _width, METRO.__SCREEN_SIZE.height - _height);
-		// Draw.Line(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width, METRO.__SCREEN_SIZE.height - _height + _headerHeight);
+		Draw.Line(0, 0, _width, 0);
 
+		//TODO replace this by a label
 		int length = Draw.getStringSize("Notifications:").width;
 		Draw.setColor(METRO.__metroRed);
-		Draw.String("Notifications:", 15, METRO.__SCREEN_SIZE.height - _height + 5);
-		Draw.Line(13, METRO.__SCREEN_SIZE.height - _height + 21, 15 + length, METRO.__SCREEN_SIZE.height - _height + 21);
+		Draw.String("Notifications:", 15, 5);
+		Draw.Line(13, 21, 15 + length, 21);
 
 		Draw.Image(METRO.__iconSet,
-			new Rectangle(_width - _headerHeight, METRO.__SCREEN_SIZE.height - _height, _headerHeight, _headerHeight),
+			new Rectangle(_width - _headerHeight, 0, _headerHeight, _headerHeight),
 			new Rectangle(0, 228 + (_isExpanded ? _headerHeight : 0), _headerHeight, _headerHeight));
 	}
 

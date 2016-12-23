@@ -43,7 +43,7 @@ public class Toolbar
 		_moneyDisplayWidth = 250;
 		_height = 40;
 		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth();
-		_buttonYPosition = -9;
+		_buttonYPosition = -5;
 
 		_panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height), false);
 		_panel.setDrawBorder(false);

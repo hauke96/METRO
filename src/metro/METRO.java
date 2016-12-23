@@ -436,6 +436,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void renderFPSDisplay()
 	{
+//		Draw.setOffset(0, 0);
 		Draw.setColor(__metroBlue);
 		Draw.String("FPS: " + Gdx.graphics.getFramesPerSecond(), __SCREEN_SIZE.width - (Draw.getStringSize("FPS: " + Gdx.graphics.getFramesPerSecond()).width + 30), 25);
 	}
