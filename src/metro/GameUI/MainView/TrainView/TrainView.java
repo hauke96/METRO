@@ -38,6 +38,8 @@ public class TrainView extends GameScreen
 	 */
 	public TrainView()
 	{
+		_isActive = true;
+		
 		_windowWidth = GameState.getInstance().getToolViewWidth();
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 40);
 		_trainViewMain = new TrainViewMain(getAreaOffset(), _windowWidth);
@@ -158,11 +160,11 @@ public class TrainView extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(mouseButton == Buttons.RIGHT)
+		if(!isHovered())
 		{
-			_isActive = false;
 			setChanged();
 			notifyObservers(); // notify about close
+			_isActive = false;
 		}
 	}
 
