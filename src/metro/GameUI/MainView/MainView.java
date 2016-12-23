@@ -51,7 +51,6 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	protected void initializeUi()
 	{
 		_toolbar = new Toolbar();
-		_toolbar.addObserver(this);
 
 		_toolbar.getBuildStationButton().register(new ActionObserver()
 		{
@@ -185,30 +184,9 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
-		// TODO refactor this into own anonymous classes
-		if(arg0.equals(_toolbar))
+		if(!_activeTool.isActive())
 		{
 			closeActiveTool();
-
-			if(arg1 == null)
-			{
-				_toolbar.resetExclusiveButtonPositions(null);
-			}
-
-			if(arg1 instanceof StationPlacingTool
-				|| arg1 instanceof TrackPlacingTool
-				|| arg1 instanceof LineView
-				|| arg1 instanceof TrainView)
-			{
-				setActiveTool((GameScreen)arg1);
-			}
-		}
-		else
-		{
-			if(!_activeTool.isActive())
-			{
-				closeActiveTool();
-			}
 		}
 	}
 
@@ -223,7 +201,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 
 		if(_activeTool != null)
 		{
-			_activeTool.close();
+			closeActiveTool();
 		}
 
 		// set new tool and add new observer
@@ -245,12 +223,11 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	 */
 	private void closeActiveTool()
 	{
-		if(_activeTool != null)
-		{
-			_activeTool.close();
-			_activeTool = null;
-			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
-		}
+		Contract.RequireNotNull(_activeTool);
+
+		_activeTool.close();
+		_activeTool = null;
+		_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
 	}
 
 	@Override

@@ -23,7 +23,7 @@ import metro.UI.Renderable.Controls.Canvas;
  *
  */
 // TODO separate UI and logic code
-public class Toolbar extends Observable
+public class Toolbar
 {
 	private Button _buildStation,
 		_buildTracks,
