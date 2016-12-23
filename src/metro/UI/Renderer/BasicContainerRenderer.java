@@ -61,12 +61,17 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 			}
 		};
 
-		_staticContainerAboveChangedObserver = (o, arg) -> _listOfStaticContainer.sort(_controlsAboveComparator);
-		_floatingContainerAboveChangedObserver = (o, arg) -> _listOfFloatingContainer.sort(_controlsAboveComparator);
+		_staticContainerAboveChangedObserver = (o, arg) -> sortContainer(_listOfStaticContainer);
+		_floatingContainerAboveChangedObserver = (o, arg) -> sortContainer(_listOfFloatingContainer);;
 
 		ContainerRegistrationService registrationService = new ContainerRegistrationService();
 		registrationService.setRenderer(this);
 		AbstractContainer.setContainerRegistrationService(registrationService);
+	}
+
+	protected void sortContainer(List<AbstractContainer> listOfContainer)
+	{
+		listOfContainer.sort(_controlsAboveComparator);
 	}
 
 	@Override
@@ -126,6 +131,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 				{
 					l.remove(clickedContainer);
 					l.add(clickedContainer);
+					sortContainer(l);
 
 					isClickedValue.value = clickedContainer.mouseClicked(screenX, screenY, button);
 				}

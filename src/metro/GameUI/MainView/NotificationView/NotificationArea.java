@@ -70,7 +70,10 @@ public class NotificationArea implements NotificationSubscriber
 			{
 				Contract.Require(arg instanceof Integer);
 
-				mouseClicked(METRO.__mousePosition.x, METRO.__mousePosition.y, (int)arg);
+				if(isInArea(METRO.__mousePosition.x, METRO.__mousePosition.y))
+				{
+					mouseClicked(METRO.__mousePosition.x, METRO.__mousePosition.y, (int)arg);
+				}
 			};
 		});
 
@@ -102,7 +105,8 @@ public class NotificationArea implements NotificationSubscriber
 		oldPanelArea.setSize(_width - METRO.__getXOffset(), oldPanelArea.height);
 		_panel.setArea(oldPanelArea);
 
-		_entryList.setArea(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - METRO.__getXOffset() - 4, _height - METRO.__titleBarHeight + _headerHeight));
+		_entryList
+			.setArea(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - METRO.__getXOffset() - 4, _height - METRO.__titleBarHeight + _headerHeight));
 	}
 
 	@Override

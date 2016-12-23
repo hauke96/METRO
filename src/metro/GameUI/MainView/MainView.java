@@ -177,6 +177,8 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 		if(_activeTool != null && _activeTool.isActive())
 		{
 			closeActiveTool();
+			
+			_toolbar.resetExclusiveButtonPositions(null);
 		}
 	}
 
@@ -219,8 +221,6 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 		_activeTool = null;
 		
 		_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
-		
-		_toolbar.resetExclusiveButtonPositions(null);
 	}
 
 	@Override
