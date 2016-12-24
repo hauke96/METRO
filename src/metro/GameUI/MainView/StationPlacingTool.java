@@ -2,6 +2,7 @@ package metro.GameUI.MainView;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
 import com.badlogic.gdx.Input.Buttons;
@@ -15,6 +16,9 @@ import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.Screen.GameScreen;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TrainStation;
+import metro.UI.Renderable.Container.AbstractContainer;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Canvas;
 
 /**
  * A station placing tool makes it possible to create train stations.
@@ -27,16 +31,32 @@ public class StationPlacingTool extends GameScreen
 	private boolean _isActive;
 	private PlayingField _playingField;
 
+	private Canvas _canvas;
+	private Panel _panel;
+
 	/**
 	 * Creates a new station placing tool.
 	 */
 	public StationPlacingTool()
 	{
 		_playingField = PlayingField.getInstance();
+
+		_canvas = new Canvas(new Point(0, 0));
+		_canvas.setPainter(() -> draw());
+
+		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height), false);
+		_panel.add(_canvas);
+		_panel.setBackgroundColor(new Color(0, 0, 0, 0));
+
+		_panel.setAboveOf(_playingField.getBackgroundPanel());
 	}
 
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
+	{
+	}
+
+	private void draw()
 	{
 		Point position = new Point(METRO.__mousePosition.x - 4,
 			METRO.__mousePosition.y - 8); // Position with offset etc.
@@ -94,6 +114,14 @@ public class StationPlacingTool extends GameScreen
 		notifyObservers(); // notify about close
 	}
 
+	/**
+	 * @return The container that holds all controls.
+	 */
+	public AbstractContainer getBackgroundPanel()
+	{
+		return _panel;
+	}
+
 	@Override
 	public boolean isActive()
 	{
@@ -105,10 +133,11 @@ public class StationPlacingTool extends GameScreen
 	{
 		return false;
 	}
-
+	
 	@Override
 	public void close()
 	{
+		_panel.close();
 		super.close();
 	}
 }

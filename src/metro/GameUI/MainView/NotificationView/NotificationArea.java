@@ -12,6 +12,7 @@ import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Contract;
 import metro.UI.Renderable.ActionObserver;
+import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.Canvas;
 import metro.UI.Renderable.Controls.List;
@@ -172,5 +173,10 @@ public class NotificationArea implements NotificationSubscriber
 		return y >= METRO.__SCREEN_SIZE.height - _height
 			&& y <= METRO.__SCREEN_SIZE.height - _height + _headerHeight
 			&& x <= _width;
+	}
+	
+	public AbstractContainer getBackgroundPanel()
+	{
+		return _panel;
 	}
 }

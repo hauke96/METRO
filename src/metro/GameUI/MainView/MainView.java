@@ -56,7 +56,10 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				setActiveTool(new StationPlacingTool());
+				StationPlacingTool stationPlacingTool = new StationPlacingTool();
+				setActiveTool(stationPlacingTool);
+				_toolbar.getBackgroundPanel().setAboveOf(stationPlacingTool.getBackgroundPanel());
+				_notificationArea.getBackgroundPanel().setAboveOf(stationPlacingTool.getBackgroundPanel());
 			}
 		});
 		_toolbar.getBuildTracksButton().register(new ActionObserver()
@@ -64,7 +67,10 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				setActiveTool(new TrackPlacingTool());
+				TrackPlacingTool trackPlacingTool = new TrackPlacingTool();
+				_toolbar.getBackgroundPanel().setAboveOf(trackPlacingTool.getBackgroundPanel());
+				_notificationArea.getBackgroundPanel().setAboveOf(trackPlacingTool.getBackgroundPanel());
+				setActiveTool(trackPlacingTool);
 			}
 		});
 		_toolbar.getShowTrainListButton().register(new ActionObserver()

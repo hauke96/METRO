@@ -2,6 +2,7 @@ package metro.GameUI.MainView;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,6 +18,9 @@ import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.Screen.GameScreen;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
+import metro.UI.Renderable.Container.AbstractContainer;
+import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Canvas;
 
 /**
  * A track placing tool is used by the player to build new tracks for the trains.
@@ -29,6 +33,9 @@ public class TrackPlacingTool extends GameScreen
 	private RailwayNode _currentRailwayNode; // click -> set railwaynode -> click -> connect/create
 	private boolean _isActive;
 	private PlayingField _playingField;
+	
+	private Canvas _canvas;
+	private Panel _panel;
 
 	/**
 	 * Creates a new Track placing tool.
@@ -37,12 +44,25 @@ public class TrackPlacingTool extends GameScreen
 	{
 		_playingField = PlayingField.getInstance();
 		_isActive=true;
+		
+		_canvas = new Canvas(new Point(0,0));
+		_canvas.setPainter(() -> draw());
+		
+		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height), false);
+		_panel.add(_canvas);
+		_panel.setBackgroundColor(new Color(0, 0, 0, 0));
+		
+		_panel.setAboveOf(_playingField.getBackgroundPanel());
 	}
 
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{
-		if(!_isActive) return;
+	}
+	
+	private void draw()
+	{
+//		if(!_isActive) return;
 
 		Point mapOffset = _playingField.getMapOffset();
 		int baseNetSpacing = GameState.getInstance().getBaseNetSpacing();
@@ -260,6 +280,14 @@ public class TrackPlacingTool extends GameScreen
 		}
 		return prevNode;
 	}
+	
+	/**
+	 * @return The container that holds all controls.
+	 */
+	public AbstractContainer getBackgroundPanel()
+	{
+		return _panel;
+	}
 
 	@Override
 	public boolean isActive()
@@ -271,5 +299,12 @@ public class TrackPlacingTool extends GameScreen
 	public boolean isHovered()
 	{
 		return false;
+	}
+	
+	@Override
+	public void close()
+	{
+		_panel.close();
+		super.close();
 	}
 }

@@ -181,7 +181,10 @@ public class Toolbar
 
 		return _createNewTrain;
 	}
-
+	
+	/**
+	 * @return The container that holds all controls.
+	 */
 	public AbstractContainer getBackgroundPanel()
 	{
 		Contract.EnsureNotNull(_panel);
