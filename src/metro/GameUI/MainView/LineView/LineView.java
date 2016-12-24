@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
@@ -482,7 +481,7 @@ public class LineView extends GameScreen implements Observer
 				_lineSelectTool.mouseClicked(screenX, screenY, mouseButton); // add/remove node to list
 			}
 		}
-		else if(!isHovered())//if(mouseButton == Buttons.RIGHT) // if select tool is not enabled, hide/close the whole line view
+		else if(!isHovered())// if select tool is not enabled, hide/close the whole line view when the mouse is outside of it
 		{
 			setChanged();
 			notifyObservers(); // notify about close
@@ -600,7 +599,7 @@ public class LineView extends GameScreen implements Observer
 	public AbstractContainer getBackgroundPanel()
 	{
 		Contract.EnsureNotNull(_panel);
-		
+
 		return _panel;
 	}
 

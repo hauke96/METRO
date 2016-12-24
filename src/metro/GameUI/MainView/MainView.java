@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -177,7 +176,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 		if(_activeTool != null && _activeTool.isActive())
 		{
 			closeActiveTool();
-			
+
 			_toolbar.resetExclusiveButtonPositions(null);
 		}
 	}
@@ -219,7 +218,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 
 		_activeTool.close();
 		_activeTool = null;
-		
+
 		_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
 	}
 

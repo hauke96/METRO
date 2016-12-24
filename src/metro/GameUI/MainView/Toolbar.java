@@ -3,7 +3,6 @@ package metro.GameUI.MainView;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.Observable;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
@@ -144,16 +143,6 @@ public class Toolbar
 
 		Draw.setColor(METRO.__metroRed);
 		Draw.Line(_buttonAreaXPosition, 0, _buttonAreaXPosition, _height);
-	}
-
-	/**
-	 * Moves the toolbar above the given control.
-	 * 
-	 * @param container The control the toolbar should be above of.
-	 */
-	private void setButtonsAboveOf(AbstractContainer container)
-	{
-		_panel.setAboveOf(container);
 	}
 
 	public boolean isHovered()

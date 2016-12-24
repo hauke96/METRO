@@ -181,7 +181,7 @@ public abstract class AbstractContainer extends CloseObservable
 			notifyAboveOfChangedObserver();
 		}
 	}
-	
+
 	@Override
 	public void setState(boolean newState)
 	{
@@ -189,7 +189,7 @@ public abstract class AbstractContainer extends CloseObservable
 		{
 			control.setState(newState);
 		}
-		
+
 		super.setState(newState);
 	};
 

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
@@ -39,7 +38,7 @@ public class TrainView extends GameScreen
 	public TrainView()
 	{
 		_isActive = true;
-		
+
 		_windowWidth = GameState.getInstance().getToolViewWidth();
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 40);
 		_trainViewMain = new TrainViewMain(getAreaOffset(), _windowWidth);
@@ -47,7 +46,7 @@ public class TrainView extends GameScreen
 
 		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
 		_panel.setDrawBorder(true);
-		
+
 		_panel.add(_trainViewMain.getPanel());
 		_panel.add(_trainViewBuy.getPanel());
 
@@ -202,7 +201,7 @@ public class TrainView extends GameScreen
 	public AbstractContainer getBackgroundPanel()
 	{
 		Contract.EnsureNotNull(_panel);
-		
+
 		return _panel;
 	}
 }

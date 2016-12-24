@@ -62,7 +62,8 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		};
 
 		_staticContainerAboveChangedObserver = (o, arg) -> sortContainer(_listOfStaticContainer);
-		_floatingContainerAboveChangedObserver = (o, arg) -> sortContainer(_listOfFloatingContainer);;
+		_floatingContainerAboveChangedObserver = (o, arg) -> sortContainer(_listOfFloatingContainer);
+		;
 
 		ContainerRegistrationService registrationService = new ContainerRegistrationService();
 		registrationService.setRenderer(this);
@@ -119,7 +120,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 						break;
 					}
 				}
-				
+
 				// When disabled, remove the container. Don't allow an alternative (e.g. container below)!
 				if(clickedContainer != null && !clickedContainer.getState())
 				{
