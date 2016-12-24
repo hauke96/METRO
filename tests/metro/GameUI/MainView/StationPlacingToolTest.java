@@ -1,15 +1,21 @@
 package metro.GameUI.MainView;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import com.badlogic.gdx.Input.Buttons;
 
-import metro.GameUI.MainView.StationPlacingTool;
+import metro.TestInitializer;
+import metro.TrainManagement.TrainManagementService;
+import metro.TrainManagement.Trains.TrainStation;
 
 /**
  * @author hauke
@@ -17,13 +23,16 @@ import metro.GameUI.MainView.StationPlacingTool;
 public class StationPlacingToolTest
 {
 	private StationPlacingTool _tool;
-	private boolean _notified; 
+	private boolean _notified;
 	
 	/**
 	 * Creates a new station placing tool and sets the notified variable to false.
 	 */
-	public StationPlacingToolTest()
+	@Before
+	public void init()
 	{
+		TestInitializer.init();
+		
 		_tool = new StationPlacingTool();
 		_notified = false;
 	}
@@ -38,11 +47,24 @@ public class StationPlacingToolTest
 	}
 	
 	/**
-	 * Check the active state getter.
+	 * Checks is the tool is active after creation.
 	 */
 	@Test
 	public void testIsActive()
 	{
+		assertTrue(_tool.isActive());
+	}
+	
+	/**
+	 * Checks is the tool is not active after closing.
+	 */
+	@Test
+	public void testIsNotActiveAfterClose()
+	{
+		assertTrue(_tool.isActive());
+		
+		_tool.close();
+		
 		assertFalse(_tool.isActive());
 	}
 	
@@ -75,5 +97,34 @@ public class StationPlacingToolTest
 		_tool.mouseClicked(0, 0, Buttons.RIGHT);
 		
 		assertTrue(_notified);
+	}
+	
+	/**
+	 * Tests if a left-click adds a station.
+	 */
+	@Test
+	public void testClickOnScreenAddsStation()
+	{
+		List<TrainStation> stations = TrainManagementService.getInstance().getStations();
+		assertEquals(0, stations.size());
+		
+		_tool.mouseClicked(100, 100, Buttons.LEFT);
+
+		assertEquals(1, stations.size());
+	}
+	
+	/**
+	 * Tests if a left-click adds a station.
+	 */
+	@Test
+	public void testDoubleClickOnScreenProducesNoDuplicates()
+	{
+		List<TrainStation> stations = TrainManagementService.getInstance().getStations();
+		assertEquals(0, stations.size());
+
+		_tool.mouseClicked(100, 100, Buttons.LEFT);
+		_tool.mouseClicked(100, 100, Buttons.LEFT);
+
+		assertEquals(1, stations.size());
 	}
 }

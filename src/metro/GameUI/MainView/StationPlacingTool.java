@@ -29,6 +29,7 @@ import metro.UI.Renderable.Controls.Canvas;
 public class StationPlacingTool extends GameScreen
 {
 	private boolean _isActive;
+
 	private PlayingField _playingField;
 
 	private Canvas _canvas;
@@ -39,6 +40,7 @@ public class StationPlacingTool extends GameScreen
 	 */
 	public StationPlacingTool()
 	{
+		_isActive = true;
 		_playingField = PlayingField.getInstance();
 
 		_canvas = new Canvas(new Point(0, 0));
@@ -109,9 +111,9 @@ public class StationPlacingTool extends GameScreen
 	 */
 	private void rightClick(int screenX, int screenY, Point2D offset)
 	{
-		_isActive = false;
 		setChanged();
 		notifyObservers(); // notify about close
+		close();
 	}
 
 	/**
@@ -137,6 +139,7 @@ public class StationPlacingTool extends GameScreen
 	@Override
 	public void close()
 	{
+		_isActive = false;
 		_panel.close();
 		super.close();
 	}

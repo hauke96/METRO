@@ -48,6 +48,14 @@ public class TrainManagementService implements Observer
 
 	private TrainManagementService()
 	{
+		init();
+	}
+	
+	/**
+	 * Resets the whole service. Be careful with this method, it removes everything!
+	 */
+	public void init()
+	{
 		_trainLineList = new ArrayList<>();
 		_trainList = new ArrayList<>();
 		_stationList = new ArrayList<>();
@@ -81,6 +89,8 @@ public class TrainManagementService implements Observer
 		_travelerSpotList.add(new TravelerSpot(new Point(53, 32), 4));
 		_travelerSpotList.add(new TravelerSpot(new Point(55, 37), 4));
 		_travelerSpotList.add(new TravelerSpot(new Point(56, 49), 3));
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void createTrains() throws IOException, IllegalArgumentException
