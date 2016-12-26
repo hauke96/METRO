@@ -40,13 +40,6 @@ public abstract class GameScreen extends Observable
 	}
 
 	/**
-	 * When a game screen is active it can be used, otherwise it'll be deleted, ignored, ...
-	 * 
-	 * @return True when active and usable, false when inactive, closed, ...
-	 */
-	public abstract boolean isActive();
-
-	/**
 	 * @return True when mouse is in sensible/important area of the game screen.
 	 */
 	public abstract boolean isHovered();
@@ -59,6 +52,8 @@ public abstract class GameScreen extends Observable
 	{
 		Logger.__debug("Closed game screen " + this);
 		Logger.__debug("Amount observer: " + countObservers());
+		setChanged();
+		notifyObservers(); // notify about close
 		deleteObservers();
 	}
 }

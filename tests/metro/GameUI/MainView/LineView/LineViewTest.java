@@ -31,19 +31,6 @@ public class LineViewTest
 		METRO.__SCREEN_SIZE = new Dimension(1920, 1080);
 		view = new LineView();
 	}
-
-	/**
-	 * Tests the visibility of the line view.
-	 */
-	@Test
-	public void testVisibility()
-	{
-		assertTrue(view.isActive());
-		
-		view.setVisibility(false);
-		
-		assertFalse(view.isActive());
-	}
 	
 	/**
 	 * Check if the initial state of the area offset is correct.

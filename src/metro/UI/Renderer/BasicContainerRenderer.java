@@ -6,6 +6,7 @@ import java.util.Observer;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import metro.Common.Technical.Contract;
+import metro.Common.Technical.ModifiableBoolean;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.CloseObservable;
 import metro.UI.Renderable.Container.AbstractContainer;
@@ -102,10 +103,6 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	@Override
 	public boolean notifyMouseClick(int screenX, int screenY, int button)
 	{
-		class ModifiableBoolean
-		{
-			private boolean value = false;
-		}
 		ModifiableBoolean isClickedValue = new ModifiableBoolean();
 
 		Notifier notifier = () -> {
@@ -134,12 +131,12 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 					l.add(clickedContainer);
 					sortContainer(l);
 
-					isClickedValue.value = clickedContainer.mouseClicked(screenX, screenY, button);
+					isClickedValue.set(clickedContainer.mouseClicked(screenX, screenY, button));
 				}
 			};
 
 			containerNotifier.notifyAllContainer(_listOfFloatingContainer);
-			if(!isClickedValue.value)
+			if(!isClickedValue.value())
 			{
 				System.out.println("OK");
 				containerNotifier.notifyAllContainer(_listOfStaticContainer);// TODO determine on which control the focus is
@@ -148,7 +145,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 
 		generalNotifying(notifier);
 
-		return isClickedValue.value;
+		return isClickedValue.value();
 	}
 
 	@Override

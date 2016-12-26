@@ -5,7 +5,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
@@ -31,9 +30,8 @@ import metro.UI.Renderable.Controls.Canvas;
 public class TrackPlacingTool extends GameScreen
 {
 	private RailwayNode _currentRailwayNode; // click -> set railwaynode -> click -> connect/create
-	private boolean _isActive;
 	private PlayingField _playingField;
-	
+
 	private Canvas _canvas;
 	private Panel _panel;
 
@@ -43,18 +41,17 @@ public class TrackPlacingTool extends GameScreen
 	public TrackPlacingTool()
 	{
 		_playingField = PlayingField.getInstance();
-		_isActive=true;
-		
-		_canvas = new Canvas(new Point(0,0));
+
+		_canvas = new Canvas(new Point(0, 0));
 		_canvas.setPainter(() -> draw());
-		
+
 		_panel = new Panel(new Rectangle(METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height), false);
 		_panel.add(_canvas);
 		_panel.setBackgroundColor(new Color(0, 0, 0, 0));
-		
+
 		_panel.setAboveOf(_playingField.getBackgroundPanel());
 	}
-	
+
 	private void draw()
 	{
 		Point mapOffset = _playingField.getMapOffset();
@@ -124,7 +121,6 @@ public class TrackPlacingTool extends GameScreen
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(!_isActive) return;
 		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, _playingField.getMapOffset());
 		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, _playingField.getMapOffset());
 	}
@@ -158,9 +154,7 @@ public class TrackPlacingTool extends GameScreen
 		}
 		else
 		{
-			_isActive = false;
-			setChanged();
-			notifyObservers(); // notify about close
+			close();
 		}
 	}
 
@@ -273,7 +267,7 @@ public class TrackPlacingTool extends GameScreen
 		}
 		return prevNode;
 	}
-	
+
 	/**
 	 * @return The container that holds all controls.
 	 */
@@ -283,21 +277,18 @@ public class TrackPlacingTool extends GameScreen
 	}
 
 	@Override
-	public boolean isActive()
-	{
-		return _isActive;
-	}
-
-	@Override
 	public boolean isHovered()
 	{
 		return false;
 	}
-	
+
 	@Override
 	public void close()
 	{
 		_panel.close();
 		super.close();
+
+		setChanged();
+		notifyObservers();
 	}
 }

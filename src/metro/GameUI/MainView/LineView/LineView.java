@@ -52,8 +52,7 @@ public class LineView extends GameScreen implements Observer
 	private InputField _lineNameField;
 
 	private int _windowWidth;
-	private boolean _isActive, // true: TrainLineView will be displayed
-		_lineSelectToolEnabled, // if enabled, the user can select nodes
+	private boolean _lineSelectToolEnabled, // if enabled, the user can select nodes
 		_editMode; // true when user edits a line
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private TrainLine _oldLine; // when the user edits a line name, the old name of it has to be saved to correctly update the line list
@@ -67,7 +66,6 @@ public class LineView extends GameScreen implements Observer
 	 */
 	public LineView()
 	{
-		_isActive = true;
 		_lineSelectToolEnabled = false;
 		_windowWidth = GameState.getInstance().getToolViewWidth();
 		_lineSelectTool = new LineSelectTool();
@@ -397,7 +395,6 @@ public class LineView extends GameScreen implements Observer
 
 	private void draw()
 	{
-		if(!_isActive) return;
 		drawTitleBox();
 		drawListBox();
 		drawColorBar();
@@ -456,26 +453,9 @@ public class LineView extends GameScreen implements Observer
 		Draw.Rect(new Rectangle(_areaOffset.x + _windowWidth - 40, _areaOffset.y + 520, 20, 20));
 	}
 
-	/**
-	 * Sets the visibility of the LineView. The visibility will also effect the usability (e.g. mouse click).
-	 * 
-	 * @param visible True will make this visible, false will make it invisible.
-	 */
-	public void setVisibility(boolean visible)
-	{
-		_isActive = visible;
-		if(_lineSelectToolEnabled)
-		{
-			_trainManagementService.removeLine(_lineSelectTool.getTrainLine());
-			_lineSelectToolEnabled = false;
-		}
-		if(!_isActive) reset();
-	}
-
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(!_isActive) return;
 		if(_lineSelectToolEnabled)
 		{
 			// if select tool exists and mouse is in the area of the select tool, forward click to tool
@@ -488,9 +468,7 @@ public class LineView extends GameScreen implements Observer
 		}
 		else if(!isHovered())// if select tool is not enabled, hide/close the whole line view when the mouse is outside of it
 		{
-			setChanged();
-			notifyObservers(); // notify about close
-			_isActive = false;
+			close();
 			return;
 		}
 
@@ -510,15 +488,8 @@ public class LineView extends GameScreen implements Observer
 
 	public void mouseScrolled(int amount)
 	{
-		if(!_isActive) return;
 		String msg = _lineSelectTool.setColor(_colorBar.getClickedColor());
 		if(!msg.equals("")) _messageLabel.setText(msg);
-	}
-
-	@Override
-	public boolean isActive()
-	{
-		return _isActive;
 	}
 
 	public void reset()
@@ -541,8 +512,6 @@ public class LineView extends GameScreen implements Observer
 		_lineNameField.setText("");
 
 		_oldLine = null;
-
-		_lineSelectTool.setState(false);
 	}
 
 	@Override
@@ -551,6 +520,9 @@ public class LineView extends GameScreen implements Observer
 		_lineSelectTool.close();
 		_panel.close();
 		super.close();
+		
+		setChanged();
+		notifyObservers(); // notify about close
 	}
 
 	@Override

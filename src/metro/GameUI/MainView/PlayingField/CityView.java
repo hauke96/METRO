@@ -107,12 +107,6 @@ public class CityView extends GameScreen
 		_enableMouseSelection = false;
 	}
 
-	@Override
-	public boolean isActive()
-	{
-		return true;
-	}
-
 	/**
 	 * @return True when a circle is selected. It depends on whether the highlighting (=mouse interaction) is enabled.
 	 */

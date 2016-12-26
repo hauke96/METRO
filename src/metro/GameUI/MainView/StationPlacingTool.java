@@ -6,7 +6,6 @@ import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
@@ -28,8 +27,6 @@ import metro.UI.Renderable.Controls.Canvas;
  */
 public class StationPlacingTool extends GameScreen
 {
-	private boolean _isActive;
-
 	private PlayingField _playingField;
 
 	private Canvas _canvas;
@@ -40,7 +37,6 @@ public class StationPlacingTool extends GameScreen
 	 */
 	public StationPlacingTool()
 	{
-		_isActive = true;
 		_playingField = PlayingField.getInstance();
 
 		_canvas = new Canvas(new Point(0, 0));
@@ -106,8 +102,6 @@ public class StationPlacingTool extends GameScreen
 	 */
 	private void rightClick(int screenX, int screenY, Point2D offset)
 	{
-		setChanged();
-		notifyObservers(); // notify about close
 		close();
 	}
 
@@ -120,22 +114,18 @@ public class StationPlacingTool extends GameScreen
 	}
 
 	@Override
-	public boolean isActive()
-	{
-		return _isActive;
-	}
-
-	@Override
 	public boolean isHovered()
 	{
 		return false;
 	}
-	
+
 	@Override
 	public void close()
 	{
-		_isActive = false;
 		_panel.close();
 		super.close();
+
+		setChanged();
+		notifyObservers(); // notify about close
 	}
 }

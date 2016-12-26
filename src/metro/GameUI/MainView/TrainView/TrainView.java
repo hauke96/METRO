@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
@@ -27,7 +25,6 @@ import metro.UI.Renderable.Controls.Canvas;
 public class TrainView extends GameScreen
 {
 	private int _windowWidth;
-	private boolean _isActive;
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
 	private TrainViewMain _trainViewMain;
 	private TrainViewBuy _trainViewBuy;
@@ -38,8 +35,6 @@ public class TrainView extends GameScreen
 	 */
 	public TrainView()
 	{
-		_isActive = true;
-
 		_windowWidth = GameState.getInstance().getToolViewWidth();
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 40);
 		_trainViewMain = new TrainViewMain(getAreaOffset(), _windowWidth);
@@ -47,7 +42,7 @@ public class TrainView extends GameScreen
 
 		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
 		_panel.setDrawBorder(true);
-		
+
 		Canvas canvas = new Canvas(new Point(_panel.getPosition().x, _panel.getPosition().y + 20));
 		canvas.setPainter(() -> draw());
 
@@ -115,13 +110,13 @@ public class TrainView extends GameScreen
 			}
 		});
 	}
-	
+
 	private void draw()
 	{
 		drawTitleBox();
 		_trainViewBuy.updateGameScreen();
 	}
-	
+
 	/**
 	 * Draws the title bar with the Label and box.
 	 */
@@ -149,31 +144,13 @@ public class TrainView extends GameScreen
 			(_windowWidth + length) / 2 + 5, 65);
 	}
 
-	/**
-	 * Sets the visibility of the TrainLineView. The visibility will also effect the usability (e.g. mouse click).
-	 * 
-	 * @param visible True will make this visible, false will make it invisible.
-	 */
-	public void setVisibility(boolean visible)
-	{
-		_isActive = visible;
-	}
-
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		if(!isHovered())
 		{
-			setChanged();
-			notifyObservers(); // notify about close
-			_isActive = false;
+			close();
 		}
-	}
-
-	@Override
-	public boolean isActive()
-	{
-		return _isActive;
 	}
 
 	@Override
@@ -183,6 +160,9 @@ public class TrainView extends GameScreen
 		_trainViewMain.close();
 		_panel.close();
 		super.close();
+
+		setChanged();
+		notifyObservers(); // notify about close
 	}
 
 	@Override

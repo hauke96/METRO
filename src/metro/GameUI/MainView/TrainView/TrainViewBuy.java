@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import metro.METRO;
@@ -201,12 +200,6 @@ public class TrainViewBuy extends GameScreen
 	Panel getPanel()
 	{
 		return _panel;
-	}
-
-	@Override
-	public boolean isActive()
-	{
-		return false;
 	}
 
 	@Override

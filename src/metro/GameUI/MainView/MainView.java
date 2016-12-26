@@ -178,7 +178,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
-		if(_activeTool != null && _activeTool.isActive())
+		if(_activeTool != null)
 		{
 			closeActiveTool();
 

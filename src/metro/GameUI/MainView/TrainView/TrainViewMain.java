@@ -4,8 +4,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import metro.METRO;
 import metro.GameUI.Screen.GameScreen;
 import metro.TrainManagement.TrainManagementService;
@@ -36,7 +34,7 @@ public class TrainViewMain extends GameScreen
 	private TrainManagementService _trainManagementService;
 	private Panel _panel;
 	private Label _yourLinesLabel,
-	_yourTrainsLabel;
+		_yourTrainsLabel;
 
 	/**
 	 * Creates a new main view for the train screen.
@@ -82,7 +80,7 @@ public class TrainViewMain extends GameScreen
 		_trainList = new List(new Rectangle(_areaOffset.x + 121, _areaOffset.y + 130, _windowWidth - 141, 230), true);
 
 		fillLineList();
-		
+
 		_yourLinesLabel = new Label("Your Lines:", new Point(METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 110));
 		_yourLinesLabel.setColor(METRO.__metroRed);
 		_yourLinesLabel.underlined(true);
@@ -194,7 +192,7 @@ public class TrainViewMain extends GameScreen
 	{
 		return _lineList;
 	}
-	
+
 	/**
 	 * @return Gets the panel of this screen.
 	 */
@@ -209,12 +207,6 @@ public class TrainViewMain extends GameScreen
 	public boolean isInMoveMode()
 	{
 		return !_movedTrain.isEmpty();
-	}
-
-	@Override
-	public boolean isActive()
-	{
-		return true;
 	}
 
 	@Override

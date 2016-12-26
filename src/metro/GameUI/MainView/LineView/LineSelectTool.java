@@ -5,7 +5,6 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Technical.Logger;
@@ -26,7 +25,6 @@ import metro.TrainManagement.Trains.TrainLine;
 public class LineSelectTool extends GameScreen
 {
 	private ArrayList<RailwayNode> _listOfNodes;
-	private boolean _isActive;
 	private Color _color;
 	private String _lineName;
 	private PlayingField _playingField;
@@ -37,7 +35,6 @@ public class LineSelectTool extends GameScreen
 	public LineSelectTool()
 	{
 		_listOfNodes = new ArrayList<RailwayNode>();
-		_isActive = true;
 		_color = METRO.__metroBlue;
 		_lineName = "";
 		_playingField = PlayingField.getInstance();
@@ -92,16 +89,6 @@ public class LineSelectTool extends GameScreen
 	}
 
 	/**
-	 * Enables or disables this tool. When enabled it works otherwise it won't do anything.
-	 * 
-	 * @param enabled True to enable, false to disable.
-	 */
-	public void setState(boolean enabled)
-	{
-		_isActive = enabled;
-	}
-
-	/**
 	 * Sets the current line and allows to make changed on it. Updates the list of nodes, the color and the name.
 	 * 
 	 * @param line The new line of this tool.
@@ -122,9 +109,7 @@ public class LineSelectTool extends GameScreen
 		}
 		else if(mouseButton == Buttons.RIGHT)
 		{
-			_isActive = false;
-			setChanged();
-			notifyObservers(); // notify about close
+			close();
 		}
 	}
 
@@ -150,12 +135,6 @@ public class LineSelectTool extends GameScreen
 			Logger.__debug("Added node " + clickedNode.getPosition());
 			_listOfNodes.add(clickedNode);
 		}
-	}
-
-	@Override
-	public boolean isActive()
-	{
-		return _isActive;
 	}
 
 	@Override
