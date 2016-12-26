@@ -55,9 +55,9 @@ public class TrainViewBuy extends GameScreen
 
 		_panel = new Panel(new Rectangle());
 		_panel.setDrawBorder(false);
-		
+
 		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, METRO.__SCREEN_SIZE.height - METRO.__getYOffset() - _areaOffset.y, 210, 20), "Buy");
-		
+
 		_availableTrains = new List(
 			new Rectangle(_areaOffset.x + 20, _areaOffset.y + 440, 140, METRO.__SCREEN_SIZE.height - (_areaOffset.y + 420) - _areaOffset.y - METRO.__getYOffset()), null, true);
 		_availableTrains.register(new ActionObserver()
@@ -90,7 +90,7 @@ public class TrainViewBuy extends GameScreen
 		_informationValues.setColor(METRO.__metroBlue);
 
 		fillTrainList();
-		
+
 		_panel.add(_buyButton);
 		_panel.add(_availableTrains);
 		_panel.add(_messageLabel);
@@ -111,6 +111,11 @@ public class TrainViewBuy extends GameScreen
 
 	@Override
 	public void updateGameScreen(SpriteBatch g)
+	{
+		updateGameScreen();
+	}
+
+	public void updateGameScreen()
 	{
 		drawHeader();
 		drawTitleImage();
@@ -195,7 +200,7 @@ public class TrainViewBuy extends GameScreen
 	{
 		return _availableTrains;
 	}
-	
+
 	/**
 	 * @return Gets the main panel of this screen.
 	 */

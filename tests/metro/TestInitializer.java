@@ -22,7 +22,7 @@ public class TestInitializer
 	public static void init()
 	{
 		METRO.__SCREEN_SIZE = new Dimension(1920, 1080);
-		
+
 		TrainManagementService.getInstance().init();
 
 		BasicContainerRenderer containerRenderer = new BasicContainerRenderer();

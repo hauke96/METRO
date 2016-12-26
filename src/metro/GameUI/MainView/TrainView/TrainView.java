@@ -16,6 +16,7 @@ import metro.TrainManagement.Trains.Train;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.Panel;
+import metro.UI.Renderable.Controls.Canvas;
 
 /**
  * The dialog to buy, sell and manage trains.
@@ -46,9 +47,13 @@ public class TrainView extends GameScreen
 
 		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
 		_panel.setDrawBorder(true);
+		
+		Canvas canvas = new Canvas(new Point(_panel.getPosition().x, _panel.getPosition().y + 20));
+		canvas.setPainter(() -> draw());
 
 		_panel.add(_trainViewMain.getPanel());
 		_panel.add(_trainViewBuy.getPanel());
+		_panel.add(canvas);
 
 		registerObserver();
 	}
@@ -114,35 +119,38 @@ public class TrainView extends GameScreen
 	@Override
 	public void updateGameScreen(SpriteBatch g)
 	{
-		drawTitleBox();
-		_trainViewMain.updateGameScreen(g);
-		_trainViewBuy.updateGameScreen(g);
 	}
-
+	
+	private void draw()
+	{
+		drawTitleBox();
+		_trainViewBuy.updateGameScreen();
+	}
 	/**
 	 * Draws the title bar with the Label and box.
 	 */
 	private void drawTitleBox()
 	{
 		int length = Draw.getStringSize("Control Management").width;
-		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 20, getAreaOffset().y + 15, _windowWidth - 40, 60);
+		Draw.setColor(METRO.__metroBlue);
+		Draw.Rect(20, 15, _windowWidth - 40, 60);
 		Color c = new Color((int)(METRO.__metroBlue.getRed() * 1.8f),
 			(int)(METRO.__metroBlue.getGreen() * 1.3f),
 			255); // lighter metro-blue
 		Draw.setColor(c);
-		Draw.Rect(METRO.__SCREEN_SIZE.width - _windowWidth + 22, getAreaOffset().y + 17, _windowWidth - 44, 56);
+		Draw.Rect(22, 17, _windowWidth - 44, 56);
 
 		// Take "METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2" to center the label
-		length = Draw.getStringSize("METRO trains").width;
+		length = Draw.getStringSize("METRO lines").width;
 		Draw.setColor(METRO.__metroRed);
-		Draw.String("METRO trains", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, getAreaOffset().y + 25);
-		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, getAreaOffset().y + 40,
-			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, getAreaOffset().y + 40);
+		Draw.String("METRO lines", (_windowWidth - length) / 2, 25);
+		Draw.Line((_windowWidth - length) / 2 - 5, 40,
+			(_windowWidth + length) / 2 + 5, 40);
 
 		length = Draw.getStringSize("Control Management").width;
-		Draw.String("Control Management", METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2, getAreaOffset().y + 50);
-		Draw.Line(METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2 - 5, getAreaOffset().y + 65,
-			METRO.__SCREEN_SIZE.width - (_windowWidth - length) / 2 + 5, getAreaOffset().y + 65);
+		Draw.String("Control Management", (_windowWidth - length) / 2, 50);
+		Draw.Line((_windowWidth - length) / 2 - 5, 65,
+			(_windowWidth + length) / 2 + 5, 65);
 	}
 
 	/**
