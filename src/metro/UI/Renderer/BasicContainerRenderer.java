@@ -138,7 +138,6 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 			containerNotifier.notifyAllContainer(_listOfFloatingContainer);
 			if(!isClickedValue.value())
 			{
-				System.out.println("OK");
 				containerNotifier.notifyAllContainer(_listOfStaticContainer);// TODO determine on which control the focus is
 			}
 		};
