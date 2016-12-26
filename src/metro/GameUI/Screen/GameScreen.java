@@ -1,11 +1,8 @@
 package metro.GameUI.Screen;
 
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import java.util.Observable;
 
 import metro.Common.Technical.Logger;
-import metro.GameUI.Common.InGameMenuWindow;
-import metro.GameUI.Common.SettingsWindow;
 
 /**
  * Every Menu or Game Sreen has to implement this interface for start() and update(). This will make the creation process more easy.
@@ -14,7 +11,7 @@ import metro.GameUI.Common.SettingsWindow;
  * 
  */
 
-public abstract class GameScreen extends GameScreenSwitchedObservable
+public abstract class GameScreen extends Observable
 {
 	/**
 	 * When mouse has clicked
@@ -63,15 +60,5 @@ public abstract class GameScreen extends GameScreenSwitchedObservable
 		Logger.__debug("Closed game screen " + this);
 		Logger.__debug("Amount observer: " + countObservers());
 		deleteObservers();
-	}
-
-	/**
-	 * Switches to the given screen.
-	 * 
-	 * @param newGameScreen The new game screen which will then be displayed.
-	 */
-	public void switchToGameScreen(GameScreen newGameScreen)
-	{
-		notifyAllAboutSwitch(newGameScreen);
 	}
 }
