@@ -395,11 +395,6 @@ public class LineView extends GameScreen implements Observer
 		_lineSelectToolEnabled = true;
 	}
 
-	@Override
-	public void updateGameScreen(SpriteBatch g)
-	{
-	}
-	
 	private void draw()
 	{
 		if(!_isActive) return;

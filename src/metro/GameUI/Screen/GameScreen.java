@@ -17,13 +17,6 @@ import metro.GameUI.Common.SettingsWindow;
 public abstract class GameScreen extends GameScreenSwitchedObservable
 {
 	/**
-	 * Updates the actual game screen.
-	 * 
-	 * @param sp SpriteBatch to draw on.
-	 */
-	public abstract void updateGameScreen(SpriteBatch sp);
-
-	/**
 	 * When mouse has clicked
 	 * 
 	 * @param screenX The x-position on the screen

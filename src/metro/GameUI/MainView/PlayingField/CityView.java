@@ -33,11 +33,6 @@ public class CityView extends GameScreen
 		_enableMouseSelection = true;
 	}
 
-	@Override
-	public void updateGameScreen(SpriteBatch sp)
-	{
-	}
-
 	/**
 	 * Draws the city view. This method does not draw the number of the selected circle over the cursor (s. {@link #drawNumbers(Point)}).
 	 * @param offset The current map offset.

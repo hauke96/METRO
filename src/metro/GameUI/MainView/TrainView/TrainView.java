@@ -115,17 +115,13 @@ public class TrainView extends GameScreen
 			}
 		});
 	}
-
-	@Override
-	public void updateGameScreen(SpriteBatch g)
-	{
-	}
 	
 	private void draw()
 	{
 		drawTitleBox();
 		_trainViewBuy.updateGameScreen();
 	}
+	
 	/**
 	 * Draws the title bar with the Label and box.
 	 */

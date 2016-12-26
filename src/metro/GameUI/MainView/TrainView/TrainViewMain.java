@@ -144,11 +144,6 @@ public class TrainViewMain extends GameScreen
 		});
 	}
 
-	@Override
-	public void updateGameScreen(SpriteBatch g)
-	{
-	}
-
 	/**
 	 * Removes the whole selected line.
 	 */

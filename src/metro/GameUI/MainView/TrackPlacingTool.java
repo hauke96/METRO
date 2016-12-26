@@ -54,16 +54,9 @@ public class TrackPlacingTool extends GameScreen
 		
 		_panel.setAboveOf(_playingField.getBackgroundPanel());
 	}
-
-	@Override
-	public void updateGameScreen(SpriteBatch sp)
-	{
-	}
 	
 	private void draw()
 	{
-//		if(!_isActive) return;
-
 		Point mapOffset = _playingField.getMapOffset();
 		int baseNetSpacing = GameState.getInstance().getBaseNetSpacing();
 

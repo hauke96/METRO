@@ -53,11 +53,6 @@ public class StationPlacingTool extends GameScreen
 		_panel.setAboveOf(_playingField.getBackgroundPanel());
 	}
 
-	@Override
-	public void updateGameScreen(SpriteBatch sp)
-	{
-	}
-
 	private void draw()
 	{
 		Point position = new Point(METRO.__mousePosition.x - 4,

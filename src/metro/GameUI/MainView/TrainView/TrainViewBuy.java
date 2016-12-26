@@ -109,12 +109,6 @@ public class TrainViewBuy extends GameScreen
 		}
 	}
 
-	@Override
-	public void updateGameScreen(SpriteBatch g)
-	{
-		updateGameScreen();
-	}
-
 	public void updateGameScreen()
 	{
 		drawHeader();

@@ -153,11 +153,6 @@ public class LineSelectTool extends GameScreen
 	}
 
 	@Override
-	public void updateGameScreen(SpriteBatch g)
-	{
-	}
-
-	@Override
 	public boolean isActive()
 	{
 		return _isActive;
