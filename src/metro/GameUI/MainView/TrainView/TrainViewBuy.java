@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
-import metro.GameUI.Screen.GameScreen;
+import metro.GameUI.Screen.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TrainTemplate;
 import metro.UI.Renderable.ActionObserver;
@@ -26,7 +26,7 @@ import metro.UI.Renderable.Controls.List;
  * @author hauke
  *
  */
-public class TrainViewBuy extends GameScreen
+public class TrainViewBuy extends ToolView
 {
 	private List _availableTrains; // all available train models
 	private int _windowWidth;

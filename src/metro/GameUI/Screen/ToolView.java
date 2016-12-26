@@ -11,7 +11,7 @@ import metro.Common.Technical.Logger;
  * 
  */
 
-public abstract class GameScreen extends Observable
+public abstract class ToolView extends Observable
 {
 	/**
 	 * When mouse has clicked

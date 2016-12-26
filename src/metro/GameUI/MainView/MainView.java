@@ -15,7 +15,7 @@ import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.MainView.TrainView.TrainView;
-import metro.GameUI.Screen.GameScreen;
+import metro.GameUI.Screen.ToolView;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
@@ -30,7 +30,7 @@ import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 // TODO break this class into MVC-structure
 public class MainView extends GameScreenContainer implements Observer, InputProcessor
 {
-	private GameScreen _activeTool;
+	private ToolView _activeTool;
 	private Toolbar _toolbar;
 	private NotificationArea _notificationArea;
 	private PlayingField _playingField;
@@ -191,7 +191,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	 * 
 	 * @param newTool The new tool that should be used.
 	 */
-	private void setActiveTool(GameScreen newTool)
+	private void setActiveTool(ToolView newTool)
 	{
 		Contract.RequireNotNull(newTool);
 

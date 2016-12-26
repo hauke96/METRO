@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Graphics.Draw;
-import metro.GameUI.Screen.GameScreen;
+import metro.GameUI.Screen.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TravelerSpot;
 
@@ -20,7 +20,7 @@ import metro.TrainManagement.Trains.TravelerSpot;
  * 
  */
 
-public class CityView extends GameScreen
+public class CityView extends ToolView
 {
 	private int _selectedLayerNumber;
 	private boolean _enableMouseSelection; // When false, there'll be no circle highlighting

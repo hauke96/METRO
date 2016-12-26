@@ -14,7 +14,7 @@ import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameUI.MainView.NotificationView.NotificationServer;
 import metro.GameUI.MainView.NotificationView.NotificationType;
 import metro.GameUI.MainView.PlayingField.PlayingField;
-import metro.GameUI.Screen.GameScreen;
+import metro.GameUI.Screen.ToolView;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.UI.Renderable.Container.AbstractContainer;
@@ -27,7 +27,7 @@ import metro.UI.Renderable.Controls.Canvas;
  * @author hauke
  *
  */
-public class TrackPlacingTool extends GameScreen
+public class TrackPlacingTool extends ToolView
 {
 	private RailwayNode _currentRailwayNode; // click -> set railwaynode -> click -> connect/create
 	private PlayingField _playingField;

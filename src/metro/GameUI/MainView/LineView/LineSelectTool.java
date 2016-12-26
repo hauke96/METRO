@@ -9,7 +9,7 @@ import com.badlogic.gdx.Input.Buttons;
 import metro.METRO;
 import metro.Common.Technical.Logger;
 import metro.GameUI.MainView.PlayingField.PlayingField;
-import metro.GameUI.Screen.GameScreen;
+import metro.GameUI.Screen.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
@@ -22,7 +22,7 @@ import metro.TrainManagement.Trains.TrainLine;
  * @author hauke
  *
  */
-public class LineSelectTool extends GameScreen
+public class LineSelectTool extends ToolView
 {
 	private ArrayList<RailwayNode> _listOfNodes;
 	private Color _color;

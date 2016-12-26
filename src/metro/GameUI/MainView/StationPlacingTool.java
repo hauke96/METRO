@@ -12,7 +12,7 @@ import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 import metro.GameUI.MainView.PlayingField.PlayingField;
-import metro.GameUI.Screen.GameScreen;
+import metro.GameUI.Screen.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TrainStation;
 import metro.UI.Renderable.Container.AbstractContainer;
@@ -25,7 +25,7 @@ import metro.UI.Renderable.Controls.Canvas;
  * @author hauke
  *
  */
-public class StationPlacingTool extends GameScreen
+public class StationPlacingTool extends ToolView
 {
 	private PlayingField _playingField;
 

@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import metro.METRO;
-import metro.GameUI.Screen.GameScreen;
+import metro.GameUI.Screen.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
@@ -22,7 +22,7 @@ import metro.UI.Renderable.Controls.List;
  * @author hauke
  *
  */
-public class TrainViewMain extends GameScreen
+public class TrainViewMain extends ToolView
 {
 	private int _windowWidth;
 	private List _trainList,

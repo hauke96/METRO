@@ -18,7 +18,7 @@ import metro.Common.Technical.Logger;
 import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameUI.MainView.NotificationView.NotificationServer;
 import metro.GameUI.MainView.NotificationView.NotificationType;
-import metro.GameUI.Screen.GameScreen;
+import metro.GameUI.Screen.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
@@ -38,7 +38,7 @@ import metro.UI.Renderable.Controls.List;
  * @author hauke
  *
  */
-public class LineView extends GameScreen implements Observer
+public class LineView extends ToolView implements Observer
 {
 	private Panel _panel;
 	private List _lineList;

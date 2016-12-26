@@ -8,7 +8,7 @@ import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Technical.Contract;
-import metro.GameUI.Screen.GameScreen;
+import metro.GameUI.Screen.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.UI.Renderable.ActionObserver;
@@ -22,7 +22,7 @@ import metro.UI.Renderable.Controls.Canvas;
  * @author hauke
  *
  */
-public class TrainView extends GameScreen
+public class TrainView extends ToolView
 {
 	private int _windowWidth;
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
