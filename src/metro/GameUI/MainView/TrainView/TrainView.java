@@ -8,7 +8,7 @@ import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Technical.Contract;
-import metro.GameUI.Screen.ToolView;
+import metro.GameUI.Common.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.UI.Renderable.ActionObserver;

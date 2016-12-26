@@ -8,8 +8,8 @@ import com.badlogic.gdx.Input.Buttons;
 
 import metro.METRO;
 import metro.Common.Technical.Logger;
+import metro.GameUI.Common.ToolView;
 import metro.GameUI.MainView.PlayingField.PlayingField;
-import metro.GameUI.Screen.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;

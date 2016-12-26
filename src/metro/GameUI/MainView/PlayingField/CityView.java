@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
 import metro.Common.Graphics.Draw;
-import metro.GameUI.Screen.ToolView;
+import metro.GameUI.Common.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TravelerSpot;
 

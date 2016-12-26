@@ -1,4 +1,4 @@
-package metro.GameUI.Screen;
+package metro.GameUI.Common;
 
 import java.util.Observable;
 
