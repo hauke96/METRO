@@ -81,13 +81,6 @@ public abstract class GameScreen extends GameScreenSwitchedObservable
 	}
 
 	/**
-	 * Resets the game screen to its default values.
-	 */
-	public void reset()
-	{
-	}
-
-	/**
 	 * Creates the in-game menu window with the yes/no option for exiting the game but provides a settings button as well.
 	 */
 	public void createMenuWindow()

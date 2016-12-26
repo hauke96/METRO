@@ -523,7 +523,6 @@ public class LineView extends GameScreen implements Observer
 		return _isActive;
 	}
 
-	@Override
 	public void reset()
 	{
 		// switch controls OFF when select tool is enabled
