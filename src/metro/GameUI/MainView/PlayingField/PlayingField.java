@@ -165,7 +165,6 @@ public class PlayingField implements InputProcessor
 
 		if(_cityView != null)
 		{
-			_cityView.mouseReleased(button);
 			processed = true;
 		}
 

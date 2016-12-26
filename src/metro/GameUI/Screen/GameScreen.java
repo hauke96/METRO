@@ -24,15 +24,6 @@ public abstract class GameScreen extends Observable
 	{
 	}
 
-	/**
-	 * When mouse has been released.
-	 * 
-	 * @param mouseButton The number of the button like Buttons.LEFT
-	 */
-	public void mouseReleased(int mouseButton)
-	{
-	}
-
 	@Override
 	public boolean equals(Object obj)
 	{

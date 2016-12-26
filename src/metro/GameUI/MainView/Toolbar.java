@@ -145,15 +145,6 @@ public class Toolbar
 		Draw.Line(_buttonAreaXPosition, 0, _buttonAreaXPosition, _height);
 	}
 
-	public boolean isHovered()
-	{
-		Point mPos = METRO.__mousePosition;
-		return _buildStation.getArea().contains(mPos)
-			|| _buildTracks.getArea().contains(mPos)
-			|| _showTrainList.getArea().contains(mPos)
-			|| _createNewTrain.getArea().contains(mPos);
-	}
-
 	public Button getBuildStationButton()
 	{
 		Contract.EnsureNotNull(_buildStation);
