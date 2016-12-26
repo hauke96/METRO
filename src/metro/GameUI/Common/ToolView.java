@@ -24,12 +24,6 @@ public abstract class ToolView extends Observable
 	{
 	}
 
-	@Override
-	public boolean equals(Object obj)
-	{
-		return obj.getClass().equals(this.getClass());
-	}
-
 	/**
 	 * @return True when mouse is in sensible/important area of the game screen.
 	 */
@@ -46,5 +40,11 @@ public abstract class ToolView extends Observable
 		setChanged();
 		notifyObservers(); // notify about close
 		deleteObservers();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		return obj.getClass().equals(this.getClass());
 	}
 }
