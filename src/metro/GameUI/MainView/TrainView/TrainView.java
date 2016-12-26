@@ -160,9 +160,6 @@ public class TrainView extends ToolView
 		_trainViewMain.close();
 		_panel.close();
 		super.close();
-
-		setChanged();
-		notifyObservers(); // notify about close
 	}
 
 	@Override

@@ -37,8 +37,11 @@ public abstract class ToolView extends Observable
 	{
 		Logger.__debug("Closed game screen " + this);
 		Logger.__debug("Amount observer: " + countObservers());
+
+		// notify about close
 		setChanged();
-		notifyObservers(); // notify about close
+		notifyObservers();
+
 		deleteObservers();
 	}
 

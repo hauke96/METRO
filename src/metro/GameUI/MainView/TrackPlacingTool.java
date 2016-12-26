@@ -287,8 +287,5 @@ public class TrackPlacingTool extends ToolView
 	{
 		_panel.close();
 		super.close();
-
-		setChanged();
-		notifyObservers();
 	}
 }

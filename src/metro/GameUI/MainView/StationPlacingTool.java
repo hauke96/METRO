@@ -124,8 +124,5 @@ public class StationPlacingTool extends ToolView
 	{
 		_panel.close();
 		super.close();
-
-		setChanged();
-		notifyObservers(); // notify about close
 	}
 }

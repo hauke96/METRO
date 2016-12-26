@@ -520,9 +520,6 @@ public class LineView extends ToolView implements Observer
 		_lineSelectTool.close();
 		_panel.close();
 		super.close();
-		
-		setChanged();
-		notifyObservers(); // notify about close
 	}
 
 	@Override
