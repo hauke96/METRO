@@ -168,6 +168,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	{
 		if(_activeTool instanceof LineView)
 		{
+			//TODO change this into an "onInputChangedListener" or something like that
 			((LineView)_activeTool).keyDown(keyCode);
 			return true;
 		}

@@ -36,68 +36,6 @@ public abstract class GameScreen extends GameScreenSwitchedObservable
 	{
 	}
 
-	/**
-	 * When a key was pressed.
-	 * 
-	 * @param keyCode Key number from Gdx.Input
-	 */
-	public void keyPressed(int keyCode)
-	{
-		if(keyCode == Keys.ESCAPE) // Show in game window if no input control and no other window is focused/open.
-		{
-			createMenuWindow();
-		}
-		else
-		{
-			keyDown(keyCode);
-		}
-	}
-
-	/**
-	 * Forwards the key up event to the active input control.
-	 * 
-	 * @param keyCode Key number from Gdx.Input
-	 */
-	public void keyUp(int keyCode)
-	{
-	}
-
-	/**
-	 * When a key was pressed AND it has been checked weather the ESC key for the ingame menu window has been pressed.
-	 * 
-	 * @param keyCode Key number from Gdx.Input
-	 */
-	public void keyDown(int keyCode)
-	{
-	}
-
-	/**
-	 * Fires when user scrolls.
-	 * 
-	 * @param amount Positive or negative amount of steps since last frame.
-	 */
-	public void mouseScrolled(int amount)
-	{
-	}
-
-	/**
-	 * Creates the in-game menu window with the yes/no option for exiting the game but provides a settings button as well.
-	 */
-	public void createMenuWindow()
-	{
-		InGameMenuWindow.show();
-		// if(_inGameMenuWindow == null) _inGameMenuWindow = new InGameMenuWindow();
-	}
-
-	/**
-	 * Create a settings menu with some options to configure METRO.
-	 */
-	public void createSettingsWindow()
-	{
-		SettingsWindow.show();
-		// if(_settingsWindow == null) _settingsWindow = new SettingsWindow();
-	}
-
 	@Override
 	public boolean equals(Object obj)
 	{
