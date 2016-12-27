@@ -75,6 +75,7 @@ public class TrainView extends ToolView
 				}
 				else
 				{
+					System.out.println(_trainViewMain.getLineList().getText());
 					Train train = new Train(trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
 					train.setLine(trainManagementService.getLine(_trainViewMain.getLineList().getText()));
 					trainManagementService.addTrain(train);

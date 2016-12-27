@@ -544,6 +544,8 @@ public class TrainManagementService implements Observer
 	 */
 	private boolean canMove(Train train, float deltaTime)
 	{
+		if(train.getLine() == null) return false;
+		
 		Point currentNode = train.getCurrentNode();
 		Point currentNodeAfterMove = train.getCurrentNode(deltaTime);
 		Point nextNodeAfterMove = train.getNextNode(deltaTime);

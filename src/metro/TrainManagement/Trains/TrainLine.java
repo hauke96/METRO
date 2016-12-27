@@ -89,8 +89,8 @@ public class TrainLine implements Cloneable
 		if(list.size() <= 1 || startNode == null) return list;
 
 		Logger.__debug(
-			"Start Node: " + startNode.getPosition() + "\n"+
-			"Line length (amount of nodes): " + list.size());
+			"Start Node: " + startNode.getPosition() + "\n" +
+				"Line length (amount of nodes): " + list.size());
 
 		ArrayList<RailwayNode> newList = new ArrayList<>();
 		// be sure that an end node is the first element in this list
@@ -469,7 +469,7 @@ public class TrainLine implements Cloneable
 			{
 				isEqual &= _listOfNodes.contains(node);
 			}
-			
+
 			isEqual &= getName().equals(line.getName());
 
 			return isEqual;
@@ -477,49 +477,55 @@ public class TrainLine implements Cloneable
 		return false;
 	}
 
-//	/**
-//	 * Draws the train line. The line doesn't need to be valid because all parts are drawn by their own.
-//	 * 
-//	 * @param offset The map offset in pixel.
-//	 * @param sp The sprite batch to draw on.
-//	 * @param map A map (node -> Integer) that says how many lines are already drawn on this node (normally all integers are 0).
-//	 */
-//	public void draw(Point offset, SpriteBatch sp, HashMap<RailwayNode, Integer> map)
-//	{
-//		if(_length == 0) return;
-//
-//		Draw.setColor(__isValid(_listOfNodes) ? _lineColor : METRO.__metroRed);
-//
-//		for(int i = 0; i < _listOfNodes.size() - 1; i++)
-//		{
-//			// the list is sorted so we know that i+1 is the direct neighbor
-//			RailwayNode node = _listOfNodes.get(i);
-//			RailwayNode neighbor = _listOfNodes.get(i + 1);
-//
-//			Point position, positionNext;
-//			position = new Point(offset.x + node.getPosition().x * _gameState.getBaseNetSpacing(),
-//				offset.y + node.getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc.
-//			positionNext = new Point(offset.x + neighbor.getPosition().x * _gameState.getBaseNetSpacing(),
-//				offset.y + neighbor.getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc. for second point
-//
-////			if(node.isNeighbor(neighbor))
-////			{
-//				drawColoredLine(offset, position, positionNext, map.get(neighbor).intValue());
-//
-//				// update the map value
-//				int layers = map.get(node).intValue();
-//				map.remove(node);
-//				map.put(node, new Integer(layers + 1));
-////			}
-//
-//			Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
-//		}
-//
-//		// Draw also a circle for the last node which won't be drawn in the for loop
-//		Point position = new Point(offset.x + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().x * _gameState.getBaseNetSpacing(),
-//			offset.y + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc.
-//		Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
-//	}
+	@Override
+	public int hashCode()
+	{
+		return ("" + _name.hashCode() + _listOfNodes.hashCode()).hashCode();
+	}
+
+	// /**
+	// * Draws the train line. The line doesn't need to be valid because all parts are drawn by their own.
+	// *
+	// * @param offset The map offset in pixel.
+	// * @param sp The sprite batch to draw on.
+	// * @param map A map (node -> Integer) that says how many lines are already drawn on this node (normally all integers are 0).
+	// */
+	// public void draw(Point offset, SpriteBatch sp, HashMap<RailwayNode, Integer> map)
+	// {
+	// if(_length == 0) return;
+	//
+	// Draw.setColor(__isValid(_listOfNodes) ? _lineColor : METRO.__metroRed);
+	//
+	// for(int i = 0; i < _listOfNodes.size() - 1; i++)
+	// {
+	// // the list is sorted so we know that i+1 is the direct neighbor
+	// RailwayNode node = _listOfNodes.get(i);
+	// RailwayNode neighbor = _listOfNodes.get(i + 1);
+	//
+	// Point position, positionNext;
+	// position = new Point(offset.x + node.getPosition().x * _gameState.getBaseNetSpacing(),
+	// offset.y + node.getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc.
+	// positionNext = new Point(offset.x + neighbor.getPosition().x * _gameState.getBaseNetSpacing(),
+	// offset.y + neighbor.getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc. for second point
+	//
+	//// if(node.isNeighbor(neighbor))
+	//// {
+	// drawColoredLine(offset, position, positionNext, map.get(neighbor).intValue());
+	//
+	// // update the map value
+	// int layers = map.get(node).intValue();
+	// map.remove(node);
+	// map.put(node, new Integer(layers + 1));
+	//// }
+	//
+	// Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
+	// }
+	//
+	// // Draw also a circle for the last node which won't be drawn in the for loop
+	// Point position = new Point(offset.x + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().x * _gameState.getBaseNetSpacing(),
+	// offset.y + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc.
+	// Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
+	// }
 
 	@Override
 	public Object clone() throws CloneNotSupportedException

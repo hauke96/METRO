@@ -3,6 +3,7 @@ package metro.GameUI.MainView.LineView;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Observer;
 
 import com.badlogic.gdx.Input.Buttons;
 
@@ -109,7 +110,8 @@ public class LineSelectTool extends ToolView
 		}
 		else if(mouseButton == Buttons.RIGHT)
 		{
-			close();
+			setChanged();
+			notifyObservers();
 		}
 	}
 

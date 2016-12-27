@@ -69,7 +69,7 @@ public class LineView extends ToolView implements Observer
 		_lineSelectToolEnabled = false;
 		_windowWidth = GameState.getInstance().getToolViewWidth();
 		_lineSelectTool = new LineSelectTool();
-		_lineSelectTool.addObserver(this);
+		_lineSelectTool.addObserver(this); // close observer
 
 		_trainManagementService = TrainManagementService.getInstance();
 
@@ -86,7 +86,7 @@ public class LineView extends ToolView implements Observer
 	{
 		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
 		_panel.setDrawBorder(true, METRO.__metroBlue);
-		
+
 		Canvas canvas = new Canvas(new Point(_panel.getPosition().x, _panel.getPosition().y + 20));
 		canvas.setPainter(() -> draw());
 
@@ -271,6 +271,7 @@ public class LineView extends ToolView implements Observer
 					NotificationServer.publishNotification("You have not enough money to modify the line. It costs 5000$.", NotificationType.GAME_ERROR);
 					_messageLabel.setText("Not enough money. This action costs 5000$!");
 					Logger.__info("There's not enough money to change the line.\n" + e.getMessage());
+					return;
 				}
 
 				if(!_lineSelectToolEnabled) return;
@@ -456,15 +457,13 @@ public class LineView extends ToolView implements Observer
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(_lineSelectToolEnabled)
+		// if select tool exists and mouse is in the area of the select tool, forward click to tool
+		if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
 		{
-			// if select tool exists and mouse is in the area of the select tool, forward click to tool
-			if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
-			{
-				// something will probably change so remove the old line (new one will be added later)
-				_trainManagementService.removeLine(_lineSelectTool.getTrainLine());
-				_lineSelectTool.mouseClicked(screenX, screenY, mouseButton); // add/remove node to list
-			}
+			// something will probably change so remove the old line (new one will be added later)
+			_trainManagementService.removeLine(_lineSelectTool.getTrainLine());
+			_lineSelectTool.mouseClicked(screenX, screenY, mouseButton); // add/remove node to list
+			_oldLine = _lineSelectTool.getTrainLine();
 		}
 		else if(!isHovered())// if select tool is not enabled, hide/close the whole line view when the mouse is outside of it
 		{
@@ -533,6 +532,8 @@ public class LineView extends ToolView implements Observer
 	{
 		if(o instanceof LineSelectTool)
 		{
+			if(!_lineSelectToolEnabled) return;
+			
 			_lineSelectToolEnabled = false;
 
 			TrainLine line = ((LineSelectTool)o).getTrainLine();
