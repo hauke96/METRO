@@ -55,8 +55,8 @@ public class StationPlacingToolTest
 	{
 		ModifiableBoolean closed = new ModifiableBoolean();
 
-		_tool.mouseClicked(0, 0, Buttons.RIGHT);
 		_tool.addObserver((o, arg) -> closed.set(true));
+		_tool.mouseClicked(0, 0, Buttons.RIGHT);
 
 		assertTrue(closed.value());
 	}
