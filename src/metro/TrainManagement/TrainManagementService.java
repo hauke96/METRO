@@ -595,6 +595,7 @@ public class TrainManagementService implements Observer
 				{
 					t.waitFor(3000);
 					stationFound = true;
+					//FIXME all stations will lose passengers when the train stops at one station
 					TrainStation s = getStation(currNode);
 					s.movePassenger(t.getMaxPassenger() - t.getCurrPassenger(), 3000 * (long)1e6);
 					break;
