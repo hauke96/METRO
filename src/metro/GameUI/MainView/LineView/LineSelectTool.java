@@ -3,7 +3,7 @@ package metro.GameUI.MainView.LineView;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Observer;
+import java.util.List;
 
 import com.badlogic.gdx.Input.Buttons;
 
@@ -25,7 +25,7 @@ import metro.TrainManagement.Trains.TrainLine;
  */
 public class LineSelectTool extends ToolView
 {
-	private ArrayList<RailwayNode> _listOfNodes;
+	private List<RailwayNode> _listOfNodes;
 	private Color _color;
 	private String _lineName;
 	private PlayingField _playingField;
@@ -44,7 +44,7 @@ public class LineSelectTool extends ToolView
 	/**
 	 * @return The list with all selected nodes.
 	 */
-	public ArrayList<RailwayNode> getNodeList()
+	public List<RailwayNode> getNodeList()
 	{
 		return _listOfNodes;
 	}

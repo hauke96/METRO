@@ -11,7 +11,7 @@ import java.util.ArrayList;
  */
 public class ActionObservable
 {
-	private ArrayList<ActionObserver> _listOfObserver;
+	private List<ActionObserver> _listOfObserver;
 
 	/**
 	 * Creates the list of all observers of this observable object.

@@ -52,9 +52,8 @@ public abstract class AbstractContainer extends CloseObservable
 			throw new UninitiatedClassException("There's no container registration service available. Set it before creating a container.");
 		}
 
-		// TODO use array list
-		_listOfControlElements = new LinkedList<ControlElement>();
-		_listOfAboveChangedObserver = new LinkedList<>();
+		_listOfControlElements = new ArrayList<ControlElement>();
+		_listOfAboveChangedObserver = new ArrayList<>();
 		_listOfContainerBelow = new ArrayList<>();
 
 		registerContainerInRenderer(_containerRegistrationService);

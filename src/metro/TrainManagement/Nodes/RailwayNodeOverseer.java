@@ -3,6 +3,7 @@ package metro.TrainManagement.Nodes;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,7 +42,7 @@ public class RailwayNodeOverseer
 	 */
 	public static RailwayNode createNode(Point position, RailwayNode neighbor)
 	{
-		ArrayList<RailwayNode> list = null;
+		List<RailwayNode> list = null;
 		if(neighbor != null)
 		{
 			list = new ArrayList<RailwayNode>();
@@ -58,7 +59,7 @@ public class RailwayNodeOverseer
 	 * @param neighbors A list of neighbors of this node.
 	 * @return A new or existing node at the given position.
 	 */
-	public static RailwayNode createNode(Point position, ArrayList<RailwayNode> neighbors)
+	public static RailwayNode createNode(Point position, List<RailwayNode> neighbors)
 	{
 		if(isNodeAt(position))
 		{
@@ -120,7 +121,7 @@ public class RailwayNodeOverseer
 	 */
 	public static void removeNodesWithoutNeighbors()
 	{
-		ArrayList<RailwayNode> list = new ArrayList<RailwayNode>();
+		List<RailwayNode> list = new ArrayList<RailwayNode>();
 
 		for(RailwayNode node : __nodeMap.values())
 		{

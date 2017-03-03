@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
@@ -296,7 +294,7 @@ public class LineView extends ToolView implements Observer
 						_trainManagementService.removeLine(_oldLine);
 						_lineList.removeElement(_lineList.getIndex(_oldLine.getName()));
 
-						ArrayList<Train> oldTrains = getTrainsOfLine(_oldLine);
+						java.util.List<Train> oldTrains = getTrainsOfLine(_oldLine);
 
 						// transfer trains to new line
 						for(Train train : oldTrains)
@@ -326,9 +324,9 @@ public class LineView extends ToolView implements Observer
 			 * @param line The train line whose trains you want.
 			 * @return All trains of that line.
 			 */
-			private ArrayList<Train> getTrainsOfLine(TrainLine line)
+			private java.util.List<Train> getTrainsOfLine(TrainLine line)
 			{
-				ArrayList<Train> trains = new ArrayList<>();
+				java.util.List<Train> trains = new ArrayList<>();
 				for(Train train : _trainManagementService.getTrains())
 				{
 					if(train.getLine().equals(line))

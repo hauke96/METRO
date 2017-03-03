@@ -36,10 +36,10 @@ import metro.TrainManagement.Trains.TravelerSpot;
  */
 public class TrainManagementService implements Observer
 {
-	private ArrayList<TrainLine> _trainLineList;
-	private ArrayList<Train> _trainList;
-	private ArrayList<TrainStation> _stationList;
-	private ArrayList<TravelerSpot> _travelerSpotList;
+	private List<TrainLine> _trainLineList;
+	private List<Train> _trainList;
+	private List<TrainStation> _stationList;
+	private List<TravelerSpot> _travelerSpotList;
 	private HashMap<String, TrainTemplate> _templateTrains;
 	private float _lastRenderTime;
 	private TrainLineDrawingService _trainLineDrawingService;
@@ -202,7 +202,7 @@ public class TrainManagementService implements Observer
 	/**
 	 * @return A list of all trains.
 	 */
-	public ArrayList<Train> getTrains()
+	public List<Train> getTrains()
 	{
 		return _trainList;
 	}
@@ -258,7 +258,7 @@ public class TrainManagementService implements Observer
 	/**
 	 * @return A list with all available trains. This does NOT mean that the player already bought them, they are just available for him.
 	 */
-	public ArrayList<TrainTemplate> getTemplateTrains()
+	public List<TrainTemplate> getTemplateTrains()
 	{
 		return new ArrayList<TrainTemplate>(_templateTrains.values());
 	}
@@ -377,14 +377,13 @@ public class TrainManagementService implements Observer
 	}
 
 	/**
-	 * Creates a copy of the list train lines and returns this copy.
+	 * List of train lines. This is only a copy of the original!
 	 * 
-	 * @return A copy of the list of all lines.
+	 * @return A list with all train lines.
 	 */
-	@SuppressWarnings("unchecked") // cast will always succeed, because the list only hold TrainLine objects
-	public ArrayList<TrainLine> getLines()
+	public List<TrainLine> getLines()
 	{
-		return (ArrayList<TrainLine>)_trainLineList.clone();
+		return new ArrayList<TrainLine>(_trainLineList);
 	}
 
 	/**
@@ -425,11 +424,11 @@ public class TrainManagementService implements Observer
 	}
 
 	/**
-	 * @return A list of all train stations.
+	 * @return A list of all train stations. This is only a copy of the original!
 	 */
-	public ArrayList<TrainStation> getStations()
+	public List<TrainStation> getStations()
 	{
-		return _stationList;
+		return new ArrayList<>(_stationList);
 	}
 
 	/**
@@ -625,8 +624,8 @@ public class TrainManagementService implements Observer
 	/**
 	 * @return A list of all traveler spots
 	 */
-	public ArrayList<TravelerSpot> getTravelerSpots()
+	public List<TravelerSpot> getTravelerSpots()
 	{
-		return _travelerSpotList;
+		return new ArrayList<>(_travelerSpotList);
 	}
 }

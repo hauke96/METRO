@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 
 import metro.Common.Technical.Logger;
 import metro.TrainManagement.Nodes.RailwayNode;
@@ -21,7 +22,7 @@ import metro.TrainManagement.Nodes.RailwayNode;
  */
 public class TrainLine implements Cloneable
 {
-	private final ArrayList<RailwayNode> _listOfNodes;
+	private final List<RailwayNode> _listOfNodes;
 	private Color _lineColor;
 	private String _name;
 	private final double _length;
@@ -46,11 +47,11 @@ public class TrainLine implements Cloneable
 	 * @param lineColor The color.
 	 */
 	@SuppressWarnings("unchecked")
-	public TrainLine(ArrayList<RailwayNode> connections, String name, Color lineColor)
+	public TrainLine(List<RailwayNode> connections, String name, Color lineColor)
 	{
 		if(connections != null)
 		{
-			_listOfNodes = sortNodes((ArrayList<RailwayNode>)connections.clone(), getAnyEndNode(connections));
+			_listOfNodes = sortNodes(new ArrayList<>(connections), getAnyEndNode(connections));
 		}
 		else
 		{
@@ -84,7 +85,7 @@ public class TrainLine implements Cloneable
 	 * @param startNode An end node of the line.
 	 * @return A sorted list with all the nodes.
 	 */
-	private ArrayList<RailwayNode> sortNodes(ArrayList<RailwayNode> list, RailwayNode startNode)
+	private List<RailwayNode> sortNodes(List<RailwayNode> list, RailwayNode startNode)
 	{
 		if(list.size() <= 1 || startNode == null) return list;
 
@@ -92,7 +93,7 @@ public class TrainLine implements Cloneable
 			"Start Node: " + startNode.getPosition() + "\n" +
 				"Line length (amount of nodes): " + list.size());
 
-		ArrayList<RailwayNode> newList = new ArrayList<>();
+		List<RailwayNode> newList = new ArrayList<>();
 		// be sure that an end node is the first element in this list
 		newList.add(startNode);
 		list.remove(startNode);
@@ -138,7 +139,7 @@ public class TrainLine implements Cloneable
 	 * @param list A list with all nodes where the end nodes should be determined.
 	 * @return One of the two end nodes of the given line.
 	 */
-	private RailwayNode getAnyEndNode(ArrayList<RailwayNode> list)
+	private RailwayNode getAnyEndNode(List<RailwayNode> list)
 	{
 		for(RailwayNode node : list)
 		{
@@ -370,7 +371,7 @@ public class TrainLine implements Cloneable
 	 * @param listOfNodes The list of nodes that may be valid.
 	 * @return True when valid.
 	 */
-	public static boolean __isValid(ArrayList<RailwayNode> listOfNodes)
+	public static boolean __isValid(List<RailwayNode> listOfNodes)
 	{
 		int amountEndNodes = 0;
 
@@ -393,12 +394,12 @@ public class TrainLine implements Cloneable
 	 * @param listOfNodes The list of all available nodes.
 	 * @return True when the given node is an end node, false if not.
 	 */
-	public static boolean __isEndNode(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
+	public static boolean __isEndNode(RailwayNode node, List<RailwayNode> listOfNodes)
 	{
 		return __getNeighborAmount(node, listOfNodes) == 1;
 	}
 
-	private static int __getNeighborAmount(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
+	private static int __getNeighborAmount(RailwayNode node, List<RailwayNode> listOfNodes)
 	{
 		int counter = 0;
 
@@ -438,7 +439,7 @@ public class TrainLine implements Cloneable
 	 * 
 	 * @return The list with all nodes.
 	 */
-	public ArrayList<RailwayNode> getNodes()
+	public List<RailwayNode> getNodes()
 	{
 		return _listOfNodes;
 	}
@@ -569,7 +570,7 @@ public class TrainLine implements Cloneable
 
 	/**
 	 * Checks if this line is valid.
-	 * This method follows more the OOP-paradigm then the static method {@link #__isValid(ArrayList)} when checking the validity of an existing line.
+	 * This method follows more the OOP-paradigm then the static method {@link #__isValid(List)} when checking the validity of an existing line.
 	 * 
 	 * @return True when this line is valid, false when not.
 	 */

@@ -2,7 +2,6 @@ package metro.GameUI.MainView.TrainView;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 
 import metro.METRO;
 import metro.GameUI.Common.ToolView;
@@ -107,7 +106,7 @@ public class TrainViewMain extends ToolView
 	private void fillLineList()
 	{
 		// Fill line list with all lines:
-		ArrayList<TrainLine> lineList = _trainManagementService.getLines();
+		java.util.List<TrainLine> lineList = _trainManagementService.getLines();
 		for(TrainLine line : lineList)
 		{
 			_lineList.addElement(line.getName());

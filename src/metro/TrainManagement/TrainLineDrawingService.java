@@ -3,6 +3,7 @@ package metro.TrainManagement;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
@@ -32,9 +33,9 @@ class TrainLineDrawingService
 	/**
 	 * Calculates the position of each Line per Node, so that the drawing routine can draw the lines in an order that looks like a normal tube-plan.
 	 * 
-	 * @param lineList An ArrayList of all existing train lines.
+	 * @param lineList An list of all existing train lines.
 	 */
-	public void calcLinePositions(ArrayList<TrainLine> lineList)
+	public void calcLinePositions(List<TrainLine> lineList)
 	{
 		_sortedLineMap = new HashMap<RailwayNode, TrainLine[]>();
 		int amountLines = lineList.size();
@@ -80,15 +81,15 @@ class TrainLineDrawingService
 	 * Draws all train lines.
 	 * 
 	 * @param mapOffset The map offset in pixel.
-	 * @param lineList An ArrayList of all existing train lines.
+	 * @param lineList An list of all existing train lines.
 	 */
-	public void drawLines(Point mapOffset, ArrayList<TrainLine> lineList)
+	public void drawLines(Point mapOffset, List<TrainLine> lineList)
 	{
 		for(TrainLine line : lineList)
 		{
 			if(line.getLength() == 0) continue;
 
-			ArrayList<RailwayNode> listOfNodes = line.getNodes();
+			List<RailwayNode> listOfNodes = line.getNodes();
 
 			Draw.setColor(line.isValid() ? line.getColor() : METRO.__metroRed);
 
