@@ -46,7 +46,6 @@ public class TrainLine implements Cloneable
 	 * @param name The name.
 	 * @param lineColor The color.
 	 */
-	@SuppressWarnings("unchecked")
 	public TrainLine(List<RailwayNode> connections, String name, Color lineColor)
 	{
 		if(connections != null)

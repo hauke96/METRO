@@ -2,7 +2,6 @@ package metro.UI.Renderable.Container;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Observer;
 
@@ -62,7 +61,7 @@ public abstract class AbstractContainer extends CloseObservable
 	/**
 	 * Initiates the {@code #_containerRegistrationService} of this {@code AbstractContainer}.
 	 * 
-	 * @param newContainerRegistrationService The new {@link #_containerRegistrationService} for this container.
+	 * @param newContainerRegistrationService The new registration service for this container.
 	 */
 	public static void setContainerRegistrationService(ContainerRegistrationService newContainerRegistrationService)
 	{

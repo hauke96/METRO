@@ -63,7 +63,6 @@ public class GameState
 	 * @param moreMoney The money to add/subtract. Throw an IllegalArgumentException when the amount of money is less than 0.
 	 * @throws IllegalArgumentException
 	 */
-	@SuppressWarnings("javadoc")
 	public void addMoney(int moreMoney)
 	{
 		if(moreMoney < 0)

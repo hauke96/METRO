@@ -298,7 +298,7 @@ public class TrainManagementService implements Observer
 	 */
 	public void sellTrainsFromLine(String lineName)
 	{
-		LinkedList<Train> trains = new LinkedList<Train>(); // because add() is in O(1)
+		List<Train> trains = new LinkedList<Train>(); // because add() is in O(1)
 		TrainLine line = getLine(lineName);
 
 		for(Train train : _trainList)

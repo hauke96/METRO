@@ -31,7 +31,7 @@ public abstract class ControlElement extends ActionObservable
 	}
 
 	/**
-	 * Calls the {@link #draw()} method when the control is visible.
+	 * Calls the draw method on the concrete control, but only when the control is visible.
 	 */
 	public void drawControl()
 	{

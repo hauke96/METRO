@@ -20,6 +20,7 @@ public abstract class CloseObservable extends ControlElement implements Closable
 	 */
 	protected CloseObservable()
 	{
+		 // To not invest the creation time of new array inside ArrayList, we use LinkedList here
 		_listOfCloseObserver = new LinkedList<CloseObserver>();
 	}
 
