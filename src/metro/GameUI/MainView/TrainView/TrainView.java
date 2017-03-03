@@ -8,7 +8,7 @@ import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Technical.Contract;
-import metro.GameUI.Screen.ToolView;
+import metro.GameUI.Common.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.UI.Renderable.ActionObserver;
@@ -75,6 +75,7 @@ public class TrainView extends ToolView
 				}
 				else
 				{
+					System.out.println(_trainViewMain.getLineList().getText());
 					Train train = new Train(trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
 					train.setLine(trainManagementService.getLine(_trainViewMain.getLineList().getText()));
 					trainManagementService.addTrain(train);
@@ -145,12 +146,9 @@ public class TrainView extends ToolView
 	}
 
 	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(!isHovered())
-		{
-			close();
-		}
+		return false;
 	}
 
 	@Override
@@ -160,9 +158,6 @@ public class TrainView extends ToolView
 		_trainViewMain.close();
 		_panel.close();
 		super.close();
-
-		setChanged();
-		notifyObservers(); // notify about close
 	}
 
 	@Override

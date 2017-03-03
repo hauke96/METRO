@@ -1,6 +1,7 @@
 package metro.GameUI.MainView.NotificationView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The notification server is just a abstraction layer between a publisher of notifications and a service thats displays, stores, analyses, ... messages.
@@ -9,9 +10,10 @@ import java.util.ArrayList;
  * @author hauke
  *
  */
+// TOOD make un-static but as service (in serviceConfiguration)
 public class NotificationServer
 {
-	private static ArrayList<NotificationSubscriber> __listOfSubscribers = new ArrayList<>();
+	private static List<NotificationSubscriber> __listOfSubscribers = new ArrayList<>();
 
 	/**
 	 * Adds the subscriber to the list of subscribers for notifications.
@@ -41,7 +43,7 @@ public class NotificationServer
 	/**
 	 * @return The list with all subscribers.
 	 */
-	public static ArrayList<NotificationSubscriber> getSubscriber()
+	public static List<NotificationSubscriber> getSubscriber()
 	{
 		return __listOfSubscribers;
 	}

@@ -22,7 +22,7 @@ import metro.UI.Renderable.ControlElement;
 
 public class List extends ControlElement
 {
-	private ArrayList<String> _entries = new ArrayList<String>();
+	private java.util.List<String> _entries = new ArrayList<String>();
 	private int _offset,
 		_defaultYSpace, // space between text and border in the normal mode
 		_compactYSpace, // space between text and border in the compact mode
@@ -62,7 +62,7 @@ public class List extends ControlElement
 	 * @param position The position on the window.
 	 * @param entries The entries that are in the list after creating it.
 	 */
-	public List(Rectangle position, ArrayList<String> entries)
+	public List(Rectangle position, java.util.List<String> entries)
 	{
 		this(position, entries, false);
 	}
@@ -74,7 +74,7 @@ public class List extends ControlElement
 	 * @param entries The entries that are in the list after creating it.
 	 * @param compact Set to true if list should be a compact list (entries are not that high)
 	 */
-	public List(Rectangle position, ArrayList<String> entries, boolean compact)
+	public List(Rectangle position, java.util.List<String> entries, boolean compact)
 	{
 		if(entries != null) _entries = entries;
 

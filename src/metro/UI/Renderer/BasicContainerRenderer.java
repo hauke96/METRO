@@ -64,7 +64,6 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 
 		_staticContainerAboveChangedObserver = (o, arg) -> sortContainer(_listOfStaticContainer);
 		_floatingContainerAboveChangedObserver = (o, arg) -> sortContainer(_listOfFloatingContainer);
-		;
 
 		ContainerRegistrationService registrationService = new ContainerRegistrationService();
 		registrationService.setRenderer(this);

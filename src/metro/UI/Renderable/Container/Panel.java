@@ -34,7 +34,7 @@ public class Panel extends StaticContainer
 
 	/**
 	 * Creates an empty transparent panel with a specified border flag.
-	 * The default border color is {@link METRO.__metroBlue} and can be changed via the {@link setDrawBorder}.
+	 * The default border color is {@link METRO#__metroBlue} and can be changed via the {@link #setDrawBorder}.
 	 * 
 	 * @param area The area of the panel including absolute position and size.
 	 * @param drawBorder The flag if the border should be drawed (true) or not drawed (false).

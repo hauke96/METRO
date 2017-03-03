@@ -10,7 +10,7 @@ import java.awt.Rectangle;
  * @author hauke
  *
  */
-
+//TODO check if this class not better implements an InputProcessor
 public abstract class ControlElement extends ActionObservable
 {
 	protected boolean _state;
@@ -31,7 +31,7 @@ public abstract class ControlElement extends ActionObservable
 	}
 
 	/**
-	 * Calls the {@link #draw()} method when the control is visible.
+	 * Calls the draw method on the concrete control, but only when the control is visible.
 	 */
 	public void drawControl()
 	{

@@ -1,6 +1,7 @@
 package metro.UI.Renderable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Every window control (or other classes) should inherit this class to be able to send information about state changes,
@@ -11,7 +12,7 @@ import java.util.ArrayList;
  */
 public class ActionObservable
 {
-	private ArrayList<ActionObserver> _listOfObserver;
+	private List<ActionObserver> _listOfObserver;
 
 	/**
 	 * Creates the list of all observers of this observable object.

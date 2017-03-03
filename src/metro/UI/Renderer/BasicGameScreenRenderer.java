@@ -55,36 +55,31 @@ public class BasicGameScreenRenderer implements GameScreenRenderer, GameScreenSw
 	@Override
 	public boolean keyDown(int keycode)
 	{
-		_currentGameScreen.keyDownEvent(keycode);
-		return true;
+		return _currentGameScreen.keyDownEvent(keycode);
 	}
 
 	@Override
 	public boolean keyUp(int keycode)
 	{
-		_currentGameScreen.keyUpEvent(keycode);
-		return true;
+		return _currentGameScreen.keyUpEvent(keycode);
 	}
 
 	@Override
 	public boolean keyTyped(char character)
 	{
-		_currentGameScreen.keyTypedEvent(character);
-		return true;
+		return _currentGameScreen.keyTypedEvent(character);
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button)
 	{
-		_currentGameScreen.touchDownEvent(screenX, screenY, pointer, button);
-		return true;
+		return _currentGameScreen.touchDownEvent(screenX, screenY, pointer, button);
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button)
 	{
-		_currentGameScreen.touchUpEvent(screenX, screenY, pointer, button);
-		return true;
+		return _currentGameScreen.touchUpEvent(screenX, screenY, pointer, button);
 	}
 
 	@Override
@@ -102,7 +97,6 @@ public class BasicGameScreenRenderer implements GameScreenRenderer, GameScreenSw
 	@Override
 	public boolean scrolled(int amount)
 	{
-		_currentGameScreen.scrolledEvent(amount);
-		return true;
+		return _currentGameScreen.scrolledEvent(amount);
 	}
 }

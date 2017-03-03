@@ -2,7 +2,6 @@ package metro.UI.Renderable.Container;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Observer;
 
@@ -28,7 +27,13 @@ public abstract class AbstractContainer extends CloseObservable
 
 	interface Notifier
 	{
-		void notifyControlElements(ControlElement control);
+		/**
+		 * Executes a certain notify action on a given control element.
+		 * 
+		 * @param control The control element, which should be notified.
+		 * @return True, when control reacted to the notification but no other control should react after this.
+		 */
+		boolean notifyControlElements(ControlElement control);
 	}
 
 	protected List<ControlElement> _listOfControlElements;
@@ -46,9 +51,8 @@ public abstract class AbstractContainer extends CloseObservable
 			throw new UninitiatedClassException("There's no container registration service available. Set it before creating a container.");
 		}
 
-		// TODO use array list
-		_listOfControlElements = new LinkedList<ControlElement>();
-		_listOfAboveChangedObserver = new LinkedList<>();
+		_listOfControlElements = new ArrayList<ControlElement>();
+		_listOfAboveChangedObserver = new ArrayList<>();
 		_listOfContainerBelow = new ArrayList<>();
 
 		registerContainerInRenderer(_containerRegistrationService);
@@ -57,7 +61,7 @@ public abstract class AbstractContainer extends CloseObservable
 	/**
 	 * Initiates the {@code #_containerRegistrationService} of this {@code AbstractContainer}.
 	 * 
-	 * @param newContainerRegistrationService The new {@link #_containerRegistrationService} for this container.
+	 * @param newContainerRegistrationService The new registration service for this container.
 	 */
 	public static void setContainerRegistrationService(ContainerRegistrationService newContainerRegistrationService)
 	{
@@ -67,38 +71,60 @@ public abstract class AbstractContainer extends CloseObservable
 	@Override
 	protected void draw()
 	{
-		generalNotifying((ControlElement control) -> control.drawControl());
+		generalNotifying((ControlElement control) -> {
+			control.drawControl();
+			return false;
+		});
 	}
 
 	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
-		generalNotifying((ControlElement control) -> control.mouseClicked(screenX, screenY, button));
-		return false;
+		return generalNotifying((ControlElement control) -> control.mouseClicked(screenX, screenY, button));
 	}
 
 	@Override
 	public void mouseReleased(int screenX, int screenY, int button)
 	{
-		generalNotifying((ControlElement control) -> control.mouseReleased(screenX, screenY, button));
+		// TODO change this notifying so that the correct boolean is returned.
+		// TODO use return value of "generalNotifying" (also in calling method)
+		generalNotifying((ControlElement control) -> {
+			control.mouseReleased(screenX, screenY, button);
+			return false;
+		});
 	}
 
 	@Override
 	public void mouseScrolled(int amount)
 	{
-		generalNotifying((ControlElement control) -> control.mouseScrolled(amount));
+		// TODO change this notifying so that the correct boolean is returned.
+		// TODO use return value of "generalNotifying" (also in calling method)
+		generalNotifying((ControlElement control) -> {
+			control.mouseScrolled(amount);
+			return false;
+		});
 	}
 
 	@Override
 	public void keyPressed(int keyCode)
 	{
-		generalNotifying((ControlElement control) -> control.keyPressed(keyCode));
+		// TODO change this notifying so that the correct boolean is returned.
+		// TODO use return value of "generalNotifying" (also in calling method)
+		generalNotifying((ControlElement control) -> {
+			control.keyPressed(keyCode);
+			return false;
+		});
 	}
 
 	@Override
 	public void keyUp(int keyCode)
 	{
-		generalNotifying((ControlElement control) -> control.keyUp(keyCode));
+		// TODO change this notifying so that the correct boolean is returned.
+		// TODO use return value of "generalNotifying" (also in calling method)
+		generalNotifying((ControlElement control) -> {
+			control.keyUp(keyCode);
+			return false;
+		});
 	}
 
 	/**
@@ -255,12 +281,25 @@ public abstract class AbstractContainer extends CloseObservable
 		_listOfAboveChangedObserver.remove(observer);
 	}
 
-	private void generalNotifying(Notifier notifyFunction)
+	/**
+	 * Executed the notification given by the notifier to all control elements until one element responded with {@code true}.
+	 * This indicated that the element processed the notification successfully.
+	 * 
+	 * @param notifyFunction The notification function which should be executed.
+	 * @return True, when notifying exited early due to a control responding a successful process (e.g. click-event handled).
+	 */
+	private boolean generalNotifying(Notifier notifyFunction)
 	{
 		for(ControlElement control : _listOfControlElements)
 		{
-			notifyFunction.notifyControlElements(control);
+			boolean processed = notifyFunction.notifyControlElements(control);
+			if(processed)
+			{
+				return true;
+			}
 		}
+		
+		return false;
 	}
 
 	/**

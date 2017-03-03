@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
-import metro.GameUI.Screen.ToolView;
+import metro.GameUI.Common.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TrainTemplate;
 import metro.UI.Renderable.ActionObserver;
@@ -207,5 +207,11 @@ public class TrainViewBuy extends ToolView
 	{
 		return METRO.__mousePosition.x > _areaOffset.x
 			&& METRO.__mousePosition.y < _areaOffset.y;
+	}
+
+	@Override
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
+	{
+		return false;
 	}
 }

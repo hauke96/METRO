@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 
 import metro.Common.Technical.Logger;
 import metro.TrainManagement.Nodes.RailwayNode;
@@ -21,7 +22,7 @@ import metro.TrainManagement.Nodes.RailwayNode;
  */
 public class TrainLine implements Cloneable
 {
-	private final ArrayList<RailwayNode> _listOfNodes;
+	private final List<RailwayNode> _listOfNodes;
 	private Color _lineColor;
 	private String _name;
 	private final double _length;
@@ -45,12 +46,11 @@ public class TrainLine implements Cloneable
 	 * @param name The name.
 	 * @param lineColor The color.
 	 */
-	@SuppressWarnings("unchecked")
-	public TrainLine(ArrayList<RailwayNode> connections, String name, Color lineColor)
+	public TrainLine(List<RailwayNode> connections, String name, Color lineColor)
 	{
 		if(connections != null)
 		{
-			_listOfNodes = sortNodes((ArrayList<RailwayNode>)connections.clone(), getAnyEndNode(connections));
+			_listOfNodes = sortNodes(new ArrayList<>(connections), getAnyEndNode(connections));
 		}
 		else
 		{
@@ -84,15 +84,15 @@ public class TrainLine implements Cloneable
 	 * @param startNode An end node of the line.
 	 * @return A sorted list with all the nodes.
 	 */
-	private ArrayList<RailwayNode> sortNodes(ArrayList<RailwayNode> list, RailwayNode startNode)
+	private List<RailwayNode> sortNodes(List<RailwayNode> list, RailwayNode startNode)
 	{
 		if(list.size() <= 1 || startNode == null) return list;
 
 		Logger.__debug(
-			"Start Node: " + startNode.getPosition() + "\n"+
-			"Line length (amount of nodes): " + list.size());
+			"Start Node: " + startNode.getPosition() + "\n" +
+				"Line length (amount of nodes): " + list.size());
 
-		ArrayList<RailwayNode> newList = new ArrayList<>();
+		List<RailwayNode> newList = new ArrayList<>();
 		// be sure that an end node is the first element in this list
 		newList.add(startNode);
 		list.remove(startNode);
@@ -138,7 +138,7 @@ public class TrainLine implements Cloneable
 	 * @param list A list with all nodes where the end nodes should be determined.
 	 * @return One of the two end nodes of the given line.
 	 */
-	private RailwayNode getAnyEndNode(ArrayList<RailwayNode> list)
+	private RailwayNode getAnyEndNode(List<RailwayNode> list)
 	{
 		for(RailwayNode node : list)
 		{
@@ -370,7 +370,7 @@ public class TrainLine implements Cloneable
 	 * @param listOfNodes The list of nodes that may be valid.
 	 * @return True when valid.
 	 */
-	public static boolean __isValid(ArrayList<RailwayNode> listOfNodes)
+	public static boolean __isValid(List<RailwayNode> listOfNodes)
 	{
 		int amountEndNodes = 0;
 
@@ -393,12 +393,12 @@ public class TrainLine implements Cloneable
 	 * @param listOfNodes The list of all available nodes.
 	 * @return True when the given node is an end node, false if not.
 	 */
-	public static boolean __isEndNode(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
+	public static boolean __isEndNode(RailwayNode node, List<RailwayNode> listOfNodes)
 	{
 		return __getNeighborAmount(node, listOfNodes) == 1;
 	}
 
-	private static int __getNeighborAmount(RailwayNode node, ArrayList<RailwayNode> listOfNodes)
+	private static int __getNeighborAmount(RailwayNode node, List<RailwayNode> listOfNodes)
 	{
 		int counter = 0;
 
@@ -438,7 +438,7 @@ public class TrainLine implements Cloneable
 	 * 
 	 * @return The list with all nodes.
 	 */
-	public ArrayList<RailwayNode> getNodes()
+	public List<RailwayNode> getNodes()
 	{
 		return _listOfNodes;
 	}
@@ -469,7 +469,7 @@ public class TrainLine implements Cloneable
 			{
 				isEqual &= _listOfNodes.contains(node);
 			}
-			
+
 			isEqual &= getName().equals(line.getName());
 
 			return isEqual;
@@ -477,49 +477,55 @@ public class TrainLine implements Cloneable
 		return false;
 	}
 
-//	/**
-//	 * Draws the train line. The line doesn't need to be valid because all parts are drawn by their own.
-//	 * 
-//	 * @param offset The map offset in pixel.
-//	 * @param sp The sprite batch to draw on.
-//	 * @param map A map (node -> Integer) that says how many lines are already drawn on this node (normally all integers are 0).
-//	 */
-//	public void draw(Point offset, SpriteBatch sp, HashMap<RailwayNode, Integer> map)
-//	{
-//		if(_length == 0) return;
-//
-//		Draw.setColor(__isValid(_listOfNodes) ? _lineColor : METRO.__metroRed);
-//
-//		for(int i = 0; i < _listOfNodes.size() - 1; i++)
-//		{
-//			// the list is sorted so we know that i+1 is the direct neighbor
-//			RailwayNode node = _listOfNodes.get(i);
-//			RailwayNode neighbor = _listOfNodes.get(i + 1);
-//
-//			Point position, positionNext;
-//			position = new Point(offset.x + node.getPosition().x * _gameState.getBaseNetSpacing(),
-//				offset.y + node.getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc.
-//			positionNext = new Point(offset.x + neighbor.getPosition().x * _gameState.getBaseNetSpacing(),
-//				offset.y + neighbor.getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc. for second point
-//
-////			if(node.isNeighbor(neighbor))
-////			{
-//				drawColoredLine(offset, position, positionNext, map.get(neighbor).intValue());
-//
-//				// update the map value
-//				int layers = map.get(node).intValue();
-//				map.remove(node);
-//				map.put(node, new Integer(layers + 1));
-////			}
-//
-//			Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
-//		}
-//
-//		// Draw also a circle for the last node which won't be drawn in the for loop
-//		Point position = new Point(offset.x + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().x * _gameState.getBaseNetSpacing(),
-//			offset.y + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc.
-//		Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
-//	}
+	@Override
+	public int hashCode()
+	{
+		return ("" + _name.hashCode() + _listOfNodes.hashCode()).hashCode();
+	}
+
+	// /**
+	// * Draws the train line. The line doesn't need to be valid because all parts are drawn by their own.
+	// *
+	// * @param offset The map offset in pixel.
+	// * @param sp The sprite batch to draw on.
+	// * @param map A map (node -> Integer) that says how many lines are already drawn on this node (normally all integers are 0).
+	// */
+	// public void draw(Point offset, SpriteBatch sp, HashMap<RailwayNode, Integer> map)
+	// {
+	// if(_length == 0) return;
+	//
+	// Draw.setColor(__isValid(_listOfNodes) ? _lineColor : METRO.__metroRed);
+	//
+	// for(int i = 0; i < _listOfNodes.size() - 1; i++)
+	// {
+	// // the list is sorted so we know that i+1 is the direct neighbor
+	// RailwayNode node = _listOfNodes.get(i);
+	// RailwayNode neighbor = _listOfNodes.get(i + 1);
+	//
+	// Point position, positionNext;
+	// position = new Point(offset.x + node.getPosition().x * _gameState.getBaseNetSpacing(),
+	// offset.y + node.getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc.
+	// positionNext = new Point(offset.x + neighbor.getPosition().x * _gameState.getBaseNetSpacing(),
+	// offset.y + neighbor.getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc. for second point
+	//
+	//// if(node.isNeighbor(neighbor))
+	//// {
+	// drawColoredLine(offset, position, positionNext, map.get(neighbor).intValue());
+	//
+	// // update the map value
+	// int layers = map.get(node).intValue();
+	// map.remove(node);
+	// map.put(node, new Integer(layers + 1));
+	//// }
+	//
+	// Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
+	// }
+	//
+	// // Draw also a circle for the last node which won't be drawn in the for loop
+	// Point position = new Point(offset.x + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().x * _gameState.getBaseNetSpacing(),
+	// offset.y + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc.
+	// Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
+	// }
 
 	@Override
 	public Object clone() throws CloneNotSupportedException
@@ -563,7 +569,7 @@ public class TrainLine implements Cloneable
 
 	/**
 	 * Checks if this line is valid.
-	 * This method follows more the OOP-paradigm then the static method {@link #__isValid(ArrayList)} when checking the validity of an existing line.
+	 * This method follows more the OOP-paradigm then the static method {@link #__isValid(List)} when checking the validity of an existing line.
 	 * 
 	 * @return True when this line is valid, false when not.
 	 */

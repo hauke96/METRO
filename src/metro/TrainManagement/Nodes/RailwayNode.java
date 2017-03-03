@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import metro.Common.Game.GameState;
@@ -20,7 +21,7 @@ import metro.TrainManagement.Trains.Train;
 
 public class RailwayNode
 {
-	private ArrayList<RailwayNode> _listOfNeighbors; // a list of all nodes this node is connected to
+	private List<RailwayNode> _listOfNeighbors; // a list of all nodes this node is connected to
 	private Point _position; // not in pixel, cross number/pos
 	private Map<RailwayNode, Train> _signals;
 
@@ -49,7 +50,7 @@ public class RailwayNode
 	 * @param position The position (NOT pixel) of the node. {@code null} indicates that the node will not be added to the overseer (because it's invalid).
 	 * @param neighbors The neighbors of the node.
 	 */
-	RailwayNode(Point position, ArrayList<RailwayNode> neighbors)
+	RailwayNode(Point position, List<RailwayNode> neighbors)
 	{
 		this(position, (RailwayNode)null); // just cast to RailwayNode to bypass the ambiguity. Ugly but works :/
 		if(neighbors != null) _listOfNeighbors.addAll(neighbors);
@@ -93,11 +94,11 @@ public class RailwayNode
 	}
 
 	/**
-	 * Returns all the neighbors of this node as ArrayList<RailwayNode>.
+	 * Returns all the neighbors of this node as list of nodes.
 	 * 
-	 * @return Neighbors as ArrayList<RailwayNode>.
+	 * @return Neighbors as list of nodes..
 	 */
-	public ArrayList<RailwayNode> getNeighbors()
+	public List<RailwayNode> getNeighbors()
 	{
 		return _listOfNeighbors;
 	}

@@ -11,14 +11,15 @@ import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Technical.Contract;
+import metro.GameUI.Common.ToolView;
 import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.MainView.TrainView.TrainView;
-import metro.GameUI.Screen.ToolView;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
+import metro.UI.Renderable.Controls.Button;
 
 /**
  * The main view is the normal screen the player sees.
@@ -56,10 +57,15 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			@Override
 			public void clickedOnControl(Object arg)
 			{
+				Contract.Require(arg instanceof Button);
+
 				StationPlacingTool stationPlacingTool = new StationPlacingTool();
-				setActiveTool(stationPlacingTool);
+
 				_toolbar.getBackgroundPanel().setAboveOf(stationPlacingTool.getBackgroundPanel());
 				_notificationArea.getBackgroundPanel().setAboveOf(stationPlacingTool.getBackgroundPanel());
+
+				setActiveTool(stationPlacingTool);
+				_toolbar.resetExclusiveButtonPositions((Button)arg);
 			}
 		});
 		_toolbar.getBuildTracksButton().register(new ActionObserver()
@@ -67,10 +73,15 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			@Override
 			public void clickedOnControl(Object arg)
 			{
+				Contract.Require(arg instanceof Button);
+
 				TrackPlacingTool trackPlacingTool = new TrackPlacingTool();
+
 				_toolbar.getBackgroundPanel().setAboveOf(trackPlacingTool.getBackgroundPanel());
 				_notificationArea.getBackgroundPanel().setAboveOf(trackPlacingTool.getBackgroundPanel());
+
 				setActiveTool(trackPlacingTool);
+				_toolbar.resetExclusiveButtonPositions((Button)arg);
 			}
 		});
 		_toolbar.getShowTrainListButton().register(new ActionObserver()
@@ -78,11 +89,15 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			@Override
 			public void clickedOnControl(Object arg)
 			{
+				Contract.Require(arg instanceof Button);
+
 				LineView lineView = new LineView();
+
 				AbstractContainer lineViewPanel = lineView.getBackgroundPanel();
 				_toolbar.getBackgroundPanel().setAboveOf(lineViewPanel);
 
 				setActiveTool(lineView);
+				_toolbar.resetExclusiveButtonPositions((Button)arg);
 			}
 		});
 		_toolbar.getCreateNewTrainButton().register(new ActionObserver()
@@ -90,14 +105,17 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			@Override
 			public void clickedOnControl(Object arg)
 			{
+				Contract.Require(arg instanceof Button);
+
 				TrainView trainView = new TrainView();
+
 				AbstractContainer trainViewPanel = trainView.getBackgroundPanel();
 				_toolbar.getBackgroundPanel().setAboveOf(trainViewPanel);
 
 				setActiveTool(trainView);
+				_toolbar.resetExclusiveButtonPositions((Button)arg);
 			}
 		});
-		;
 
 		_playingField = PlayingField.getInstance();
 		_notificationArea = NotificationArea.getInstance();
@@ -140,8 +158,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 
 		if(_activeTool != null)
 		{
-			_activeTool.mouseClicked(screenX, screenY, button);
-			return true;
+			return _activeTool.mouseClicked(screenX, screenY, button);
 		}
 		return false;
 	}
@@ -168,7 +185,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	{
 		if(_activeTool instanceof LineView)
 		{
-			//TODO change this into an "onInputChangedListener" or something like that
+			// TODO change this into an "onInputChangedListener" or something like that
 			((LineView)_activeTool).keyDown(keyCode);
 			return true;
 		}
@@ -178,12 +195,9 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	@Override
 	public void update(Observable arg0, Object arg1)
 	{
-		if(_activeTool != null)
-		{
-			closeActiveTool();
-
-			_toolbar.resetExclusiveButtonPositions(null);
-		}
+		_activeTool = null;
+		_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
+		_toolbar.resetExclusiveButtonPositions(null);
 	}
 
 	/**
@@ -197,7 +211,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 
 		if(_activeTool != null)
 		{
-			closeActiveTool();
+			_activeTool.close();
 		}
 
 		// set new tool and add new observer
@@ -212,19 +226,6 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 		{
 			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
 		}
-	}
-
-	/**
-	 * Closes the active tool and resets everything that depends on this.
-	 */
-	private void closeActiveTool()
-	{
-		Contract.RequireNotNull(_activeTool);
-
-		_activeTool.close();
-		_activeTool = null;
-
-		_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
 	}
 
 	@Override

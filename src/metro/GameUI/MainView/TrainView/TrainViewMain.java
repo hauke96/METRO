@@ -2,10 +2,9 @@ package metro.GameUI.MainView.TrainView;
 
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.ArrayList;
 
 import metro.METRO;
-import metro.GameUI.Screen.ToolView;
+import metro.GameUI.Common.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
@@ -107,7 +106,7 @@ public class TrainViewMain extends ToolView
 	private void fillLineList()
 	{
 		// Fill line list with all lines:
-		ArrayList<TrainLine> lineList = _trainManagementService.getLines();
+		java.util.List<TrainLine> lineList = _trainManagementService.getLines();
 		for(TrainLine line : lineList)
 		{
 			_lineList.addElement(line.getName());
@@ -222,5 +221,11 @@ public class TrainViewMain extends ToolView
 	public String getTrainToMove()
 	{
 		return _movedTrain;
+	}
+
+	@Override
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
+	{
+		return false;
 	}
 }

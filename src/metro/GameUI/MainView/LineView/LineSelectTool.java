@@ -3,13 +3,14 @@ package metro.GameUI.MainView.LineView;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.Input.Buttons;
 
 import metro.METRO;
 import metro.Common.Technical.Logger;
+import metro.GameUI.Common.ToolView;
 import metro.GameUI.MainView.PlayingField.PlayingField;
-import metro.GameUI.Screen.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
@@ -24,7 +25,7 @@ import metro.TrainManagement.Trains.TrainLine;
  */
 public class LineSelectTool extends ToolView
 {
-	private ArrayList<RailwayNode> _listOfNodes;
+	private List<RailwayNode> _listOfNodes;
 	private Color _color;
 	private String _lineName;
 	private PlayingField _playingField;
@@ -43,7 +44,7 @@ public class LineSelectTool extends ToolView
 	/**
 	 * @return The list with all selected nodes.
 	 */
-	public ArrayList<RailwayNode> getNodeList()
+	public List<RailwayNode> getNodeList()
 	{
 		return _listOfNodes;
 	}
@@ -101,16 +102,21 @@ public class LineSelectTool extends ToolView
 	}
 
 	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{
 		if(mouseButton == Buttons.LEFT)
 		{
-			leftClick(screenX, screenY, _playingField.getMapOffset());
+			return leftClick(screenX, screenY, _playingField.getMapOffset());
 		}
 		else if(mouseButton == Buttons.RIGHT)
 		{
-			close();
+			// TODO why do we simply notify our observers?
+			setChanged();
+			notifyObservers();
+			return true;
 		}
+		
+		return false;
 	}
 
 	/**
@@ -120,11 +126,14 @@ public class LineSelectTool extends ToolView
 	 * @param screenY The y-coordinate of the click.
 	 * @param offset The current map offset.
 	 */
-	public void leftClick(int screenX, int screenY, Point2D offset)
+	public boolean leftClick(int screenX, int screenY, Point2D offset)
 	{
 		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(_playingField.getSelectedNode());
+		
 		Logger.__debug("node is " + clickedNode);
-		if(clickedNode == null) return;
+		
+		if(clickedNode == null) return false;
+		
 		if(_listOfNodes.contains(clickedNode))
 		{
 			Logger.__debug("Removed node " + clickedNode.getPosition());
@@ -135,6 +144,8 @@ public class LineSelectTool extends ToolView
 			Logger.__debug("Added node " + clickedNode.getPosition());
 			_listOfNodes.add(clickedNode);
 		}
+		
+		return true;
 	}
 
 	@Override

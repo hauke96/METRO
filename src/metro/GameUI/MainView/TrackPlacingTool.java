@@ -11,10 +11,10 @@ import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Technical.Logger;
 import metro.Exceptions.NotEnoughMoneyException;
+import metro.GameUI.Common.ToolView;
 import metro.GameUI.MainView.NotificationView.NotificationServer;
 import metro.GameUI.MainView.NotificationView.NotificationType;
 import metro.GameUI.MainView.PlayingField.PlayingField;
-import metro.GameUI.Screen.ToolView;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.UI.Renderable.Container.AbstractContainer;
@@ -119,23 +119,12 @@ public class TrackPlacingTool extends ToolView
 	}
 
 	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, _playingField.getMapOffset());
-		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, _playingField.getMapOffset());
-	}
-
-	/**
-	 * Places tracks.
-	 * 
-	 * @param screenX The y-coordinate of the click.
-	 * @param screenY The y-coordinate of the click.
-	 * @param offset The current map offset.
-	 */
-	public void leftClick(int screenX, int screenY, Point offset)
-	{
-		Logger.__debug("Linksklick!");
-		placeTracks(screenX, screenY, Buttons.LEFT, offset);
+		if(mouseButton == Buttons.RIGHT) return rightClick(screenX, screenY, _playingField.getMapOffset());
+		else if(mouseButton == Buttons.LEFT) return leftClick(screenX, screenY, _playingField.getMapOffset());
+		
+		return false;
 	}
 
 	/**
@@ -145,7 +134,7 @@ public class TrackPlacingTool extends ToolView
 	 * @param screenY The y-coordinate of the click.
 	 * @param offset The current map offset.
 	 */
-	public void rightClick(int screenX, int screenY, Point offset)
+	protected boolean rightClick(int screenX, int screenY, Point offset)
 	{
 		if(_currentRailwayNode != null)
 		{
@@ -156,6 +145,23 @@ public class TrackPlacingTool extends ToolView
 		{
 			close();
 		}
+		
+		return true;
+	}
+
+	/**
+	 * Places tracks.
+	 * 
+	 * @param screenX The y-coordinate of the click.
+	 * @param screenY The y-coordinate of the click.
+	 * @param offset The current map offset.
+	 * @return 
+	 */
+	protected boolean leftClick(int screenX, int screenY, Point offset)
+	{
+		placeTracks(screenX, screenY, Buttons.LEFT, offset);
+		
+		return true;
 	}
 
 	/**
@@ -287,8 +293,5 @@ public class TrackPlacingTool extends ToolView
 	{
 		_panel.close();
 		super.close();
-
-		setChanged();
-		notifyObservers();
 	}
 }

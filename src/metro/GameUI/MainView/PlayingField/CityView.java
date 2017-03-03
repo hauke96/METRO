@@ -2,13 +2,11 @@ package metro.GameUI.MainView.PlayingField;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.util.ArrayList;
-
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import java.util.List;
 
 import metro.METRO;
 import metro.Common.Graphics.Draw;
-import metro.GameUI.Screen.ToolView;
+import metro.GameUI.Common.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TravelerSpot;
 
@@ -39,7 +37,7 @@ public class CityView extends ToolView
 	 */
 	public void updateGameScreen(Point offset)
 	{
-		ArrayList<TravelerSpot> travelerSpots = TrainManagementService.getInstance().getTravelerSpots();
+		List<TravelerSpot> travelerSpots = TrainManagementService.getInstance().getTravelerSpots();
 
 		_selectedLayerNumber = -1;
 		if(_enableMouseSelection)
@@ -114,5 +112,11 @@ public class CityView extends ToolView
 	public boolean isHovered()
 	{
 		return _selectedLayerNumber != -1;
+	}
+
+	@Override
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
+	{
+		return false;
 	}
 }
