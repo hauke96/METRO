@@ -148,10 +148,6 @@ public class TrainView extends ToolView
 	@Override
 	public void mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(!isHovered())
-		{
-			close();
-		}
 	}
 
 	@Override

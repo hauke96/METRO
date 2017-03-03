@@ -465,11 +465,6 @@ public class LineView extends ToolView implements Observer
 			_lineSelectTool.mouseClicked(screenX, screenY, mouseButton); // add/remove node to list
 			_oldLine = _lineSelectTool.getTrainLine();
 		}
-		else if(!isHovered())// if select tool is not enabled, hide/close the whole line view when the mouse is outside of it
-		{
-			close();
-			return;
-		}
 
 		// when the mouse is out of TrainLineView, get the new line from the select tool and add it to the overseer
 		if(screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
