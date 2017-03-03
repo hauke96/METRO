@@ -5,7 +5,7 @@ import java.util.Observable;
 import metro.Common.Technical.Logger;
 
 /**
- * Every Menu or Game Sreen has to implement this interface for start() and update(). This will make the creation process more easy.
+ * Every Menu or game screen has to implement this interface for start() and update(). This will make the creation process more easy.
  * 
  * @author Hauke
  * 
@@ -19,10 +19,9 @@ public abstract class ToolView extends Observable
 	 * @param screenX The x-position on the screen
 	 * @param screenY The y-position on the screen
 	 * @param mouseButton The number of the button like Buttons.LEFT
+	 * @return True when view successfully processed click.
 	 */
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
-	{
-	}
+	public abstract boolean mouseClicked(int screenX, int screenY, int mouseButton);
 
 	/**
 	 * @return True when mouse is in sensible/important area of the game screen.

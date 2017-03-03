@@ -60,10 +60,12 @@ public class StationPlacingTool extends ToolView
 	}
 
 	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{
-		if(mouseButton == Buttons.RIGHT) rightClick(screenX, screenY, _playingField.getMapOffset());
-		else if(mouseButton == Buttons.LEFT) leftClick(screenX, screenY, _playingField.getMapOffset());
+		if(mouseButton == Buttons.RIGHT) return rightClick(screenX, screenY, _playingField.getMapOffset());
+		else if(mouseButton == Buttons.LEFT) return leftClick(screenX, screenY, _playingField.getMapOffset());
+		
+		return false;
 	}
 
 	/**
@@ -73,9 +75,9 @@ public class StationPlacingTool extends ToolView
 	 * @param screenY The y-coordinate of the click.
 	 * @param offset The current map offset.
 	 */
-	private void leftClick(int screenX, int screenY, Point2D offset)
+	private boolean leftClick(int screenX, int screenY, Point2D offset)
 	{
-		boolean positionOccupied = false;
+		boolean positionAlreadyHasStation = false;
 
 		// TODO maybe get the position from the playing field?
 		Point selectPointOnScreen = new Point(_playingField.getSelectedNode().x * GameState.getInstance().getBaseNetSpacing() + (int)offset.getX(),
@@ -84,13 +86,16 @@ public class StationPlacingTool extends ToolView
 		Point offsetPoint = new Point((int)offset.getX(), (int)offset.getY());
 		for(TrainStation ts : TrainManagementService.getInstance().getStations())
 		{
-			positionOccupied |= ts.getPositionOnScreen(offsetPoint).equals(selectPointOnScreen); // true if this cross has already a station
+			positionAlreadyHasStation |= ts.getPositionOnScreen(offsetPoint).equals(selectPointOnScreen); // true if this cross has already a station
 		}
 
-		if(!positionOccupied) // no doubles
+		if(!positionAlreadyHasStation) // no doubles
 		{
 			TrainManagementService.getInstance().addStation(new TrainStation(_playingField.getSelectedNode(), 0));
+			return true;
 		}
+		
+		return false;
 	}
 
 	/**
@@ -100,9 +105,11 @@ public class StationPlacingTool extends ToolView
 	 * @param screenY The y-coordinate of the click.
 	 * @param offset The current map offset.
 	 */
-	private void rightClick(int screenX, int screenY, Point2D offset)
+	private boolean rightClick(int screenX, int screenY, Point2D offset)
 	{
 		close();
+		
+		return true;
 	}
 
 	/**

@@ -113,4 +113,10 @@ public class CityView extends ToolView
 	{
 		return _selectedLayerNumber != -1;
 	}
+
+	@Override
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
+	{
+		return false;
+	}
 }

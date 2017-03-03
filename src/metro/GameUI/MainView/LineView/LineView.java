@@ -453,14 +453,16 @@ public class LineView extends ToolView implements Observer
 	}
 
 	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{
+		boolean clickProcessed = false;
+
 		// if select tool exists and mouse is in the area of the select tool, forward click to tool
 		if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
 		{
 			// something will probably change so remove the old line (new one will be added later)
 			_trainManagementService.removeLine(_lineSelectTool.getTrainLine());
-			_lineSelectTool.mouseClicked(screenX, screenY, mouseButton); // add/remove node to list
+			clickProcessed = _lineSelectTool.mouseClicked(screenX, screenY, mouseButton); // add/remove node to list
 			_oldLine = _lineSelectTool.getTrainLine();
 		}
 
@@ -470,7 +472,10 @@ public class LineView extends ToolView implements Observer
 			Logger.__debug("Add line to observer");
 			TrainLine line = _lineSelectTool.getTrainLine();
 			_trainManagementService.addLine(line); // this will only change something when line is valid
+			clickProcessed = true;
 		}
+
+		return clickProcessed;
 	}
 
 	public void keyDown(int keyCode)
@@ -526,7 +531,7 @@ public class LineView extends ToolView implements Observer
 		if(o instanceof LineSelectTool)
 		{
 			if(!_lineSelectToolEnabled) return;
-			
+
 			_lineSelectToolEnabled = false;
 
 			TrainLine line = ((LineSelectTool)o).getTrainLine();

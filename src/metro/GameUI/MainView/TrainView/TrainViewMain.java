@@ -222,4 +222,10 @@ public class TrainViewMain extends ToolView
 	{
 		return _movedTrain;
 	}
+
+	@Override
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
+	{
+		return false;
+	}
 }

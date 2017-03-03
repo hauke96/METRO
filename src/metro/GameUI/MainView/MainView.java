@@ -158,8 +158,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 
 		if(_activeTool != null)
 		{
-			_activeTool.mouseClicked(screenX, screenY, button);
-			return true;
+			return _activeTool.mouseClicked(screenX, screenY, button);
 		}
 		return false;
 	}

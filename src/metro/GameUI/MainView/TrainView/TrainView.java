@@ -146,8 +146,9 @@ public class TrainView extends ToolView
 	}
 
 	@Override
-	public void mouseClicked(int screenX, int screenY, int mouseButton)
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{
+		return false;
 	}
 
 	@Override
