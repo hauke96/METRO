@@ -59,6 +59,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
+import metro.AppContext.ServiceLocator;
 import metro.Common.Game.GameState;
 import metro.Common.Game.Settings;
 import metro.Common.Graphics.Draw;
@@ -125,9 +126,10 @@ public class METRO implements ApplicationListener, InputProcessor
 	private void setSettings()
 	{
 		Logger.__separatingEmptyLine = true;
-
-		Settings settings = Settings.getInstance();
-
+		
+		ServiceLocator.init();
+		
+		Settings settings = ServiceLocator.get(Settings.class);
 		settings.read();
 
 		try
@@ -210,7 +212,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		
 		__currentGameScreenContainerManager.switchGameScreen(startScreen);
 
-		__gameState = GameState.getInstance();
+		__gameState =ServiceLocator.get(GameState.class);
 	}
 
 	/**

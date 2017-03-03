@@ -12,8 +12,6 @@ import metro.Exceptions.NotEnoughMoneyException;
  */
 public class GameState
 {
-	private static final GameState __INSTANCE = new GameState();
-
 	private int _money,
 		_baseNetSpacing, // amount of pixel between lines of the base net
 		_toolViewWidth;
@@ -21,19 +19,11 @@ public class GameState
 	/**
 	 * Creates a new game state. This can't be done by an external class.
 	 */
-	private GameState()
+	public GameState()
 	{
 		_money = 500000000;
 		_baseNetSpacing = 20;
 		_toolViewWidth = 400;
-	}
-
-	/**
-	 * @return The instance of the game state. There can only be one instance per game.
-	 */
-	public static GameState getInstance()
-	{
-		return __INSTANCE;
 	}
 
 	/**

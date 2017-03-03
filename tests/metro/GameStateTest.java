@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import metro.AppContext.ServiceLocator;
 import metro.Common.Game.GameState;
 import metro.Exceptions.NotEnoughMoneyException;
 
@@ -19,7 +20,7 @@ public class GameStateTest
 	 */
 	public GameStateTest()
 	{
-		gameState = GameState.getInstance();
+		gameState = ServiceLocator.get(GameState.class);
 	}
 
 	/**

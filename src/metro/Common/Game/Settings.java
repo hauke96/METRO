@@ -10,6 +10,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import metro.Common.Technical.Contract;
+import metro.Common.Technical.Logger;
+
 /**
  * Holds all necessary information that are stored in the settings.cfg file.
  * This class can also load and parse this file by calling {@link #read()}.
@@ -24,22 +27,17 @@ import java.util.Map;
  */
 public class Settings
 {
+	private static final String EOL = "[eol]";
+
 	private Map<String, Object> _settings,
 		_newSettings;
 
-	private String __praeambel = "* comments begin with *\n* Settings: [name]=[value]\n";
-	private static final Settings __INSTANCE = new Settings();
-
-	private Settings()
+	private String __praeambel;
+	
+	public Settings()
 	{
-	}
-
-	/**
-	 * @return The instance of the settings. There can only be one instance per game.
-	 */
-	public static Settings getInstance()
-	{
-		return __INSTANCE;
+		__praeambel = "* comments begin with *\n* Settings: [name]=[value]\n";
+		_newSettings = new HashMap<String, Object>();
 	}
 
 	/**
@@ -47,8 +45,8 @@ public class Settings
 	 */
 	public void create()
 	{
-		if(_newSettings == null) _newSettings = new HashMap<String, Object>();
-
+		Contract.RequireNotNull(_newSettings);
+		
 		set("fullscreen.on", false);
 		set("screen.width", 1024);
 		set("screen.height", 768);
@@ -77,7 +75,7 @@ public class Settings
 			String str = null, settingsName = null, settingsValue = null;
 			str = getNextEntry(reader);
 
-			while(!str.equals("[eol]")) // end of a line
+			while(!str.equals(EOL)) // end of a line
 			{
 				if(!str.contains("=") || str.equals("")) continue;
 
@@ -113,9 +111,11 @@ public class Settings
 		}
 		catch(IOException e)
 		{
+			Logger.__error(e.getMessage(), e);
+			return EOL;
 		}
 
-		if(str == null) str = "[eol]";
+		if(str == null) str = EOL;
 		else if(str.charAt(0) == '*' || str.charAt(0) == ' ') return getNextEntry(reader);
 
 		return str;
