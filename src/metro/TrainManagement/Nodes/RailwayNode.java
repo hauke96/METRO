@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import metro.AppContext.ServiceLocator;
+import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.TrainManagement.Trains.Train;
@@ -125,7 +125,7 @@ public class RailwayNode
 		Point position, positionNext;
 
 		// TODO BAAAAD, get the int of the baseNetSpacing directly as parameter from the oberseer (or service if already renamed).
-		GameState gameState = ServiceLocator.get(GameState.class);
+		GameState gameState = Locator.get(GameState.class);
 
 		position = new Point(offset.x + _position.x * gameState.getBaseNetSpacing(),
 			offset.y + _position.y * gameState.getBaseNetSpacing()); // Position with offset etc.

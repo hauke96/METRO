@@ -6,7 +6,7 @@ import java.awt.Point;
 
 import org.junit.Test;
 
-import metro.AppContext.ServiceLocator;
+import metro.AppContext.Locator;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 
 /**
@@ -21,7 +21,7 @@ public class PlayingFieldTest
 	 */
 	public PlayingFieldTest()
 	{
-		field = ServiceLocator.get(PlayingField.class);
+		field = Locator.get(PlayingField.class);
 	}
 
 	/**

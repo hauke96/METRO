@@ -15,7 +15,7 @@ import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 
 import metro.TestInitializer;
-import metro.AppContext.ServiceLocator;
+import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
 import metro.Common.Technical.ModifiableBoolean;
 import metro.GameUI.MainView.PlayingField.PlayingField;
@@ -39,8 +39,8 @@ public class StationPlacingToolTest
 	{
 		TestInitializer.init();
 
-		_trainManagementService = ServiceLocator.get(TrainManagementService.class);
-		_tool = new StationPlacingTool(ServiceLocator.get(GameState.class), ServiceLocator.get(PlayingField.class), _trainManagementService);
+		_trainManagementService = Locator.get(TrainManagementService.class);
+		_tool = new StationPlacingTool(Locator.get(GameState.class), Locator.get(PlayingField.class), _trainManagementService);
 		_notified = false;
 	}
 

@@ -10,7 +10,7 @@ import java.awt.Point;
 import org.junit.Test;
 
 import metro.METRO;
-import metro.AppContext.ServiceLocator;
+import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
 import metro.GameUI.MainView.LineView.LineSelectTool;
 import metro.GameUI.MainView.LineView.LineView;
@@ -32,12 +32,12 @@ public class LineViewTest
 	 */
 	public LineViewTest()
 	{
-		new BasicContainerRenderer(ServiceLocator.get(ContainerRegistrationService.class));
+		new BasicContainerRenderer(Locator.get(ContainerRegistrationService.class));
 		METRO.__SCREEN_SIZE = new Dimension(1920, 1080);
 
-		_toolViewWidth = ServiceLocator.get(GameState.class).getToolViewWidth();
-		PlayingField field = ServiceLocator.get(PlayingField.class);
-		TrainManagementService trainManagementService = ServiceLocator.get(TrainManagementService.class);
+		_toolViewWidth = Locator.get(GameState.class).getToolViewWidth();
+		PlayingField field = Locator.get(PlayingField.class);
+		TrainManagementService trainManagementService = Locator.get(TrainManagementService.class);
 
 		view = new LineView(_toolViewWidth, field, trainManagementService);
 	}

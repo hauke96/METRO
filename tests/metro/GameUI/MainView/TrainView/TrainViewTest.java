@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import metro.METRO;
 import metro.TestInitializer;
-import metro.AppContext.ServiceLocator;
+import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
 import metro.TrainManagement.TrainManagementService;
 
@@ -32,8 +32,8 @@ public class TrainViewTest
 		
 		METRO.__SCREEN_SIZE = new Dimension(1920, 1080);
 
-		_toolVewWidth = ServiceLocator.get(GameState.class).getToolViewWidth();
-		TrainManagementService trainManagementService = ServiceLocator.get(TrainManagementService.class);
+		_toolVewWidth = Locator.get(GameState.class).getToolViewWidth();
+		TrainManagementService trainManagementService = Locator.get(TrainManagementService.class);
 
 		view = new TrainView(_toolVewWidth, trainManagementService);
 	}

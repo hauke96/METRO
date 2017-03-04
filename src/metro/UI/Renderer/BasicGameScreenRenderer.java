@@ -2,7 +2,7 @@ package metro.UI.Renderer;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import metro.AppContext.ServiceLocator;
+import metro.AppContext.Locator;
 import metro.Common.Technical.Contract;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
@@ -50,7 +50,7 @@ public class BasicGameScreenRenderer implements GameScreenRenderer, GameScreenSw
 		}
 		else
 		{
-			registrationService = ServiceLocator.get(ContainerRegistrationService.class);
+			registrationService = Locator.get(ContainerRegistrationService.class);
 		}
 
 		// new gamescreen

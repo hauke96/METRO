@@ -7,7 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
-import metro.AppContext.ServiceLocator;
+import metro.AppContext.Locator;
 import metro.Common.Game.Settings;
 import metro.Common.Technical.Contract;
 import metro.GameUI.Common.InGameMenuWindow;
@@ -35,7 +35,7 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 	public GameScreenContainer()
 	{
 		 // directly use ServiceLocator for convenience (always calling "super(settings);" in sub-classes is unhandy.
-		_settings = ServiceLocator.get(Settings.class);
+		_settings = Locator.get(Settings.class);
 		_area = new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height);
 
 		Contract.EnsureNotNull(_area);

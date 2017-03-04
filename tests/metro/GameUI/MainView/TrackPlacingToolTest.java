@@ -11,7 +11,7 @@ import java.util.Observer;
 import org.junit.Test;
 
 import metro.METRO;
-import metro.AppContext.ServiceLocator;
+import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
 import metro.Common.Technical.ModifiableBoolean;
 import metro.GameUI.MainView.PlayingField.PlayingField;
@@ -22,8 +22,8 @@ public class TrackPlacingToolTest
 
 	public TrackPlacingToolTest()
 	{
-		GameState gameState = ServiceLocator.get(GameState.class);
-		PlayingField playingField = ServiceLocator.get(PlayingField.class);
+		GameState gameState = Locator.get(GameState.class);
+		PlayingField playingField = Locator.get(PlayingField.class);
 		
 		_tool = new TrackPlacingTool(gameState, playingField);
 		METRO.__gameState = gameState;

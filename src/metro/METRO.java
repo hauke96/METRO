@@ -62,7 +62,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import metro.AppContext.ServiceLocator;
+import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
 import metro.Common.Game.Settings;
 import metro.Common.Graphics.Draw;
@@ -132,7 +132,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	{
 		Logger.__separatingEmptyLine = true;
 
-		Settings settings = ServiceLocator.get(Settings.class);
+		Settings settings = Locator.get(Settings.class);
 		settings.read();
 
 		try
@@ -208,11 +208,11 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		__currentGameScreenContainerManager = new BasicGameScreenRenderer();
 
-		GameScreenContainer startScreen = new MainMenu(ServiceLocator.get(Settings.class));
+		GameScreenContainer startScreen = new MainMenu(Locator.get(Settings.class));
 
 		__currentGameScreenContainerManager.switchGameScreen(startScreen);
 
-		__gameState = ServiceLocator.get(GameState.class);
+		__gameState = Locator.get(GameState.class);
 	}
 
 	/**
@@ -244,8 +244,8 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void initGdx()
 	{
-		Draw.setSettingsService(ServiceLocator.get(Settings.class));
-		Fill.setSettingsService(ServiceLocator.get(Settings.class));
+		Draw.setSettingsService(Locator.get(Settings.class));
+		Fill.setSettingsService(Locator.get(Settings.class));
 		
 		__spriteBatch = new SpriteBatch();
 		__gameWindowSpriteBatch = new SpriteBatch();

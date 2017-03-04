@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import metro.AppContext.ServiceLocator;
+import metro.AppContext.Locator;
 import metro.Exceptions.ContainerPositioningConflict;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderer.BasicContainerRenderer;
@@ -57,7 +57,7 @@ public class BasicContainerRendererTest
 	@Before
 	public void constructControls()
 	{
-		ContainerRegistrationService registrationService = ServiceLocator.get(ContainerRegistrationService.class);
+		ContainerRegistrationService registrationService = Locator.get(ContainerRegistrationService.class);
 		_containerRenderer = new DummyRenderer(registrationService);
 
 		_containerAbove = new DummyAbstractContainer();

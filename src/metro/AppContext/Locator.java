@@ -19,7 +19,7 @@ import metro.UI.ContainerRegistrationService;
  * @author hauke
  *
  */
-public class ServiceLocator
+public class Locator
 {
 	private interface ServiceInstanceCreator<T>
 	{

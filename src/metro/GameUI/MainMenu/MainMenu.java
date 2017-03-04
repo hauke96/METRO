@@ -3,7 +3,7 @@ package metro.GameUI.MainMenu;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
-import metro.AppContext.ServiceLocator;
+import metro.AppContext.Locator;
 import metro.Common.Game.Settings;
 import metro.Common.Technical.Contract;
 import metro.GameUI.Common.SettingsWindow;
@@ -69,7 +69,7 @@ public class MainMenu extends GameScreenContainer
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				exitGameScreen(ServiceLocator.get(MainView.class));
+				exitGameScreen(Locator.get(MainView.class));
 			}
 		});
 	}
