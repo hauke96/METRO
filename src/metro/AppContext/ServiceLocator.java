@@ -7,6 +7,7 @@ import metro.Common.Game.GameState;
 import metro.Common.Game.Settings;
 import metro.Common.Technical.Contract;
 import metro.GameUI.MainView.MainView;
+import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.TrainManagement.TrainLineDrawingService;
 import metro.TrainManagement.TrainManagementService;
@@ -48,6 +49,7 @@ public class ServiceLocator
 		register(PlayingField.class, () -> new PlayingField(
 			get(GameState.class),
 			get(TrainManagementService.class)));
+		register(NotificationArea.class, () -> new NotificationArea());
 
 		register(TrainManagementService.class, () -> new TrainManagementService(
 			get(GameState.class),

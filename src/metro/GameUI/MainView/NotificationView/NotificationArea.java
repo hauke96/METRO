@@ -34,12 +34,10 @@ public class NotificationArea implements NotificationSubscriber
 	private Canvas _canvas;
 	private Panel _panel;
 
-	private final static NotificationArea __INSTANCE = new NotificationArea();
-
 	/**
 	 * Creates a notification area with no entries.
 	 */
-	private NotificationArea()
+	public NotificationArea()
 	{
 		_backGroundColor = new Color(255, 255, 255, 165);
 		_height = 250;
@@ -86,14 +84,6 @@ public class NotificationArea implements NotificationSubscriber
 	}
 
 	/**
-	 * @return The instance of the game state. There can only be one instance per game.
-	 */
-	public static NotificationArea getInstance()
-	{
-		return __INSTANCE;
-	}
-
-	/**
 	 * Sets the width of the notification area. It still begins at (0,SCREEN_HEIGHT - height) but may not end at the screens edge.
 	 * 
 	 * @param newWidth The new width in pixel.
@@ -120,6 +110,7 @@ public class NotificationArea implements NotificationSubscriber
 	/**
 	 * Draws the control.
 	 */
+	// TODO replace this by normal UI
 	public void draw()
 	{
 		Fill.setColor(_backGroundColor);
@@ -128,7 +119,6 @@ public class NotificationArea implements NotificationSubscriber
 		Draw.setColor(METRO.__metroBlue);
 		Draw.Line(0, 0, _width, 0);
 
-		// TODO replace this by a label
 		int length = Draw.getStringSize("Notifications:").width;
 		Draw.setColor(METRO.__metroRed);
 		Draw.String("Notifications:", 15, 5);

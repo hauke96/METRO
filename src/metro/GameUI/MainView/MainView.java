@@ -8,6 +8,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
+import metro.AppContext.ServiceLocator;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Technical.Contract;
@@ -129,8 +130,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			}
 		});
 
-		// TODO service locator
-		_notificationArea = NotificationArea.getInstance();
+		_notificationArea = ServiceLocator.get(NotificationArea.class);
 
 		AbstractContainer playingFieldBackground = _playingField.getBackgroundPanel();
 		playingFieldBackground.setState(false);
