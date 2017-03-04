@@ -141,7 +141,6 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	public void updateGameScreen(SpriteBatch sp)
 	{
 		_playingField.setCityCircleHighlighting(_activeTool == null || !_activeTool.isHovered());
-//		 _playingField.updateGameScreen();
 
 		printDebugStuff(sp);
 	}

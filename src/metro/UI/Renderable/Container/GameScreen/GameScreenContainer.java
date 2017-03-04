@@ -39,6 +39,7 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		_area = new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height);
 
 		Contract.EnsureNotNull(_area);
+		Contract.EnsureNotNull(_settings);
 	}
 
 	/**
