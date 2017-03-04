@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.util.Random;
 
-import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 
@@ -21,7 +20,6 @@ public class TrainStation
 		_movingPassengerWaitingTime,
 		_randomAddPassengerWaitingTime;
 	private Point _position; // Position
-	private GameState _gameState;
 	private int[] _movingPassengersAmount,
 		_movingPassengersDuration;
 	private long _movingPassengerLastCall,
@@ -52,7 +50,6 @@ public class TrainStation
 	{
 		_waitingPassengers = waitingPassengers;
 		_position = position;
-		_gameState = GameState.getInstance();
 
 		_randomAddPassengerWaitingTime = (int)750e6; // 750ms == 750*10^6 ns
 		_randomAddPassengerLastCall = 0;
@@ -65,32 +62,35 @@ public class TrainStation
 
 	/**
 	 * Draws the station with passenger amount.
+	 * 
 	 * @param offset The offset of the current game screen.
+	 * @param baseNetSpacing The current base net spacing.
 	 */
-	public void draw(Point offset)
+	public void draw(Point offset, int baseNetSpacing)
 	{
-		Point position = new Point(offset.x + _position.x * _gameState.getBaseNetSpacing() - 4,
-			offset.y + _position.y * _gameState.getBaseNetSpacing() - 7); // Position with offset etc.
+		Point position = new Point(offset.x + _position.x * baseNetSpacing - 4,
+			offset.y + _position.y * baseNetSpacing - 7); // Position with offset etc.
 		Fill.setColor(Color.white);
 		Fill.Rect(position.x, position.y, 8, 15);
 		Draw.setColor(Color.black);
 		Draw.Rect(position.x, position.y, 8, 15);
 
 		Draw.String("" + _waitingPassengers,
-			offset.x + _position.x * _gameState.getBaseNetSpacing() - Draw.getStringSize("" + _waitingPassengers).width / 2 - 1,
-			offset.y + _position.y * _gameState.getBaseNetSpacing() - 25);
+			offset.x + _position.x * baseNetSpacing - Draw.getStringSize("" + _waitingPassengers).width / 2 - 1,
+			offset.y + _position.y * baseNetSpacing - 25);
 	}
 
 	/**
 	 * Returns the position with offset.
 	 * 
 	 * @param offset The offset of the current game screen.
+	 * @param baseNetSpacing The current base net spacing.
 	 * @return The position with offset.
 	 */
-	public Point getPositionOnScreen(Point offset)
+	public Point getPositionOnScreen(Point offset, int baseNetSpacing)
 	{
-		return new Point(offset.x + _position.x * _gameState.getBaseNetSpacing(),
-			offset.y + _position.y * _gameState.getBaseNetSpacing()); // Position with offset etc.
+		return new Point(offset.x + _position.x * baseNetSpacing,
+			offset.y + _position.y * baseNetSpacing); // Position with offset etc.
 	}
 
 	/**

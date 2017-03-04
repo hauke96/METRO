@@ -6,6 +6,7 @@ import java.awt.Point;
 
 import org.junit.Test;
 
+import metro.AppContext.ServiceLocator;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 
 /**
@@ -20,7 +21,7 @@ public class PlayingFieldTest
 	 */
 	public PlayingFieldTest()
 	{
-		field = PlayingField.getInstance();
+		field = ServiceLocator.get(PlayingField.class);
 	}
 
 	/**
@@ -29,15 +30,15 @@ public class PlayingFieldTest
 	@Test
 	public void testInitialMapOffset()
 	{
-		assertEquals(new Point(0,0), field.getMapOffset());
+		assertEquals(new Point(0, 0), field.getMapOffset());
 	}
-	
+
 	/**
 	 * Tests the initial state of the selected node.
 	 */
 	@Test
 	public void testInitialSelectedNode()
 	{
-		assertEquals(new Point(-1,-1), field.getSelectedNode());
+		assertEquals(new Point(-1, -1), field.getSelectedNode());
 	}
 }

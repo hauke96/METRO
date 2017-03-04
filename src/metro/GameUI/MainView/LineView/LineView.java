@@ -8,7 +8,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import metro.METRO;
-import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Contract;
@@ -17,6 +16,7 @@ import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameUI.Common.ToolView;
 import metro.GameUI.MainView.NotificationView.NotificationServer;
 import metro.GameUI.MainView.NotificationView.NotificationType;
+import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainLine;
@@ -49,7 +49,7 @@ public class LineView extends ToolView implements Observer
 		_messageLabel;
 	private InputField _lineNameField;
 
-	private int _windowWidth;
+	private int _toolWidth;
 	private boolean _lineSelectToolEnabled, // if enabled, the user can select nodes
 		_editMode; // true when user edits a line
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
@@ -58,20 +58,26 @@ public class LineView extends ToolView implements Observer
 	private TrainManagementService _trainManagementService;
 
 	private LineSelectTool _lineSelectTool;
+	private PlayingField _playingField;
 
 	/**
 	 * Creates a new TrainLineView.
+	 * 
+	 * @param toolWidth The width of the tools UI area.
+	 * @param playingField The field the player currently plays on.
+	 * @param trainManagementService The train management service.
 	 */
-	public LineView()
+	public LineView(int toolWidth, PlayingField playingField, TrainManagementService trainManagementService)
 	{
+		_toolWidth = toolWidth;
+		_playingField = playingField;
+		_trainManagementService = trainManagementService;
+
 		_lineSelectToolEnabled = false;
-		_windowWidth = GameState.getInstance().getToolViewWidth();
-		_lineSelectTool = new LineSelectTool();
+		_lineSelectTool = new LineSelectTool(_playingField, _trainManagementService);
 		_lineSelectTool.addObserver(this); // close observer
 
-		_trainManagementService = TrainManagementService.getInstance();
-
-		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 40);
+		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _toolWidth, 40);
 
 		createControls();
 		addObserver();
@@ -82,29 +88,29 @@ public class LineView extends ToolView implements Observer
 	 */
 	private void createControls()
 	{
-		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
+		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _toolWidth, METRO.__SCREEN_SIZE.height));
 		_panel.setDrawBorder(true, METRO.__metroBlue);
 
 		Canvas canvas = new Canvas(new Point(_panel.getPosition().x, _panel.getPosition().y + 20));
 		canvas.setPainter(() -> draw());
 
-		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 40, 300), true);
+		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _toolWidth - 40, 300), true);
 		fillLineList();
 
-		_createLineButton = new Button(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Create line");
-		_editLineButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Edit line");
-		_removeLineButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, _areaOffset.y + 450, (_windowWidth - 40) / 3 - 10, 20), "Remove line");
+		_createLineButton = new Button(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 450, (_toolWidth - 40) / 3 - 10, 20), "Create line");
+		_editLineButton = new Button(new Rectangle(_areaOffset.x + 12 + (_toolWidth / 3), _areaOffset.y + 450, (_toolWidth - 40) / 3 - 10, 20), "Edit line");
+		_removeLineButton = new Button(new Rectangle(_areaOffset.x + 4 + (_toolWidth / 3) * 2, _areaOffset.y + 450, (_toolWidth - 40) / 3 - 10, 20), "Remove line");
 
-		_lineNameField = new InputField(new Rectangle(_areaOffset.x + 95, _areaOffset.y + 490, _windowWidth - 175, 20));
+		_lineNameField = new InputField(new Rectangle(_areaOffset.x + 95, _areaOffset.y + 490, _toolWidth - 175, 20));
 		_lineNameField.setState(false);
 
 		_lineNameFieldLabel = new Label("Line Name", new Point(_areaOffset.x + 20, _areaOffset.y + 493));
 		_lineNameFieldLabel.setState(false);
 
-		_colorBar = new ColorBar(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 520, _windowWidth - 70, 20), 0.9f, 0.8f);
+		_colorBar = new ColorBar(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 520, _toolWidth - 70, 20), 0.9f, 0.8f);
 		_colorBar.setState(false);
 
-		_saveButton = new Button(new Rectangle(_areaOffset.x + (_windowWidth / 2) - 75, METRO.__SCREEN_SIZE.height - _areaOffset.y - 60, 150, 20), "Save");
+		_saveButton = new Button(new Rectangle(_areaOffset.x + (_toolWidth / 2) - 75, METRO.__SCREEN_SIZE.height - _areaOffset.y - 60, 150, 20), "Save");
 		_saveButton.setState(false);
 
 		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 100));
@@ -387,7 +393,7 @@ public class LineView extends ToolView implements Observer
 	 */
 	void createLineSelectTool()
 	{
-		_lineSelectTool = new LineSelectTool(); // create clean select tool
+		_lineSelectTool = new LineSelectTool(_playingField, _trainManagementService); // create clean select tool
 		_lineSelectTool.addObserver(this);
 		_lineSelectToolEnabled = true;
 	}
@@ -406,24 +412,24 @@ public class LineView extends ToolView implements Observer
 	{
 		int length = Draw.getStringSize("Control Management").width;
 		Draw.setColor(METRO.__metroBlue);
-		Draw.Rect(20, 15, _windowWidth - 40, 60);
+		Draw.Rect(20, 15, _toolWidth - 40, 60);
 		Color c = new Color((int)(METRO.__metroBlue.getRed() * 1.8f),
 			(int)(METRO.__metroBlue.getGreen() * 1.3f),
 			255); // lighter metro-blue
 		Draw.setColor(c);
-		Draw.Rect(22, 17, _windowWidth - 44, 56);
+		Draw.Rect(22, 17, _toolWidth - 44, 56);
 
 		// Take "METRO.__SCREEN_SIZE.width - (_windowWidth + length) / 2" to center the label
 		length = Draw.getStringSize("METRO lines").width;
 		Draw.setColor(METRO.__metroRed);
-		Draw.String("METRO lines", (_windowWidth - length) / 2, 25);
-		Draw.Line((_windowWidth - length) / 2 - 5, 40,
-			(_windowWidth + length) / 2 + 5, 40);
+		Draw.String("METRO lines", (_toolWidth - length) / 2, 25);
+		Draw.Line((_toolWidth - length) / 2 - 5, 40,
+			(_toolWidth + length) / 2 + 5, 40);
 
 		length = Draw.getStringSize("Control Management").width;
-		Draw.String("Control Management", (_windowWidth - length) / 2, 50);
-		Draw.Line((_windowWidth - length) / 2 - 5, 65,
-			(_windowWidth + length) / 2 + 5, 65);
+		Draw.String("Control Management", (_toolWidth - length) / 2, 50);
+		Draw.Line((_toolWidth - length) / 2 - 5, 65,
+			(_toolWidth + length) / 2 + 5, 65);
 	}
 
 	/**
@@ -433,9 +439,9 @@ public class LineView extends ToolView implements Observer
 	{
 		Draw.setColor(METRO.__metroRed);
 		int length = Draw.getStringSize("List of your lines:").width;
-		Draw.String("List of your lines:", METRO.__SCREEN_SIZE.width - _windowWidth + 20, _areaOffset.y + 110);
-		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 20, _areaOffset.y + 125,
-			METRO.__SCREEN_SIZE.width - _windowWidth + 20 + length, _areaOffset.y + 125);
+		Draw.String("List of your lines:", METRO.__SCREEN_SIZE.width - _toolWidth + 20, _areaOffset.y + 110);
+		Draw.Line(METRO.__SCREEN_SIZE.width - _toolWidth + 20, _areaOffset.y + 125,
+			METRO.__SCREEN_SIZE.width - _toolWidth + 20 + length, _areaOffset.y + 125);
 	}
 
 	/**
@@ -446,10 +452,10 @@ public class LineView extends ToolView implements Observer
 		if(_colorBar.getClickedColor() != null)
 		{
 			Fill.setColor(_colorBar.getClickedColor());
-			Fill.Rect(new Rectangle(_areaOffset.x + _windowWidth - 40, _areaOffset.y + 520, 20, 20));
+			Fill.Rect(new Rectangle(_areaOffset.x + _toolWidth - 40, _areaOffset.y + 520, 20, 20));
 		}
 		Draw.setColor(Color.darkGray);
-		Draw.Rect(new Rectangle(_areaOffset.x + _windowWidth - 40, _areaOffset.y + 520, 20, 20));
+		Draw.Rect(new Rectangle(_areaOffset.x + _toolWidth - 40, _areaOffset.y + 520, 20, 20));
 	}
 
 	@Override
@@ -458,7 +464,7 @@ public class LineView extends ToolView implements Observer
 		boolean clickProcessed = false;
 
 		// if select tool exists and mouse is in the area of the select tool, forward click to tool
-		if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _windowWidth)
+		if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _toolWidth)
 		{
 			// something will probably change so remove the old line (new one will be added later)
 			_trainManagementService.removeLine(_lineSelectTool.getTrainLine());
@@ -467,7 +473,7 @@ public class LineView extends ToolView implements Observer
 		}
 
 		// when the mouse is out of TrainLineView, get the new line from the select tool and add it to the overseer
-		if(screenX <= METRO.__SCREEN_SIZE.width - _windowWidth && _lineSelectToolEnabled)
+		if(screenX <= METRO.__SCREEN_SIZE.width - _toolWidth && _lineSelectToolEnabled)
 		{
 			Logger.__debug("Add line to observer");
 			TrainLine line = _lineSelectTool.getTrainLine();

@@ -29,16 +29,22 @@ public class LineSelectTool extends ToolView
 	private Color _color;
 	private String _lineName;
 	private PlayingField _playingField;
+	private TrainManagementService _trainManagementService;
 
 	/**
 	 * Creates a new tool to select the train line.
+	 * 
+	 * @param playingField The field the player plays on.
+	 * @param trainManagementService The train management service.
 	 */
-	public LineSelectTool()
+	public LineSelectTool(PlayingField playingField, TrainManagementService trainManagementService)
 	{
+		_playingField = playingField;
+		_trainManagementService = trainManagementService;
+
 		_listOfNodes = new ArrayList<RailwayNode>();
 		_color = METRO.__metroBlue;
 		_lineName = "";
-		_playingField = PlayingField.getInstance();
 	}
 
 	/**
@@ -68,9 +74,9 @@ public class LineSelectTool extends ToolView
 	 */
 	public String setColor(Color newColor)
 	{
-		if(TrainManagementService.getInstance().isLineColorUsed(newColor))
+		if(_trainManagementService.isLineColorUsed(newColor))
 		{
-			Logger.__debug("Old color is " + _color+"\n"
+			Logger.__debug("Old color is " + _color + "\n"
 				+ "New color is " + newColor.toString());
 			return "No duplicate colors allowed!";
 		}
@@ -115,7 +121,7 @@ public class LineSelectTool extends ToolView
 			notifyObservers();
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -125,15 +131,16 @@ public class LineSelectTool extends ToolView
 	 * @param screenX The y-coordinate of the click.
 	 * @param screenY The y-coordinate of the click.
 	 * @param offset The current map offset.
+	 * @return True when click handled.
 	 */
-	public boolean leftClick(int screenX, int screenY, Point2D offset)
+	private boolean leftClick(int screenX, int screenY, Point2D offset)
 	{
 		RailwayNode clickedNode = RailwayNodeOverseer.getNodeByPosition(_playingField.getSelectedNode());
-		
+
 		Logger.__debug("node is " + clickedNode);
-		
+
 		if(clickedNode == null) return false;
-		
+
 		if(_listOfNodes.contains(clickedNode))
 		{
 			Logger.__debug("Removed node " + clickedNode.getPosition());
@@ -144,7 +151,7 @@ public class LineSelectTool extends ToolView
 			Logger.__debug("Added node " + clickedNode.getPosition());
 			_listOfNodes.add(clickedNode);
 		}
-		
+
 		return true;
 	}
 

@@ -16,6 +16,7 @@ import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.MainView.TrainView.TrainView;
+import metro.TrainManagement.TrainManagementService;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
@@ -35,22 +36,33 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	private Toolbar _toolbar;
 	private NotificationArea _notificationArea;
 	private PlayingField _playingField;
+	private GameState _gameState;
+	private TrainManagementService _trainManagementService;
 
 	/**
 	 * Creates a new main view with no active sub tools.
+	 * 
+	 * @param gameState The current state of the player.
+	 * @param trainManagementService The train management service 
+	 * @param playingField The field, the player should play on.
 	 */
-	public MainView()
+	public MainView(GameState gameState, TrainManagementService trainManagementService, PlayingField playingField)
 	{
+		_gameState = gameState;
+		_trainManagementService = trainManagementService;
+		_playingField = playingField;
+		
 		_activeTool = null;
-
-		// TODO add here new Controller-class
+		
 		setInputProcessor(this);
 	}
 
 	@Override
 	protected void initializeUi()
 	{
-		_toolbar = new Toolbar();
+		_playingField.getBackgroundPanel().registerContainer();
+		
+		_toolbar = new Toolbar(_gameState.getToolViewWidth());
 
 		_toolbar.getBuildStationButton().register(new ActionObserver()
 		{
@@ -59,7 +71,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			{
 				Contract.Require(arg instanceof Button);
 
-				StationPlacingTool stationPlacingTool = new StationPlacingTool();
+				StationPlacingTool stationPlacingTool = new StationPlacingTool(_gameState, _playingField, _trainManagementService);
 
 				_toolbar.getBackgroundPanel().setAboveOf(stationPlacingTool.getBackgroundPanel());
 				_notificationArea.getBackgroundPanel().setAboveOf(stationPlacingTool.getBackgroundPanel());
@@ -75,7 +87,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			{
 				Contract.Require(arg instanceof Button);
 
-				TrackPlacingTool trackPlacingTool = new TrackPlacingTool();
+				TrackPlacingTool trackPlacingTool = new TrackPlacingTool(_gameState, _playingField);
 
 				_toolbar.getBackgroundPanel().setAboveOf(trackPlacingTool.getBackgroundPanel());
 				_notificationArea.getBackgroundPanel().setAboveOf(trackPlacingTool.getBackgroundPanel());
@@ -91,7 +103,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			{
 				Contract.Require(arg instanceof Button);
 
-				LineView lineView = new LineView();
+				LineView lineView = new LineView(_gameState.getToolViewWidth(), _playingField, _trainManagementService);
 
 				AbstractContainer lineViewPanel = lineView.getBackgroundPanel();
 				_toolbar.getBackgroundPanel().setAboveOf(lineViewPanel);
@@ -107,7 +119,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			{
 				Contract.Require(arg instanceof Button);
 
-				TrainView trainView = new TrainView();
+				TrainView trainView = new TrainView(_gameState.getToolViewWidth(), _trainManagementService);
 
 				AbstractContainer trainViewPanel = trainView.getBackgroundPanel();
 				_toolbar.getBackgroundPanel().setAboveOf(trainViewPanel);
@@ -117,7 +129,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 			}
 		});
 
-		_playingField = PlayingField.getInstance();
+		// TODO service locator
 		_notificationArea = NotificationArea.getInstance();
 
 		AbstractContainer playingFieldBackground = _playingField.getBackgroundPanel();
@@ -129,7 +141,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	public void updateGameScreen(SpriteBatch sp)
 	{
 		_playingField.setCityCircleHighlighting(_activeTool == null || !_activeTool.isHovered());
-		// _playingField.updateGameScreen();
+//		 _playingField.updateGameScreen();
 
 		printDebugStuff(sp);
 	}
@@ -220,7 +232,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 
 		if(_activeTool instanceof LineView || _activeTool instanceof TrainView) // tools that have own window and influence the notification area
 		{
-			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth());
+			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width - _gameState.getToolViewWidth());
 		}
 		else
 		{

@@ -45,11 +45,16 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	protected List<AbstractContainer> _listOfFloatingContainer;
 	protected List<AbstractContainer> _listOfStaticContainer;
 
+	private ContainerRegistrationService _containerRegistrationService;
+
 	/**
 	 * Creates a basic renderer with empty fields.
+	 * 
+	 * @param registrationService The registration service that should be used.
 	 */
-	public BasicContainerRenderer()
+	public BasicContainerRenderer(ContainerRegistrationService registrationService)
 	{
+		_containerRegistrationService = registrationService;
 		_listOfStaticContainer = new CopyOnWriteArrayList<AbstractContainer>();
 		_listOfFloatingContainer = new CopyOnWriteArrayList<AbstractContainer>();
 
@@ -65,9 +70,9 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		_staticContainerAboveChangedObserver = (o, arg) -> sortContainer(_listOfStaticContainer);
 		_floatingContainerAboveChangedObserver = (o, arg) -> sortContainer(_listOfFloatingContainer);
 
-		ContainerRegistrationService registrationService = new ContainerRegistrationService();
-		registrationService.setRenderer(this);
-		AbstractContainer.setContainerRegistrationService(registrationService);
+		// cyclic dependency but necessary somehow:
+		_containerRegistrationService.setRenderer(this);
+		AbstractContainer.setContainerRegistrationService(_containerRegistrationService);
 	}
 
 	protected void sortContainer(List<AbstractContainer> listOfContainer)
@@ -78,6 +83,8 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	@Override
 	public void registerStaticContainer(StaticContainer renderable)
 	{
+		if(_listOfStaticContainer.contains(renderable)) return;
+
 		_listOfStaticContainer.add(renderable);
 		renderable.registerCloseObserver(this);
 		renderable.registerAboveChangedObserver(_staticContainerAboveChangedObserver);
@@ -87,6 +94,8 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	@Override
 	public void registerFloatingContainer(FloatingContainer renderable)
 	{
+		if(_listOfFloatingContainer.contains(renderable)) return;
+
 		_listOfFloatingContainer.add(renderable);
 		renderable.registerCloseObserver(this);
 		renderable.registerAboveChangedObserver(_floatingContainerAboveChangedObserver);
@@ -217,5 +226,11 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		Contract.RequireNotNull(_controlsAboveComparator);
 
 		return _controlsAboveComparator;
+	}
+
+	@Override
+	public ContainerRegistrationService getRegistrationService()
+	{
+		return _containerRegistrationService;
 	}
 }

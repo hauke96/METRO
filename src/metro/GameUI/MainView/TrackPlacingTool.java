@@ -34,13 +34,18 @@ public class TrackPlacingTool extends ToolView
 
 	private Canvas _canvas;
 	private Panel _panel;
+	private GameState _gameState;
 
 	/**
 	 * Creates a new Track placing tool.
+	 * 
+	 * @param gameState The current state of the player.
+	 * @param playingField The current playing field.
 	 */
-	public TrackPlacingTool()
+	public TrackPlacingTool(GameState gameState, PlayingField playingField)
 	{
-		_playingField = PlayingField.getInstance();
+		_gameState = gameState;
+		_playingField = playingField;
 
 		_canvas = new Canvas(new Point(0, 0));
 		_canvas.setPainter(() -> draw());
@@ -55,7 +60,7 @@ public class TrackPlacingTool extends ToolView
 	private void draw()
 	{
 		Point mapOffset = _playingField.getMapOffset();
-		int baseNetSpacing = GameState.getInstance().getBaseNetSpacing();
+		int baseNetSpacing = _gameState.getBaseNetSpacing();
 
 		if(_currentRailwayNode != null) // if not null, calc and draw preview of new tracks
 		{
@@ -123,7 +128,7 @@ public class TrackPlacingTool extends ToolView
 	{
 		if(mouseButton == Buttons.RIGHT) return rightClick(screenX, screenY, _playingField.getMapOffset());
 		else if(mouseButton == Buttons.LEFT) return leftClick(screenX, screenY, _playingField.getMapOffset());
-		
+
 		return false;
 	}
 
@@ -145,7 +150,7 @@ public class TrackPlacingTool extends ToolView
 		{
 			close();
 		}
-		
+
 		return true;
 	}
 
@@ -155,12 +160,12 @@ public class TrackPlacingTool extends ToolView
 	 * @param screenX The y-coordinate of the click.
 	 * @param screenY The y-coordinate of the click.
 	 * @param offset The current map offset.
-	 * @return 
+	 * @return
 	 */
 	protected boolean leftClick(int screenX, int screenY, Point offset)
 	{
 		placeTracks(screenX, screenY, Buttons.LEFT, offset);
-		
+
 		return true;
 	}
 

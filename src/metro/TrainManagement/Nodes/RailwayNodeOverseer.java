@@ -12,6 +12,8 @@ import java.util.Map;
  * @author hauke
  *
  */
+// TODO rename this to RailwayNodeService
+// TODO make this into real service
 public class RailwayNodeOverseer
 {
 	/**

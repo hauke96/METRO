@@ -22,22 +22,28 @@ public class CityView extends ToolView
 {
 	private int _selectedLayerNumber;
 	private boolean _enableMouseSelection; // When false, there'll be no circle highlighting
+	private TrainManagementService _trainManagementService;
 
 	/**
 	 * Constructor to load all the important stuff.
+	 * 
+	 * @param trainManagementService The train management service.
 	 */
-	public CityView()
+	public CityView(TrainManagementService trainManagementService)
 	{
+		_trainManagementService = trainManagementService;
 		_enableMouseSelection = true;
 	}
 
 	/**
 	 * Draws the city view. This method does not draw the number of the selected circle over the cursor (s. {@link #drawNumbers(Point)}).
+	 * 
 	 * @param offset The current map offset.
+	 * @param baseNetSpacing The current base net spacing.
 	 */
-	public void updateGameScreen(Point offset)
+	public void updateGameScreen(Point offset, int baseNetSpacing)
 	{
-		List<TravelerSpot> travelerSpots = TrainManagementService.getInstance().getTravelerSpots();
+		List<TravelerSpot> travelerSpots = _trainManagementService.getTravelerSpots();
 
 		_selectedLayerNumber = -1;
 		if(_enableMouseSelection)
@@ -48,7 +54,7 @@ public class CityView extends ToolView
 				boolean isLayerSelected = false;
 				for(int k = 0; !isLayerSelected && k < travelerSpots.size(); ++k) // go through all spots
 				{
-					isLayerSelected = travelerSpots.get(k).isMouseInCircle(i, offset); // if mouse is in ANY circle of this layer
+					isLayerSelected = travelerSpots.get(k).isMouseInCircle(i, offset, baseNetSpacing); // if mouse is in ANY circle of this layer
 					if(isLayerSelected)
 					{
 						_selectedLayerNumber = i;
@@ -62,18 +68,19 @@ public class CityView extends ToolView
 			for(int k = 0; k < travelerSpots.size(); ++k)
 			{
 				if(travelerSpots.get(k).getStrength() <= i) continue;
-				travelerSpots.get(k).draw(i, i == _selectedLayerNumber, true, offset); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+				travelerSpots.get(k).draw(i, i == _selectedLayerNumber, true, offset, baseNetSpacing); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 			}
 			for(int k = 0; k < travelerSpots.size(); ++k)
 			{
 				if(travelerSpots.get(k).getStrength() <= i) continue;
-				travelerSpots.get(k).draw(i, i == _selectedLayerNumber, false, offset); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
+				travelerSpots.get(k).draw(i, i == _selectedLayerNumber, false, offset, baseNetSpacing); // i==selectedLayerNumber means: if i is the selected circle level -> draw it different
 			}
 		}
 	}
 
 	/**
 	 * Draws the number of the selected Traveler Spot above the mouse.
+	 * 
 	 * @param cursorDotPosition The position of the cursor dot from the Grid.
 	 */
 	public void drawNumbers(Point cursorDotPosition)

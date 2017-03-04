@@ -10,7 +10,10 @@ import java.awt.Point;
 import org.junit.Test;
 
 import metro.METRO;
+import metro.TestInitializer;
+import metro.AppContext.ServiceLocator;
 import metro.Common.Game.GameState;
+import metro.TrainManagement.TrainManagementService;
 
 /**
  * @author hauke
@@ -18,14 +21,21 @@ import metro.Common.Game.GameState;
 public class TrainViewTest
 {
 	private TrainView view;
+	private int _toolVewWidth;
 
 	/**
 	 * Sets the screen dimensions and creates a fresh train view.
 	 */
 	public TrainViewTest()
 	{
+		TestInitializer.init();
+		
 		METRO.__SCREEN_SIZE = new Dimension(1920, 1080);
-		view = new TrainView();
+
+		_toolVewWidth = ServiceLocator.get(GameState.class).getToolViewWidth();
+		TrainManagementService trainManagementService = ServiceLocator.get(TrainManagementService.class);
+
+		view = new TrainView(_toolVewWidth, trainManagementService);
 	}
 
 	/**
@@ -35,7 +45,7 @@ public class TrainViewTest
 	public void testGetAreaOffset()
 	{
 		assertEquals(
-			new Point(METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth(), 40),
+			new Point(METRO.__SCREEN_SIZE.width - _toolVewWidth, 40),
 			view.getAreaOffset());
 	}
 

@@ -38,7 +38,10 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import org.lwjgl.opengl.Display;
 
@@ -66,6 +69,8 @@ import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Logger;
 import metro.GameUI.MainMenu.MainMenu;
+import metro.GameUI.MainView.MainView;
+import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Controls.InputField;
 import metro.UI.Renderer.BasicContainerRenderer;
@@ -126,9 +131,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	private void setSettings()
 	{
 		Logger.__separatingEmptyLine = true;
-		
-		ServiceLocator.init();
-		
+
 		Settings settings = ServiceLocator.get(Settings.class);
 		settings.read();
 
@@ -136,22 +139,22 @@ public class METRO implements ApplicationListener, InputProcessor
 		{
 			_config = new LwjglApplicationConfiguration();
 			_config.title = "METRO  " + __VERSION;
-			_config.width = Integer.parseInt(settings.getOld("screen.width").toString());
-			_config.height = Integer.parseInt(settings.getOld("screen.height").toString());
-			_config.useGL30 = Boolean.parseBoolean(settings.getOld("use.opengl30").toString());
+			_config.width = Integer.parseInt(settings.getOiginal(Settings.SCREEN_WIDTH).toString());
+			_config.height = Integer.parseInt(settings.getOiginal(Settings.SCREEN_HEIGHT).toString());
+			_config.useGL30 = Boolean.parseBoolean(settings.getOiginal(Settings.USE_OPENGL30).toString());
 			_config.resizable = false;
-			_config.fullscreen = Boolean.parseBoolean(settings.getOld("fullscreen.on").toString());
+			_config.fullscreen = Boolean.parseBoolean(settings.getOiginal(Settings.FULLSCREEN_ON).toString());
 			// _config.foregroundFPS = -1; // max frames
-			_config.samples = Integer.parseInt(settings.getOld("amount.samples").toString());
-			_config.vSyncEnabled = false;// Boolean.parseBoolean(Settings.get("use.vsync").toString());
-			_config.useHDPI = Boolean.parseBoolean(settings.getOld("use.hdpi").toString());
+			_config.samples = Integer.parseInt(settings.getOiginal(Settings.AMOUNT_SAMPLES).toString());
+			_config.vSyncEnabled = false;// Boolean.parseBoolean(Settings.get(Settings.USE_VSYNC).toString());
+			_config.useHDPI = Boolean.parseBoolean(settings.getOiginal(Settings.USE_HDPI).toString());
 
 			__application = new LwjglApplication(this, _config);
 
 			System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
 
-			__SCREEN_SIZE = new Dimension(Integer.parseInt(settings.getOld("screen.width").toString()),
-				Integer.parseInt(settings.getOld("screen.height").toString()));
+			__SCREEN_SIZE = new Dimension(Integer.parseInt(settings.getOiginal(Settings.SCREEN_WIDTH).toString()),
+				Integer.parseInt(settings.getOiginal(Settings.SCREEN_HEIGHT).toString()));
 			__titleBarHeight = _config.fullscreen ? 0 : 22;
 		}
 		catch(Exception ex) // if something has gone wrong (e.g. "screen.width=19a20")
@@ -160,9 +163,9 @@ public class METRO implements ApplicationListener, InputProcessor
 			if(file.exists()) // try to use default values by deleting config file
 			{
 				// Create date time for backup name
-				java.util.Date date = new java.util.Date();
-				java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd.MM.yyyy.h:mm:ss");
-				sdf.setTimeZone(java.util.TimeZone.getTimeZone("CET"));
+				Date date = new java.util.Date();
+				SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd.MM.yyyy.h:mm:ss");
+				sdf.setTimeZone(TimeZone.getTimeZone("CET"));
 				String formattedDate = sdf.format(date);
 
 				// try to rename settings.cfg
@@ -171,18 +174,18 @@ public class METRO implements ApplicationListener, InputProcessor
 					Logger.__error("No backup of settings.cfg has been created.");
 				}
 
-				System.err
-					.println(
-						"Something went wrong by reading the settings.\nThey have been renamed to \"settings.backup.{date}\".\nHere some more information:\n" + ex.getMessage());
+				Logger.__error(
+					"Something went wrong by reading the settings.\nThey have been renamed to \"settings.backup.{date}\".\nHere some more information:\n" + ex.getMessage());
 			}
 			else
 			{
-				System.err.println("Could NOT create configuration."
+				Logger.__error("Could NOT create configuration."
 					+ "Using default values by deleting the ./settings.cfg is not working."
 					+ "\nHere some technical information :" + ex.getMessage() + "\n");
+
 				for(StackTraceElement str : ex.getStackTrace())
 				{
-					System.err.println(str.toString());
+					Logger.__error(str.toString());
 				}
 			}
 		}
@@ -203,16 +206,13 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		loadVisuals();
 
-		__containerRenderer = new BasicContainerRenderer();
-		
 		__currentGameScreenContainerManager = new BasicGameScreenRenderer();
-		
-		GameScreenContainer startScreen = new MainMenu();
-		startScreen.init(__containerRenderer);
-		
+
+		GameScreenContainer startScreen = new MainMenu(ServiceLocator.get(Settings.class));
+
 		__currentGameScreenContainerManager.switchGameScreen(startScreen);
 
-		__gameState =ServiceLocator.get(GameState.class);
+		__gameState = ServiceLocator.get(GameState.class);
 	}
 
 	/**
@@ -244,6 +244,9 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void initGdx()
 	{
+		Draw.setSettingsService(ServiceLocator.get(Settings.class));
+		Fill.setSettingsService(ServiceLocator.get(Settings.class));
+		
 		__spriteBatch = new SpriteBatch();
 		__gameWindowSpriteBatch = new SpriteBatch();
 		if(_config.fullscreen)
@@ -340,11 +343,11 @@ public class METRO implements ApplicationListener, InputProcessor
 		__spriteBatch.begin();
 
 		renderInit();
-//		__currentGameScreenManager.renderCurrentGameScreen(__spriteBatch);
+		// __currentGameScreenManager.renderCurrentGameScreen(__spriteBatch);
 		__currentGameScreenContainerManager.updateGameScreen(__spriteBatch);
 		__currentGameScreenContainerManager.renderUI();
 		// TODO replace this by calling the "currentGameScreenContainerManager"
-//		__containerRenderer.notifyDraw();
+		// __containerRenderer.notifyDraw();
 		renderFPSDisplay();
 		renderCursor();
 
@@ -436,7 +439,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	private void renderFPSDisplay()
 	{
-//		Draw.setOffset(0, 0);
+		// Draw.setOffset(0, 0);
 		Draw.setColor(__metroBlue);
 		Draw.String("FPS: " + Gdx.graphics.getFramesPerSecond(), __SCREEN_SIZE.width - (Draw.getStringSize("FPS: " + Gdx.graphics.getFramesPerSecond()).width + 30), 25);
 	}
@@ -465,9 +468,9 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyDown(int keyCode)
 	{
-//		__containerRenderer.notifyKeyPressed(keyCode);
+		// __containerRenderer.notifyKeyPressed(keyCode);
 		// TODO check if the gamescreen is allowed to handle input now (if an input field has focus, no other control is allowed to)
-//		__currentGameScreenManager.keyDown(keyCode);
+		// __currentGameScreenManager.keyDown(keyCode);
 		__currentGameScreenContainerManager.keyDown(keyCode);
 		return false;
 	}
@@ -475,8 +478,8 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean keyUp(int keyCode)
 	{
-//		__containerRenderer.notifyKeyUp(keyCode);
-//		__currentGameScreenManager.keyUp(keyCode);
+		// __containerRenderer.notifyKeyUp(keyCode);
+		// __currentGameScreenManager.keyUp(keyCode);
 		__currentGameScreenContainerManager.keyUp(keyCode);
 		return false;
 	}
@@ -524,12 +527,12 @@ public class METRO implements ApplicationListener, InputProcessor
 		screenX -= __xOffset;
 		screenY -= __yOffset;
 
-//		boolean controlGotClickEvent = __containerRenderer.notifyMouseClick(screenX, screenY, mouseButton);
+		// boolean controlGotClickEvent = __containerRenderer.notifyMouseClick(screenX, screenY, mouseButton);
 
-//		if(!controlGotClickEvent)
-//		{
-//			__currentGameScreenManager.touchDown(screenX, screenY, pointer, mouseButton);
-//		}
+		// if(!controlGotClickEvent)
+		// {
+		// __currentGameScreenManager.touchDown(screenX, screenY, pointer, mouseButton);
+		// }
 		__currentGameScreenContainerManager.touchDown(screenX, screenY, pointer, mouseButton);
 
 		return false;
@@ -541,8 +544,8 @@ public class METRO implements ApplicationListener, InputProcessor
 		screenX -= __xOffset;
 		screenY -= __yOffset;
 		__dragMode = false;
-		__containerRenderer.notifyMouseReleased(screenX, screenY, mouseButton);
-//		__currentGameScreenManager.touchUp(screenX, screenY, pointer, mouseButton);
+//		__containerRenderer.notifyMouseReleased(screenX, screenY, mouseButton);
+		// __currentGameScreenManager.touchUp(screenX, screenY, pointer, mouseButton);
 		__currentGameScreenContainerManager.touchUp(screenX, screenY, pointer, mouseButton);
 		return false;
 	}
@@ -567,9 +570,9 @@ public class METRO implements ApplicationListener, InputProcessor
 	@Override
 	public boolean scrolled(int amount)
 	{
-//		__containerRenderer.notifyMouseScrolled(amount);
+		// __containerRenderer.notifyMouseScrolled(amount);
 		// TODO check if game screen is allowed to get the scroll event or if other controls get this before
-//		__currentGameScreenManager.scrolled(amount);
+		// __currentGameScreenManager.scrolled(amount);
 		__currentGameScreenContainerManager.scrolled(amount);
 		return false;
 	}
@@ -586,7 +589,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static void __setSelectedInput(InputField field)
 	{
-//		__currentGameScreenManager.setSelectedInput(field);
+		// __currentGameScreenManager.setSelectedInput(field);
 	}
 
 	/**

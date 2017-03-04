@@ -3,6 +3,7 @@ package metro.TrainManagement;
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
@@ -16,16 +17,22 @@ import metro.TrainManagement.Trains.TrainLine;
  * @author hauke
  *
  */
-class TrainLineDrawingService
+public class TrainLineDrawingService
 {
-	private HashMap<RailwayNode, TrainLine[]> _sortedLineMap;
+	private Map<RailwayNode, TrainLine[]> _sortedLineMap;
 	private GameState _gameState;
 	private int _lineThickness;
 
-	TrainLineDrawingService()
+	/**
+	 * Create a service for drawing train lines.
+	 * 
+	 * @param gameState The current state of the player.
+	 */
+	public TrainLineDrawingService(GameState gameState)
 	{
+		_gameState = gameState;
+		
 		_sortedLineMap = new HashMap<RailwayNode, TrainLine[]>();
-		_gameState = GameState.getInstance();
 		_lineThickness = 3;
 	}
 

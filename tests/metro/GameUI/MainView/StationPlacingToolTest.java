@@ -12,9 +12,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.badlogic.gdx.Input.Buttons;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 
 import metro.TestInitializer;
+import metro.AppContext.ServiceLocator;
+import metro.Common.Game.GameState;
 import metro.Common.Technical.ModifiableBoolean;
+import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.TrainStation;
 
@@ -25,6 +29,7 @@ public class StationPlacingToolTest
 {
 	private StationPlacingTool _tool;
 	private boolean _notified;
+	private TrainManagementService _trainManagementService;
 
 	/**
 	 * Creates a new station placing tool and sets the notified variable to false.
@@ -34,7 +39,8 @@ public class StationPlacingToolTest
 	{
 		TestInitializer.init();
 
-		_tool = new StationPlacingTool();
+		_trainManagementService = ServiceLocator.get(TrainManagementService.class);
+		_tool = new StationPlacingTool(ServiceLocator.get(GameState.class), ServiceLocator.get(PlayingField.class), _trainManagementService);
 		_notified = false;
 	}
 
@@ -88,12 +94,12 @@ public class StationPlacingToolTest
 	@Test
 	public void testClickOnScreenAddsStation()
 	{
-		List<TrainStation> stations = TrainManagementService.getInstance().getStations();
+		List<TrainStation> stations = _trainManagementService.getStations();
 		assertEquals(0, stations.size());
 
 		_tool.mouseClicked(100, 100, Buttons.LEFT);
 
-		assertEquals(1, stations.size());
+		assertEquals(1, _trainManagementService.getStations().size());
 	}
 
 	/**
@@ -102,12 +108,12 @@ public class StationPlacingToolTest
 	@Test
 	public void testDoubleClickOnScreenProducesNoDuplicates()
 	{
-		List<TrainStation> stations = TrainManagementService.getInstance().getStations();
+		List<TrainStation> stations = _trainManagementService.getStations();
 		assertEquals(0, stations.size());
 
 		_tool.mouseClicked(100, 100, Buttons.LEFT);
 		_tool.mouseClicked(100, 100, Buttons.LEFT);
 
-		assertEquals(1, stations.size());
+		assertEquals(1, _trainManagementService.getStations().size());
 	}
 }

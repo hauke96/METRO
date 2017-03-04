@@ -55,7 +55,7 @@ public abstract class AbstractContainer extends CloseObservable
 		_listOfAboveChangedObserver = new ArrayList<>();
 		_listOfContainerBelow = new ArrayList<>();
 
-		registerContainerInRenderer(_containerRegistrationService);
+		registerContainer();
 	}
 
 	/**
@@ -249,6 +249,16 @@ public abstract class AbstractContainer extends CloseObservable
 	protected abstract void registerContainerInRenderer(ContainerRegistrationService registrationService);
 
 	/**
+	 * Registers this control to the registration service.
+	 */
+	public void registerContainer()
+	{
+		Contract.RequireNotNull(_containerRegistrationService != null);
+
+		registerContainerInRenderer(_containerRegistrationService);
+	}
+
+	/**
 	 * Adds an observer for the event that the "above of" property changed.
 	 * The observer will be notices when this happens.
 	 * 
@@ -298,7 +308,7 @@ public abstract class AbstractContainer extends CloseObservable
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 

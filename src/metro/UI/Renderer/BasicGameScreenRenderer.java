@@ -2,7 +2,9 @@ package metro.UI.Renderer;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import metro.AppContext.ServiceLocator;
 import metro.Common.Technical.Contract;
+import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Container.GameScreen.GameScreenSwitchedObserver;
 
@@ -18,10 +20,7 @@ public class BasicGameScreenRenderer implements GameScreenRenderer, GameScreenSw
 	@Override
 	public void switchGameScreen(GameScreenContainer gameScreen)
 	{
-		Contract.RequireNotNull(gameScreen);
-		_currentGameScreen = gameScreen;
-		_currentGameScreen.registerSwitchedObserver(this);
-		Contract.EnsureNotNull(_currentGameScreen);
+		reactToGameScreenSwitch(gameScreen);
 	}
 
 	@Override
@@ -41,13 +40,23 @@ public class BasicGameScreenRenderer implements GameScreenRenderer, GameScreenSw
 	{
 		Contract.RequireNotNull(newGameScreen);
 
+		ContainerRegistrationService registrationService;
+
 		// old game screen
-		_currentGameScreen.unregisterSwitchedObserver();
+		if(_currentGameScreen != null)
+		{
+			_currentGameScreen.unregisterSwitchedObserver();
+			registrationService = _currentGameScreen.getContainerRegistrationService();
+		}
+		else
+		{
+			registrationService = ServiceLocator.get(ContainerRegistrationService.class);
+		}
 
 		// new gamescreen
 		_currentGameScreen = newGameScreen;
 		_currentGameScreen.registerSwitchedObserver(this);
-		_currentGameScreen.init(new BasicContainerRenderer());
+		_currentGameScreen.init(new BasicContainerRenderer(registrationService));
 
 		Contract.EnsureNotNull(newGameScreen);
 	}

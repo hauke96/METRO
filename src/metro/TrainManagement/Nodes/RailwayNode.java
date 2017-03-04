@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import metro.AppContext.ServiceLocator;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.TrainManagement.Trains.Train;
@@ -116,12 +117,16 @@ public class RailwayNode
 
 	/**
 	 * Draws a railway node and its neighbors. An algorithm takes care of NOT drawing nodes twice.
+	 * 
 	 * @param offset An map offset in pixel.
 	 */
 	public void draw(Point offset)
 	{
 		Point position, positionNext;
-		GameState gameState = GameState.getInstance();
+
+		// TODO BAAAAD, get the int of the baseNetSpacing directly as parameter from the oberseer (or service if already renamed).
+		GameState gameState = ServiceLocator.get(GameState.class);
+
 		position = new Point(offset.x + _position.x * gameState.getBaseNetSpacing(),
 			offset.y + _position.y * gameState.getBaseNetSpacing()); // Position with offset etc.
 

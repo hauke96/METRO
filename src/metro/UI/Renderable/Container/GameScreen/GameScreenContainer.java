@@ -7,8 +7,11 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.METRO;
+import metro.AppContext.ServiceLocator;
+import metro.Common.Game.Settings;
 import metro.Common.Technical.Contract;
 import metro.GameUI.Common.InGameMenuWindow;
+import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderer.ContainerRenderer;
 
 /**
@@ -22,13 +25,17 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 	private ContainerRenderer _containerRenderer;
 	private Rectangle _area;
 	private InputProcessor _gameScreenInputProcessor;
+	private Settings _settings;
+
 	// TODO setter for input processor where a gameScreenContainer can register itself (or a controller)
 
 	/**
-	 * Creates a new GameScreenPanel which is fullscreen and always on top
+	 * Creates a new GameScreenPanel which is full screen and always on top
 	 */
 	public GameScreenContainer()
 	{
+		 // directly use ServiceLocator for convenience (always calling "super(settings);" in sub-classes is unhandy.
+		_settings = ServiceLocator.get(Settings.class);
 		_area = new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height);
 
 		Contract.EnsureNotNull(_area);
@@ -45,11 +52,11 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 
 		_containerRenderer = renderer;
 		
-		Contract.EnsureNotNull(_containerRenderer);
-		
 		initializeUi();
+
+		Contract.EnsureNotNull(_containerRenderer);
 	}
-	
+
 	/**
 	 * This method will create the UI of the game screen. Creating the UI in the constructor won't work (renderer not set there).
 	 */
@@ -58,6 +65,11 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 	public void setInputProcessor(InputProcessor processor)
 	{
 		_gameScreenInputProcessor = processor;
+	}
+	
+	public ContainerRegistrationService getContainerRegistrationService()
+	{
+		return _containerRenderer.getRegistrationService();
 	}
 
 	/**
@@ -84,7 +96,7 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 	{
 		if(keycode == Keys.ESCAPE) // Show in game window if no input control and no other window is focused/open.
 		{
-			InGameMenuWindow.show();
+			InGameMenuWindow.show(_settings);
 		}
 		else
 		{

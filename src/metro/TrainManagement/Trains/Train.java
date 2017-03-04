@@ -5,7 +5,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
-import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Contract;
@@ -79,7 +78,7 @@ public class Train extends TrainTemplate
 	public void setLine(TrainLine line)
 	{
 		Contract.EnsureNotNull(line);
-		
+
 		_trainLine = line;
 
 		_currentNode = calcCurrentNode();
@@ -116,12 +115,13 @@ public class Train extends TrainTemplate
 
 	/**
 	 * Draws the train on its train line.
+	 * 
 	 * @param offset The offset of the map.
+	 * @param baseNetSpacing The current base net spacing.
 	 */
-	public void draw(Point offset)
+	public void draw(Point offset, int baseNetSpacing)
 	{
 		Point2D position = calcPosition();
-		int baseNetSpacing = GameState.getInstance().getBaseNetSpacing();
 
 		if(getTexture() == null)
 		{
@@ -314,7 +314,7 @@ public class Train extends TrainTemplate
 	public Point getCurrentNode(float deltaTime)
 	{
 		Contract.RequireNotNull(_trainLine);
-		
+
 		float relativeOnLine = _relativeOnLine + getMovedDistance(deltaTime);
 		// TODO change 0 to real start node of the train
 		return _trainLine.getNode(_direction > 0 ? relativeOnLine : _trainLine.getLength() - relativeOnLine,

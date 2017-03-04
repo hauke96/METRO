@@ -5,7 +5,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import metro.METRO;
-import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Contract;
@@ -36,12 +35,14 @@ public class Toolbar
 
 	/**
 	 * Creates a new toolbar.
+	 * 
+	 * @param buttonAreaWidth The width of the area, where e.g. the "Create Lines" buttton ist.
 	 */
-	public Toolbar()
+	public Toolbar(int buttonAreaWidth)
 	{
 		_moneyDisplayWidth = 250;
 		_height = 40;
-		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - GameState.getInstance().getToolViewWidth();
+		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - buttonAreaWidth;
 		_buttonYPosition = -5;
 
 		_panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, _height), false);
@@ -172,7 +173,7 @@ public class Toolbar
 
 		return _createNewTrain;
 	}
-	
+
 	/**
 	 * @return The container that holds all controls.
 	 */

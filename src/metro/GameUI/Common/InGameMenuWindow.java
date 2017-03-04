@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import metro.METRO;
+import metro.Common.Game.Settings;
 import metro.Common.Graphics.Draw;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.CloseObservable;
@@ -29,15 +30,17 @@ public class InGameMenuWindow
 	private Button _yesButton,
 		_noButton,
 		_settingsButton;
+	private Settings _settings;
 	
 	/**
 	 * Shows the InGameMenuWindow. There'll be only one instance.
+	 * @param settings The settings object with game settings.
 	 */
-	public static void show()
+	public static void show(Settings settings)
 	{
 		if(__INSTANCE == null)
 		{
-			__INSTANCE = new InGameMenuWindow();
+			__INSTANCE = new InGameMenuWindow(settings);
 		}
 		
 		__INSTANCE._window.setVisibility(true);
@@ -46,8 +49,10 @@ public class InGameMenuWindow
 	/**
 	 * Creates a new exit game window with a settings button.
 	 */
-	private InGameMenuWindow()
+	private InGameMenuWindow(Settings settings)
 	{
+		_settings = settings;
+		
 		_window = new Window("Really quit?",
 			new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 200,
 				METRO.__SCREEN_SIZE.height / 2 - 50,
@@ -88,7 +93,7 @@ public class InGameMenuWindow
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				SettingsWindow.show();
+				SettingsWindow.show(_settings);
 				_window.close();
 			}
 		});

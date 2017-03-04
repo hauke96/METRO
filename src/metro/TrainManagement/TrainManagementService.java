@@ -43,14 +43,22 @@ public class TrainManagementService implements Observer
 	private HashMap<String, TrainTemplate> _templateTrains;
 	private float _lastRenderTime;
 	private TrainLineDrawingService _trainLineDrawingService;
+	private GameState _gameState;
 
-	private final static TrainManagementService __INSTANCE = new TrainManagementService();
-
-	private TrainManagementService()
+	/**
+	 * Creates and initializes the new train management service.
+	 * Note that there should only be one instance at a time.
+	 * @param gameState The current state of the player.
+	 * @param trainLineDrawingService The drawing service for train lines.
+	 */
+	public TrainManagementService(GameState gameState, TrainLineDrawingService trainLineDrawingService)
 	{
+		_gameState = gameState;
+		_trainLineDrawingService = trainLineDrawingService;
+		
 		init();
 	}
-	
+
 	/**
 	 * Resets the whole service. Be careful with this method, it removes everything!
 	 */
@@ -63,8 +71,6 @@ public class TrainManagementService implements Observer
 
 		_templateTrains = new HashMap<>();
 		_lastRenderTime = System.nanoTime();
-
-		_trainLineDrawingService = new TrainLineDrawingService();
 
 		try
 		{
@@ -89,8 +95,6 @@ public class TrainManagementService implements Observer
 		_travelerSpotList.add(new TravelerSpot(new Point(53, 32), 4));
 		_travelerSpotList.add(new TravelerSpot(new Point(55, 37), 4));
 		_travelerSpotList.add(new TravelerSpot(new Point(56, 49), 3));
-		// TODO Auto-generated method stub
-		
 	}
 
 	private void createTrains() throws IOException, IllegalArgumentException
@@ -114,7 +118,7 @@ public class TrainManagementService implements Observer
 			{
 				String[] lineSplit = line.split(":");
 				if(lineSplit.length > 2) throw new IllegalArgumentException("Each property must contain exactly one \":\" symbol!");
-				//TODO simplify this whole method!
+				// TODO simplify this whole method!
 				switch(lineSplit[0])
 				{
 					case "NAME":
@@ -165,12 +169,12 @@ public class TrainManagementService implements Observer
 				{
 					Logger.__debug(
 						"Name: " + name + "\n" +
-						"Manufacturer: " + manufacturer + "\n" +
-						"Price: " + Integer.parseInt(price) + "\n" +
-						"Costs: " + Integer.parseInt(costs) + "\n" +
-						"CostFactor: " + Float.parseFloat(costsfactor) + "\n" +
-						"Passenger: " + Integer.parseInt(passenger) + "\n" +
-						"Speed: " + Float.parseFloat(speed));
+							"Manufacturer: " + manufacturer + "\n" +
+							"Price: " + Integer.parseInt(price) + "\n" +
+							"Costs: " + Integer.parseInt(costs) + "\n" +
+							"CostFactor: " + Float.parseFloat(costsfactor) + "\n" +
+							"Passenger: " + Integer.parseInt(passenger) + "\n" +
+							"Speed: " + Float.parseFloat(speed));
 					addTemplateTrain(new TrainTemplate(name,
 						name,
 						manufacturer,
@@ -189,14 +193,6 @@ public class TrainManagementService implements Observer
 				}
 			}
 		}
-	}
-
-	/**
-	 * @return The instance of the train observer. There can only be one instance per game.
-	 */
-	public static TrainManagementService getInstance()
-	{
-		return __INSTANCE;
 	}
 
 	/**
@@ -413,7 +409,7 @@ public class TrainManagementService implements Observer
 	{
 		try
 		{
-			GameState.getInstance().withdrawMoney(TrainStation.__price);
+			_gameState.withdrawMoney(TrainStation.__price);
 			_stationList.add(trainStation);
 		}
 		catch(NotEnoughMoneyException e)
@@ -448,9 +444,11 @@ public class TrainManagementService implements Observer
 	 */
 	public void drawStations(Point offset)
 	{
+		int baseNetSpacing = _gameState.getBaseNetSpacing();
+		
 		for(TrainStation station : _stationList)
 		{
-			station.draw(offset);
+			station.draw(offset, baseNetSpacing);
 			station.addRandomPassenger(getStrength(station.getPosition()));
 			station.handlePassenger();
 		}
@@ -493,9 +491,10 @@ public class TrainManagementService implements Observer
 
 		lockNodes();
 
+		int baseNetSpacing = _gameState.getBaseNetSpacing();
 		for(Train train : _trainList)
 		{
-			train.draw(offset);
+			train.draw(offset, baseNetSpacing);
 			train.drive(canMove(train, deltaTime), deltaTime);
 		}
 
@@ -544,7 +543,7 @@ public class TrainManagementService implements Observer
 	private boolean canMove(Train train, float deltaTime)
 	{
 		if(train.getLine() == null) return false;
-		
+
 		Point currentNode = train.getCurrentNode();
 		Point currentNodeAfterMove = train.getCurrentNode(deltaTime);
 		Point nextNodeAfterMove = train.getNextNode(deltaTime);
@@ -594,7 +593,7 @@ public class TrainManagementService implements Observer
 				{
 					t.waitFor(3000);
 					stationFound = true;
-					//FIXME all stations will lose passengers when the train stops at one station
+					// FIXME all stations will lose passengers when the train stops at one station
 					TrainStation s = getStation(currNode);
 					s.movePassenger(t.getMaxPassenger() - t.getCurrPassenger(), 3000 * (long)1e6);
 					break;

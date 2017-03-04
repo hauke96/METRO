@@ -25,19 +25,29 @@ import metro.UI.Renderable.Controls.Canvas;
  * @author hauke
  *
  */
+// TODO also resolve by ServiceLocator
+// reset after use
 public class StationPlacingTool extends ToolView
 {
-	private PlayingField _playingField;
-
 	private Canvas _canvas;
 	private Panel _panel;
 
+	private GameState _gameState;
+	private PlayingField _playingField;
+	private TrainManagementService _trainManagementService;
+
 	/**
 	 * Creates a new station placing tool.
+	 * 
+	 * @param gameState The current state of the player.
+	 * @param playingField The current playing field.
+	 * @param trainManagementService The train management service.
 	 */
-	public StationPlacingTool()
+	public StationPlacingTool(GameState gameState, PlayingField playingField, TrainManagementService trainManagementService)
 	{
-		_playingField = PlayingField.getInstance();
+		_gameState = gameState;
+		_playingField = playingField;
+		_trainManagementService = trainManagementService;
 
 		_canvas = new Canvas(new Point(0, 0));
 		_canvas.setPainter(() -> draw());
@@ -64,7 +74,7 @@ public class StationPlacingTool extends ToolView
 	{
 		if(mouseButton == Buttons.RIGHT) return rightClick(screenX, screenY, _playingField.getMapOffset());
 		else if(mouseButton == Buttons.LEFT) return leftClick(screenX, screenY, _playingField.getMapOffset());
-		
+
 		return false;
 	}
 
@@ -73,28 +83,30 @@ public class StationPlacingTool extends ToolView
 	 * 
 	 * @param screenX The y-coordinate of the click.
 	 * @param screenY The y-coordinate of the click.
-	 * @param offset The current map offset.
+	 * @param mapOffset The current map offset.
 	 */
-	private boolean leftClick(int screenX, int screenY, Point2D offset)
+	private boolean leftClick(int screenX, int screenY, Point2D mapOffset)
 	{
 		boolean positionAlreadyHasStation = false;
+		Point offsetAsPoint = new Point((int)mapOffset.getX(), (int)mapOffset.getY());
+		Point selectedNode = _playingField.getSelectedNode();
+		int baseNetSpacing = _gameState.getBaseNetSpacing();
 
 		// TODO maybe get the position from the playing field?
-		Point selectPointOnScreen = new Point(_playingField.getSelectedNode().x * GameState.getInstance().getBaseNetSpacing() + (int)offset.getX(),
-			_playingField.getSelectedNode().y * GameState.getInstance().getBaseNetSpacing() + (int)offset.getY());
+		Point selectPointOnScreen = new Point(selectedNode.x * baseNetSpacing + (int)mapOffset.getX(),
+			selectedNode.y * baseNetSpacing + (int)mapOffset.getY());
 
-		Point offsetPoint = new Point((int)offset.getX(), (int)offset.getY());
-		for(TrainStation ts : TrainManagementService.getInstance().getStations())
+		for(TrainStation ts : _trainManagementService.getStations())
 		{
-			positionAlreadyHasStation |= ts.getPositionOnScreen(offsetPoint).equals(selectPointOnScreen); // true if this cross has already a station
+			positionAlreadyHasStation |= ts.getPositionOnScreen(offsetAsPoint, baseNetSpacing).equals(selectPointOnScreen); // true if this cross has already a station
 		}
 
 		if(!positionAlreadyHasStation) // no doubles
 		{
-			TrainManagementService.getInstance().addStation(new TrainStation(_playingField.getSelectedNode(), 0));
+			_trainManagementService.addStation(new TrainStation(selectedNode, 0));
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -108,7 +120,7 @@ public class StationPlacingTool extends ToolView
 	private boolean rightClick(int screenX, int screenY, Point2D offset)
 	{
 		close();
-		
+
 		return true;
 	}
 

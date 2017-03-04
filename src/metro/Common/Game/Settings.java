@@ -19,7 +19,7 @@ import metro.Common.Technical.Logger;
  * By calling {@link #set(String, Object)}, the settings will automagically saved into the settings.cfg, so no manual call is necessary.
  * 
  * This class differs between {@code _settings} and {@code _newSettings}. The {@code _newSettings} field holds all settings including the
- * changed ones whereas {@code _settings} holds only the old ones. To get the old settings just call {@link #getOld(String)} and to get
+ * changed ones whereas {@code _settings} holds only the old ones. To get the old settings just call {@link #getOiginal(String)} and to get
  * the new ones call {@link #get(String)}.
  * 
  * @author hauke
@@ -27,6 +27,15 @@ import metro.Common.Technical.Logger;
  */
 public class Settings
 {
+	public static final String FULLSCREEN_ON = "fullscreen.on";
+	public static final String SCREEN_WIDTH = "screen.width";
+	public static final String SCREEN_HEIGHT = "screen.height";
+	public static final String USE_OPENGL30 = "use.opengl30";
+	public static final String USE_HDPI = "use.hdpi";
+	public static final String USE_VSYNC = "use.vsync";
+	public static final String AMOUNT_SAMPLES = "amount.samples";
+	public static final String AMOUNT_SEGMENTS = "amount.segments";
+
 	private static final String EOL = "[eol]";
 
 	private Map<String, Object> _settings,
@@ -47,14 +56,14 @@ public class Settings
 	{
 		Contract.RequireNotNull(_newSettings);
 		
-		set("fullscreen.on", false);
-		set("screen.width", 1024);
-		set("screen.height", 768);
-		set("use.opengl30", false);
-		set("use.hdpi", false);
-		set("use.vsync", true);
-		set("amount.samples", 4);
-		set("amount.segments", 32);
+		set(FULLSCREEN_ON, false);
+		set(SCREEN_WIDTH, 1024);
+		set(SCREEN_HEIGHT, 768);
+		set(USE_OPENGL30, false);
+		set(USE_HDPI, false);
+		set(USE_VSYNC, true);
+		set(AMOUNT_SAMPLES, 4);
+		set(AMOUNT_SEGMENTS, 32);
 
 		save();
 	}
@@ -129,13 +138,13 @@ public class Settings
 		File oldFile = new File("./settings.cfg");
 		if(oldFile.exists()) oldFile.delete();
 
-		if(Boolean.parseBoolean(_newSettings.get("fullscreen.on").toString())) // if fullscreen is true, the resolution has to be the full-screen resolution
+		if(Boolean.parseBoolean(_newSettings.get(FULLSCREEN_ON).toString())) // if fullscreen is true, the resolution has to be the full-screen resolution
 		{
 			GraphicsEnvironment gEnviroment = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			GraphicsDevice[] devices = gEnviroment.getScreenDevices();
 
-			_newSettings.put("screen.width", devices[0].getDisplayMode().getWidth());
-			_newSettings.put("screen.height", devices[0].getDisplayMode().getHeight());
+			_newSettings.put(SCREEN_WIDTH, devices[0].getDisplayMode().getWidth());
+			_newSettings.put(SCREEN_HEIGHT, devices[0].getDisplayMode().getHeight());
 		}
 
 		try
@@ -163,7 +172,7 @@ public class Settings
 	 * @param settingsKey The key which value you want to have.
 	 * @return The value of the key. "" when key does not exist.
 	 */
-	public Object getOld(String settingsKey)
+	public Object getOiginal(String settingsKey)
 	{
 		return _settings.containsKey(settingsKey) ? _settings.get(settingsKey) : "";
 	}

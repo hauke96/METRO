@@ -40,14 +40,16 @@ public class TrainViewMain extends ToolView
 	 * 
 	 * @param areaOffset The offset of the screen area.
 	 * @param windowWidth The window width.
+	 * @param trainManagementService The train management service.
 	 */
-	public TrainViewMain(Point areaOffset, int windowWidth)
+	public TrainViewMain(Point areaOffset, int windowWidth, TrainManagementService trainManagementService)
 	{
 		_windowWidth = windowWidth;
 		_areaOffset = areaOffset;
-		_movedTrain = "";
+		_trainManagementService = trainManagementService;
 
-		_trainManagementService = TrainManagementService.getInstance();
+		// TODO WTF a train as String?
+		_movedTrain = "";
 
 		_panel = new Panel(new Rectangle());
 		_panel.setDrawBorder(false);

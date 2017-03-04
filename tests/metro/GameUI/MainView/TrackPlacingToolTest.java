@@ -11,8 +11,10 @@ import java.util.Observer;
 import org.junit.Test;
 
 import metro.METRO;
+import metro.AppContext.ServiceLocator;
 import metro.Common.Game.GameState;
 import metro.Common.Technical.ModifiableBoolean;
+import metro.GameUI.MainView.PlayingField.PlayingField;
 
 public class TrackPlacingToolTest
 {
@@ -20,8 +22,11 @@ public class TrackPlacingToolTest
 
 	public TrackPlacingToolTest()
 	{
-		_tool = new TrackPlacingTool();
-		METRO.__gameState = GameState.getInstance();
+		GameState gameState = ServiceLocator.get(GameState.class);
+		PlayingField playingField = ServiceLocator.get(PlayingField.class);
+		
+		_tool = new TrackPlacingTool(gameState, playingField);
+		METRO.__gameState = gameState;
 	}
 
 	/**

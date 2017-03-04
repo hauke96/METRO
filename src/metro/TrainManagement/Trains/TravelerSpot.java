@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Point;
 
 import metro.METRO;
-import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 
@@ -19,7 +18,6 @@ public class TravelerSpot
 {
 	private Point _position;
 	private int _strength;
-	private GameState _gameState;
 
 	private static int __scale = 2;
 
@@ -33,7 +31,6 @@ public class TravelerSpot
 	{
 		_position = position;
 		_strength = strength > 10 ? 10 : strength;
-		_gameState = GameState.getInstance();
 	}
 
 	/**
@@ -41,41 +38,44 @@ public class TravelerSpot
 	 * 
 	 * @param layerIndex The circle index.
 	 * @param offset The current map offset.
+	 * @param baseNetSpacing The current base net spacing.
 	 * @return Boolean if mouse is in circle.
 	 */
-	public boolean isMouseInCircle(int layerIndex, Point offset)
+	public boolean isMouseInCircle(int layerIndex, Point offset, int baseNetSpacing)
 	{
 		layerIndex = (int)_strength - layerIndex;
 		if(layerIndex < 0) return false;
 
-		Point position = new Point(_position.x * _gameState.getBaseNetSpacing() + offset.x,
-			_position.y * _gameState.getBaseNetSpacing() + offset.y);
+		Point position = new Point(_position.x * baseNetSpacing + offset.x,
+			_position.y * baseNetSpacing + offset.y);
 
 		boolean isInCurrentCircle = Math.pow(METRO.__mousePosition.x - position.x, 2)
-			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(_gameState.getBaseNetSpacing() * __scale * layerIndex, 2); // true: Mouse cursor is in circle
+			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(baseNetSpacing * __scale * layerIndex, 2); // true: Mouse cursor is in circle
 		boolean isInNextCircle = Math.pow(METRO.__mousePosition.x - position.x, 2)
-			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(_gameState.getBaseNetSpacing() * __scale * (layerIndex - 1), 2); // true: Mouse cursor is in circle
+			+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(baseNetSpacing * __scale * (layerIndex - 1), 2); // true: Mouse cursor is in circle
 
 		return isInCurrentCircle && !isInNextCircle;
 	}
 
 	/**
 	 * Draws the circles of the hot-spot.
+	 * 
 	 * @param layerIndex Index of the circle to draw
 	 * @param circleSelected If the circle is selected and therefore drawn in a different color.
 	 * @param onlyEdges If only edges should be drawn
 	 * @param offset The current map offset.
+	 * @param baseNetSpacing The current base net spacing.
 	 */
-	public void draw(int layerIndex, boolean circleSelected, boolean onlyEdges, Point offset)
+	public void draw(int layerIndex, boolean circleSelected, boolean onlyEdges, Point offset, int baseNetSpacing)
 	{
-		int circleRadius = _gameState.getBaseNetSpacing() * __scale;
+		int circleRadius = baseNetSpacing * __scale;
 
 		layerIndex = _strength - layerIndex;
 		if(layerIndex < -1) return;
 
 		// get the position with offset
-		Point position = new Point(_position.x * _gameState.getBaseNetSpacing() + offset.x + 1,
-			_position.y * _gameState.getBaseNetSpacing() + offset.y + 1);
+		Point position = new Point(_position.x * baseNetSpacing + offset.x + 1,
+			_position.y * baseNetSpacing + offset.y + 1);
 
 		if(circleSelected)
 		{

@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
 import metro.METRO;
 import metro.Common.Game.Settings;
+import metro.Common.Technical.Contract;
 
 /**
  * Provides lots of methods to draw lines, rects, circles, ... onto the screen
@@ -23,14 +24,27 @@ import metro.Common.Game.Settings;
  * @author hauke
  *
  */
-
+// TODO Make this to a normal service without all these static methods.
 public class Draw
 {
 	private static ShapeRenderer __shapeRenderer;
 	private static int __xOffset, __yOffset, __lineGap = 8;
 	private static float __r, __g, __b, __a; // current color values
 	private static BitmapFont __stdFont;
+	private static Settings __settings;
 
+	/**
+	 * Sets the settings object to use settings like AMOUNT_SEGMENTS for rendering.
+	 * 
+	 * @param settings The settings object.
+	 */
+	public static void setSettingsService(Settings settings)
+	{
+		Contract.RequireNotNull(settings);
+		
+		__settings=settings;
+	}
+	
 	/**
 	 * Sets the offset for drawing things.
 	 * 
@@ -107,7 +121,7 @@ public class Draw
 		__shapeRenderer.circle(x + diameter / 2 + __xOffset,
 			y + diameter / 2 + __yOffset,
 			diameter / 2,
-			Integer.parseInt(Settings.getInstance().getOld("amount.segments").toString()));
+			Integer.parseInt(__settings.getOiginal(Settings.AMOUNT_SEGMENTS).toString()));
 		reset();
 	}
 

@@ -25,44 +25,37 @@ import metro.UI.Renderable.Controls.Canvas;
  */
 public class PlayingField implements InputProcessor
 {
-	private static PlayingField __INSTANCE;
-	
 	private CityView _cityView;
 	private boolean _dragMode;
 	private Point _oldMousePos, // Mouse position from last frame
 		_mapOffset,
 		_selectedNode;
 	private GameState _gameState;
-	
 	private Panel _panel;
-
-	private PlayingField()
-	{
-		_dragMode = false;
-		_cityView = new CityView(); // create extra instance for general purpose actions
-		_mapOffset = new Point();
-		_selectedNode = new Point(-1, -1);
-		_gameState = GameState.getInstance();
-		
-		_panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height), false);
-		
-		Canvas canvas = new Canvas(new Point(0, 0));
-		canvas.setPainter(() -> updateGameScreen());
-		
-		_panel.add(canvas);
-	}
+	private TrainManagementService _trainManagementService;
 
 	/**
-	 * @return The unique instance of the playing field.
+	 * Gets a fresh playing field.
+	 * 
+	 * @param gameState The current state of the player.
+	 * @param trainManagementService The train management service.
 	 */
-	public static PlayingField getInstance()
+	public PlayingField(GameState gameState, TrainManagementService trainManagementService)
 	{
-		if(__INSTANCE == null)
-		{
-			__INSTANCE = new PlayingField();
-		}
-		
-		return __INSTANCE;
+		_gameState = gameState;
+		_trainManagementService = trainManagementService;
+
+		_dragMode = false;
+		_cityView = new CityView(_trainManagementService); // create extra instance for general purpose actions
+		_mapOffset = new Point();
+		_selectedNode = new Point(-1, -1);
+
+		_panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height), false);
+
+		Canvas canvas = new Canvas(new Point(0, 0));
+		canvas.setPainter(() -> updateGameScreen());
+
+		_panel.add(canvas);
 	}
 
 	/**
@@ -76,7 +69,7 @@ public class PlayingField implements InputProcessor
 		else _cityView.disableCircleHighlighting();
 	}
 
-	public void updateGameScreen()
+	private void updateGameScreen()
 	{
 		if(_dragMode)
 		{
@@ -85,17 +78,16 @@ public class PlayingField implements InputProcessor
 		}
 		_oldMousePos = METRO.__mousePosition;
 
-		_cityView.updateGameScreen(_mapOffset);
+		_cityView.updateGameScreen(_mapOffset, _gameState.getBaseNetSpacing());
 		drawBaseNet(new Color(220, 220, 220), 0);
 		Point cursorDotPosition = drawBaseDot();
 		_cityView.drawNumbers(cursorDotPosition);
 
 		RailwayNodeOverseer.drawAllNodes(_mapOffset);
 
-		TrainManagementService trainManagementService = TrainManagementService.getInstance();
-		trainManagementService.drawLines(_mapOffset);
-		trainManagementService.drawStations(_mapOffset);
-		trainManagementService.drawTrains(_mapOffset);
+		_trainManagementService.drawLines(_mapOffset);
+		_trainManagementService.drawStations(_mapOffset);
+		_trainManagementService.drawTrains(_mapOffset);
 	}
 
 	/**

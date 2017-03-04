@@ -36,16 +36,17 @@ public class SettingsWindow
 	private List _resolutionList,
 		_sampleList,
 		_segmentList;
-	private Settings _settings = Settings.getInstance();
+	private Settings _settings;
 	
 	/**
 	 * Shows the settings window. There'll be only one instance.
+	 * @param settings The settings object with game settings.
 	 */
-	public static void show()
+	public static void show(Settings settings)
 	{
 		if(__INSTANCE == null)
 		{
-			__INSTANCE = new SettingsWindow();
+			__INSTANCE = new SettingsWindow(settings);
 		}
 		
 		__INSTANCE._window.setVisibility(true);
@@ -53,9 +54,12 @@ public class SettingsWindow
 
 	/**
 	 * Creates a settings window.
+	 * @param settings TODO
 	 */
-	private SettingsWindow()
+	private SettingsWindow(Settings settings)
 	{
+		_settings = settings;
+		
 		_window = new Window("METRO settings",
 			new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 50, METRO.__SCREEN_SIZE.height / 2 - 225, 500, 450),
 			METRO.__metroBlue);

@@ -2,6 +2,7 @@ package metro;
 
 import java.awt.Dimension;
 
+import metro.AppContext.ServiceLocator;
 import metro.TrainManagement.TrainManagementService;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.Container.AbstractContainer;
@@ -23,13 +24,8 @@ public class TestInitializer
 	{
 		METRO.__SCREEN_SIZE = new Dimension(1920, 1080);
 
-		TrainManagementService.getInstance().init();
+		ServiceLocator.get(TrainManagementService.class).init();
 
-		BasicContainerRenderer containerRenderer = new BasicContainerRenderer();
-
-		ContainerRegistrationService containerRegistrationService = new ContainerRegistrationService();
-		containerRegistrationService.setRenderer(containerRenderer);
-
-		AbstractContainer.setContainerRegistrationService(containerRegistrationService);
+		BasicContainerRenderer containerRenderer = new BasicContainerRenderer(ServiceLocator.get(ContainerRegistrationService.class));
 	}
 }

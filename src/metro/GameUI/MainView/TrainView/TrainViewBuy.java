@@ -29,7 +29,7 @@ import metro.UI.Renderable.Controls.List;
 public class TrainViewBuy extends ToolView
 {
 	private List _availableTrains; // all available train models
-	private int _windowWidth;
+	private int _toolWidth;
 	private Point _areaOffset;
 	private Button _buyButton;
 	private Label _messageLabel,
@@ -43,14 +43,14 @@ public class TrainViewBuy extends ToolView
 	 * Creates a new dialog.
 	 * 
 	 * @param areaOffset The position of the right edge of the main dialog (to better determine positions).
-	 * @param windowWidth The width of the main dialog.
+	 * @param toolWidth The width of the main dialog.
+	 * @param trainManagementService The train management service.
 	 */
-	public TrainViewBuy(Point areaOffset, int windowWidth)
+	public TrainViewBuy(Point areaOffset, int toolWidth, TrainManagementService trainManagementService)
 	{
-		_windowWidth = windowWidth;
+		_toolWidth = toolWidth;
 		_areaOffset = areaOffset;
-
-		_trainManagementService = TrainManagementService.getInstance();
+		_trainManagementService = trainManagementService;
 
 		_panel = new Panel(new Rectangle());
 		_panel.setDrawBorder(false);
@@ -64,6 +64,7 @@ public class TrainViewBuy extends ToolView
 			@Override
 			public void selectionChanged(String entry)
 			{
+				// Create own control class for train-choosing?
 				TrainTemplate train = _trainManagementService.getTemplateTrain(_availableTrains.getText());
 
 				if(train != null)
@@ -120,9 +121,9 @@ public class TrainViewBuy extends ToolView
 
 		String text = "Available train models:";
 		int length = Draw.getStringSize(text).width;
-		Draw.String(text, METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 420);
-		Draw.Line(METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 435,
-			METRO.__SCREEN_SIZE.width - _windowWidth + 25 + length, _areaOffset.y + 435);
+		Draw.String(text, METRO.__SCREEN_SIZE.width - _toolWidth + 25, _areaOffset.y + 420);
+		Draw.Line(METRO.__SCREEN_SIZE.width - _toolWidth + 25, _areaOffset.y + 435,
+			METRO.__SCREEN_SIZE.width - _toolWidth + 25 + length, _areaOffset.y + 435);
 	}
 
 	/**
@@ -136,7 +137,7 @@ public class TrainViewBuy extends ToolView
 			int diff = _buyButton.getPosition().y - (_informationValues.getPosition().y + _informationValues.getArea().height);
 			int height = diff >= 220 ? 180 : diff - 40;
 			Rectangle position = new Rectangle(
-				METRO.__SCREEN_SIZE.width - _windowWidth + 170 + ((200 - height) / 2),
+				METRO.__SCREEN_SIZE.width - _toolWidth + 170 + ((200 - height) / 2),
 				_areaOffset.y + 460 + _informationKeys.getArea().height,
 				height,
 				height);

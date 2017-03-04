@@ -5,7 +5,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import metro.METRO;
-import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Technical.Contract;
 import metro.GameUI.Common.ToolView;
@@ -29,16 +28,21 @@ public class TrainView extends ToolView
 	private TrainViewMain _trainViewMain;
 	private TrainViewBuy _trainViewBuy;
 	private Panel _panel;
+	private TrainManagementService _trainManagementService;
 
 	/**
 	 * Creates a new TrainLineView.
+	 * @param toolWidth The width of this tool. 
+	 * @param trainManagementService The train management service.
 	 */
-	public TrainView()
+	public TrainView(int toolWidth, TrainManagementService trainManagementService)
 	{
-		_windowWidth = GameState.getInstance().getToolViewWidth();
+		_windowWidth = toolWidth;
+		_trainManagementService = trainManagementService;
+		
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 40);
-		_trainViewMain = new TrainViewMain(getAreaOffset(), _windowWidth);
-		_trainViewBuy = new TrainViewBuy(getAreaOffset(), _windowWidth);
+		_trainViewMain = new TrainViewMain(getAreaOffset(), _windowWidth, _trainManagementService);
+		_trainViewBuy = new TrainViewBuy(getAreaOffset(), _windowWidth, _trainManagementService);
 
 		_panel = new Panel(new Rectangle(_areaOffset.x, _areaOffset.y, _windowWidth, METRO.__SCREEN_SIZE.height));
 		_panel.setDrawBorder(true);
@@ -60,7 +64,6 @@ public class TrainView extends ToolView
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				TrainManagementService trainManagementService = TrainManagementService.getInstance();
 				if(_trainViewMain.getLineList().getSelected() == -1)
 				{
 					_trainViewBuy.getMessageLabel().setText("Please select the line this train should drive on.");
@@ -69,22 +72,22 @@ public class TrainView extends ToolView
 				{
 					_trainViewBuy.getMessageLabel().setText("Please select the train model you want to buy.");
 				}
-				else if(METRO.__gameState.getMoney() < trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getText()).getPrice())
+				else if(METRO.__gameState.getMoney() < _trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getText()).getPrice())
 				{
 					_trainViewBuy.getMessageLabel().setText("You have not enough money.");
 				}
 				else
 				{
 					System.out.println(_trainViewMain.getLineList().getText());
-					Train train = new Train(trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
-					train.setLine(trainManagementService.getLine(_trainViewMain.getLineList().getText()));
-					trainManagementService.addTrain(train);
+					Train train = new Train(_trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
+					train.setLine(_trainManagementService.getLine(_trainViewMain.getLineList().getText()));
+					_trainManagementService.addTrain(train);
 					_trainViewBuy.getMessageLabel().setText("");
 
 					// find next number for train
 					String trainName = train.getName();
 					int minNumber = 0;
-					while(minNumber < 1000 && trainManagementService.getTrainByName(trainName + " (" + minNumber + ")") != null)
+					while(minNumber < 1000 && _trainManagementService.getTrainByName(trainName + " (" + minNumber + ")") != null)
 					{
 						++minNumber;
 					}

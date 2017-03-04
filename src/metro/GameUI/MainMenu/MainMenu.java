@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 import metro.METRO;
+import metro.AppContext.ServiceLocator;
+import metro.Common.Game.Settings;
 import metro.Common.Graphics.Draw;
 import metro.GameUI.Common.SettingsWindow;
 import metro.GameUI.MainView.MainView;
@@ -37,15 +39,20 @@ public class MainMenu extends GameScreenContainer
 		_titleImageTexture;
 	private Panel _panel;
 	private Canvas _titleImageCanvas;
+	private Settings _settings;
 
 	/**
 	 * Creates a main menu with the welcome-window, and the three buttons "Play", "Settings" and "Exit".
+	 * 
+	 * @param settings The settings object with game settings.
 	 */
-	public MainMenu()
+	public MainMenu(Settings settings)
 	{
+		_settings = settings;
+
 		loadVisuals();
 	}
-	
+
 	@Override
 	protected void initializeUi()
 	{
@@ -58,7 +65,7 @@ public class MainMenu extends GameScreenContainer
 
 		_button_exitGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 + 95, 200, 50),
 			new Rectangle(0, 100, 200, 50), __buttonTextures);
-		
+
 		_titleImageCanvas = new Canvas(new Point(
 			METRO.__SCREEN_SIZE.width / 2 - _titleImageTexture.getRegionWidth() / 2,
 			METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 200));
@@ -67,10 +74,10 @@ public class MainMenu extends GameScreenContainer
 			@Override
 			public void paint()
 			{
-				Draw.Image(_titleImageTexture,0,0);
+				Draw.Image(_titleImageTexture, 0, 0);
 			}
 		});
-		
+
 		addActionObservations();
 
 		// Create welcome-window:
@@ -109,9 +116,7 @@ public class MainMenu extends GameScreenContainer
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				//TODO extract settings window from normal game screen and call it here
-//				createSettingsWindow();
-				SettingsWindow.show();
+				SettingsWindow.show(_settings);
 			}
 		});
 		_button_startGame.register(new ActionObserver()
@@ -119,8 +124,7 @@ public class MainMenu extends GameScreenContainer
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				exitGameScreen(new MainView());
-//				 METRO.__changeGameScreen(new MainView());
+				exitGameScreen(ServiceLocator.get(MainView.class));
 			}
 		});
 	}
@@ -132,7 +136,7 @@ public class MainMenu extends GameScreenContainer
 		{
 			_welcomeWindow.close();
 		}
-		
+
 		notifyAllAboutSwitch(newContainer);
 	}
 

@@ -1,5 +1,6 @@
 package metro.UI.Renderer;
 
+import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.Container.FloatingContainer;
 import metro.UI.Renderable.Container.StaticContainer;
 
@@ -69,4 +70,11 @@ public interface ContainerRenderer
 	 * @param keyCode The key that's released.
 	 */
 	public void notifyKeyUp(int keyCode);
+
+	/**
+	 * Gets the used registration service.
+	 * 
+	 * @return The currently used registration service.
+	 */
+	public ContainerRegistrationService getRegistrationService();
 }
