@@ -13,6 +13,9 @@ import metro.Common.Technical.Logger;
  */
 public abstract class ToolView
 {
+	/**
+	 * This event indicates, that this tool view will be closed. Unload everything on this event call.
+	 */
 	public final Event CloseEvent;
 
 	/**
@@ -24,7 +27,7 @@ public abstract class ToolView
 	}
 
 	/**
-	 * When mouse has clicked
+	 * Handles the click event.
 	 * 
 	 * @param screenX The x-position on the screen
 	 * @param screenY The y-position on the screen
@@ -39,8 +42,8 @@ public abstract class ToolView
 	public abstract boolean isHovered();
 
 	/**
-	 * Closes the game screen by removing all controls from the game screen.
-	 * Normally this method is called via METRO.closeGameScreen(GameScreen) to use the correct control manager.
+	 * Closes the tool view by removing all controls from it.
+	 * This also removes all observers to the close event in order to make garbage-collection easier/possible.
 	 */
 	public void close()
 	{

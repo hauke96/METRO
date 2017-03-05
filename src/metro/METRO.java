@@ -69,8 +69,6 @@ import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Logger;
 import metro.GameUI.MainMenu.MainMenu;
-import metro.GameUI.MainView.MainView;
-import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Controls.InputField;
 import metro.UI.Renderer.BasicContainerRenderer;
