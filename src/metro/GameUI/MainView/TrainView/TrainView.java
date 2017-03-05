@@ -32,15 +32,17 @@ public class TrainView extends ToolView
 
 	/**
 	 * Creates a new TrainLineView.
-	 * @param toolWidth The width of this tool. 
+	 * 
+	 * @param toolWidth The width of this tool.
 	 * @param trainManagementService The train management service.
 	 */
 	public TrainView(int toolWidth, TrainManagementService trainManagementService)
 	{
 		_windowWidth = toolWidth;
 		_trainManagementService = trainManagementService;
-		
+
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 40);
+		// TODO only enable buy-button when element in list selected (problem with empty lists)
 		_trainViewMain = new TrainViewMain(getAreaOffset(), _windowWidth, _trainManagementService);
 		_trainViewBuy = new TrainViewBuy(getAreaOffset(), _windowWidth, _trainManagementService);
 
@@ -78,7 +80,6 @@ public class TrainView extends ToolView
 				}
 				else
 				{
-					System.out.println(_trainViewMain.getLineList().getSelectedText());
 					Train train = new Train(_trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getSelectedText()));
 					train.setLine(_trainManagementService.getLine(_trainViewMain.getLineList().getSelectedText()));
 					_trainManagementService.addTrain(train);

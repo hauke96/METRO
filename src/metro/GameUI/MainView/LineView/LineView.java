@@ -569,7 +569,10 @@ public class LineView extends ToolView
 	@Override
 	public void close()
 	{
-		_lineSelectTool.close();
+		if(_lineSelectTool != null)
+		{
+			_lineSelectTool.close();
+		}
 		_panel.close();
 		super.close();
 	}

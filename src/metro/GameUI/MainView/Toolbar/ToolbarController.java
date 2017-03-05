@@ -46,8 +46,8 @@ public class ToolbarController
 			{
 				if(_selectedButton == arg) return;
 
-				selectButton(_view.getBuildStationButton());
 				StationPlacingToolSelected.fireEvent();
+				selectButton(_view.getBuildStationButton());
 			}
 		});
 
@@ -58,8 +58,8 @@ public class ToolbarController
 			{
 				if(_selectedButton == arg) return;
 
-				selectButton(_view.getBuildTracksButton());
 				TrackPlacingToolSelected.fireEvent();
+				selectButton(_view.getBuildTracksButton());
 			}
 		});
 		_view.getShowTrainListButton().register(new ActionObserver()
@@ -69,8 +69,8 @@ public class ToolbarController
 			{
 				if(_selectedButton == arg) return;
 
-				selectButton(_view.getShowTrainListButton());
 				LineViewToolSelected.fireEvent();
+				selectButton(_view.getShowTrainListButton());
 			}
 		});
 		_view.getCreateNewTrainButton().register(new ActionObserver()
@@ -80,8 +80,8 @@ public class ToolbarController
 			{
 				if(_selectedButton == arg) return;
 
-				selectButton(_view.getCreateNewTrainButton());
 				TrainViewToolSelected.fireEvent();
+				selectButton(_view.getCreateNewTrainButton());
 			}
 		});
 	}

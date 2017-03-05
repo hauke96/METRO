@@ -85,13 +85,13 @@ public class Locator
 		{
 			return (T)_initializedServices.get(clazz);
 		}
-		
+
 		// TODO exception if type not registered.
 		ServiceInstanceCreator<?> serviceCreator = _registeredServices.get(clazz);
-		
+
 		T resolvedService = (T)serviceCreator.resolve();
 		_initializedServices.put(clazz, resolvedService);
-		
+
 		return resolvedService;
 	}
 }
