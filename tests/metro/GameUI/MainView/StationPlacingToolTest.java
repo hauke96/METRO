@@ -5,14 +5,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.badlogic.gdx.Input.Buttons;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 
 import metro.TestInitializer;
 import metro.AppContext.Locator;
@@ -61,7 +58,7 @@ public class StationPlacingToolTest
 	{
 		ModifiableBoolean closed = new ModifiableBoolean();
 
-		_tool.addObserver((o, arg) -> closed.set(true));
+		_tool.CloseEvent.add(() -> closed.set(true));
 		_tool.mouseClicked(0, 0, Buttons.RIGHT);
 
 		assertTrue(closed.value());
@@ -73,14 +70,8 @@ public class StationPlacingToolTest
 	@Test
 	public void testObserverByRightClick()
 	{
-		_tool.addObserver(new Observer()
-		{
-			@Override
-			public void update(Observable o, Object arg)
-			{
-				assertEquals(o, _tool);
-				_notified = true;
-			}
+		_tool.CloseEvent.add(() -> {
+			_notified = true;
 		});
 
 		_tool.mouseClicked(0, 0, Buttons.RIGHT);

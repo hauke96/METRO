@@ -1,12 +1,9 @@
 package metro.GameUI.MainView;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Point;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.junit.Test;
 
@@ -24,7 +21,7 @@ public class TrackPlacingToolTest
 	{
 		GameState gameState = Locator.get(GameState.class);
 		PlayingField playingField = Locator.get(PlayingField.class);
-		
+
 		_tool = new TrackPlacingTool(gameState, playingField);
 		METRO.__gameState = gameState;
 	}
@@ -37,14 +34,8 @@ public class TrackPlacingToolTest
 	{
 		ModifiableBoolean notified = new ModifiableBoolean();
 
-		_tool.addObserver(new Observer()
-		{
-			@Override
-			public void update(Observable o, Object arg)
-			{
-				assertEquals(o, _tool);
-				notified.set(true);
-			}
+		_tool.CloseEvent.add(() -> {
+			notified.set(true);
 		});
 
 		_tool.rightClick(100, 100, new Point());
@@ -60,14 +51,8 @@ public class TrackPlacingToolTest
 	{
 		ModifiableBoolean notified = new ModifiableBoolean();
 
-		_tool.addObserver(new Observer()
-		{
-			@Override
-			public void update(Observable o, Object arg)
-			{
-				assertEquals(o, _tool);
-				notified.set(true);
-			}
+		_tool.CloseEvent.add(() -> {
+			notified.set(true);
 		});
 
 		// get node internally:
@@ -89,14 +74,8 @@ public class TrackPlacingToolTest
 	{
 		ModifiableBoolean notified = new ModifiableBoolean();
 
-		_tool.addObserver(new Observer()
-		{
-			@Override
-			public void update(Observable o, Object arg)
-			{
-				assertEquals(o, _tool);
-				notified.set(true);
-			}
+		_tool.CloseEvent.add(() -> {
+			notified.set(true);
 		});
 
 		// get node internally:

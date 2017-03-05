@@ -1,7 +1,6 @@
 package metro.GameUI.Common;
 
 import java.text.MessageFormat;
-import java.util.Observable;
 
 import metro.Common.Technical.Event;
 import metro.Common.Technical.Logger;
@@ -12,7 +11,7 @@ import metro.Common.Technical.Logger;
  * @author Hauke
  * 
  */
-public abstract class ToolView extends Observable
+public abstract class ToolView
 {
 	public final Event CloseEvent;
 

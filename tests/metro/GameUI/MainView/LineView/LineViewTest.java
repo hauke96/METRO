@@ -12,8 +12,6 @@ import org.junit.Test;
 import metro.METRO;
 import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
-import metro.GameUI.MainView.LineView.LineSelectTool;
-import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.TrainManagement.TrainManagementService;
 import metro.UI.ContainerRegistrationService;
@@ -76,15 +74,13 @@ public class LineViewTest
 	public void testCreateLineSelectTool()
 	{
 		LineSelectTool tool = view.getLineSelectTool();
-		assertTrue(tool != null);
-		assertTrue(tool.countObservers() > 0);
-		assertFalse(view.isLineSelectToolEnabled());
+		assertTrue(tool == null);
 
 		view.createLineSelectTool();
-
 		tool = view.getLineSelectTool();
+
 		assertTrue(tool != null);
-		assertTrue(tool.countObservers() > 0);
+		assertTrue(tool.CloseEvent.countObservers() > 0);
 		assertTrue(view.isLineSelectToolEnabled());
 	}
 }

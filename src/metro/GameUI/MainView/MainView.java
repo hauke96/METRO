@@ -1,8 +1,6 @@
 package metro.GameUI.MainView;
 
 import java.awt.Color;
-import java.util.Observable;
-import java.util.Observer;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,7 +28,7 @@ import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
  * @author Hauke
  */
 // TODO break this class into MVC-structure
-public class MainView extends GameScreenContainer implements Observer, InputProcessor
+public class MainView extends GameScreenContainer implements InputProcessor
 {
 	private ToolView _activeTool;
 	private ToolbarController _toolbar;
@@ -168,14 +166,6 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 		return false;
 	}
 
-	@Override
-	public void update(Observable arg0, Object arg1)
-	{
-		_activeTool = null;
-		_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
-		_toolbar.selectButton(null);
-	}
-
 	/**
 	 * Sets the active tool and adds an observer to this.
 	 * 
@@ -192,7 +182,11 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 
 		// set new tool and add new observer
 		_activeTool = newTool;
-		_activeTool.addObserver(this);
+		_activeTool.CloseEvent.add(() -> {
+			_activeTool = null;
+			_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
+			_toolbar.selectButton(null);
+		});
 
 		if(_activeTool instanceof LineView || _activeTool instanceof TrainView) // tools that have own window and influence the notification area
 		{
