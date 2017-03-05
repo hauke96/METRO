@@ -41,7 +41,8 @@ public class LineView extends ToolView
 	private Button _createLineButton, // to create a new train line
 		_editLineButton, // to change railway nodes of train line
 		_removeLineButton, // to remove a train line
-		_saveButton; // to save settings/changes
+		_saveButton, // to save settings/changes
+		_aboardButton;
 	private ColorBar _colorBar;
 	private Label _lineNameFieldLabel,
 		_messageLabel;
@@ -106,8 +107,11 @@ public class LineView extends ToolView
 		_colorBar = new ColorBar(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 520, _toolWidth - 70, 20), 0.9f, 0.8f);
 		_colorBar.setState(false);
 
-		_saveButton = new Button(new Rectangle(_areaOffset.x + (_toolWidth / 2) - 75, METRO.__SCREEN_SIZE.height - _areaOffset.y - 60, 150, 20), "Save");
+		_saveButton = new Button(new Rectangle(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 60, (_toolWidth - 60) / 2, 20), "Save");
 		_saveButton.setState(false);
+
+		_aboardButton = new Button(new Rectangle(_areaOffset.x + (_toolWidth - 60) / 2 + 40, METRO.__SCREEN_SIZE.height - _areaOffset.y - 60, (_toolWidth - 60) / 2, 20), "Aboard");
+		_aboardButton.setState(false);
 
 		_messageLabel = new Label("", new Point(_areaOffset.x + 20, METRO.__SCREEN_SIZE.height - _areaOffset.y - 100));
 		_messageLabel.setColor(METRO.__metroRed);
@@ -120,6 +124,7 @@ public class LineView extends ToolView
 		_panel.add(_lineNameFieldLabel);
 		_panel.add(_colorBar);
 		_panel.add(_saveButton);
+		_panel.add(_aboardButton);
 		_panel.add(_messageLabel);
 		_panel.add(canvas);
 	}
@@ -133,6 +138,7 @@ public class LineView extends ToolView
 		addEditButtonObserver();
 		addRemoveLineButtonObserver();
 		addSaveButtonObserver();
+		addAboardButtonObserver();
 		addColorBarObserver();
 		addMessageLabelObserver();
 		addLineNameFieldObserver();
@@ -220,6 +226,7 @@ public class LineView extends ToolView
 				_editLineButton.setState(true);
 				_removeLineButton.setState(true);
 				_saveButton.setState(true);
+				_aboardButton.setState(true);
 
 				createLineSelectTool();
 				_lineSelectTool.setLine(line);
@@ -342,6 +349,18 @@ public class LineView extends ToolView
 		});
 	}
 
+	private void addAboardButtonObserver()
+	{
+		_aboardButton.register(new ActionObserver()
+		{
+			@Override
+			public void clickedOnControl(Object arg)
+			{
+				_lineSelectTool.close();
+			}
+		});
+	}
+
 	/**
 	 * Creates the observer for the color bar.
 	 * The observer will manage the click and update operations.
@@ -427,7 +446,7 @@ public class LineView extends ToolView
 	{
 		_lineSelectTool = new LineSelectTool(_playingField, _trainManagementService); // create clean select tool
 		_lineSelectToolEnabled = true;
-		
+
 		addLineSelectToolCloseObserver();
 	}
 
@@ -537,6 +556,7 @@ public class LineView extends ToolView
 		_lineNameFieldLabel.setState(_lineSelectToolEnabled);
 		_colorBar.setState(_lineSelectToolEnabled);
 		_saveButton.setState(_lineSelectToolEnabled);
+		_aboardButton.setState(_lineSelectToolEnabled);
 
 		_colorBar.clear();
 
