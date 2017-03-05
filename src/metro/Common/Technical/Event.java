@@ -57,4 +57,20 @@ public class Event
 			eventHandler.handleEvent();
 		}
 	}
+
+	/**
+	 * Removes all registered listeners from this event.
+	 */
+	public void clean()
+	{
+		_handlerList.clear();
+	}
+
+	/**
+	 * @return The amount of registered observers. Note that duplicates are allowed.
+	 */
+	public int countObservers()
+	{
+		return _handlerList.size();
+	}
 }

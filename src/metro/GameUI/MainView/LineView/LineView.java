@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
 import metro.METRO;
 import metro.Common.Graphics.Draw;
@@ -36,7 +34,7 @@ import metro.UI.Renderable.Controls.List;
  * @author hauke
  *
  */
-public class LineView extends ToolView implements Observer
+public class LineView extends ToolView
 {
 	private Panel _panel;
 	private List _lineList;
@@ -74,8 +72,6 @@ public class LineView extends ToolView implements Observer
 		_trainManagementService = trainManagementService;
 
 		_lineSelectToolEnabled = false;
-		_lineSelectTool = new LineSelectTool(_playingField, _trainManagementService);
-		_lineSelectTool.addObserver(this); // close observer
 
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _toolWidth, 40);
 
@@ -139,15 +135,7 @@ public class LineView extends ToolView implements Observer
 		addSaveButtonObserver();
 		addColorBarObserver();
 		addMessageLabelObserver();
-
-		_lineNameField.register(new ActionObserver()
-		{
-			@Override
-			public void gotInput(String text)
-			{
-				_lineSelectTool.setName(text);
-			}
-		});
+		addLineNameFieldObserver();
 	}
 
 	/**
@@ -400,14 +388,47 @@ public class LineView extends ToolView implements Observer
 		});
 	}
 
+	private void addLineNameFieldObserver()
+	{
+		_lineNameField.register(new ActionObserver()
+		{
+			@Override
+			public void gotInput(String text)
+			{
+				_lineSelectTool.setName(text);
+			}
+		});
+	}
+
+	private void addLineSelectToolCloseObserver()
+	{
+		_lineSelectTool.CloseEvent.add(() -> {
+			if(!_lineSelectToolEnabled) return;
+
+			_lineSelectToolEnabled = false;
+
+			TrainLine line = _lineSelectTool.getTrainLine();
+			_trainManagementService.removeLine(line);
+
+			if(_lineToEdit != null) // when creating a new line, _oldLine is null
+			{
+				_trainManagementService.addLine(_lineToEdit);
+				_lineList.setText(_lineToEdit.getName());
+			}
+			_lineList.setState(true);
+			reset();
+		});
+	}
+
 	/**
 	 * Creates a clean {@link metro.GameUI.MainView#LineSelectTool}, adds this as observer and sets the {@code _lineSelectToolEnabled} flag.
 	 */
 	void createLineSelectTool()
 	{
 		_lineSelectTool = new LineSelectTool(_playingField, _trainManagementService); // create clean select tool
-		_lineSelectTool.addObserver(this);
 		_lineSelectToolEnabled = true;
+		
+		addLineSelectToolCloseObserver();
 	}
 
 	private void draw()
@@ -477,7 +498,7 @@ public class LineView extends ToolView implements Observer
 
 		// something will probably change so get current (=old) line to replace it later
 		TrainLine oldLine = _lineSelectTool.getTrainLine();
-		
+
 		clickProcessed = _lineSelectTool.mouseClicked(screenX, screenY, mouseButton); // add/remove node to list
 
 		// if we edit an existing line, reload it from the select tool
@@ -537,28 +558,6 @@ public class LineView extends ToolView implements Observer
 	public boolean isHovered()
 	{
 		return METRO.__mousePosition.x > _areaOffset.x; // don't need to check y-coord. because the whole screen height is used.
-	}
-
-	@Override
-	public void update(Observable o, Object arg)
-	{
-		if(o instanceof LineSelectTool)
-		{
-			if(!_lineSelectToolEnabled) return;
-
-			_lineSelectToolEnabled = false;
-
-			TrainLine line = _lineSelectTool.getTrainLine();
-			_trainManagementService.removeLine(line);
-
-			if(_lineToEdit != null) // when creating a new line, _oldLine is null
-			{
-				_trainManagementService.addLine(_lineToEdit);
-				_lineList.setText(_lineToEdit.getName());
-			}
-			_lineList.setState(true);
-			reset();
-		}
 	}
 
 	/**

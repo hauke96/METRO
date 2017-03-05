@@ -3,6 +3,7 @@ package metro.GameUI.Common;
 import java.text.MessageFormat;
 import java.util.Observable;
 
+import metro.Common.Technical.Event;
 import metro.Common.Technical.Logger;
 
 /**
@@ -11,9 +12,18 @@ import metro.Common.Technical.Logger;
  * @author Hauke
  * 
  */
-// TODO use Event for closing
 public abstract class ToolView extends Observable
 {
+	public final Event CloseEvent;
+
+	/**
+	 * Creates an empty tool view with usable close-event.
+	 */
+	public ToolView()
+	{
+		CloseEvent = new Event();
+	}
+
 	/**
 	 * When mouse has clicked
 	 * 
@@ -36,13 +46,10 @@ public abstract class ToolView extends Observable
 	public void close()
 	{
 		Logger.__debug("Closed tool view " + this);
-		Logger.__debug(MessageFormat.format("Unregister {0} observer.", countObservers()));
+		Logger.__debug(MessageFormat.format("Unregister {0} observer.", CloseEvent.countObservers()));
 
-		// notify about close
-		setChanged();
-		notifyObservers();
-
-		deleteObservers();
+		CloseEvent.fireEvent();
+		CloseEvent.clean();
 	}
 
 	@Override
