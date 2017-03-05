@@ -16,12 +16,11 @@ import metro.GameUI.Common.ToolView;
 import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
+import metro.GameUI.MainView.Toolbar.ToolbarController;
 import metro.GameUI.MainView.TrainView.TrainView;
 import metro.TrainManagement.TrainManagementService;
-import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
-import metro.UI.Renderable.Controls.Button;
 
 /**
  * The main view is the normal screen the player sees.
@@ -34,7 +33,7 @@ import metro.UI.Renderable.Controls.Button;
 public class MainView extends GameScreenContainer implements Observer, InputProcessor
 {
 	private ToolView _activeTool;
-	private Toolbar _toolbar;
+	private ToolbarController _toolbar;
 	private NotificationArea _notificationArea;
 	private PlayingField _playingField;
 	private GameState _gameState;
@@ -44,7 +43,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	 * Creates a new main view with no active sub tools.
 	 * 
 	 * @param gameState The current state of the player.
-	 * @param trainManagementService The train management service 
+	 * @param trainManagementService The train management service
 	 * @param playingField The field, the player should play on.
 	 */
 	public MainView(GameState gameState, TrainManagementService trainManagementService, PlayingField playingField)
@@ -52,89 +51,62 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 		_gameState = gameState;
 		_trainManagementService = trainManagementService;
 		_playingField = playingField;
-		
+
 		_activeTool = null;
-		
+
 		setInputProcessor(this);
 	}
 
 	@Override
 	protected void initializeUi()
 	{
+		// Be sure the playground is visible after switching the game screen (and bypass the including renderer change):
 		_playingField.getBackgroundPanel().registerContainer();
-		
-		_toolbar = new Toolbar(_gameState.getToolViewWidth());
 
-		_toolbar.getBuildStationButton().register(new ActionObserver()
-		{
-			@Override
-			public void clickedOnControl(Object arg)
-			{
-				Contract.Require(arg instanceof Button);
+		_toolbar = new ToolbarController(_gameState.getToolViewWidth());
 
-				StationPlacingTool stationPlacingTool = new StationPlacingTool(_gameState, _playingField, _trainManagementService);
+		_toolbar.StationPlacingToolSelected.add(() -> {
+			StationPlacingTool stationPlacingTool = new StationPlacingTool(_gameState, _playingField, _trainManagementService);
 
-				_toolbar.getBackgroundPanel().setAboveOf(stationPlacingTool.getBackgroundPanel());
-				_notificationArea.getBackgroundPanel().setAboveOf(stationPlacingTool.getBackgroundPanel());
+			_toolbar.setAboveOf(stationPlacingTool.getBackgroundPanel());
+			_notificationArea.getBackgroundPanel().setAboveOf(stationPlacingTool.getBackgroundPanel());
 
-				setActiveTool(stationPlacingTool);
-				_toolbar.resetExclusiveButtonPositions((Button)arg);
-			}
+			setActiveTool(stationPlacingTool);
 		});
-		_toolbar.getBuildTracksButton().register(new ActionObserver()
-		{
-			@Override
-			public void clickedOnControl(Object arg)
-			{
-				Contract.Require(arg instanceof Button);
 
-				TrackPlacingTool trackPlacingTool = new TrackPlacingTool(_gameState, _playingField);
+		_toolbar.TrackPlacingToolSelected.add(() -> {
+			TrackPlacingTool trackPlacingTool = new TrackPlacingTool(_gameState, _playingField);
 
-				_toolbar.getBackgroundPanel().setAboveOf(trackPlacingTool.getBackgroundPanel());
-				_notificationArea.getBackgroundPanel().setAboveOf(trackPlacingTool.getBackgroundPanel());
+			_toolbar.setAboveOf(trackPlacingTool.getBackgroundPanel());
+			_notificationArea.getBackgroundPanel().setAboveOf(trackPlacingTool.getBackgroundPanel());
 
-				setActiveTool(trackPlacingTool);
-				_toolbar.resetExclusiveButtonPositions((Button)arg);
-			}
+			setActiveTool(trackPlacingTool);
 		});
-		_toolbar.getShowTrainListButton().register(new ActionObserver()
-		{
-			@Override
-			public void clickedOnControl(Object arg)
-			{
-				Contract.Require(arg instanceof Button);
 
-				LineView lineView = new LineView(_gameState.getToolViewWidth(), _playingField, _trainManagementService);
+		_toolbar.LineViewToolSelected.add(() -> {
+			LineView lineView = new LineView(_gameState.getToolViewWidth(), _playingField, _trainManagementService);
 
-				AbstractContainer lineViewPanel = lineView.getBackgroundPanel();
-				_toolbar.getBackgroundPanel().setAboveOf(lineViewPanel);
+			_toolbar.setAboveOf(lineView.getBackgroundPanel());
 
-				setActiveTool(lineView);
-				_toolbar.resetExclusiveButtonPositions((Button)arg);
-			}
+			setActiveTool(lineView);
 		});
-		_toolbar.getCreateNewTrainButton().register(new ActionObserver()
-		{
-			@Override
-			public void clickedOnControl(Object arg)
-			{
-				Contract.Require(arg instanceof Button);
 
-				TrainView trainView = new TrainView(_gameState.getToolViewWidth(), _trainManagementService);
+		_toolbar.TrainViewToolSelected.add(() -> {
+			TrainView trainView = new TrainView(_gameState.getToolViewWidth(), _trainManagementService);
 
-				AbstractContainer trainViewPanel = trainView.getBackgroundPanel();
-				_toolbar.getBackgroundPanel().setAboveOf(trainViewPanel);
+			AbstractContainer trainViewPanel = trainView.getBackgroundPanel();
+			_toolbar.setAboveOf(trainViewPanel);
 
-				setActiveTool(trainView);
-				_toolbar.resetExclusiveButtonPositions((Button)arg);
-			}
+			setActiveTool(trainView);
 		});
 
 		_notificationArea = Locator.get(NotificationArea.class);
 
 		AbstractContainer playingFieldBackground = _playingField.getBackgroundPanel();
 		playingFieldBackground.setState(false);
-		_toolbar.getBackgroundPanel().setAboveOf(playingFieldBackground);
+
+		// TODO do it right
+		// _toolbar.getBackgroundPanel().setAboveOf(playingFieldBackground);
 	}
 
 	@Override
@@ -208,7 +180,7 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	{
 		_activeTool = null;
 		_notificationArea.setWidth(METRO.__SCREEN_SIZE.width);
-		_toolbar.resetExclusiveButtonPositions(null);
+		_toolbar.selectButton(null);
 	}
 
 	/**
