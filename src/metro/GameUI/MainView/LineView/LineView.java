@@ -53,7 +53,7 @@ public class LineView extends ToolView implements Observer
 	private boolean _lineSelectToolEnabled, // if enabled, the user can select nodes
 		_editMode; // true when user edits a line
 	private Point _areaOffset; // to get the (0,0)-coordinate very easy
-	private TrainLine _oldLine; // when the user edits a line name, the old name of it has to be saved to correctly update the line list
+	private TrainLine _lineToEdit; // when the user edits a line name, the old name of it has to be saved to correctly update the line list
 
 	private TrainManagementService _trainManagementService;
 
@@ -139,6 +139,15 @@ public class LineView extends ToolView implements Observer
 		addSaveButtonObserver();
 		addColorBarObserver();
 		addMessageLabelObserver();
+
+		_lineNameField.register(new ActionObserver()
+		{
+			@Override
+			public void gotInput(String text)
+			{
+				_lineSelectTool.setName(text);
+			}
+		});
 	}
 
 	/**
@@ -166,7 +175,7 @@ public class LineView extends ToolView implements Observer
 			{
 				if(_lineSelectToolEnabled) return;
 				createLineSelectTool();
-				if(_colorBar.getClickedColor() != null) _lineSelectTool.setColor(_colorBar.getClickedColor());
+				if(_colorBar.getSelectedColor() != null) _lineSelectTool.setColor(_colorBar.getSelectedColor());
 				reset();
 			}
 		});
@@ -193,7 +202,7 @@ public class LineView extends ToolView implements Observer
 
 				try
 				{
-					_oldLine = (TrainLine)line.clone();
+					_lineToEdit = (TrainLine)line.clone();
 				}
 				catch(CloneNotSupportedException e)
 				{
@@ -203,7 +212,7 @@ public class LineView extends ToolView implements Observer
 				}
 
 				Logger.__debug("Color: " + color + "\n"
-					+ "Old line: " + _oldLine + "\n"
+					+ "Old line: " + _lineToEdit + "\n"
 					+ "New Line: " + line);
 
 				if(color == null || line == null)
@@ -295,12 +304,12 @@ public class LineView extends ToolView implements Observer
 
 					Logger.__debug("Amount of lines (pre)  : " + _trainManagementService.getLines().size());
 
-					if(_oldLine != null)
+					if(_lineToEdit != null)
 					{
-						_trainManagementService.removeLine(_oldLine);
-						_lineList.removeElement(_lineList.getIndex(_oldLine.getName()));
+						_trainManagementService.removeLine(_lineToEdit);
+						_lineList.removeElement(_lineList.getIndex(_lineToEdit.getName()));
 
-						java.util.List<Train> oldTrains = getTrainsOfLine(_oldLine);
+						java.util.List<Train> oldTrains = getTrainsOfLine(_lineToEdit);
 
 						// transfer trains to new line
 						for(Train train : oldTrains)
@@ -357,18 +366,21 @@ public class LineView extends ToolView implements Observer
 			public void clickedOnControl(Object arg)
 			{
 				_messageLabel.setText("");
+				TrainLine oldLine = _lineSelectTool.getTrainLine();
 
-				Color clickedColor = _colorBar.getClickedColor();
-				String msg = _lineSelectTool.setColor(clickedColor);
+				Color clickedColor = _colorBar.getSelectedColor();
+				String errorMessage = _lineSelectTool.setColor(clickedColor);
 
-				if(!msg.equals("")) // some error occurred
+				if(errorMessage != null) // some error occurred
 				{
-					_messageLabel.setText(msg);
+					_messageLabel.setText(errorMessage);
 				}
 				else if(_editMode)
 				{
 					_trainManagementService.getLine(_lineList.getText()).setColor(clickedColor);
 				}
+
+				updateLine(oldLine, _lineSelectTool.getTrainLine());
 			}
 		});
 	}
@@ -449,9 +461,9 @@ public class LineView extends ToolView implements Observer
 	 */
 	private void drawColorBar()
 	{
-		if(_colorBar.getClickedColor() != null)
+		if(_colorBar.getSelectedColor() != null)
 		{
-			Fill.setColor(_colorBar.getClickedColor());
+			Fill.setColor(_colorBar.getSelectedColor());
 			Fill.Rect(new Rectangle(_areaOffset.x + _toolWidth - 40, _areaOffset.y + 520, 20, 20));
 		}
 		Draw.setColor(Color.darkGray);
@@ -463,39 +475,35 @@ public class LineView extends ToolView implements Observer
 	{
 		boolean clickProcessed = false;
 
-		// if select tool exists and mouse is in the area of the select tool, forward click to tool
-		if(_lineSelectTool != null && _lineSelectToolEnabled && screenX <= METRO.__SCREEN_SIZE.width - _toolWidth)
+		// something will probably change so get current (=old) line to replace it later
+		TrainLine oldLine = _lineSelectTool.getTrainLine();
+		
+		clickProcessed = _lineSelectTool.mouseClicked(screenX, screenY, mouseButton); // add/remove node to list
+
+		// if we edit an existing line, reload it from the select tool
+		if(_lineToEdit != null)
 		{
-			// something will probably change so remove the old line (new one will be added later)
-			_trainManagementService.removeLine(_lineSelectTool.getTrainLine());
-			clickProcessed = _lineSelectTool.mouseClicked(screenX, screenY, mouseButton); // add/remove node to list
-			_oldLine = _lineSelectTool.getTrainLine();
+			_lineToEdit = _lineSelectTool.getTrainLine();
 		}
 
-		// when the mouse is out of TrainLineView, get the new line from the select tool and add it to the overseer
-		if(screenX <= METRO.__SCREEN_SIZE.width - _toolWidth && _lineSelectToolEnabled)
+		// when the mouse is out of TrainLineView, get the new line from the select tool and replace it with the new one
+		if(!isHovered() && _lineSelectToolEnabled)
 		{
 			Logger.__debug("Add line to observer");
-			TrainLine line = _lineSelectTool.getTrainLine();
-			_trainManagementService.addLine(line); // this will only change something when line is valid
+			updateLine(oldLine, _lineSelectTool.getTrainLine());
 			clickProcessed = true;
 		}
 
 		return clickProcessed;
 	}
 
-	public void keyDown(int keyCode)
+	private void updateLine(TrainLine oldLine, TrainLine newLine)
 	{
-		_lineSelectTool.setName(_lineNameField.getText());
+		_trainManagementService.removeLine(oldLine);
+		_trainManagementService.addLine(newLine);
 	}
 
-	public void mouseScrolled(int amount)
-	{
-		String msg = _lineSelectTool.setColor(_colorBar.getClickedColor());
-		if(!msg.equals("")) _messageLabel.setText(msg);
-	}
-
-	public void reset()
+	private void reset()
 	{
 		// switch controls OFF when select tool is enabled
 		_editLineButton.setState(!_lineSelectToolEnabled);
@@ -514,7 +522,7 @@ public class LineView extends ToolView implements Observer
 		_messageLabel.setText("");
 		_lineNameField.setText("");
 
-		_oldLine = null;
+		_lineToEdit = null;
 	}
 
 	@Override
@@ -540,13 +548,13 @@ public class LineView extends ToolView implements Observer
 
 			_lineSelectToolEnabled = false;
 
-			TrainLine line = ((LineSelectTool)o).getTrainLine();
+			TrainLine line = _lineSelectTool.getTrainLine();
 			_trainManagementService.removeLine(line);
 
-			if(_oldLine != null) // when creating a new line, _oldLine is null
+			if(_lineToEdit != null) // when creating a new line, _oldLine is null
 			{
-				_trainManagementService.addLine(_oldLine);
-				_lineList.setText(_oldLine.getName());
+				_trainManagementService.addLine(_lineToEdit);
+				_lineList.setText(_lineToEdit.getName());
 			}
 			_lineList.setState(true);
 			reset();

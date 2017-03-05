@@ -1,5 +1,6 @@
 package metro.GameUI.Common;
 
+import java.text.MessageFormat;
 import java.util.Observable;
 
 import metro.Common.Technical.Logger;
@@ -10,7 +11,7 @@ import metro.Common.Technical.Logger;
  * @author Hauke
  * 
  */
-
+// TODO use Event for closing
 public abstract class ToolView extends Observable
 {
 	/**
@@ -34,8 +35,8 @@ public abstract class ToolView extends Observable
 	 */
 	public void close()
 	{
-		Logger.__debug("Closed game screen " + this);
-		Logger.__debug("Amount observer: " + countObservers());
+		Logger.__debug("Closed tool view " + this);
+		Logger.__debug(MessageFormat.format("Unregister {0} observer.", countObservers()));
 
 		// notify about close
 		setChanged();

@@ -70,7 +70,7 @@ public class LineSelectTool extends ToolView
 	 * Sets the color for this in-progress-line.
 	 * 
 	 * @param newColor The new color.
-	 * @return A message if something went wrong.
+	 * @return A message if something went wrong. Returns {@code null} when nothing went wrong.
 	 */
 	public String setColor(Color newColor)
 	{
@@ -82,7 +82,7 @@ public class LineSelectTool extends ToolView
 		}
 
 		_color = newColor;
-		return "";
+		return null;
 	}
 
 	/**
@@ -116,9 +116,7 @@ public class LineSelectTool extends ToolView
 		}
 		else if(mouseButton == Buttons.RIGHT)
 		{
-			// TODO why do we simply notify our observers?
-			setChanged();
-			notifyObservers();
+			close();
 			return true;
 		}
 

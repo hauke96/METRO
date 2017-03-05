@@ -157,7 +157,6 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	@Override
 	public boolean scrolled(int amount)
 	{
-		if(_activeTool instanceof LineView) ((LineView)_activeTool).mouseScrolled(amount);
 		_playingField.scrolled(amount);
 
 		return true;
@@ -166,12 +165,6 @@ public class MainView extends GameScreenContainer implements Observer, InputProc
 	@Override
 	public boolean keyDown(int keyCode)
 	{
-		if(_activeTool instanceof LineView)
-		{
-			// TODO change this into an "onInputChangedListener" or something like that
-			((LineView)_activeTool).keyDown(keyCode);
-			return true;
-		}
 		return false;
 	}
 

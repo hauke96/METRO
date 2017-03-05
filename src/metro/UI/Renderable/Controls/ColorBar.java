@@ -54,7 +54,7 @@ public class ColorBar extends ControlElement
 	 * 
 	 * @return The color which has been clicked.
 	 */
-	public Color getClickedColor()
+	public Color getSelectedColor()
 	{
 		return _clickedColor;
 	}
@@ -208,6 +208,7 @@ public class ColorBar extends ControlElement
 			_clickedXPosition += _area.width;
 			_clickedXPosition %= _area.width;
 			_clickedColor = Color.getHSBColor((float)_clickedXPosition / (float)_area.width, _saturation, _brightness);
+			
 			notifyClickOnControl(this);
 		}
 	}
