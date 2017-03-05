@@ -168,7 +168,7 @@ public class List extends ControlElement
 	 * 
 	 * @return The text of the selecting entry. {@code ""} when selection is invalid.
 	 */
-	public String getText()
+	public String getSelectedText()
 	{
 		return getText(_selectedEntry);
 	}
@@ -196,7 +196,7 @@ public class List extends ControlElement
 	 * 
 	 * @return Index of selected entry. Returns -1 if nothing is selected.
 	 */
-	public int getSelected()
+	public int getSelectedIndex()
 	{
 		return _selectedEntry;
 	}

@@ -181,11 +181,11 @@ public class LineView extends ToolView
 			public void clickedOnControl(Object arg)
 			{
 				Logger.__debug(""
-					+ "Clicked line (index): " + _lineList.getSelected() + "\n"
-					+ "Clicked line  (name): " + _lineList.getText());
-				if(_lineList.getSelected() == -1) return;
+					+ "Clicked line (index): " + _lineList.getSelectedIndex() + "\n"
+					+ "Clicked line  (name): " + _lineList.getSelectedText());
+				if(_lineList.getSelectedIndex() == -1) return;
 
-				TrainLine line = _trainManagementService.getLine(_lineList.getText());
+				TrainLine line = _trainManagementService.getLine(_lineList.getSelectedText());
 				Color color = line.getColor();
 
 				try
@@ -240,12 +240,12 @@ public class LineView extends ToolView
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				if(_lineList.getSelected() < 0 || _lineList.getSelected() >= _trainManagementService.getLines().size()) return; // out of bounds
+				if(_lineList.getSelectedIndex() < 0 || _lineList.getSelectedIndex() >= _trainManagementService.getLines().size()) return; // out of bounds
 
-				_trainManagementService.sellTrainsFromLine(_lineList.getText());
+				_trainManagementService.sellTrainsFromLine(_lineList.getSelectedText());
 
-				_trainManagementService.removeLine(_lineList.getText());
-				_lineList.removeElement(_lineList.getSelected());
+				_trainManagementService.removeLine(_lineList.getSelectedText());
+				_lineList.removeElement(_lineList.getSelectedIndex());
 				_lineSelectToolEnabled = false;
 				reset();
 			}
@@ -278,11 +278,11 @@ public class LineView extends ToolView
 				if(!_lineSelectToolEnabled) return;
 
 				// if something went wrong:
-				if(_lineList.contains(_lineNameField.getText()) && !_editMode) // when edit mode, then don't change the list
+				if(_lineList.contains(_lineNameField.getSelectedText()) && !_editMode) // when edit mode, then don't change the list
 				{
-					_messageLabel.setText("The line \"" + _lineNameField.getText() + "\" already exists.");
+					_messageLabel.setText("The line \"" + _lineNameField.getSelectedText() + "\" already exists.");
 				}
-				else if(_lineNameField.getText().equals(""))
+				else if(_lineNameField.getSelectedText().equals(""))
 				{
 					_messageLabel.setText("Please enter a name!");
 				}
@@ -307,8 +307,8 @@ public class LineView extends ToolView
 					}
 
 					_trainManagementService.addLine(line);
-					line.setName(_lineNameField.getText());
-					_lineList.addElement(_lineNameField.getText());
+					line.setName(_lineNameField.getSelectedText());
+					_lineList.addElement(_lineNameField.getSelectedText());
 					_lineSelectToolEnabled = false;
 
 					reset();
@@ -365,7 +365,7 @@ public class LineView extends ToolView
 				}
 				else if(_editMode)
 				{
-					_trainManagementService.getLine(_lineList.getText()).setColor(clickedColor);
+					_trainManagementService.getLine(_lineList.getSelectedText()).setColor(clickedColor);
 				}
 
 				updateLine(oldLine, _lineSelectTool.getTrainLine());

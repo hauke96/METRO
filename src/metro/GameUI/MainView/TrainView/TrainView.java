@@ -64,23 +64,23 @@ public class TrainView extends ToolView
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				if(_trainViewMain.getLineList().getSelected() == -1)
+				if(_trainViewMain.getLineList().getSelectedIndex() == -1)
 				{
 					_trainViewBuy.getMessageLabel().setText("Please select the line this train should drive on.");
 				}
-				else if(_trainViewBuy.getTrainList().getSelected() == -1)
+				else if(_trainViewBuy.getTrainList().getSelectedIndex() == -1)
 				{
 					_trainViewBuy.getMessageLabel().setText("Please select the train model you want to buy.");
 				}
-				else if(METRO.__gameState.getMoney() < _trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getText()).getPrice())
+				else if(METRO.__gameState.getMoney() < _trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getSelectedText()).getPrice())
 				{
 					_trainViewBuy.getMessageLabel().setText("You have not enough money.");
 				}
 				else
 				{
-					System.out.println(_trainViewMain.getLineList().getText());
-					Train train = new Train(_trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getText()));
-					train.setLine(_trainManagementService.getLine(_trainViewMain.getLineList().getText()));
+					System.out.println(_trainViewMain.getLineList().getSelectedText());
+					Train train = new Train(_trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getSelectedText()));
+					train.setLine(_trainManagementService.getLine(_trainViewMain.getLineList().getSelectedText()));
 					_trainManagementService.addTrain(train);
 					_trainViewBuy.getMessageLabel().setText("");
 

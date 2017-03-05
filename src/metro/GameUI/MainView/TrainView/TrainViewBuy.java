@@ -65,7 +65,7 @@ public class TrainViewBuy extends ToolView
 			public void selectionChanged(String entry)
 			{
 				// Create own control class for train-choosing?
-				TrainTemplate train = _trainManagementService.getTemplateTrain(_availableTrains.getText());
+				TrainTemplate train = _trainManagementService.getTemplateTrain(_availableTrains.getSelectedText());
 
 				if(train != null)
 				{

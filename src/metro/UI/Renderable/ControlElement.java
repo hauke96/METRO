@@ -158,7 +158,7 @@ public abstract class ControlElement extends ActionObservable
 	/**
 	 * @return The text of the control.
 	 */
-	public String getText()
+	public String getSelectedText()
 	{
 		return _text;
 	}

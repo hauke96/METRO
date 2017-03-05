@@ -70,7 +70,7 @@ public class TrainViewMain extends ToolView
 				}
 
 				_trainList.clear();
-				TrainLine line = _trainManagementService.getLine(_lineList.getText());
+				TrainLine line = _trainManagementService.getLine(_lineList.getSelectedText());
 				for(Train train : _trainManagementService.getTrains())
 				{
 					if(train.getLine().equals(line)) _trainList.addElement(train.getName());
@@ -148,8 +148,8 @@ public class TrainViewMain extends ToolView
 	 */
 	private void sellTrainButton_action()
 	{
-		_trainManagementService.removeTrain(_trainList.getText());
-		_trainList.removeElement(_trainList.getSelected());
+		_trainManagementService.removeTrain(_trainList.getSelectedText());
+		_trainList.removeElement(_trainList.getSelectedIndex());
 		_trainList.setSelectedEntry(0);
 	}
 
@@ -159,12 +159,12 @@ public class TrainViewMain extends ToolView
 	 */
 	void startMoveMode()
 	{
-		if(_trainList.getSelected() == -1) return;
+		if(_trainList.getSelectedIndex() == -1) return;
 
 		_moveTrainButton.setState(false);
 		_sellTrainButton.setState(false);
 
-		_movedTrain = _trainList.getText();
+		_movedTrain = _trainList.getSelectedText();
 	}
 
 	/**

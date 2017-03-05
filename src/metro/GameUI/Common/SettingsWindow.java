@@ -201,7 +201,7 @@ public class SettingsWindow
 					Logger.__debug(MessageFormat.format("Old res.: {0}x{1} -- New res.: {2}",
 						_settings.get("screen.width"),
 						_settings.get("screen.height"),
-						_resolutionList.getText()));
+						_resolutionList.getSelectedText()));
 
 					String splitted[] = entry.split("x");
 					if(splitted.length == 2)
