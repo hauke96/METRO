@@ -22,16 +22,19 @@
         <pathelement location="libs/gdx-freetype-natives.jar"/>
         <pathelement location="libs/gdx-freetype.jar"/>
         <path refid="JUnit 4.libraryclasspath"/>
+        <pathelement location="libs/juard_0.0.1.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="src">
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
         <copy includeemptydirs="false" todir="bin">
             <fileset dir="tests">
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -68,13 +71,14 @@
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="metro.GameScreen.MainView.LineView.LineViewTest" todir="${junit.output.dir}"/>
-            <test name="metro.GameScreen.MainView.NotificationView.NotificationServerTest" todir="${junit.output.dir}"/>
-            <test name="metro.GameScreen.MainView.PlayingField.PlayingFieldTest" todir="${junit.output.dir}"/>
-            <test name="metro.GameScreen.MainView.StationPlacingToolTest" todir="${junit.output.dir}"/>
-            <test name="metro.GameScreen.MainView.TrackPlacingToolTest" todir="${junit.output.dir}"/>
-            <test name="metro.GameScreen.MainView.TrainView.TrainViewTest" todir="${junit.output.dir}"/>
             <test name="metro.GameStateTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.LineView.LineViewTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.NotificationView.NotificationServerTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.PlayingField.PlayingFieldTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.StationPlacingToolTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.TrackPlacingToolTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.TrainView.TrainViewTest" todir="${junit.output.dir}"/>
+            <test name="metro.UI.Renderable.Container.BasicContainerRendererTest" todir="${junit.output.dir}"/>
             <classpath refid="METRO.classpath"/>
         </junit>
     </target>
@@ -82,13 +86,30 @@
         <mkdir dir="${junit.output.dir}"/>
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
-            <test name="metro.GameScreen.MainView.LineView.LineViewTest" todir="${junit.output.dir}"/>
-            <test name="metro.GameScreen.MainView.NotificationView.NotificationServerTest" todir="${junit.output.dir}"/>
-            <test name="metro.GameScreen.MainView.PlayingField.PlayingFieldTest" todir="${junit.output.dir}"/>
-            <test name="metro.GameScreen.MainView.StationPlacingToolTest" todir="${junit.output.dir}"/>
-            <test name="metro.GameScreen.MainView.TrackPlacingToolTest" todir="${junit.output.dir}"/>
-            <test name="metro.GameScreen.MainView.TrainView.TrainViewTest" todir="${junit.output.dir}"/>
             <test name="metro.GameStateTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.LineView.LineViewTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.NotificationView.NotificationServerTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.PlayingField.PlayingFieldTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.StationPlacingToolTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.TrackPlacingToolTest" todir="${junit.output.dir}"/>
+            <test name="metro.GameUI.MainView.TrainView.TrainViewTest" todir="${junit.output.dir}"/>
+            <test name="metro.UI.Renderable.Container.BasicContainerRendererTest" todir="${junit.output.dir}"/>
+            <classpath refid="METRO.classpath"/>
+        </junit>
+    </target>
+    <target name="BasicContainerRendererTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="metro.UI.Renderable.Container.BasicContainerRendererTest" todir="${junit.output.dir}"/>
+            <classpath refid="METRO.classpath"/>
+        </junit>
+    </target>
+    <target name="BasicContainerRendererTest.testMiddleAboveAbove">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="metro.UI.Renderable.Container.BasicContainerRendererTest" todir="${junit.output.dir}"/>
             <classpath refid="METRO.classpath"/>
         </junit>
     </target>
@@ -97,6 +118,29 @@
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="metro.GameStateTest" todir="${junit.output.dir}"/>
+            <classpath refid="METRO.classpath"/>
+        </junit>
+    </target>
+    <target name="metro">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <classpath refid="METRO.classpath"/>
+        </junit>
+    </target>
+    <target name="TrainViewTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="metro.GameUI.MainView.TrainView.TrainViewTest" todir="${junit.output.dir}"/>
+            <classpath refid="METRO.classpath"/>
+        </junit>
+    </target>
+    <target name="LineViewTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="metro.GameUI.MainView.LineView.LineViewTest" todir="${junit.output.dir}"/>
             <classpath refid="METRO.classpath"/>
         </junit>
     </target>
