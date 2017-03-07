@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import juard.Contract;
 import metro.METRO;
 import metro.Common.Graphics.Draw;
-import metro.Common.Technical.Contract;
 import metro.GameUI.Common.ToolView;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Trains.Train;

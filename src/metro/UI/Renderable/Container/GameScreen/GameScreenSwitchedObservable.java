@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import metro.Common.Technical.Contract;
+import juard.Contract;
 
 /**
  * Classes who are able to switch a game screen are observable by this class.

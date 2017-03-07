@@ -2,8 +2,8 @@ package metro.UI.Renderer;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import juard.Contract;
 import metro.AppContext.Locator;
-import metro.Common.Technical.Contract;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Container.GameScreen.GameScreenSwitchedObserver;

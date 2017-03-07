@@ -6,10 +6,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import juard.Contract;
 import metro.METRO;
 import metro.AppContext.Locator;
 import metro.Common.Game.Settings;
-import metro.Common.Technical.Contract;
 import metro.GameUI.Common.InGameMenuWindow;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderer.ContainerRenderer;

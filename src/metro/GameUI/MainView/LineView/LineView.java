@@ -5,10 +5,10 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
+import juard.Contract;
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
-import metro.Common.Technical.Contract;
 import metro.Common.Technical.Logger;
 import metro.Exceptions.NotEnoughMoneyException;
 import metro.GameUI.Common.ToolView;

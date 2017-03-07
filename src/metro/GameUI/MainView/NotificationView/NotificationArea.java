@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Input.Buttons;
 
+import juard.Contract;
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
-import metro.Common.Technical.Contract;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.Panel;

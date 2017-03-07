@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observer;
 
-import metro.Common.Technical.Contract;
+import juard.Contract;
 import metro.Exceptions.ContainerPositioningConflict;
 import metro.Exceptions.UninitiatedClassException;
 import metro.UI.ContainerRegistrationService;

@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import metro.METRO;
 import metro.AppContext.Locator;
 import metro.Common.Game.Settings;
-import metro.Common.Technical.Contract;
 import metro.GameUI.Common.SettingsWindow;
 import metro.GameUI.MainView.MainView;
 import metro.UI.Renderable.ActionObserver;

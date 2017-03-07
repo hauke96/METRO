@@ -5,11 +5,11 @@ import java.awt.Color;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import juard.Contract;
 import metro.METRO;
 import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
-import metro.Common.Technical.Contract;
 import metro.GameUI.Common.ToolView;
 import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.NotificationView.NotificationArea;

@@ -5,9 +5,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.Point2D;
 
+import juard.Contract;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
-import metro.Common.Technical.Contract;
 
 /**
  * A Train can carry passengers, costs a bit to buy and maintain it.

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Observer;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import metro.Common.Technical.Contract;
+import juard.Contract;
 import metro.Common.Technical.ModifiableBoolean;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.CloseObservable;

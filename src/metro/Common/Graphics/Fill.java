@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
+import juard.Contract;
 import metro.METRO;
 import metro.Common.Game.Settings;
-import metro.Common.Technical.Contract;
 
 /**
  * Provides lots of methods to fill several simple forms like circles, rectangles, ...

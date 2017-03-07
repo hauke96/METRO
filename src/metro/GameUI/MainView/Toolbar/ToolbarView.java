@@ -4,10 +4,10 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 
+import juard.Contract;
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
-import metro.Common.Technical.Contract;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.Button;

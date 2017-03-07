@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import metro.Common.Technical.Contract;
+import juard.Contract;
 import metro.Common.Technical.Logger;
 
 /**

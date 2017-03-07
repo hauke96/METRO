@@ -2,10 +2,10 @@ package metro.UI.Renderable.Controls;
 
 import java.awt.Point;
 
+import juard.Contract;
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
-import metro.Common.Technical.Contract;
 import metro.UI.Renderable.ControlElement;
 
 /**

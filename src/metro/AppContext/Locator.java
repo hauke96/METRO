@@ -3,9 +3,9 @@ package metro.AppContext;
 import java.util.HashMap;
 import java.util.Map;
 
+import juard.Contract;
 import metro.Common.Game.GameState;
 import metro.Common.Game.Settings;
-import metro.Common.Technical.Contract;
 import metro.GameUI.MainView.MainView;
 import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
