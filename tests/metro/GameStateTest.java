@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
-import metro.Exceptions.NotEnoughMoneyException;
+import metro.Common.Technical.Exceptions.NotEnoughMoneyException;
 
 /**
  * @author hauke

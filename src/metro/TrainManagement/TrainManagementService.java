@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Technical.Logger;
-import metro.Exceptions.NotEnoughMoneyException;
+import metro.Common.Technical.Exceptions.NotEnoughMoneyException;
 import metro.GameUI.MainView.NotificationView.NotificationServer;
 import metro.GameUI.MainView.NotificationView.NotificationType;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;

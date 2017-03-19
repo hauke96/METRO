@@ -1,6 +1,6 @@
 package metro.UI;
 
-import metro.Exceptions.UninitiatedClassException;
+import metro.Common.Technical.Exceptions.UninitiatedClassException;
 import metro.UI.Renderable.Container.FloatingContainer;
 import metro.UI.Renderable.Container.StaticContainer;
 import metro.UI.Renderer.ContainerRenderer;

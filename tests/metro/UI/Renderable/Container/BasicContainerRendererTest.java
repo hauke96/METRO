@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import metro.AppContext.Locator;
-import metro.Exceptions.ContainerPositioningConflict;
+import metro.Common.Technical.Exceptions.ContainerPositioningConflict;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderer.BasicContainerRenderer;
 

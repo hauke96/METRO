@@ -1,4 +1,4 @@
-package metro.Exceptions;
+package metro.Common.Technical.Exceptions;
 
 /**
  * @author hauke

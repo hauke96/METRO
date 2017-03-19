@@ -1,4 +1,4 @@
-package metro.Exceptions;
+package metro.Common.Technical.Exceptions;
 
 /**
  * This exception indicates, that two container have a conflict in there "is below of" relation.

@@ -1,6 +1,6 @@
 package metro.Common.Game;
 
-import metro.Exceptions.NotEnoughMoneyException;
+import metro.Common.Technical.Exceptions.NotEnoughMoneyException;
 
 /**
  * A game state is the place where all game relevant information are stored.

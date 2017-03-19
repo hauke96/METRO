@@ -1,4 +1,4 @@
-package metro.Exceptions;
+package metro.Common.Technical.Exceptions;
 
 /**
  * This exception is for any transaction or action with money where not enough money exists.

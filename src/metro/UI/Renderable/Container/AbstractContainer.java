@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Observer;
 
 import juard.Contract;
-import metro.Exceptions.ContainerPositioningConflict;
-import metro.Exceptions.UninitiatedClassException;
+import metro.Common.Technical.Exceptions.ContainerPositioningConflict;
+import metro.Common.Technical.Exceptions.UninitiatedClassException;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.CloseObservable;
 import metro.UI.Renderable.ControlElement;
