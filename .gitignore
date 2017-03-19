@@ -1,4 +1,9 @@
+# build stuff
 *.class
+*build.xml*
+
+# settings file (METRO will generate default on start)
+settings.cfg
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
@@ -15,5 +20,4 @@ hs_err_pid*
 *.blend*[1-9]
 
 # javadoc
-doc/*
-
+doc/javadoc/*
