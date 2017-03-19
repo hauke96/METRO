@@ -17,7 +17,7 @@ import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
  * 
  */
 
-public class MainMenu extends GameScreenContainer
+public class MainMenuTool extends GameScreenContainer
 {
 	private MainMenuView _mainMenuView;
 	private Settings _settings;
@@ -27,7 +27,7 @@ public class MainMenu extends GameScreenContainer
 	 * 
 	 * @param settings The settings object with game settings.
 	 */
-	public MainMenu(Settings settings)
+	public MainMenuTool(Settings settings)
 	{
 		_settings = settings;
 

@@ -29,7 +29,7 @@ public class MainMenuView
 
 	void initializeUi()
 	{
-		// Create MainMenu buttons:
+		// Create MainMenuTool buttons:
 		_button_startGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2 - 25, 200, 50),
 			new Rectangle(0, 0, 200, 50), __buttonTextures);
 

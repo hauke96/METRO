@@ -68,7 +68,7 @@ import metro.Common.Game.Settings;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Logger;
-import metro.GameUI.MainMenu.MainMenu;
+import metro.GameUI.MainMenu.MainMenuTool;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Controls.InputField;
 import metro.UI.Renderer.BasicContainerRenderer;
@@ -206,7 +206,7 @@ public class METRO implements ApplicationListener, InputProcessor
 
 		__currentGameScreenContainerManager = new BasicGameScreenRenderer();
 
-		GameScreenContainer startScreen = new MainMenu(Locator.get(Settings.class));
+		GameScreenContainer startScreen = new MainMenuTool(Locator.get(Settings.class));
 
 		__currentGameScreenContainerManager.switchGameScreen(startScreen);
 

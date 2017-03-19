@@ -160,7 +160,7 @@ public class TrackPlacingTool extends ToolView
 	 * @param screenX The y-coordinate of the click.
 	 * @param screenY The y-coordinate of the click.
 	 * @param offset The current map offset.
-	 * @return
+	 * @return True if handled, false if not.
 	 */
 	protected boolean leftClick(int screenX, int screenY, Point offset)
 	{
