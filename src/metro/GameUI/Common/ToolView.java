@@ -6,11 +6,16 @@ import metro.Common.Technical.Event;
 import metro.Common.Technical.Logger;
 
 /**
- * Every Menu or game screen has to implement this interface for start() and update(). This will make the creation process more easy.
+ * A class extending the ToolView is a game component (not a pure UI component) using to easily embed - sometimes complex - tools into others.
+ * A ToolView doesn't necessarily has to have a UI component. It is just a component able to interact with the whole screen. 
+ * 
+ * The ToolView is also used to create stages in the application.
+ * E.g. could a {@code MainMenu} be such a sage, where the user can move to the {@code MainView} view, showing the normal game.
  * 
  * @author Hauke
  * 
  */
+// TODO find better name
 public abstract class ToolView
 {
 	/**
