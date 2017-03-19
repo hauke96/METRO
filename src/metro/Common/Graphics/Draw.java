@@ -41,10 +41,10 @@ public class Draw
 	public static void setSettingsService(Settings settings)
 	{
 		Contract.RequireNotNull(settings);
-		
-		__settings=settings;
+
+		__settings = settings;
 	}
-	
+
 	/**
 	 * Sets the offset for drawing things.
 	 * 

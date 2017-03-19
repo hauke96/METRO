@@ -42,7 +42,7 @@ public class Settings
 		_newSettings;
 
 	private String __praeambel;
-	
+
 	public Settings()
 	{
 		__praeambel = "* comments begin with *\n* Settings: [name]=[value]\n";
@@ -55,7 +55,7 @@ public class Settings
 	public void create()
 	{
 		Contract.RequireNotNull(_newSettings);
-		
+
 		set(FULLSCREEN_ON, false);
 		set(SCREEN_WIDTH, 1024);
 		set(SCREEN_HEIGHT, 768);

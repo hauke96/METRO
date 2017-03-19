@@ -34,7 +34,7 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 	 */
 	public GameScreenContainer()
 	{
-		 // directly use ServiceLocator for convenience (always calling "super(settings);" in sub-classes is unhandy.
+		// directly use ServiceLocator for convenience (always calling "super(settings);" in sub-classes is unhandy.
 		_settings = Locator.get(Settings.class);
 		_area = new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height);
 
@@ -52,7 +52,7 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		Contract.RequireNotNull(renderer);
 
 		_containerRenderer = renderer;
-		
+
 		initializeUi();
 
 		Contract.EnsureNotNull(_containerRenderer);
@@ -67,7 +67,7 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 	{
 		_gameScreenInputProcessor = processor;
 	}
-	
+
 	public ContainerRegistrationService getContainerRegistrationService()
 	{
 		return _containerRenderer.getRegistrationService();

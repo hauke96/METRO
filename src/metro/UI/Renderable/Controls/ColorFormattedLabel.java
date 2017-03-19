@@ -103,7 +103,7 @@ public class ColorFormattedLabel extends Label
 			label.draw();
 		}
 	}
-	
+
 	@Override
 	public void underlined(boolean underlined)
 	{
@@ -113,7 +113,7 @@ public class ColorFormattedLabel extends Label
 			label.underlined(_underlined);
 		}
 	}
-	
+
 	@Override
 	public void setUnderlineColor(Color color)
 	{

@@ -39,7 +39,7 @@ public class NotificationServer
 			sub.addMessage(message, type);
 		}
 	}
-	
+
 	/**
 	 * @return The list with all subscribers.
 	 */

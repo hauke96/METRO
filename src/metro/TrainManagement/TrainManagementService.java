@@ -34,6 +34,7 @@ import metro.TrainManagement.Trains.TravelerSpot;
  * 
  * @author hauke
  */
+// TODO increase cohesion by separating this class
 public class TrainManagementService implements Observer
 {
 	private List<TrainLine> _trainLineList;
@@ -48,6 +49,7 @@ public class TrainManagementService implements Observer
 	/**
 	 * Creates and initializes the new train management service.
 	 * Note that there should only be one instance at a time.
+	 * 
 	 * @param gameState The current state of the player.
 	 * @param trainLineDrawingService The drawing service for train lines.
 	 */
@@ -55,7 +57,7 @@ public class TrainManagementService implements Observer
 	{
 		_gameState = gameState;
 		_trainLineDrawingService = trainLineDrawingService;
-		
+
 		init();
 	}
 
@@ -445,7 +447,7 @@ public class TrainManagementService implements Observer
 	public void drawStations(Point offset)
 	{
 		int baseNetSpacing = _gameState.getBaseNetSpacing();
-		
+
 		for(TrainStation station : _stationList)
 		{
 			station.draw(offset, baseNetSpacing);

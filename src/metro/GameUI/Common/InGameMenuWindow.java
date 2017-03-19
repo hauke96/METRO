@@ -25,15 +25,16 @@ import metro.UI.Renderer.CloseObserver;
 public class InGameMenuWindow
 {
 	private static InGameMenuWindow __INSTANCE;
-	
+
 	private Window _window;
 	private Button _yesButton,
 		_noButton,
 		_settingsButton;
 	private Settings _settings;
-	
+
 	/**
 	 * Shows the InGameMenuWindow. There'll be only one instance.
+	 * 
 	 * @param settings The settings object with game settings.
 	 */
 	public static void show(Settings settings)
@@ -42,7 +43,7 @@ public class InGameMenuWindow
 		{
 			__INSTANCE = new InGameMenuWindow(settings);
 		}
-		
+
 		__INSTANCE._window.setVisibility(true);
 	}
 
@@ -52,7 +53,7 @@ public class InGameMenuWindow
 	private InGameMenuWindow(Settings settings)
 	{
 		_settings = settings;
-		
+
 		_window = new Window("Really quit?",
 			new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 200,
 				METRO.__SCREEN_SIZE.height / 2 - 50,

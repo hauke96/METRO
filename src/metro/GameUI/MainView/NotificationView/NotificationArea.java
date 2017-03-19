@@ -164,7 +164,7 @@ public class NotificationArea implements NotificationSubscriber
 			&& y <= METRO.__SCREEN_SIZE.height - _height + _headerHeight
 			&& x <= _width;
 	}
-	
+
 	public AbstractContainer getBackgroundPanel()
 	{
 		return _panel;

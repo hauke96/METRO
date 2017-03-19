@@ -10,7 +10,7 @@ import java.awt.Rectangle;
  * @author hauke
  *
  */
-//TODO check if this class not better implements an InputProcessor
+// TODO check if this class not better implements an InputProcessor
 public abstract class ControlElement extends ActionObservable
 {
 	protected boolean _state;

@@ -13,7 +13,7 @@ import java.util.Map;
  *
  */
 // TODO rename this to RailwayNodeService
-// TODO make this into real service
+// TODO make this into real service (interface, no static methods, etc.)
 public class RailwayNodeOverseer
 {
 	/**

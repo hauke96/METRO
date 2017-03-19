@@ -36,7 +36,7 @@ class ToolbarView
 		_moneyDisplayWidth = 250;
 		_height = 40;
 		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - buttonAreaWidth;
-		
+
 		_buttonYPosition = -5;
 		_selectedButtonYPosition = 0;
 

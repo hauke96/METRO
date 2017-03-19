@@ -17,6 +17,7 @@ import metro.TrainManagement.Trains.TrainLine;
  * @author hauke
  *
  */
+// TODO make this state-less
 public class TrainLineDrawingService
 {
 	private Map<RailwayNode, TrainLine[]> _sortedLineMap;
@@ -31,7 +32,7 @@ public class TrainLineDrawingService
 	public TrainLineDrawingService(GameState gameState)
 	{
 		_gameState = gameState;
-		
+
 		_sortedLineMap = new HashMap<RailwayNode, TrainLine[]>();
 		_lineThickness = 3;
 	}
@@ -89,6 +90,7 @@ public class TrainLineDrawingService
 	 * @param mapOffset The map offset in pixel.
 	 * @param lineList An list of all existing train lines.
 	 */
+	// TODO design a working algorithm for this
 	public void drawLines(Point mapOffset, List<TrainLine> lineList)
 	{
 		for(TrainLine line : lineList)

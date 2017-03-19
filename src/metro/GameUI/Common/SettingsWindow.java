@@ -26,7 +26,7 @@ import metro.UI.Renderer.CloseObserver;
 public class SettingsWindow
 {
 	private static SettingsWindow __INSTANCE;
-	
+
 	private Window _window;
 	private Button _okButton;
 	private Checkbox _fullscreenOn,
@@ -37,9 +37,10 @@ public class SettingsWindow
 		_sampleList,
 		_segmentList;
 	private Settings _settings;
-	
+
 	/**
 	 * Shows the settings window. There'll be only one instance.
+	 * 
 	 * @param settings The settings object with game settings.
 	 */
 	public static void show(Settings settings)
@@ -48,18 +49,19 @@ public class SettingsWindow
 		{
 			__INSTANCE = new SettingsWindow(settings);
 		}
-		
+
 		__INSTANCE._window.setVisibility(true);
 	}
 
 	/**
 	 * Creates a settings window.
+	 * 
 	 * @param settings TODO
 	 */
 	private SettingsWindow(Settings settings)
 	{
 		_settings = settings;
-		
+
 		_window = new Window("METRO settings",
 			new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 50, METRO.__SCREEN_SIZE.height / 2 - 225, 500, 450),
 			METRO.__metroBlue);

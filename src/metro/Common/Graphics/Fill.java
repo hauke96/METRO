@@ -27,7 +27,7 @@ public class Fill
 	private static int __xOffset, __yOffset;
 	private static float __r, __g, __b, __a; // current color values
 	private static Settings __settings;
-	
+
 	/**
 	 * Sets the settings object to use settings like AMOUNT_SEGMENTS for rendering.
 	 * 
@@ -36,8 +36,8 @@ public class Fill
 	public static void setSettingsService(Settings settings)
 	{
 		Contract.RequireNotNull(settings);
-		
-		__settings=settings;
+
+		__settings = settings;
 	}
 
 	/**

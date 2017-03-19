@@ -6,7 +6,7 @@ package metro.Exceptions;
 public class UninitiatedClassException extends RuntimeException
 {
 	private static final long serialVersionUID = 1L;
-	
+
 	/**
 	 * Creates a new UninitiatedClassException with the given message.
 	 * 

@@ -13,7 +13,6 @@ import metro.Common.Graphics.Fill;
  * @author hauke
  *
  */
-
 public class TravelerSpot
 {
 	private Point _position;

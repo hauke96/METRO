@@ -244,7 +244,7 @@ public class METRO implements ApplicationListener, InputProcessor
 	{
 		Draw.setSettingsService(Locator.get(Settings.class));
 		Fill.setSettingsService(Locator.get(Settings.class));
-		
+
 		__spriteBatch = new SpriteBatch();
 		__gameWindowSpriteBatch = new SpriteBatch();
 		if(_config.fullscreen)
@@ -542,7 +542,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		screenX -= __xOffset;
 		screenY -= __yOffset;
 		__dragMode = false;
-//		__containerRenderer.notifyMouseReleased(screenX, screenY, mouseButton);
+		// __containerRenderer.notifyMouseReleased(screenX, screenY, mouseButton);
 		// __currentGameScreenManager.touchUp(screenX, screenY, pointer, mouseButton);
 		__currentGameScreenContainerManager.touchUp(screenX, screenY, pointer, mouseButton);
 		return false;
