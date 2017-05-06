@@ -14,7 +14,7 @@ import metro.GameUI.Common.ToolView;
 import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
-import metro.GameUI.MainView.Toolbar.ToolbarController;
+import metro.GameUI.MainView.Toolbar.ToolbarTool;
 import metro.GameUI.MainView.TrainView.TrainView;
 import metro.TrainManagement.TrainManagementService;
 import metro.UI.Renderable.Container.AbstractContainer;
@@ -31,7 +31,7 @@ import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 public class MainView extends GameScreenContainer implements InputProcessor
 {
 	private ToolView _activeTool;
-	private ToolbarController _toolbar;
+	private ToolbarTool _toolbar;
 	private NotificationArea _notificationArea;
 	private PlayingField _playingField;
 	private GameState _gameState;
@@ -61,7 +61,7 @@ public class MainView extends GameScreenContainer implements InputProcessor
 		// Be sure the playground is visible after switching the game screen (and bypass the including renderer change):
 		_playingField.getBackgroundPanel().registerContainer();
 
-		_toolbar = new ToolbarController(_gameState.getToolViewWidth());
+		_toolbar = new ToolbarTool(_gameState.getToolViewWidth());
 
 		_toolbar.StationPlacingToolSelected.add(() -> {
 			StationPlacingTool stationPlacingTool = new StationPlacingTool(_gameState, _playingField, _trainManagementService);

@@ -14,7 +14,7 @@ import metro.UI.Renderable.Controls.Button;
  * @author hauke
  *
  */
-public class ToolbarController
+public class ToolbarTool
 {
 	private ToolbarView _view;
 	private Button _selectedButton;
@@ -29,7 +29,7 @@ public class ToolbarController
 	 * 
 	 * @param viewWidth The width of tools to align buttons.
 	 */
-	public ToolbarController(int viewWidth)
+	public ToolbarTool(int viewWidth)
 	{
 		_view = new ToolbarView(viewWidth);
 		_selectedButton = null;
