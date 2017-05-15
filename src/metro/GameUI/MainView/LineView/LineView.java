@@ -442,6 +442,7 @@ public class LineView extends ToolView
 	/**
 	 * Creates a clean {@link metro.GameUI.MainView#LineSelectTool}, adds this as observer and sets the {@code _lineSelectToolEnabled} flag.
 	 */
+	//TODO maybe it's smarter to have one tool (given in the constructor) and reset it here?
 	void createLineSelectTool()
 	{
 		_lineSelectTool = new LineSelectTool(_playingField, _trainManagementService); // create clean select tool
@@ -513,6 +514,8 @@ public class LineView extends ToolView
 	@Override
 	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{
+		if(_lineSelectTool == null) return false;
+		
 		boolean clickProcessed = false;
 
 		// something will probably change so get current (=old) line to replace it later

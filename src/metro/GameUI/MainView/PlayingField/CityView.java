@@ -48,6 +48,7 @@ public class CityView extends ToolView
 		_selectedLayerNumber = -1;
 		if(_enableMouseSelection)
 		{
+			//TODO do this via a "MouseMoved" event and not in the drawing method. Also be clear, that the "MouseMoved" event here only gets called when the mouse is in the area.
 			// get the selected circle number
 			for(int i = 0; i < 10; ++i) // go through all layers
 			{

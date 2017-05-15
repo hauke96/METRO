@@ -79,6 +79,7 @@ public class NotificationArea implements NotificationSubscriber
 		_panel.add(_entryList);
 		_panel.add(_canvas);
 
+		// TODO why is this here? Put it somewhere else (this tool should not know when the game is loaded)
 		addMessage("Game started", NotificationType.GAME_INFO);
 		NotificationServer.subscribe(this);
 	}
@@ -110,7 +111,6 @@ public class NotificationArea implements NotificationSubscriber
 	/**
 	 * Draws the control.
 	 */
-	// TODO replace this by normal UI
 	public void draw()
 	{
 		Fill.setColor(_backGroundColor);

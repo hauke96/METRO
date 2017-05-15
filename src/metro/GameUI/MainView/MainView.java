@@ -98,6 +98,7 @@ public class MainView extends GameScreenContainer implements InputProcessor
 			setActiveTool(trainView);
 		});
 
+		// TODO Move to constructor
 		_notificationArea = Locator.get(NotificationArea.class);
 
 		AbstractContainer playingFieldBackground = _playingField.getBackgroundPanel();
