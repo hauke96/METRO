@@ -31,9 +31,9 @@ public class Canvas extends ControlElement
 	public Canvas(Point position)
 	{
 		setPosition(position);
-
-		_area.height=METRO.__SCREEN_SIZE.height;
-		_area.width=METRO.__SCREEN_SIZE.width;
+		
+		_area.height = METRO.__SCREEN_SIZE.height;
+		_area.width = METRO.__SCREEN_SIZE.width;
 	}
 	
 	public Canvas(Rectangle area)
@@ -53,10 +53,10 @@ public class Canvas extends ControlElement
 		
 		Draw.setOffset(_area.x, _area.y);
 		Fill.setOffset(_area.x, _area.y);
-
+		
 		com.badlogic.gdx.math.Rectangle scissors = new com.badlogic.gdx.math.Rectangle();
-		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_area.x, _area.y, _area.width
-				+ 1, _area.height + 1);
+		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_area.x + METRO.__getXOffset(), _area.y + METRO.__getYOffset(), _area.width
+		        + 1, _area.height + 1);
 		
 		ScissorStack.calculateScissors((Camera) METRO.__camera, METRO.__spriteBatch.getTransformMatrix(), clipBounds, scissors);
 		ScissorStack.pushScissors(scissors);
