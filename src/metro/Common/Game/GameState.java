@@ -13,8 +13,8 @@ import metro.Common.Technical.Exceptions.NotEnoughMoneyException;
 public class GameState
 {
 	private int _money,
-			_baseNetSpacing, // amount of pixel between lines of the base net
-			_toolViewWidth;
+	        _baseNetSpacing, // amount of pixel between lines of the base net
+	        _toolViewWidth;
 	
 	/**
 	 * Creates a new game state. This can't be done by an external class.
@@ -54,8 +54,9 @@ public class GameState
 	 * @param moreMoney
 	 *            The money to add/subtract. Throw an IllegalArgumentException when the amount of money is less than 0.
 	 * @throws IllegalArgumentException
+	 *             Throws this exception when the money passed is < 0.
 	 */
-	public void addMoney(int moreMoney)
+	public void addMoney(int moreMoney) throws IllegalArgumentException
 	{
 		if (moreMoney < 0)
 		{

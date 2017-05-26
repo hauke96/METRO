@@ -112,6 +112,9 @@ public class TrainViewBuy extends ToolView
 		}
 	}
 	
+	/**
+	 * Draws the control.
+	 */
 	public void updateGameScreen()
 	{
 		drawHeader();

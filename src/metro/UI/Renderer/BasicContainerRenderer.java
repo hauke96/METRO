@@ -21,17 +21,17 @@ import metro.UI.Renderable.Container.StaticContainer;
  */
 public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 {
-	interface ContainerCollectionNotifier
+	private interface ContainerCollectionNotifier
 	{
 		void notifyAllContainer(List<AbstractContainer> listOfContainer);
 	}
 	
-	interface ContainerNotifier
+	private interface ContainerNotifier
 	{
 		void notifyContainer(AbstractContainer container);
 	}
 	
-	interface Notifier
+	private interface Notifier
 	{
 		void executeFunctions();
 	}
@@ -41,7 +41,7 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 	private Observer	_staticContainerAboveChangedObserver;
 	private Observer	_floatingContainerAboveChangedObserver;
 	
-	// make these protected for the tests
+	// make these protected for the tests :(
 	protected List<AbstractContainer>	_listOfFloatingContainer;
 	protected List<AbstractContainer>	_listOfStaticContainer;
 	

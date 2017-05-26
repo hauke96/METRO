@@ -57,6 +57,9 @@ public class Fill
 	
 	/**
 	 * Initializes the screen for drawing on it. It also stops the spriteBatch for a transparent background.
+	 * 
+	 * @param spriteBatch
+	 *            The sprite batch to draw on.
 	 */
 	private static void init(SpriteBatch spriteBatch)
 	{
@@ -71,6 +74,9 @@ public class Fill
 	
 	/**
 	 * Resets the screen and the spriteBatch to the default values so that METRO can use it normally. The drawing has finished at this point.
+	 * 
+	 * @param spriteBatch
+	 *            The sprite batch to draw on.
 	 */
 	private static void reset(SpriteBatch spriteBatch)
 	{
@@ -107,7 +113,7 @@ public class Fill
 	{
 		init(METRO.__spriteBatch);
 		__shapeRenderer.circle(x + diameter / 2 + __xOffset, y + diameter / 2 + __yOffset, diameter
-				/ 2, Integer.parseInt(__settings.getOiginal(Settings.AMOUNT_SEGMENTS).toString()));
+		        / 2, Integer.parseInt(__settings.getOiginal(Settings.AMOUNT_SEGMENTS).toString()));
 		reset(METRO.__spriteBatch);
 	}
 	

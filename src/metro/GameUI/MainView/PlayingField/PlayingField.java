@@ -77,6 +77,9 @@ public class PlayingField implements InputProcessor
 		return _selectedNode;
 	}
 	
+	/**
+	 * @return The background panel of this control.
+	 */
 	public AbstractContainer getBackgroundPanel()
 	{
 		return _panel;
@@ -93,6 +96,10 @@ public class PlayingField implements InputProcessor
 		_cityView.setCircleHighlighting(hightlight);
 	}
 	
+	/**
+	 * @param area
+	 *            Sets the area of the playing field. The field will only be drawn inside the bounds given by the {@code area}.
+	 */
 	public void setArea(Rectangle area)
 	{
 		_panel.setArea(area);
@@ -147,6 +154,8 @@ public class PlayingField implements InputProcessor
 	
 	/**
 	 * Calculates the position and draws the dot near the cursor.
+	 * 
+	 * @return The point of the base dot.
 	 */
 	private Point drawBaseDot()
 	{

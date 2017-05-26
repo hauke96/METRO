@@ -71,7 +71,6 @@ import metro.Common.Technical.Logger;
 import metro.GameUI.MainMenu.MainMenuTool;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Controls.InputField;
-import metro.UI.Renderer.BasicContainerRenderer;
 import metro.UI.Renderer.BasicGameScreenRenderer;
 
 /**
@@ -85,24 +84,23 @@ public class METRO implements ApplicationListener, InputProcessor
 	private BasicGameScreenRenderer			__currentGameScreenContainerManager;
 	
 	private static OSType					__detectedOS;
-	private static BasicContainerRenderer	__containerRenderer;
 	private static SpriteBatch				__gameWindowSpriteBatch;
 	private static int						__xOffset,
-			__yOffset,
-			__titleBarBorderLineWidth;
+	        __yOffset,
+	        __titleBarBorderLineWidth;
 	private static LwjglApplication			__application;
 	
 	public static Dimension				__SCREEN_SIZE;
 	public static final String			__VERSION	= "0.1.4_indev";
 	public static boolean				__dragMode,
-			__debug;
+	        __debug;
 	public static Point					__dragModeLastMousePosition;
 	public static TextureRegion			__iconSet,
-			__mouseCursorImage;
+	        __mouseCursorImage;
 	public static Color					__metroRed,
-			__metroBlue;
+	        __metroBlue;
 	public static Point					__mousePosition,
-			__originalMousePosition;
+	        __originalMousePosition;
 	public static OrthographicCamera	__camera;
 	public static SpriteBatch			__spriteBatch;
 	public static GameState				__gameState;
@@ -173,13 +171,13 @@ public class METRO implements ApplicationListener, InputProcessor
 				}
 				
 				Logger.__error(
-						"Something went wrong by reading the settings.\nThey have been renamed to \"settings.backup.{date}\".\nHere some more information:\n" + ex.getMessage());
+				        "Something went wrong by reading the settings.\nThey have been renamed to \"settings.backup.{date}\".\nHere some more information:\n" + ex.getMessage());
 			}
 			else
 			{
 				Logger.__error("Could NOT create configuration."
-						+ "Using default values by deleting the ./settings.cfg is not working."
-						+ "\nHere some technical information :" + ex.getMessage() + "\n");
+				        + "Using default values by deleting the ./settings.cfg is not working."
+				        + "\nHere some technical information :" + ex.getMessage() + "\n");
 				
 				for (StackTraceElement str : ex.getStackTrace())
 				{
@@ -308,6 +306,8 @@ public class METRO implements ApplicationListener, InputProcessor
 	
 	/**
 	 * Load the font {@code GatsbyFLF-Bold} in size 21.
+	 * 
+	 * @return The loaded font.
 	 */
 	private BitmapFont loadFonts()
 	{
@@ -376,8 +376,8 @@ public class METRO implements ApplicationListener, InputProcessor
 		// blue title bar background
 		Fill.setColor(__metroBlue);
 		Fill.Rect(
-				new Rectangle(__titleBarBorderLineWidth * 2, __titleBarBorderLineWidth * 2, __SCREEN_SIZE.width - 4 * __titleBarBorderLineWidth - __titleBarHeight
-						+ 1, __titleBarHeight - 4 * __titleBarBorderLineWidth), __gameWindowSpriteBatch);
+		        new Rectangle(__titleBarBorderLineWidth * 2, __titleBarBorderLineWidth * 2, __SCREEN_SIZE.width - 4 * __titleBarBorderLineWidth - __titleBarHeight
+		                + 1, __titleBarHeight - 4 * __titleBarBorderLineWidth), __gameWindowSpriteBatch);
 		
 		// title of title bar
 		Draw.setColor(Color.white);

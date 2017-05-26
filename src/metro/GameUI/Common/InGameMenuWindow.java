@@ -50,6 +50,7 @@ public class InGameMenuWindow
 	
 	/**
 	 * Creates a new exit game window with a settings button.
+	 * @param settings The settings object to display current settings and change them.
 	 */
 	private InGameMenuWindow(Settings settings)
 	{

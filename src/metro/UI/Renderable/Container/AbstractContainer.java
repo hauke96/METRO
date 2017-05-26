@@ -25,7 +25,7 @@ public abstract class AbstractContainer extends CloseObservable
 {
 	private static ContainerRegistrationService _containerRegistrationService;
 	
-	interface Notifier
+	private interface Notifier
 	{
 		/**
 		 * Executes a certain notify action on a given control element.

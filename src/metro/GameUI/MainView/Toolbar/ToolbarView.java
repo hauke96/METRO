@@ -13,17 +13,24 @@ import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.Button;
 import metro.UI.Renderable.Controls.Canvas;
 
+/**
+ * This is the view component of the toolbar. It displays all relevant information e.g. the current money.
+ * It also hosts the buttons for the train, station and track creators and managers.
+ * 
+ * @author hauke
+ *
+ */
 class ToolbarView
 {
 	private Button	_buildStation,
-			_buildTracks,
-			_showTrainList,
-			_createNewTrain;
+	        _buildTracks,
+	        _showTrainList,
+	        _createNewTrain;
 	private int		_moneyDisplayWidth,
-			_height,
-			_buttonAreaXPosition,
-			_buttonYPosition,
-			_selectedButtonYPosition;
+	        _height,
+	        _buttonAreaXPosition,
+	        _buttonYPosition,
+	        _selectedButtonYPosition;
 	private Panel	_panel;
 	
 	/**
@@ -31,6 +38,8 @@ class ToolbarView
 	 * 
 	 * @param buttonAreaWidth
 	 *            The width of the area, where e.g. the "Create Lines" button is.
+	 * @param height
+	 *            The height of the toolbar view.
 	 */
 	ToolbarView(int buttonAreaWidth, int height)
 	{
@@ -86,6 +95,9 @@ class ToolbarView
 		Draw.Line(_buttonAreaXPosition, 0, _buttonAreaXPosition, _height);
 	}
 	
+	/**
+	 * @return The buttont to build statinos.
+	 */
 	public Button getBuildStationButton()
 	{
 		Contract.EnsureNotNull(_buildStation);
@@ -93,6 +105,9 @@ class ToolbarView
 		return _buildStation;
 	}
 	
+	/**
+	 * @return The button to build tracks.
+	 */
 	public Button getBuildTracksButton()
 	{
 		Contract.EnsureNotNull(_buildTracks);
@@ -100,6 +115,9 @@ class ToolbarView
 		return _buildTracks;
 	}
 	
+	/**
+	 * @return The button to show the train list dialog.
+	 */
 	public Button getShowTrainListButton()
 	{
 		Contract.EnsureNotNull(_showTrainList);
@@ -107,6 +125,9 @@ class ToolbarView
 		return _showTrainList;
 	}
 	
+	/**
+	 * @return The button to show the dialog for creating a new train.
+	 */
 	public Button getCreateNewTrainButton()
 	{
 		Contract.EnsureNotNull(_createNewTrain);
@@ -122,11 +143,18 @@ class ToolbarView
 		return _buttonYPosition;
 	}
 	
+	/**
+	 * @return The y-position of the selected button. It is usually lower then the y-position of all other buttons.
+	 */
 	public int getSelectedButtonYPosition()
 	{
 		return _selectedButtonYPosition;
 	}
 	
+	/**
+	 * @param container
+	 *            The container that should be below the toolbar.
+	 */
 	public void setAboveOf(AbstractContainer container)
 	{
 		Contract.RequireNotNull(container);

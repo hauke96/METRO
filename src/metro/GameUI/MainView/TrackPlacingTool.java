@@ -70,9 +70,9 @@ public class TrackPlacingTool extends ToolView
 			Draw.setColor(Color.black);
 			
 			int diagonalOffset = 0,
-					B = _playingField.getSelectedNode().x - nodePosition.x, // horizontal distance
-					H = _playingField.getSelectedNode().y - nodePosition.y, // vertical distance
-					preFactor = 1;
+			        B = _playingField.getSelectedNode().x - nodePosition.x, // horizontal distance
+			        H = _playingField.getSelectedNode().y - nodePosition.y, // vertical distance
+			        preFactor = 1;
 			
 			if (Math.abs(H) > Math.abs(B)) // vertical tracks
 			{
@@ -80,14 +80,14 @@ public class TrackPlacingTool extends ToolView
 				if (H < 0) preFactor = -1;
 				
 				Draw.Line(mapOffset.x + nodePosition.x * baseNetSpacing, mapOffset.y + nodePosition.y * baseNetSpacing, mapOffset.x + nodePosition.x * baseNetSpacing, mapOffset.y
-						+ (nodePosition.y + preFactor * diagonalOffset) * baseNetSpacing);
+				        + (nodePosition.y + preFactor * diagonalOffset) * baseNetSpacing);
 				
 				Draw.Line(mapOffset.x + nodePosition.x * baseNetSpacing, mapOffset.y + (nodePosition.y + preFactor * diagonalOffset) * baseNetSpacing, mapOffset.x
-						+ (nodePosition.x + B) * baseNetSpacing, mapOffset.y + (nodePosition.y + preFactor * (diagonalOffset + Math.abs(B))) * baseNetSpacing);
+				        + (nodePosition.x + B) * baseNetSpacing, mapOffset.y + (nodePosition.y + preFactor * (diagonalOffset + Math.abs(B))) * baseNetSpacing);
 				
 				Draw.Line(mapOffset.x + (nodePosition.x + B) * baseNetSpacing, mapOffset.y
-						+ (nodePosition.y + preFactor * (diagonalOffset + Math.abs(B))) * baseNetSpacing, mapOffset.x + (nodePosition.x + B) * baseNetSpacing, mapOffset.y
-								+ (nodePosition.y + preFactor * (2 * diagonalOffset + preFactor * ((H - B) % 2) + Math.abs(B))) * baseNetSpacing);
+				        + (nodePosition.y + preFactor * (diagonalOffset + Math.abs(B))) * baseNetSpacing, mapOffset.x + (nodePosition.x + B) * baseNetSpacing, mapOffset.y
+				                + (nodePosition.y + preFactor * (2 * diagonalOffset + preFactor * ((H - B) % 2) + Math.abs(B))) * baseNetSpacing);
 			}
 			else if (Math.abs(B) > Math.abs(H)) // horizontal tracks
 			{
@@ -95,19 +95,19 @@ public class TrackPlacingTool extends ToolView
 				if (B < 0) preFactor = -1;
 				
 				Draw.Line(mapOffset.x + (nodePosition.x + preFactor * diagonalOffset) * baseNetSpacing, mapOffset.y + nodePosition.y * baseNetSpacing, mapOffset.x
-						+ nodePosition.x * baseNetSpacing, mapOffset.y + nodePosition.y * baseNetSpacing);
+				        + nodePosition.x * baseNetSpacing, mapOffset.y + nodePosition.y * baseNetSpacing);
 				
 				Draw.Line(mapOffset.x + (nodePosition.x + preFactor * diagonalOffset) * baseNetSpacing, mapOffset.y + nodePosition.y * baseNetSpacing, mapOffset.x
-						+ (nodePosition.x + preFactor * (diagonalOffset + Math.abs(H))) * baseNetSpacing, mapOffset.y + (nodePosition.y + H) * baseNetSpacing);
+				        + (nodePosition.x + preFactor * (diagonalOffset + Math.abs(H))) * baseNetSpacing, mapOffset.y + (nodePosition.y + H) * baseNetSpacing);
 				
 				Draw.Line(mapOffset.x + (nodePosition.x + preFactor * (diagonalOffset + Math.abs(H))) * baseNetSpacing, mapOffset.y
-						+ (nodePosition.y + H) * baseNetSpacing, mapOffset.x + (nodePosition.x + preFactor * (2 * diagonalOffset + preFactor * ((B - H) % 2) + Math.abs(H)))
-								* baseNetSpacing, mapOffset.y + (nodePosition.y + H) * baseNetSpacing);
+				        + (nodePosition.y + H) * baseNetSpacing, mapOffset.x + (nodePosition.x + preFactor * (2 * diagonalOffset + preFactor * ((B - H) % 2) + Math.abs(H)))
+				                * baseNetSpacing, mapOffset.y + (nodePosition.y + H) * baseNetSpacing);
 			}
 			else if (Math.abs(B) == Math.abs(H)) // diagonal tracks
 			{
 				Draw.Line(mapOffset.x + nodePosition.x * baseNetSpacing, mapOffset.y + nodePosition.y * baseNetSpacing, mapOffset.x
-						+ _playingField.getSelectedNode().x * baseNetSpacing, mapOffset.y + _playingField.getSelectedNode().y * baseNetSpacing);
+				        + _playingField.getSelectedNode().x * baseNetSpacing, mapOffset.y + _playingField.getSelectedNode().y * baseNetSpacing);
 			}
 		}
 	}
@@ -130,6 +130,7 @@ public class TrackPlacingTool extends ToolView
 	 *            The y-coordinate of the click.
 	 * @param offset
 	 *            The current map offset.
+	 * @return True when handled, false otherwise.
 	 */
 	protected boolean rightClick(int screenX, int screenY, Point offset)
 	{
@@ -155,7 +156,7 @@ public class TrackPlacingTool extends ToolView
 	 *            The y-coordinate of the click.
 	 * @param offset
 	 *            The current map offset.
-	 * @return True if handled, false if not.
+	 * @return True when handled, false otherwise.
 	 */
 	protected boolean leftClick(int screenX, int screenY, Point offset)
 	{
@@ -192,10 +193,10 @@ public class TrackPlacingTool extends ToolView
 		// second click
 		{
 			int diagonalOffset = 0,
-					B = _playingField.getSelectedNode().x - _currentRailwayNode.getPosition().x, // horizontal distance
-					H = _playingField.getSelectedNode().y - _currentRailwayNode.getPosition().y, // vertical distance
-					preFactorH = 1,
-					preFactorB = 1;
+			        B = _playingField.getSelectedNode().x - _currentRailwayNode.getPosition().x, // horizontal distance
+			        H = _playingField.getSelectedNode().y - _currentRailwayNode.getPosition().y, // vertical distance
+			        preFactorH = 1,
+			        preFactorB = 1;
 			RailwayNode prevNode = _currentRailwayNode;
 			
 			if (H < 0) preFactorH = -1;
@@ -208,7 +209,7 @@ public class TrackPlacingTool extends ToolView
 					diagonalOffset = (int) ((Math.abs(H) - Math.abs(B)) / 2f); // calculate length of one vertical part
 					
 					METRO.__gameState.withdrawMoney(RailwayNode.__price *
-							(diagonalOffset + Math.abs(B) + (Math.abs(H) - (diagonalOffset + Math.abs(B)))));
+					        (diagonalOffset + Math.abs(B) + (Math.abs(H) - (diagonalOffset + Math.abs(B)))));
 					
 					prevNode = createTrack(0, preFactorH, 0, diagonalOffset, prevNode); // vertical line
 					prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(B), prevNode); // diagonal lines
@@ -219,7 +220,7 @@ public class TrackPlacingTool extends ToolView
 					diagonalOffset = (int) ((Math.abs(B) - Math.abs(H)) / 2f);
 					
 					METRO.__gameState.withdrawMoney(RailwayNode.__price *
-							(diagonalOffset + Math.abs(H) + (Math.abs(B) - (diagonalOffset + Math.abs(H)))));
+					        (diagonalOffset + Math.abs(H) + (Math.abs(B) - (diagonalOffset + Math.abs(H)))));
 					
 					prevNode = createTrack(preFactorB, 0, 0, diagonalOffset, prevNode); // vertical lines
 					prevNode = createTrack(preFactorB, preFactorH, 0, Math.abs(H), prevNode); // diagonal lines
@@ -255,6 +256,7 @@ public class TrackPlacingTool extends ToolView
 	 *            End of counter.
 	 * @param prevNode
 	 *            The previous node that should be connected to new ones.
+	 * @return The node this tracks ends with.
 	 */
 	private RailwayNode createTrack(int offsetB, int offsetH, int start, int end, RailwayNode prevNode)
 	{
@@ -266,7 +268,7 @@ public class TrackPlacingTool extends ToolView
 			if (!RailwayNodeOverseer.isNodeAt(nodePosition)) // if there's NO node at this position
 			{
 				node = RailwayNodeOverseer.createNode(new Point(
-						prevNode.getPosition().x + offsetB, prevNode.getPosition().y + offsetH), prevNode);
+				        prevNode.getPosition().x + offsetB, prevNode.getPosition().y + offsetH), prevNode);
 				
 			}
 			else

@@ -64,16 +64,28 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 	 */
 	protected abstract void initializeUi();
 	
+	/**
+	 * Changes the input processor of this game screen container.
+	 * 
+	 * @param processor
+	 *            The new input processor.
+	 */
 	public void setInputProcessor(InputProcessor processor)
 	{
 		_gameScreenInputProcessor = processor;
 	}
 	
+	/**
+	 * @return The current registration service for container.
+	 */
 	public ContainerRegistrationService getContainerRegistrationService()
 	{
 		return _containerRenderer.getRegistrationService();
 	}
 	
+	/**
+	 * @return The current renderer for container.
+	 */
 	public ContainerRenderer getContainerRenderer()
 	{
 		Contract.EnsureNotNull(_containerRenderer);
@@ -91,6 +103,12 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		_containerRenderer.notifyDraw();
 	}
 	
+	/**
+	 * @param sp
+	 *            the sprite batch to draw on.
+	 */
+	// TODO remove this method. This is only used to draw city circles (which should be drawed on a canvas).
+	@Deprecated
 	public abstract void updateGameScreen(SpriteBatch sp);
 	
 	@Override
@@ -101,6 +119,11 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		notifyAllAboutSwitch(newGameScreen);
 	}
 	
+	/**
+	 * @param keycode
+	 *            The code of the pressed key.
+	 * @return True when handled, false otherwise.
+	 */
 	public boolean keyDownEvent(int keycode)
 	{
 		if (keycode == Keys.ESCAPE) // Show in game window if no input control and no other window is focused/open.
@@ -118,6 +141,11 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		return true;
 	}
 	
+	/**
+	 * @param keycode
+	 *            The code of the pressed key.
+	 * @return True when handled, false otherwise.
+	 */
 	public boolean keyUpEvent(int keycode)
 	{
 		_containerRenderer.notifyKeyUp(keycode);
@@ -128,6 +156,11 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		return true;
 	}
 	
+	/**
+	 * @param character
+	 *            The character typed.
+	 * @return True when handled, false otherwise.
+	 */
 	public boolean keyTypedEvent(char character)
 	{
 		if (_gameScreenInputProcessor != null)
@@ -137,6 +170,19 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		return true;
 	}
 	
+	/**
+	 * Handles a click of touch event (only called "click").
+	 * 
+	 * @param screenX
+	 *            The x-position of the click.
+	 * @param screenY
+	 *            The y-position of the click.
+	 * @param pointer
+	 *            The pointer of the event.
+	 * @param button
+	 *            The button pressed.
+	 * @return True when handled, false otherwise.
+	 */
 	public boolean touchDownEvent(int screenX, int screenY, int pointer, int button)
 	{
 		boolean clickProcessed = _containerRenderer.notifyMouseClick(screenX, screenY, button);
@@ -147,6 +193,19 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		return true;
 	}
 	
+	/**
+	 * Handles a up-event of touch of click (only called "click").
+	 * 
+	 * @param screenX
+	 *            The x-position of the click.
+	 * @param screenY
+	 *            The y-position of the click.
+	 * @param pointer
+	 *            The pointer of the event.
+	 * @param button
+	 *            The button that was pressed and is now released.
+	 * @return True when handled, false otherwise.
+	 */
 	public boolean touchUpEvent(int screenX, int screenY, int pointer, int button)
 	{
 		_containerRenderer.notifyMouseReleased(screenX, screenY, button);
@@ -157,6 +216,17 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		return true;
 	}
 	
+	/**
+	 * Handles a drag event.
+	 * 
+	 * @param screenX
+	 *            The x-position of the mouse.
+	 * @param screenY
+	 *            The y-position of the mouse.
+	 * @param pointer
+	 *            The pointer for this event.
+	 * @return True when handled, false otherwise.
+	 */
 	public boolean touchDraggedEvent(int screenX, int screenY, int pointer)
 	{
 		if (_gameScreenInputProcessor != null)
@@ -166,6 +236,15 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		return true;
 	}
 	
+	/**
+	 * Handles the event of a moving mouse.
+	 * 
+	 * @param screenX
+	 *            The current x-position of the mouse.
+	 * @param screenY
+	 *            The current y-position of the mouse.
+	 * @return True when handled, false otherwise.
+	 */
 	public boolean mouseMovedEvent(int screenX, int screenY)
 	{
 		if (_gameScreenInputProcessor != null)
@@ -175,6 +254,13 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		return true;
 	}
 	
+	/**
+	 * Handles a scroll event.
+	 * 
+	 * @param amount
+	 *            The amount of steps scrolled since last call.
+	 * @return True when handled, false otherwise.
+	 */
 	public boolean scrolledEvent(int amount)
 	{
 		_containerRenderer.notifyMouseScrolled(amount);

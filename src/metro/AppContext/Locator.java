@@ -26,8 +26,8 @@ public class Locator
 		T resolve();
 	}
 	
-	private static Map<Class, ServiceInstanceCreator<?>>	_registeredServices;
-	private static Map<Class, Object>						_initializedServices;
+	private static Map<Class<?>, ServiceInstanceCreator<?>>	_registeredServices;
+	private static Map<Class<?>, Object>					_initializedServices;
 	private static boolean									_serviceLocatorInitialized;
 	
 	/**
@@ -80,12 +80,15 @@ public class Locator
 		
 		if (_initializedServices.containsKey(clazz))
 		{
-			return (T) _initializedServices.get(clazz);
+			@SuppressWarnings ("unchecked") // we will either get null or the correct type
+			T service = (T) _initializedServices.get(clazz);
+			return service;
 		}
 		
 		// TODO exception if type not registered.
 		ServiceInstanceCreator<?> serviceCreator = _registeredServices.get(clazz);
 		
+		@SuppressWarnings ("unchecked") // we will either get null or the correct type
 		T resolvedService = (T) serviceCreator.resolve();
 		_initializedServices.put(clazz, resolvedService);
 		

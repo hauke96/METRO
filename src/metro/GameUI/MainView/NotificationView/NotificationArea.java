@@ -78,11 +78,17 @@ public class NotificationArea implements NotificationSubscriber
 		NotificationServer.subscribe(this);
 	}
 	
+	/**
+	 * @return The background panel of this control.
+	 */
 	public AbstractContainer getBackgroundPanel()
 	{
 		return _panel;
 	}
 	
+	/**
+	 * @return The height of the background panel (and so of this whole control).
+	 */
 	public int getHeight()
 	{
 		return _height;

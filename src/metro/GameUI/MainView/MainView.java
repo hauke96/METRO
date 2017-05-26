@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import juard.Contract;
 import metro.METRO;
-import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.GameUI.Common.ToolView;
@@ -47,6 +46,8 @@ public class MainView extends GameScreenContainer implements InputProcessor
 	 *            The train management service
 	 * @param playingField
 	 *            The field, the player should play on.
+	 * @param notificationArea
+	 *            The notification area, where in-game notifications will be displayed.
 	 */
 	public MainView(GameState gameState, TrainManagementService trainManagementService, PlayingField playingField, NotificationArea notificationArea)
 	{

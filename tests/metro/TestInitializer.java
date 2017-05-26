@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import metro.AppContext.Locator;
 import metro.TrainManagement.TrainManagementService;
 import metro.UI.ContainerRegistrationService;
-import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderer.BasicContainerRenderer;
 
 /**
@@ -26,6 +25,7 @@ public class TestInitializer
 		
 		Locator.get(TrainManagementService.class).init();
 		
-		BasicContainerRenderer containerRenderer = new BasicContainerRenderer(Locator.get(ContainerRegistrationService.class));
+		// Initializes the renderer
+		new BasicContainerRenderer(Locator.get(ContainerRegistrationService.class));
 	}
 }

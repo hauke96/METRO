@@ -28,7 +28,9 @@ public class ToolbarTool
 	 * Creates the controller and the view of the toolbar.
 	 * 
 	 * @param viewWidth
-	 *            The width of tools to align buttons.
+	 *            The width of the toolbar.
+	 * @param viewHeight
+	 *            The height of the toolbar.
 	 */
 	public ToolbarTool(int viewWidth, int viewHeight)
 	{

@@ -39,10 +39,13 @@ public class Settings
 	private static final String EOL = "[eol]";
 	
 	private Map<String, Object> _settings,
-			_newSettings;
+	        _newSettings;
 	
 	private String __praeambel;
 	
+	/**
+	 * Creates a plain settings object. No config file will be loaded here.
+	 */
 	public Settings()
 	{
 		__praeambel = "* comments begin with *\n* Settings: [name]=[value]\n";

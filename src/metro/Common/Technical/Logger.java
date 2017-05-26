@@ -19,13 +19,20 @@ public class Logger
 	private static final String	INFO	= "[info]  ";
 	private static final String	FATAL	= "[fatal]";
 	
+	/**
+	 * True to create an empty line between each output.
+	 */
 	public static boolean	__separatingEmptyLine	= false;
+	/**
+	 * True to also show debug output.
+	 */
 	public static boolean	__showDebug				= true;
 	
 	/**
 	 * Prints the given information including
 	 * 
 	 * @param infoMessage
+	 *            The message to print as normal information.
 	 */
 	public static void __info(String infoMessage)
 	{
@@ -36,7 +43,7 @@ public class Logger
 	 * Prints a debug message into the console but only if the debug mode is on.
 	 * 
 	 * @param debugMessage
-	 *            The message to print.
+	 *            The message to print in debug mode.
 	 */
 	public static void __debug(String debugMessage)
 	{
@@ -49,7 +56,7 @@ public class Logger
 	 * Prints the error message to STD_ERR.
 	 * 
 	 * @param errorMessage
-	 *            The message to show.
+	 *            The message to show as error.
 	 */
 	public static void __error(String errorMessage)
 	{
@@ -60,7 +67,7 @@ public class Logger
 	 * Prints the error message to STD_ERR.
 	 * 
 	 * @param errorMessage
-	 *            The message to show.
+	 *            The message to show as error.
 	 * @param throwable
 	 *            An throwable object to show even more information.
 	 */
@@ -74,7 +81,7 @@ public class Logger
 	 * Shows the error message and exits the application with exit-code 1.
 	 * 
 	 * @param errorMessage
-	 *            The error message to show.
+	 *            The error message to show as fatal error.
 	 */
 	public static void __fatal(String errorMessage)
 	{

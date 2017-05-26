@@ -19,11 +19,11 @@ import metro.UI.Renderer.BasicContainerRenderer;
  */
 public class BasicContainerRendererTest
 {
-	StaticContainer			_containerAbove,
-			_containerBelow,
-			_containerMiddle,
-			_containerOther,
-			_containerConflictedWithAbove;
+	private StaticContainer	_containerAbove,
+	        _containerBelow,
+	        _containerMiddle,
+	        _containerOther,
+	        _containerConflictedWithAbove;
 	private DummyRenderer	_containerRenderer;
 	
 	private class DummyRenderer extends BasicContainerRenderer

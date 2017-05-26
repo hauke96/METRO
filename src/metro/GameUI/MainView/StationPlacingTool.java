@@ -89,6 +89,7 @@ public class StationPlacingTool extends ToolView
 	 *            The y-coordinate of the click.
 	 * @param mapOffset
 	 *            The current map offset.
+	 * @return True when handeled, false otherwise.
 	 */
 	private boolean leftClick(int screenX, int screenY, Point2D mapOffset)
 	{
@@ -123,6 +124,7 @@ public class StationPlacingTool extends ToolView
 	 *            The y-coordinate of the click.
 	 * @param offset
 	 *            The current map offset.
+	 * @return True when handeled, false otherwise.
 	 */
 	private boolean rightClick(int screenX, int screenY, Point2D offset)
 	{

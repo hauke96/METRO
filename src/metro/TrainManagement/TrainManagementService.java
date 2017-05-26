@@ -106,15 +106,15 @@ public class TrainManagementService implements Observer
 		List<String> lines = Files.readAllLines((new File("data/trains.txt")).toPath(), Charset.defaultCharset());
 		
 		Pattern comment = Pattern.compile("\\s#\\w"),
-				empty = Pattern.compile("\\s");
+		        empty = Pattern.compile("\\s");
 		
 		String name = "",
-				manufacturer = "",
-				price = "",
-				costs = "",
-				costsfactor = "",
-				passenger = "",
-				speed = "";
+		        manufacturer = "",
+		        price = "",
+		        costs = "",
+		        costsfactor = "",
+		        passenger = "",
+		        speed = "";
 		
 		for (String line : lines)
 		{
@@ -127,58 +127,58 @@ public class TrainManagementService implements Observer
 				{
 					case "NAME":
 						if (!name.equals("")) throw new IllegalArgumentException(
-								"Each property has to have exactly one key of each. In this case \"NAME\" exists multiple times in the property " + name + "!");
+						        "Each property has to have exactly one key of each. In this case \"NAME\" exists multiple times in the property " + name + "!");
 						name = lineSplit[1];
 						break;
 					case "MANUFACTURER":
 						if (!manufacturer.equals("")) throw new IllegalArgumentException(
-								"Each property has to have exactly one key of each. In this case \"MANUFACTURER\" exists multiple times in the property " + name + "!");
+						        "Each property has to have exactly one key of each. In this case \"MANUFACTURER\" exists multiple times in the property " + name + "!");
 						manufacturer = lineSplit[1];
 						break;
 					case "PRICE":
 						if (!price.equals("")) throw new IllegalArgumentException(
-								"Each property has to have exactly one key of each. In this case \"PRICE\" exists multiple times in the property " + name + "!");
+						        "Each property has to have exactly one key of each. In this case \"PRICE\" exists multiple times in the property " + name + "!");
 						price = lineSplit[1];
 						break;
 					case "COSTS":
 						if (!costs.equals("")) throw new IllegalArgumentException(
-								"Each property has to have exactly one key of each. In this case \"COSTS\" exists multiple times in the property " + name + "!");
+						        "Each property has to have exactly one key of each. In this case \"COSTS\" exists multiple times in the property " + name + "!");
 						costs = lineSplit[1];
 						break;
 					case "COSTSFACTOR":
 						if (!costsfactor.equals("")) throw new IllegalArgumentException(
-								"Each property has to have exactly one key of each. In this case \"COSTFACTOR\" exists multiple times in the property " + name + "!");
+						        "Each property has to have exactly one key of each. In this case \"COSTFACTOR\" exists multiple times in the property " + name + "!");
 						costsfactor = lineSplit[1];
 						break;
 					case "PASSENGER":
 						if (!passenger.equals("")) throw new IllegalArgumentException(
-								"Each property has to have exactly one key of each. In this case \"PASSENGER\" exists multiple times in the property " + name + "!");
+						        "Each property has to have exactly one key of each. In this case \"PASSENGER\" exists multiple times in the property " + name + "!");
 						passenger = lineSplit[1];
 						break;
 					case "SPEED":
 						if (!speed.equals("")) throw new IllegalArgumentException(
-								"Each property has to have exactly one key of each. In this case \"SPEED\" exists multiple times in the property " + name + "!");
+						        "Each property has to have exactly one key of each. In this case \"SPEED\" exists multiple times in the property " + name + "!");
 						speed = lineSplit[1];
 						break;
 				}
 				
 				// when the read data is complete, create train and put it into the map and then reset all variables
 				if (!name.equals("")
-						&& !manufacturer.equals("")
-						&& !price.equals("")
-						&& !costs.equals("")
-						&& !costsfactor.equals("")
-						&& !passenger.equals("")
-						&& !speed.equals(""))
+				        && !manufacturer.equals("")
+				        && !price.equals("")
+				        && !costs.equals("")
+				        && !costsfactor.equals("")
+				        && !passenger.equals("")
+				        && !speed.equals(""))
 				{
 					Logger.__debug(
-							"Name: " + name + "\n" +
-									"Manufacturer: " + manufacturer + "\n" +
-									"Price: " + Integer.parseInt(price) + "\n" +
-									"Costs: " + Integer.parseInt(costs) + "\n" +
-									"CostFactor: " + Float.parseFloat(costsfactor) + "\n" +
-									"Passenger: " + Integer.parseInt(passenger) + "\n" +
-									"Speed: " + Float.parseFloat(speed));
+					        "Name: " + name + "\n" +
+					                "Manufacturer: " + manufacturer + "\n" +
+					                "Price: " + Integer.parseInt(price) + "\n" +
+					                "Costs: " + Integer.parseInt(costs) + "\n" +
+					                "CostFactor: " + Float.parseFloat(costsfactor) + "\n" +
+					                "Passenger: " + Integer.parseInt(passenger) + "\n" +
+					                "Speed: " + Float.parseFloat(speed));
 					addTemplateTrain(new TrainTemplate(name, name, manufacturer, Integer.parseInt(price), Integer.parseInt(costs), Float.parseFloat(costsfactor), Integer.parseInt(passenger), Float.parseFloat(speed)));
 					name = "";
 					manufacturer = "";
@@ -527,7 +527,7 @@ public class TrainManagementService implements Observer
 			
 			// set signal for train
 			RailwayNodeOverseer.getNodeByPosition(currentNode).setSignalValue(
-					RailwayNodeOverseer.getNodeByPosition(nextNode), train);
+			        RailwayNodeOverseer.getNodeByPosition(nextNode), train);
 			
 			// find train thats nearer on the nextNode and set therefore the signal to this node
 			for (Train t : getTrains())
@@ -535,11 +535,11 @@ public class TrainManagementService implements Observer
 				if (!t.equals(train))
 				{
 					if (nextNode.equals(t.getNextNode()) // driving to same node
-							&& currentNode.equals(t.getCurrentNode()) // same last node. In addition to first condition --> trains driving in same direction
-							&& train.calcPosition().distance(nextNode) >= t.calcPosition().distance(nextNode)) // train behind t --> train can't move, t can
+					        && currentNode.equals(t.getCurrentNode()) // same last node. In addition to first condition --> trains driving in same direction
+					        && train.calcPosition().distance(nextNode) >= t.calcPosition().distance(nextNode)) // train behind t --> train can't move, t can
 					{
 						RailwayNodeOverseer.getNodeByPosition(currentNode).setSignalValue(
-								RailwayNodeOverseer.getNodeByPosition(nextNode), t);
+						        RailwayNodeOverseer.getNodeByPosition(nextNode), t);
 					}
 				}
 			}
@@ -551,6 +551,8 @@ public class TrainManagementService implements Observer
 	 * 
 	 * @param train
 	 *            The train which may can move.
+	 * @param deltaTime
+	 *            The difference in time since last call.
 	 * @return True when the train can move, false when not.
 	 */
 	private boolean canMove(Train train, float deltaTime)
@@ -564,14 +566,14 @@ public class TrainManagementService implements Observer
 		if (currentNode.equals(currentNodeAfterMove)) // train does not pass a signal
 		{
 			return RailwayNodeOverseer.getNodeByPosition(currentNode).getSignalValue(
-					RailwayNodeOverseer.getNodeByPosition(train.getNextNode()), train);
+			        RailwayNodeOverseer.getNodeByPosition(train.getNextNode()), train);
 		}
 		
 		// when the train will pass a node/signal, check if any other train is in this area or if this train can move forward.
 		// When there's any other node in the next area, the signal at "currentNode" will change to "green" which is wrong, because
 		// then other train might rush into this train.
 		return RailwayNodeOverseer.getNodeByPosition(currentNodeAfterMove).getSignalValue(
-				RailwayNodeOverseer.getNodeByPosition(nextNodeAfterMove), train);
+		        RailwayNodeOverseer.getNodeByPosition(nextNodeAfterMove), train);
 	}
 	
 	/**

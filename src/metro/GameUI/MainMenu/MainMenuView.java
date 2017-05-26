@@ -16,31 +16,40 @@ import metro.UI.Renderable.Controls.Button;
 import metro.UI.Renderable.Controls.Canvas;
 import metro.UI.Renderable.Controls.Canvas.CanvasPainter;
 
+/**
+ * The view component of the main menu. This contains all the buttons and welcome window.
+ * 
+ * @author hauke
+ *
+ */
 public class MainMenuView
 {
 	private Button					_button_startGame,
-			_button_settings,
-			_button_exitGame;
+	        _button_settings,
+	        _button_exitGame;
 	private Window					_welcomeWindow;
 	private static TextureRegion	__buttonTextures,
-			_titleImageTexture;
+	        _titleImageTexture;
 	private Panel					_panel;
 	private Canvas					_titleImageCanvas;
 	
+	/**
+	 * Creates all controls and initialized them.
+	 */
 	void initializeUi()
 	{
 		// Create MainMenuTool buttons:
 		_button_startGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2
-				- 25, 200, 50), new Rectangle(0, 0, 200, 50), __buttonTextures);
+		        - 25, 200, 50), new Rectangle(0, 0, 200, 50), __buttonTextures);
 		
 		_button_settings = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2
-				+ 35, 200, 50), new Rectangle(0, 50, 200, 50), __buttonTextures);
+		        + 35, 200, 50), new Rectangle(0, 50, 200, 50), __buttonTextures);
 		
 		_button_exitGame = new Button(new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 100, METRO.__SCREEN_SIZE.height / 2
-				+ 95, 200, 50), new Rectangle(0, 100, 200, 50), __buttonTextures);
+		        + 95, 200, 50), new Rectangle(0, 100, 200, 50), __buttonTextures);
 		
 		_titleImageCanvas = new Canvas(new Point(
-				METRO.__SCREEN_SIZE.width / 2 - _titleImageTexture.getRegionWidth() / 2, METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 200));
+		        METRO.__SCREEN_SIZE.width / 2 - _titleImageTexture.getRegionWidth() / 2, METRO.__SCREEN_SIZE.height / 2 - _titleImageTexture.getRegionHeight() / 2 - 200));
 		_titleImageCanvas.setPainter(new CanvasPainter()
 		{
 			@Override
@@ -59,6 +68,9 @@ public class MainMenuView
 		_panel.add(_button_exitGame);
 	}
 	
+	/**
+	 * Loads the textures for e.g. the buttons.
+	 */
 	void loadVisuals()
 	{
 		__buttonTextures = new TextureRegion(new Texture(Gdx.files.internal("textures/MainMenu_Buttons.png")));
@@ -68,6 +80,9 @@ public class MainMenuView
 		_titleImageTexture.flip(false, true);
 	}
 	
+	/**
+	 * Closes the main window including all windows.
+	 */
 	void close()
 	{
 		_panel.close();
@@ -77,18 +92,27 @@ public class MainMenuView
 		}
 	}
 	
-	ActionObservable getExitButton()
+	/**
+	 * @return The play button.
+	 */
+	ActionObservable getStartGameButton()
 	{
-		return _button_exitGame;
+		return _button_startGame;
 	}
 	
+	/**
+	 * @return The settings button.
+	 */
 	ActionObservable getSettingsButton()
 	{
 		return _button_settings;
 	}
 	
-	ActionObservable getStartGameButton()
+	/**
+	 * @return The exit button.
+	 */
+	ActionObservable getExitButton()
 	{
-		return _button_startGame;
+		return _button_exitGame;
 	}
 }

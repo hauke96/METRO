@@ -20,8 +20,17 @@ import metro.UI.Renderable.ControlElement;
  */
 public class Canvas extends ControlElement
 {
+	/**
+	 * This class is used to render the content of a canvas.
+	 * 
+	 * @author hauke
+	 *
+	 */
 	public interface CanvasPainter
 	{
+		/**
+		 * This method renders the content of this painter.
+		 */
 		public void paint();
 	}
 	
@@ -36,11 +45,22 @@ public class Canvas extends ControlElement
 		_area.width = METRO.__SCREEN_SIZE.width;
 	}
 	
+	/**
+	 * Creates an empty canvas with the given size and position.
+	 * 
+	 * @param area
+	 *            The area with the position on the parent control and the size.
+	 */
 	public Canvas(Rectangle area)
 	{
 		_area = area;
 	}
 	
+	/**
+	 * Sets the painter to draw content on the canvas.
+	 * 
+	 * @param newPainter Ths new painter of this canvas.
+	 */
 	public void setPainter(CanvasPainter newPainter)
 	{
 		_painter = newPainter;

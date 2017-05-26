@@ -22,8 +22,8 @@ import metro.UI.Renderer.BasicContainerRenderer;
  */
 public class LineViewTest
 {
-	LineView	view;
-	private int	_toolViewWidth;
+	private LineView	view;
+	private int			_toolViewWidth;
 	
 	/**
 	 * Simply creates the line view object
@@ -47,7 +47,7 @@ public class LineViewTest
 	public void testGetAreaOffset()
 	{
 		assertEquals(
-				new Point(METRO.__SCREEN_SIZE.width - _toolViewWidth, 40), view.getAreaOffset());
+		        new Point(METRO.__SCREEN_SIZE.width - _toolViewWidth, 40), view.getAreaOffset());
 	}
 	
 	/**
