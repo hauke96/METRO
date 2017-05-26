@@ -206,7 +206,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		
 		GameScreenContainer startScreen = new MainMenuTool(Locator.get(Settings.class));
 		
-		__currentGameScreenContainerManager.switchGameScreen(startScreen);
+		__currentGameScreenContainerManager.switchTo(startScreen);
 		
 		__gameState = Locator.get(GameState.class);
 	}
@@ -342,7 +342,7 @@ public class METRO implements ApplicationListener, InputProcessor
 		
 		renderInit();
 		// __currentGameScreenManager.renderCurrentGameScreen(__spriteBatch);
-		__currentGameScreenContainerManager.updateGameScreen(__spriteBatch);
+		__currentGameScreenContainerManager.draw(__spriteBatch);
 		__currentGameScreenContainerManager.renderUI();
 		// TODO replace this by calling the "currentGameScreenContainerManager"
 		// __containerRenderer.notifyDraw();

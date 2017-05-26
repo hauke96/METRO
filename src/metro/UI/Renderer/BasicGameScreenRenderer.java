@@ -18,13 +18,13 @@ public class BasicGameScreenRenderer implements GameScreenRenderer, GameScreenSw
 	private GameScreenContainer _currentGameScreen;
 	
 	@Override
-	public void switchGameScreen(GameScreenContainer gameScreen)
+	public void switchTo(GameScreenContainer gameScreen)
 	{
 		reactToGameScreenSwitch(gameScreen);
 	}
 	
 	@Override
-	public void updateGameScreen(SpriteBatch sp)
+	public void draw(SpriteBatch sp)
 	{
 		_currentGameScreen.updateGameScreen(sp);
 	}

@@ -115,7 +115,7 @@ public class TrainViewBuy extends ToolView
 	/**
 	 * Draws the control.
 	 */
-	public void updateGameScreen()
+	public void draw()
 	{
 		drawHeader();
 		drawTitleImage();

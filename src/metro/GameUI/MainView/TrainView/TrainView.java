@@ -121,7 +121,7 @@ public class TrainView extends ToolView
 	private void draw()
 	{
 		drawTitleBox();
-		_trainViewBuy.updateGameScreen();
+		_trainViewBuy.draw();
 	}
 	
 	/**

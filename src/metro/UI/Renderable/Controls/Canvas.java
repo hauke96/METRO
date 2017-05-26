@@ -59,7 +59,8 @@ public class Canvas extends ControlElement
 	/**
 	 * Sets the painter to draw content on the canvas.
 	 * 
-	 * @param newPainter Ths new painter of this canvas.
+	 * @param newPainter
+	 *            Ths new painter of this canvas.
 	 */
 	public void setPainter(CanvasPainter newPainter)
 	{

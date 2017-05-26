@@ -28,8 +28,8 @@ public class InGameMenuWindow
 	
 	private Window		_window;
 	private Button		_yesButton,
-			_noButton,
-			_settingsButton;
+	        _noButton,
+	        _settingsButton;
 	private Settings	_settings;
 	
 	/**
@@ -50,7 +50,9 @@ public class InGameMenuWindow
 	
 	/**
 	 * Creates a new exit game window with a settings button.
-	 * @param settings The settings object to display current settings and change them.
+	 * 
+	 * @param settings
+	 *            The settings object to display current settings and change them.
 	 */
 	private InGameMenuWindow(Settings settings)
 	{

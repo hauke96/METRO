@@ -44,7 +44,7 @@ public class CityView extends ToolView
 	 * @param baseNetSpacing
 	 *            The current base net spacing.
 	 */
-	public void updateGameScreen(Point offset, int baseNetSpacing)
+	public void draw(Point offset, int baseNetSpacing)
 	{
 		List<TravelerSpot> travelerSpots = _trainManagementService.getTravelerSpots();
 		

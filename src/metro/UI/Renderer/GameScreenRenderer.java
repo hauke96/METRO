@@ -19,14 +19,14 @@ public interface GameScreenRenderer extends InputProcessor, GameScreenSwitchedOb
 	 * @param sp
 	 *            SpriteBatch to draw on.
 	 */
-	void updateGameScreen(SpriteBatch sp);
+	void draw(SpriteBatch sp);
 	
 	/**
 	 * Switches the current game screen to the given one.
 	 * 
 	 * @param gameScreen The new game screen.
 	 */
-	void switchGameScreen(GameScreenContainer gameScreen);
+	void switchTo(GameScreenContainer gameScreen);
 	
 	/**
 	 * Renders the controls specified by the renderer passed to the game screen.

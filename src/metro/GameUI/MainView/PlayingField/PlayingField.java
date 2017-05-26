@@ -56,7 +56,7 @@ public class PlayingField implements InputProcessor
 		_panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height), false);
 		
 		_canvas = new Canvas(new Point(0, 0));
-		_canvas.setPainter(() -> updateGameScreen());
+		_canvas.setPainter(() -> draw());
 		
 		_panel.add(_canvas);
 	}
@@ -107,7 +107,7 @@ public class PlayingField implements InputProcessor
 		_canvas.setArea(area);
 	}
 	
-	private void updateGameScreen()
+	private void draw()
 	{
 		if (_dragMode)
 		{
@@ -117,7 +117,7 @@ public class PlayingField implements InputProcessor
 		
 		boolean mouseIsOnPanel = _panel.isInArea(_oldMousePos.x, _oldMousePos.y);
 		_cityView.setCircleHighlighting(mouseIsOnPanel);
-		_cityView.updateGameScreen(_mapOffset, _gameState.getBaseNetSpacing());
+		_cityView.draw(_mapOffset, _gameState.getBaseNetSpacing());
 		
 		drawBaseNet(new Color(220, 220, 220), 0);
 		
