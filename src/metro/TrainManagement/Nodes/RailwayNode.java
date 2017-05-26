@@ -14,7 +14,7 @@ import metro.TrainManagement.Trains.Train;
 
 /**
  * A railway node is a point that's used by train lines and every node has neighbors (both know each other).
- * Train lines are not drawn here even if they're only node connections (they are drawn in the {@link metro.TrainManagement.Trains.TrainLine} class).
+ * Train lines are not drawn here even if they're only node connections (they are drawn in the {@link metro.TrainManagement.TrainLines.TrainLine} class).
  * 
  * @author hauke
  *

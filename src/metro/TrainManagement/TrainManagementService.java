@@ -20,12 +20,13 @@ import metro.Common.Technical.Logger;
 import metro.Common.Technical.Exceptions.NotEnoughMoneyException;
 import metro.GameUI.MainView.NotificationView.NotificationServer;
 import metro.GameUI.MainView.NotificationView.NotificationType;
+import metro.TrainManagement.Environment.TravelerSpot;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
+import metro.TrainManagement.TrainLines.TrainLine;
+import metro.TrainManagement.TrainLines.TrainLineDrawingService;
+import metro.TrainManagement.TrainStations.TrainStation;
 import metro.TrainManagement.Trains.Train;
-import metro.TrainManagement.Trains.TrainLine;
-import metro.TrainManagement.Trains.TrainStation;
 import metro.TrainManagement.Trains.TrainTemplate;
-import metro.TrainManagement.Trains.TravelerSpot;
 
 /**
  * The train management service combines the former TrainOverseer and TrainLineOverseer into one class without any circle dependencies anymore.

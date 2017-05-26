@@ -1,4 +1,4 @@
-package metro.TrainManagement;
+package metro.TrainManagement.TrainLines;
 
 import java.awt.Point;
 import java.util.HashMap;
@@ -9,7 +9,6 @@ import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.TrainManagement.Nodes.RailwayNode;
-import metro.TrainManagement.Trains.TrainLine;
 
 /**
  * This class draws the train lines by a specific sorting algorithm.

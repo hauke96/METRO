@@ -8,7 +8,7 @@ import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.GameUI.Common.ToolView;
 import metro.TrainManagement.TrainManagementService;
-import metro.TrainManagement.Trains.TravelerSpot;
+import metro.TrainManagement.Environment.TravelerSpot;
 
 /**
  * GameScreen with the city view. It Shows the population density and basic player information.

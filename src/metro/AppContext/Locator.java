@@ -14,8 +14,8 @@ import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.MainView.TrainView.TrainView;
-import metro.TrainManagement.TrainLineDrawingService;
 import metro.TrainManagement.TrainManagementService;
+import metro.TrainManagement.TrainLines.TrainLineDrawingService;
 import metro.UI.ContainerRegistrationService;
 
 /**

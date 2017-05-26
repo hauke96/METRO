@@ -17,7 +17,7 @@ import metro.Common.Game.GameState;
 import metro.Common.Technical.ModifiableBoolean;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.TrainManagement.TrainManagementService;
-import metro.TrainManagement.Trains.TrainStation;
+import metro.TrainManagement.TrainStations.TrainStation;
 
 /**
  * @author hauke

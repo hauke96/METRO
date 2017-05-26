@@ -14,7 +14,7 @@ import metro.Common.Graphics.Fill;
 import metro.GameUI.Common.ToolView;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.TrainManagement.TrainManagementService;
-import metro.TrainManagement.Trains.TrainStation;
+import metro.TrainManagement.TrainStations.TrainStation;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.Panel;
 import metro.UI.Renderable.Controls.Canvas;

@@ -14,7 +14,7 @@ import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.TrainManagement.TrainManagementService;
 import metro.TrainManagement.Nodes.RailwayNode;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
-import metro.TrainManagement.Trains.TrainLine;
+import metro.TrainManagement.TrainLines.TrainLine;
 
 /**
  * The LineSelectTool allows the user to create train lines by clicking on all the nodes this line should contain.
