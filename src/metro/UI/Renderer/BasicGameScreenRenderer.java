@@ -40,25 +40,25 @@ public class BasicGameScreenRenderer implements GameScreenRenderer, GameScreenSw
 	{
 		Contract.RequireNotNull(newGameScreen);
 		
-		ContainerRegistrationService registrationService;
-		
-		// old game screen
 		if (_currentGameScreen != null)
 		{
 			_currentGameScreen.unregisterSwitchedObserver();
-			registrationService = _currentGameScreen.getContainerRegistrationService();
+			
+			newGameScreen.init(_currentGameScreen.getContainerRenderer());
 		}
 		else
 		{
-			registrationService = Locator.get(ContainerRegistrationService.class);
+			ContainerRegistrationService registrationService = Locator.get(ContainerRegistrationService.class);
+			
+			// TODO resolve the BasicContainerRenderer, this also ensures that there'll be only one instance
+			newGameScreen.init(new BasicContainerRenderer(registrationService));
 		}
 		
-		// new gamescreen
-		_currentGameScreen = newGameScreen;
-		_currentGameScreen.registerSwitchedObserver(this);
-		_currentGameScreen.init(new BasicContainerRenderer(registrationService));
+		newGameScreen.registerSwitchedObserver(this);
 		
-		Contract.EnsureNotNull(newGameScreen);
+		_currentGameScreen = newGameScreen;
+		
+		Contract.EnsureNotNull(_currentGameScreen);
 	}
 	
 	@Override

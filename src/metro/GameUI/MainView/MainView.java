@@ -67,8 +67,6 @@ public class MainView extends GameScreenContainer implements InputProcessor
 		int height = METRO.__SCREEN_SIZE.height - toolbarHeight - _notificationArea.getHeight();
 		Rectangle playingFieldArea = new Rectangle(0, toolbarHeight, METRO.__SCREEN_SIZE.width, height);
 		
-		// Be sure the playground is visible after switching the game screen (and bypass the including renderer change):
-		_playingField.getBackgroundPanel().registerContainer();
 		_playingField.setArea(playingFieldArea);
 		
 		_toolbar = new ToolbarTool(_gameState.getToolViewWidth(), toolbarHeight);
@@ -114,8 +112,6 @@ public class MainView extends GameScreenContainer implements InputProcessor
 		
 		AbstractContainer playingFieldBackground = _playingField.getBackgroundPanel();
 		playingFieldBackground.setState(false);
-		
-		_notificationArea.getBackgroundPanel().setAboveOf(playingFieldBackground);
 		
 		// TODO do it right
 		// _toolbar.getBackgroundPanel().setAboveOf(playingFieldBackground);

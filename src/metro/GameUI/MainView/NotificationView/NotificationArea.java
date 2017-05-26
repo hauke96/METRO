@@ -55,7 +55,7 @@ public class NotificationArea implements NotificationSubscriber
 		_entryList.setTransparency(165);
 		_entryList.setStickiness(true);
 		
-		_canvas = new Canvas(new Point(0, METRO.__SCREEN_SIZE.height - _height));
+		_canvas = new Canvas(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height, METRO.__SCREEN_SIZE.width, _height));
 		_canvas.setPainter(() -> draw());
 		_canvas.register(new ActionObserver()
 		{

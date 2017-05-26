@@ -74,6 +74,13 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		return _containerRenderer.getRegistrationService();
 	}
 	
+	public ContainerRenderer getContainerRenderer()
+	{
+		Contract.EnsureNotNull(_containerRenderer);
+		
+		return _containerRenderer;
+	}
+	
 	/**
 	 * Renders the UI via the renderer specified in the constructor.
 	 */
