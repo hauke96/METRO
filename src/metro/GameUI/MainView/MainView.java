@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import juard.Contract;
 import metro.METRO;
+import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.GameUI.Common.ToolView;
@@ -51,6 +52,7 @@ public class MainView extends GameScreenContainer implements InputProcessor
 	 */
 	public MainView(GameState gameState, TrainManagementService trainManagementService, PlayingField playingField, NotificationArea notificationArea)
 	{
+		// TODO contracts
 		_gameState = gameState;
 		_trainManagementService = trainManagementService;
 		_playingField = playingField;
@@ -74,7 +76,7 @@ public class MainView extends GameScreenContainer implements InputProcessor
 		
 		_toolbar.StationPlacingToolSelected.add(() ->
 		{
-			StationPlacingTool stationPlacingTool = new StationPlacingTool(_gameState, _playingField, _trainManagementService);
+			StationPlacingTool stationPlacingTool = Locator.get(StationPlacingTool.class);
 			
 			_toolbar.setAboveOf(stationPlacingTool.getBackgroundPanel());
 			_notificationArea.getBackgroundPanel().setAboveOf(stationPlacingTool.getBackgroundPanel());
@@ -84,7 +86,7 @@ public class MainView extends GameScreenContainer implements InputProcessor
 		
 		_toolbar.TrackPlacingToolSelected.add(() ->
 		{
-			TrackPlacingTool trackPlacingTool = new TrackPlacingTool(_gameState, _playingField);
+			TrackPlacingTool trackPlacingTool = Locator.get(TrackPlacingTool.class);
 			
 			_toolbar.setAboveOf(trackPlacingTool.getBackgroundPanel());
 			_notificationArea.getBackgroundPanel().setAboveOf(trackPlacingTool.getBackgroundPanel());
@@ -94,7 +96,7 @@ public class MainView extends GameScreenContainer implements InputProcessor
 		
 		_toolbar.LineViewToolSelected.add(() ->
 		{
-			LineView lineView = new LineView(_gameState.getToolViewWidth(), _playingField, _trainManagementService);
+			LineView lineView = Locator.get(LineView.class);
 			
 			_toolbar.setAboveOf(lineView.getBackgroundPanel());
 			
@@ -103,7 +105,7 @@ public class MainView extends GameScreenContainer implements InputProcessor
 		
 		_toolbar.TrainViewToolSelected.add(() ->
 		{
-			TrainView trainView = new TrainView(_gameState.getToolViewWidth(), _trainManagementService);
+			TrainView trainView = Locator.get(TrainView.class);
 			
 			AbstractContainer trainViewPanel = trainView.getBackgroundPanel();
 			_toolbar.setAboveOf(trainViewPanel);

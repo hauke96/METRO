@@ -46,6 +46,7 @@ public class TrackPlacingTool extends ToolView
 	 */
 	public TrackPlacingTool(GameState gameState, PlayingField playingField)
 	{
+		//TODO contracts
 		_gameState = gameState;
 		_playingField = playingField;
 		

@@ -25,7 +25,6 @@ import metro.UI.Renderable.Controls.Canvas;
  * @author hauke
  *
  */
-// TODO also resolve by ServiceLocator
 // reset after use
 public class StationPlacingTool extends ToolView
 {
@@ -48,6 +47,7 @@ public class StationPlacingTool extends ToolView
 	 */
 	public StationPlacingTool(GameState gameState, PlayingField playingField, TrainManagementService trainManagementService)
 	{
+		//TODO contracts
 		_gameState = gameState;
 		_playingField = playingField;
 		_trainManagementService = trainManagementService;

@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import juard.Contract;
 import metro.METRO;
+import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.GameUI.Common.ToolView;
 import metro.TrainManagement.TrainManagementService;
@@ -33,14 +34,15 @@ public class TrainView extends ToolView
 	/**
 	 * Creates a new TrainLineView.
 	 * 
-	 * @param toolWidth
-	 *            The width of this tool.
+	 * @param gameState
+	 *            The current game state.
 	 * @param trainManagementService
 	 *            The train management service.
 	 */
-	public TrainView(int toolWidth, TrainManagementService trainManagementService)
+	public TrainView(GameState gameState, TrainManagementService trainManagementService)
 	{
-		_windowWidth = toolWidth;
+		// TODO contracts
+		_windowWidth = gameState.getToolViewWidth();
 		_trainManagementService = trainManagementService;
 		
 		_areaOffset = new Point(METRO.__SCREEN_SIZE.width - _windowWidth, 40);

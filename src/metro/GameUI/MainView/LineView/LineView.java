@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import juard.Contract;
 import metro.METRO;
+import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
 import metro.Common.Technical.Logger;
@@ -62,16 +63,17 @@ public class LineView extends ToolView
 	/**
 	 * Creates a new TrainLineView.
 	 * 
-	 * @param toolWidth
-	 *            The width of the tools UI area.
+	 * @param gameState
+	 *            The current game state.
 	 * @param playingField
 	 *            The field the player currently plays on.
 	 * @param trainManagementService
 	 *            The train management service.
 	 */
-	public LineView(int toolWidth, PlayingField playingField, TrainManagementService trainManagementService)
+	public LineView(GameState gameState, PlayingField playingField, TrainManagementService trainManagementService)
 	{
-		_toolWidth = toolWidth;
+		//TODO contracts
+		_toolWidth = gameState.getToolViewWidth();
 		_playingField = playingField;
 		_trainManagementService = trainManagementService;
 		

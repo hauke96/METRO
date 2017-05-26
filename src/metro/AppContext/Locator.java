@@ -7,8 +7,12 @@ import juard.Contract;
 import metro.Common.Game.GameState;
 import metro.Common.Game.Settings;
 import metro.GameUI.MainView.MainView;
+import metro.GameUI.MainView.StationPlacingTool;
+import metro.GameUI.MainView.TrackPlacingTool;
+import metro.GameUI.MainView.LineView.LineView;
 import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
+import metro.GameUI.MainView.TrainView.TrainView;
 import metro.TrainManagement.TrainLineDrawingService;
 import metro.TrainManagement.TrainManagementService;
 import metro.UI.ContainerRegistrationService;
@@ -58,6 +62,10 @@ public class Locator
 		
 		register(MainView.class, () -> new MainView(
 		        get(GameState.class), get(TrainManagementService.class), get(PlayingField.class), get(NotificationArea.class)));
+		register(StationPlacingTool.class, () -> new StationPlacingTool(get(GameState.class), get(PlayingField.class), get(TrainManagementService.class)));
+		register(TrackPlacingTool.class, () -> new TrackPlacingTool(get(GameState.class), get(PlayingField.class)));
+		register(LineView.class, () -> new LineView(get(GameState.class), get(PlayingField.class), get(TrainManagementService.class)));
+		register(TrainView.class, () -> new TrainView(get(GameState.class), get(TrainManagementService.class)));
 	}
 	
 	private static <T> void register(Class<T> clazz, ServiceInstanceCreator<T> t)
