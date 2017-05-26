@@ -61,7 +61,7 @@ public class Locator
 		register(ContainerRegistrationService.class, () -> new ContainerRegistrationService());
 		
 		register(MainView.class, () -> new MainView(
-		        get(GameState.class), get(TrainManagementService.class), get(PlayingField.class), get(NotificationArea.class)));
+		        get(GameState.class), get(PlayingField.class), get(NotificationArea.class)));
 		register(StationPlacingTool.class, () -> new StationPlacingTool(get(GameState.class), get(PlayingField.class), get(TrainManagementService.class)));
 		register(TrackPlacingTool.class, () -> new TrackPlacingTool(get(GameState.class), get(PlayingField.class)));
 		register(LineView.class, () -> new LineView(get(GameState.class), get(PlayingField.class), get(TrainManagementService.class)));

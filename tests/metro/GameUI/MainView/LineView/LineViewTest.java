@@ -22,7 +22,7 @@ import metro.UI.Renderer.BasicContainerRenderer;
  */
 public class LineViewTest
 {
-	private LineView	view;
+	private LineView	_view;
 	private int			_toolViewWidth;
 	
 	/**
@@ -34,10 +34,8 @@ public class LineViewTest
 		METRO.__SCREEN_SIZE = new Dimension(1920, 1080);
 		
 		_toolViewWidth = Locator.get(GameState.class).getToolViewWidth();
-		PlayingField field = Locator.get(PlayingField.class);
-		TrainManagementService trainManagementService = Locator.get(TrainManagementService.class);
 		
-		view = new LineView(_toolViewWidth, field, trainManagementService);
+		_view = Locator.get(LineView.class);
 	}
 	
 	/**
@@ -47,7 +45,7 @@ public class LineViewTest
 	public void testGetAreaOffset()
 	{
 		assertEquals(
-		        new Point(METRO.__SCREEN_SIZE.width - _toolViewWidth, 40), view.getAreaOffset());
+		        new Point(METRO.__SCREEN_SIZE.width - _toolViewWidth, 40), _view.getAreaOffset());
 	}
 	
 	/**
@@ -57,13 +55,13 @@ public class LineViewTest
 	public void testIsHovered()
 	{
 		METRO.__mousePosition = new Point(0, 0);
-		assertFalse(view.isHovered());
+		assertFalse(_view.isHovered());
 		
-		METRO.__mousePosition = new Point(view.getAreaOffset().x, 0);
-		assertFalse(view.isHovered());
+		METRO.__mousePosition = new Point(_view.getAreaOffset().x, 0);
+		assertFalse(_view.isHovered());
 		
-		METRO.__mousePosition = new Point(view.getAreaOffset().x + 1, 0);
-		assertTrue(view.isHovered());
+		METRO.__mousePosition = new Point(_view.getAreaOffset().x + 1, 0);
+		assertTrue(_view.isHovered());
 	}
 	
 	/**
@@ -72,14 +70,14 @@ public class LineViewTest
 	@Test
 	public void testCreateLineSelectTool()
 	{
-		LineSelectTool tool = view.getLineSelectTool();
+		LineSelectTool tool = _view.getLineSelectTool();
 		assertTrue(tool == null);
 		
-		view.createLineSelectTool();
-		tool = view.getLineSelectTool();
+		_view.createLineSelectTool();
+		tool = _view.getLineSelectTool();
 		
 		assertTrue(tool != null);
 		assertTrue(tool.CloseEvent.countObservers() > 0);
-		assertTrue(view.isLineSelectToolEnabled());
+		assertTrue(_view.isLineSelectToolEnabled());
 	}
 }

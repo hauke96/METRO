@@ -20,7 +20,7 @@ import metro.TrainManagement.TrainManagementService;
  */
 public class TrainViewTest
 {
-	private TrainView	view;
+	private TrainView	_view;
 	private int			_toolVewWidth;
 	
 	/**
@@ -33,9 +33,8 @@ public class TrainViewTest
 		METRO.__SCREEN_SIZE = new Dimension(1920, 1080);
 		
 		_toolVewWidth = Locator.get(GameState.class).getToolViewWidth();
-		TrainManagementService trainManagementService = Locator.get(TrainManagementService.class);
 		
-		view = new TrainView(_toolVewWidth, trainManagementService);
+		_view = Locator.get(TrainView.class);
 	}
 	
 	/**
@@ -45,7 +44,7 @@ public class TrainViewTest
 	public void testGetAreaOffset()
 	{
 		assertEquals(
-		        new Point(METRO.__SCREEN_SIZE.width - _toolVewWidth, 40), view.getAreaOffset());
+		        new Point(METRO.__SCREEN_SIZE.width - _toolVewWidth, 40), _view.getAreaOffset());
 	}
 	
 	/**
@@ -55,12 +54,12 @@ public class TrainViewTest
 	public void testIsHovered()
 	{
 		METRO.__mousePosition = new Point(0, 0);
-		assertFalse(view.isHovered());
+		assertFalse(_view.isHovered());
 		
-		METRO.__mousePosition = new Point(view.getAreaOffset().x, 0);
-		assertFalse(view.isHovered());
+		METRO.__mousePosition = new Point(_view.getAreaOffset().x, 0);
+		assertFalse(_view.isHovered());
 		
-		METRO.__mousePosition = new Point(view.getAreaOffset().x + 1, 0);
-		assertTrue(view.isHovered());
+		METRO.__mousePosition = new Point(_view.getAreaOffset().x + 1, 0);
+		assertTrue(_view.isHovered());
 	}
 }

@@ -17,7 +17,6 @@ import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.MainView.Toolbar.ToolbarTool;
 import metro.GameUI.MainView.TrainView.TrainView;
-import metro.TrainManagement.TrainManagementService;
 import metro.UI.Renderable.Container.AbstractContainer;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 
@@ -36,25 +35,21 @@ public class MainView extends GameScreenContainer implements InputProcessor
 	private NotificationArea		_notificationArea;
 	private PlayingField			_playingField;
 	private GameState				_gameState;
-	private TrainManagementService	_trainManagementService;
 	
 	/**
 	 * Creates a new main view with no active sub tools.
 	 * 
 	 * @param gameState
 	 *            The current state of the player.
-	 * @param trainManagementService
-	 *            The train management service
 	 * @param playingField
 	 *            The field, the player should play on.
 	 * @param notificationArea
 	 *            The notification area, where in-game notifications will be displayed.
 	 */
-	public MainView(GameState gameState, TrainManagementService trainManagementService, PlayingField playingField, NotificationArea notificationArea)
+	public MainView(GameState gameState, PlayingField playingField, NotificationArea notificationArea)
 	{
 		// TODO contracts
 		_gameState = gameState;
-		_trainManagementService = trainManagementService;
 		_playingField = playingField;
 		_notificationArea = notificationArea;
 		
