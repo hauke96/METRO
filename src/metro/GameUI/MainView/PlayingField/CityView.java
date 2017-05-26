@@ -21,7 +21,7 @@ import metro.TrainManagement.Trains.TravelerSpot;
 public class CityView extends ToolView
 {
 	private int						_selectedLayerNumber;
-	private boolean					_enableMouseSelection;	// When false, there'll be no circle highlighting
+	private boolean					_circleHighlightingEnabled;	// When false, there'll be no circle highlighting
 	private TrainManagementService	_trainManagementService;
 	
 	/**
@@ -33,7 +33,7 @@ public class CityView extends ToolView
 	public CityView(TrainManagementService trainManagementService)
 	{
 		_trainManagementService = trainManagementService;
-		_enableMouseSelection = true;
+		_circleHighlightingEnabled = true;
 	}
 	
 	/**
@@ -44,12 +44,12 @@ public class CityView extends ToolView
 	 * @param baseNetSpacing
 	 *            The current base net spacing.
 	 */
-	public void updateGameScreen(Point offset, int baseNetSpacing, boolean highlightCircles)
+	public void updateGameScreen(Point offset, int baseNetSpacing)
 	{
 		List<TravelerSpot> travelerSpots = _trainManagementService.getTravelerSpots();
 		
 		_selectedLayerNumber = -1;
-		if (_enableMouseSelection)
+		if (_circleHighlightingEnabled)
 		{
 			// TODO do this via a "MouseMoved" event and not in the drawing method. Also be clear, that the "MouseMoved" event here only gets called when the mouse is in the area.
 			// get the selected circle number
@@ -95,24 +95,19 @@ public class CityView extends ToolView
 		{
 			Draw.setColor(new Color(63, 114, 161));
 			Draw.String(_selectedLayerNumber + "", METRO.__mousePosition.x - Draw.getStringSize(_selectedLayerNumber + "").width / 2 + p.x, METRO.__mousePosition.y
-					+ Draw.getStringSize(_selectedLayerNumber + "").height / 4 - 30 + p.y);
+			        + Draw.getStringSize(_selectedLayerNumber + "").height / 4 - 30 + p.y);
 		}
 	}
 	
 	/**
 	 * Enables the highlighting of the city circles when a mouse hovers one.
+	 * 
+	 * @param state
+	 *            The new state. True to highlight and false to not highlight circles.
 	 */
-	public void enableCircleHighlighting()
+	public void setCircleHighlighting(boolean state)
 	{
-		_enableMouseSelection = true;
-	}
-	
-	/**
-	 * Disables the highlighting of the city circles when a mouse hovers one.
-	 */
-	public void disableCircleHighlighting()
-	{
-		_enableMouseSelection = false;
+		_circleHighlightingEnabled = state;
 	}
 	
 	/**

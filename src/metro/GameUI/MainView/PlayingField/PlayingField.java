@@ -90,8 +90,7 @@ public class PlayingField implements InputProcessor
 	 */
 	public void setCityCircleHighlighting(boolean hightlight)
 	{
-		if (hightlight) _cityView.enableCircleHighlighting();
-		else _cityView.disableCircleHighlighting();
+		_cityView.setCircleHighlighting(hightlight);
 	}
 	
 	public void setArea(Rectangle area)
@@ -109,9 +108,9 @@ public class PlayingField implements InputProcessor
 		}
 		_oldMousePos = METRO.__mousePosition;
 		
-		boolean hightlightCircles = _panel.isInArea(_oldMousePos.x, _oldMousePos.y);
-		
-		_cityView.updateGameScreen(_mapOffset, _gameState.getBaseNetSpacing(), hightlightCircles);
+		boolean mouseIsOnPanel = _panel.isInArea(_oldMousePos.x, _oldMousePos.y);
+		_cityView.setCircleHighlighting(mouseIsOnPanel);
+		_cityView.updateGameScreen(_mapOffset, _gameState.getBaseNetSpacing());
 		
 		drawBaseNet(new Color(220, 220, 220), 0);
 		
