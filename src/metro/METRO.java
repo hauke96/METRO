@@ -83,12 +83,12 @@ public class METRO implements ApplicationListener, InputProcessor
 	private LwjglApplicationConfiguration	_config;
 	private BasicGameScreenRenderer			__currentGameScreenContainerManager;
 	
-	private static OSType					__detectedOS;
-	private static SpriteBatch				__gameWindowSpriteBatch;
-	private static int						__xOffset,
+	private static OSType			__detectedOS;
+	private static SpriteBatch		__gameWindowSpriteBatch;
+	private static int				__xOffset,
 	        __yOffset,
 	        __titleBarBorderLineWidth;
-	private static LwjglApplication			__application;
+	private static LwjglApplication	__application;
 	
 	public static Dimension				__SCREEN_SIZE;
 	public static final String			__VERSION	= "0.1.4_indev";

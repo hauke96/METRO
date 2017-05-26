@@ -132,19 +132,19 @@ public class TrainLineDrawingService
 				if (thisPosition == null)
 				{
 					thisPosition = new Point(
-							mapOffset.x +
-									thisNodePosition.x * _gameState.getBaseNetSpacing() +
-									directionOffset.x * (thisNodeIndex * _lineThickness + thisNodeIndex), mapOffset.y +
-											thisNodePosition.y * _gameState.getBaseNetSpacing() +
-											directionOffset.y * (thisNodeIndex * _lineThickness + thisNodeIndex));
+					        mapOffset.x +
+					                thisNodePosition.x * _gameState.getBaseNetSpacing() +
+					                directionOffset.x * (thisNodeIndex * _lineThickness + thisNodeIndex), mapOffset.y +
+					                        thisNodePosition.y * _gameState.getBaseNetSpacing() +
+					                        directionOffset.y * (thisNodeIndex * _lineThickness + thisNodeIndex));
 				}
 				
 				nextPosition = new Point(
-						mapOffset.x +
-								nextNodePosition.x * _gameState.getBaseNetSpacing() +
-								directionOffset.x * (nextNodeIndex * _lineThickness + nextNodeIndex), mapOffset.y +
-										nextNodePosition.y * _gameState.getBaseNetSpacing() +
-										directionOffset.y * (nextNodeIndex * _lineThickness + nextNodeIndex));
+				        mapOffset.x +
+				                nextNodePosition.x * _gameState.getBaseNetSpacing() +
+				                directionOffset.x * (nextNodeIndex * _lineThickness + nextNodeIndex), mapOffset.y +
+				                        nextNodePosition.y * _gameState.getBaseNetSpacing() +
+				                        directionOffset.y * (nextNodeIndex * _lineThickness + nextNodeIndex));
 				
 				drawColoredLine(mapOffset, thisPosition, nextPosition);
 				

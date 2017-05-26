@@ -45,7 +45,7 @@ public class TrainViewTest
 	public void testGetAreaOffset()
 	{
 		assertEquals(
-				new Point(METRO.__SCREEN_SIZE.width - _toolVewWidth, 40), view.getAreaOffset());
+		        new Point(METRO.__SCREEN_SIZE.width - _toolVewWidth, 40), view.getAreaOffset());
 	}
 	
 	/**

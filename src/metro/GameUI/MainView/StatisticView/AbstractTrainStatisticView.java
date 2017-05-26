@@ -62,7 +62,7 @@ abstract public class AbstractTrainStatisticView
 		// Create scissor to draw only in the area of the statistic view.
 		com.badlogic.gdx.math.Rectangle scissors = new com.badlogic.gdx.math.Rectangle();
 		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(position.x + METRO.__getXOffset(), position.y + METRO.__getYOffset(), _size.x + 1, _size.y
-				+ 1);
+		        + 1);
 		ScissorStack.calculateScissors((Camera) METRO.__camera, METRO.__spriteBatch.getTransformMatrix(), clipBounds, scissors);
 		ScissorStack.pushScissors(scissors);
 		

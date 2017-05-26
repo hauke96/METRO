@@ -133,14 +133,14 @@ public class Train extends TrainTemplate
 		{
 			Fill.setColor(Color.lightGray);
 			Fill.Rect(
-					(int) (offset.x + position.getX() * baseNetSpacing), (int) (offset.y + position.getY() * baseNetSpacing + ((_direction - 1) * 5)), 10, 10);
+			        (int) (offset.x + position.getX() * baseNetSpacing), (int) (offset.y + position.getY() * baseNetSpacing + ((_direction - 1) * 5)), 10, 10);
 		}
 		else
 		{
 			Draw.Image(getTexture(), new Rectangle(
-					(int) (offset.x + position.getX() * baseNetSpacing) - baseNetSpacing / 2, (int) (offset.y + position.getY() * baseNetSpacing)
-							- baseNetSpacing / 2, baseNetSpacing, baseNetSpacing), new Rectangle(
-									0, _textureYOffset, 64, 64), baseNetSpacing / 2, baseNetSpacing / 2, _textureRotation);
+			        (int) (offset.x + position.getX() * baseNetSpacing) - baseNetSpacing / 2, (int) (offset.y + position.getY() * baseNetSpacing)
+			                - baseNetSpacing / 2, baseNetSpacing, baseNetSpacing), new Rectangle(
+			                        0, _textureYOffset, 64, 64), baseNetSpacing / 2, baseNetSpacing / 2, _textureRotation);
 		}
 	}
 	
@@ -199,7 +199,7 @@ public class Train extends TrainTemplate
 	private void adjustTexture()
 	{
 		Point currentNode = getCurrentNode(),
-				nextNode = getNextNode();
+		        nextNode = getNextNode();
 		int directionMagicNumber = (nextNode.x - currentNode.x) + 10 * (nextNode.y - currentNode.y);
 		
 		switch (directionMagicNumber)

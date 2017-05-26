@@ -127,7 +127,7 @@ public class Draw
 	{
 		init();
 		__shapeRenderer.circle(x + diameter / 2 + __xOffset, y + diameter / 2 + __yOffset, diameter
-				/ 2, Integer.parseInt(__settings.getOiginal(Settings.AMOUNT_SEGMENTS).toString()));
+		        / 2, Integer.parseInt(__settings.getOiginal(Settings.AMOUNT_SEGMENTS).toString()));
 		reset();
 	}
 	
@@ -309,7 +309,7 @@ public class Draw
 			for (int i = 0; i <= w; i++)
 			{
 				spriteBatch.draw(METRO.__iconSet.getTexture(), x1, y1, x2 - x1 != 0 ? x2 - x1 + 1 : x2 - x1 + offset + i, y2 - y1 != 0 ? y2 - y1
-						: y2 - y1 + offset + i, 20, 0, 1, 1, false, false);
+				        : y2 - y1 + offset + i, 20, 0, 1, 1, false, false);
 			}
 		}
 		spriteBatch.setColor(1, 1, 1, 1);
@@ -561,7 +561,7 @@ public class Draw
 	public static void Image(TextureRegion image, Rectangle position, Rectangle areaOnImage)
 	{
 		METRO.__spriteBatch.draw(image.getTexture(), position.x + __xOffset, position.y
-				+ __yOffset, position.width, position.height, areaOnImage.x, areaOnImage.y, areaOnImage.width, areaOnImage.height, false, true);
+		        + __yOffset, position.width, position.height, areaOnImage.x, areaOnImage.y, areaOnImage.width, areaOnImage.height, false, true);
 	}
 	
 	/**
@@ -583,6 +583,6 @@ public class Draw
 	public static void Image(TextureRegion image, Rectangle position, Rectangle areaOnImage, int rotationCenterX, int rotationCenterY, float rotation)
 	{
 		METRO.__spriteBatch.draw(image.getTexture(), position.x + __xOffset, position.y
-				+ __yOffset, rotationCenterX, rotationCenterY, position.width, position.height, 1, 1, rotation, areaOnImage.x, areaOnImage.y, areaOnImage.width, areaOnImage.height, false, true);
+		        + __yOffset, rotationCenterX, rotationCenterY, position.width, position.height, 1, 1, rotation, areaOnImage.x, areaOnImage.y, areaOnImage.width, areaOnImage.height, false, true);
 	}
 }

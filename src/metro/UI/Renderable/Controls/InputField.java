@@ -23,9 +23,9 @@ import metro.UI.Renderable.ControlElement;
 public class InputField extends ControlElement
 {
 	private int		_curserPos	= 0,
-			_xOffset = 0;			// in pixel
+	        _xOffset = 0;			// in pixel
 	private boolean	_shift,
-			_selected;
+	        _selected;
 	
 	/**
 	 * Creates a new InputField with one line to input text. The start-text is "" and the window is null
@@ -61,7 +61,7 @@ public class InputField extends ControlElement
 		// Create scissor to draw only in the area of the list box.
 		com.badlogic.gdx.math.Rectangle scissors = new com.badlogic.gdx.math.Rectangle();
 		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_area.x + METRO.__getXOffset(), _area.y + METRO.__getYOffset(), _area.width
-				+ 1, _area.height + 1);
+		        + 1, _area.height + 1);
 		ScissorStack.calculateScissors((Camera) METRO.__camera, METRO.__spriteBatch.getTransformMatrix(), clipBounds, scissors);
 		ScissorStack.pushScissors(scissors);
 		

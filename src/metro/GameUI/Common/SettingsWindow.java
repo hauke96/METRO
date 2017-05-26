@@ -30,12 +30,12 @@ public class SettingsWindow
 	private Window		_window;
 	private Button		_okButton;
 	private Checkbox	_fullscreenOn,
-			_useOpenGL30,
-			_useVSync,
-			_useHDPI;
+	        _useOpenGL30,
+	        _useVSync,
+	        _useHDPI;
 	private List		_resolutionList,
-			_sampleList,
-			_segmentList;
+	        _sampleList,
+	        _segmentList;
 	private Settings	_settings;
 	
 	/**
@@ -98,7 +98,7 @@ public class SettingsWindow
 		_resolutionList.addElement("1024x768");
 		if (Boolean.parseBoolean(_settings.get("fullscreen.on").toString())) _resolutionList.setState(false);
 		int index = _resolutionList.getIndex(Integer.parseInt(_settings.get("screen.width").toString()) + "x" + Integer.parseInt(_settings.get("screen.width").toString())); // get the entry with the
-																																												// current resolution
+		                                                                                                                                                                     // current resolution
 		_resolutionList.setSelectedEntry(index);
 		_window.add(_resolutionList);
 		

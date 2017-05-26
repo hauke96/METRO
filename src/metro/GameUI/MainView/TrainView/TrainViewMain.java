@@ -25,15 +25,15 @@ public class TrainViewMain extends ToolView
 {
 	private int						_windowWidth;
 	private List					_trainList,
-			_lineList;
+	        _lineList;
 	private Button					_moveTrainButton,						// to change a train
-			_sellTrainButton;												// to remove a train
+	        _sellTrainButton;												// to remove a train
 	private Point					_areaOffset;							// to get the (0,0)-coordinate very easy
 	private String					_movedTrain;
 	private TrainManagementService	_trainManagementService;
 	private Panel					_panel;
 	private Label					_yourLinesLabel,
-			_yourTrainsLabel;
+	        _yourTrainsLabel;
 	
 	/**
 	 * Creates a new main view for the train screen.
@@ -217,7 +217,7 @@ public class TrainViewMain extends ToolView
 	public boolean isHovered()
 	{
 		return METRO.__mousePosition.x > _areaOffset.x
-				&& METRO.__mousePosition.y < 400;
+		        && METRO.__mousePosition.y < 400;
 	}
 	
 	/**

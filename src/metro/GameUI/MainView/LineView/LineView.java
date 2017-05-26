@@ -39,18 +39,18 @@ public class LineView extends ToolView
 	private Panel		_panel;
 	private List		_lineList;
 	private Button		_createLineButton,								// to create a new train line
-			_editLineButton,											// to change railway nodes of train line
-			_removeLineButton,											// to remove a train line
-			_saveButton,												// to save settings/changes
-			_aboardButton;
+	        _editLineButton,											// to change railway nodes of train line
+	        _removeLineButton,											// to remove a train line
+	        _saveButton,												// to save settings/changes
+	        _aboardButton;
 	private ColorBar	_colorBar;
 	private Label		_lineNameFieldLabel,
-			_messageLabel;
+	        _messageLabel;
 	private InputField	_lineNameField;
 	
 	private int			_toolWidth;
 	private boolean		_lineSelectToolEnabled,											// if enabled, the user can select nodes
-			_editMode;																	// true when user edits a line
+	        _editMode;																	// true when user edits a line
 	private Point		_areaOffset;													// to get the (0,0)-coordinate very easy
 	private TrainLine	_lineToEdit;													// when the user edits a line name, the old name of it has to be saved to correctly update the line list
 	
@@ -190,8 +190,8 @@ public class LineView extends ToolView
 			public void clickedOnControl(Object arg)
 			{
 				Logger.__debug(""
-						+ "Clicked line (index): " + _lineList.getSelectedIndex() + "\n"
-						+ "Clicked line  (name): " + _lineList.getSelectedText());
+				        + "Clicked line (index): " + _lineList.getSelectedIndex() + "\n"
+				        + "Clicked line  (name): " + _lineList.getSelectedText());
 				if (_lineList.getSelectedIndex() == -1) return;
 				
 				TrainLine line = _trainManagementService.getLine(_lineList.getSelectedText());
@@ -209,8 +209,8 @@ public class LineView extends ToolView
 				}
 				
 				Logger.__debug("Color: " + color + "\n"
-						+ "Old line: " + _lineToEdit + "\n"
-						+ "New Line: " + line);
+				        + "Old line: " + _lineToEdit + "\n"
+				        + "New Line: " + line);
 				
 				if (color == null || line == null)
 				{

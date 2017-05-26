@@ -80,7 +80,7 @@ public class LineSelectTool extends ToolView
 		if (_trainManagementService.isLineColorUsed(newColor))
 		{
 			Logger.__debug("Old color is " + _color + "\n"
-					+ "New color is " + newColor.toString());
+			        + "New color is " + newColor.toString());
 			return "No duplicate colors allowed!";
 		}
 		

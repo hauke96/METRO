@@ -24,7 +24,8 @@ public interface GameScreenRenderer extends InputProcessor, GameScreenSwitchedOb
 	/**
 	 * Switches the current game screen to the given one.
 	 * 
-	 * @param gameScreen The new game screen.
+	 * @param gameScreen
+	 *            The new game screen.
 	 */
 	void switchTo(GameScreenContainer gameScreen);
 	

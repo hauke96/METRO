@@ -87,7 +87,8 @@ public class GameStateTest
 	 * Subtracts something from the game state account.
 	 * When more money is withdrawn then there actually exists, an exception should be the result.
 	 * 
-	 * @throws NotEnoughMoneyException Is thrown when not enough money exists for a withdrawal.
+	 * @throws NotEnoughMoneyException
+	 *             Is thrown when not enough money exists for a withdrawal.
 	 */
 	@Test
 	public void testWithdrawMoney() throws NotEnoughMoneyException
@@ -101,7 +102,8 @@ public class GameStateTest
 	 * Checks if the game state withdraws money when a negative amount is passed.
 	 * A negative amount of money is not valid, so an IllegalArgumentException should be thrown.
 	 * 
-	 * @throws NotEnoughMoneyException Is thrown when not enough money exists for a withdrawal.
+	 * @throws NotEnoughMoneyException
+	 *             Is thrown when not enough money exists for a withdrawal.
 	 */
 	@Test (expected = IllegalArgumentException.class)
 	public void testWithdrawMoneyNegative() throws NotEnoughMoneyException
@@ -114,7 +116,8 @@ public class GameStateTest
 	/**
 	 * Check if the game state allows the withdraw of more money then the account currently has.
 	 * 
-	 * @throws NotEnoughMoneyException Is thrown when not enough money exists for a withdrawal.
+	 * @throws NotEnoughMoneyException
+	 *             Is thrown when not enough money exists for a withdrawal.
 	 */
 	@Test (expected = NotEnoughMoneyException.class)
 	public void testWithdrawMoneyTooMuch() throws NotEnoughMoneyException

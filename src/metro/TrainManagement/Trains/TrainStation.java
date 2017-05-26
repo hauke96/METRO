@@ -17,13 +17,13 @@ import metro.Common.Graphics.Fill;
 public class TrainStation
 {
 	private int		_waitingPassengers,
-			_movingPassengerWaitingTime,
-			_randomAddPassengerWaitingTime;
+	        _movingPassengerWaitingTime,
+	        _randomAddPassengerWaitingTime;
 	private Point	_position;					// Position
 	private int[]	_movingPassengersAmount,
-			_movingPassengersDuration;
+	        _movingPassengersDuration;
 	private long	_movingPassengerLastCall,
-			_randomAddPassengerLastCall;
+	        _randomAddPassengerLastCall;
 	
 	/**
 	 * The price to build one train station.
@@ -80,7 +80,7 @@ public class TrainStation
 		Draw.Rect(position.x, position.y, 8, 15);
 		
 		Draw.String("" + _waitingPassengers, offset.x + _position.x * baseNetSpacing - Draw.getStringSize("" + _waitingPassengers).width / 2 - 1, offset.y
-				+ _position.y * baseNetSpacing - 25);
+		        + _position.y * baseNetSpacing - 25);
 	}
 	
 	/**

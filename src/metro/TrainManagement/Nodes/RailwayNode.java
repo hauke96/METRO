@@ -142,7 +142,7 @@ public class RailwayNode
 			Point p = node.getPosition();
 			
 			if (p.y < _position.y ||
-					(p.y == _position.y && p.x < _position.x))
+			        (p.y == _position.y && p.x < _position.x))
 			{
 				positionNext = new Point(offset.x + p.x * gameState.getBaseNetSpacing(), offset.y + p.y * gameState.getBaseNetSpacing()); // Position with offset etc. for second point
 				

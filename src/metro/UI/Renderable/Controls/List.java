@@ -24,16 +24,16 @@ public class List extends ControlElement
 {
 	private java.util.List<String>	_entries	= new ArrayList<String>();
 	private int						_offset,
-			_defaultYSpace,																				// space between text and border in the normal mode
-			_compactYSpace,																				// space between text and border in the compact mode
-			_selectedEntry;																				// the entry, that was clicked
+	        _defaultYSpace,																				// space between text and border in the normal mode
+	        _compactYSpace,																				// space between text and border in the compact mode
+	        _selectedEntry;																				// the entry, that was clicked
 	private int						_maxOffset,
-			_scrollHeight;																				// height of one scroll step
+	        _scrollHeight;																				// height of one scroll step
 	private boolean					_compact	= false,												// less space between text and top/bottom edge
-			_decorated = true,
-			_sticky = false;
+	        _decorated = true,
+	        _sticky = false;
 	private Color					_backgroundColor,
-			_hoverColor;
+	        _hoverColor;
 	
 	/**
 	 * Creates a new list control element on a window.
@@ -116,12 +116,12 @@ public class List extends ControlElement
 			int amountRows = Draw.getStringLines(e, _area.width - 6);
 			
 			yOffset += 2 * ySpace + // space above and below string
-					Draw.getStringSize(e).height * amountRows + // rows * height of string
-					(amountRows - 1) * 8; // space between lines
+			        Draw.getStringSize(e).height * amountRows + // rows * height of string
+			        (amountRows - 1) * 8; // space between lines
 		}
 		yOffset += ySpace;
 		int magicFactor = (23 / 20) * (ySpace - 10) + 17; // fine-tuning for the maximum offset for scrolling (with this factor, the space between last element and bottom of list are matching
-															// automagically)
+		                                                  // automagically)
 		if (yOffset - _scrollHeight - 3 > _area.height) _maxOffset = yOffset - _area.height - _scrollHeight + magicFactor;
 		else _maxOffset = 0;
 	}
@@ -254,7 +254,7 @@ public class List extends ControlElement
 		// Create scissor to draw only in the area of the list box.
 		com.badlogic.gdx.math.Rectangle scissors = new com.badlogic.gdx.math.Rectangle();
 		com.badlogic.gdx.math.Rectangle clipBounds = new com.badlogic.gdx.math.Rectangle(_area.x + METRO.__getXOffset(), _area.y + METRO.__getYOffset(), _area.width
-				+ 1, _area.height + 1);
+		        + 1, _area.height + 1);
 		ScissorStack.calculateScissors((Camera) METRO.__camera, METRO.__spriteBatch.getTransformMatrix(), clipBounds, scissors);
 		ScissorStack.pushScissors(scissors);
 		
@@ -294,9 +294,9 @@ public class List extends ControlElement
 			
 			// Calculate rect for the border = rect of entry
 			Rectangle entryRect = new Rectangle(_area.x + 3, _area.y + _offset + (yOffset - ySpace) + 5, _area.width - 9, 2 * ySpace + // space above and below string
-					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
-					(amountRows - 1) * 8 // space between lines
-					- 1);
+			        Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
+			        (amountRows - 1) * 8 // space between lines
+			        - 1);
 			
 			// Hover effect: when mouse is in an entry, make background light-light-gray
 			if (_state && entryRect.contains(mPos))
@@ -313,9 +313,9 @@ public class List extends ControlElement
 					Draw.setColor(Color.gray);
 				}
 				Draw.Rect(_area.x + 3, _area.y + _offset + (yOffset - ySpace) + 5, _area.width - 9, 2 * ySpace + // space above and below string
-						Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
-						(amountRows - 1) * 8 // space between lines
-						- 3); // gap between rects
+				        Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
+				        (amountRows - 1) * 8 // space between lines
+				        - 3); // gap between rects
 			}
 			else if (_state) // enabled but not decoryted --> just a line between entries
 			{
@@ -327,8 +327,8 @@ public class List extends ControlElement
 			Draw.String(_entries.get(i), _area.x + 20, _area.y + _offset + yOffset + 4, _area.width - 40);
 			
 			yOffset += 2 * ySpace + // 2 * 30px space above and below string
-					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
-					(amountRows - 1) * 8; // space between lines
+			        Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
+			        (amountRows - 1) * 8; // space between lines
 		}
 	}
 	
@@ -382,9 +382,9 @@ public class List extends ControlElement
 			
 			// Calculate rect for the border = rect of entry
 			Rectangle entryRect = new Rectangle(_area.x + 3, _area.y + _offset + (yOffset - ySpace) + 5, _area.width - 9, 2 * ySpace + // space above and below string
-					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
-					(amountRows - 1) * 8 // space between lines
-					- 3);
+			        Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
+			        (amountRows - 1) * 8 // space between lines
+			        - 3);
 			
 			if (_state && entryRect.contains(mPos)) // when mouse is in an entry, make background light-light-gray
 			{
@@ -393,8 +393,8 @@ public class List extends ControlElement
 			}
 			
 			yOffset += 2 * ySpace + // 2 * 30px space above and below string
-					Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
-					(amountRows - 1) * 8; // space between lines
+			        Draw.getStringSize(_entries.get(i)).height * amountRows + // rows * height of string
+			        (amountRows - 1) * 8; // space between lines
 		}
 		
 		return _area.contains(mPos);

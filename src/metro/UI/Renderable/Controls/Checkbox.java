@@ -18,7 +18,7 @@ import metro.UI.Renderable.ControlElement;
 public class Checkbox extends ControlElement
 {
 	private boolean	_checked,
-			_oldState;			// used by hasChanged() method to determine if the state has changed since last call
+	        _oldState;			// used by hasChanged() method to determine if the state has changed since last call
 	private Label	_label;
 	private int		_textWidth;
 	
@@ -126,9 +126,9 @@ public class Checkbox extends ControlElement
 		Point mPos = METRO.__originalMousePosition;
 		
 		return mPos.x >= _area.x
-				&& mPos.x <= _area.x + 15
-				&& mPos.y >= _area.y
-				&& mPos.y <= _area.y + 15;
+		        && mPos.x <= _area.x + 15
+		        && mPos.y >= _area.y
+		        && mPos.y <= _area.y + 15;
 	}
 	
 	@Override
@@ -136,8 +136,8 @@ public class Checkbox extends ControlElement
 	{
 		// set the color depending on _enabled
 		Draw.setColor(_state
-				? METRO.__metroBlue
-				: new Color(METRO.__metroBlue.getRed(), METRO.__metroBlue.getGreen(), METRO.__metroBlue.getBlue(), 125));
+		        ? METRO.__metroBlue
+		        : new Color(METRO.__metroBlue.getRed(), METRO.__metroBlue.getGreen(), METRO.__metroBlue.getBlue(), 125));
 		
 		Draw.Rect(_area.x, _area.y, 15, 15);
 		if (_checked) // draw cross if checked
@@ -147,8 +147,8 @@ public class Checkbox extends ControlElement
 		}
 		
 		_label.setColor(_state
-				? Color.black
-				: Color.lightGray);
+		        ? Color.black
+		        : Color.lightGray);
 		_label.draw();
 	}
 	
@@ -162,9 +162,9 @@ public class Checkbox extends ControlElement
 		Point mPos = METRO.__originalMousePosition;
 		
 		if (mPos.x >= _area.x
-				&& mPos.x <= _area.x + 15
-				&& mPos.y >= _area.y
-				&& mPos.y <= _area.y + 15)
+		        && mPos.x <= _area.x + 15
+		        && mPos.y >= _area.y
+		        && mPos.y <= _area.y + 15)
 		{
 			_checked = (false == _checked) && _state;
 			return true;

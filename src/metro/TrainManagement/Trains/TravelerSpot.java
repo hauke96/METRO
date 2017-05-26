@@ -53,9 +53,9 @@ public class TravelerSpot
 		Point position = new Point(_position.x * baseNetSpacing + offset.x, _position.y * baseNetSpacing + offset.y);
 		
 		boolean isInCurrentCircle = Math.pow(METRO.__mousePosition.x - position.x, 2)
-				+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(baseNetSpacing * __scale * layerIndex, 2); // true: Mouse cursor is in circle
+		        + Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(baseNetSpacing * __scale * layerIndex, 2); // true: Mouse cursor is in circle
 		boolean isInNextCircle = Math.pow(METRO.__mousePosition.x - position.x, 2)
-				+ Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(baseNetSpacing * __scale * (layerIndex - 1), 2); // true: Mouse cursor is in circle
+		        + Math.pow(METRO.__mousePosition.y - position.y, 2) < Math.pow(baseNetSpacing * __scale * (layerIndex - 1), 2); // true: Mouse cursor is in circle
 		
 		return isInCurrentCircle && !isInNextCircle;
 	}
@@ -128,10 +128,10 @@ public class TravelerSpot
 		for (int i = 0; i < _strength; ++i) // go through all layers
 		{
 			boolean isInCurrentCircle = Math.pow(pos.x - _position.x, 2)
-					+ Math.pow(pos.y - _position.y, 2) < Math.pow(__scale * i, 2);
+			        + Math.pow(pos.y - _position.y, 2) < Math.pow(__scale * i, 2);
 			
 			boolean isInNextCircle = Math.pow(pos.x - _position.x, 2)
-					+ Math.pow(pos.y - _position.y, 2) < Math.pow(__scale * (i - 1), 2);
+			        + Math.pow(pos.y - _position.y, 2) < Math.pow(__scale * (i - 1), 2);
 			
 			if (isInCurrentCircle && !isInNextCircle)
 			{

@@ -33,8 +33,8 @@ public class TrainViewBuy extends ToolView
 	private Point					_areaOffset;
 	private Button					_buyButton;
 	private Label					_messageLabel,
-			_informationKeys,									// like name=, manufacturer=, ...
-			_informationValues;									// like CT-01, 1.03, ...
+	        _informationKeys,									// like name=, manufacturer=, ...
+	        _informationValues;									// like CT-01, 1.03, ...
 	private TrainManagementService	_trainManagementService;
 	private TextureRegion			_titleImage;
 	private Panel					_panel;
@@ -61,7 +61,7 @@ public class TrainViewBuy extends ToolView
 		_buyButton = new Button(new Rectangle(_areaOffset.x + 170, METRO.__SCREEN_SIZE.height - METRO.__getYOffset() - _areaOffset.y, 210, 20), "Buy");
 		
 		_availableTrains = new List(
-				new Rectangle(_areaOffset.x + 20, _areaOffset.y + 440, 140, METRO.__SCREEN_SIZE.height - (_areaOffset.y + 420) - _areaOffset.y - METRO.__getYOffset()), null, true);
+		        new Rectangle(_areaOffset.x + 20, _areaOffset.y + 440, 140, METRO.__SCREEN_SIZE.height - (_areaOffset.y + 420) - _areaOffset.y - METRO.__getYOffset()), null, true);
 		_availableTrains.register(new ActionObserver()
 		{
 			@Override
@@ -73,12 +73,12 @@ public class TrainViewBuy extends ToolView
 				if (train != null)
 				{
 					_informationValues.setText("= " + train.getName() + "\n= " +
-							train.getManufacturer() + "\n= " +
-							train.getPrice() + "$\n= " +
-							train.getCosts() + "$ / month\n= " +
-							(Math.round((train.getCostFactor() - 1) * 1000) / 10f) + "%\n= " +
-							train.getMaxPassenger() + " people / car\n= " +
-							(int) (train.getSpeed() * 80) + "km/h");
+					        train.getManufacturer() + "\n= " +
+					        train.getPrice() + "$\n= " +
+					        train.getCosts() + "$ / month\n= " +
+					        (Math.round((train.getCostFactor() - 1) * 1000) / 10f) + "%\n= " +
+					        train.getMaxPassenger() + " people / car\n= " +
+					        (int) (train.getSpeed() * 80) + "km/h");
 					_titleImage = train.getTitleImage();
 				}
 			}
@@ -142,7 +142,7 @@ public class TrainViewBuy extends ToolView
 			int diff = _buyButton.getPosition().y - (_informationValues.getPosition().y + _informationValues.getArea().height);
 			int height = diff >= 220 ? 180 : diff - 40;
 			Rectangle position = new Rectangle(
-					METRO.__SCREEN_SIZE.width - _toolWidth + 170 + ((200 - height) / 2), _areaOffset.y + 460 + _informationKeys.getArea().height, height, height);
+			        METRO.__SCREEN_SIZE.width - _toolWidth + 170 + ((200 - height) / 2), _areaOffset.y + 460 + _informationKeys.getArea().height, height, height);
 			
 			Draw.Image(_titleImage, position);
 			
@@ -210,7 +210,7 @@ public class TrainViewBuy extends ToolView
 	public boolean isHovered()
 	{
 		return METRO.__mousePosition.x > _areaOffset.x
-				&& METRO.__mousePosition.y < _areaOffset.y;
+		        && METRO.__mousePosition.y < _areaOffset.y;
 	}
 	
 	@Override

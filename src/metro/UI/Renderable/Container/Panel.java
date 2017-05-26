@@ -19,7 +19,7 @@ import metro.UI.Renderable.ControlElement;
 public class Panel extends StaticContainer
 {
 	private Color	_backgroundColor,
-			_borderColor;
+	        _borderColor;
 	private boolean	_drawBorder;
 	
 	/**

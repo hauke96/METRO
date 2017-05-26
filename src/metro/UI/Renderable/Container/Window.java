@@ -21,8 +21,8 @@ public class Window extends FloatingContainer
 {
 	private Point	_oldMousePos;
 	private boolean	_dragMode,						// to drag the window
-			_closed;								// even if window has been deleted from the window list, that does not mean, that this object doesn't exist anymore, to this indicates that this
-													// window has been deleted
+	        _closed;								// even if window has been deleted from the window list, that does not mean, that this object doesn't exist anymore, to this indicates that this
+	                                                // window has been deleted
 	private Color	_color;							// color of borders
 	
 	/**
@@ -168,9 +168,9 @@ public class Window extends FloatingContainer
 	public boolean isMouseOnWindowArea(int screenX, int screenY)
 	{
 		return screenX >= _area.x
-				&& screenX <= _area.x + _area.width
-				&& screenY >= _area.y
-				&& screenY <= _area.y + _area.height;
+		        && screenX <= _area.x + _area.width
+		        && screenY >= _area.y
+		        && screenY <= _area.y + _area.height;
 	}
 	
 	@Override
@@ -179,7 +179,7 @@ public class Window extends FloatingContainer
 		super.mouseClicked(screenX, screenY, mouseButton);
 		// Check for drag-mode:
 		if (isMouseOnWindow(screenX, screenY)
-				&& mouseButton == Buttons.LEFT)
+		        && mouseButton == Buttons.LEFT)
 		{
 			_dragMode = true;
 			_oldMousePos = new Point(screenX, screenY);
@@ -210,9 +210,9 @@ public class Window extends FloatingContainer
 	public boolean closeIfNeeded(int screenX, int screenY, int mouseButton)
 	{
 		if (screenX >= _area.x + _area.width - 20
-				&& screenX <= _area.x + _area.width
-				&& screenY >= _area.y
-				&& screenY <= _area.y + 20)
+		        && screenX <= _area.x + _area.width
+		        && screenY >= _area.y
+		        && screenY <= _area.y + 20)
 		{
 			close(); // mark whis window as "closed" to tell the METRO class to remove it
 			return true;

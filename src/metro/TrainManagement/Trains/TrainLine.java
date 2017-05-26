@@ -96,8 +96,8 @@ public class TrainLine implements Cloneable
 		if (list.size() <= 1 || startNode == null) return list;
 		
 		Logger.__debug(
-				"Start Node: " + startNode.getPosition() + "\n" +
-						"Line length (amount of nodes): " + list.size());
+		        "Start Node: " + startNode.getPosition() + "\n" +
+		                "Line length (amount of nodes): " + list.size());
 		
 		List<RailwayNode> newList = new ArrayList<>();
 		// be sure that an end node is the first element in this list
@@ -211,10 +211,10 @@ public class TrainLine implements Cloneable
 		if (_listOfNodes.size() <= startNode) return _listOfNodes.get(_listOfNodes.size() - 1).getPosition();
 		
 		double length = 0.0,
-				lastLength = 0.0;
+		        lastLength = 0.0;
 		
 		Point nodePre = _listOfNodes.get(startNode).getPosition(),
-				nodeSuc = _listOfNodes.get(startNode + 1).getPosition();
+		        nodeSuc = _listOfNodes.get(startNode + 1).getPosition();
 		
 		/*
 		 * The small bit of the distance thats between the last to nodes:
@@ -318,7 +318,7 @@ public class TrainLine implements Cloneable
 		}
 		
 		double length = 0.0,
-				lastLength = calcPartLength(startNode, startNode + direction);
+		        lastLength = calcPartLength(startNode, startNode + direction);
 		
 		// iterate over all pre-processed node distances to find the two nodes that are around the train (given by the parameters of this method).
 		int i;
@@ -326,7 +326,7 @@ public class TrainLine implements Cloneable
 		{
 			length += lastLength;
 			lastLength = calcPartLength(
-					direction > 0 ? i : i + direction, direction > 0 ? i + direction : i);
+			        direction > 0 ? i : i + direction, direction > 0 ? i + direction : i);
 		}
 		
 		// the sucessor with index i was found, the predecessor is therefore i - direction.
