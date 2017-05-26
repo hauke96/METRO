@@ -23,7 +23,7 @@ import metro.GameUI.MainView.NotificationView.NotificationType;
 import metro.TrainManagement.Environment.TravelerSpot;
 import metro.TrainManagement.Nodes.RailwayNodeOverseer;
 import metro.TrainManagement.TrainLines.TrainLine;
-import metro.TrainManagement.TrainLines.TrainLineDrawingService;
+import metro.TrainManagement.TrainLines.TrainLineManagementService;
 import metro.TrainManagement.TrainStations.TrainStation;
 import metro.TrainManagement.Trains.Train;
 import metro.TrainManagement.Trains.TrainTemplate;
@@ -44,7 +44,7 @@ public class TrainManagementService implements Observer
 	private List<TravelerSpot>				_travelerSpotList;
 	private HashMap<String, TrainTemplate>	_templateTrains;
 	private float							_lastRenderTime;
-	private TrainLineDrawingService			_trainLineDrawingService;
+	private TrainLineManagementService			_trainLineDrawingService;
 	private GameState						_gameState;
 	
 	/**
@@ -56,7 +56,7 @@ public class TrainManagementService implements Observer
 	 * @param trainLineDrawingService
 	 *            The drawing service for train lines.
 	 */
-	public TrainManagementService(GameState gameState, TrainLineDrawingService trainLineDrawingService)
+	public TrainManagementService(GameState gameState, TrainLineManagementService trainLineDrawingService)
 	{
 		_gameState = gameState;
 		_trainLineDrawingService = trainLineDrawingService;

@@ -17,7 +17,7 @@ import metro.TrainManagement.Nodes.RailwayNode;
  *
  */
 // TODO make this state-less
-public class TrainLineDrawingService
+public class TrainLineManagementService
 {
 	private Map<RailwayNode, TrainLine[]>	_sortedLineMap;
 	private GameState						_gameState;
@@ -29,7 +29,7 @@ public class TrainLineDrawingService
 	 * @param gameState
 	 *            The current state of the player.
 	 */
-	public TrainLineDrawingService(GameState gameState)
+	public TrainLineManagementService(GameState gameState)
 	{
 		_gameState = gameState;
 		

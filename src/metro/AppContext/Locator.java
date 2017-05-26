@@ -15,7 +15,7 @@ import metro.GameUI.MainView.NotificationView.NotificationArea;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.GameUI.MainView.TrainView.TrainView;
 import metro.TrainManagement.TrainManagementService;
-import metro.TrainManagement.TrainLines.TrainLineDrawingService;
+import metro.TrainManagement.TrainLines.TrainLineManagementService;
 import metro.UI.ContainerRegistrationService;
 
 /**
@@ -58,8 +58,8 @@ public class Locator
 		register(NotificationArea.class, () -> new NotificationArea());
 		
 		register(TrainManagementService.class, () -> new TrainManagementService(
-		        get(GameState.class), get(TrainLineDrawingService.class)));
-		register(TrainLineDrawingService.class, () -> new TrainLineDrawingService(
+		        get(GameState.class), get(TrainLineManagementService.class)));
+		register(TrainLineManagementService.class, () -> new TrainLineManagementService(
 		        get(GameState.class)));
 		register(ContainerRegistrationService.class, () -> new ContainerRegistrationService());
 		
