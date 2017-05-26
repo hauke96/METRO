@@ -387,6 +387,7 @@ public class TrainLine implements Cloneable
 	 *            The list of nodes that may be valid.
 	 * @return True when valid.
 	 */
+	// TODO Check if train line validation is working. If not correct this implementation.
 	public static boolean __isValid(List<RailwayNode> listOfNodes)
 	{
 		int amountEndNodes = 0;
