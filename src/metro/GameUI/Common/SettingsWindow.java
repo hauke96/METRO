@@ -58,7 +58,7 @@ public class SettingsWindow
 	 * Creates a settings window.
 	 * 
 	 * @param settings
-	 *            TODO
+	 *            The current settings to show them in the window.
 	 */
 	private SettingsWindow(Settings settings)
 	{
