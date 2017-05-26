@@ -6,6 +6,7 @@ import java.util.Map;
 import juard.Contract;
 import metro.Common.Game.GameState;
 import metro.Common.Game.Settings;
+import metro.Common.Technical.Exceptions.ResolutionFailedException;
 import metro.GameUI.MainView.MainView;
 import metro.GameUI.MainView.StationPlacingTool;
 import metro.GameUI.MainView.TrackPlacingTool;
@@ -48,6 +49,8 @@ public class Locator
 	
 	private static void registerAll()
 	{
+		Contract.Require(_serviceLocatorInitialized);
+		
 		register(GameState.class, () -> new GameState());
 		register(Settings.class, () -> new Settings());
 		register(PlayingField.class, () -> new PlayingField(
@@ -85,6 +88,7 @@ public class Locator
 	public static <T> T get(Class<T> clazz)
 	{
 		Contract.Require(_serviceLocatorInitialized);
+		Contract.Require(clazz != null);
 		
 		if (_initializedServices.containsKey(clazz))
 		{
@@ -93,8 +97,11 @@ public class Locator
 			return service;
 		}
 		
-		// TODO exception if type not registered.
 		ServiceInstanceCreator<?> serviceCreator = _registeredServices.get(clazz);
+		if (serviceCreator == null)
+		{
+			throw new ResolutionFailedException(clazz);
+		}
 		
 		@SuppressWarnings ("unchecked") // we will either get null or the correct type
 		T resolvedService = (T) serviceCreator.resolve();
