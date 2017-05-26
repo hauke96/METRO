@@ -30,11 +30,11 @@ import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 // TODO break this class into MVC-structure
 public class MainView extends GameScreenContainer implements InputProcessor
 {
-	private ToolView				_activeTool;
-	private ToolbarTool				_toolbar;
-	private NotificationArea		_notificationArea;
-	private PlayingField			_playingField;
-	private GameState				_gameState;
+	private ToolView			_activeTool;
+	private ToolbarTool			_toolbar;
+	private NotificationArea	_notificationArea;
+	private PlayingField		_playingField;
+	private GameState			_gameState;
 	
 	/**
 	 * Creates a new main view with no active sub tools.

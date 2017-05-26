@@ -12,8 +12,6 @@ import org.junit.Test;
 import metro.METRO;
 import metro.AppContext.Locator;
 import metro.Common.Game.GameState;
-import metro.GameUI.MainView.PlayingField.PlayingField;
-import metro.TrainManagement.TrainManagementService;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderer.BasicContainerRenderer;
 
