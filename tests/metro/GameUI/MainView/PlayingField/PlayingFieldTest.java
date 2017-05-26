@@ -1,13 +1,12 @@
 package metro.GameUI.MainView.PlayingField;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import java.awt.Point;
 
 import org.junit.Test;
 
 import metro.AppContext.Locator;
-import metro.GameUI.MainView.PlayingField.PlayingField;
 
 /**
  * @author hauke

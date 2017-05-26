@@ -1,7 +1,5 @@
 package metro.UI.Renderer;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import juard.Contract;
 import metro.AppContext.Locator;
 import metro.UI.ContainerRegistrationService;
@@ -21,12 +19,6 @@ public class BasicGameScreenRenderer implements GameScreenRenderer, GameScreenSw
 	public void switchTo(GameScreenContainer gameScreen)
 	{
 		reactToGameScreenSwitch(gameScreen);
-	}
-	
-	@Override
-	public void draw(SpriteBatch sp)
-	{
-		_currentGameScreen.updateGameScreen(sp);
 	}
 	
 	@Override

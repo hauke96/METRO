@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import juard.Contract;
 import metro.METRO;
@@ -102,14 +101,6 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		
 		_containerRenderer.notifyDraw();
 	}
-	
-	/**
-	 * @param sp
-	 *            the sprite batch to draw on.
-	 */
-	// TODO remove this method. This is only used to draw city circles (which should be drawed on a canvas).
-	@Deprecated
-	public abstract void updateGameScreen(SpriteBatch sp);
 	
 	@Override
 	public void reactToGameScreenSwitch(GameScreenContainer newGameScreen)

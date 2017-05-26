@@ -1,13 +1,9 @@
 package metro.GameUI.MainView.NotificationView;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import metro.GameUI.MainView.NotificationView.NotificationServer;
-import metro.GameUI.MainView.NotificationView.NotificationSubscriber;
-import metro.GameUI.MainView.NotificationView.NotificationType;
 
 /**
  * @author hauke

@@ -1,7 +1,5 @@
 package metro.GameUI.MainMenu;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import metro.METRO;
 import metro.AppContext.Locator;
 import metro.Common.Game.Settings;
@@ -79,10 +77,5 @@ public class MainMenuTool extends GameScreenContainer
 		_mainMenuView.close();
 		
 		notifyAllAboutSwitch(newContainer);
-	}
-	
-	@Override
-	public void updateGameScreen(SpriteBatch sp)
-	{
 	}
 }

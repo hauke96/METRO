@@ -118,20 +118,13 @@ public class MainView extends GameScreenContainer implements InputProcessor
 		// _toolbar.getBackgroundPanel().setAboveOf(playingFieldBackground);
 	}
 	
-	@Override
-	public void updateGameScreen(SpriteBatch sp)
-	{
-		_playingField.setCityCircleHighlighting(_activeTool == null || !_activeTool.isHovered());
-		
-		printDebugStuff(sp);
-	}
-	
 	/**
 	 * Prints all the debug stuff, that is -more or less- important.
 	 * 
 	 * @param sp
 	 *            The SpriteBatch to draw on
 	 */
+	// TODO create own tool to display these information.
 	private void printDebugStuff(SpriteBatch sp)
 	{
 		Draw.setColor(Color.blue);

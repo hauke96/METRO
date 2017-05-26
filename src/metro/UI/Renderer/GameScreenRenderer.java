@@ -1,7 +1,6 @@
 package metro.UI.Renderer;
 
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Container.GameScreen.GameScreenSwitchedObserver;
@@ -14,13 +13,10 @@ import metro.UI.Renderable.Container.GameScreen.GameScreenSwitchedObserver;
 public interface GameScreenRenderer extends InputProcessor, GameScreenSwitchedObserver
 {
 	/**
-	 * Updates the actual game screen.
-	 * 
-	 * @param sp
-	 *            SpriteBatch to draw on.
+	 * Renders the controls specified by the renderer passed to the game screen.
 	 */
-	void draw(SpriteBatch sp);
-	
+	void renderUI();
+
 	/**
 	 * Switches the current game screen to the given one.
 	 * 
@@ -28,9 +24,4 @@ public interface GameScreenRenderer extends InputProcessor, GameScreenSwitchedOb
 	 *            The new game screen.
 	 */
 	void switchTo(GameScreenContainer gameScreen);
-	
-	/**
-	 * Renders the controls specified by the renderer passed to the game screen.
-	 */
-	void renderUI();
 }
