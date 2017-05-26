@@ -25,57 +25,52 @@ import metro.UI.Renderer.CloseObserver;
 public class InGameMenuWindow
 {
 	private static InGameMenuWindow __INSTANCE;
-
-	private Window _window;
-	private Button _yesButton,
-		_noButton,
-		_settingsButton;
-	private Settings _settings;
-
+	
+	private Window		_window;
+	private Button		_yesButton,
+			_noButton,
+			_settingsButton;
+	private Settings	_settings;
+	
 	/**
 	 * Shows the InGameMenuWindow. There'll be only one instance.
 	 * 
-	 * @param settings The settings object with game settings.
+	 * @param settings
+	 *            The settings object with game settings.
 	 */
 	public static void show(Settings settings)
 	{
-		if(__INSTANCE == null)
+		if (__INSTANCE == null)
 		{
 			__INSTANCE = new InGameMenuWindow(settings);
 		}
-
+		
 		__INSTANCE._window.setVisibility(true);
 	}
-
+	
 	/**
 	 * Creates a new exit game window with a settings button.
 	 */
 	private InGameMenuWindow(Settings settings)
 	{
 		_settings = settings;
-
-		_window = new Window("Really quit?",
-			new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 200,
-				METRO.__SCREEN_SIZE.height / 2 - 50,
-				400,
-				100),
-			METRO.__metroRed);
+		
+		_window = new Window("Really quit?", new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 200, METRO.__SCREEN_SIZE.height / 2 - 50, 400, 100), METRO.__metroRed);
 		registerWindowCloseObserver();
-
+		
 		_yesButton = new Button(new Rectangle(10, 70, 120, 20), "Yes");
 		_settingsButton = new Button(new Rectangle(140, 70, 120, 20), "Settings");
 		_noButton = new Button(new Rectangle(270, 70, 120, 20), "No");
 		addButtonObserver();
-
-		Label label = new Label("Really quit METRO? Or go into settings?",
-			new Point(200 - (Draw.getStringSize("Really quit METRO? Or go into settings?").width) / 2, 25));
-
+		
+		Label label = new Label("Really quit METRO? Or go into settings?", new Point(200 - (Draw.getStringSize("Really quit METRO? Or go into settings?").width) / 2, 25));
+		
 		_window.add(label);
 		_window.add(_yesButton);
 		_window.add(_settingsButton);
 		_window.add(_noButton);
 	}
-
+	
 	/**
 	 * Creates observer for all buttons ("yes", "no" and "settings").
 	 */
@@ -107,7 +102,7 @@ public class InGameMenuWindow
 			}
 		});
 	}
-
+	
 	/**
 	 * Just closes the window and sets the _settingsWindow to null.
 	 */

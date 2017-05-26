@@ -26,57 +26,54 @@ import metro.UI.Renderer.CloseObserver;
 public class SettingsWindow
 {
 	private static SettingsWindow __INSTANCE;
-
-	private Window _window;
-	private Button _okButton;
-	private Checkbox _fullscreenOn,
-		_useOpenGL30,
-		_useVSync,
-		_useHDPI;
-	private List _resolutionList,
-		_sampleList,
-		_segmentList;
-	private Settings _settings;
-
+	
+	private Window		_window;
+	private Button		_okButton;
+	private Checkbox	_fullscreenOn,
+			_useOpenGL30,
+			_useVSync,
+			_useHDPI;
+	private List		_resolutionList,
+			_sampleList,
+			_segmentList;
+	private Settings	_settings;
+	
 	/**
 	 * Shows the settings window. There'll be only one instance.
 	 * 
-	 * @param settings The settings object with game settings.
+	 * @param settings
+	 *            The settings object with game settings.
 	 */
 	public static void show(Settings settings)
 	{
-		if(__INSTANCE == null)
+		if (__INSTANCE == null)
 		{
 			__INSTANCE = new SettingsWindow(settings);
 		}
-
+		
 		__INSTANCE._window.setVisibility(true);
 	}
-
+	
 	/**
 	 * Creates a settings window.
 	 * 
-	 * @param settings TODO
+	 * @param settings
+	 *            TODO
 	 */
 	private SettingsWindow(Settings settings)
 	{
 		_settings = settings;
-
-		_window = new Window("METRO settings",
-			new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 50, METRO.__SCREEN_SIZE.height / 2 - 225, 500, 450),
-			METRO.__metroBlue);
+		
+		_window = new Window("METRO settings", new Rectangle(METRO.__SCREEN_SIZE.width / 2 - 50, METRO.__SCREEN_SIZE.height / 2 - 225, 500, 450), METRO.__metroBlue);
 		registerWindowCloseObserver();
-
-		Label label = new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.",
-			new Point(20, 20),
-			460);
+		
+		Label label = new Label("To make things easier, you don't need to click on \"save\". Everything will be saved in realtime by just changing settings.", new Point(20, 20), 460);
 		_window.add(label);
-
-		_okButton = new Button(new Rectangle(200, 420, 100, 20),
-			"OK");
+		
+		_okButton = new Button(new Rectangle(200, 420, 100, 20), "OK");
 		_window.add(_okButton);
 		addButtonObserver();
-
+		
 		_fullscreenOn = new Checkbox(new Point(20, 70), "Fullscreen", Boolean.parseBoolean(_settings.get("fullscreen.on").toString()), true);
 		_useOpenGL30 = new Checkbox(new Point(20, 90), "Use OpenGL 3.0", Boolean.parseBoolean(_settings.get("use.opengl30").toString()), true);
 		_useVSync = new Checkbox(new Point(20, 110), "Enable VSync", Boolean.parseBoolean(_settings.get("use.vsync").toString()), true);
@@ -86,7 +83,7 @@ public class SettingsWindow
 		_window.add(_useVSync);
 		_window.add(_useHDPI);
 		addCheckboxObserver();
-
+		
 		label = new Label("Screen Resolution:", new Point(20, 180));
 		_window.add(label);
 		_resolutionList = new List(new Rectangle(20, 200, 190, 150), true);
@@ -99,11 +96,12 @@ public class SettingsWindow
 		_resolutionList.addElement("1280x768");
 		_resolutionList.addElement("1280x720");
 		_resolutionList.addElement("1024x768");
-		if(Boolean.parseBoolean(_settings.get("fullscreen.on").toString())) _resolutionList.setState(false);
-		int index = _resolutionList.getIndex(Integer.parseInt(_settings.get("screen.width").toString()) + "x" + Integer.parseInt(_settings.get("screen.width").toString())); // get the entry with the current resolution
+		if (Boolean.parseBoolean(_settings.get("fullscreen.on").toString())) _resolutionList.setState(false);
+		int index = _resolutionList.getIndex(Integer.parseInt(_settings.get("screen.width").toString()) + "x" + Integer.parseInt(_settings.get("screen.width").toString())); // get the entry with the
+																																												// current resolution
 		_resolutionList.setSelectedEntry(index);
 		_window.add(_resolutionList);
-
+		
 		label = new Label("Amount Samples:", new Point(240, 180));
 		_window.add(label);
 		_sampleList = new List(new Rectangle(240, 200, 90, 150), true);
@@ -115,7 +113,7 @@ public class SettingsWindow
 		index = _sampleList.getIndex(_settings.get("amount.samples") + ""); // get the entry with the current resolution
 		_sampleList.setSelectedEntry(index);
 		_window.add(_sampleList);
-
+		
 		label = new Label("Amount Segments:", new Point(360, 180));
 		_window.add(label);
 		_segmentList = new List(new Rectangle(360, 200, 90, 150), true);
@@ -129,10 +127,10 @@ public class SettingsWindow
 		index = _segmentList.getIndex(_settings.get("amount.segments") + ""); // get the entry with the current resolution
 		_segmentList.setSelectedEntry(index);
 		_window.add(_segmentList);
-
+		
 		addListObserver();
 	}
-
+	
 	/**
 	 * Adds the observer for the "ok" button that closes the window.
 	 */
@@ -147,7 +145,7 @@ public class SettingsWindow
 			}
 		});
 	}
-
+	
 	/**
 	 * Creates the observer with sub-classes for all the check-boxes of this class.
 	 */
@@ -187,7 +185,7 @@ public class SettingsWindow
 			}
 		});
 	}
-
+	
 	/**
 	 * Add observer for all lists (resolution, samples and segments)
 	 */
@@ -198,15 +196,12 @@ public class SettingsWindow
 			@Override
 			public void selectionChanged(String entry)
 			{
-				if(entry != null && !Boolean.parseBoolean(_settings.get("fullscreen.on").toString())) // ... and fullscreen-mode is off
+				if (entry != null && !Boolean.parseBoolean(_settings.get("fullscreen.on").toString())) // ... and fullscreen-mode is off
 				{
-					Logger.__debug(MessageFormat.format("Old res.: {0}x{1} -- New res.: {2}",
-						_settings.get("screen.width"),
-						_settings.get("screen.height"),
-						_resolutionList.getSelectedText()));
-
+					Logger.__debug(MessageFormat.format("Old res.: {0}x{1} -- New res.: {2}", _settings.get("screen.width"), _settings.get("screen.height"), _resolutionList.getSelectedText()));
+					
 					String splitted[] = entry.split("x");
-					if(splitted.length == 2)
+					if (splitted.length == 2)
 					{
 						_settings.set("screen.width", Integer.parseInt(splitted[0]));
 						_settings.set("screen.height", Integer.parseInt(splitted[1]));
@@ -219,7 +214,7 @@ public class SettingsWindow
 			@Override
 			public void selectionChanged(String entry)
 			{
-				if(entry != null && !entry.equals("")) _settings.set("amount.samples", Integer.parseInt(entry));
+				if (entry != null && !entry.equals("")) _settings.set("amount.samples", Integer.parseInt(entry));
 			}
 		});
 		_segmentList.register(new ActionObserver()
@@ -227,11 +222,11 @@ public class SettingsWindow
 			@Override
 			public void selectionChanged(String entry)
 			{
-				if(entry != null && !entry.equals("")) _settings.set("amount.segments", Integer.parseInt(entry));
+				if (entry != null && !entry.equals("")) _settings.set("amount.segments", Integer.parseInt(entry));
 			}
 		});
 	}
-
+	
 	/**
 	 * Just closes the window and sets the _settingsWindow to null.
 	 */

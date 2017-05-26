@@ -13,7 +13,8 @@ public interface CloseObserver
 	/**
 	 * Will be calls when an observable closes itself or has been closed.
 	 * 
-	 * @param container The container that has been closed.
+	 * @param container
+	 *            The container that has been closed.
 	 */
 	public void reactToClosedControlElement(CloseObservable container);
 }

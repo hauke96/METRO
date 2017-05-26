@@ -24,9 +24,9 @@ public class Event
 		 */
 		public void handleEvent();
 	}
-
+	
 	private List<EventHandler> _handlerList;
-
+	
 	/**
 	 * Creates a new Event.
 	 */
@@ -34,30 +34,31 @@ public class Event
 	{
 		_handlerList = new ArrayList<>();
 	}
-
+	
 	/**
 	 * Registers the given event handler.
 	 * 
 	 * Duplicates are allowed.
 	 * 
-	 * @param eventHandler The handler to register.
+	 * @param eventHandler
+	 *            The handler to register.
 	 */
 	public void add(EventHandler eventHandler)
 	{
 		_handlerList.add(eventHandler);
 	}
-
+	
 	/**
 	 * Notified all registered event handler.
 	 */
 	public void fireEvent()
 	{
-		for(EventHandler eventHandler : _handlerList)
+		for (EventHandler eventHandler : _handlerList)
 		{
 			eventHandler.handleEvent();
 		}
 	}
-
+	
 	/**
 	 * Removes all registered listeners from this event.
 	 */
@@ -65,7 +66,7 @@ public class Event
 	{
 		_handlerList.clear();
 	}
-
+	
 	/**
 	 * @return The amount of registered observers. Note that duplicates are allowed.
 	 */

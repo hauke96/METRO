@@ -15,7 +15,7 @@ import metro.GameUI.MainView.PlayingField.PlayingField;
 public class PlayingFieldTest
 {
 	private PlayingField field;
-
+	
 	/**
 	 * Creates the playing field.
 	 */
@@ -23,7 +23,7 @@ public class PlayingFieldTest
 	{
 		field = Locator.get(PlayingField.class);
 	}
-
+	
 	/**
 	 * Tests the initial state of the map offset.
 	 */
@@ -32,7 +32,7 @@ public class PlayingFieldTest
 	{
 		assertEquals(new Point(0, 0), field.getMapOffset());
 	}
-
+	
 	/**
 	 * Tests the initial state of the selected node.
 	 */

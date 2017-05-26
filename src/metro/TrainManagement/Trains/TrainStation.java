@@ -16,83 +16,87 @@ import metro.Common.Graphics.Fill;
 
 public class TrainStation
 {
-	private int _waitingPassengers,
-		_movingPassengerWaitingTime,
-		_randomAddPassengerWaitingTime;
-	private Point _position; // Position
-	private int[] _movingPassengersAmount,
-		_movingPassengersDuration;
-	private long _movingPassengerLastCall,
-		_randomAddPassengerLastCall;
-
+	private int		_waitingPassengers,
+			_movingPassengerWaitingTime,
+			_randomAddPassengerWaitingTime;
+	private Point	_position;					// Position
+	private int[]	_movingPassengersAmount,
+			_movingPassengersDuration;
+	private long	_movingPassengerLastCall,
+			_randomAddPassengerLastCall;
+	
 	/**
 	 * The price to build one train station.
 	 */
 	public static int __price = 5000;
-
+	
 	/**
 	 * Creates a new train station.
 	 * 
-	 * @param position The position in fields (not in pixel).
+	 * @param position
+	 *            The position in fields (not in pixel).
 	 */
 	public TrainStation(Point position)
 	{
 		this(position, 0);
 	}
-
+	
 	/**
 	 * Creates a new train station.
 	 * 
-	 * @param position The position in fields (not in pixel).
-	 * @param waitingPassengers The amount of waiting passengers.
+	 * @param position
+	 *            The position in fields (not in pixel).
+	 * @param waitingPassengers
+	 *            The amount of waiting passengers.
 	 */
 	public TrainStation(Point position, int waitingPassengers)
 	{
 		_waitingPassengers = waitingPassengers;
 		_position = position;
-
-		_randomAddPassengerWaitingTime = (int)750e6; // 750ms == 750*10^6 ns
+		
+		_randomAddPassengerWaitingTime = (int) 750e6; // 750ms == 750*10^6 ns
 		_randomAddPassengerLastCall = 0;
-
-		_movingPassengerWaitingTime = (int)250e6; // 250ms == 250*10^6 ns
+		
+		_movingPassengerWaitingTime = (int) 250e6; // 250ms == 250*10^6 ns
 		_movingPassengersAmount = new int[8]; // there can never be more then 8 trains in one station
 		_movingPassengersDuration = new int[8];
 		_movingPassengerLastCall = 0;
 	}
-
+	
 	/**
 	 * Draws the station with passenger amount.
 	 * 
-	 * @param offset The offset of the current game screen.
-	 * @param baseNetSpacing The current base net spacing.
+	 * @param offset
+	 *            The offset of the current game screen.
+	 * @param baseNetSpacing
+	 *            The current base net spacing.
 	 */
 	public void draw(Point offset, int baseNetSpacing)
 	{
-		Point position = new Point(offset.x + _position.x * baseNetSpacing - 4,
-			offset.y + _position.y * baseNetSpacing - 7); // Position with offset etc.
+		Point position = new Point(offset.x + _position.x * baseNetSpacing - 4, offset.y + _position.y * baseNetSpacing - 7); // Position with offset etc.
 		Fill.setColor(Color.white);
 		Fill.Rect(position.x, position.y, 8, 15);
 		Draw.setColor(Color.black);
 		Draw.Rect(position.x, position.y, 8, 15);
-
-		Draw.String("" + _waitingPassengers,
-			offset.x + _position.x * baseNetSpacing - Draw.getStringSize("" + _waitingPassengers).width / 2 - 1,
-			offset.y + _position.y * baseNetSpacing - 25);
+		
+		Draw.String("" + _waitingPassengers, offset.x + _position.x * baseNetSpacing - Draw.getStringSize("" + _waitingPassengers).width / 2 - 1, offset.y
+				+ _position.y * baseNetSpacing - 25);
 	}
-
+	
 	/**
 	 * Returns the position with offset.
 	 * 
-	 * @param offset The offset of the current game screen.
-	 * @param baseNetSpacing The current base net spacing.
+	 * @param offset
+	 *            The offset of the current game screen.
+	 * @param baseNetSpacing
+	 *            The current base net spacing.
 	 * @return The position with offset.
 	 */
 	public Point getPositionOnScreen(Point offset, int baseNetSpacing)
 	{
-		return new Point(offset.x + _position.x * baseNetSpacing,
-			offset.y + _position.y * baseNetSpacing); // Position with offset etc.
+		return new Point(offset.x + _position.x * baseNetSpacing, offset.y + _position.y * baseNetSpacing); // Position with offset etc.
 	}
-
+	
 	/**
 	 * @return The position of this station in baseNetSpacing-units.
 	 */
@@ -100,40 +104,42 @@ public class TrainStation
 	{
 		return _position;
 	}
-
+	
 	/**
 	 * Adds a job for the station to move some passengers. The amount and the amount of time for this job can be specified.
 	 * Moving passengers is handled by the {@link #handlePassenger()} method.
 	 * 
-	 * @param amount The amount of passenger to move.
-	 * @param duration The duration of the job in nanoseconds.
+	 * @param amount
+	 *            The amount of passenger to move.
+	 * @param duration
+	 *            The duration of the job in nanoseconds.
 	 */
 	public void movePassenger(int amount, long duration)
 	{
-		for(int i = 0; i < _movingPassengersAmount.length; ++i)
+		for (int i = 0; i < _movingPassengersAmount.length; ++i)
 		{
-			if(_movingPassengersDuration[i] == 0) // free slot in array
+			if (_movingPassengersDuration[i] == 0) // free slot in array
 			{
-				_movingPassengersDuration[i] = (int)(duration / _movingPassengerWaitingTime); // amount of iterations until the job is done.
-				_movingPassengersAmount[i] = amount / (int)_movingPassengersDuration[i];
+				_movingPassengersDuration[i] = (int) (duration / _movingPassengerWaitingTime); // amount of iterations until the job is done.
+				_movingPassengersAmount[i] = amount / (int) _movingPassengersDuration[i];
 				break;
 			}
 		}
 	}
-
+	
 	/**
 	 * Increases/decreases the amount of passenger according to the creates jobs via the {@link #movePassenger(int, long)} method.
 	 */
 	public void handlePassenger()
 	{
 		long thisCall = System.nanoTime();
-		if(System.nanoTime() > _movingPassengerLastCall + _movingPassengerWaitingTime)
+		if (System.nanoTime() > _movingPassengerLastCall + _movingPassengerWaitingTime)
 		{
-			for(int i = 0; i < _movingPassengersAmount.length && _waitingPassengers > 0; ++i)
+			for (int i = 0; i < _movingPassengersAmount.length && _waitingPassengers > 0; ++i)
 			{
-				if(_movingPassengersDuration[i] != 0) // valid entry/running job.
+				if (_movingPassengersDuration[i] != 0) // valid entry/running job.
 				{
-					if(_waitingPassengers >= _movingPassengersAmount[i])
+					if (_waitingPassengers >= _movingPassengersAmount[i])
 					{
 						_waitingPassengers -= _movingPassengersAmount[i];
 					}
@@ -147,36 +153,37 @@ public class TrainStation
 			_movingPassengerLastCall = thisCall;
 		}
 	}
-
+	
 	/**
 	 * Adds a random amount of passenger between 0 and 5 * (citizenDensity + 1).
 	 * 
-	 * @param citizenDensity The city density of this station.
+	 * @param citizenDensity
+	 *            The city density of this station.
 	 */
 	public void addRandomPassenger(int citizenDensity)
 	{
 		citizenDensity++; // there's also the 0-density but there should be some passenger there as well ;)
 		long thisCall = System.nanoTime();
-		if(System.nanoTime() > _randomAddPassengerLastCall + _randomAddPassengerWaitingTime)
+		if (System.nanoTime() > _randomAddPassengerLastCall + _randomAddPassengerWaitingTime)
 		{
 			_waitingPassengers += new Random().nextInt(5 * citizenDensity);
 			_randomAddPassengerLastCall = thisCall;
 		}
 	}
-
+	
 	@Override
 	public boolean equals(Object obj)
 	{
 		Point pos = null;
-		if(obj instanceof Point)
+		if (obj instanceof Point)
 		{
-			pos = (Point)obj;
+			pos = (Point) obj;
 		}
-		else if(obj instanceof TrainStation)
+		else if (obj instanceof TrainStation)
 		{
-			pos = ((TrainStation)obj).getPosition();
+			pos = ((TrainStation) obj).getPosition();
 		}
-
+		
 		return _position.equals(pos);
 	}
 }

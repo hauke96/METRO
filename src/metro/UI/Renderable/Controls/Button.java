@@ -22,16 +22,19 @@ import metro.UI.Renderable.ControlElement;
 
 public class Button extends ControlElement
 {
-	private TextureRegion _texture;
-	private Rectangle _areaOnImage;
-	private boolean _hasBeenClicked = false; // true if control has been clicked since last check
-
+	private TextureRegion	_texture;
+	private Rectangle		_areaOnImage;
+	private boolean			_hasBeenClicked	= false;	// true if control has been clicked since last check
+	
 	/**
 	 * Creates a new Button.
 	 * 
-	 * @param area The position on the screen/window (absolute).
-	 * @param areaOnImage The position of the button texture on an image (absolute).
-	 * @param texture The button texture.
+	 * @param area
+	 *            The position on the screen/window (absolute).
+	 * @param areaOnImage
+	 *            The position of the button texture on an image (absolute).
+	 * @param texture
+	 *            The button texture.
 	 */
 	public Button(Rectangle area, Rectangle areaOnImage, TextureRegion texture)
 	{
@@ -40,12 +43,14 @@ public class Button extends ControlElement
 		_areaOnImage = areaOnImage;
 		_state = true;
 	}
-
+	
 	/**
 	 * Creates a new button.
 	 * 
-	 * @param area The position on the screen/window (absolute).
-	 * @param text The text of the button.
+	 * @param area
+	 *            The position on the screen/window (absolute).
+	 * @param text
+	 *            The text of the button.
 	 */
 	public Button(Rectangle area, String text)
 	{
@@ -54,24 +59,26 @@ public class Button extends ControlElement
 		_areaOnImage = new Rectangle(0, 0, _area.width, _area.height);
 		_state = true;
 	}
-
+	
 	/**
 	 * Checks if the mouse is in the button area or has been clicked a while ago.
 	 * 
-	 * @param x x-coordinate of mouse.
-	 * @param y y-coordinate of mouse.
+	 * @param x
+	 *            x-coordinate of mouse.
+	 * @param y
+	 *            y-coordinate of mouse.
 	 * @return True if mouse is in area or Button has been pressed.
 	 */
 	public boolean isPressed(int x, int y)
 	{
-		if(_state && (_area.contains(x, y) || _hasBeenClicked))
+		if (_state && (_area.contains(x, y) || _hasBeenClicked))
 		{
 			_hasBeenClicked = false;
 			return true;
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Returns if the button has been clicked since last frame.
 	 * 
@@ -83,20 +90,19 @@ public class Button extends ControlElement
 		_hasBeenClicked = false;
 		return _state ? temp : false;
 	}
-
+	
 	/**
 	 * Draws the button with its text/texture.
 	 */
 	protected void draw()
 	{
-		if(!_text.equals(""))
+		if (!_text.equals(""))
 		{
-			if(_state) Draw.setColor(METRO.__metroRed);
+			if (_state) Draw.setColor(METRO.__metroRed);
 			else Draw.setColor(Color.gray);
-			Draw.String(_text, _area.x + (_area.width - Draw.getStringSize(_text).width) / 2,
-				_area.y + (_area.height - Draw.getStringSize(_text).height) / 2);
-
-			if(_state) Draw.setColor(METRO.__metroBlue);
+			Draw.String(_text, _area.x + (_area.width - Draw.getStringSize(_text).width) / 2, _area.y + (_area.height - Draw.getStringSize(_text).height) / 2);
+			
+			if (_state) Draw.setColor(METRO.__metroBlue);
 			else Draw.setColor(Color.lightGray);
 			Draw.Rect(_area.x, _area.y, _area.width, _area.height);
 		}
@@ -105,7 +111,7 @@ public class Button extends ControlElement
 			Draw.Image(_texture, _area, _areaOnImage);
 		}
 	}
-
+	
 	/**
 	 * Check if mouse is on the button and sets its clicked-flag to true (isPressed() would return true now).
 	 * 
@@ -113,59 +119,61 @@ public class Button extends ControlElement
 	 */
 	public boolean clickOnControlElement()
 	{
-		if(!_state) return false;
+		if (!_state) return false;
 		Point mPos = METRO.__originalMousePosition;
-
-		if(_area.contains(mPos))
+		
+		if (_area.contains(mPos))
 		{
 			_hasBeenClicked = true;
 			return true;
 		}
 		return false;
 	}
-
+	
 	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
-		if(clickOnControlElement())
+		if (clickOnControlElement())
 		{
 			notifyClickOnControl(this);
 			return true;
 		}
 		return false;
 	}
-
+	
 	@Override
 	public void mouseReleased(int screenX, int screenY, int button)
 	{
 	}
-
+	
 	@Override
 	public void moveElement(Point offset)
 	{
 		_area.translate(offset.x, offset.y);
 	}
-
+	
 	@Override
 	public void mouseScrolled(int amount)
 	{
 	}
-
+	
 	@Override
 	public void keyPressed(int key)
 	{
 	}
-
+	
 	@Override
 	public void keyUp(int keyCode)
 	{
 	}
-
+	
 	/**
 	 * Sets the texture of this button and the area of it on the raw image.
 	 * 
-	 * @param positionOnImage The area of the texture for this button.
-	 * @param image The raw image where the texture is on.
+	 * @param positionOnImage
+	 *            The area of the texture for this button.
+	 * @param image
+	 *            The raw image where the texture is on.
 	 */
 	public void setImage(Rectangle positionOnImage, TextureRegion image)
 	{

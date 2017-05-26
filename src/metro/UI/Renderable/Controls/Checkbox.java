@@ -17,55 +17,69 @@ import metro.UI.Renderable.ControlElement;
  */
 public class Checkbox extends ControlElement
 {
-	private boolean _checked,
-		_oldState; // used by hasChanged() method to determine if the state has changed since last call
-	private Label _label;
-	private int _textWidth;
-
+	private boolean	_checked,
+			_oldState;			// used by hasChanged() method to determine if the state has changed since last call
+	private Label	_label;
+	private int		_textWidth;
+	
 	/**
 	 * Creates a new checkbox with a certain text.
 	 * 
-	 * @param position The position of the checkbox.
-	 * @param text The text of the checkbox
+	 * @param position
+	 *            The position of the checkbox.
+	 * @param text
+	 *            The text of the checkbox
 	 */
 	public Checkbox(Point position, String text)
 	{
 		this(position, text, 0, false, true);
 	}
-
+	
 	/**
 	 * Creates a new checbox with a certain text and a start-state.
 	 * 
-	 * @param position The position of the checkbox.
-	 * @param text The text of the checkbox
-	 * @param checked The start state of the checkbox.
+	 * @param position
+	 *            The position of the checkbox.
+	 * @param text
+	 *            The text of the checkbox
+	 * @param checked
+	 *            The start state of the checkbox.
 	 */
 	public Checkbox(Point position, String text, boolean checked)
 	{
 		this(position, text, 0, checked, true);
 	}
-
+	
 	/**
 	 * Creates a new checbox with a certain text and a start-state.
 	 * 
-	 * @param position The position of the checkbox.
-	 * @param text The text of the checkbox
-	 * @param checked The start state of the checkbox.
-	 * @param enabled The enable-flag.
+	 * @param position
+	 *            The position of the checkbox.
+	 * @param text
+	 *            The text of the checkbox
+	 * @param checked
+	 *            The start state of the checkbox.
+	 * @param enabled
+	 *            The enable-flag.
 	 */
 	public Checkbox(Point position, String text, boolean checked, boolean enabled)
 	{
 		this(position, text, 0, checked, enabled);
 	}
-
+	
 	/**
 	 * Creates a new checkbox with a certain text, a start-state and an enable flag.
 	 * 
-	 * @param position The position of the checkbox.
-	 * @param text The text of the checkbox
-	 * @param textWidth The maximum width of the text. This enables automatic linebreaks
-	 * @param checked The start state of the checkbox.
-	 * @param enabled The enable-flag.
+	 * @param position
+	 *            The position of the checkbox.
+	 * @param text
+	 *            The text of the checkbox
+	 * @param textWidth
+	 *            The maximum width of the text. This enables automatic linebreaks
+	 * @param checked
+	 *            The start state of the checkbox.
+	 * @param enabled
+	 *            The enable-flag.
 	 */
 	public Checkbox(Point position, String text, int textWidth, boolean checked, boolean enabled)
 	{
@@ -78,7 +92,7 @@ public class Checkbox extends ControlElement
 		_oldState = _checked;
 		_state = enabled;
 	}
-
+	
 	/**
 	 * Returns the current state of the checkbox.
 	 * 
@@ -88,7 +102,7 @@ public class Checkbox extends ControlElement
 	{
 		return _checked;
 	}
-
+	
 	/**
 	 * Returns true, when the state (true/false) has changes since last call of this method.
 	 * 
@@ -97,10 +111,10 @@ public class Checkbox extends ControlElement
 	public boolean hasChanged()
 	{
 		boolean hasChanged = _oldState != _checked;
-		if(hasChanged) _oldState = _checked;
+		if (hasChanged) _oldState = _checked;
 		return hasChanged;
 	}
-
+	
 	/**
 	 * This method checks if the mouse is in the area of the box.
 	 * Notice: The mouse does NOT need to be clicked to return true!
@@ -110,34 +124,34 @@ public class Checkbox extends ControlElement
 	public boolean isPressed()
 	{
 		Point mPos = METRO.__originalMousePosition;
-
+		
 		return mPos.x >= _area.x
-			&& mPos.x <= _area.x + 15
-			&& mPos.y >= _area.y
-			&& mPos.y <= _area.y + 15;
+				&& mPos.x <= _area.x + 15
+				&& mPos.y >= _area.y
+				&& mPos.y <= _area.y + 15;
 	}
-
+	
 	@Override
 	protected void draw()
 	{
 		// set the color depending on _enabled
 		Draw.setColor(_state
-			? METRO.__metroBlue
-			: new Color(METRO.__metroBlue.getRed(), METRO.__metroBlue.getGreen(), METRO.__metroBlue.getBlue(), 125));
-
+				? METRO.__metroBlue
+				: new Color(METRO.__metroBlue.getRed(), METRO.__metroBlue.getGreen(), METRO.__metroBlue.getBlue(), 125));
+		
 		Draw.Rect(_area.x, _area.y, 15, 15);
-		if(_checked) // draw cross if checked
+		if (_checked) // draw cross if checked
 		{
 			Draw.Line(_area.x + 3, _area.y + 3, _area.x + 13, _area.y + 13);
 			Draw.Line(_area.x + 3, _area.y + 13, _area.x + 13, _area.y + 3);
 		}
-
+		
 		_label.setColor(_state
-			? Color.black
-			: Color.lightGray);
+				? Color.black
+				: Color.lightGray);
 		_label.draw();
 	}
-
+	
 	/**
 	 * Does all actions when the mouse clicked on this control.
 	 * 
@@ -146,63 +160,63 @@ public class Checkbox extends ControlElement
 	public boolean clickOnControlElement()
 	{
 		Point mPos = METRO.__originalMousePosition;
-
-		if(mPos.x >= _area.x
-			&& mPos.x <= _area.x + 15
-			&& mPos.y >= _area.y
-			&& mPos.y <= _area.y + 15)
+		
+		if (mPos.x >= _area.x
+				&& mPos.x <= _area.x + 15
+				&& mPos.y >= _area.y
+				&& mPos.y <= _area.y + 15)
 		{
 			_checked = (false == _checked) && _state;
 			return true;
 		}
 		return false;
 	}
-
+	
 	@Override
 	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
-		if(clickOnControlElement())
+		if (clickOnControlElement())
 		{
 			notifyStateChanged(_checked);
 			return true;
 		}
 		return false;
 	}
-
+	
 	@Override
 	public void mouseReleased(int screenX, int screenY, int button)
 	{
 	}
-
+	
 	@Override
 	public void moveElement(Point offset)
 	{
 		_area.setLocation(_area.x + offset.x, _area.y + offset.y);
 		_label.moveElement(offset);
 	}
-
+	
 	@Override
 	public void mouseScrolled(int amount)
 	{
 	}
-
+	
 	@Override
 	public void keyPressed(int key)
 	{
 	}
-
+	
 	@Override
 	public void keyUp(int keyCode)
 	{
 	}
-
+	
 	@Override
 	public void setText(String text)
 	{
 		_text = text;
 		_label.setText(text);
 	}
-
+	
 	@Override
 	public void setPosition(Point newPosition)
 	{
@@ -210,14 +224,14 @@ public class Checkbox extends ControlElement
 		newPosition.translate(25, 0);
 		_label.setPosition(newPosition);
 	}
-
+	
 	@Override
 	public Rectangle getArea()
 	{
 		Dimension size = calcSize(_label.getPosition().x);
 		return new Rectangle(_area.x, _area.y, size.width, size.height);
 	}
-
+	
 	private Dimension calcSize(int labelXPosition)
 	{
 		return new Dimension(25 + labelXPosition, 20);

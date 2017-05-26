@@ -13,7 +13,7 @@ public class ContainerPositioningConflict extends RuntimeException
 	 * ID needed for the serialization process.
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	/**
 	 * Creates an exception that says, that the "is below of" property of two container are in conflict.
 	 */

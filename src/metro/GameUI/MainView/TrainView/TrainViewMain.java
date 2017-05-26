@@ -23,77 +23,80 @@ import metro.UI.Renderable.Controls.List;
  */
 public class TrainViewMain extends ToolView
 {
-	private int _windowWidth;
-	private List _trainList,
-		_lineList;
-	private Button _moveTrainButton, // to change a train
-		_sellTrainButton; // to remove a train
-	private Point _areaOffset; // to get the (0,0)-coordinate very easy
-	private String _movedTrain;
-	private TrainManagementService _trainManagementService;
-	private Panel _panel;
-	private Label _yourLinesLabel,
-		_yourTrainsLabel;
-
+	private int						_windowWidth;
+	private List					_trainList,
+			_lineList;
+	private Button					_moveTrainButton,						// to change a train
+			_sellTrainButton;												// to remove a train
+	private Point					_areaOffset;							// to get the (0,0)-coordinate very easy
+	private String					_movedTrain;
+	private TrainManagementService	_trainManagementService;
+	private Panel					_panel;
+	private Label					_yourLinesLabel,
+			_yourTrainsLabel;
+	
 	/**
 	 * Creates a new main view for the train screen.
 	 * 
-	 * @param areaOffset The offset of the screen area.
-	 * @param windowWidth The window width.
-	 * @param trainManagementService The train management service.
+	 * @param areaOffset
+	 *            The offset of the screen area.
+	 * @param windowWidth
+	 *            The window width.
+	 * @param trainManagementService
+	 *            The train management service.
 	 */
 	public TrainViewMain(Point areaOffset, int windowWidth, TrainManagementService trainManagementService)
 	{
 		_windowWidth = windowWidth;
 		_areaOffset = areaOffset;
 		_trainManagementService = trainManagementService;
-
+		
 		// TODO WTF a train as String?
 		_movedTrain = "";
-
+		
 		_panel = new Panel(new Rectangle());
 		_panel.setDrawBorder(false);
-
+		
 		_lineList = new List(new Rectangle(_areaOffset.x + 20, _areaOffset.y + 130, _windowWidth - 300, 230), true);
 		_lineList.register(new ActionObserver()
 		{
 			@Override
 			public void selectionChanged(String entry)
 			{
-				if(isInMoveMode())
+				if (isInMoveMode())
 				{
 					TrainLine selectedLine = _trainManagementService.getLine(entry);
 					Train selectedTrain = _trainManagementService.getTrainByName(_movedTrain);
-
+					
 					selectedTrain.setLine(selectedLine);
 					stopMoveMode();
 				}
-
+				
 				_trainList.clear();
 				TrainLine line = _trainManagementService.getLine(_lineList.getSelectedText());
-				for(Train train : _trainManagementService.getTrains())
+				for (Train train : _trainManagementService.getTrains())
 				{
-					if(train.getLine().equals(line)) _trainList.addElement(train.getName());
+					if (train.getLine().equals(line)) _trainList.addElement(train.getName());
 				}
 			}
 		});
-
+		
 		_trainList = new List(new Rectangle(_areaOffset.x + 121, _areaOffset.y + 130, _windowWidth - 141, 230), true);
-
+		
 		fillLineList();
-
+		
 		_yourLinesLabel = new Label("Your Lines:", new Point(METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 110));
 		_yourLinesLabel.setColor(METRO.__metroRed);
 		_yourLinesLabel.underlined(true);
 		_yourTrainsLabel = new Label("Your Trains:", new Point(METRO.__SCREEN_SIZE.width - _windowWidth + 125, _areaOffset.y + 110));
 		_yourTrainsLabel.setColor(METRO.__metroRed);
 		_yourTrainsLabel.underlined(true);
-
+		
 		_moveTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Move train");
 		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Sell train");
-
+		
 		addButtonObserver();
-
+		
 		_panel.add(_lineList);
 		_panel.add(_trainList);
 		_panel.add(_moveTrainButton);
@@ -101,7 +104,7 @@ public class TrainViewMain extends ToolView
 		_panel.add(_yourLinesLabel);
 		_panel.add(_yourTrainsLabel);
 	}
-
+	
 	/**
 	 * Fills the line list with the lines.
 	 */
@@ -109,17 +112,17 @@ public class TrainViewMain extends ToolView
 	{
 		// Fill line list with all lines:
 		java.util.List<TrainLine> lineList = _trainManagementService.getLines();
-		for(TrainLine line : lineList)
+		for (TrainLine line : lineList)
 		{
 			_lineList.addElement(line.getName());
 		}
-
-		if(lineList.size() > 0)
+		
+		if (lineList.size() > 0)
 		{
 			_lineList.setSelectedEntry(0); // simply select the first entry
 		}
 	}
-
+	
 	/**
 	 * Creates all needed observers for the buttons.
 	 */
@@ -142,7 +145,7 @@ public class TrainViewMain extends ToolView
 			}
 		});
 	}
-
+	
 	/**
 	 * Removes the whole selected line.
 	 */
@@ -152,21 +155,21 @@ public class TrainViewMain extends ToolView
 		_trainList.removeElement(_trainList.getSelectedIndex());
 		_trainList.setSelectedEntry(0);
 	}
-
+	
 	/**
 	 * Fills controls with information about line so that the player can edit it.
 	 * Also disabled the buttons for editing and selling trains and sets the {@code _movedTrain} variable.
 	 */
 	void startMoveMode()
 	{
-		if(_trainList.getSelectedIndex() == -1) return;
-
+		if (_trainList.getSelectedIndex() == -1) return;
+		
 		_moveTrainButton.setState(false);
 		_sellTrainButton.setState(false);
-
+		
 		_movedTrain = _trainList.getSelectedText();
 	}
-
+	
 	/**
 	 * Sets the move mode to {@code false}, so that no trains can be moved to other lines.
 	 */
@@ -174,10 +177,10 @@ public class TrainViewMain extends ToolView
 	{
 		_moveTrainButton.setState(false);
 		_sellTrainButton.setState(false);
-
+		
 		_movedTrain = "";
 	}
-
+	
 	/**
 	 * @return The list with all trains of the selected line.
 	 */
@@ -185,7 +188,7 @@ public class TrainViewMain extends ToolView
 	{
 		return _trainList;
 	}
-
+	
 	/**
 	 * @return The list with all lines.
 	 */
@@ -193,7 +196,7 @@ public class TrainViewMain extends ToolView
 	{
 		return _lineList;
 	}
-
+	
 	/**
 	 * @return Gets the panel of this screen.
 	 */
@@ -201,7 +204,7 @@ public class TrainViewMain extends ToolView
 	{
 		return _panel;
 	}
-
+	
 	/**
 	 * @return True when the TrainViewMain is in move mode.
 	 */
@@ -209,14 +212,14 @@ public class TrainViewMain extends ToolView
 	{
 		return !_movedTrain.isEmpty();
 	}
-
+	
 	@Override
 	public boolean isHovered()
 	{
 		return METRO.__mousePosition.x > _areaOffset.x
-			&& METRO.__mousePosition.y < 400;
+				&& METRO.__mousePosition.y < 400;
 	}
-
+	
 	/**
 	 * @return The train that should be moved.
 	 */
@@ -224,7 +227,7 @@ public class TrainViewMain extends ToolView
 	{
 		return _movedTrain;
 	}
-
+	
 	@Override
 	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
 	{

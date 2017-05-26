@@ -23,35 +23,38 @@ import metro.Common.Game.Settings;
 
 public class Fill
 {
-	private static ShapeRenderer __shapeRenderer = new ShapeRenderer();
-	private static int __xOffset, __yOffset;
-	private static float __r, __g, __b, __a; // current color values
-	private static Settings __settings;
-
+	private static ShapeRenderer	__shapeRenderer	= new ShapeRenderer();
+	private static int				__xOffset, __yOffset;
+	private static float			__r, __g, __b, __a;						// current color values
+	private static Settings			__settings;
+	
 	/**
 	 * Sets the settings object to use settings like AMOUNT_SEGMENTS for rendering.
 	 * 
-	 * @param settings The settings object.
+	 * @param settings
+	 *            The settings object.
 	 */
 	public static void setSettingsService(Settings settings)
 	{
 		Contract.RequireNotNull(settings);
-
+		
 		__settings = settings;
 	}
-
+	
 	/**
 	 * Sets the offset for drawing things.
 	 * 
-	 * @param offsetX The offset for the x-coordinates.
-	 * @param offsetY The offset for the y-coordinates.
+	 * @param offsetX
+	 *            The offset for the x-coordinates.
+	 * @param offsetY
+	 *            The offset for the y-coordinates.
 	 */
 	public static void setOffset(int offsetX, int offsetY)
 	{
 		__xOffset = offsetX;
 		__yOffset = offsetY;
 	}
-
+	
 	/**
 	 * Initializes the screen for drawing on it. It also stops the spriteBatch for a transparent background.
 	 */
@@ -60,12 +63,12 @@ public class Fill
 		spriteBatch.end();
 		Gdx.gl.glEnable(GL30.GL_BLEND);
 		Gdx.gl.glBlendFunc(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
-
+		
 		__shapeRenderer.setProjectionMatrix(METRO.__camera.combined);
 		__shapeRenderer.begin(ShapeType.Filled);
 		__shapeRenderer.setColor(__r, __g, __b, __a);
 	}
-
+	
 	/**
 	 * Resets the screen and the spriteBatch to the default values so that METRO can use it normally. The drawing has finished at this point.
 	 */
@@ -75,11 +78,12 @@ public class Fill
 		Gdx.gl.glDisable(GL30.GL_BLEND);
 		spriteBatch.begin();
 	}
-
+	
 	/**
 	 * Sets the current color. Everything after this will be drawn in this color.
 	 * 
-	 * @param color Color to set.
+	 * @param color
+	 *            Color to set.
 	 */
 	public static void setColor(Color color)
 	{
@@ -88,45 +92,55 @@ public class Fill
 		__b = color.getBlue() / 255f;
 		__a = color.getAlpha() / 255f;
 	}
-
+	
 	/**
 	 * Draws a simple circle.
 	 * 
-	 * @param x x-Position (upper left corner of circle)
-	 * @param y y-Position (upper left corner of circle)
-	 * @param diameter diameter=width=height of circle
+	 * @param x
+	 *            x-Position (upper left corner of circle)
+	 * @param y
+	 *            y-Position (upper left corner of circle)
+	 * @param diameter
+	 *            diameter=width=height of circle
 	 */
 	public static void Circle(int x, int y, int diameter)
 	{
 		init(METRO.__spriteBatch);
-		__shapeRenderer.circle(x + diameter / 2 + __xOffset,
-			y + diameter / 2 + __yOffset,
-			diameter / 2,
-			Integer.parseInt(__settings.getOiginal(Settings.AMOUNT_SEGMENTS).toString()));
+		__shapeRenderer.circle(x + diameter / 2 + __xOffset, y + diameter / 2 + __yOffset, diameter
+				/ 2, Integer.parseInt(__settings.getOiginal(Settings.AMOUNT_SEGMENTS).toString()));
 		reset(METRO.__spriteBatch);
 	}
-
+	
 	/**
 	 * Draws a rectangle.
 	 * 
-	 * @param x x-coordinate (left upper corner)
-	 * @param y y-coordinate (left upper corner)
-	 * @param width Width of rectangle.
-	 * @param height Height of rectangle.
+	 * @param x
+	 *            x-coordinate (left upper corner)
+	 * @param y
+	 *            y-coordinate (left upper corner)
+	 * @param width
+	 *            Width of rectangle.
+	 * @param height
+	 *            Height of rectangle.
 	 */
 	public static void Rect(int x, int y, int width, int height)
 	{
 		Rect(x, y, width, height, METRO.__spriteBatch);
 	}
-
+	
 	/**
 	 * Draws a rectangle onto a given spriteBatch.
 	 * 
-	 * @param x x-coordinate (left upper corner)
-	 * @param y y-coordinate (left upper corner)
-	 * @param width Width of rectangle.
-	 * @param height Height of rectangle.
-	 * @param spriteBatch The spriteBatch to use here.
+	 * @param x
+	 *            x-coordinate (left upper corner)
+	 * @param y
+	 *            y-coordinate (left upper corner)
+	 * @param width
+	 *            Width of rectangle.
+	 * @param height
+	 *            Height of rectangle.
+	 * @param spriteBatch
+	 *            The spriteBatch to use here.
 	 */
 	public static void Rect(int x, int y, int width, int height, SpriteBatch spriteBatch)
 	{
@@ -134,37 +148,46 @@ public class Fill
 		__shapeRenderer.rect(x + __xOffset, y + __yOffset, width, height);
 		reset(spriteBatch);
 	}
-
+	
 	/**
 	 * Fills a rectangle with the given awt.Rectangle onto the METRO.__spriteBatch.
 	 * 
-	 * @param rect The rectangle to draw.
+	 * @param rect
+	 *            The rectangle to draw.
 	 */
 	public static void Rect(Rectangle rect)
 	{
 		Rect(rect.x, rect.y, rect.width, rect.height);
 	}
-
+	
 	/**
 	 * Fills a rectangle with the given awt.Rectangle onto a given spriteBatch.
 	 * 
-	 * @param rect The rectangle to draw.
-	 * @param spriteBatch The spriteBatch to use here.
+	 * @param rect
+	 *            The rectangle to draw.
+	 * @param spriteBatch
+	 *            The spriteBatch to use here.
 	 */
 	public static void Rect(Rectangle rect, SpriteBatch spriteBatch)
 	{
 		Rect(rect.x, rect.y, rect.width, rect.height, spriteBatch);
 	}
-
+	
 	/**
 	 * Draws a thick line from one coordinate pair to another onto the given sprite batch.
 	 * 
-	 * @param x1 First x-coordinate.
-	 * @param y1 First y-coordinate.
-	 * @param x2 Second x-coordinate.
-	 * @param y2 Second y-coordinate.
-	 * @param w The width of the line
-	 * @param spriteBatch The spriteBatch to draw on.
+	 * @param x1
+	 *            First x-coordinate.
+	 * @param y1
+	 *            First y-coordinate.
+	 * @param x2
+	 *            Second x-coordinate.
+	 * @param y2
+	 *            Second y-coordinate.
+	 * @param w
+	 *            The width of the line
+	 * @param spriteBatch
+	 *            The spriteBatch to draw on.
 	 */
 	public static void Line(int x1, int y1, int x2, int y2, int w, SpriteBatch spriteBatch)
 	{

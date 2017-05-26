@@ -23,9 +23,9 @@ public class TestInitializer
 	public static void init()
 	{
 		METRO.__SCREEN_SIZE = new Dimension(1920, 1080);
-
+		
 		Locator.get(TrainManagementService.class).init();
-
+		
 		BasicContainerRenderer containerRenderer = new BasicContainerRenderer(Locator.get(ContainerRegistrationService.class));
 	}
 }

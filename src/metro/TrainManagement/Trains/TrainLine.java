@@ -22,33 +22,38 @@ import metro.TrainManagement.Nodes.RailwayNode;
  */
 public class TrainLine implements Cloneable
 {
-	private final List<RailwayNode> _listOfNodes;
-	private Color _lineColor;
-	private String _name;
-	private final double _length;
-	private final double[] _nodeDistances;
-
+	private final List<RailwayNode>	_listOfNodes;
+	private Color					_lineColor;
+	private String					_name;
+	private final double			_length;
+	private final double[]			_nodeDistances;
+	
 	/**
 	 * Creates an empty new train line with a given title and a color.
 	 * 
-	 * @param name The title.
-	 * @param lineColor The color.
+	 * @param name
+	 *            The title.
+	 * @param lineColor
+	 *            The color.
 	 */
 	public TrainLine(String name, Color lineColor)
 	{
 		this(null, name, lineColor);
 	}
-
+	
 	/**
 	 * Creates a (partly) filled train line with a name and a color.
 	 * 
-	 * @param connections All connections that should be added.
-	 * @param name The name.
-	 * @param lineColor The color.
+	 * @param connections
+	 *            All connections that should be added.
+	 * @param name
+	 *            The name.
+	 * @param lineColor
+	 *            The color.
 	 */
 	public TrainLine(List<RailwayNode> connections, String name, Color lineColor)
 	{
-		if(connections != null)
+		if (connections != null)
 		{
 			_listOfNodes = sortNodes(new ArrayList<>(connections), getAnyEndNode(connections));
 		}
@@ -60,58 +65,60 @@ public class TrainLine implements Cloneable
 		_lineColor = lineColor;
 		_length = calcLength();
 		_nodeDistances = new double[_listOfNodes.size()];
-
+		
 		Logger.__debug("Calculate line length: " + _length);
-
+		
 		preprocessNodeDistances();
 	}
-
+	
 	/**
 	 * Calculates the distance to every node beginning at node 0.
 	 */
 	private void preprocessNodeDistances()
 	{
-		for(int i = 0; i < _listOfNodes.size(); i++)
+		for (int i = 0; i < _listOfNodes.size(); i++)
 		{
 			_nodeDistances[i] = calcPartLength(0, i);
 		}
 	}
-
+	
 	/**
 	 * Sorts the given list of nodes by choosing one start node an then the neighbors.
 	 * 
-	 * @param list The list of nodes that should be sorted.
-	 * @param startNode An end node of the line.
+	 * @param list
+	 *            The list of nodes that should be sorted.
+	 * @param startNode
+	 *            An end node of the line.
 	 * @return A sorted list with all the nodes.
 	 */
 	private List<RailwayNode> sortNodes(List<RailwayNode> list, RailwayNode startNode)
 	{
-		if(list.size() <= 1 || startNode == null) return list;
-
+		if (list.size() <= 1 || startNode == null) return list;
+		
 		Logger.__debug(
-			"Start Node: " + startNode.getPosition() + "\n" +
-				"Line length (amount of nodes): " + list.size());
-
+				"Start Node: " + startNode.getPosition() + "\n" +
+						"Line length (amount of nodes): " + list.size());
+		
 		List<RailwayNode> newList = new ArrayList<>();
 		// be sure that an end node is the first element in this list
 		newList.add(startNode);
 		list.remove(startNode);
-
+		
 		// create a dummy node to enter toe first for-loop
 		RailwayNode neighbor = null;
 		int listLength = list.size();
-
-		for(int i = 0; i < listLength; ++i)
+		
+		for (int i = 0; i < listLength; ++i)
 		{
 			neighbor = null;
 			int k; // the index of the neighbor for the node at index i
 			// search for the left neighbor of node i
-			for(k = 0; k < list.size() && neighbor == null; ++k)
+			for (k = 0; k < list.size() && neighbor == null; ++k)
 			{
-				if(newList.get(i).isNeighbor(list.get(k))) neighbor = list.get(k);
+				if (newList.get(i).isNeighbor(list.get(k))) neighbor = list.get(k);
 			}
-
-			if(neighbor != null)
+			
+			if (neighbor != null)
 			{
 				Logger.__debug(newList.get(i).getPosition() + "  ==>  " + neighbor.getPosition());
 				newList.add(neighbor);
@@ -127,27 +134,28 @@ public class TrainLine implements Cloneable
 				newList.addAll(sortNodes(list, getAnyEndNode(list)));
 			}
 		}
-
+		
 		return newList;
 	}
-
+	
 	/**
 	 * This method determines an end node of the given line.
 	 * It's not specified which node of the two end nodes will be chosen, because the algorithm will take the first in the list of nodes.
 	 * 
-	 * @param list A list with all nodes where the end nodes should be determined.
+	 * @param list
+	 *            A list with all nodes where the end nodes should be determined.
 	 * @return One of the two end nodes of the given line.
 	 */
 	private RailwayNode getAnyEndNode(List<RailwayNode> list)
 	{
-		for(RailwayNode node : list)
+		for (RailwayNode node : list)
 		{
-			if(TrainLine.__isEndNode(node, list)) return node;
+			if (TrainLine.__isEndNode(node, list)) return node;
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * Calculates the length of the train line.
 	 * The length is scaled by the {@code METRO.__baseNetSpacing} and is NOT given in pixel.
@@ -158,73 +166,77 @@ public class TrainLine implements Cloneable
 	{
 		return calcPartLength(0, _listOfNodes.size() - 1);
 	}
-
+	
 	/**
 	 * calculates the distance between two nodes.
 	 * 
-	 * @param startNode The index of the start node.
-	 * @param endNode The index of the end node.
+	 * @param startNode
+	 *            The index of the start node.
+	 * @param endNode
+	 *            The index of the end node.
 	 * @return The distance between them.
 	 */
 	private double calcPartLength(int startNode, int endNode)
 	{
 		double length = 0.0;
-
-		for(int i = startNode; i < endNode; ++i) // don't cycle over the last element of the list because of (i + 1) index usages
+		
+		for (int i = startNode; i < endNode; ++i) // don't cycle over the last element of the list because of (i + 1) index usages
 		{
 			int xDiff = Math.abs(_listOfNodes.get(i).getPosition().x - _listOfNodes.get(i + 1).getPosition().x);
 			int yDiff = Math.abs(_listOfNodes.get(i).getPosition().y - _listOfNodes.get(i + 1).getPosition().y);
-
+			
 			// distance between two nodes
 			double v = Math.sqrt(Math.hypot(xDiff, yDiff));
 			length += v;
 		}
-
+		
 		return length;
 	}
-
+	
 	/**
 	 * Calculates the position of a train that traveled a specific distance from the start node.
 	 * The idea of searching the position is to find two nodes that are around the distance.
 	 * (E.g. the distance is 5 and one node is at 4.5 and one at 5.5). There's a detailed explanation about the calculation in the methods body.
 	 * 
-	 * @param distance The traveled distance of a train.
-	 * @param startNode The index of the node the train started.
+	 * @param distance
+	 *            The traveled distance of a train.
+	 * @param startNode
+	 *            The index of the node the train started.
 	 * @return The position of the train.
 	 */
 	public Point2D getPositionOfTrain(double distance, int startNode)
 	{
 		// When start node is out of bounds, return the first/last nodes position
-		if(startNode < 0) return _listOfNodes.get(0).getPosition();
-		if(_listOfNodes.size() <= startNode) return _listOfNodes.get(_listOfNodes.size() - 1).getPosition();
-
+		if (startNode < 0) return _listOfNodes.get(0).getPosition();
+		if (_listOfNodes.size() <= startNode) return _listOfNodes.get(_listOfNodes.size() - 1).getPosition();
+		
 		double length = 0.0,
-			lastLength = 0.0;
-
+				lastLength = 0.0;
+		
 		Point nodePre = _listOfNodes.get(startNode).getPosition(),
-			nodeSuc = _listOfNodes.get(startNode + 1).getPosition();
-
+				nodeSuc = _listOfNodes.get(startNode + 1).getPosition();
+		
 		/*
 		 * The small bit of the distance thats between the last to nodes:
 		 * ------ (node x-1) ---------- (node x) ---....... (node x+1) .......
 		 * Where --- is the distance that's left over and ... some distance that irrelevant.
 		 */
 		double distanceLeftOver = distance;
-
+		
 		// iterate over the nodes and calculate the distance until it's over the distance or at the end of the list
 		lastLength = calcPartLength(startNode, startNode + 1);
-
+		
 		// iterate over all nodes to find (x) and (x+1) which are describes below
-		for(int i = startNode + 1; i + 1 < _listOfNodes.size() && nodeSuc != null && length + lastLength < distance; ++i)
+		for (int i = startNode + 1; i + 1 < _listOfNodes.size() && nodeSuc != null && length + lastLength < distance; ++i)
 		{
 			length += lastLength;
 			distanceLeftOver -= lastLength;
-
+			
 			nodePre = _listOfNodes.get(i).getPosition();
 			nodeSuc = _listOfNodes.get(i + 1).getPosition();
 			lastLength = calcPartLength(i, i + 1);
 		}
-
+		
 		/* @formatter:off
 		*
 		*
@@ -261,78 +273,81 @@ public class TrainLine implements Cloneable
 		*
 		* @formatter:on
 		*/
-
+		
 		// calculate delta values of the coordinates.
 		// This will give us an integer between -1 and 1 which gives information about the orientation of the nodes (diagonal vertical, horizontal),
 		// including the direction (left, right, up, down) by 1 and -1.
 		int deltaX = nodeSuc.x - nodePre.x;
 		int deltaY = nodeSuc.y - nodePre.y;
-
+		
 		// calculate the distance between the two nodes
 		double cX = lastLength == 0 ? 0 : (distanceLeftOver / lastLength) * deltaX;
 		double cY = lastLength == 0 ? 0 : (distanceLeftOver / lastLength) * deltaY;
-
+		
 		// and finally calculate the position by adding ratio based value to the x and y coordinate
 		return new Point2D.Double(nodePre.x + cX, nodePre.y + cY);
 	}
-
+	
 	/**
 	 * Calculates the two nodes that are around the given distance beginning at the given start node.
 	 * 
-	 * @param distance The distance from the start node that's between two nodes.
-	 * @param startNode The start node from where the distance counts.
-	 * @param direction The direction of the train.
+	 * @param distance
+	 *            The distance from the start node that's between two nodes.
+	 * @param startNode
+	 *            The start node from where the distance counts.
+	 * @param direction
+	 *            The direction of the train.
 	 * @return The nodes this train is between. [0] is the current node, [1] the next node, [2].x the distance and [2].y the remaining distance.
 	 */
 	public Point[] getNode(double distance, int startNode, int direction)
 	{
 		Point nodes[] = new Point[2];
-
+		
 		// When start node is out of bounds, return the first/last nodes position
-		if(startNode < 0)
+		if (startNode < 0)
 		{
 			nodes[0] = _listOfNodes.get(0).getPosition();
 			nodes[1] = _listOfNodes.get(1).getPosition();
 			return nodes;
 		}
-		if(_listOfNodes.size() < startNode || distance > _length)
+		if (_listOfNodes.size() < startNode || distance > _length)
 		{
 			nodes[0] = _listOfNodes.get(_listOfNodes.size() - 2).getPosition();
 			nodes[1] = _listOfNodes.get(_listOfNodes.size() - 1).getPosition();
 			return nodes;
 		}
-
+		
 		double length = 0.0,
-			lastLength = calcPartLength(startNode, startNode + direction);
-
+				lastLength = calcPartLength(startNode, startNode + direction);
+		
 		// iterate over all pre-processed node distances to find the two nodes that are around the train (given by the parameters of this method).
 		int i;
-		for(i = startNode + direction; 0 <= i && i < _listOfNodes.size() && length + lastLength <= distance; i += direction)
+		for (i = startNode + direction; 0 <= i && i < _listOfNodes.size() && length + lastLength <= distance; i += direction)
 		{
 			length += lastLength;
 			lastLength = calcPartLength(
-				direction > 0 ? i : i + direction,
-				direction > 0 ? i + direction : i);
+					direction > 0 ? i : i + direction, direction > 0 ? i + direction : i);
 		}
-
+		
 		// the sucessor with index i was found, the predecessor is therefore i - direction.
 		nodes[0] = _listOfNodes.get(i - direction).getPosition();
 		nodes[1] = _listOfNodes.get(i).getPosition();
-
+		
 		return nodes;
 	}
-
+	
 	/**
 	 * Checks if a node is included in this train line.
 	 * 
-	 * @param node The node that's possibly in here.
+	 * @param node
+	 *            The node that's possibly in here.
 	 * @return True if the node is already included.
 	 */
 	public boolean contains(RailwayNode node)
 	{
 		return _listOfNodes.contains(node);
 	}
-
+	
 	/**
 	 * Gets the name/title of this train line.
 	 * 
@@ -342,17 +357,18 @@ public class TrainLine implements Cloneable
 	{
 		return _name;
 	}
-
+	
 	/**
 	 * Updates the name of this train line.
 	 * 
-	 * @param newName The new name.
+	 * @param newName
+	 *            The new name.
 	 */
 	public void setName(String newName)
 	{
 		_name = newName;
 	}
-
+	
 	/**
 	 * @return The amount of nodes of this line (not the length or something).
 	 */
@@ -360,59 +376,62 @@ public class TrainLine implements Cloneable
 	{
 		return _listOfNodes.size();
 	}
-
+	
 	/**
 	 * Check if this train line is a valid line. A line is valid when both of the following conditions apply:
 	 * 1.) There're more than 2 nodes in this line.
 	 * 2.) There're exactly 2 end/start nodes in this line. These nodes only have one neighbor.
 	 * 3.) All non-end-nodes have exactly two neighbors (no crossing allowed).
 	 * 
-	 * @param listOfNodes The list of nodes that may be valid.
+	 * @param listOfNodes
+	 *            The list of nodes that may be valid.
 	 * @return True when valid.
 	 */
 	public static boolean __isValid(List<RailwayNode> listOfNodes)
 	{
 		int amountEndNodes = 0;
-
-		for(RailwayNode node : listOfNodes)
+		
+		for (RailwayNode node : listOfNodes)
 		{
-			if(__isEndNode(node, listOfNodes)) ++amountEndNodes;
-			else if(__getNeighborAmount(node, listOfNodes) > 2)
+			if (__isEndNode(node, listOfNodes)) ++amountEndNodes;
+			else if (__getNeighborAmount(node, listOfNodes) > 2)
 			{
 				return false;
 			}
 		}
-
+		
 		return listOfNodes.size() >= 2 && amountEndNodes == 2;
 	}
-
+	
 	/**
 	 * Checks if the given node is one of the end nodes in the list of given nodes.
 	 * 
-	 * @param node The node that's probably an end node.
-	 * @param listOfNodes The list of all available nodes.
+	 * @param node
+	 *            The node that's probably an end node.
+	 * @param listOfNodes
+	 *            The list of all available nodes.
 	 * @return True when the given node is an end node, false if not.
 	 */
 	public static boolean __isEndNode(RailwayNode node, List<RailwayNode> listOfNodes)
 	{
 		return __getNeighborAmount(node, listOfNodes) == 1;
 	}
-
+	
 	private static int __getNeighborAmount(RailwayNode node, List<RailwayNode> listOfNodes)
 	{
 		int counter = 0;
-
-		for(RailwayNode neighborNode : node.getNeighbors())
+		
+		for (RailwayNode neighborNode : node.getNeighbors())
 		{
-			for(RailwayNode Node : listOfNodes)
+			for (RailwayNode Node : listOfNodes)
 			{
-				if(neighborNode.equals(Node)) ++counter;
+				if (neighborNode.equals(Node)) ++counter;
 			}
 		}
-
+		
 		return counter;
 	}
-
+	
 	/**
 	 * Returns the color of this line.
 	 * 
@@ -422,17 +441,18 @@ public class TrainLine implements Cloneable
 	{
 		return _lineColor;
 	}
-
+	
 	/**
 	 * Sets the color of the line. This method does not check for any color duplicates in other lines.
 	 * 
-	 * @param newLineColor The new color of the line.
+	 * @param newLineColor
+	 *            The new color of the line.
 	 */
 	public void setColor(Color newLineColor)
 	{
 		_lineColor = newLineColor;
 	}
-
+	
 	/**
 	 * Returns the whole list with all nodes of this line.
 	 * 
@@ -442,7 +462,7 @@ public class TrainLine implements Cloneable
 	{
 		return _listOfNodes;
 	}
-
+	
 	/**
 	 * @return The length of this train line in field units (not the amount of nodes!).
 	 */
@@ -450,39 +470,39 @@ public class TrainLine implements Cloneable
 	{
 		return _length;
 	}
-
+	
 	/**
 	 * Checks if two lines are equal. They are equal when line A has the same nodes as B.
 	 * The order of the nodes doesn't matter.
 	 */
 	public boolean equals(Object o)
 	{
-		if(o instanceof TrainLine)
+		if (o instanceof TrainLine)
 		{
-			TrainLine line = (TrainLine)o;
-
-			if(line.getNodes().size() != _listOfNodes.size()) return false;
-
+			TrainLine line = (TrainLine) o;
+			
+			if (line.getNodes().size() != _listOfNodes.size()) return false;
+			
 			boolean isEqual = true;
-
-			for(RailwayNode node : line.getNodes())
+			
+			for (RailwayNode node : line.getNodes())
 			{
 				isEqual &= _listOfNodes.contains(node);
 			}
-
+			
 			isEqual &= getName().equals(line.getName());
-
+			
 			return isEqual;
 		}
 		return false;
 	}
-
+	
 	@Override
 	public int hashCode()
 	{
 		return ("" + _name.hashCode() + _listOfNodes.hashCode()).hashCode();
 	}
-
+	
 	// /**
 	// * Draws the train line. The line doesn't need to be valid because all parts are drawn by their own.
 	// *
@@ -526,47 +546,49 @@ public class TrainLine implements Cloneable
 	// offset.y + _listOfNodes.get(_listOfNodes.size() - 1).getPosition().y * _gameState.getBaseNetSpacing()); // Position with offset etc.
 	// Draw.Circle(position.x - _thickness, position.y - _thickness, 2 * _thickness + 1);
 	// }
-
+	
 	@Override
 	public Object clone() throws CloneNotSupportedException
 	{
 		return super.clone();
 	}
-
+	
 	/**
 	 * Gets the predecessor of the given node in direction 1.
 	 * 
-	 * @param node The node which predecessor you want to know.
+	 * @param node
+	 *            The node which predecessor you want to know.
 	 * @return The predecessor of node.
 	 */
 	public RailwayNode getPredecessorOf(RailwayNode node)
 	{
 		int index = _listOfNodes.indexOf(node) - 1;
-
-		if(index >= 0)
+		
+		if (index >= 0)
 		{
 			return _listOfNodes.get(index);
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Gets the successor of the given node in direction 1.
 	 * 
-	 * @param node The node which successor you want to know.
+	 * @param node
+	 *            The node which successor you want to know.
 	 * @return The successor of node.
 	 **/
 	public RailwayNode getSuccessorOf(RailwayNode node)
 	{
 		int index = _listOfNodes.indexOf(node) + 1;
-
-		if(index < _listOfNodes.size())
+		
+		if (index < _listOfNodes.size())
 		{
 			return _listOfNodes.get(index);
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Checks if this line is valid.
 	 * This method follows more the OOP-paradigm then the static method {@link #__isValid(List)} when checking the validity of an existing line.

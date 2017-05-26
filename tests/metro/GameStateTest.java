@@ -14,7 +14,7 @@ import metro.Common.Technical.Exceptions.NotEnoughMoneyException;
 public class GameStateTest
 {
 	private GameState gameState;
-
+	
 	/**
 	 * Simply gets the instance of the game state.
 	 */
@@ -22,7 +22,7 @@ public class GameStateTest
 	{
 		gameState = Locator.get(GameState.class);
 	}
-
+	
 	/**
 	 * Check if everything is sets properly (meaning, everythin's != 0).
 	 */
@@ -33,7 +33,7 @@ public class GameStateTest
 		assertNotEquals(0, gameState.getBaseNetSpacing());
 		assertNotEquals(0, gameState.getToolViewWidth());
 	}
-
+	
 	/**
 	 * Set something to the fields of the game state and checks if the values have been set correctly.
 	 */
@@ -43,12 +43,12 @@ public class GameStateTest
 		gameState.setMoney(5789);
 		gameState.setBaseNetSpacing(245);
 		gameState.setToolViewWidth(825);
-
+		
 		assertEquals(5789, gameState.getMoney());
 		assertEquals(245, gameState.getBaseNetSpacing());
 		assertEquals(825, gameState.getToolViewWidth());
 	}
-
+	
 	/**
 	 * Sets the amount of money to a valid number, adds something valid and checks if the calculation was correct.
 	 */
@@ -57,10 +57,10 @@ public class GameStateTest
 	{
 		gameState.setMoney(368);
 		gameState.addMoney(246);
-
+		
 		assertEquals(368 + 246, gameState.getMoney());
 	}
-
+	
 	/**
 	 * Takes a negative amount of money on the account and add something valid.
 	 */
@@ -69,22 +69,22 @@ public class GameStateTest
 	{
 		gameState.setMoney(-368);
 		gameState.addMoney(246);
-
+		
 		assertEquals(-368 + 246, gameState.getMoney());
 	}
-
+	
 	/**
 	 * Takes a valid amount of money and adds something invalid. An exception should be the result.
 	 * 
 	 * @throws IllegalArgumentException
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test (expected = IllegalArgumentException.class)
 	public void testAddMoneyWrong() throws IllegalArgumentException
 	{
 		gameState.setMoney(368);
 		gameState.addMoney(-246);
 	}
-
+	
 	/**
 	 * Subtracts something from the game state account.
 	 * When more money is withdrawn then there actually exists, an exception should be the result.
@@ -98,34 +98,34 @@ public class GameStateTest
 		gameState.withdrawMoney(54);
 		assertEquals(46, gameState.getMoney());
 	}
-
+	
 	/**
 	 * Checks if the game state withdraws money when a negative amount is passed.
 	 * A negative amount of money is not valid, so an IllegalArgumentException should be throwed.
 	 * 
 	 * @throws NotEnoughMoneyException
 	 */
-	@Test(expected = IllegalArgumentException.class)
+	@Test (expected = IllegalArgumentException.class)
 	public void testWithdrawMoneyNegative() throws NotEnoughMoneyException
 	{
 		gameState.setMoney(100);
 		gameState.withdrawMoney(-54);
 		assertEquals(154, gameState.getMoney());
 	}
-
+	
 	/**
 	 * Check if the game state allows the withdraw of more money then the account currently has.
 	 * 
 	 * @throws NotEnoughMoneyException
 	 */
-	@Test(expected = NotEnoughMoneyException.class)
+	@Test (expected = NotEnoughMoneyException.class)
 	public void testWithdrawMoneyTooMuch() throws NotEnoughMoneyException
 	{
 		gameState.setMoney(100);
 		gameState.withdrawMoney(154);
 		assertEquals(100, gameState.getMoney());
 	}
-
+	
 	/**
 	 * Tests is the zooming works correctly.
 	 */
@@ -134,16 +134,16 @@ public class GameStateTest
 	{
 		gameState.setBaseNetSpacing(40);
 		int spacing = gameState.getBaseNetSpacing();
-
+		
 		gameState.zoom(1);
 		assertEquals(spacing - 5, gameState.getBaseNetSpacing());
-
+		
 		gameState.zoom(-1);
 		assertEquals(spacing, gameState.getBaseNetSpacing());
-
+		
 		gameState.zoom(100);
 		assertEquals(20, gameState.getBaseNetSpacing());
-
+		
 		gameState.zoom(-100);
 		assertEquals(70, gameState.getBaseNetSpacing());
 	}

@@ -14,18 +14,20 @@ import metro.TrainManagement.Trains.Train;
  */
 public class BasicTrainStatisticView extends AbstractTrainStatisticView
 {
-
+	
 	/**
 	 * Creates a new train statistic view that just shows the basic information about the train.
 	 * 
-	 * @param size The size of the view.
-	 * @param train The train which information should be displayed.
+	 * @param size
+	 *            The size of the view.
+	 * @param train
+	 *            The train which information should be displayed.
 	 */
 	public BasicTrainStatisticView(Point size, Train train)
 	{
 		super(size, train);
 	}
-
+	
 	@Override
 	public void drawView(SpriteBatch sp)
 	{

@@ -19,29 +19,30 @@ import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 
 public class MainMenuTool extends GameScreenContainer
 {
-	private MainMenuView _mainMenuView;
-	private Settings _settings;
-
+	private MainMenuView	_mainMenuView;
+	private Settings		_settings;
+	
 	/**
 	 * Creates a main menu with the welcome-window, and the three buttons "Play", "Settings" and "Exit".
 	 * 
-	 * @param settings The settings object with game settings.
+	 * @param settings
+	 *            The settings object with game settings.
 	 */
 	public MainMenuTool(Settings settings)
 	{
 		_settings = settings;
-
+		
 		_mainMenuView = new MainMenuView();
 		_mainMenuView.loadVisuals();
 	}
-
+	
 	@Override
 	protected void initializeUi()
 	{
 		_mainMenuView.initializeUi();
 		addActionObservations();
 	}
-
+	
 	/**
 	 * Creates anonymous inner classes for all buttons (using ActionObserver system) to do their specific action.
 	 */
@@ -72,14 +73,14 @@ public class MainMenuTool extends GameScreenContainer
 			}
 		});
 	}
-
+	
 	protected void exitGameScreen(GameScreenContainer newContainer)
 	{
 		_mainMenuView.close();
-
+		
 		notifyAllAboutSwitch(newContainer);
 	}
-
+	
 	@Override
 	public void updateGameScreen(SpriteBatch sp)
 	{

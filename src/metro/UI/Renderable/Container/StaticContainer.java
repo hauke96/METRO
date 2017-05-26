@@ -16,7 +16,7 @@ public abstract class StaticContainer extends AbstractContainer
 	public StaticContainer()
 	{
 	}
-
+	
 	@Override
 	protected void registerContainerInRenderer(ContainerRegistrationService registrationService)
 	{

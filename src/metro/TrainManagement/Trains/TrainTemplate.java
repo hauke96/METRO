@@ -25,28 +25,36 @@ import metro.Common.Technical.Logger;
 
 public class TrainTemplate extends Observable
 {
-	protected String _name, _modelName, _manufacturer;
-	protected int _price, _costs, _maxPassengers;
-	protected float _costsFactor, _speed;
-
+	protected String	_name, _modelName, _manufacturer;
+	protected int		_price, _costs, _maxPassengers;
+	protected float		_costsFactor, _speed;
+	
 	// Values that may be used very often:
-	protected static Map<String, TextureRegion> _textures = new HashMap<>();
-	protected static Map<String, TextureRegion> _titleTextures = new HashMap<>();
-	protected static Point _textureScale = new Point(1, 1);
-
+	protected static Map<String, TextureRegion>	_textures		= new HashMap<>();
+	protected static Map<String, TextureRegion>	_titleTextures	= new HashMap<>();
+	protected static Point						_textureScale	= new Point(1, 1);
+	
 	/**
 	 * Creates a new train template with the following properties.
 	 * Every data for trains are in the ./data/trains.txt file and will be read & parsed by the GameState class.
 	 * This is not a actual train, for more information about trains look into the {@code train} class.
 	 * 
-	 * @param name The name of this train like "CT-1 (3)". This name can be anything.
-	 * @param modelName The model name of the train.
-	 * @param manufacturer Manufacturer of the train.
-	 * @param price Price for buying the train.
-	 * @param costs Costs per month.
-	 * @param costsFactor Monthly increase of the costs.
-	 * @param passengers Maximum amount of passengers per train.
-	 * @param speed The speed in nodes per second.
+	 * @param name
+	 *            The name of this train like "CT-1 (3)". This name can be anything.
+	 * @param modelName
+	 *            The model name of the train.
+	 * @param manufacturer
+	 *            Manufacturer of the train.
+	 * @param price
+	 *            Price for buying the train.
+	 * @param costs
+	 *            Costs per month.
+	 * @param costsFactor
+	 *            Monthly increase of the costs.
+	 * @param passengers
+	 *            Maximum amount of passengers per train.
+	 * @param speed
+	 *            The speed in nodes per second.
 	 */
 	public TrainTemplate(String name, String modelName, String manufacturer, int price, int costs, float costsFactor, int passengers, float speed)
 	{
@@ -58,19 +66,19 @@ public class TrainTemplate extends Observable
 		_costsFactor = costsFactor;
 		_maxPassengers = passengers;
 		_speed = speed;
-
+		
 		loadTextures();
 	}
-
+	
 	private void loadTextures()
 	{
-		if(!_textures.containsKey(_name) && Gdx.files != null)
+		if (!_textures.containsKey(_name) && Gdx.files != null)
 		{
 			loadModelTextures();
 			loadTitleTextures();
 		}
 	}
-
+	
 	/**
 	 * Load the normal texture for this train. This will be used to display the train one the playing field.
 	 */
@@ -82,15 +90,15 @@ public class TrainTemplate extends Observable
 			texture.flip(false, true);
 			texture.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			_textures.put(_modelName, texture);
-
+			
 			Logger.__info("Succesfully loaded image for train " + _modelName + ".");
 		}
-		catch(GdxRuntimeException ex)
+		catch (GdxRuntimeException ex)
 		{
 			Logger.__error("Error while loading trains title image!", ex);
 		}
 	}
-
+	
 	/**
 	 * Load the title image for this train that'll be displayed by the train buy dialog.
 	 */
@@ -105,15 +113,15 @@ public class TrainTemplate extends Observable
 			textureRegion.flip(false, true);
 			textureRegion.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 			_titleTextures.put(_modelName, textureRegion);
-
+			
 			Logger.__info("Succesfully loaded title image for train " + _modelName + ".");
 		}
-		catch(GdxRuntimeException ex)
+		catch (GdxRuntimeException ex)
 		{
 			Logger.__error("Error while loading title image!", ex);
 		}
 	}
-
+	
 	/**
 	 * @return The texture for this train.
 	 */
@@ -121,7 +129,7 @@ public class TrainTemplate extends Observable
 	{
 		return _textures.get(_modelName);
 	}
-
+	
 	/**
 	 * @return The title texture for this train.
 	 */
@@ -129,7 +137,7 @@ public class TrainTemplate extends Observable
 	{
 		return _titleTextures.get(_modelName);
 	}
-
+	
 	/**
 	 * @return The model designation of the train.
 	 */
@@ -137,7 +145,7 @@ public class TrainTemplate extends Observable
 	{
 		return _name;
 	}
-
+	
 	/**
 	 * @return Gets the name of the manufacturer of this train.
 	 */
@@ -145,7 +153,7 @@ public class TrainTemplate extends Observable
 	{
 		return _manufacturer;
 	}
-
+	
 	/**
 	 * @return Gets the price this train costs.
 	 */
@@ -153,7 +161,7 @@ public class TrainTemplate extends Observable
 	{
 		return _price;
 	}
-
+	
 	/**
 	 * @return Gets the monthly costs of this train without any consideration of the age.
 	 */
@@ -161,7 +169,7 @@ public class TrainTemplate extends Observable
 	{
 		return _costs;
 	}
-
+	
 	/**
 	 * @return Gets the monthly increase of this train.
 	 */
@@ -169,7 +177,7 @@ public class TrainTemplate extends Observable
 	{
 		return _costsFactor;
 	}
-
+	
 	/**
 	 * @return Gets the maximum amount of passengers that can travel with this train.
 	 */
@@ -177,7 +185,7 @@ public class TrainTemplate extends Observable
 	{
 		return _maxPassengers;
 	}
-
+	
 	/**
 	 * @return Gets the speed in nodes per second.
 	 */
@@ -185,7 +193,7 @@ public class TrainTemplate extends Observable
 	{
 		return _speed;
 	}
-
+	
 	/**
 	 * @return The name of the train model. This is not the real name of the train itself, just the name of the model.
 	 */
@@ -193,7 +201,7 @@ public class TrainTemplate extends Observable
 	{
 		return _modelName;
 	}
-
+	
 	/**
 	 * @return The title image of the train model.
 	 */

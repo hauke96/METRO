@@ -12,10 +12,10 @@ import metro.GameUI.MainView.NotificationView.NotificationType;
 /**
  * @author hauke
  */
-public class NotificationServerTest //implements NotificationSubscriber
+public class NotificationServerTest // implements NotificationSubscriber
 {
-	private static String messageToSend = "The answer is 42";
-	private static String receivedMessage = "";
+	private static String	messageToSend	= "The answer is 42";
+	private static String	receivedMessage	= "";
 	
 	/**
 	 * Removes all subscribers before every test due to static saving.
@@ -33,18 +33,18 @@ public class NotificationServerTest //implements NotificationSubscriber
 	public void testAddingCorrect()
 	{
 		assertEquals(0, NotificationServer.getSubscriber().size());
-
+		
 		// simply add empty subscriber:
 		NotificationServer.subscribe(null);
-
+		
 		assertEquals(1, NotificationServer.getSubscriber().size());
-
+		
 		// simply add another empty subscriber:
 		NotificationServer.subscribe(null);
-
+		
 		assertEquals(2, NotificationServer.getSubscriber().size());
 	}
-
+	
 	/**
 	 * Tests if the subscriber receives the correct message.
 	 */

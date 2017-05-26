@@ -22,9 +22,9 @@ import metro.UI.Renderer.BasicContainerRenderer;
  */
 public class LineViewTest
 {
-	LineView view;
-	private int _toolViewWidth;
-
+	LineView	view;
+	private int	_toolViewWidth;
+	
 	/**
 	 * Simply creates the line view object
 	 */
@@ -32,14 +32,14 @@ public class LineViewTest
 	{
 		new BasicContainerRenderer(Locator.get(ContainerRegistrationService.class));
 		METRO.__SCREEN_SIZE = new Dimension(1920, 1080);
-
+		
 		_toolViewWidth = Locator.get(GameState.class).getToolViewWidth();
 		PlayingField field = Locator.get(PlayingField.class);
 		TrainManagementService trainManagementService = Locator.get(TrainManagementService.class);
-
+		
 		view = new LineView(_toolViewWidth, field, trainManagementService);
 	}
-
+	
 	/**
 	 * Check if the initial state of the area offset is correct.
 	 */
@@ -47,10 +47,9 @@ public class LineViewTest
 	public void testGetAreaOffset()
 	{
 		assertEquals(
-			new Point(METRO.__SCREEN_SIZE.width - _toolViewWidth, 40),
-			view.getAreaOffset());
+				new Point(METRO.__SCREEN_SIZE.width - _toolViewWidth, 40), view.getAreaOffset());
 	}
-
+	
 	/**
 	 * Check if the hover-detection works properly.
 	 */
@@ -59,14 +58,14 @@ public class LineViewTest
 	{
 		METRO.__mousePosition = new Point(0, 0);
 		assertFalse(view.isHovered());
-
+		
 		METRO.__mousePosition = new Point(view.getAreaOffset().x, 0);
 		assertFalse(view.isHovered());
-
+		
 		METRO.__mousePosition = new Point(view.getAreaOffset().x + 1, 0);
 		assertTrue(view.isHovered());
 	}
-
+	
 	/**
 	 * Creates a line select tool and checks for observers and correct flags.
 	 */
@@ -75,10 +74,10 @@ public class LineViewTest
 	{
 		LineSelectTool tool = view.getLineSelectTool();
 		assertTrue(tool == null);
-
+		
 		view.createLineSelectTool();
 		tool = view.getLineSelectTool();
-
+		
 		assertTrue(tool != null);
 		assertTrue(tool.CloseEvent.countObservers() > 0);
 		assertTrue(view.isLineSelectToolEnabled());

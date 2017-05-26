@@ -16,27 +16,28 @@ import metro.UI.Renderable.Controls.Button;
  */
 public class ToolbarTool
 {
-	private ToolbarView _view;
-	private Button _selectedButton;
-
-	public Event StationPlacingToolSelected = new Event();
-	public Event TrackPlacingToolSelected = new Event();
-	public Event LineViewToolSelected = new Event();
-	public Event TrainViewToolSelected = new Event();
-
+	private ToolbarView	_view;
+	private Button		_selectedButton;
+	
+	public Event	StationPlacingToolSelected	= new Event();
+	public Event	TrackPlacingToolSelected	= new Event();
+	public Event	LineViewToolSelected		= new Event();
+	public Event	TrainViewToolSelected		= new Event();
+	
 	/**
 	 * Creates the controller and the view of the toolbar.
 	 * 
-	 * @param viewWidth The width of tools to align buttons.
+	 * @param viewWidth
+	 *            The width of tools to align buttons.
 	 */
 	public ToolbarTool(int viewWidth)
 	{
 		_view = new ToolbarView(viewWidth);
 		_selectedButton = null;
-
+		
 		registerObervers();
 	}
-
+	
 	private void registerObervers()
 	{
 		_view.getBuildStationButton().register(new ActionObserver()
@@ -44,20 +45,20 @@ public class ToolbarTool
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				if(_selectedButton == arg) return;
-
+				if (_selectedButton == arg) return;
+				
 				StationPlacingToolSelected.fireEvent();
 				selectButton(_view.getBuildStationButton());
 			}
 		});
-
+		
 		_view.getBuildTracksButton().register(new ActionObserver()
 		{
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				if(_selectedButton == arg) return;
-
+				if (_selectedButton == arg) return;
+				
 				TrackPlacingToolSelected.fireEvent();
 				selectButton(_view.getBuildTracksButton());
 			}
@@ -67,8 +68,8 @@ public class ToolbarTool
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				if(_selectedButton == arg) return;
-
+				if (_selectedButton == arg) return;
+				
 				LineViewToolSelected.fireEvent();
 				selectButton(_view.getShowTrainListButton());
 			}
@@ -78,47 +79,49 @@ public class ToolbarTool
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				if(_selectedButton == arg) return;
-
+				if (_selectedButton == arg) return;
+				
 				TrainViewToolSelected.fireEvent();
 				selectButton(_view.getCreateNewTrainButton());
 			}
 		});
 	}
-
+	
 	/**
 	 * Will select the given button. Is {@code null} is passed, all buttons will be deselected.
 	 * Selecting means, that the given button will be e.g. a bit lower or greater then the others.
 	 *
-	 * @param button Button to select.
+	 * @param button
+	 *            Button to select.
 	 */
 	public void selectButton(Button button)
 	{
-		if(_selectedButton != null)
+		if (_selectedButton != null)
 		{
 			resetButtonPosition(_selectedButton);
 		}
-
+		
 		// Move the selected button a bit down:
-		if(button != null)
+		if (button != null)
 		{
 			button.setPosition(new Point(button.getPosition().x, _view.getSelectedButtonYPosition()));
 		}
-
+		
 		_selectedButton = button;
 	}
-
+	
 	private void resetButtonPosition(Button button)
 	{
 		Contract.RequireNotNull(button);
-
+		
 		button.setPosition(new Point(button.getPosition().x, _view.getButtonYPosition()));
 	}
-
+	
 	/**
 	 * Moves the view of this control above of the given container.
 	 * 
-	 * @param container The container that should be below the toolbar.
+	 * @param container
+	 *            The container that should be below the toolbar.
 	 */
 	public void setAboveOf(AbstractContainer container)
 	{

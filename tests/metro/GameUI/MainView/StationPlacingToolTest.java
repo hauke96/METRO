@@ -24,10 +24,10 @@ import metro.TrainManagement.Trains.TrainStation;
  */
 public class StationPlacingToolTest
 {
-	private StationPlacingTool _tool;
-	private boolean _notified;
-	private TrainManagementService _trainManagementService;
-
+	private StationPlacingTool		_tool;
+	private boolean					_notified;
+	private TrainManagementService	_trainManagementService;
+	
 	/**
 	 * Creates a new station placing tool and sets the notified variable to false.
 	 */
@@ -35,12 +35,12 @@ public class StationPlacingToolTest
 	public void init()
 	{
 		TestInitializer.init();
-
+		
 		_trainManagementService = Locator.get(TrainManagementService.class);
 		_tool = new StationPlacingTool(Locator.get(GameState.class), Locator.get(PlayingField.class), _trainManagementService);
 		_notified = false;
 	}
-
+	
 	/**
 	 * Check the hover getter.
 	 */
@@ -49,7 +49,7 @@ public class StationPlacingToolTest
 	{
 		assertFalse(_tool.isHovered());
 	}
-
+	
 	/**
 	 * Check if the state is not active after right clicking.
 	 */
@@ -57,28 +57,29 @@ public class StationPlacingToolTest
 	public void testActiveAfterRightClick()
 	{
 		ModifiableBoolean closed = new ModifiableBoolean();
-
+		
 		_tool.CloseEvent.add(() -> closed.set(true));
 		_tool.mouseClicked(0, 0, Buttons.RIGHT);
-
+		
 		assertTrue(closed.value());
 	}
-
+	
 	/**
 	 * Checks if the observer works on right clicking.
 	 */
 	@Test
 	public void testObserverByRightClick()
 	{
-		_tool.CloseEvent.add(() -> {
+		_tool.CloseEvent.add(() ->
+		{
 			_notified = true;
 		});
-
+		
 		_tool.mouseClicked(0, 0, Buttons.RIGHT);
-
+		
 		assertTrue(_notified);
 	}
-
+	
 	/**
 	 * Tests if a left-click adds a station.
 	 */
@@ -87,12 +88,12 @@ public class StationPlacingToolTest
 	{
 		List<TrainStation> stations = _trainManagementService.getStations();
 		assertEquals(0, stations.size());
-
+		
 		_tool.mouseClicked(100, 100, Buttons.LEFT);
-
+		
 		assertEquals(1, _trainManagementService.getStations().size());
 	}
-
+	
 	/**
 	 * Tests if a left-click adds a station.
 	 */
@@ -101,10 +102,10 @@ public class StationPlacingToolTest
 	{
 		List<TrainStation> stations = _trainManagementService.getStations();
 		assertEquals(0, stations.size());
-
+		
 		_tool.mouseClicked(100, 100, Buttons.LEFT);
 		_tool.mouseClicked(100, 100, Buttons.LEFT);
-
+		
 		assertEquals(1, _trainManagementService.getStations().size());
 	}
 }
