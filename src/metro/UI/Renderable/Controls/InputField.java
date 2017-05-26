@@ -53,6 +53,13 @@ public class InputField extends ControlElement
 	}
 	
 	@Override
+	public void setSelectedText(String text)
+	{
+		_text = text;
+		_curserPos = _text.length();
+	}
+	
+	@Override
 	protected void draw()
 	{
 		METRO.__spriteBatch.end();
@@ -106,6 +113,22 @@ public class InputField extends ControlElement
 		else disselect();
 		
 		return clickedOnControl;
+	}
+	
+	/**
+	 * Sets this input as selected which enables inputs.
+	 */
+	public void select()
+	{
+		_selected = true;
+	}
+	
+	/**
+	 * Sets this input as non-selected which disables inputs.
+	 */
+	public void disselect()
+	{
+		_selected = false;
 	}
 	
 	@Override
@@ -203,18 +226,6 @@ public class InputField extends ControlElement
 		}
 	}
 	
-	/**
-	 * Adds a character at _cursor position to the current text.
-	 * 
-	 * @param c
-	 *            The character to add.
-	 */
-	private void charTyped(char c)
-	{
-		_text = new StringBuilder(_text).insert(_curserPos, c).toString();
-		++_curserPos;
-	}
-	
 	@Override
 	public void keyUp(int key)
 	{
@@ -226,26 +237,15 @@ public class InputField extends ControlElement
 		}
 	}
 	
-	@Override
-	public void setText(String text)
-	{
-		_text = text;
-		_curserPos = _text.length();
-	}
-	
 	/**
-	 * Sets this input as selected which enables inputs.
+	 * Adds a character at _cursor position to the current text.
+	 * 
+	 * @param c
+	 *            The character to add.
 	 */
-	public void select()
+	private void charTyped(char c)
 	{
-		_selected = true;
-	}
-	
-	/**
-	 * Sets this input as non-selected which disables inputs.
-	 */
-	public void disselect()
-	{
-		_selected = false;
+		_text = new StringBuilder(_text).insert(_curserPos, c).toString();
+		++_curserPos;
 	}
 }

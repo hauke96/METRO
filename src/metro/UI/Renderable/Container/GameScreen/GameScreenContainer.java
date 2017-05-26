@@ -64,17 +64,6 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 	protected abstract void initializeUi();
 	
 	/**
-	 * Changes the input processor of this game screen container.
-	 * 
-	 * @param processor
-	 *            The new input processor.
-	 */
-	public void setInputProcessor(InputProcessor processor)
-	{
-		_gameScreenInputProcessor = processor;
-	}
-	
-	/**
 	 * @return The current registration service for container.
 	 */
 	public ContainerRegistrationService getContainerRegistrationService()
@@ -90,6 +79,17 @@ public abstract class GameScreenContainer extends GameScreenSwitchedObservable i
 		Contract.EnsureNotNull(_containerRenderer);
 		
 		return _containerRenderer;
+	}
+	
+	/**
+	 * Changes the input processor of this game screen container.
+	 * 
+	 * @param processor
+	 *            The new input processor.
+	 */
+	public void setInputProcessor(InputProcessor processor)
+	{
+		_gameScreenInputProcessor = processor;
 	}
 	
 	/**

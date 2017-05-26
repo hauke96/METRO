@@ -75,15 +75,6 @@ public class ColorBar extends ControlElement
 	}
 	
 	/**
-	 * Clears the color bar and sets it color to null (default value).
-	 */
-	public void clear()
-	{
-		_clickedColor = null;
-		_clickedXPosition = -1;
-	}
-	
-	/**
 	 * Selects a new color.
 	 * 
 	 * @param color
@@ -112,7 +103,7 @@ public class ColorBar extends ControlElement
 	 *            The blue-value of the color.
 	 * @return The hue of the color.
 	 */
-	public int getHue(int red, int green, int blue)
+	private int getHue(int red, int green, int blue)
 	{
 		float min = Math.min(Math.min(red, green), blue);
 		float max = Math.max(Math.max(red, green), blue);
@@ -135,6 +126,15 @@ public class ColorBar extends ControlElement
 		if (hue < 0) hue = hue + 360;
 		
 		return Math.round(hue);
+	}
+	
+	/**
+	 * Clears the color bar and sets it color to null (default value).
+	 */
+	public void clear()
+	{
+		_clickedColor = null;
+		_clickedXPosition = -1;
 	}
 	
 	@Override

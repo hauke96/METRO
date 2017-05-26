@@ -61,6 +61,66 @@ public abstract class AbstractContainer extends CloseObservable
 	}
 	
 	/**
+	 * Checks if the given container is above this one.
+	 * 
+	 * @param container
+	 *            A container to check.
+	 * @return True when the given container is above this one.
+	 */
+	public boolean isAbove(AbstractContainer container)
+	{
+		Contract.RequireNotNull(_listOfContainerBelow);
+		
+		return container != null && compareTo(container) == 1;
+	}
+	
+	/**
+	 * Checks if this container is above the given one.
+	 * 
+	 * @param otherContainer
+	 *            The container to compare to.
+	 * @return 1 when this is above, 0 if there's no relation between them and -1 when this is below the given container
+	 */
+	public int compareTo(AbstractContainer otherContainer)
+	{
+		Contract.RequireNotNull(otherContainer);
+		
+		// use this. just for better readings
+		List<AbstractContainer> allContainerBelowThis = this.getContainerBelow();
+		List<AbstractContainer> allContainerBelowOther = otherContainer.getContainerBelow();
+		
+		boolean otherIsBelowThis = allContainerBelowThis.contains(otherContainer);
+		boolean thisIsBelowOther = allContainerBelowOther.contains(this);
+		
+		if (thisIsBelowOther && otherIsBelowThis)
+		{
+			// Both are above each other -> conflict
+			throw new ContainerPositioningConflict();
+		}
+		
+		if (!thisIsBelowOther && !otherIsBelowThis)
+		{
+			return 0;
+		}
+		
+		if (thisIsBelowOther)
+		{
+			return -1;
+		}
+		
+		return 1;
+	}
+	
+	/**
+	 * @return All the container below this one.
+	 */
+	public List<AbstractContainer> getContainerBelow()
+	{
+		Contract.EnsureNotNull(_listOfContainerBelow);
+		return _listOfContainerBelow;
+	}
+	
+	/**
 	 * Initiates the {@code #_containerRegistrationService} of this {@code AbstractContainer}.
 	 * 
 	 * @param newContainerRegistrationService
@@ -69,92 +129,6 @@ public abstract class AbstractContainer extends CloseObservable
 	public static void setContainerRegistrationService(ContainerRegistrationService newContainerRegistrationService)
 	{
 		_containerRegistrationService = newContainerRegistrationService;
-	}
-	
-	@Override
-	protected void draw()
-	{
-		generalNotifying((ControlElement control) ->
-		{
-			control.drawControl();
-			return false;
-		});
-	}
-	
-	@Override
-	public boolean mouseClicked(int screenX, int screenY, int button)
-	{
-		return generalNotifying((ControlElement control) -> control.mouseClicked(screenX, screenY, button));
-	}
-	
-	@Override
-	public void mouseReleased(int screenX, int screenY, int button)
-	{
-		// TODO change this notifying so that the correct boolean is returned.
-		// TODO use return value of "generalNotifying" (also in calling method)
-		generalNotifying((ControlElement control) ->
-		{
-			control.mouseReleased(screenX, screenY, button);
-			return false;
-		});
-	}
-	
-	@Override
-	public void mouseScrolled(int amount)
-	{
-		// TODO change this notifying so that the correct boolean is returned.
-		// TODO use return value of "generalNotifying" (also in calling method)
-		generalNotifying((ControlElement control) ->
-		{
-			control.mouseScrolled(amount);
-			return false;
-		});
-	}
-	
-	@Override
-	public void keyPressed(int keyCode)
-	{
-		// TODO change this notifying so that the correct boolean is returned.
-		// TODO use return value of "generalNotifying" (also in calling method)
-		generalNotifying((ControlElement control) ->
-		{
-			control.keyPressed(keyCode);
-			return false;
-		});
-	}
-	
-	@Override
-	public void keyUp(int keyCode)
-	{
-		// TODO change this notifying so that the correct boolean is returned.
-		// TODO use return value of "generalNotifying" (also in calling method)
-		generalNotifying((ControlElement control) ->
-		{
-			control.keyUp(keyCode);
-			return false;
-		});
-	}
-	
-	/**
-	 * Adds a control to the container which will display it and process input events.
-	 * 
-	 * @param control
-	 *            The new control to add.
-	 */
-	public void add(ControlElement control)
-	{
-		_listOfControlElements.add(control);
-	}
-	
-	/**
-	 * Will remove a control from the container. The control will not be visible after this and will not get any input anymore.
-	 * 
-	 * @param control
-	 *            The control that should be removed.
-	 */
-	public void remove(ControlElement control)
-	{
-		_listOfControlElements.remove(control);
 	}
 	
 	@Override
@@ -229,38 +203,29 @@ public abstract class AbstractContainer extends CloseObservable
 		}
 		
 		super.setState(newState);
-	};
-	
-	/**
-	 * Checks if the given container is above this one.
-	 * 
-	 * @param container
-	 *            A container to check.
-	 * @return True when the given container is above this one.
-	 */
-	public boolean isAbove(AbstractContainer container)
-	{
-		Contract.RequireNotNull(_listOfContainerBelow);
-		
-		return container != null && compareTo(container) == 1;
 	}
 	
 	/**
-	 * @return All the container below this one.
+	 * Adds a control to the container which will display it and process input events.
+	 * 
+	 * @param control
+	 *            The new control to add.
 	 */
-	public List<AbstractContainer> getContainerBelow()
+	public void add(ControlElement control)
 	{
-		Contract.EnsureNotNull(_listOfContainerBelow);
-		return _listOfContainerBelow;
+		_listOfControlElements.add(control);
 	}
 	
 	/**
-	 * Registers the container in the renderer so that the renderer knows that kind of container this is. This is very important for the correct rendering and input processing of container.
+	 * Will remove a control from the container. The control will not be visible after this and will not get any input anymore.
 	 * 
-	 * @param registrationService
-	 *            The registration service which is able to register container in the renderer.
+	 * @param control
+	 *            The control that should be removed.
 	 */
-	protected abstract void registerContainerInRenderer(ContainerRegistrationService registrationService);
+	public void remove(ControlElement control)
+	{
+		_listOfControlElements.remove(control);
+	}
 	
 	/**
 	 * Registers this control to the registration service.
@@ -271,6 +236,14 @@ public abstract class AbstractContainer extends CloseObservable
 		
 		registerContainerInRenderer(_containerRegistrationService);
 	}
+	
+	/**
+	 * Registers the container in the renderer so that the renderer knows that kind of container this is. This is very important for the correct rendering and input processing of container.
+	 * 
+	 * @param registrationService
+	 *            The registration service which is able to register container in the renderer.
+	 */
+	protected abstract void registerContainerInRenderer(ContainerRegistrationService registrationService);
 	
 	/**
 	 * Adds an observer for the event that the "above of" property changed.
@@ -308,6 +281,29 @@ public abstract class AbstractContainer extends CloseObservable
 	}
 	
 	/**
+	 * Notifies the registers observers about the "above of" property changed.
+	 */
+	private void notifyAboveOfChangedObserver()
+	{
+		Contract.RequireNotNull(_listOfAboveChangedObserver);
+		
+		for (Observer o : _listOfAboveChangedObserver)
+		{
+			o.update(null, null);
+		}
+	}
+	
+	@Override
+	protected void draw()
+	{
+		generalNotifying((ControlElement control) ->
+		{
+			control.drawControl();
+			return false;
+		});
+	}
+	
+	/**
 	 * Executed the notification given by the notifier to all control elements until one element responded with {@code true}.
 	 * This indicated that the element processed the notification successfully.
 	 * 
@@ -329,53 +325,57 @@ public abstract class AbstractContainer extends CloseObservable
 		return false;
 	}
 	
-	/**
-	 * Notifies the registers observers about the "above of" property changed.
-	 */
-	private void notifyAboveOfChangedObserver()
+	@Override
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
-		Contract.RequireNotNull(_listOfAboveChangedObserver);
-		
-		for (Observer o : _listOfAboveChangedObserver)
-		{
-			o.update(null, null);
-		}
+		return generalNotifying((ControlElement control) -> control.mouseClicked(screenX, screenY, button));
 	}
 	
-	/**
-	 * Checks if this container is above the given one.
-	 * 
-	 * @param otherContainer
-	 *            The container to compare to.
-	 * @return 1 when this is above, 0 if there's no relation between them and -1 when this is below the given container
-	 */
-	public int compareTo(AbstractContainer otherContainer)
+	@Override
+	public void mouseReleased(int screenX, int screenY, int button)
 	{
-		Contract.RequireNotNull(otherContainer);
-		
-		// use this. just for better readings
-		List<AbstractContainer> allContainerBelowThis = this.getContainerBelow();
-		List<AbstractContainer> allContainerBelowOther = otherContainer.getContainerBelow();
-		
-		boolean otherIsBelowThis = allContainerBelowThis.contains(otherContainer);
-		boolean thisIsBelowOther = allContainerBelowOther.contains(this);
-		
-		if (thisIsBelowOther && otherIsBelowThis)
+		// TODO change this notifying so that the correct boolean is returned.
+		// TODO use return value of "generalNotifying" (also in calling method)
+		generalNotifying((ControlElement control) ->
 		{
-			// Both are above each other -> conflict
-			throw new ContainerPositioningConflict();
-		}
-		
-		if (!thisIsBelowOther && !otherIsBelowThis)
+			control.mouseReleased(screenX, screenY, button);
+			return false;
+		});
+	}
+	
+	@Override
+	public void mouseScrolled(int amount)
+	{
+		// TODO change this notifying so that the correct boolean is returned.
+		// TODO use return value of "generalNotifying" (also in calling method)
+		generalNotifying((ControlElement control) ->
 		{
-			return 0;
-		}
-		
-		if (thisIsBelowOther)
+			control.mouseScrolled(amount);
+			return false;
+		});
+	}
+	
+	@Override
+	public void keyPressed(int keyCode)
+	{
+		// TODO change this notifying so that the correct boolean is returned.
+		// TODO use return value of "generalNotifying" (also in calling method)
+		generalNotifying((ControlElement control) ->
 		{
-			return -1;
-		}
-		
-		return 1;
+			control.keyPressed(keyCode);
+			return false;
+		});
+	}
+	
+	@Override
+	public void keyUp(int keyCode)
+	{
+		// TODO change this notifying so that the correct boolean is returned.
+		// TODO use return value of "generalNotifying" (also in calling method)
+		generalNotifying((ControlElement control) ->
+		{
+			control.keyUp(keyCode);
+			return false;
+		});
 	}
 }

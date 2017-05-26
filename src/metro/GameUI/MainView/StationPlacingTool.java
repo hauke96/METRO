@@ -47,7 +47,7 @@ public class StationPlacingTool extends ToolView
 	 */
 	public StationPlacingTool(GameState gameState, PlayingField playingField, TrainManagementService trainManagementService)
 	{
-		//TODO contracts
+		// TODO contracts
 		_gameState = gameState;
 		_playingField = playingField;
 		_trainManagementService = trainManagementService;

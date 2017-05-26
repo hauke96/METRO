@@ -13,6 +13,13 @@ import metro.UI.Renderable.Container.StaticContainer;
 public interface ContainerRenderer
 {
 	/**
+	 * Gets the used registration service.
+	 * 
+	 * @return The currently used registration service.
+	 */
+	public ContainerRegistrationService getRegistrationService();
+	
+	/**
 	 * Registers a new static container.
 	 * 
 	 * @param newStaticContainer
@@ -81,11 +88,4 @@ public interface ContainerRenderer
 	 *            The key that's released.
 	 */
 	public void notifyKeyUp(int keyCode);
-	
-	/**
-	 * Gets the used registration service.
-	 * 
-	 * @return The currently used registration service.
-	 */
-	public ContainerRegistrationService getRegistrationService();
 }

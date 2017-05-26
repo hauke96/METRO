@@ -59,6 +59,35 @@ public class Label extends ControlElement
 		_underlineColor = _color;
 	}
 	
+	@Override
+	public Rectangle getArea()
+	{
+		Dimension size = calcSize();
+		return new Rectangle(_area.x, _area.y, size.width, size.height);
+	}
+	
+	/**
+	 * Let the text be underlined or not.
+	 * 
+	 * @param underlined
+	 *            True to underline the text, false to not do that.
+	 */
+	public void setUnderline(boolean underlined)
+	{
+		_underlined = underlined;
+	}
+	
+	/**
+	 * Colors the underline line into the given color.
+	 * 
+	 * @param color
+	 *            The color of the underline line.
+	 */
+	public void setUnderlineColor(Color color)
+	{
+		_underlineColor = color;
+	}
+	
 	/**
 	 * Sets the color of the text to newColor.
 	 * 
@@ -94,6 +123,11 @@ public class Label extends ControlElement
 			Draw.setColor(_underlineColor);
 			Draw.Line(_area.x, _area.y + textArea.height + 2, _area.x + textArea.width, _area.y + textArea.height + 2);
 		}
+	}
+	
+	private Dimension calcSize()
+	{
+		return new Dimension(Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
 	}
 	
 	/**
@@ -147,39 +181,5 @@ public class Label extends ControlElement
 	@Override
 	public void keyUp(int keyCode)
 	{
-	}
-	
-	@Override
-	public Rectangle getArea()
-	{
-		Dimension size = calcSize();
-		return new Rectangle(_area.x, _area.y, size.width, size.height);
-	}
-	
-	private Dimension calcSize()
-	{
-		return new Dimension(Draw.getStringSize(_text).width, Draw.getStringSize(_text).height);
-	}
-	
-	/**
-	 * Let the text be underlined or not.
-	 * 
-	 * @param underlined
-	 *            True to underline the text, false to not do that.
-	 */
-	public void underlined(boolean underlined)
-	{
-		_underlined = underlined;
-	}
-	
-	/**
-	 * Colors the underline line into the given color.
-	 * 
-	 * @param color
-	 *            The color of the underline line.
-	 */
-	public void setUnderlineColor(Color color)
-	{
-		_underlineColor = color;
 	}
 }

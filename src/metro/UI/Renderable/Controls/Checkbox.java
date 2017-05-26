@@ -93,6 +93,28 @@ public class Checkbox extends ControlElement
 		_state = enabled;
 	}
 	
+	@Override
+	public Rectangle getArea()
+	{
+		Dimension size = calcSize(_label.getPosition().x);
+		return new Rectangle(_area.x, _area.y, size.width, size.height);
+	}
+	
+	@Override
+	public void setPosition(Point newPosition)
+	{
+		super.setPosition(newPosition);
+		newPosition.translate(25, 0);
+		_label.setPosition(newPosition);
+	}
+	
+	@Override
+	public void setSelectedText(String text)
+	{
+		_text = text;
+		_label.setSelectedText(text);
+	}
+	
 	/**
 	 * Returns the current state of the checkbox.
 	 * 
@@ -129,6 +151,11 @@ public class Checkbox extends ControlElement
 		        && mPos.x <= _area.x + 15
 		        && mPos.y >= _area.y
 		        && mPos.y <= _area.y + 15;
+	}
+	
+	private Dimension calcSize(int labelXPosition)
+	{
+		return new Dimension(25 + labelXPosition, 20);
 	}
 	
 	@Override
@@ -208,32 +235,5 @@ public class Checkbox extends ControlElement
 	@Override
 	public void keyUp(int keyCode)
 	{
-	}
-	
-	@Override
-	public void setText(String text)
-	{
-		_text = text;
-		_label.setText(text);
-	}
-	
-	@Override
-	public void setPosition(Point newPosition)
-	{
-		super.setPosition(newPosition);
-		newPosition.translate(25, 0);
-		_label.setPosition(newPosition);
-	}
-	
-	@Override
-	public Rectangle getArea()
-	{
-		Dimension size = calcSize(_label.getPosition().x);
-		return new Rectangle(_area.x, _area.y, size.width, size.height);
-	}
-	
-	private Dimension calcSize(int labelXPosition)
-	{
-		return new Dimension(25 + labelXPosition, 20);
 	}
 }

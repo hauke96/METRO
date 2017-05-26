@@ -68,6 +68,16 @@ public class Canvas extends ControlElement
 	}
 	
 	@Override
+	public void setPosition(Point position)
+	{
+		Contract.RequireNotNull(position);
+		
+		position.translate(METRO.__getXOffset(), METRO.__getYOffset());
+		
+		super.setPosition(position);
+	}
+	
+	@Override
 	protected void draw()
 	{
 		Contract.RequireNotNull(_painter);
@@ -91,18 +101,6 @@ public class Canvas extends ControlElement
 	}
 	
 	@Override
-	public boolean mouseClicked(int screenX, int screenY, int button)
-	{
-		notifyClickOnControl(button);
-		return false;
-	}
-	
-	@Override
-	public void mouseReleased(int screenX, int screenY, int button)
-	{
-	}
-	
-	@Override
 	public void moveElement(Point offset)
 	{
 		Contract.RequireNotNull(offset);
@@ -113,13 +111,15 @@ public class Canvas extends ControlElement
 	}
 	
 	@Override
-	public void setPosition(Point position)
+	public boolean mouseClicked(int screenX, int screenY, int button)
 	{
-		Contract.RequireNotNull(position);
-		
-		position.translate(METRO.__getXOffset(), METRO.__getYOffset());
-		
-		super.setPosition(position);
+		notifyClickOnControl(button);
+		return false;
+	}
+	
+	@Override
+	public void mouseReleased(int screenX, int screenY, int button)
+	{
 	}
 	
 	@Override

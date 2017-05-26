@@ -22,18 +22,21 @@ import metro.UI.Renderable.ControlElement;
 
 public class List extends ControlElement
 {
-	private java.util.List<String>	_entries	= new ArrayList<String>();
-	private int						_offset,
-	        _defaultYSpace,																				// space between text and border in the normal mode
-	        _compactYSpace,																				// space between text and border in the compact mode
-	        _selectedEntry;																				// the entry, that was clicked
-	private int						_maxOffset,
-	        _scrollHeight;																				// height of one scroll step
-	private boolean					_compact	= false,												// less space between text and top/bottom edge
-	        _decorated = true,
-	        _sticky = false;
-	private Color					_backgroundColor,
-	        _hoverColor;
+	private java.util.List<String> _entries = new ArrayList<String>();
+	
+	private int	_offset;
+	private int	_defaultYSpace;	// space between text and border in the normal mode
+	private int	_compactYSpace;	// space between text and border in the compact mode
+	private int	_selectedEntry;	// the entry, that was clicked
+	private int	_maxOffset;
+	private int	_scrollHeight;	// height of one scroll step
+	
+	private boolean	_compact	= false;	// less space between text and top/bottom edge
+	private boolean	_decorated	= true;
+	private boolean	_sticky		= false;
+	
+	private Color	_backgroundColor;
+	private Color	_hoverColor;
 	
 	/**
 	 * Creates a new list control element on a window.
@@ -103,6 +106,132 @@ public class List extends ControlElement
 	}
 	
 	/**
+	 * Gets the text of a given entry.
+	 * 
+	 * @param entryIndex
+	 *            The number of the entry.
+	 * @return String The text of the entry. It's "" if the entry doesn't exist.
+	 */
+	public String getText(int entryIndex)
+	{
+		if (entryIndex >= _entries.size() || entryIndex < 0) return "";
+		return _entries.get(entryIndex);
+	}
+	
+	/**
+	 * Returns the text of the selected entry of this list.
+	 * When the entry does not exists or nothing is selected an empty string will be returned.
+	 * 
+	 * @return The text of the selecting entry. {@code ""} when selection is invalid.
+	 */
+	public String getSelectedText()
+	{
+		return getText(_selectedEntry);
+	}
+	
+	/**
+	 * Sets the selected entry of this list.
+	 * When the entry does not exist, nothing changes.
+	 * Beware: When there's more than one entry with this value, it can happen that an entry becomes selected you don't want to have selected.
+	 */
+	public void setSelectedText(String entry)
+	{
+		if (_entries.contains(entry))
+		{
+			_selectedEntry = getIndex(entry);
+			if (_selectedEntry != -1)
+			{
+				setSelectedEntry(_selectedEntry);
+			}
+		}
+	}
+	
+	/**
+	 * Returns the index of the first entry with the given text.
+	 * 
+	 * @param entryText
+	 *            The text to search.
+	 * @return The index. Returns -1 if the entry doesn't exist.
+	 */
+	public int getIndex(String entryText)
+	{
+		for (int i = 0; i < _entries.size(); ++i)
+		{
+			if (_entries.get(i).equals(entryText))
+			{
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	/**
+	 * Sets the selected Entry to a specific.
+	 * 
+	 * @param entryIndex
+	 *            The entry number.
+	 */
+	public void setSelectedEntry(int entryIndex)
+	{
+		_selectedEntry = entryIndex;
+		if (0 <= _selectedEntry && _selectedEntry < _entries.size())
+		{
+			notifySelectionChanged(_entries.get(_selectedEntry));
+		}
+		else
+		{
+			notifySelectionChanged(null);
+		}
+	}
+	
+	/**
+	 * Return the index of the selected entry.
+	 * 
+	 * @return Index of selected entry. Returns -1 if nothing is selected.
+	 */
+	public int getSelectedIndex()
+	{
+		return _selectedEntry;
+	}
+	
+	/**
+	 * Sets the style of the list. An undecorated list has no background, no borders, only the entries and the scroll bar.
+	 * 
+	 * @param decorated
+	 *            True to have normal decoration (borders etc.), false to have entries and scroll bar only.
+	 */
+	public void setDecoration(boolean decorated)
+	{
+		_decorated = decorated;
+	}
+	
+	/**
+	 * Sets the transparency of the background color and the color of hovered entries. Does not influence line colors (borders etc.) and text colors.
+	 * 
+	 * @param transparency
+	 *            The transparency from 0 (fully transparent) to 255 (not at all).
+	 */
+	public void setTransparency(int transparency)
+	{
+		_backgroundColor = new Color(255, 255, 255, transparency);
+		int c = 240 - (255 - transparency) / 4;
+		_hoverColor = new Color(c, c, c, transparency);
+	}
+	
+	/**
+	 * Sets the stickiness of the list.
+	 * When the list is sticky, the scroll bar is at the very top/bottom it stays at the top/bottom when a new entry is added to the list.
+	 * When the list is sticky but the scroll bar is somewhere in the middle, the list acts normal.
+	 * 
+	 * @param sticky
+	 *            True to set the list sticky, false to not set it sticky.
+	 */
+	public void setStickiness(boolean sticky)
+	{
+		_sticky = sticky;
+	}
+	
+	/**
 	 * Calculates the maximum offset for the list to scroll. If there're to less elements for scrolling the maximum offset is 0.
 	 */
 	private void calcMaxOffset()
@@ -159,78 +288,6 @@ public class List extends ControlElement
 		setSelectedEntry(-1);
 		calcMaxOffset();
 		if (-_offset > _maxOffset) _offset = -_maxOffset;
-	}
-	
-	/**
-	 * Gets the text of a given entry.
-	 * 
-	 * @param entryIndex
-	 *            The number of the entry.
-	 * @return String The text of the entry. It's "" if the entry doesn't exist.
-	 */
-	public String getText(int entryIndex)
-	{
-		if (entryIndex >= _entries.size() || entryIndex < 0) return "";
-		return _entries.get(entryIndex);
-	}
-	
-	/**
-	 * Returns the text of the selected entry of this list.
-	 * When the entry does not exists or nothing is selected an empty string will be returned.
-	 * 
-	 * @return The text of the selecting entry. {@code ""} when selection is invalid.
-	 */
-	public String getSelectedText()
-	{
-		return getText(_selectedEntry);
-	}
-	
-	/**
-	 * Sets the selected Entry to a specific.
-	 * 
-	 * @param entryIndex
-	 *            The entry number.
-	 */
-	public void setSelectedEntry(int entryIndex)
-	{
-		_selectedEntry = entryIndex;
-		if (0 <= _selectedEntry && _selectedEntry < _entries.size())
-		{
-			notifySelectionChanged(_entries.get(_selectedEntry));
-		}
-		else
-		{
-			notifySelectionChanged(null);
-		}
-	}
-	
-	/**
-	 * Return the index of the selected entry.
-	 * 
-	 * @return Index of selected entry. Returns -1 if nothing is selected.
-	 */
-	public int getSelectedIndex()
-	{
-		return _selectedEntry;
-	}
-	
-	/**
-	 * Returns the index of the first entry with the given text.
-	 * 
-	 * @param entryText
-	 *            The text to search.
-	 * @return The index. Returns -1 if the entry doesn't exist.
-	 */
-	public int getIndex(String entryText)
-	{
-		for (int i = 0; i < _entries.size(); ++i)
-		{
-			if (_entries.get(i).equals(entryText))
-			{
-				return i;
-			}
-		}
-		return -1;
 	}
 	
 	/**
@@ -458,59 +515,5 @@ public class List extends ControlElement
 	@Override
 	public void keyUp(int keyCode)
 	{
-	}
-	
-	/**
-	 * Sets the selected entry of this list.
-	 * When the entry does not exist, nothing changes.
-	 * Beware: When there's more than one entry with this value, it can happen that an entry becomes selected you don't want to have selected.
-	 */
-	public void setText(String entry)
-	{
-		if (_entries.contains(entry))
-		{
-			_selectedEntry = getIndex(entry);
-			if (_selectedEntry != -1)
-			{
-				setSelectedEntry(_selectedEntry);
-			}
-		}
-	}
-	
-	/**
-	 * Sets the style of the list. An undecorated list has no background, no borders, only the entries and the scroll bar.
-	 * 
-	 * @param decorated
-	 *            True to have normal decoration (borders etc.), false to have entries and scroll bar only.
-	 */
-	public void setDecoration(boolean decorated)
-	{
-		_decorated = decorated;
-	}
-	
-	/**
-	 * Sets the transparency of the background color and the color of hovered entries. Does not influence line colors (borders etc.) and text colors.
-	 * 
-	 * @param transparency
-	 *            The transparency from 0 (fully transparent) to 255 (not at all).
-	 */
-	public void setTransparency(int transparency)
-	{
-		_backgroundColor = new Color(255, 255, 255, transparency);
-		int c = 240 - (255 - transparency) / 4;
-		_hoverColor = new Color(c, c, c, transparency);
-	}
-	
-	/**
-	 * Sets the stickiness of the list.
-	 * When the list is sticky, the scroll bar is at the very top/bottom it stays at the top/bottom when a new entry is added to the list.
-	 * When the list is sticky but the scroll bar is somewhere in the middle, the list acts normal.
-	 * 
-	 * @param sticky
-	 *            True to set the list sticky, false to not set it sticky.
-	 */
-	public void setStickiness(boolean sticky)
-	{
-		_sticky = sticky;
 	}
 }

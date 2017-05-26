@@ -76,6 +76,22 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 		AbstractContainer.setContainerRegistrationService(_containerRegistrationService);
 	}
 	
+	/**
+	 * @return The comparator this class uses to compare controls by their "above-of" property.
+	 */
+	public Comparator<AbstractContainer> getAboveOfComparator()
+	{
+		Contract.RequireNotNull(_controlsAboveComparator);
+		
+		return _controlsAboveComparator;
+	}
+	
+	@Override
+	public ContainerRegistrationService getRegistrationService()
+	{
+		return _containerRegistrationService;
+	}
+	
 	protected void sortContainer(List<AbstractContainer> listOfContainer)
 	{
 		listOfContainer.sort(_controlsAboveComparator);
@@ -220,21 +236,5 @@ public class BasicContainerRenderer implements CloseObserver, ContainerRenderer
 			abstractContainer.removeAboveChangedObserver(_staticContainerAboveChangedObserver);
 			abstractContainer.removeAboveChangedObserver(_floatingContainerAboveChangedObserver);
 		}
-	}
-	
-	/**
-	 * @return The comparator this class uses to compare controls by their "above-of" property.
-	 */
-	public Comparator<AbstractContainer> getAboveOfComparator()
-	{
-		Contract.RequireNotNull(_controlsAboveComparator);
-		
-		return _controlsAboveComparator;
-	}
-	
-	@Override
-	public ContainerRegistrationService getRegistrationService()
-	{
-		return _containerRegistrationService;
 	}
 }

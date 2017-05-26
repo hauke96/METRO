@@ -72,7 +72,7 @@ public class TrainViewBuy extends ToolView
 				
 				if (train != null)
 				{
-					_informationValues.setText("= " + train.getName() + "\n= " +
+					_informationValues.setSelectedText("= " + train.getName() + "\n= " +
 					        train.getManufacturer() + "\n= " +
 					        train.getPrice() + "$\n= " +
 					        train.getCosts() + "$ / month\n= " +
@@ -170,7 +170,7 @@ public class TrainViewBuy extends ToolView
 	{
 		if (_availableTrains.contains(modelName))
 		{
-			_availableTrains.setText(modelName);
+			_availableTrains.setSelectedText(modelName);
 		}
 	}
 	

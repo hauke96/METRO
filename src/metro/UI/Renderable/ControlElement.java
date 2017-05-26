@@ -31,6 +31,135 @@ public abstract class ControlElement extends ActionObservable
 	}
 	
 	/**
+	 * Gets an rectangle which covers the whole area of this control.
+	 * 
+	 * @return The area of this control as rectangle.
+	 */
+	public Rectangle getArea()
+	{
+		return (Rectangle) _area.clone();
+	}
+	
+	/**
+	 * Sets the new area of this control. The control will be displayed in this area on next frame.
+	 * 
+	 * @param newArea
+	 *            The new area of the control.
+	 */
+	public void setArea(Rectangle newArea)
+	{
+		_area = newArea;
+	}
+	
+	/**
+	 * Returns the current position of this control.
+	 * 
+	 * @return Position as Point.
+	 */
+	public Point getPosition()
+	{
+		return (Point) _area.getLocation().clone();
+	}
+	
+	/**
+	 * Sets a new position
+	 * 
+	 * @param pos
+	 *            New position as Point.
+	 */
+	public void setPosition(Point pos)
+	{
+		_area.setLocation(pos);
+	}
+	
+	/**
+	 * @return The text of the control.
+	 */
+	public String getSelectedText()
+	{
+		return _text;
+	}
+	
+	/**
+	 * Updates the text of the control.
+	 * 
+	 * @param text
+	 *            The new text.
+	 */
+	public void setSelectedText(String text)
+	{
+		_text = text;
+	}
+	
+	/**
+	 * Gets the current state of this control.
+	 * 
+	 * @return True when control is active and the user can interact with it, false if not.
+	 */
+	public boolean getState()
+	{
+		return _state;
+	}
+	
+	/**
+	 * Sets the enable state of the control. If it's disabled, the user can't interact with this control.
+	 * 
+	 * @param newState
+	 *            The new state of the control.
+	 */
+	public void setState(boolean newState)
+	{
+		_state = newState;
+	}
+	
+	/**
+	 * @return The visibility status of the control. This has nothing directly to do with the {@link #getState()} method and the state property.
+	 */
+	public boolean isVisible()
+	{
+		return _visible;
+	}
+	
+	/**
+	 * Sets the visibility of the control. If it's set to {@code false} also the state of the control is set to {@code false}.
+	 * Don't forget to set the state to true as well or use the {@link #enable()} method.
+	 * 
+	 * @param visibility
+	 *            The new visibility of the control.
+	 */
+	public void setVisibility(boolean visibility)
+	{
+		_visible = visibility;
+		if (!_visible)
+		{
+			setState(false);
+		}
+	}
+	
+	/**
+	 * Checks if the given coordinates are in the area of this control.
+	 * 
+	 * @param x
+	 *            The x-coordinate.
+	 * @param y
+	 *            The y-coordinate.
+	 * @return True when the coordinates are in the controls area, false if not.
+	 */
+	public boolean isInArea(int x, int y)
+	{
+		return _area.contains(x, y);
+	}
+	
+	/**
+	 * Sets the visibility AND the state of the control to true, so it's visible and able to receive interaction events.
+	 */
+	public void enable()
+	{
+		setVisibility(true);
+		setState(true);
+	}
+	
+	/**
 	 * Calls the draw method on the concrete control, but only when the control is visible.
 	 */
 	public void drawControl()
@@ -102,133 +231,4 @@ public abstract class ControlElement extends ActionObservable
 	 *            The code of the key from Input.Keys
 	 */
 	public abstract void keyUp(int keyCode);
-	
-	/**
-	 * Gets an rectangle which covers the whole area of this control.
-	 * 
-	 * @return The area of this control as rectangle.
-	 */
-	public Rectangle getArea()
-	{
-		return (Rectangle) _area.clone();
-	}
-	
-	/**
-	 * Sets the new area of this control. The control will be displayed in this area on next frame.
-	 * 
-	 * @param newArea
-	 *            The new area of the control.
-	 */
-	public void setArea(Rectangle newArea)
-	{
-		_area = newArea;
-	}
-	
-	/**
-	 * Checks if the given coordinates are in the area of this control.
-	 * 
-	 * @param x
-	 *            The x-coordinate.
-	 * @param y
-	 *            The y-coordinate.
-	 * @return True when the coordinates are in the controls area, false if not.
-	 */
-	public boolean isInArea(int x, int y)
-	{
-		return _area.contains(x, y);
-	}
-	
-	/**
-	 * Sets a new position
-	 * 
-	 * @param pos
-	 *            New position as Point.
-	 */
-	public void setPosition(Point pos)
-	{
-		_area.setLocation(pos);
-	}
-	
-	/**
-	 * Returns the current position of this control.
-	 * 
-	 * @return Position as Point.
-	 */
-	public Point getPosition()
-	{
-		return (Point) _area.getLocation().clone();
-	}
-	
-	/**
-	 * Updates the text of the control.
-	 * 
-	 * @param text
-	 *            The new text.
-	 */
-	public void setText(String text)
-	{
-		_text = text;
-	}
-	
-	/**
-	 * @return The text of the control.
-	 */
-	public String getSelectedText()
-	{
-		return _text;
-	}
-	
-	/**
-	 * Sets the enable state of the control. If it's disabled, the user can't interact with this control.
-	 * 
-	 * @param newState
-	 *            The new state of the control.
-	 */
-	public void setState(boolean newState)
-	{
-		_state = newState;
-	}
-	
-	/**
-	 * Gets the current state of this control.
-	 * 
-	 * @return True when control is active and the user can interact with it, false if not.
-	 */
-	public boolean getState()
-	{
-		return _state;
-	}
-	
-	/**
-	 * Sets the visibility of the control. If it's set to {@code false} also the state of the control is set to {@code false}.
-	 * Don't forget to set the state to true as well or use the {@link #enable()} method.
-	 * 
-	 * @param visibility
-	 *            The new visibility of the control.
-	 */
-	public void setVisibility(boolean visibility)
-	{
-		_visible = visibility;
-		if (!_visible)
-		{
-			setState(false);
-		}
-	}
-	
-	/**
-	 * Sets the visibility AND the state of the control to true, so it's visible and able to receive interaction events.
-	 */
-	public void enable()
-	{
-		setVisibility(true);
-		setState(true);
-	}
-	
-	/**
-	 * @return The visibility status of the control. This has nothing directly to do with the {@link #getState()} method and the state property.
-	 */
-	public boolean isVisible()
-	{
-		return _visible;
-	}
 }

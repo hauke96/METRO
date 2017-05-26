@@ -72,22 +72,22 @@ public class TrainView extends ToolView
 			{
 				if (_trainViewMain.getLineList().getSelectedIndex() == -1)
 				{
-					_trainViewBuy.getMessageLabel().setText("Please select the line this train should drive on.");
+					_trainViewBuy.getMessageLabel().setSelectedText("Please select the line this train should drive on.");
 				}
 				else if (_trainViewBuy.getTrainList().getSelectedIndex() == -1)
 				{
-					_trainViewBuy.getMessageLabel().setText("Please select the train model you want to buy.");
+					_trainViewBuy.getMessageLabel().setSelectedText("Please select the train model you want to buy.");
 				}
 				else if (METRO.__gameState.getMoney() < _trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getSelectedText()).getPrice())
 				{
-					_trainViewBuy.getMessageLabel().setText("You have not enough money.");
+					_trainViewBuy.getMessageLabel().setSelectedText("You have not enough money.");
 				}
 				else
 				{
 					Train train = new Train(_trainManagementService.getTemplateTrain(_trainViewBuy.getTrainList().getSelectedText()));
 					train.setLine(_trainManagementService.getLine(_trainViewMain.getLineList().getSelectedText()));
 					_trainManagementService.addTrain(train);
-					_trainViewBuy.getMessageLabel().setText("");
+					_trainViewBuy.getMessageLabel().setSelectedText("");
 					
 					// find next number for train
 					String trainName = train.getName();
@@ -99,7 +99,7 @@ public class TrainView extends ToolView
 					
 					if (minNumber == 1000) // maximum number of trains from a specific type
 					{
-						_trainViewBuy.getMessageLabel().setText("You have to much trains of this type!");
+						_trainViewBuy.getMessageLabel().setSelectedText("You have to much trains of this type!");
 					}
 					else
 					{

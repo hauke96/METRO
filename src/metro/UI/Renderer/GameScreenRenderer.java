@@ -16,7 +16,7 @@ public interface GameScreenRenderer extends InputProcessor, GameScreenSwitchedOb
 	 * Renders the controls specified by the renderer passed to the game screen.
 	 */
 	void renderUI();
-
+	
 	/**
 	 * Switches the current game screen to the given one.
 	 * 

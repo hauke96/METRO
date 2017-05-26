@@ -92,6 +92,20 @@ public class Button extends ControlElement
 	}
 	
 	/**
+	 * Sets the texture of this button and the area of it on the raw image.
+	 * 
+	 * @param positionOnImage
+	 *            The area of the texture for this button.
+	 * @param image
+	 *            The raw image where the texture is on.
+	 */
+	public void setImage(Rectangle positionOnImage, TextureRegion image)
+	{
+		_areaOnImage = positionOnImage;
+		_texture = image;
+	}
+	
+	/**
 	 * Draws the button with its text/texture.
 	 */
 	protected void draw()
@@ -165,19 +179,5 @@ public class Button extends ControlElement
 	@Override
 	public void keyUp(int keyCode)
 	{
-	}
-	
-	/**
-	 * Sets the texture of this button and the area of it on the raw image.
-	 * 
-	 * @param positionOnImage
-	 *            The area of the texture for this button.
-	 * @param image
-	 *            The raw image where the texture is on.
-	 */
-	public void setImage(Rectangle positionOnImage, TextureRegion image)
-	{
-		_areaOnImage = positionOnImage;
-		_texture = image;
 	}
 }

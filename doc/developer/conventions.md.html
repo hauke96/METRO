@@ -2,7 +2,7 @@
 <html>
   <head>
       <meta charset="utf-8" />
-      <title>naming_conventions</title>
+      <title>conventions</title>
       <style>.markdown-preview:not([data-use-github-style]) { padding: 2em; font-size: 1.2em; color: rgb(171, 178, 191); overflow: auto; background-color: rgb(40, 44, 52); }
 .markdown-preview:not([data-use-github-style]) > :first-child { margin-top: 0px; }
 .markdown-preview:not([data-use-github-style]) h1, .markdown-preview:not([data-use-github-style]) h2, .markdown-preview:not([data-use-github-style]) h3, .markdown-preview:not([data-use-github-style]) h4, .markdown-preview:not([data-use-github-style]) h5, .markdown-preview:not([data-use-github-style]) h6 { line-height: 1.2; margin-top: 1.5em; margin-bottom: 0.5em; color: rgb(255, 255, 255); }
@@ -532,5 +532,31 @@ This class holds all services and other external classes needed.</p>
 <p>Services are named just with <em>service</em> in the end:</p>
 <ul>
 <li>Dummy<strong>Service</strong></li>
-</ul></body>
+</ul>
+<h1 id="structural-conventions">Structural conventions</h1>
+<p>A class should be structured as followed:</p>
+<ol>
+<li>Class header<ol>
+<li>Import statements</li>
+<li>Javadoc describing what this class is (indlucing the <code>@author</code> tag)</li>
+<li>Class name</li>
+</ol>
+</li>
+<li>Fields<ol>
+<li>Just group them together by access modifiers</li>
+</ol>
+</li>
+<li>Constructor<ol>
+<li>Most general top (e.g. the one without any parameter)</li>
+<li>Most specific bottom (e.g. with all parameters needed)</li>
+</ol>
+</li>
+<li>Methods<ol>
+<li>Any kind of init methods</li>
+<li>Getter and Setter (first a getter like <code>getName()</code> followed by setter <code>setName(String name)</code>). Other sounding methods like <code>isActive()</code> are actually getter.</li>
+<li>Changing methods like <code>draw()</code></li>
+<li>Events like <code>mouseDown(int x, int y, int button)</code></li>
+</ol>
+</li>
+</ol></body>
 </html>

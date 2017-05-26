@@ -72,7 +72,7 @@ public class LineView extends ToolView
 	 */
 	public LineView(GameState gameState, PlayingField playingField, TrainManagementService trainManagementService)
 	{
-		//TODO contracts
+		// TODO contracts
 		_toolWidth = gameState.getToolViewWidth();
 		_playingField = playingField;
 		_trainManagementService = trainManagementService;
@@ -205,7 +205,7 @@ public class LineView extends ToolView
 				}
 				catch (CloneNotSupportedException e)
 				{
-					_messageLabel.setText("Can't clone the old line :/");
+					_messageLabel.setSelectedText("Can't clone the old line :/");
 					Logger.__fatal("Can't clone the old line :/", e);
 					return;
 				}
@@ -216,14 +216,14 @@ public class LineView extends ToolView
 				
 				if (color == null || line == null)
 				{
-					_messageLabel.setText("An erorr occured while reading data :(");
+					_messageLabel.setSelectedText("An erorr occured while reading data :(");
 					return;
 				}
 				
 				_editMode = true;
 				
 				_lineNameField.setState(true);
-				_lineNameField.setText(line.getName());
+				_lineNameField.setSelectedText(line.getName());
 				_lineNameFieldLabel.setState(true);
 				_colorBar.setState(true);
 				_colorBar.setValue(color);
@@ -282,7 +282,7 @@ public class LineView extends ToolView
 				catch (NotEnoughMoneyException e)
 				{
 					NotificationServer.publishNotification("You have not enough money to modify the line. It costs 5000$.", NotificationType.GAME_ERROR);
-					_messageLabel.setText("Not enough money. This action costs 5000$!");
+					_messageLabel.setSelectedText("Not enough money. This action costs 5000$!");
 					Logger.__info("There's not enough money to change the line.\n" + e.getMessage());
 					return;
 				}
@@ -292,11 +292,11 @@ public class LineView extends ToolView
 				// if something went wrong:
 				if (_lineList.contains(_lineNameField.getSelectedText()) && !_editMode) // when edit mode, then don't change the list
 				{
-					_messageLabel.setText("The line \"" + _lineNameField.getSelectedText() + "\" already exists.");
+					_messageLabel.setSelectedText("The line \"" + _lineNameField.getSelectedText() + "\" already exists.");
 				}
 				else if (_lineNameField.getSelectedText().equals(""))
 				{
-					_messageLabel.setText("Please enter a name!");
+					_messageLabel.setSelectedText("Please enter a name!");
 				}
 				else if (TrainLine.__isValid(_lineSelectTool.getNodeList()))
 				{
@@ -329,7 +329,7 @@ public class LineView extends ToolView
 				}
 				else
 				{
-					_messageLabel.setText("Train Line is not valid!");
+					_messageLabel.setSelectedText("Train Line is not valid!");
 				}
 			}
 			
@@ -378,7 +378,7 @@ public class LineView extends ToolView
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				_messageLabel.setText("");
+				_messageLabel.setSelectedText("");
 				TrainLine oldLine = _lineSelectTool.getTrainLine();
 				
 				Color clickedColor = _colorBar.getSelectedColor();
@@ -386,7 +386,7 @@ public class LineView extends ToolView
 				
 				if (errorMessage != null) // some error occurred
 				{
-					_messageLabel.setText(errorMessage);
+					_messageLabel.setSelectedText(errorMessage);
 				}
 				else if (_editMode)
 				{
@@ -408,7 +408,7 @@ public class LineView extends ToolView
 			@Override
 			public void clickedOnControl(Object arg)
 			{
-				_messageLabel.setText("");
+				_messageLabel.setSelectedText("");
 			}
 		});
 	}
@@ -439,7 +439,7 @@ public class LineView extends ToolView
 			if (_lineToEdit != null) // when creating a new line, _oldLine is null
 			{
 				_trainManagementService.addLine(_lineToEdit);
-				_lineList.setText(_lineToEdit.getName());
+				_lineList.setSelectedText(_lineToEdit.getName());
 			}
 			_lineList.setState(true);
 			reset();
@@ -565,8 +565,8 @@ public class LineView extends ToolView
 		
 		_colorBar.clear();
 		
-		_messageLabel.setText("");
-		_lineNameField.setText("");
+		_messageLabel.setSelectedText("");
+		_lineNameField.setSelectedText("");
 		
 		_lineToEdit = null;
 	}

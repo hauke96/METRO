@@ -30,3 +30,21 @@ Here's how the three classes should be named:
 Services are named just with _service_ in the end:
 
 * Dummy__Service__
+
+# Structural conventions
+A class should be structured as followed:
+
+1. Class header
+	1. Import statements
+	2. Javadoc describing what this class is (indlucing the `@author` tag)
+	3. Class name
+2. Fields
+	1. Just group them together by access modifiers
+3. Constructor
+	1. Most general top (e.g. the one without any parameter)
+	2. Most specific bottom (e.g. with all parameters needed)
+4. Methods
+	1. Any kind of init methods
+	2. Getter and Setter (first a getter like `getName()` followed by setter `setName(String name)`). Other sounding methods like `isActive()` are actually getter.
+	3. Changing methods like `draw()`
+	4. Events like `mouseDown(int x, int y, int button)`

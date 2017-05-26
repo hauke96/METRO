@@ -87,10 +87,10 @@ public class TrainViewMain extends ToolView
 		
 		_yourLinesLabel = new Label("Your Lines:", new Point(METRO.__SCREEN_SIZE.width - _windowWidth + 25, _areaOffset.y + 110));
 		_yourLinesLabel.setColor(METRO.__metroRed);
-		_yourLinesLabel.underlined(true);
+		_yourLinesLabel.setUnderline(true);
 		_yourTrainsLabel = new Label("Your Trains:", new Point(METRO.__SCREEN_SIZE.width - _windowWidth + 125, _areaOffset.y + 110));
 		_yourTrainsLabel.setColor(METRO.__metroRed);
-		_yourTrainsLabel.underlined(true);
+		_yourTrainsLabel.setUnderline(true);
 		
 		_moveTrainButton = new Button(new Rectangle(_areaOffset.x + 12 + (_windowWidth / 3), _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Move train");
 		_sellTrainButton = new Button(new Rectangle(_areaOffset.x + 4 + (_windowWidth / 3) * 2, _areaOffset.y + 380, (_windowWidth - 40) / 3 - 10, 20), "Sell train");

@@ -61,6 +61,54 @@ public class Window extends FloatingContainer
 	}
 	
 	/**
+	 * Returns true is mouse is in window, false if not and also false if in window but on a control element.
+	 * 
+	 * @param screenX
+	 *            x-coordinate of mouse
+	 * @param screenY
+	 *            y-coordinate of mouse
+	 * @return boolean True/false if mouse is in plain window area without touching controls.
+	 */
+	public boolean isMouseOnWindow(int screenX, int screenY)
+	{
+		boolean mouseOnControl = false;
+		Point mPos = new Point(screenX, screenY);
+		for (ControlElement control : _listOfControlElements)
+		{
+			mouseOnControl |= control.isInArea(mPos.x - _area.x, mPos.y + _area.y);
+		}
+		
+		return !mouseOnControl && isMouseOnWindowArea(screenX, screenY);
+	}
+	
+	/**
+	 * Checks if the mouse is in the window. This will NOT consider controls like the {@link #isMouseOnWindow(int, int)} method does.
+	 * 
+	 * @param screenX
+	 *            x-coordinate of mouse
+	 * @param screenY
+	 *            y-coordinate of mouse
+	 * @return boolean True/false if mouse is in window.
+	 */
+	public boolean isMouseOnWindowArea(int screenX, int screenY)
+	{
+		return screenX >= _area.x
+		        && screenX <= _area.x + _area.width
+		        && screenY >= _area.y
+		        && screenY <= _area.y + _area.height;
+	}
+	
+	/**
+	 * Returns true if window has been successfully removed from the window list.
+	 * 
+	 * @return True - Already removed, False - Still exists
+	 */
+	public boolean isClosed()
+	{
+		return _closed;
+	}
+	
+	/**
 	 * Draws the window and all controls on it.
 	 */
 	@Override
@@ -136,67 +184,6 @@ public class Window extends FloatingContainer
 	}
 	
 	/**
-	 * Returns true is mouse is in window, false if not and also false if in window but on a control element.
-	 * 
-	 * @param screenX
-	 *            x-coordinate of mouse
-	 * @param screenY
-	 *            y-coordinate of mouse
-	 * @return boolean True/false if mouse is in plain window area without touching controls.
-	 */
-	public boolean isMouseOnWindow(int screenX, int screenY)
-	{
-		boolean mouseOnControl = false;
-		Point mPos = new Point(screenX, screenY);
-		for (ControlElement control : _listOfControlElements)
-		{
-			mouseOnControl |= control.isInArea(mPos.x - _area.x, mPos.y + _area.y);
-		}
-		
-		return !mouseOnControl && isMouseOnWindowArea(screenX, screenY);
-	}
-	
-	/**
-	 * Checks if the mouse is in the window. This will NOT consider controls like the {@link #isMouseOnWindow(int, int)} method does.
-	 * 
-	 * @param screenX
-	 *            x-coordinate of mouse
-	 * @param screenY
-	 *            y-coordinate of mouse
-	 * @return boolean True/false if mouse is in window.
-	 */
-	public boolean isMouseOnWindowArea(int screenX, int screenY)
-	{
-		return screenX >= _area.x
-		        && screenX <= _area.x + _area.width
-		        && screenY >= _area.y
-		        && screenY <= _area.y + _area.height;
-	}
-	
-	@Override
-	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
-	{
-		super.mouseClicked(screenX, screenY, mouseButton);
-		// Check for drag-mode:
-		if (isMouseOnWindow(screenX, screenY)
-		        && mouseButton == Buttons.LEFT)
-		{
-			_dragMode = true;
-			_oldMousePos = new Point(screenX, screenY);
-			
-			closeIfNeeded(screenX, screenY, mouseButton);
-			return true;
-		}
-		return false;
-	}
-	
-	@Override
-	public void mouseReleased(int screenX, int screenY, int button)
-	{
-		_dragMode = false;
-	}
-	
-	/**
 	 * Closes the window if the mouse is on the cross. NO CLICK is needed in this function, be careful. This function calls the close() function to mark himself as closed.
 	 * 
 	 * @param screenX
@@ -230,18 +217,31 @@ public class Window extends FloatingContainer
 		_closed = true;
 	}
 	
-	/**
-	 * Returns true if window has been successfully removed from the window list.
-	 * 
-	 * @return True - Already removed, False - Still exists
-	 */
-	public boolean isClosed()
-	{
-		return _closed;
-	}
-	
 	@Override
 	public void moveElement(Point offset)
 	{
+	}
+	
+	@Override
+	public boolean mouseClicked(int screenX, int screenY, int mouseButton)
+	{
+		super.mouseClicked(screenX, screenY, mouseButton);
+		// Check for drag-mode:
+		if (isMouseOnWindow(screenX, screenY)
+		        && mouseButton == Buttons.LEFT)
+		{
+			_dragMode = true;
+			_oldMousePos = new Point(screenX, screenY);
+			
+			closeIfNeeded(screenX, screenY, mouseButton);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public void mouseReleased(int screenX, int screenY, int button)
+	{
+		_dragMode = false;
 	}
 }
