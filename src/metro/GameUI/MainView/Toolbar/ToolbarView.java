@@ -32,10 +32,10 @@ class ToolbarView
 	 * @param buttonAreaWidth
 	 *            The width of the area, where e.g. the "Create Lines" button is.
 	 */
-	ToolbarView(int buttonAreaWidth)
+	ToolbarView(int buttonAreaWidth, int height)
 	{
 		_moneyDisplayWidth = 250;
-		_height = 40;
+		_height = height;
 		_buttonAreaXPosition = METRO.__SCREEN_SIZE.width - buttonAreaWidth;
 		
 		_buttonYPosition = -5;

@@ -28,10 +28,11 @@ public class PlayingField implements InputProcessor
 	private CityView				_cityView;
 	private boolean					_dragMode;
 	private Point					_oldMousePos,									// Mouse position from last frame
-			_mapOffset,
-			_selectedNode;
+	        _mapOffset,
+	        _selectedNode;
 	private GameState				_gameState;
 	private Panel					_panel;
+	private Canvas					_canvas;
 	private TrainManagementService	_trainManagementService;
 	
 	/**
@@ -54,10 +55,31 @@ public class PlayingField implements InputProcessor
 		
 		_panel = new Panel(new Rectangle(0, 0, METRO.__SCREEN_SIZE.width, METRO.__SCREEN_SIZE.height), false);
 		
-		Canvas canvas = new Canvas(new Point(0, 0));
-		canvas.setPainter(() -> updateGameScreen());
+		_canvas = new Canvas(new Point(0, 0));
+		_canvas.setPainter(() -> updateGameScreen());
 		
-		_panel.add(canvas);
+		_panel.add(_canvas);
+	}
+	
+	/**
+	 * @return The current map offset.
+	 */
+	public Point getMapOffset()
+	{
+		return _mapOffset;
+	}
+	
+	/**
+	 * @return The currently hovered node.
+	 */
+	public Point getSelectedNode()
+	{
+		return _selectedNode;
+	}
+	
+	public AbstractContainer getBackgroundPanel()
+	{
+		return _panel;
 	}
 	
 	/**
@@ -72,6 +94,13 @@ public class PlayingField implements InputProcessor
 		else _cityView.disableCircleHighlighting();
 	}
 	
+	public void setArea(Rectangle area)
+	{
+		_panel.setArea(area);
+		
+		_canvas.setArea(area);
+	}
+	
 	private void updateGameScreen()
 	{
 		if (_dragMode)
@@ -80,9 +109,13 @@ public class PlayingField implements InputProcessor
 		}
 		_oldMousePos = METRO.__mousePosition;
 		
-		_cityView.updateGameScreen(_mapOffset, _gameState.getBaseNetSpacing());
+		boolean hightlightCircles = _panel.isInArea(_oldMousePos.x, _oldMousePos.y);
+		
+		_cityView.updateGameScreen(_mapOffset, _gameState.getBaseNetSpacing(), hightlightCircles);
+		
 		drawBaseNet(new Color(220, 220, 220), 0);
-		Point cursorDotPosition = drawBaseDot();
+		
+		Point cursorDotPosition = drawBaseDot(); // TODO separate drawing and calculation
 		_cityView.drawNumbers(cursorDotPosition);
 		
 		RailwayNodeOverseer.drawAllNodes(_mapOffset);
@@ -119,11 +152,11 @@ public class PlayingField implements InputProcessor
 	private Point drawBaseDot()
 	{
 		_selectedNode = new Point(
-				(int) Math.round((int) (METRO.__mousePosition.x - _mapOffset.x)
-						/ (float) _gameState.getBaseNetSpacing()), (int) Math.round((int) (METRO.__mousePosition.y - _mapOffset.y) / (float) _gameState.getBaseNetSpacing()));
+		        (int) Math.round((int) (METRO.__mousePosition.x - _mapOffset.x)
+		                / (float) _gameState.getBaseNetSpacing()), (int) Math.round((int) (METRO.__mousePosition.y - _mapOffset.y) / (float) _gameState.getBaseNetSpacing()));
 		
 		Point offsetMarker = new Point(
-				(int) (_mapOffset.x) + _gameState.getBaseNetSpacing() * _selectedNode.x, (int) (_mapOffset.y) + _gameState.getBaseNetSpacing() * _selectedNode.y);
+		        (int) (_mapOffset.x) + _gameState.getBaseNetSpacing() * _selectedNode.x, (int) (_mapOffset.y) + _gameState.getBaseNetSpacing() * _selectedNode.y);
 		
 		Fill.setColor(Color.darkGray);
 		Fill.Rect(offsetMarker.x - 1, offsetMarker.y - 1, 3, 3);
@@ -176,22 +209,6 @@ public class PlayingField implements InputProcessor
 		return true;
 	}
 	
-	/**
-	 * @return The current map offset.
-	 */
-	public Point getMapOffset()
-	{
-		return _mapOffset;
-	}
-	
-	/**
-	 * @return The currently hovered node.
-	 */
-	public Point getSelectedNode()
-	{
-		return _selectedNode;
-	}
-	
 	@Override
 	public boolean keyDown(int keycode)
 	{
@@ -220,10 +237,5 @@ public class PlayingField implements InputProcessor
 	public boolean mouseMoved(int screenX, int screenY)
 	{
 		return false;
-	}
-	
-	public AbstractContainer getBackgroundPanel()
-	{
-		return _panel;
 	}
 }

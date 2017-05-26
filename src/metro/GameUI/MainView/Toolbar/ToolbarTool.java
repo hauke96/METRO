@@ -30,9 +30,9 @@ public class ToolbarTool
 	 * @param viewWidth
 	 *            The width of tools to align buttons.
 	 */
-	public ToolbarTool(int viewWidth)
+	public ToolbarTool(int viewWidth, int viewHeight)
 	{
-		_view = new ToolbarView(viewWidth);
+		_view = new ToolbarView(viewWidth, viewHeight);
 		_selectedButton = null;
 		
 		registerObervers();

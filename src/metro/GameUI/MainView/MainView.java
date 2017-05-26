@@ -1,6 +1,7 @@
 package metro.GameUI.MainView;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -47,11 +48,12 @@ public class MainView extends GameScreenContainer implements InputProcessor
 	 * @param playingField
 	 *            The field, the player should play on.
 	 */
-	public MainView(GameState gameState, TrainManagementService trainManagementService, PlayingField playingField)
+	public MainView(GameState gameState, TrainManagementService trainManagementService, PlayingField playingField, NotificationArea notificationArea)
 	{
 		_gameState = gameState;
 		_trainManagementService = trainManagementService;
 		_playingField = playingField;
+		_notificationArea = notificationArea;
 		
 		_activeTool = null;
 		
@@ -61,10 +63,15 @@ public class MainView extends GameScreenContainer implements InputProcessor
 	@Override
 	protected void initializeUi()
 	{
+		int toolbarHeight = 40;
+		int height = METRO.__SCREEN_SIZE.height - toolbarHeight - _notificationArea.getHeight();
+		Rectangle playingFieldArea = new Rectangle(0, toolbarHeight, METRO.__SCREEN_SIZE.width, height);
+		
 		// Be sure the playground is visible after switching the game screen (and bypass the including renderer change):
 		_playingField.getBackgroundPanel().registerContainer();
+		_playingField.setArea(playingFieldArea);
 		
-		_toolbar = new ToolbarTool(_gameState.getToolViewWidth());
+		_toolbar = new ToolbarTool(_gameState.getToolViewWidth(), toolbarHeight);
 		
 		_toolbar.StationPlacingToolSelected.add(() ->
 		{
@@ -105,11 +112,10 @@ public class MainView extends GameScreenContainer implements InputProcessor
 			setActiveTool(trainView);
 		});
 		
-		// TODO Move to constructor
-		_notificationArea = Locator.get(NotificationArea.class);
-		
 		AbstractContainer playingFieldBackground = _playingField.getBackgroundPanel();
 		playingFieldBackground.setState(false);
+		
+		_notificationArea.getBackgroundPanel().setAboveOf(playingFieldBackground);
 		
 		// TODO do it right
 		// _toolbar.getBackgroundPanel().setAboveOf(playingFieldBackground);

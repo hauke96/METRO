@@ -57,7 +57,7 @@ public class Locator
 		register(ContainerRegistrationService.class, () -> new ContainerRegistrationService());
 		
 		register(MainView.class, () -> new MainView(
-		        get(GameState.class), get(TrainManagementService.class), get(PlayingField.class)));
+		        get(GameState.class), get(TrainManagementService.class), get(PlayingField.class), get(NotificationArea.class)));
 	}
 	
 	private static <T> void register(Class<T> clazz, ServiceInstanceCreator<T> t)

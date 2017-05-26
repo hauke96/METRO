@@ -27,8 +27,8 @@ public class NotificationArea implements NotificationSubscriber
 {
 	private boolean	_isExpanded;
 	private int		_height,
-			_width,
-			_headerHeight;
+	        _width,
+	        _headerHeight;
 	private Color	_backGroundColor;
 	private List	_entryList;
 	private Canvas	_canvas;
@@ -49,7 +49,7 @@ public class NotificationArea implements NotificationSubscriber
 		_panel.setDrawBorder(true, METRO.__metroBlue);
 		
 		_entryList = new List(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - METRO.__getXOffset() - 4, _height - _headerHeight
-				- METRO.__titleBarHeight), new ArrayList<String>(), true);
+		        - METRO.__titleBarHeight), new ArrayList<String>(), true);
 		
 		_entryList.setDecoration(false);
 		_entryList.setTransparency(165);
@@ -78,6 +78,32 @@ public class NotificationArea implements NotificationSubscriber
 		NotificationServer.subscribe(this);
 	}
 	
+	public AbstractContainer getBackgroundPanel()
+	{
+		return _panel;
+	}
+	
+	public int getHeight()
+	{
+		return _height;
+	}
+	
+	/**
+	 * Checks if the given coordinates are inside this control.
+	 * 
+	 * @param x
+	 *            The x-coordinate.
+	 * @param y
+	 *            The y-coordinate.
+	 * @return True when point is inside, false otherwise.
+	 */
+	public boolean isInArea(int x, int y)
+	{
+		return y >= METRO.__SCREEN_SIZE.height - _height
+		        && y <= METRO.__SCREEN_SIZE.height - _height + _headerHeight
+		        && x <= _width;
+	}
+	
 	/**
 	 * Sets the width of the notification area. It still begins at (0,SCREEN_HEIGHT - height) but may not end at the screens edge.
 	 * 
@@ -93,7 +119,7 @@ public class NotificationArea implements NotificationSubscriber
 		_panel.setArea(oldPanelArea);
 		
 		_entryList.setArea(new Rectangle(0, METRO.__SCREEN_SIZE.height - _height + _headerHeight, _width - METRO.__getXOffset() - 4, _height - METRO.__titleBarHeight
-				+ _headerHeight));
+		        + _headerHeight));
 	}
 	
 	@Override
@@ -120,7 +146,7 @@ public class NotificationArea implements NotificationSubscriber
 		Draw.Line(13, 21, 15 + length, 21);
 		
 		Draw.Image(METRO.__iconSet, new Rectangle(_width - _headerHeight, 0, _headerHeight, _headerHeight), new Rectangle(0, 228
-				+ (_isExpanded ? _headerHeight : 0), _headerHeight, _headerHeight));
+		        + (_isExpanded ? _headerHeight : 0), _headerHeight, _headerHeight));
 	}
 	
 	/**
@@ -146,26 +172,5 @@ public class NotificationArea implements NotificationSubscriber
 			_entryList.setVisibility(_isExpanded);
 			_panel.setPosition(new Point(0, METRO.__SCREEN_SIZE.height - _height));
 		}
-	}
-	
-	/**
-	 * Checks if the given coordinates are inside this control.
-	 * 
-	 * @param x
-	 *            The x-coordinate.
-	 * @param y
-	 *            The y-coordinate.
-	 * @return True when point is inside, false otherwise.
-	 */
-	public boolean isInArea(int x, int y)
-	{
-		return y >= METRO.__SCREEN_SIZE.height - _height
-				&& y <= METRO.__SCREEN_SIZE.height - _height + _headerHeight
-				&& x <= _width;
-	}
-	
-	public AbstractContainer getBackgroundPanel()
-	{
-		return _panel;
 	}
 }
