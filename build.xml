@@ -22,7 +22,7 @@
         <pathelement location="libs/gdx-freetype-natives.jar"/>
         <pathelement location="libs/gdx-freetype.jar"/>
         <path refid="JUnit 4.libraryclasspath"/>
-        <pathelement location="libs/juard_0.0.1.jar"/>
+        <pathelement location="libs/juard_0.0.2.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
