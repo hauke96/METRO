@@ -1,6 +1,6 @@
 package metro.UI.Renderer;
 
-import juard.Contract;
+import juard.contract.Contract;
 import metro.AppContext.Locator;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;

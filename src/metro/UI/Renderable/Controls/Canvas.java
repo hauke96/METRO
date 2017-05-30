@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 
-import juard.Contract;
+import juard.contract.Contract;
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;

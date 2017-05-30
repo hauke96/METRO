@@ -5,7 +5,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import juard.Contract;
+import juard.contract.Contract;
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;

@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import juard.Contract;
+import juard.contract.Contract;
 import metro.METRO;
 import metro.AppContext.Locator;
 import metro.Common.Game.GameState;

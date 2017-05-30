@@ -3,7 +3,7 @@ package metro.AppContext;
 import java.util.HashMap;
 import java.util.Map;
 
-import juard.Contract;
+import juard.contract.Contract;
 import metro.Common.Game.GameState;
 import metro.Common.Game.Settings;
 import metro.Common.Technical.Exceptions.ResolutionFailedException;

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Input.Buttons;
 
-import juard.Contract;
+import juard.contract.Contract;
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;

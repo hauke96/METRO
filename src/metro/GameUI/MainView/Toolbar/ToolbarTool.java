@@ -2,7 +2,7 @@ package metro.GameUI.MainView.Toolbar;
 
 import java.awt.Point;
 
-import juard.Contract;
+import juard.contract.Contract;
 import metro.Common.Technical.Event;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.Container.AbstractContainer;

@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
-import juard.Contract;
+import juard.contract.Contract;
 import metro.METRO;
 import metro.AppContext.Locator;
 import metro.Common.Game.Settings;

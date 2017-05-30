@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Observable;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import juard.Contract;
+import juard.contract.Contract;
 
 /**
  * Classes who are able to switch a game screen are observable by this class.

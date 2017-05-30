@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import juard.Contract;
+import juard.contract.Contract;
 import metro.METRO;
 import metro.Common.Graphics.Draw;
 
