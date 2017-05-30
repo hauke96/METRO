@@ -9,7 +9,7 @@ import com.badlogic.gdx.Input.Buttons;
 import metro.METRO;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
-import metro.Common.Technical.Logger;
+import juard.log.Logger;
 import metro.Common.Technical.Exceptions.NotEnoughMoneyException;
 import metro.GameUI.Common.ToolView;
 import metro.GameUI.MainView.NotificationView.NotificationServer;

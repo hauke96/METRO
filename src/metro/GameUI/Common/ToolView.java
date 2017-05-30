@@ -2,8 +2,8 @@ package metro.GameUI.Common;
 
 import java.text.MessageFormat;
 
-import metro.Common.Technical.Event;
-import metro.Common.Technical.Logger;
+import juard.event.Event;
+import juard.log.Logger;
 
 /**
  * A class extending the ToolView is a game component (not a pure UI component) using to easily embed - sometimes complex - tools into others.

@@ -1,7 +1,7 @@
 package metro.GameUI.MainMenu;
 
 import metro.METRO;
-import metro.AppContext.Locator;
+import juard.injection.Locator;
 import metro.Common.Game.Settings;
 import metro.GameUI.Common.SettingsWindow;
 import metro.GameUI.MainView.MainView;

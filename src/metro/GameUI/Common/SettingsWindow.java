@@ -6,7 +6,7 @@ import java.text.MessageFormat;
 
 import metro.METRO;
 import metro.Common.Game.Settings;
-import metro.Common.Technical.Logger;
+import juard.log.Logger;
 import metro.UI.Renderable.ActionObserver;
 import metro.UI.Renderable.CloseObservable;
 import metro.UI.Renderable.Container.Window;

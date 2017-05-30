@@ -1,7 +1,7 @@
 package metro.UI.Renderer;
 
 import juard.contract.Contract;
-import metro.AppContext.Locator;
+import juard.injection.Locator;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Container.GameScreen.GameScreenSwitchedObserver;

@@ -8,7 +8,7 @@ import java.util.List;
 import com.badlogic.gdx.Input.Buttons;
 
 import metro.METRO;
-import metro.Common.Technical.Logger;
+import juard.log.Logger;
 import metro.GameUI.Common.ToolView;
 import metro.GameUI.MainView.PlayingField.PlayingField;
 import metro.TrainManagement.TrainManagementService;

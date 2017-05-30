@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 import metro.METRO;
 import metro.Common.Game.GameState;
-import metro.Common.Technical.Logger;
+import juard.log.Logger;
 import metro.Common.Technical.Exceptions.NotEnoughMoneyException;
 import metro.GameUI.MainView.NotificationView.NotificationServer;
 import metro.GameUI.MainView.NotificationView.NotificationType;

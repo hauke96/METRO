@@ -2,7 +2,7 @@ package metro;
 
 import java.awt.Dimension;
 
-import metro.AppContext.Locator;
+import juard.injection.Locator;
 import metro.TrainManagement.TrainManagementService;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderer.BasicContainerRenderer;

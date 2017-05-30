@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import metro.METRO;
 import metro.TestInitializer;
-import metro.AppContext.Locator;
+import juard.injection.Locator;
 import metro.Common.Game.GameState;
 
 /**

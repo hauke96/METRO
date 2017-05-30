@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import metro.AppContext.Locator;
+import juard.injection.Locator;
 import metro.Common.Technical.Exceptions.ContainerPositioningConflict;
 import metro.UI.ContainerRegistrationService;
 import metro.UI.Renderer.BasicContainerRenderer;

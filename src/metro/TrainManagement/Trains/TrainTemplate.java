@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import metro.Common.Technical.Logger;
+import juard.log.Logger;
 
 /**
  * A train template is a final train. There are also less available properties e.g. has a train template no line and no current passengers.

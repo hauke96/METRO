@@ -62,12 +62,13 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import metro.AppContext.Locator;
+import juard.injection.Locator;
+import metro.AppContext.ServiceLocator;
 import metro.Common.Game.GameState;
 import metro.Common.Game.Settings;
 import metro.Common.Graphics.Draw;
 import metro.Common.Graphics.Fill;
-import metro.Common.Technical.Logger;
+import juard.log.Logger;
 import metro.GameUI.MainMenu.MainMenuTool;
 import metro.UI.Renderable.Container.GameScreen.GameScreenContainer;
 import metro.UI.Renderable.Controls.InputField;
@@ -114,6 +115,8 @@ public class METRO implements ApplicationListener, InputProcessor
 	 */
 	public static void main(String[] args)
 	{
+		ServiceLocator.registerAll();
+		
 		new METRO();
 	}
 	

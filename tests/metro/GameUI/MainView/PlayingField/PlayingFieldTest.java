@@ -6,7 +6,7 @@ import java.awt.Point;
 
 import org.junit.Test;
 
-import metro.AppContext.Locator;
+import juard.injection.Locator;
 
 /**
  * @author hauke

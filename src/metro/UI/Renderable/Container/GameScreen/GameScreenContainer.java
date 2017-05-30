@@ -6,8 +6,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 
 import juard.contract.Contract;
+import juard.injection.Locator;
 import metro.METRO;
-import metro.AppContext.Locator;
 import metro.Common.Game.Settings;
 import metro.GameUI.Common.InGameMenuWindow;
 import metro.UI.ContainerRegistrationService;

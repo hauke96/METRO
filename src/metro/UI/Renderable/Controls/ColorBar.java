@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 
 import metro.METRO;
 import metro.Common.Graphics.Draw;
-import metro.Common.Technical.Logger;
+import juard.log.Logger;
 import metro.UI.Renderable.ControlElement;
 
 /**

@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.badlogic.gdx.Input.Buttons;
 
 import metro.TestInitializer;
-import metro.AppContext.Locator;
+import juard.injection.Locator;
 import metro.Common.Game.GameState;
 import metro.Common.Technical.ModifiableBoolean;
 import metro.GameUI.MainView.PlayingField.PlayingField;

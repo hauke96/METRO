@@ -8,7 +8,7 @@ import java.awt.Point;
 import org.junit.Test;
 
 import metro.METRO;
-import metro.AppContext.Locator;
+import juard.injection.Locator;
 import metro.Common.Game.GameState;
 import metro.Common.Technical.ModifiableBoolean;
 import metro.GameUI.MainView.PlayingField.PlayingField;

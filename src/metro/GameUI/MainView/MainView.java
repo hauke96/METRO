@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import juard.contract.Contract;
 import metro.METRO;
-import metro.AppContext.Locator;
+import juard.injection.Locator;
 import metro.Common.Game.GameState;
 import metro.Common.Graphics.Draw;
 import metro.GameUI.Common.ToolView;

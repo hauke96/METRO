@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import juard.contract.Contract;
-import metro.Common.Technical.Logger;
+import juard.log.Logger;
 
 /**
  * Holds all necessary information that are stored in the settings.cfg file.
